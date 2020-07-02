@@ -1,0 +1,3 @@
+displayName = Demo Mod
+author = billybobmcbo
+version = 0.1
