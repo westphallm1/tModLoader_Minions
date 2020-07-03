@@ -13,7 +13,7 @@ namespace DemoMod.Projectiles.Minions
 		Vector2? targetVector;
 		public override void SetStaticDefaults() 
 		{
-            base.SetDefaults();
+            base.SetStaticDefaults();
 			// This is necessary for right-click targeting
 			ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
 
@@ -38,14 +38,28 @@ namespace DemoMod.Projectiles.Minions
 			projectile.minionSlots = 1f;
 			// Needed so the minion doesn't despawn on collision with enemies or tiles
 			projectile.penetrate = -1;
+			// Makes the minion not go through tiles
+			projectile.tileCollide = true;
         }
+
+
+		// Here you can decide if your minion breaks things like grass or pots
+		public override bool? CanCutTiles() {
+			return false;
+		}
+
+		// This is mandatory if your minion deals contact damage (further related stuff in AI() in the Movement region)
+		public override bool MinionContactDamage() {
+			return true;
+		}
 
 		public abstract Vector2 IdleBehavior();
 		public abstract Vector2? FindTarget();
-		public abstract void IdleMovement(Vector2 idlePosition);
-		public abstract void TargetedMovement(Vector2 targetPosition);
+		public abstract void IdleMovement(Vector2 vectorToIdlePosition);
+		public abstract void TargetedMovement(Vector2 vectorToTargetPosition);
 
-		public virtual void Animate() {
+		public virtual void AfterMoving() { }
+		public virtual void Animate(int minFrame = 0, int? maxFrame = null) {
 
 			// This is a simple "loop through all frames from top to bottom" animation
 			int frameSpeed = 5;
@@ -53,8 +67,8 @@ namespace DemoMod.Projectiles.Minions
 			if (projectile.frameCounter >= frameSpeed) {
 				projectile.frameCounter = 0;
 				projectile.frame++;
-				if (projectile.frame >= Main.projFrames[projectile.type]) {
-					projectile.frame = 0;
+				if (projectile.frame >= (maxFrame ?? Main.projFrames[projectile.type])) {
+					projectile.frame = minFrame;
 				}
 			}
 		}
@@ -70,7 +84,58 @@ namespace DemoMod.Projectiles.Minions
             {
 				IdleMovement(vectorToIdle);
             }
+			AfterMoving();
 			Animate();
+        }
+
+
+		// utility methods
+		public void TeleportToPlayer(Vector2 vectorToIdlePosition, float maxDistance)
+        {
+			if(Main.myPlayer == player.whoAmI && vectorToIdlePosition.Length() > maxDistance)
+            {
+				projectile.position += vectorToIdlePosition;
+				projectile.velocity = Vector2.Zero;
+				projectile.netUpdate = true;
+            }
+        }
+
+		public Vector2? PlayerTargetPosition(float maxRange)
+        {
+			if(player.HasMinionAttackTargetNPC)
+            {
+				NPC npc = Main.npc[player.MinionAttackTargetNPC];
+				if(Vector2.Distance(npc.Center, projectile.Center) < maxRange)
+                {
+					return npc.Center;
+                }
+            }
+			return null;
+        }
+
+		public Vector2? ClosestEnemyInRange(float maxRange)
+        {
+			Vector2 targetCenter = projectile.position;
+			bool foundTarget = false;
+			for(int i = 0; i < Main.maxNPCs; i++)
+            {
+				NPC npc = Main.npc[i];
+				if(!npc.CanBeChasedBy())
+                {
+					continue;
+                }
+                float between = Vector2.Distance(npc.Center, projectile.Center);
+                bool closest = Vector2.Distance(projectile.Center, targetCenter) > between;
+				// don't let a minion infinitely chain attacks off progressively further enemies
+                bool inRange = Vector2.Distance(npc.Center, player.Center) < maxRange;
+                bool lineOfSight = Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height);
+				if(lineOfSight && inRange && (closest || !foundTarget))
+                {
+					targetCenter = npc.Center;
+					foundTarget = true;
+                }
+            }
+			return foundTarget ? targetCenter : (Vector2?)null;
         }
     }
 }

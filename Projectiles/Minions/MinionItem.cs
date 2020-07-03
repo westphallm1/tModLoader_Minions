@@ -30,6 +30,10 @@ namespace DemoMod.Projectiles.Minions
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
+			player.AddBuff(item.buffType, 2);
+
+			// Here you can change where the minion is spawned. Most vanilla minions spawn at the cursor position.
+			position = Main.MouseWorld;
 			return true;
 		}
     }

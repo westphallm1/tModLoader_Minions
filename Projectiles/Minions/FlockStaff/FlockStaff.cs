@@ -98,7 +98,7 @@ namespace DemoMod.Projectiles.Minions.FlockStaff
 	{
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Example Minion");
+			DisplayName.SetDefault("Flocking Bird");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 4;
 		}
@@ -107,18 +107,6 @@ namespace DemoMod.Projectiles.Minions.FlockStaff
 			base.SetDefaults();
 			projectile.width = 30;
 			projectile.height = 24;
-			// Makes the minion go through tiles freely
-			projectile.tileCollide = true;
-		}
-
-		// Here you can decide if your minion breaks things like grass or pots
-		public override bool? CanCutTiles() {
-			return false;
-		}
-
-		// This is mandatory if your minion deals contact damage (further related stuff in AI() in the Movement region)
-		public override bool MinionContactDamage() {
-			return true;
 		}
 
         public override Vector2 IdleBehavior()
@@ -130,19 +118,12 @@ namespace DemoMod.Projectiles.Minions.FlockStaff
 			// The index is projectile.minionPos
 			float minionPositionOffsetX = (10 + projectile.minionPos * 40) * -player.direction;
 			idlePosition.X += minionPositionOffsetX; // Go behind the player
+			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 
 			// All of this code below this line is adapted from Spazmamini code (ID 388, aiStyle 66)
 
 			// Teleport to player if distance is too big
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-			float distanceToIdlePosition = vectorToIdlePosition.Length();
-			if (Main.myPlayer == player.whoAmI && distanceToIdlePosition > 2000f) {
-				// Whenever you deal with non-regular events that change the behavior or position drastically, make sure to only run the code on the owner of the projectile,
-				// and then set netUpdate to true
-				projectile.position = idlePosition;
-				projectile.velocity *= 0.1f;
-				projectile.netUpdate = true;
-			}
+			TeleportToPlayer(vectorToIdlePosition, 2000f);
 
 			// If your minion is flying, you want to do this independently of any conditions
 			float overlapVelocity = 0.04f;
@@ -162,49 +143,20 @@ namespace DemoMod.Projectiles.Minions.FlockStaff
 
         public override Vector2? FindTarget()
         {
-			// Starting search distance
-			float distanceFromTarget = 700f;
-			Vector2 targetCenter = projectile.position;
-			bool foundTarget = false;
-
-			// This code is required if your minion weapon has the targeting feature
-			if (player.HasMinionAttackTargetNPC) {
-				NPC npc = Main.npc[player.MinionAttackTargetNPC];
-				float between = Vector2.Distance(npc.Center, projectile.Center);
-				// Reasonable distance away so it doesn't target across multiple screens
-				if (between < 2000f) {
-					distanceFromTarget = between;
-					targetCenter = npc.Center;
-					foundTarget = true;
-				}
-			}
-			if (!foundTarget) {
-				// This code is required either way, used for finding a target
-				for (int i = 0; i < Main.maxNPCs; i++) {
-					NPC npc = Main.npc[i];
-					if (npc.CanBeChasedBy()) {
-						float between = Vector2.Distance(npc.Center, projectile.Center);
-						bool closest = Vector2.Distance(projectile.Center, targetCenter) > between;
-						bool inRange = between < distanceFromTarget;
-						bool lineOfSight = Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height);
-						// Additional check for this specific minion behavior, otherwise it will stop attacking once it dashed through an enemy while flying though tiles afterwards
-						// The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
-						bool closeThroughWall = between < 100f;
-						if (((closest && inRange) || !foundTarget) && (lineOfSight || closeThroughWall)) {
-							distanceFromTarget = between;
-							targetCenter = npc.Center;
-							foundTarget = true;
-						}
-					}
-				}
-			}
-
-			// friendly needs to be set to true so the minion can deal contact damage
-			// friendly needs to be set to false so it doesn't damage things like target dummies while idling
-			// Both things depend on if it has a target or not, so it's just one assignment here
-			// You don't need this assignment if your minion is shooting things instead of dealing contact damage
-			projectile.friendly = foundTarget;
-			return foundTarget ? targetCenter - projectile.Center : (Vector2?)null;
+			projectile.friendly = true;
+            if (PlayerTargetPosition(2000f) is Vector2 target)
+            {
+                return target - projectile.Center;
+            }
+            else if (ClosestEnemyInRange(700f) is Vector2 target2)
+            {
+                return target2 - projectile.Center;
+            }
+            else
+            {
+				projectile.friendly = false;
+                return null;
+            }
         }
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -251,7 +203,7 @@ namespace DemoMod.Projectiles.Minions.FlockStaff
             }
         }
 
-        public override void Animate()
+        public override void Animate(int minRange = 0, int? maxRange = null)
         {
 			base.Animate();
 			// So it will lean slightly towards the direction it's moving
