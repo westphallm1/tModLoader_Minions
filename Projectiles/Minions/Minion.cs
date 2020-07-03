@@ -4,6 +4,9 @@ using System;
 using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
 
 namespace DemoMod.Projectiles.Minions
 {
@@ -25,6 +28,7 @@ namespace DemoMod.Projectiles.Minions
 				projectile.timeLeft = 2;
 			}
 		}
+
 
 		public abstract void Behavior();
 	}

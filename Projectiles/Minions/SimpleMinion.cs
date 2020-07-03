@@ -1,16 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace DemoMod.Projectiles.Minions
 {
     public abstract class SimpleMinion<T> : Minion<T> where T : ModBuff
     {
-		Vector2 vectorToIdle;
-		Vector2? targetVector;
+		protected Vector2 vectorToIdle;
+		protected Vector2? vectorToTarget;
+		protected Vector2 oldVectorToIdle;
+		protected Vector2? oldVectorToTarget = null;
 		public override void SetStaticDefaults() 
 		{
             base.SetStaticDefaults();
@@ -76,8 +76,8 @@ namespace DemoMod.Projectiles.Minions
         public override void Behavior()
         {
 			vectorToIdle = IdleBehavior();
-			targetVector = FindTarget();
-			if(targetVector is Vector2 targetPosition)
+			vectorToTarget = FindTarget();
+			if(vectorToTarget is Vector2 targetPosition)
             {
 				TargetedMovement(targetPosition);
             } else
@@ -86,6 +86,8 @@ namespace DemoMod.Projectiles.Minions
             }
 			AfterMoving();
 			Animate();
+			oldVectorToIdle = vectorToIdle;
+			oldVectorToTarget = vectorToTarget;
         }
 
 
@@ -100,12 +102,13 @@ namespace DemoMod.Projectiles.Minions
             }
         }
 
-		public Vector2? PlayerTargetPosition(float maxRange)
+		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null)
         {
+			Vector2 center = centeredOn ?? projectile.Center;
 			if(player.HasMinionAttackTargetNPC)
             {
 				NPC npc = Main.npc[player.MinionAttackTargetNPC];
-				if(Vector2.Distance(npc.Center, projectile.Center) < maxRange)
+				if(Vector2.Distance(npc.Center, center) < maxRange)
                 {
 					return npc.Center;
                 }
@@ -113,8 +116,9 @@ namespace DemoMod.Projectiles.Minions
 			return null;
         }
 
-		public Vector2? ClosestEnemyInRange(float maxRange)
+		public Vector2? ClosestEnemyInRange(float maxRange, Vector2? centeredOn = null)
         {
+			Vector2 center = centeredOn ?? projectile.Center;
 			Vector2 targetCenter = projectile.position;
 			bool foundTarget = false;
 			for(int i = 0; i < Main.maxNPCs; i++)
@@ -124,11 +128,11 @@ namespace DemoMod.Projectiles.Minions
                 {
 					continue;
                 }
-                float between = Vector2.Distance(npc.Center, projectile.Center);
-                bool closest = Vector2.Distance(projectile.Center, targetCenter) > between;
+                float between = Vector2.Distance(npc.Center, center);
+                bool closest = Vector2.Distance(center, targetCenter) > between;
 				// don't let a minion infinitely chain attacks off progressively further enemies
                 bool inRange = Vector2.Distance(npc.Center, player.Center) < maxRange;
-                bool lineOfSight = Collision.CanHitLine(projectile.position, projectile.width, projectile.height, npc.position, npc.width, npc.height);
+                bool lineOfSight = Collision.CanHitLine(center, projectile.width, projectile.height, npc.position, npc.width, npc.height);
 				if(lineOfSight && inRange && (closest || !foundTarget))
                 {
 					targetCenter = npc.Center;

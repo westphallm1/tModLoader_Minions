@@ -165,7 +165,6 @@ namespace DemoMod.Projectiles.Minions.BunnyStaff
                 base.Animate();
             }
 			projectile.spriteDirection = projectile.velocity.X > 0 ? -1: 1;
-
 			// Some visuals here
 			//Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.78f);
         }
