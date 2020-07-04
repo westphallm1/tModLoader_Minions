@@ -18,12 +18,14 @@ namespace DemoMod.Projectiles.Minions
     {
 
         public int attackFrames = 60;
+        public int animationFrames = 120;
         public AttackState attackState = AttackState.IDLE;
 
         public override void SetDefaults()
         {
             base.SetDefaults();
 			projectile.ai[0] = 0;
+			projectile.ai[1] = 0;
         }
 
         public List<Projectile> GetActiveMinions()
@@ -56,6 +58,7 @@ namespace DemoMod.Projectiles.Minions
         public override Vector2 IdleBehavior()
         {
             projectile.ai[0] = (projectile.ai[0] + 1) % attackFrames;
+            projectile.ai[1] = (projectile.ai[1] + 1) % animationFrames;
             return default;
         }
 
