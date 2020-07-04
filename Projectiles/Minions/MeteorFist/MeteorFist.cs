@@ -12,7 +12,7 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
 {
     public class MeteorFistMinionBuff: MinionBuff
     {
-        public MeteorFistMinionBuff() : base(ProjectileType<MeteorFistMinion>(), ProjectileType<MeteorFistMinion>()) { }
+        public MeteorFistMinionBuff() : base(ProjectileType<MeteorFistMinion>()) { }
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -95,7 +95,7 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
             {
                 Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<MeteorFistHead>(), 0, 0, Main.myPlayer);
             }
-            Projectile head = GetMinionsOfType(ProjectileType<MeteorFistHead>()).FirstOrDefault();
+            Projectile head = GetHead(ProjectileType<MeteorFistHead>());
             if(head == default)
             {
                 // the head got despawned, wait for it to respawn
@@ -115,7 +115,12 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
 
         public override Vector2? FindTarget()
         {
-            Projectile head = GetMinionsOfType(ProjectileType<MeteorFistHead>()).FirstOrDefault();
+            Projectile head = GetHead(ProjectileType<MeteorFistHead>());
+            if(head == default)
+            {
+                // the head got despawned, wait for it to respawn
+                return null;
+            }
             if(FindTargetInTurnOrder(400f, head.Center) is Vector2 target)
             {
                 projectile.friendly = true;
@@ -168,8 +173,12 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
             if(vectorToIdlePosition.Length() < 32)
             {
                 attackState = AttackState.IDLE;
-                Projectile head = GetMinionsOfType(ProjectileType<MeteorFistHead>()).FirstOrDefault();
-                projectile.spriteDirection = head.spriteDirection;
+                Projectile head = GetHead(ProjectileType<MeteorFistHead>());
+                if(head != default)
+                {
+                    // the head got despawned, wait for it to respawn
+                    projectile.spriteDirection = head.spriteDirection;
+                }
                 projectile.position += vectorToIdlePosition;
                 projectile.velocity = Vector2.Zero;
             } else

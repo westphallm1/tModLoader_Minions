@@ -17,6 +17,9 @@ namespace DemoMod.Projectiles.Minions
     public abstract class GroupAwareMinion<T> : SimpleMinion<T> where T : ModBuff
     {
 
+        private List<Projectile> others = null;
+        private Projectile leader = null;
+        private Projectile head = null;
         public int attackFrames = 60;
         public int animationFrames = 120;
         public AttackState attackState = AttackState.IDLE;
@@ -30,7 +33,11 @@ namespace DemoMod.Projectiles.Minions
 
         public List<Projectile> GetActiveMinions()
         {
-            return GetMinionsOfType(projectile.type);
+            if(others == null)
+            {
+                others = GetMinionsOfType(projectile.type);
+            }
+            return others;
         }
 
         public List<Projectile> GetMinionsOfType(int projectileType)
@@ -46,17 +53,33 @@ namespace DemoMod.Projectiles.Minions
 			}
             otherMinions.Sort((x, y)=>x.minionPos - y.minionPos);
 			return otherMinions;
+        }
 
+        public Projectile GetHead(int headType)
+        {
+            if (head == null)
+            {
+                head = GetMinionsOfType(headType).FirstOrDefault();
+            }
+            return head;
         }
 
 		public Projectile GetFirstMinion(List<Projectile> others = null)
         {
-			return (others ?? GetActiveMinions())
-				.Where(p => p.minionPos == others.Min(p2 => p2.minionPos)).FirstOrDefault();
+            if(leader == null)
+            {
+                leader = (others ?? GetActiveMinions())
+                    .Where(p => p.minionPos == others.Min(p2 => p2.minionPos)).FirstOrDefault();
+
+            }
+            return leader;   
         }
 
         public override Vector2 IdleBehavior()
         {
+            leader = null;
+            others = null;
+            head = null;
             projectile.ai[0] = (projectile.ai[0] + 1) % attackFrames;
             projectile.ai[1] = (projectile.ai[1] + 1) % animationFrames;
             return default;

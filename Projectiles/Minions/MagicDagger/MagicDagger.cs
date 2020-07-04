@@ -95,7 +95,7 @@ namespace DemoMod.Projectiles.Minions.MagicDagger
             {
                 Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<MagicDaggerThrower>(), 0, 0, Main.myPlayer);
             }
-            Projectile head = GetMinionsOfType(ProjectileType<MagicDaggerThrower>()).FirstOrDefault();
+            Projectile head = GetHead(ProjectileType<MagicDaggerThrower>());
             if(head == default)
             {
                 // the head got despawned, wait for it to respawn
