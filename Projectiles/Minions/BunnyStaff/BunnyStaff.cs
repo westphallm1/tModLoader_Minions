@@ -52,8 +52,8 @@ namespace DemoMod.Projectiles.Minions.BunnyStaff
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-			projectile.width = 48;
-			projectile.height = 40;
+			projectile.width = 16;
+			projectile.height = 16;
 		}
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

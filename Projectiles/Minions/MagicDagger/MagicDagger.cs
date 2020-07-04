@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -47,10 +48,13 @@ namespace DemoMod.Projectiles.Minions.MagicDagger
             return false;
         }
     }
+
+
     public class MagicDaggerMinion : GroupAwareMinion<MagicDaggerMinionBuff>
     {
 
         private int framesInAir;
+        private float idleAngle;
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
@@ -71,11 +75,6 @@ namespace DemoMod.Projectiles.Minions.MagicDagger
             attackFrames = 120;
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            
-        }
-
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if(projectile.tileCollide)
@@ -89,10 +88,26 @@ namespace DemoMod.Projectiles.Minions.MagicDagger
         public override Vector2 IdleBehavior()
         {
             base.IdleBehavior();
-            Vector2 idlePosition = player.Top;
-            int minionCount = GetActiveMinions().Count;
-            idlePosition.X += -3 * (minionCount/2) + 10 * (projectile.minionPos/2);
-            idlePosition.Y += -20;
+            List<Projectile> minions = GetActiveMinions();
+            Projectile leader = GetFirstMinion(minions);
+            if(leader.minionPos == projectile.minionPos && 
+                player.ownedProjectileCounts[ProjectileType<MagicDaggerThrower>()] == 0)
+            {
+                Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<MagicDaggerThrower>(), 0, 0, Main.myPlayer);
+            }
+            Projectile head = GetMinionsOfType(ProjectileType<MagicDaggerThrower>()).FirstOrDefault();
+            if(head == default)
+            {
+                // the head got despawned, wait for it to respawn
+                return Vector2.Zero;
+            }
+            Vector2 idlePosition = head.Center;
+            int minionCount = minions.Count;
+            int order = minions.IndexOf(projectile);
+            idleAngle = (float)(2 * Math.PI * order) / minionCount;
+            idleAngle += (2 * (float)Math.PI * minions[0].ai[0]) / attackFrames;
+            idlePosition.X += 2 + 20 * (float)Math.Sin(idleAngle);
+            idlePosition.Y += 2 + 20 * (float)Math.Cos(idleAngle);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
@@ -100,7 +115,7 @@ namespace DemoMod.Projectiles.Minions.MagicDagger
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(600f, player.Top) is Vector2 target)
+            if(FindTargetInTurnOrder(400f, projectile.Center) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;
@@ -122,8 +137,9 @@ namespace DemoMod.Projectiles.Minions.MagicDagger
                 target *= speed;
                 framesInAir = 0;
                 projectile.velocity = target;
+                projectile.rotation = (float)(Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + Math.PI/2);
             }
-            if(framesInAir++ > 300)
+            if(framesInAir++ > 40)
             {
                 attackState = AttackState.RETURNING;
                 projectile.tileCollide = false;
@@ -134,9 +150,6 @@ namespace DemoMod.Projectiles.Minions.MagicDagger
                 projectile.tileCollide = true;
                 projectile.velocity.Y += 0.5f;
                 projectile.velocity.X *= 0.95f;
-            } else
-            {
-                projectile.rotation = (float)(Math.Atan2(projectile.velocity.Y, projectile.velocity.X) + Math.PI/2);
             }
         }
 
@@ -151,20 +164,24 @@ namespace DemoMod.Projectiles.Minions.MagicDagger
             projectile.rotation = (float)Math.PI;
             // alway clamp to the idle position
             projectile.tileCollide = false;
-            int inertia = 5;
+            int inertia = 2;
             int maxSpeed = 20;
-            if(vectorToIdlePosition.Length() < 16)
+            if(vectorToIdlePosition.Length() < 32)
             {
-                // return to the attacking state after getting back home
                 attackState = AttackState.IDLE;
-            }
-            Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
-            if(speedChange.Length() > maxSpeed)
+                projectile.rotation =  (float) Math.PI - idleAngle;
+                projectile.position += vectorToIdlePosition;
+                projectile.velocity = Vector2.Zero;
+            } else
             {
-                speedChange.Normalize();
-                speedChange *= maxSpeed;
+                Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
+                if(speedChange.Length() > maxSpeed)
+                {
+                    speedChange.Normalize();
+                    speedChange *= maxSpeed;
+                }
+                projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;
             }
-            projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;
         }
     }
 }

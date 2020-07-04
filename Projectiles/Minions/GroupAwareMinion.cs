@@ -28,16 +28,23 @@ namespace DemoMod.Projectiles.Minions
 
         public List<Projectile> GetActiveMinions()
         {
+            return GetMinionsOfType(projectile.type);
+        }
+
+        public List<Projectile> GetMinionsOfType(int projectileType)
+        {
 			var otherMinions = new List<Projectile>();
 			for (int i = 0; i < Main.maxProjectiles; i++) {
 				// Fix overlap with other minions
 				Projectile other = Main.projectile[i];
-				if (other.active && other.owner == projectile.owner && projectile.type == other.type )
+				if (other.active && other.owner == projectile.owner && other.type == projectileType )
 				{
 					otherMinions.Add(other);
 				}
 			}
+            otherMinions.Sort((x, y)=>x.minionPos - y.minionPos);
 			return otherMinions;
+
         }
 
 		public Projectile GetFirstMinion(List<Projectile> others = null)
