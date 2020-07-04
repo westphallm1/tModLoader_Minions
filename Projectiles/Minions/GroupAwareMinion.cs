@@ -68,23 +68,18 @@ namespace DemoMod.Projectiles.Minions
             {
                 return null;
             }
-            else if (attackState == AttackState.IDLE)
+            else if (attackState == AttackState.IDLE && !IsMyTurn())
             {
-                // wait for our "turn" within the attack rotation
-                if(IsMyTurn())
-                {
-                    attackState = AttackState.ATTACKING;
-                } else
-                {
-                    return null;
-                }
+                return null;
             }
             if (PlayerTargetPosition(searchDistance, center) is Vector2 target)
             {
+                attackState = AttackState.ATTACKING;
                 return target - projectile.Center;
             }
             else if (ClosestEnemyInRange(searchDistance, center) is Vector2 target2)
             {
+                attackState = AttackState.ATTACKING;
                 return target2 - projectile.Center;
             }
             else
