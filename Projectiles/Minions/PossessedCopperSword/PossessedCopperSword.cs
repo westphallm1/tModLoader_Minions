@@ -15,7 +15,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Possessed Copper Sword");
+			DisplayName.SetDefault("Copper StarSword");
 			Description.SetDefault("A possessed copper sword will fight for you!");
         }
     }
@@ -24,13 +24,13 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Possessed Copper Sword");
+			DisplayName.SetDefault("Copper StarSword");
 			Tooltip.SetDefault("Summons a possessed Sword to fight for you!");
 		}
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 19;
+			item.damage = 8;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
@@ -46,26 +46,27 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copper Sword");
+			DisplayName.SetDefault("Copper StarSword");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
 		}
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-			projectile.width = 32;
-			projectile.height = 32;
+			projectile.width = 16;
+			projectile.height = 16;
 			projectile.tileCollide = false;
             projectile.type = ProjectileType<CopperSwordMinion>();
             projectile.ai[0] = 0;
             attackState = AttackState.IDLE;
-            attackFrames = 45;
+            attackFrames = 60;
 		}
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             attackState = AttackState.RETURNING;
-            Lighting.AddLight(projectile.Center, Color.Aqua.ToVector3());
+            Lighting.AddLight(target.position, Color.LightYellow.ToVector3());
+            Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Gold);
         }
 
         public override Vector2 IdleBehavior()
@@ -81,7 +82,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(600f, player.Center) is Vector2 target)
+            if(FindTargetInTurnOrder(500f, player.Center) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;
@@ -96,20 +97,20 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
         {
             // alway clamp to the idle position
             int inertia = 5;
-            int speed = 12;
+            int speed = 8;
             vectorToTargetPosition.Normalize();
             vectorToTargetPosition *= speed;
             projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
             projectile.rotation += (float)Math.PI / 9;
-            Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, 42);
+            Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Copper);
         }
 
         public override void IdleMovement(Vector2 vectorToIdlePosition)
         {
             // alway clamp to the idle position
             int inertia = 5;
-            int maxSpeed = attackState == AttackState.IDLE ? 20 : 12;
-            if(vectorToIdlePosition.Length() < 16)
+            int maxSpeed = attackState == AttackState.IDLE ? 12 : 8;
+            if(vectorToIdlePosition.Length() < 32)
             {
                 // return to the attacking state after getting back home
                 attackState = AttackState.IDLE;
