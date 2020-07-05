@@ -43,9 +43,16 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
     public class PaperSurferMinion : GroupAwareMinion<PaperSurferMinionBuff>
     {
 
-        private float idleAngle;
-        private int framesSinceDiveBomb = 0;
-        private Random random = new Random();
+        protected float idleAngle;
+        protected int framesSinceDiveBomb = 0;
+        protected int diveBombHeightRequirement = 40;
+        protected int diveBombHeightTarget = 120;
+        protected int diveBombHorizontalRange = 80;
+        protected int diveBombFrameRateLimit = 60;
+        protected int diveBombSpeed = 12;
+        protected int diveBombInertia = 12;
+        protected int approachSpeed = 8;
+        protected int approachInertia = 8;
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
