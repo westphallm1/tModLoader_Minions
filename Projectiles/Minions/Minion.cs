@@ -12,6 +12,8 @@ namespace DemoMod.Projectiles.Minions
 {
 	public abstract class Minion<T>  : ModProjectile where T: ModBuff
 	{
+        public readonly float PI = (float)Math.PI;
+
         public Player player;
 		public override void AI() {
 			player = Main.player[projectile.owner];

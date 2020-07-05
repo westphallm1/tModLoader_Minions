@@ -68,8 +68,7 @@ namespace DemoMod.Projectiles.Minions
         {
             if(leader == null)
             {
-                leader = (others ?? GetActiveMinions())
-                    .Where(p => p.minionPos == others.Min(p2 => p2.minionPos)).FirstOrDefault();
+                leader = (others ?? GetActiveMinions()).FirstOrDefault();
 
             }
             return leader;   
