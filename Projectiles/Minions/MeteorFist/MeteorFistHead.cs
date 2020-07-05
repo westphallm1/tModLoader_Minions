@@ -12,6 +12,11 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
 {
     public class MeteorFistHead : SimpleMinion<MeteorFistMinionBuff>
     {
+        protected int targetedInertia = 15;
+        protected int targetedSpeed = 9;
+        protected int maxDistanceFromPlayer = 600;
+        protected int minDistanceToEnemy = 200;
+
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -80,15 +85,15 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            int inertia = 15;
-            int maxSpeed = 9;
+            int inertia = targetedInertia;
+            int maxSpeed = targetedSpeed;
             // move towards the enemy, but don't get too far from the player
             projectile.spriteDirection = vectorToTargetPosition.X > 0 ? -1 : 1;
             Vector2 vectorFromPlayer = player.Center - projectile.Center;
-            if (vectorFromPlayer.Length() > 600f)
+            if (vectorFromPlayer.Length() > maxDistanceFromPlayer)
             {
                 vectorToTargetPosition = vectorFromPlayer;
-            } else if (vectorToTargetPosition.Length() < 200f){
+            } else if (vectorToTargetPosition.Length() < minDistanceToEnemy){
                 vectorToTargetPosition *= -1;
             }
             vectorToTargetPosition.Normalize();

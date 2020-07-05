@@ -50,9 +50,9 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
         protected int diveBombHorizontalRange = 80;
         protected int diveBombFrameRateLimit = 60;
         protected int diveBombSpeed = 12;
-        protected int diveBombInertia = 12;
+        protected int diveBombInertia = 15;
         protected int approachSpeed = 8;
-        protected int approachInertia = 8;
+        protected int approachInertia = 40;
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
@@ -113,19 +113,19 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             // alway clamp to the idle position
-            int inertia = 40;
-            int speed = 8;
+            int inertia = approachInertia;
+            int speed = approachSpeed;
             
             projectile.friendly = framesSinceDiveBomb ++ > 20; // limit rate of attack
-            if(framesSinceDiveBomb < 60 || Math.Abs(vectorToTargetPosition.X) > 80)
+            if(framesSinceDiveBomb < diveBombFrameRateLimit || Math.Abs(vectorToTargetPosition.X) > diveBombHorizontalRange)
             {
                 // always aim for "above" while approaching
-                vectorToTargetPosition.Y -= 120;
+                vectorToTargetPosition.Y -= diveBombHeightTarget;
                 projectile.rotation = 0;
-            } else if(vectorToTargetPosition.Y > 40)
+            } else if(vectorToTargetPosition.Y > diveBombHeightRequirement)
             {
-                inertia = 15;
-                speed = 12;
+                inertia = diveBombInertia;
+                speed = diveBombSpeed;
                 projectile.rotation = (projectile.velocity.X > 0 ? 7 : 5) * PI / 4;
             }
             vectorToTargetPosition.Normalize();
