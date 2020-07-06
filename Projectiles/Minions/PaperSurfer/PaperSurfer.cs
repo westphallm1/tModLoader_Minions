@@ -61,7 +61,7 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
 			Main.projFrames[projectile.type] = 6;
 		}
 
-		public sealed override void SetDefaults() {
+		public override void SetDefaults() {
 			base.SetDefaults();
 			projectile.width = 16;
 			projectile.height = 16;
@@ -80,11 +80,15 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
             List<Projectile> minions = GetActiveMinions();
             Vector2 idlePosition = player.Top;
             int minionCount = minions.Count;
-            int order = minions.IndexOf(projectile);
-            idleAngle = (2 * PI * order) / minionCount;
-            idleAngle += 2 * PI * minions[0].ai[1] / animationFrames;
-            idlePosition.X += 2 + 40 * (float)Math.Cos(idleAngle);
-            idlePosition.Y += -20 + 10 * (float)Math.Sin(idleAngle);
+            // this was silently failing sometimes, don't know why
+            if(minionCount > 0)
+            {
+                int order = minions.IndexOf(projectile);
+                idleAngle = (2 * PI * order) / minionCount;
+                idleAngle += 2 * PI * minions[0].ai[1] / animationFrames;
+                idlePosition.X += 2 + 40 * (float)Math.Cos(idleAngle);
+                idlePosition.Y += -20 + 10 * (float)Math.Sin(idleAngle);
+            }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;

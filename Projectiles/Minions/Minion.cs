@@ -15,7 +15,14 @@ namespace DemoMod.Projectiles.Minions
         public readonly float PI = (float)Math.PI;
 
         public Player player;
-		public override void AI() {
+
+		protected int buffType;
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+			buffType = BuffType<T>();
+        }
+        public override void AI() {
 			player = Main.player[projectile.owner];
 			CheckActive();
 			Behavior();
@@ -24,9 +31,9 @@ namespace DemoMod.Projectiles.Minions
 		public void CheckActive() {
 			// This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
 			if (player.dead || !player.active) {
-				player.ClearBuff(BuffType<T>());
+				player.ClearBuff(buffType);
 			}
-			if (player.HasBuff(BuffType<T>())) {
+			if (player.HasBuff(buffType)) {
 				projectile.timeLeft = 2;
 			}
 		}
