@@ -45,7 +45,7 @@ namespace DemoMod.Items.Weapons
             ItemID.Sets.GamepadWholeScreenUseRange[item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
             ItemID.Sets.LockOnIgnoresCollision[item.type] = true;
             item.damage = 10;
-            item.knockBack = 10f;
+            item.knockBack = 6f;
             item.width = 32;
             item.height = 32;
             item.useTime = 30;

@@ -96,12 +96,14 @@ namespace DemoMod.Projectiles.Minions.StarSurfer
             diveBombInertia = 10;
             approachSpeed = 15;
             approachInertia = 20;
+            animationFrames = 30;
             projectile.type = ProjectileType<StarSurferMinion>();
             projectileType = ProjectileType<StarSurferProjectile>();
         }
 
         public override Vector2 IdleBehavior()
         {
+            Lighting.AddLight(projectile.position, Color.Yellow.ToVector3());
             return base.IdleBehavior();
         }
 
@@ -122,8 +124,7 @@ namespace DemoMod.Projectiles.Minions.StarSurfer
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             base.TargetedMovement(vectorToTargetPosition);
-            //Dust.NewDust(projectile.position, projectile.width / 2, projectile.height / 2, DustID.Gold, -projectile.velocity.X, -projectile.velocity.Y);
-            Lighting.AddLight(projectile.position, Color.Yellow.ToVector3());
+            Dust.NewDust(projectile.position, projectile.width / 2, projectile.height / 2, DustID.Gold, -projectile.velocity.X, -projectile.velocity.Y);
             if (projectileFrameCount++ > projectileFireRate)
             {
                 projectileFrameCount = 0;
