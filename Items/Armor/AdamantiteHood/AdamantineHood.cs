@@ -11,7 +11,7 @@ namespace DemoMod.Items.Armor.AdamantiteHood
 		public override void SetStaticDefaults() {
 			DisplayName.SetDefault("Adamantite Hood");
 			Tooltip.SetDefault(""
-				+ "7% increased minion damge"
+				+ "7% increased minion damge\n"
 				+ "+1 maximum minions");
 		}
 
@@ -33,7 +33,7 @@ namespace DemoMod.Items.Armor.AdamantiteHood
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs) {
-			return body.type == ItemID.AdamantiteLeggings && legs.type == ItemID.AdamantiteBreastplate;
+			return legs.type == ItemID.AdamantiteLeggings && body.type == ItemID.AdamantiteBreastplate;
 		}
 
 		public override void UpdateEquip(Player player) {

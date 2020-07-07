@@ -75,7 +75,7 @@ namespace DemoMod.Projectiles.Minions.StarSurfer
     {
 
 
-        protected int projectileFireRate = 30;
+        protected int projectileFireRate = 120;
         protected int projectileDamage = 30;
         protected int projectileFrameCount = 0;
         protected int projectileVelocity = 18;
@@ -96,7 +96,7 @@ namespace DemoMod.Projectiles.Minions.StarSurfer
             diveBombInertia = 10;
             approachSpeed = 15;
             approachInertia = 20;
-            animationFrames = 30;
+            animationFrames = 160;
             projectile.type = ProjectileType<StarSurferMinion>();
             projectileType = ProjectileType<StarSurferProjectile>();
         }
