@@ -55,6 +55,8 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
         private int framesInAir;
         private float idleAngle;
         private int maxFramesInAir = 35;
+        private bool hasHitEnemy = false;
+        private float travelVelocity;
         private Random random = new Random();
 
 		public override void SetStaticDefaults() {
@@ -75,12 +77,12 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
             projectile.minionSlots = 1;
             attackFrames = 120;
             animationFrames = 120;
+            travelVelocity = 8;
 		}
 
         public override Vector2 IdleBehavior()
         {
             base.IdleBehavior();
-            Lighting.AddLight(projectile.position, Color.Purple.ToVector3() * 0.75f);
             List<Projectile> minions = GetActiveMinions();
             Vector2 idlePosition = player.Center;
             int minionCount = minions.Count;
@@ -105,6 +107,12 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
                 projectile.friendly = false;
                 return null;
             }
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            base.OnHitNPC(target, damage, knockback, crit);
+            hasHitEnemy = true;
         }
 
         private void WarpWithDust(Vector2 vectorToNewPosition, bool bigDustBefore)
@@ -139,13 +147,9 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
         }
         private void TeleportToEnemy(Vector2 target)
         {
-            float distanceFromFoe = 60 + random.Next(-20, 20);
-            float travelVelocity = 8;
-            Vector2 teleportDirection = new Vector2((float)Math.Cos(idleAngle), (float)Math.Sin(idleAngle));
-            if(teleportDirection.Y < -0.5)
-            {
-                travelVelocity = -12; // give it a boost if it's getting sent upwards
-            }
+            float distanceFromFoe = 80 + random.Next(-20, 20);
+            float teleportAngle = (float)(random.NextDouble() * 2 * Math.PI);
+            Vector2 teleportDirection = new Vector2((float)Math.Cos(teleportAngle), (float)Math.Sin(teleportAngle));
             projectile.velocity = -travelVelocity * teleportDirection;
             framesInAir = 0;
             WarpWithDust(target + distanceFromFoe * teleportDirection, false);
@@ -153,7 +157,6 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            Lighting.AddLight(projectile.position, Color.Purple.ToVector3() * 0.25f);
             if(oldVectorToTarget == null && vectorToTarget is Vector2 target)
             {
                 TeleportToEnemy(target);
@@ -162,11 +165,17 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
             {
                 attackState = AttackState.RETURNING;
             }
+            else if (!hasHitEnemy && vectorToTargetPosition != Vector2.Zero)
+            {
+                vectorToTargetPosition.Normalize();
+                projectile.velocity = vectorToTargetPosition * travelVelocity;
+            }
             else
             {
                 projectile.rotation += (float)Math.PI / 9;
                 projectile.velocity.Y += 0.2f;
             }
+            Lighting.AddLight(projectile.position, Color.Purple.ToVector3() * 0.75f);
         }
 
         public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -189,6 +198,7 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
                 projectile.rotation = idleAngle + (float) Math.PI/2;
                 projectile.position += vectorToIdlePosition;
                 projectile.velocity = Vector2.Zero;
+                hasHitEnemy = false;
             }
         }
     }
