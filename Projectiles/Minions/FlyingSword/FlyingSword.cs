@@ -30,7 +30,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 42;
+			item.damage = 48;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
@@ -45,7 +45,8 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
         int hitCount = 0;
         int maxHitCount = 8;
         int framesInAir = 0;
-        int maxFramesInAir = 180;
+        int maxFramesInAir = 90;
+        int enemyHitFrame = 0;
 
 
 		public override void SetStaticDefaults() {
@@ -63,7 +64,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
             projectile.type = ProjectileType<FlyingSwordMinion>();
             projectile.ai[0] = 0;
             attackState = AttackState.IDLE;
-            attackFrames = 60;
+            attackFrames = 120;
 		}
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -72,6 +73,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
             {
                 attackState = AttackState.RETURNING;
             }
+            enemyHitFrame = framesInAir;
             Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Platinum);
         }
 
@@ -93,7 +95,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(900f, player.Center) is Vector2 target)
+            if(FindTargetInTurnOrder(950f, player.Center) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;
@@ -107,13 +109,21 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             // alway clamp to the idle position
-            int inertia = hitCount == 0? 5 : 30;
-            int speed = 12;
-            vectorToTargetPosition.Normalize();
-            vectorToTargetPosition *= speed;
-            projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
-            projectile.rotation += (float)Math.PI / 9;
-            if(framesInAir ++ >= maxFramesInAir)
+            int inertia = 5;
+            int speed = 15;
+            framesInAir++;
+            if((enemyHitFrame == 0 || enemyHitFrame + 9 < framesInAir) && vectorToTargetPosition.Length() > 8 )
+            {
+                vectorToTargetPosition.Normalize();
+                vectorToTargetPosition *= speed;
+                projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+                projectile.rotation += (float)Math.PI / 9;
+            } else
+            {
+                projectile.velocity.Normalize();
+                projectile.velocity *= speed; // travel straight away from the impact
+            }
+            if(framesInAir >= maxFramesInAir)
             {
                 attackState = AttackState.RETURNING;
             }
@@ -124,13 +134,14 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
         {
             // alway clamp to the idle position
             int inertia = 5;
-            int maxSpeed = 20;
+            int maxSpeed = 32;
             if(vectorToIdlePosition.Length() < 32)
             {
                 // return to the attacking state after getting back home
                 attackState = AttackState.IDLE;
                 hitCount = 0;
                 framesInAir = 0;
+                enemyHitFrame = 0;
             }
             Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
             if(speedChange.Length() > maxSpeed)
