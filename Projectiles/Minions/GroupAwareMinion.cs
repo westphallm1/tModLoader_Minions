@@ -40,21 +40,6 @@ namespace DemoMod.Projectiles.Minions
             return others;
         }
 
-        public List<Projectile> GetMinionsOfType(int projectileType)
-        {
-			var otherMinions = new List<Projectile>();
-			for (int i = 0; i < Main.maxProjectiles; i++) {
-				// Fix overlap with other minions
-				Projectile other = Main.projectile[i];
-				if (other.active && other.owner == projectile.owner && other.type == projectileType )
-				{
-					otherMinions.Add(other);
-				}
-			}
-            otherMinions.Sort((x, y)=>x.minionPos - y.minionPos);
-			return otherMinions;
-        }
-
         public Projectile GetHead(int headType)
         {
             if (head == null)

@@ -15,7 +15,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 {
     public class BalloonBuddyMinionBuff: MinionBuff
     {
-        public BalloonBuddyMinionBuff() : base(ProjectileType<BalloonBuddyMinion>(), ProjectileType<BalloonBuddyBodyMinion>()) { }
+        public BalloonBuddyMinionBuff() : base(ProjectileType<BalloonBuddyMinion>()) { }
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -152,8 +152,12 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
             CircularVectorQueue.Initialize(backingArray);
             PositionLog = new CircularLengthQueue(backingArray, queueSize: 32);
             PositionLog.mod = mod;
-            empowerCount = 0;
 		}
+
+        protected int GetSegmentCount()
+        {
+            return GetMinionsOfType(ProjectileType<BalloonBuddyBodyMinion>()).Count;
+        }
 
         public override Vector2 IdleBehavior()
         {
@@ -176,11 +180,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
         }
         protected override void OnEmpower()
         {
-            if(empowerCount < player.maxMinions)
-            {
-                Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<BalloonBuddyBodyMinion>(), 0, 0, Main.myPlayer);
-            }
-            empowerCount++;
+            Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<BalloonBuddyBodyMinion>(), 0, 0, Main.myPlayer);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -196,22 +196,22 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 
         protected override int ComputeDamage()
         {
-            return 12;
+            return 4 * 4 + GetSegmentCount();
         }
 
         protected override float ComputeSearchDistance()
         {
-            return 550;
+            return 450 + 4 * GetSegmentCount();
         }
 
         protected override float ComputeInertia()
         {
-            return 20;
+            return 22 - GetSegmentCount();
         }
 
         protected override float ComputeTargetedSpeed()
         {
-            return 8;
+            return 8 + 2 * GetSegmentCount();
         }
 
         protected override float ComputeIdleSpeed()

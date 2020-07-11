@@ -87,7 +87,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrakeHatchling
 
         protected override int ComputeDamage()
         {
-            return 8 + 12 * (int)projectile.minionSlots;
+            return 8 + 6 * (int)projectile.minionSlots;
         }
 
         protected override float ComputeSearchDistance()
@@ -97,17 +97,17 @@ namespace DemoMod.Projectiles.Minions.TurtleDrakeHatchling
 
         protected override float ComputeInertia()
         {
-            return Math.Max(10, 40 - 8 * projectile.minionSlots);
+            return Math.Max(10, 40 - 4 * projectile.minionSlots);
         }
 
         protected override float ComputeTargetedSpeed()
         {
-            return 4 * projectile.minionSlots - 1;
+            return 3 * projectile.minionSlots;
         }
 
         protected override float ComputeIdleSpeed()
         {
-            return ComputeTargetedSpeed() + 2;
+            return ComputeTargetedSpeed() + 3;
         }
 
         protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)

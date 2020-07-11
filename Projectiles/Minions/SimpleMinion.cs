@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -117,6 +118,21 @@ namespace DemoMod.Projectiles.Minions
 			return null;
         }
 
+
+        public List<Projectile> GetMinionsOfType(int projectileType)
+        {
+			var otherMinions = new List<Projectile>();
+			for (int i = 0; i < Main.maxProjectiles; i++) {
+				// Fix overlap with other minions
+				Projectile other = Main.projectile[i];
+				if (other.active && other.owner == projectile.owner && other.type == projectileType )
+				{
+					otherMinions.Add(other);
+				}
+			}
+            otherMinions.Sort((x, y)=>x.minionPos - y.minionPos);
+			return otherMinions;
+        }
 		public Vector2? ClosestEnemyInRange(float maxRange, Vector2? centeredOn = null)
         {
 			Vector2 center = centeredOn ?? projectile.Center;
