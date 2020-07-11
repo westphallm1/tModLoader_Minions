@@ -84,7 +84,10 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
             int minionCount = minions.Count;
             int order = minions.IndexOf(projectile);
             float idleAngle = (float)(2 * Math.PI * order) / minionCount;
-            idleAngle += (2 * (float)Math.PI * minions[0].ai[1]) / animationFrames;
+            if(minions.Count > 0)
+            {
+                idleAngle += (2 * (float)Math.PI * minions[0].ai[1]) / animationFrames;
+            }
             Vector2 idlePosition = player.Center;
             idlePosition.X += (30 + projectile.minionPos * 20) * -player.direction;
             idlePosition.Y += -35 + 5 * (float) Math.Sin(idleAngle);

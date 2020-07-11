@@ -68,6 +68,17 @@ namespace DemoMod.Projectiles.Minions.TurtleDrakeHatchling
             return base.Colliding(projHitbox, targetHitbox);
         }
 
+        public override Vector2 IdleBehavior()
+        {
+            base.IdleBehavior();
+            Vector2 idlePosition = player.Top;
+            idlePosition.X += 48 * -player.direction;
+            idlePosition.Y += -32;
+            Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            return vectorToIdlePosition;
+        }
+
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             vectorToTargetPosition.Y += -32; // hit with the body instead of the balloon
@@ -117,5 +128,17 @@ namespace DemoMod.Projectiles.Minions.TurtleDrakeHatchling
                     break;
             }
         }
+
+        public override void Animate(int minFrame = 0, int? maxFrame = null)
+        {
+            base.Animate(minFrame, maxFrame);
+
+            if(Math.Abs(projectile.velocity.X) > 2)
+            {
+                projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
+            }
+            projectile.rotation = projectile.velocity.X * 0.05f;
+        }
     }
+
 }

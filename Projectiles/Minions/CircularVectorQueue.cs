@@ -7,6 +7,10 @@ using static Terraria.ModLoader.ModContent;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace DemoMod.Projectiles.Minions
 {
@@ -17,6 +21,7 @@ namespace DemoMod.Projectiles.Minions
         protected int startingPosition;
         protected readonly int headerSize;
         public int Length = 0;
+        public Mod mod;
         private int headPosition
         {
             get { return (int)backingArray[startingPosition]; }
@@ -71,7 +76,7 @@ namespace DemoMod.Projectiles.Minions
                 headIndex = headPosition - 2 * index;
             } else
             {
-                int distancePastStart = startOfQueue - (headPosition - 2 * index);
+                int distancePastStart = (headPosition - 2 * index) - startOfQueue;
                 headIndex = endOfQueue + distancePastStart;
             }
             return new Vector2(backingArray[headIndex], backingArray[headIndex + 1]);

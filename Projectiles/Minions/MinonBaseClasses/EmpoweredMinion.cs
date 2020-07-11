@@ -1,5 +1,6 @@
 ﻿using log4net.Repository.Hierarchy;
 using Microsoft.Xna.Framework;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,20 +45,23 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 
         protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
 
-        public override Vector2 IdleBehavior()
+        protected virtual void OnEmpower()
         {
-            if(projectile.ai[0] == 1 && projectile.minionSlots < player.maxMinions)
+            if(projectile.minionSlots < player.maxMinions)
             {
                 projectile.minionSlots += 1;
+            }
+        }
+
+        public override Vector2 IdleBehavior()
+        {
+            if(projectile.ai[0] == 1 )
+            {
+                OnEmpower();
                 projectile.ai[0] = 0;
             }
             projectile.damage = ComputeDamage();
-            Vector2 idlePosition = player.Top;
-            idlePosition.X += 48 * -player.direction;
-            idlePosition.Y += -32;
-            Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
-            return vectorToIdlePosition;
+            return Vector2.Zero;
         }
 
         public override Vector2? FindTarget()
@@ -119,11 +123,6 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 					projectile.frame = minFrame;
 				}
 			}
-            if(Math.Abs(projectile.velocity.X) > 2)
-            {
-                projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
-            }
-            projectile.rotation = projectile.velocity.X * 0.05f;
         }
     }
 }

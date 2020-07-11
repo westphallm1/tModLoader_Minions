@@ -62,7 +62,7 @@ namespace DemoMod.Projectiles.Minions
             }
         }
 
-        public Vector2 PositionAlongPath(float distanceAlongPath)
+        public Vector2 PositionAlongPath(float distanceAlongPath, ref Vector2 direction)
         {
             if(distanceAlongPath >= SavedDistance || Length < 2)
             {
@@ -83,13 +83,14 @@ namespace DemoMod.Projectiles.Minions
             }
             float overshoot = distance - distanceAlongPath;
             Vector2 overshootDirection = Vector2.Normalize(next - current);
+            direction = overshootDirection;
             return next - overshoot * overshootDirection;
         }
 
         public CircularLengthQueue(float[] backing, int startingPosition = 0, int headerSize = 2, int queueSize = 16, int lengthResolution = 16, int maxLength = 220) :
             base(backing, startingPosition, headerSize, queueSize)
         {
-            this.LengthResolution = lengthResolution;
+            LengthResolution = lengthResolution;
             MaxSaveDistance = maxLength;
         }
     }
