@@ -102,7 +102,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrakeHatchling
 
         protected override float ComputeTargetedSpeed()
         {
-            return 3 * projectile.minionSlots;
+            return 3 + projectile.minionSlots;
         }
 
         protected override float ComputeIdleSpeed()

@@ -20,7 +20,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Balloon Buddy");
-			Description.SetDefault("A possessed dagger will fight for you!");
+			Description.SetDefault("A balloon buddy will fight for you!");
         }
     }
 
@@ -29,7 +29,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Balloon Buddy");
-			Tooltip.SetDefault("Summons a possessed dagger to fight for you!");
+			Tooltip.SetDefault("Summons a balloon buddy to fight for you!");
             
 		}
 
@@ -53,7 +53,6 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
             projectile.minionSlots = 0;
             projectile.width = 24;
             projectile.height = 22;
-            Main.NewText("Summoned a buddy!");
         }
         public override Vector2? FindTarget()
         {
@@ -95,7 +94,6 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
             projectile.minionSlots = 1;
             projectile.width = 14;
             projectile.height = 12;
-            Main.NewText("Summoned a buddy!");
         }
         public override Vector2? FindTarget()
         {
@@ -130,7 +128,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
     {
         private static float[] backingArray;
         public static CircularLengthQueue PositionLog = null;
-        private int empowerCount;
+        public int framesSinceLastHit = 0;
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Balloon Buddy");
@@ -147,7 +145,6 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
             projectile.ai[0] = 0;
             projectile.ai[1] = 0;
             projectile.minionSlots = -1;
-            Main.NewText("Initializing!");
             backingArray = new float[255];
             CircularVectorQueue.Initialize(backingArray);
             PositionLog = new CircularLengthQueue(backingArray, queueSize: 32);
@@ -183,6 +180,11 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
             Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<BalloonBuddyBodyMinion>(), 0, 0, Main.myPlayer);
         }
 
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            framesSinceLastHit = 0;
+        }
+
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             // TODO: don't count the balloon for collisions
@@ -192,6 +194,18 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             base.TargetedMovement(vectorToTargetPosition);
+            float inertia = ComputeInertia();
+            float speed = ComputeTargetedSpeed();
+            vectorToTargetPosition.Normalize();
+            vectorToTargetPosition *= speed;
+            if(framesSinceLastHit ++ > 8)
+            {
+                projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+            } else
+            {
+                projectile.velocity.Normalize();
+                projectile.velocity *= speed; // kick it away from enemies that it's just hit
+            }
         }
 
         protected override int ComputeDamage()
@@ -211,7 +225,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 
         protected override float ComputeTargetedSpeed()
         {
-            return 8 + 2 * GetSegmentCount();
+            return 6 + GetSegmentCount();
         }
 
         protected override float ComputeIdleSpeed()
