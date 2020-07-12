@@ -126,25 +126,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
             projectile.minionSlots = 0;
             projectile.width = 20;
             projectile.height = 28;
-        }
-        public override void IdleMovement(Vector2 vectorToIdlePosition)
-        {
-            Vector2 angle = new Vector2();
-            Vector2 trail = GetPositionAlongPath(ref angle);
-            Vector2 normal = new Vector2(angle.Y, -angle.X);
-            normal.Normalize();
-            projectile.position = trail + Math.Sign(angle.X) * 4*normal;
-            projectile.rotation = (float)Math.Atan2(angle.Y, angle.X) + (float)Math.PI;
-            projectile.velocity = Vector2.Zero;
-            // todo calc more efficiently
-            if(angle.X > 0)
-            {
-                projectile.rotation -= (float)Math.PI;
-                projectile.spriteDirection = -1;
-            } else
-            {
-                projectile.spriteDirection = 1;
-            }
+            NormalShift = 4;
         }
 
         protected override Vector2 GetPositionAlongPath(ref Vector2 angle)
@@ -222,12 +204,6 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             framesSinceLastHit = 0;
-        }
-
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
-            // TODO: don't count the balloon for collisions
-            return base.Colliding(projHitbox, targetHitbox);
         }
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
