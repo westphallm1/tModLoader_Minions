@@ -210,12 +210,12 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 
         protected override int ComputeDamage()
         {
-            return 4 * 4 + GetSegmentCount();
+            return 4  + 4 * GetSegmentCount();
         }
 
         protected override float ComputeSearchDistance()
         {
-            return 450 + 4 * GetSegmentCount();
+            return 400 + 30 * GetSegmentCount();
         }
 
         protected override float ComputeInertia()
