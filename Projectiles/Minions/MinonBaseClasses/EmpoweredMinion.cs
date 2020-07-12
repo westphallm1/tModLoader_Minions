@@ -118,8 +118,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 				projectile.frameCounter = 0;
 				projectile.frame++;
 				if (projectile.frame >= (maxFrame ?? Main.projFrames[projectile.type]) ||
-                    projectile.frame < minFrame ||
-                    Math.Abs(projectile.velocity.X) < 2) {
+                    projectile.frame < minFrame) {
 					projectile.frame = minFrame;
 				}
 			}
