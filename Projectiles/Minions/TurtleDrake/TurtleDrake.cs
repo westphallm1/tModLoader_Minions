@@ -37,6 +37,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrake
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
+            item.damage = 45;
 			item.value = Item.buyPrice(0, 30, 0, 0);
 			item.rare = ItemRarityID.Blue;
 		}
@@ -103,7 +104,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrake
         }
         protected override int ComputeDamage()
         {
-            return 30 + 20 * (int)projectile.minionSlots;
+            return baseDamage + (baseDamage/2) * (int)projectile.minionSlots;
         }
 
         protected override float ComputeSearchDistance()

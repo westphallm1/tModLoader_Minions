@@ -38,6 +38,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
+            item.damage = 40;
 			item.height = 32;
 			item.value = Item.buyPrice(0, 30, 0, 0);
 			item.rare = ItemRarityID.Blue;
@@ -225,7 +226,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
 
         protected override int ComputeDamage()
         {
-            return 40 + 20 * GetSegmentCount();
+            return baseDamage + (baseDamage / 2) * GetSegmentCount();
         }
 
         protected override float ComputeSearchDistance()

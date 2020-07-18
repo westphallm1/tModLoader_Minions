@@ -37,6 +37,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
+            item.damage = 50;
 			item.value = Item.buyPrice(0, 30, 0, 0);
 			item.rare = ItemRarityID.Blue;
 		}
@@ -143,13 +144,17 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
                 Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<EclipseMinion>(), 0, 0, Main.myPlayer, projectile.minionSlots - 1);
             }
             framesSinceLastHit++;
-            if(framesSinceLastHit ++ > 60)
+            if(framesSinceLastHit ++ > 60 && targetNPCIndex is int npcIndex)
             {
-                Projectile.NewProjectile(projectile.position + vectorToTargetPosition, Vector2.Zero, 
-                    ProjectileType<ExampleLaser>(), 
+                vectorToTargetPosition.Normalize();
+                vectorToTargetPosition *= 8;
+                Projectile.NewProjectile(projectile.position, vectorToTargetPosition, 
+                    ProjectileType<EclipseSphere>(), 
                     projectile.damage, 
                     projectile.knockBack, 
-                    Main.myPlayer);
+                    Main.myPlayer,
+                    projectile.minionSlots - 1,
+                    npcIndex);
                 framesSinceLastHit = 0;
             }
             Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
@@ -162,12 +167,28 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         }
         protected override int ComputeDamage()
         {
-            return 30 + 20 * (int)projectile.minionSlots;
+            return baseDamage + (baseDamage/2) * (int)projectile.minionSlots;
         }
 
+        private Vector2? GetTargetVector()
+        {
+            float searchDistance = ComputeSearchDistance();
+            if (PlayerTargetPosition(searchDistance, player.Center, searchDistance/2) is Vector2 target)
+            {
+                return target - projectile.Center;
+            }
+            else if (ClosestEnemyInRange(searchDistance, player.Center, searchDistance/2) is Vector2 target2)
+            {
+                return target2 - projectile.Center;
+            }
+            else
+            {
+                return null;
+            }
+        }
         public override Vector2? FindTarget()
         {
-            Vector2? target = base.FindTarget();
+            Vector2? target = GetTargetVector();
             if(target == null && player.ownedProjectileCounts[ProjectileType<EclipseMinion>()] > 0)
             {
                 Projectile child = GetMinionsOfType(ProjectileType<EclipseMinion>()).FirstOrDefault();
@@ -192,7 +213,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 
         protected override float ComputeSearchDistance()
         {
-            return 700 + 50 * projectile.minionSlots;
+            return 700 + 100 * projectile.minionSlots;
         }
 
         protected override float ComputeInertia()

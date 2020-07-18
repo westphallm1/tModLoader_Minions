@@ -50,6 +50,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
         protected abstract float ComputeIdleSpeed();
 
         protected int frameSpeed = 15;
+        protected int baseDamage = -1;
 
         protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
 
@@ -63,6 +64,10 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 
         public override Vector2 IdleBehavior()
         {
+            if(baseDamage == -1)
+            {
+                baseDamage = projectile.damage;
+            }
             if(projectile.ai[0] == 1 )
             {
                 OnEmpower();

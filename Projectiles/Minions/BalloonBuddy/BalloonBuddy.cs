@@ -39,6 +39,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
+            item.damage = 10;
 			item.value = Item.buyPrice(0, 30, 0, 0);
 			item.rare = ItemRarityID.Blue;
 		}
@@ -210,7 +211,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 
         protected override int ComputeDamage()
         {
-            return 4  + 4 * GetSegmentCount();
+            return (baseDamage /2) + baseDamage/4 * GetSegmentCount();
         }
 
         protected override float ComputeSearchDistance()
