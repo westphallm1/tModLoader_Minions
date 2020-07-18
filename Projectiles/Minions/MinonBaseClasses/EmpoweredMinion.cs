@@ -13,6 +13,8 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 {
     public abstract class EmpoweredMinionItem<TBuff, TMinion> : MinionItem<TBuff, TMinion> where TBuff: ModBuff where TMinion: EmpoweredMinion<TBuff>
     {
+        protected int dustType = DustID.Confetti;
+        protected int dustCount = 10;
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             if(player.ownedProjectileCounts[item.shoot] == 0)
@@ -26,6 +28,10 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
                     if (other.active && other.owner == Main.myPlayer && other.type == item.shoot && other.minionSlots < player.maxMinions)
                     {
                         other.ai[0] = 1;
+                        for (int j = 0; j < dustCount; j++)
+                        {
+                            Dust.NewDust(other.position, other.width, other.height, dustType);
+                        }
                         break;
                     }
                 }
@@ -42,6 +48,8 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
         protected abstract float ComputeInertia();
         protected abstract float ComputeTargetedSpeed();
         protected abstract float ComputeIdleSpeed();
+
+        protected int frameSpeed = 15;
 
         protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
 
@@ -112,7 +120,6 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
             int max = 0;
             SetMinAndMaxFrames(ref minFrame, ref max);
             maxFrame = max;
-			int frameSpeed = 15;
 			projectile.frameCounter++;
 			if (projectile.frameCounter >= frameSpeed) {
 				projectile.frameCounter = 0;
