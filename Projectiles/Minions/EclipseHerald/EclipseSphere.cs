@@ -23,8 +23,8 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         }
         public override void SetDefaults()
 		{
-			projectile.width = 10;
-			projectile.height = 10;
+			projectile.width = 64;
+			projectile.height = 64;
 			projectile.friendly = true;
 			projectile.penetrate = -1;
 			projectile.tileCollide = false;
@@ -36,7 +36,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         public override void AI()
         {
 			base.AI();
-			projectile.frame = (int)projectile.ai[0];
+            projectile.frame = Math.Min(5, (int)projectile.ai[0]);
 			projectile.rotation += (float)(Math.PI) / 90;
             if(hitTarget == 0 && targetNPC.active)
             {
@@ -46,7 +46,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
                     OnHitTarget();
                 }
                 vectorToTarget.Normalize();
-                projectile.velocity = vectorToTarget * 8;
+                projectile.velocity = vectorToTarget * (8+ projectile.ai[0]);
             }
             if(targetNPC.active && targetNPC.boss && hitTarget > 0)
             {
@@ -64,15 +64,10 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         private void AddDust()
         {
             // dust should come from outside the projectile and go towards the center
-            for(float i = 0; i < 2*Math.PI; i+= (float)Math.PI/4)
+            Vector2 velocity = -projectile.velocity;
+            for(int i = 0; i < 5; i++)
             {
-                Vector2 angle = new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
-                Vector2 position = angle * (8 + 4 * projectile.ai[0]);
-                Vector2 velocity = -4 * angle;
-                for(int j = 0; j < 3; j++)
-                {
-                    Dust.NewDust(position, 8, 8, DustID.Shadowflame, velocity.X, velocity.Y);
-                }
+                Dust.NewDust(projectile.position, projectile.width/2, projectile.height/2, DustID.GoldFlame, velocity.X, velocity.Y);
             }
         }
 

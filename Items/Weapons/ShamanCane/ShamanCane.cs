@@ -6,6 +6,7 @@ using System.Linq;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace DemoMod.Items.Weapons.ShamanCane
 {
@@ -92,6 +93,7 @@ namespace DemoMod.Items.Weapons.ShamanCane
         {
             ItemID.Sets.GamepadWholeScreenUseRange[item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
             ItemID.Sets.LockOnIgnoresCollision[item.type] = true;
+            Item.staff[item.type] = true;
             DisplayName.SetDefault("Shaman's Cane");
         }
 
@@ -106,19 +108,21 @@ namespace DemoMod.Items.Weapons.ShamanCane
             item.height = 40;
             item.useTime = 45;
             item.useAnimation = 30;
-            item.useStyle = ItemUseStyleID.SwingThrow;
+            item.useStyle = ItemUseStyleID.HoldingOut;
             item.value = Item.buyPrice(0, 30, 0, 0);
             item.rare = ItemRarityID.Green;
             item.autoReuse = true; // for convenience's sake
             // These below are needed for a minion weapon
-            item.summon = true;
+            item.magic = true;
             item.noMelee = true;
             item.shoot = ProjectileType<ShamanCaneProjectile>();
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
+            base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
             Vector2 vectorToTarget = Main.MouseWorld - player.Center;
+            player.itemRotation = (float)Math.Atan2(vectorToTarget.Y, player.direction * vectorToTarget.X);
             vectorToTarget.Normalize();
             vectorToTarget *= 5;
             speedX = vectorToTarget.X;

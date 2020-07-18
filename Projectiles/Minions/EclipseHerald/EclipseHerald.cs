@@ -33,7 +33,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.knockBack = 0.5f;
+			item.knockBack = 3f;
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
@@ -73,7 +73,6 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
             Projectile parent = GetMinionsOfType(ProjectileType<EclipseHeraldMinion>()).FirstOrDefault();
             if(parent == default)
             {
-                Main.NewText("I can't find my mommy!");
                 return Vector2.Zero;
             }
             // want to hover above and behind herald
@@ -98,18 +97,19 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 
         public override void Animate(int minFrame = 0, int? maxFrame = null)
         {
-            projectile.frame = Math.Min(6, (int)projectile.ai[0]);
+            projectile.frame = Math.Min(5, (int)projectile.ai[0]);
         }
     }
     public class EclipseHeraldMinion : EmpoweredMinion<EclipseHeraldMinionBuff>
     {
 
         private int framesSinceLastHit;
+        private int frameDirection = 1;
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Eclipse Herald");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 8;
+			Main.projFrames[projectile.type] =5;
 		}
 
 		public sealed override void SetDefaults() {
@@ -135,6 +135,11 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
             return vectorToIdlePosition;
         }
 
+        public override void IdleMovement(Vector2 vectorToIdlePosition)
+        {
+            base.IdleMovement(vectorToIdlePosition);
+            Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
+        }
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             // stay floating behind the player at all times
@@ -157,7 +162,6 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
                     npcIndex);
                 framesSinceLastHit = 0;
             }
-            Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -194,7 +198,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
                 Projectile child = GetMinionsOfType(ProjectileType<EclipseMinion>()).FirstOrDefault();
                 for(int i = 0; i < 5; i++)
                 {
-                    Dust.NewDust(child.Center, child.width, child.height, DustID.Shadowflame);
+                    Dust.NewDust(child.Center, child.width, child.height, DustID.GoldFlame);
                 }
                 child.Kill(); // classic line
             }
@@ -233,20 +237,27 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 
         protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)
         {
-            if(vectorToTarget == null)
-            {
-                minFrame = 0;
-                maxFrame = 7;
-            } else
-            {
-                minFrame = 7;
-                maxFrame = 8;
-            }
+            minFrame = 0;
+            maxFrame = Math.Min(4, (int)projectile.minionSlots);
+            frameSpeed = (45 / (maxFrame));
         }
 
         public override void Animate(int minFrame = 0, int? maxFrame = null)
         {
-            base.Animate(minFrame, maxFrame);
+            int max = 0;
+            SetMinAndMaxFrames(ref minFrame, ref max);
+			projectile.frameCounter++;
+			if (projectile.frameCounter >= frameSpeed) {
+				projectile.frameCounter = 0;
+				projectile.frame += frameDirection;
+				if (projectile.frame >= max) {
+                    frameDirection = -1;
+				}
+                if(projectile.frame <= minFrame)
+                {
+                    frameDirection = 1;
+                }
+			}
 
             if(Math.Abs(projectile.velocity.X) > 2)
             {
