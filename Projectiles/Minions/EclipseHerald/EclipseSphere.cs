@@ -13,7 +13,7 @@ using System.Linq;
 namespace DemoMod.Projectiles.Minions.EclipseHerald
 {
     class EclipseSphere : ModProjectile {
-        private int hitTarget;
+        private bool hitTarget;
 
         private NPC targetNPC => Main.npc[(int)projectile.ai[1]];
         public override void SetStaticDefaults()
@@ -29,16 +29,22 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 			projectile.penetrate = -1;
 			projectile.tileCollide = false;
 			projectile.timeLeft = 1800;
-            hitTarget = 0;
+            hitTarget = false;
             ProjectileID.Sets.Homing[projectile.type] = true;
             ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
         public override void AI()
         {
 			base.AI();
-            projectile.frame = Math.Min(5, (int)projectile.ai[0]);
+            if(hitTarget)
+            {
+                projectile.frame = Math.Min(5, (int)projectile.ai[0]);
+            } else
+            {
+                projectile.frame = 0;
+            }
 			projectile.rotation += (float)(Math.PI) / 90;
-            if(hitTarget == 0 && targetNPC.active)
+            if(!hitTarget && targetNPC.active)
             {
                 Vector2 vectorToTarget = targetNPC.Center - projectile.Center;
                 if(vectorToTarget.Length() < 4)
@@ -46,15 +52,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
                     OnHitTarget();
                 }
                 vectorToTarget.Normalize();
-                projectile.velocity = vectorToTarget * (8+ projectile.ai[0]);
-            }
-            if(targetNPC.active && targetNPC.boss && hitTarget > 0)
-            {
-                hitTarget--;
-            }
-            if(!targetNPC.active)
-            {
-                hitTarget = 1;
+                projectile.velocity = vectorToTarget * (6+ Math.Min(5, projectile.ai[0]));
             }
             Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
             AddDust();
@@ -64,26 +62,29 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         private void AddDust()
         {
             // dust should come from outside the projectile and go towards the center
-            Vector2 velocity = -projectile.velocity;
-            for(int i = 0; i < 5; i++)
+            if(!hitTarget)
             {
-                Dust.NewDust(projectile.position, projectile.width/2, projectile.height/2, DustID.GoldFlame, velocity.X, velocity.Y);
+                Vector2 velocity = -projectile.velocity;
+                int dustSize = (int)(2 + 2 * projectile.ai[0]);
+                for(int i = 0; i < 5; i++)
+                {
+                    Dust.NewDust(projectile.Center, dustSize, dustSize, DustID.GoldFlame, velocity.X, velocity.Y);
+                }
             }
         }
 
         private void OnHitTarget()
         {
-            hitTarget = 20;
+            hitTarget = true;
             projectile.timeLeft = Math.Min(projectile.timeLeft, 60);
-            projectile.tileCollide = true;
+            projectile.position += projectile.velocity;
+            projectile.velocity.Normalize();
+            projectile.velocity *= 2; // slowly drift from place of impact
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if(target == targetNPC)
-            {
-                OnHitTarget();
-            }
+            OnHitTarget();
             base.OnHitNPC(target, damage, knockback, crit);
         }
     }

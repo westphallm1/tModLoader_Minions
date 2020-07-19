@@ -104,24 +104,23 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
     {
 
         private int framesSinceLastHit;
-        private int frameDirection = 1;
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Eclipse Herald");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] =5;
+			Main.projFrames[projectile.type] = 9;
 		}
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-			projectile.width = 46;
-			projectile.height = 50;
+			projectile.width = 66;
+			projectile.height = 60;
 			projectile.tileCollide = false;
             projectile.type = ProjectileType<EclipseHeraldMinion>();
             projectile.ai[0] = 0;
             framesSinceLastHit = 0;
             projectile.friendly = true;
-            frameSpeed = 10;
+            frameSpeed = 5;
 		}
 
         public override Vector2 IdleBehavior()
@@ -237,31 +236,27 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 
         protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)
         {
-            minFrame = 0;
-            maxFrame = Math.Min(4, (int)projectile.minionSlots);
-            frameSpeed = (45 / (maxFrame));
+            if(vectorToTarget != null)
+            {
+                minFrame = 5;
+                maxFrame = 9;
+            } else if (projectile.velocity.Y < 3)
+            {
+                minFrame = 0;
+                maxFrame = 4;
+            } else
+            {
+                minFrame = 4;
+                maxFrame = 4;
+            }
         }
 
         public override void Animate(int minFrame = 0, int? maxFrame = null)
         {
-            int max = 0;
-            SetMinAndMaxFrames(ref minFrame, ref max);
-			projectile.frameCounter++;
-			if (projectile.frameCounter >= frameSpeed) {
-				projectile.frameCounter = 0;
-				projectile.frame += frameDirection;
-				if (projectile.frame >= max) {
-                    frameDirection = -1;
-				}
-                if(projectile.frame <= minFrame)
-                {
-                    frameDirection = 1;
-                }
-			}
-
+            base.Animate(minFrame, maxFrame);
             if(Math.Abs(projectile.velocity.X) > 2)
             {
-                projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
+                projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
             }
             projectile.rotation = projectile.velocity.X * 0.05f;
         }
