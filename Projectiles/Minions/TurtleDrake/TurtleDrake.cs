@@ -65,12 +65,6 @@ namespace DemoMod.Projectiles.Minions.TurtleDrake
             framesSinceLastHit = 0;
 		}
 
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
-            // TODO: don't count the balloon for collisions
-            return base.Colliding(projHitbox, targetHitbox);
-        }
-
         public override Vector2 IdleBehavior()
         {
             base.IdleBehavior();
@@ -84,7 +78,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrake
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            vectorToTargetPosition.Y += -32; // hit with the body instead of the balloon
+            vectorToTargetPosition.Y += -24; // hit with the body instead of the balloon
             if(framesSinceLastHit ++ > 3)
             {
                 base.TargetedMovement(vectorToTargetPosition);
