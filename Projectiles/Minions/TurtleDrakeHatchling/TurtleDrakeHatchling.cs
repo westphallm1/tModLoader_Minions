@@ -28,7 +28,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrakeHatchling
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Turtle Drake Hatchling Staff");
-			Tooltip.SetDefault("Summons a possessed dagger to fight for you!");
+			Tooltip.SetDefault("Summons a young turtle drake to fight for you!");
 		}
 
 		public override void SetDefaults() {
@@ -38,9 +38,19 @@ namespace DemoMod.Projectiles.Minions.TurtleDrakeHatchling
 			item.width = 32;
 			item.height = 32;
             item.damage = 8;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 0, 50, 0);
+			item.rare = ItemRarityID.Green;
 		}
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.JungleSpores, 8);
+            recipe.AddIngredient(ItemID.Vine, 3);
+            recipe.AddIngredient(ItemID.Coral, 5);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 
 

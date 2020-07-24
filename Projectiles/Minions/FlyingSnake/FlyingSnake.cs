@@ -20,7 +20,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Flying Snake");
-			Description.SetDefault("A balloon buddy will fight for you!");
+			Description.SetDefault("A flying snake will fight for you!");
         }
     }
 
@@ -29,7 +29,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Flying Snake");
-			Tooltip.SetDefault("Summons a balloon buddy to fight for you!");
+			Tooltip.SetDefault("Summons a flying snake to fight for you!");
             
 		}
 
@@ -40,9 +40,18 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
 			item.width = 32;
             item.damage = 40;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 15, 0, 0);
+			item.rare = ItemRarityID.Lime;
 		}
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.ChlorophyteBar, 12);
+            recipe.AddIngredient(ItemID.LunarTabletFragment, 6);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 
     public class FlyingSnakeTailMinion : WormFollowerMinion<FlyingSnakeMinionBuff>

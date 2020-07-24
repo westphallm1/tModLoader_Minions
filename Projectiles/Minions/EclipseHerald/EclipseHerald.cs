@@ -19,7 +19,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Eclipse Herald");
-			Description.SetDefault("A possessed dagger will fight for you!");
+			Description.SetDefault("A herald of the eclipse will fight for you!");
         }
     }
 
@@ -28,7 +28,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Eclipse Herald Staff");
-			Tooltip.SetDefault("Summons a possessed dagger to fight for you!");
+			Tooltip.SetDefault("Can't come to grips \nWith the total eclipse \nJust a slip of your lips \nand you're gone...");
 		}
 
 		public override void SetDefaults() {
@@ -38,9 +38,17 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 			item.width = 32;
 			item.height = 32;
             item.damage = 50;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 20, 0, 0);
+			item.rare = ItemRarityID.Red;
 		}
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.FragmentSolar, 18);
+            recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 
 

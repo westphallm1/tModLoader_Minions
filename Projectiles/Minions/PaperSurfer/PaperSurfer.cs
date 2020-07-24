@@ -18,7 +18,7 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Paper Surfer");
-			Description.SetDefault("A possessed copper sword will fight for you!");
+			Description.SetDefault("A paper surfer will fight for you!");
         }
     }
 
@@ -27,7 +27,7 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Paper Surfer Staff");
-			Tooltip.SetDefault("Summons a possessed Sword to fight for you!");
+			Tooltip.SetDefault("Summons a paper surfer to fight for you!");
 		}
 
 		public override void SetDefaults() {
@@ -37,9 +37,18 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 0, 70, 0);
+			item.rare = ItemRarityID.Green;
 		}
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.ClayBlock, 10);
+            recipe.AddIngredient(ItemID.Cloud, 10);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
     public class PaperSurferMinion : SurferMinion<PaperSurferMinionBuff>
     {

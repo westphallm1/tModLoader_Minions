@@ -18,7 +18,7 @@ namespace DemoMod.Projectiles.Minions.StarSurfer
         {
             base.SetDefaults();
             DisplayName.SetDefault("Star Surfer");
-            Description.SetDefault("A possessed copper sword will fight for you!");
+            Description.SetDefault("A star surfer will fight for you!");
         }
     }
 
@@ -28,19 +28,29 @@ namespace DemoMod.Projectiles.Minions.StarSurfer
         {
             base.SetStaticDefaults();
             DisplayName.SetDefault("Star Surfer Staff");
-            Tooltip.SetDefault("Summons a possessed Sword to fight for you!");
+            Tooltip.SetDefault("Summons a star surfer to fight for you!");
         }
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            item.damage = 35;
+            item.damage = 32;
             item.knockBack = 3f;
             item.mana = 10;
             item.width = 32;
             item.height = 32;
-            item.value = Item.buyPrice(0, 30, 0, 0);
-            item.rare = ItemRarityID.Blue;
+            item.value = Item.buyPrice(0, 6, 0, 0);
+            item.rare = ItemRarityID.LightRed;
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.SoulofLight, 10);
+            recipe.AddIngredient(ItemID.Star, 6);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 

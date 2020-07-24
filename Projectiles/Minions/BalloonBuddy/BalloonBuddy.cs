@@ -40,9 +40,18 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 			item.width = 32;
 			item.height = 32;
             item.damage = 10;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 0, 50, 0);
+			item.rare = ItemRarityID.Green;
 		}
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.ShinyRedBalloon, 1);
+            recipe.AddIngredient(ItemID.Cloud, 10);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 
     public class BalloonBuddyTailMinion : GroupAwareMinion<BalloonBuddyMinionBuff>

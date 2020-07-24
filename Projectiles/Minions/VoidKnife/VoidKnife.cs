@@ -31,13 +31,13 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 40;
+			item.damage = 35;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 7, 0, 0);
+			item.rare = ItemRarityID.LightRed;
 		}
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -45,6 +45,15 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
             base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
             Projectile.NewProjectile(position - new Vector2(5, 0), new Vector2(speedX, speedY), item.shoot, damage, knockBack, Main.myPlayer);
             return false;
+        }
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.SoulofNight, 10);
+            recipe.AddIngredient(ItemID.ThrowingKnife, 50);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 

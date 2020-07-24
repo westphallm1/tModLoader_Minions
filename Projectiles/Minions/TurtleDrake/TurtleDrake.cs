@@ -19,7 +19,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrake
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Turtle Drake");
-			Description.SetDefault("A possessed dagger will fight for you!");
+			Description.SetDefault("A turtle drake will fight for you!");
         }
     }
 
@@ -28,7 +28,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrake
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Turtle Drake Staff");
-			Tooltip.SetDefault("Summons a possessed dagger to fight for you!");
+			Tooltip.SetDefault("Summons a turtle drake to fight for you!");
 		}
 
 		public override void SetDefaults() {
@@ -37,10 +37,20 @@ namespace DemoMod.Projectiles.Minions.TurtleDrake
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-            item.damage = 45;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+            item.damage = 30;
+			item.value = Item.buyPrice(0, 10, 0, 0);
+			item.rare = ItemRarityID.LightRed;
 		}
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.TurtleShell, 1);
+            recipe.AddIngredient(ItemID.SoulofFlight, 10);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 
 

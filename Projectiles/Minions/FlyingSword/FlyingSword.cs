@@ -16,7 +16,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Flying Sword");
-			Description.SetDefault("A possessed copper sword will fight for you!");
+			Description.SetDefault("A flying sword will fight for you!");
         }
     }
 
@@ -25,7 +25,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Flying Sword");
-			Tooltip.SetDefault("Summons a possessed Sword to fight for you!");
+			Tooltip.SetDefault("Summons a flying sword to fight for you!");
 		}
 
 		public override void SetDefaults() {
@@ -35,9 +35,18 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 12, 0, 0);
+			item.rare = ItemRarityID.Pink;
 		}
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.SoulofFlight, 10);
+            recipe.AddIngredient(ItemID.HallowedBar, 12);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
     public class FlyingSwordMinion : GroupAwareMinion<FlyingSwordMinionBuff>
     {

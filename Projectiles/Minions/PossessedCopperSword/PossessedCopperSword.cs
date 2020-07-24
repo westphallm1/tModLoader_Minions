@@ -25,7 +25,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Copper StarSword");
-			Tooltip.SetDefault("Summons a possessed Sword to fight for you!");
+			Tooltip.SetDefault("Summons a possessed sword to fight for you!");
 		}
 
 		public override void SetDefaults() {
@@ -35,9 +35,18 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 0, 5, 0);
+			item.rare = ItemRarityID.White;
 		}
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.CopperShortsword, 1);
+            recipe.AddIngredient(ItemID.Star, 3);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
     public class CopperSwordMinion : GroupAwareMinion<CopperSwordMinionBuff>
     {

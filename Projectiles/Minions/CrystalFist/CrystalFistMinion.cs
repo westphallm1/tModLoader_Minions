@@ -17,7 +17,7 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Crystal Fist");
-			Description.SetDefault("A possessed dagger will fight for you!");
+			Description.SetDefault("A crystal fist will fight for you!");
         }
     }
 
@@ -26,7 +26,7 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crystal Fist Staff");
-			Tooltip.SetDefault("Summons a possessed dagger to fight for you!");
+			Tooltip.SetDefault("Summons a crystal fist to fight for you!");
 		}
 
 		public override void SetDefaults() {
@@ -36,8 +36,8 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 30, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 12, 0, 0);
+			item.rare = ItemRarityID.Pink;
 		}
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -46,6 +46,15 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
             Projectile.NewProjectile(position + new Vector2(5, 0), new Vector2(speedX, speedY), item.shoot, damage, knockBack, Main.myPlayer);
             Projectile.NewProjectile(position - new Vector2(5, 0), new Vector2(speedX, speedY), item.shoot, damage, knockBack, Main.myPlayer);
             return false;
+        }
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.SoulofMight, 10);
+            recipe.AddIngredient(ItemID.CrystalShard, 10);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 
