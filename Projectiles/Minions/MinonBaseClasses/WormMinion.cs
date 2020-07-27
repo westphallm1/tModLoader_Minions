@@ -21,6 +21,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
         public int framesSinceLastHit = 0;
         private SpriteBatch spriteBatch;
         private Texture2D texture;
+        private Color lightColor;
 		public override void SetStaticDefaults() {
 			Main.projFrames[projectile.type] = 1;
 		}
@@ -50,6 +51,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
         {
             texture = Main.projectileTexture[projectile.type];
             this.spriteBatch = spriteBatch;
+            this.lightColor = lightColor;
 
             DrawTail();
             DrawBody();
@@ -68,7 +70,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
             Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
             float r = angle.ToRotation();
             spriteBatch.Draw(texture, pos - Main.screenPosition,
-                bounds, c == default ? Color.White : c, r,
+                bounds, c == default ? lightColor : c, r,
                 origin, 1, GetEffects(r), 0);
         }
 
