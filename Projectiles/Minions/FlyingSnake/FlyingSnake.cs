@@ -28,7 +28,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Snake");
+			DisplayName.SetDefault("Flying Snake Staff");
 			Tooltip.SetDefault("Summons a flying snake to fight for you!");
             
 		}

@@ -17,7 +17,7 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Meteor Fist");
-			Description.SetDefault("A possessed dagger will fight for you!");
+			Description.SetDefault("A meteor fist will fight for you!");
         }
     }
 
@@ -26,7 +26,7 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Meteor Fist Staff");
-			Tooltip.SetDefault("Summons a possessed dagger to fight for you!");
+			Tooltip.SetDefault("Summons a meteor fist to fight for you!");
 		}
 
 		public override void SetDefaults() {
