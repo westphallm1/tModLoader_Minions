@@ -58,7 +58,7 @@ namespace DemoMod.Projectiles.Minions.BoneSerpent
     public class BoneSerpentMinion : EmpoweredMinion<BoneSerpentMinionBuff>
     {
         private float[] backingArray;
-        public static CircularLengthQueue PositionLog = null;
+        public CircularLengthQueue PositionLog = null;
         public int framesSinceLastHit = 0;
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
