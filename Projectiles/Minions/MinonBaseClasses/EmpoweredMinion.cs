@@ -41,7 +41,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 
     }
 
-    public abstract class EmpoweredMinion<T> : SimpleMinion<T> where T: ModBuff
+    public abstract class EmpoweredMinion<T> : SimpleMinion<T> where T: ModBuff 
     {
         protected abstract int ComputeDamage();
         protected abstract float ComputeSearchDistance();
