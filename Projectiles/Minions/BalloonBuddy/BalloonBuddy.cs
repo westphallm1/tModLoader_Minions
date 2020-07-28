@@ -41,14 +41,14 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 			item.width = 32;
             item.damage = 10;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.Lime;
+			item.value = Item.buyPrice(0, 0, 70, 0);
+			item.rare = ItemRarityID.Green;
 		}
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Bone, 30);
-            recipe.AddIngredient(ItemID.HellstoneBar, 10);
+            recipe.AddIngredient(ItemID.ShinyRedBalloon, 1);
+            recipe.AddIngredient(ItemID.SunStone, 15);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

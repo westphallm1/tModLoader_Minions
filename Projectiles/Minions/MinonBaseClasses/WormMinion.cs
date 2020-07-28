@@ -116,7 +116,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 
         protected override int ComputeDamage()
         {
-            return baseDamage/2 + (baseDamage / 2) * GetSegmentCount();
+            return baseDamage/2 + (baseDamage / 4) * GetSegmentCount();
         }
 
         protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)

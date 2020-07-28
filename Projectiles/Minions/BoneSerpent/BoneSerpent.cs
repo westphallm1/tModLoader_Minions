@@ -21,7 +21,7 @@ namespace DemoMod.Projectiles.Minions.BoneSerpent
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Bone Serpent");
-			Description.SetDefault("A flying snake will fight for you!");
+			Description.SetDefault("A skeletal dragon will fight for you!");
         }
     }
 
@@ -30,7 +30,7 @@ namespace DemoMod.Projectiles.Minions.BoneSerpent
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bone Serpent Staff");
-			Tooltip.SetDefault("Summons a flying snake to fight for you!");
+			Tooltip.SetDefault("Summons a skeletal dragon to fight for you!");
             
 		}
 
@@ -41,8 +41,8 @@ namespace DemoMod.Projectiles.Minions.BoneSerpent
 			item.width = 32;
             item.damage = 18;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.Lime;
+			item.value = Item.buyPrice(0, 1, 0, 0);
+			item.rare = ItemRarityID.Orange;
 		}
         public override void AddRecipes()
         {
@@ -92,11 +92,6 @@ namespace DemoMod.Projectiles.Minions.BoneSerpent
             Rectangle tail = new Rectangle(0, 56, 14, 28);
             int dist = 26 + 15 * (GetSegmentCount() + 1);
             AddSprite(dist, tail);
-        }
-
-        protected override int ComputeDamage()
-        {
-            return baseDamage/2 + (baseDamage / 2) * GetSegmentCount();
         }
 
         protected override float ComputeSearchDistance()
