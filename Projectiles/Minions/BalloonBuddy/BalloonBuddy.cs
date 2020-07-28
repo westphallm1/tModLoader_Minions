@@ -106,7 +106,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 
         protected override float ComputeTargetedSpeed()
         {
-            return 3 + 2 * GetSegmentCount();
+            return Math.Min(13, 3 + 2 * GetSegmentCount());
         }
 
         protected override float ComputeIdleSpeed()

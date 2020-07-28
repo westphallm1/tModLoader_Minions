@@ -106,7 +106,7 @@ namespace DemoMod.Projectiles.Minions.BoneSerpent
 
         protected override float ComputeTargetedSpeed()
         {
-            return 4 + 2 * GetSegmentCount();
+            return Math.Min(14, 4 + 2 * GetSegmentCount());
         }
 
         protected override float ComputeIdleSpeed()

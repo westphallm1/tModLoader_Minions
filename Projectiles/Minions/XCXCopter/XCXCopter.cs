@@ -125,7 +125,7 @@ namespace DemoMod.Projectiles.Minions.XCXCopter
 
         protected override float ComputeTargetedSpeed()
         {
-            return 3 + 3 * GetSegmentCount();
+            return Math.Min(16, 3 + 3f * GetSegmentCount());
         }
 
         protected override float ComputeIdleSpeed()
