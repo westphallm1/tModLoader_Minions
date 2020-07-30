@@ -2,6 +2,7 @@
 using log4net.Repository.Hierarchy;
 using log4net.Util;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 {
     public class EclipseHeraldMinionBuff: MinionBuff
     {
-        public EclipseHeraldMinionBuff() : base(ProjectileType<EclipseHeraldMinion>(), ProjectileType<EclipseHeraldMinion>()) { }
+        public EclipseHeraldMinionBuff() : base(ProjectileType<EclipseHeraldMinion>()) { }
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -51,67 +52,11 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         }
     }
 
-
-    public class EclipseMinion : SimpleMinion<EclipseHeraldMinionBuff>
-    {
-		public override void SetStaticDefaults() {
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Eclipse");
-			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 6;
-		}
-
-		public sealed override void SetDefaults() {
-			base.SetDefaults();
-			projectile.width = 64;
-			projectile.height = 64;
-            projectile.minionSlots = 0;
-			projectile.tileCollide = false;
-            projectile.type = ProjectileType<EclipseMinion>();
-		}
-
-        public override Vector2? FindTarget()
-        {
-            return null;
-        }
-
-        public override Vector2 IdleBehavior()
-        {
-            // find parent EclipseHerald
-            Projectile parent = GetMinionsOfType(ProjectileType<EclipseHeraldMinion>()).FirstOrDefault();
-            if(parent == default)
-            {
-                return Vector2.Zero;
-            }
-            // want to hover above and behind herald
-            Vector2 target = parent.Top;
-            target.Y -= 48;
-            target.X -= 25;
-            target.X += 5 * parent.rotation; // tilt as parent moves
-            return target - projectile.position;
-        }
-
-        public override void IdleMovement(Vector2 vectorToIdlePosition)
-        {
-            projectile.position += vectorToIdlePosition;
-            projectile.velocity = Vector2.Zero;
-            projectile.rotation += (float)Math.PI / 90;
-        }
-
-        public override void TargetedMovement(Vector2 vectorToTargetPosition)
-        {
-            // no op
-        }
-
-        public override void Animate(int minFrame = 0, int? maxFrame = null)
-        {
-            projectile.frame = Math.Min(5, (int)projectile.ai[0]);
-        }
-    }
     public class EclipseHeraldMinion : EmpoweredMinion<EclipseHeraldMinionBuff>
     {
 
         private int framesSinceLastHit;
+        private const int AnimationFrames = 120;
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Eclipse Herald");
@@ -126,10 +71,60 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 			projectile.tileCollide = false;
             projectile.type = ProjectileType<EclipseHeraldMinion>();
             projectile.ai[0] = 0;
+            projectile.ai[1] = 0;
             framesSinceLastHit = 0;
             projectile.friendly = true;
             frameSpeed = 5;
 		}
+
+        private Color ShadowColor(Color original)
+        {
+           return new Color(original.R/2, original.G/2, original.B/2);
+        }
+
+        private void DrawSuns(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 pos = projectile.Center;
+            pos.Y -= 24;
+            pos.X -= 8 * projectile.spriteDirection;
+            float r = (float)(2 * Math.PI * projectile.ai[1]) / AnimationFrames;
+            int index = Math.Min(5, (int)projectile.minionSlots - 1);
+            Rectangle bounds = new Rectangle(0, 64 * index, 64, 64);
+            Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+            Texture2D texture = Main.projectileTexture[ProjectileType<EclipseSphere>()];
+            // main
+            spriteBatch.Draw(texture, pos - Main.screenPosition,
+                bounds, lightColor , r,
+                origin, 1, 0, 0);
+        }
+
+
+        private void DrawShadows(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 pos = projectile.Center;
+            pos.Y -= 4; // don't know why this offset needs to exist
+            Rectangle bounds = new Rectangle(0, 52 * projectile.frame, 66, 52);
+            Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+            Color shadowColor = ShadowColor(lightColor);
+            Texture2D texture = Main.projectileTexture[projectile.type];
+            SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+            // echo 1
+            float offset = 2f * (float)Math.Sin(Math.PI * (projectile.ai[1] % 60) / 30);
+            spriteBatch.Draw(texture, pos - Main.screenPosition + Vector2.One * offset,
+                bounds, shadowColor, projectile.rotation, origin, 1, effects, 0);
+            // echo 2
+            spriteBatch.Draw(texture, pos - Main.screenPosition - Vector2.One * offset,
+                bounds, shadowColor, projectile.rotation, origin, 1, effects, 0);
+
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            projectile.ai[1] = (projectile.ai[1] +1) % AnimationFrames;
+            DrawSuns(spriteBatch, lightColor);
+            DrawShadows(spriteBatch, lightColor);
+            return true;
+        }
 
         public override Vector2 IdleBehavior()
         {
@@ -151,16 +146,14 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         {
             // stay floating behind the player at all times
             IdleMovement(vectorToIdle);
-            if(player.ownedProjectileCounts[ProjectileType<EclipseMinion>()] == 0)
-            {
-                Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<EclipseMinion>(), 0, 0, Main.myPlayer, projectile.minionSlots - 1);
-            }
             framesSinceLastHit++;
             if(framesSinceLastHit ++ > 60 && targetNPCIndex is int npcIndex)
             {
                 vectorToTargetPosition.Normalize();
                 vectorToTargetPosition *= 8;
-                Projectile.NewProjectile(projectile.position, vectorToTargetPosition, 
+                Vector2 pos = projectile.Center;
+                pos.Y -= 24;
+                Projectile.NewProjectile(pos, vectorToTargetPosition, 
                     ProjectileType<EclipseSphere>(), 
                     projectile.damage, 
                     projectile.knockBack, 
@@ -178,7 +171,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         }
         protected override int ComputeDamage()
         {
-            return baseDamage + (baseDamage/2) * (int)projectile.minionSlots;
+            return baseDamage/2 + (baseDamage/2) * (int)projectile.minionSlots;
         }
 
         private Vector2? GetTargetVector()
@@ -200,26 +193,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
         public override Vector2? FindTarget()
         {
             Vector2? target = GetTargetVector();
-            if(target == null && player.ownedProjectileCounts[ProjectileType<EclipseMinion>()] > 0)
-            {
-                Projectile child = GetMinionsOfType(ProjectileType<EclipseMinion>()).FirstOrDefault();
-                for(int i = 0; i < 5; i++)
-                {
-                    Dust.NewDust(child.Center, child.width, child.height, DustID.GoldFlame);
-                }
-                child.Kill(); // classic line
-            }
             return target;
-        }
-
-        protected override void OnEmpower()
-        {
-            base.OnEmpower();
-            Projectile child = GetMinionsOfType(ProjectileType<EclipseMinion>()).FirstOrDefault();
-            if(child != default)
-            {
-                child.ai[0] = projectile.minionSlots - 1;
-            }
         }
 
         protected override float ComputeSearchDistance()

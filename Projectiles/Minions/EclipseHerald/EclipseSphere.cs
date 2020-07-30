@@ -1,14 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
-using Terraria.Enums;
 using Terraria.ModLoader;
 using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DemoMod.Projectiles.Minions.EclipseHerald
 {
@@ -28,7 +22,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 			projectile.friendly = true;
 			projectile.penetrate = -1;
 			projectile.tileCollide = false;
-			projectile.timeLeft = 1800;
+			projectile.timeLeft = 300;
             hitTarget = false;
             ProjectileID.Sets.Homing[projectile.type] = true;
             ProjectileID.Sets.MinionShot[projectile.type] = true;
@@ -61,7 +55,6 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 
         private void AddDust()
         {
-            // dust should come from outside the projectile and go towards the center
             if(!hitTarget)
             {
                 Vector2 velocity = -projectile.velocity;
