@@ -19,7 +19,7 @@ namespace DemoMod.Items.Armor
 		public override void SetDefaults() {
 			item.width = 18;
 			item.height = 18;
-			item.value = 10000;
+			item.value = Item.sellPrice(silver: 1);
 			item.rare = ItemRarityID.White;
 			item.defense = 3;
 		}
@@ -28,5 +28,15 @@ namespace DemoMod.Items.Armor
 			player.minionDamageMult += 0.04f;
 			player.moveSpeed += 0.05f;
 		}
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.Acorn, 2);
+            recipe.AddIngredient(ItemID.Wood, 12);
+            recipe.AddTile(TileID.WorkBenches);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
 	}
 }
