@@ -325,7 +325,6 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
                 projectile.rotation = 0.025f * projectile.velocity.X;
             } else
             {
-                //float r_normalized = (float)((projectile.rotation + 2 * Math.PI) % (2 * Math.PI));
                 projectile.spriteDirection = 1;
             }
         }
