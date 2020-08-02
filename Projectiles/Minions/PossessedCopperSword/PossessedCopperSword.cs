@@ -84,6 +84,11 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
             Vector2 idlePosition = player.Center;
             idlePosition.X += (20 + projectile.minionPos * 10) * -player.direction;
             idlePosition.Y += -5 * projectile.minionPos;
+            if(!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+            {
+                idlePosition.X = player.Center.X + 20 * -player.direction;
+                idlePosition.Y = player.Center.Y -5;
+            }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
@@ -91,7 +96,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(500f, player.Center) is Vector2 target)
+            if(FindTargetInTurnOrder(500f, player.Top) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;

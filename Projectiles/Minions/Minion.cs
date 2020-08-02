@@ -45,7 +45,7 @@ namespace DemoMod.Projectiles.Minions
 				NPC npc = Main.npc[player.MinionAttackTargetNPC];
 				float distance = Vector2.Distance(npc.Center, center);
 				if(distance < noLOSRange || (distance < maxRange && 
-					Collision.CanHitLine(projectile.Center, 8, 8, npc.position, npc.width, npc.height)))
+					Collision.CanHitLine(projectile.Center, 1, 1, npc.position, npc.width, npc.height)))
                 {
 					targetNPCIndex = player.MinionAttackTargetNPC;
 					return npc.Center;
@@ -88,7 +88,7 @@ namespace DemoMod.Projectiles.Minions
 				// don't let a minion infinitely chain attacks off progressively further enemies
                 bool inRange = Vector2.Distance(npc.Center, player.Center) < maxRange;
                 bool inNoLOSRange = Vector2.Distance(npc.Center, player.Center) < noLOSRange;
-                bool lineOfSight =Collision.CanHitLine(projectile.Center, 8, 8, npc.position, npc.width, npc.height); 
+                bool lineOfSight =Collision.CanHitLine(projectile.Center, 1, 1, npc.position, npc.width, npc.height); 
 				if((inNoLOSRange || (lineOfSight && inRange)) && (closest || !foundTarget))
                 {
 					targetNPCIndex = i;

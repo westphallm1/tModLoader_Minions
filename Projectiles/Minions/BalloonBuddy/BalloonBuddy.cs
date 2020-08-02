@@ -44,6 +44,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 			item.value = Item.buyPrice(0, 0, 70, 0);
 			item.rare = ItemRarityID.Green;
 		}
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

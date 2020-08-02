@@ -68,8 +68,9 @@ namespace DemoMod.Projectiles.Minions.Acorn
             diveBombFrameRateLimit = 60;
             diveBombSpeed = 12;
             diveBombInertia = 15;
-            approachSpeed = 8;
+            approachSpeed = 7;
             approachInertia = 40;
+            idleCircle = 25;
             targetSearchDistance = 500;
             projectile.width = 44;
             projectile.height = 20;

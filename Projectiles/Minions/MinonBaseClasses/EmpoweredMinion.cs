@@ -15,6 +15,16 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
     {
         protected int dustType = DustID.Confetti;
         protected int dustCount = 10;
+
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+        }
+
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+        }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             if(player.ownedProjectileCounts[item.shoot] == 0)
@@ -54,6 +64,15 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 
         protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
 
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+			// These below are needed for a minion
+			// Denotes that this projectile is a pet or minion
+			Main.projPet[projectile.type] = false;
+			// This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
+			ProjectileID.Sets.MinionSacrificable[projectile.type] = false; // don't let you sacrifice 
+        }
         protected virtual void OnEmpower()
         {
             if(projectile.minionSlots < player.maxMinions)

@@ -25,6 +25,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
         protected int approachSpeed = 8;
         protected int approachInertia = 40;
         protected int targetSearchDistance = 800;
+        protected int idleCircle = 40;
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
@@ -54,10 +55,16 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
             // this was silently failing sometimes, don't know why
             if(minionCount > 0)
             {
+                int radius = idleCircle;
+                Vector2 maxCircle = player.Top + new Vector2(idleCircle, -20);
+                if(!Collision.CanHitLine(maxCircle, 1, 1, player.Top, 1, 1))
+                {
+                    radius = 7;
+                }
                 int order = minions.IndexOf(projectile);
                 idleAngle = (2 * PI * order) / minionCount;
                 idleAngle += 2 * PI * minions[0].ai[1] / animationFrames;
-                idlePosition.X += 2 + 40 * (float)Math.Cos(idleAngle);
+                idlePosition.X += 2 + radius * (float)Math.Cos(idleAngle);
                 idlePosition.Y += -20 + 10 * (float)Math.Sin(idleAngle);
             }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
@@ -74,7 +81,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
         }
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(targetSearchDistance, player.Center) is Vector2 target)
+            if(FindTargetInTurnOrder(targetSearchDistance, player.Top) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;
@@ -95,8 +102,8 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
             if(framesSinceDiveBomb < diveBombFrameRateLimit || Math.Abs(vectorToTargetPosition.X) > diveBombHorizontalRange)
             {
                 // always aim for "above" while approaching, if it's in the line of sight
-                if(Collision.CanHitLine(projectile.Center, projectile.width/2, projectile.height/2,
-                    new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - diveBombHeightTarget), 32, 32))
+                if(Collision.CanHitLine(projectile.Center, 1, 1,
+                    new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - diveBombHeightTarget), 1, 1))
                 {
                     vectorToTargetPosition.Y -= diveBombHeightTarget;
                 }

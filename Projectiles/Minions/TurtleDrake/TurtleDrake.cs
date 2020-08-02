@@ -123,7 +123,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrake
 
         protected override float ComputeTargetedSpeed()
         {
-            return 4 + 3.5f * projectile.minionSlots;
+            return Math.Min(16, 4 + 3f * projectile.minionSlots);
         }
 
         protected override float ComputeIdleSpeed()
