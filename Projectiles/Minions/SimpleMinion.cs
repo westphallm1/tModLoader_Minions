@@ -10,7 +10,6 @@ namespace DemoMod.Projectiles.Minions
     {
 		protected Vector2 vectorToIdle;
 		protected Vector2? vectorToTarget;
-		protected int? targetNPCIndex;
 		protected Vector2 oldVectorToIdle;
 		protected Vector2? oldVectorToTarget = null;
 		public override void SetStaticDefaults() 
@@ -103,50 +102,6 @@ namespace DemoMod.Projectiles.Minions
 				projectile.velocity = Vector2.Zero;
 				projectile.netUpdate = true;
             }
-        }
-
-		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0)
-        {
-			Vector2 center = centeredOn ?? projectile.Center;
-			if(player.HasMinionAttackTargetNPC)
-            {
-				NPC npc = Main.npc[player.MinionAttackTargetNPC];
-				float distance = Vector2.Distance(npc.Center, center);
-				if(distance < noLOSRange || (distance < maxRange && 
-					Collision.CanHitLine(projectile.Center, 8, 8, npc.position, npc.width, npc.height)))
-                {
-					targetNPCIndex = player.MinionAttackTargetNPC;
-					return npc.Center;
-                }
-            }
-			return null;
-        }
-		public Vector2? ClosestEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0)
-        {
-			Vector2 center = centeredOn ?? projectile.Center;
-			Vector2 targetCenter = projectile.position;
-			bool foundTarget = false;
-			for(int i = 0; i < Main.maxNPCs; i++)
-            {
-				NPC npc = Main.npc[i];
-				if(!npc.CanBeChasedBy())
-                {
-					continue;
-                }
-                float between = Vector2.Distance(npc.Center, center);
-                bool closest = Vector2.Distance(center, targetCenter) > between;
-				// don't let a minion infinitely chain attacks off progressively further enemies
-                bool inRange = Vector2.Distance(npc.Center, player.Center) < maxRange;
-                bool inNoLOSRange = Vector2.Distance(npc.Center, player.Center) < noLOSRange;
-                bool lineOfSight =Collision.CanHitLine(projectile.Center, 8, 8, npc.position, npc.width, npc.height); 
-				if((inNoLOSRange || (lineOfSight && inRange)) && (closest || !foundTarget))
-                {
-					targetNPCIndex = i;
-					targetCenter = npc.Center;
-					foundTarget = true;
-                }
-            }
-			return foundTarget ? targetCenter : (Vector2?)null;
         }
 
 

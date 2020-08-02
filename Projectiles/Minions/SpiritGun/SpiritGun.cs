@@ -3,6 +3,7 @@ using log4net.Repository.Hierarchy;
 using log4net.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NVorbis;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,8 +30,8 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spirit Gun Staff");
-			Tooltip.SetDefault("Can't come to grips \nWith the total eclipse \nJust a slip of your lips \nand you're gone...");
+			DisplayName.SetDefault("Spirit Gun");
+			Tooltip.SetDefault("Summons sentient bullets to fight for you.\nMake sure they don't get hungry...");
 		}
 
 		public override void SetDefaults() {
@@ -39,7 +40,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-            item.damage = 50;
+            item.damage = 55;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.Red;
 		}
@@ -57,8 +58,11 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
     {
 
         private int framesSinceLastHit;
+        private int lastTrickshotFrame;
         private const int AnimationFrames = 120;
         private int animationFrame;
+        private bool hasSetAi1; // this seems like a major hack. Need to set ai[1] = 2 exactly once
+        private bool isReloading;
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Spirit Gun");
@@ -70,13 +74,12 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
 			base.SetDefaults();
 			projectile.width = 44;
 			projectile.height = 26;
-			projectile.tileCollide = false;
+			projectile.tileCollide = true;
             projectile.type = ProjectileType<SpiritGunMinion>();
-            projectile.ai[0] = 0;
-            animationFrame = 0;
             animationFrame = 0;
             framesSinceLastHit = 0;
             projectile.friendly = true;
+            hasSetAi1 = false;
 		}
 
         private Color ShadowColor(Color original)
@@ -84,19 +87,28 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
            return new Color(original.R/2, original.G/2, original.B/2);
         }
 
+        private Vector2 GetSpiritLocation(int index)
+        {
+            float r = (float)(2 * Math.PI * animationFrame) / AnimationFrames;
+            Vector2 pos = projectile.Center;
+            float r1 = r + 2 * (float)Math.PI * index / (projectile.minionSlots + 1);
+            Vector2 pos1 = pos + new Vector2((float)Math.Cos(r1), (float)Math.Sin(r1)) * 32;
+            return pos1;
+
+        }
+
+        private void SpiritDust(int index)
+        {
+            Dust.NewDust(GetSpiritLocation(index), 10, 14, DustID.Confetti);
+        }
         private void DrawSpirits(SpriteBatch spriteBatch, Color lightColor)
         {
-            Vector2 pos = projectile.Center;
-            float r = (float)(2 * Math.PI * animationFrame) / AnimationFrames;
             Rectangle bounds = new Rectangle(0, projectile.height, 10, 14);
             Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
             Texture2D texture = Main.projectileTexture[projectile.type];
-            // main
-            for(int i = 0; i <= projectile.minionSlots+1; i++)
+            for(int i = 0; i < projectile.ai[1]; i++)
             {
-                float r1 = r + 2 * (float)Math.PI * i / (projectile.minionSlots + 1);
-                Vector2 pos1 = pos + new Vector2((float)Math.Cos(r1), (float)Math.Sin(r1)) * 32;
-                spriteBatch.Draw(texture, pos1 - Main.screenPosition,
+                spriteBatch.Draw(texture, GetSpiritLocation(i) - Main.screenPosition,
                     bounds, lightColor , 0,
                     origin, 1, 0, 0);
             }
@@ -128,9 +140,37 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             DrawShadows(spriteBatch, lightColor);
             return true;
         }
+        protected override void OnEmpower()
+        {
+            base.OnEmpower();
+            projectile.ai[1] += 1;
+        }
 
         public override Vector2 IdleBehavior()
         {
+            if(!hasSetAi1)
+            {
+                projectile.ai[1] = 2;
+                hasSetAi1 = true;
+            }
+            // this is a little messy
+            int reloadSpeed = Math.Max(3, 30 / (int)projectile.minionSlots);
+            int reloadDelay = 45 - Math.Min(10, (int)projectile.minionSlots);
+            framesSinceLastHit++;
+            bool timeBetweenShots = framesSinceLastHit > 2 * reloadDelay;
+            bool timeSinceReload = isReloading && framesSinceLastHit > reloadDelay;
+            if((timeBetweenShots || timeSinceReload) && framesSinceLastHit %reloadSpeed == 0)
+            {
+                if(projectile.ai[1] == projectile.minionSlots+1)
+                {
+                    isReloading = false;
+                }
+                if(projectile.ai[1] < projectile.minionSlots +1)
+                {
+                    projectile.ai[1] += 1;
+                    SpiritDust((int)projectile.ai[1]);
+                }
+            }
             base.IdleBehavior();
             Vector2 idlePosition = player.Top;
             idlePosition.X += 48 * -player.direction;
@@ -142,30 +182,35 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
 
         public override void IdleMovement(Vector2 vectorToIdlePosition)
         {
+            projectile.tileCollide = vectorToIdlePosition.Length() < 32;
             base.IdleMovement(vectorToIdlePosition);
             Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
         }
+
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            // stay floating behind the player at all times
             IdleMovement(vectorToIdle);
-            framesSinceLastHit++;
-            if(framesSinceLastHit ++ > 60 && targetNPCIndex is int npcIndex)
+            if(framesSinceLastHit> 15 && projectile.ai[1] > 0 && !isReloading)
             {
-                vectorToTargetPosition.Normalize();
-                vectorToTargetPosition *= 8;
                 Vector2 pos = projectile.Center;
-                pos.Y -= 24;
-                // TODO
-                //Projectile.NewProjectile(pos, vectorToTargetPosition, 
-                //    ProjectileType<EclipseSphere>(), 
-                //    projectile.damage, 
-                //    projectile.knockBack, 
-                //    Main.myPlayer,
-                //    projectile.minionSlots - 1,
-                //    npcIndex);
+                Projectile.NewProjectile(pos, vectorToTargetPosition,
+                    ProjectileType<SpiritGunMinionBullet>(),
+                    projectile.damage,
+                    projectile.knockBack,
+                    Main.myPlayer,
+                    vectorToTargetPosition.X,
+                    vectorToTargetPosition.Y);
+                Main.PlaySound(SoundID.Item97);
+                // TODO handle flipping and stuff
+                projectile.rotation = vectorToTargetPosition.ToRotation();
+                SpiritDust((int)projectile.ai[1]);
+                projectile.ai[1] -= 1;
                 framesSinceLastHit = 0;
-            }
+                if(projectile.ai[1] == 0)
+                {
+                    isReloading = true;
+                }
+            } 
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -175,34 +220,58 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
         }
         protected override int ComputeDamage()
         {
-            return baseDamage;
+            return baseDamage + (baseDamage / 10) * (int)projectile.minionSlots;
         }
 
-        private Vector2? GetTargetVector()
+
+        private Vector2? GetAnyTargetVector(Vector2 center)
         {
-            float searchDistance = ComputeSearchDistance();
-            if (PlayerTargetPosition(searchDistance, player.Center, searchDistance/2) is Vector2 target)
+            float searchDistance = 600;
+            if (PlayerAnyTargetPosition(searchDistance, center) is Vector2 target)
             {
-                return target - projectile.Center;
+                return target;
             }
-            else if (ClosestEnemyInRange(searchDistance, player.Center, searchDistance/2) is Vector2 target2)
+            else if (AnyEnemyInRange(searchDistance, center) is Vector2 target2)
             {
-                return target2 - projectile.Center;
+                return target2;
             }
             else
             {
                 return null;
             }
         }
+
+        private Vector2? TrickshotAngle(int frame)
+        {
+            // search a fraction of possible positions each frame
+            float angle = 2 * frame * (float)Math.PI / AnimationFrames;
+            float distance = ComputeSearchDistance() / (1 + frame % 8);
+            Vector2 target = projectile.Center + distance * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+            if(!Collision.CanHitLine(projectile.Center, 1, 1, target, 1, 1))
+            {
+                return null;
+            }
+            if(GetAnyTargetVector(target) != null)
+            {
+                lastTrickshotFrame = frame;
+                return target - projectile.Center;
+            } else
+            {
+                return null;
+            }
+        }
         public override Vector2? FindTarget()
         {
-            Vector2? target = GetTargetVector();
-            return target;
+            if (framesSinceLastHit > 15 && !isReloading && TrickshotAngle(animationFrame) is Vector2 trickshot2)
+            {
+                return trickshot2;
+            }
+            return null;
         }
 
         protected override float ComputeSearchDistance()
         {
-            return 700 + 100 * projectile.minionSlots;
+            return 600;
         }
 
         protected override float ComputeInertia()
@@ -229,11 +298,18 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
         public override void Animate(int minFrame = 0, int? maxFrame = null)
         {
             base.Animate(minFrame, maxFrame);
-            if(Math.Abs(projectile.velocity.X) > 2)
+            if(framesSinceLastHit > 30)
             {
-                projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
+                if(Math.Abs(projectile.velocity.X) > 2)
+                {
+                    projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
+                }
+                projectile.rotation = 0.025f * projectile.velocity.X;
+            } else
+            {
+                //float r_normalized = (float)((projectile.rotation + 2 * Math.PI) % (2 * Math.PI));
+                projectile.spriteDirection = 1;
             }
-            projectile.rotation = 0.025f * projectile.velocity.X;
         }
     }
 }
