@@ -150,7 +150,6 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             int speed = 16;
-            projectile.spriteDirection = 1; 
             if(oldVectorToTarget == null && vectorToTarget is Vector2 target)
             {
                 target.Y -= Math.Abs(target.X) / 10; // add a bit of vertical increase to target
@@ -158,8 +157,9 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
                 target *= speed;
                 framesInAir = 0;
                 projectile.velocity = target;
-                projectile.rotation = (float)Math.Atan2(target.X, target.Y);
             }
+            projectile.spriteDirection = 1; 
+            projectile.rotation = (float)(Math.PI + projectile.velocity.ToRotation());
             if(framesInAir++ > 15)
             {
                 attackState = AttackState.RETURNING;
