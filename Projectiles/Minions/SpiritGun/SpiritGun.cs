@@ -38,8 +38,8 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
 			base.SetDefaults();
 			item.knockBack = 3f;
 			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
+			item.width = 44;
+			item.height = 26;
             item.damage = 55;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.Red;
@@ -47,8 +47,8 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.FragmentSolar, 18);
-            recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.AddIngredient(ItemID.SpectreBar, 12);
+            recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
