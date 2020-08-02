@@ -39,23 +39,6 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             ProjectileID.Sets.Homing[projectile.type] = true;
             ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
-
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
-        {
-            DrawSpirit(spriteBatch, lightColor);
-            return true;
-        }
-        private void DrawSpirit(SpriteBatch spriteBatch, Color lightColor)
-        {
-            Rectangle bounds = new Rectangle(0, 26, 10, 14);
-            Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-            Texture2D texture = Main.projectileTexture[ProjectileType<SpiritGunMinion>()];
-            Vector2 pos = projectile.Center + vectorToTarget;
-            spriteBatch.Draw(texture, pos - Main.screenPosition,
-                bounds, Color.LightCyan, 0,
-                origin, 1, 0, 0);
-        }
-
         private void LookForTarget()
         {
             if((PlayerTargetPosition(600) ?? ClosestEnemyInRange(600)) is Vector2 target)

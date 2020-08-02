@@ -58,10 +58,10 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
     {
 
         private int framesSinceLastHit;
-        private int lastTrickshotFrame;
         private const int AnimationFrames = 120;
         private int animationFrame;
         private bool hasSetAi1; // this seems like a major hack. Need to set ai[1] = 2 exactly once
+        private Queue<Vector2> activeTargetVectors;
         private bool isReloading;
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
@@ -80,6 +80,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             framesSinceLastHit = 0;
             projectile.friendly = true;
             hasSetAi1 = false;
+            activeTargetVectors = new Queue<Vector2>();
 		}
 
         private Color ShadowColor(Color original)
@@ -110,6 +111,13 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             {
                 spriteBatch.Draw(texture, GetSpiritLocation(i) - Main.screenPosition,
                     bounds, lightColor , 0,
+                    origin, 1, 0, 0);
+            }
+            foreach (Vector2 active in activeTargetVectors)
+            {
+                Lighting.AddLight(active, Color.LightCyan.ToVector3() * 0.75f);
+                spriteBatch.Draw(texture, active - Main.screenPosition,
+                    bounds, Color.LightCyan, 0,
                     origin, 1, 0, 0);
             }
         }
@@ -155,7 +163,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             }
             // this is a little messy
             int reloadSpeed = Math.Max(3, 30 / (int)projectile.minionSlots);
-            int reloadDelay = 45 - Math.Min(10, (int)projectile.minionSlots);
+            int reloadDelay = Math.Max(10, 45 - 4*(int)projectile.minionSlots);
             framesSinceLastHit++;
             bool timeBetweenShots = framesSinceLastHit > 2 * reloadDelay;
             bool timeSinceReload = isReloading && framesSinceLastHit > reloadDelay;
@@ -164,10 +172,16 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
                 if(projectile.ai[1] == projectile.minionSlots+1)
                 {
                     isReloading = false;
+                    activeTargetVectors = new Queue<Vector2>();
                 }
                 if(projectile.ai[1] < projectile.minionSlots +1)
                 {
                     projectile.ai[1] += 1;
+                    Vector2 returned = activeTargetVectors.Dequeue();
+                    for(int i = 0; i < 4; i++)
+                    {
+                        Dust.NewDust(returned, 4, 10, DustID.Confetti);
+                    }
                     SpiritDust((int)projectile.ai[1]);
                 }
             }
@@ -184,7 +198,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
         {
             projectile.tileCollide = vectorToIdlePosition.Length() < 32;
             base.IdleMovement(vectorToIdlePosition);
-            Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
+            Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3() * 0.75f);
         }
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -205,6 +219,11 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
                 projectile.rotation = vectorToTargetPosition.ToRotation();
                 SpiritDust((int)projectile.ai[1]);
                 projectile.ai[1] -= 1;
+                activeTargetVectors.Enqueue(projectile.Center + vectorToTargetPosition);
+                for(int i = 0; i < 4; i++)
+                {
+                    Dust.NewDust(projectile.Center + vectorToTargetPosition, 4, 10, DustID.Confetti);
+                }
                 framesSinceLastHit = 0;
                 if(projectile.ai[1] == 0)
                 {
@@ -220,7 +239,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
         }
         protected override int ComputeDamage()
         {
-            return baseDamage + (baseDamage / 10) * (int)projectile.minionSlots;
+            return baseDamage + (baseDamage / 5) * (int)projectile.minionSlots;
         }
 
 
@@ -253,7 +272,6 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             }
             if(GetAnyTargetVector(target) != null)
             {
-                lastTrickshotFrame = frame;
                 return target - projectile.Center;
             } else
             {
