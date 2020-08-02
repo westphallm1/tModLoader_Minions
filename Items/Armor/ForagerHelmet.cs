@@ -6,12 +6,12 @@ using Terraria.ID;
 namespace DemoMod.Items.Armor
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class ExampleHelmet : ModItem
+	public class ForagerHelmet : ModItem
 	{
 		public override void SetStaticDefaults() {
-			DisplayName.SetDefault("Butterfly Helmet");
+			DisplayName.SetDefault("Forager's Helmet");
 			Tooltip.SetDefault(""
-				+ "3% increased minion damge"
+				+ "3% increased minion damge\n"
 				+ "+1 minion knockback");
 		}
 
@@ -24,7 +24,7 @@ namespace DemoMod.Items.Armor
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs) {
-			return body.type == ItemType<ExampleBreastplate>() && legs.type == ItemType<ExampleLeggings>();
+			return body.type == ItemType<ForagerBreastplate>() && legs.type == ItemType<ForagerLeggings>();
 		}
 
 		public override void UpdateEquip(Player player) {
