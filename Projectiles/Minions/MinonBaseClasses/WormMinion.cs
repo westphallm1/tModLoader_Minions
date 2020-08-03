@@ -87,10 +87,6 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
             projectile.ai[1] = (projectile.ai[1] + 1) % 240;
             int radius = 48;
             Vector2 maxCircle = player.Top + new Vector2(48, -20);
-            if(!Collision.CanHitLine(maxCircle, 1, 1, player.Top, 1, 1))
-            {
-                radius = 7;
-            }
             Vector2 idlePosition = player.Top;
             idlePosition.X += radius * (float)Math.Cos(Math.PI * projectile.ai[1] / 60);
             idlePosition.Y += -20  + 8 * (float)Math.Sin(Math.PI * projectile.ai[1] / 60);

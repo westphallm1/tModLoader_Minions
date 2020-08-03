@@ -42,7 +42,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.CopperShortsword, 1);
-            recipe.AddIngredient(ItemID.Star, 3);
+            recipe.AddIngredient(ItemID.FallenStar, 3);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
@@ -96,7 +96,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(500f, player.Top) is Vector2 target)
+            if(FindTargetInTurnOrder(500f, projectile.Center) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;

@@ -107,7 +107,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(950f, player.Center) is Vector2 target)
+            if(FindTargetInTurnOrder(950f, projectile.Center) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;

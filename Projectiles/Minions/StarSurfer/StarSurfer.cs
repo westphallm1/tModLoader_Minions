@@ -47,7 +47,7 @@ namespace DemoMod.Projectiles.Minions.StarSurfer
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.SoulofLight, 10);
-            recipe.AddIngredient(ItemID.Star, 6);
+            recipe.AddIngredient(ItemID.FallenStar, 6);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
@@ -119,7 +119,7 @@ namespace DemoMod.Projectiles.Minions.StarSurfer
 
         public override Vector2? FindTarget()
         {
-            if (FindTargetInTurnOrder(900f, player.Center) is Vector2 target)
+            if (FindTargetInTurnOrder(900f, projectile.Center) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;

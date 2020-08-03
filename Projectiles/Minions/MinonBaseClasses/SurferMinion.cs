@@ -81,7 +81,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
         }
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(targetSearchDistance, player.Top) is Vector2 target)
+            if(FindTargetInTurnOrder(targetSearchDistance, projectile.Center) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;
@@ -94,7 +94,6 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            // alway clamp to the idle position
             int inertia = approachInertia;
             int speed = approachSpeed;
             
@@ -124,20 +123,18 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
         {
             // alway clamp to the idle position
             projectile.tileCollide = false;
-            int inertia = 5;
+            int inertia = 15;
             int maxSpeed = 12;
-            if(vectorToIdlePosition.Length() < 32)
+            if(vectorToIdlePosition.Length() < maxSpeed)
             {
-                projectile.position += vectorToIdlePosition;
-                projectile.velocity = Vector2.Zero;
                 projectile.rotation = 0;
                 projectile.spriteDirection = (idleAngle % (2* PI)) > PI ? -1 : 1;
-            } else
+            }  else
             {
                 vectorToIdlePosition.Normalize();
                 vectorToIdlePosition *= maxSpeed;
-                projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
             }
+            projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
         }
 		public override void Animate(int minFrame = 0, int? maxFrame = null) {
 

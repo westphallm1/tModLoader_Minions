@@ -12,6 +12,7 @@ namespace DemoMod.Projectiles.Minions
 		protected Vector2? vectorToTarget;
 		protected Vector2 oldVectorToIdle;
 		protected Vector2? oldVectorToTarget = null;
+		protected int framesSinceHadTarget = 0;
 		public override void SetStaticDefaults() 
 		{
             base.SetStaticDefaults();
@@ -82,6 +83,11 @@ namespace DemoMod.Projectiles.Minions
 			if(vectorToTarget is Vector2 targetPosition)
             {
 				TargetedMovement(targetPosition);
+                oldVectorToTarget = vectorToTarget;
+            } else if(oldVectorToTarget is Vector2 oldTarget && framesSinceHadTarget++ < 30)
+            {
+				oldVectorToTarget = oldTarget - projectile.velocity;
+				TargetedMovement(oldTarget); // don't immediately give up if losing LOS
             } else
             {
 				IdleMovement(vectorToIdle);
@@ -89,7 +95,6 @@ namespace DemoMod.Projectiles.Minions
 			AfterMoving();
 			Animate();
 			oldVectorToIdle = vectorToIdle;
-			oldVectorToTarget = vectorToTarget;
         }
 
 
