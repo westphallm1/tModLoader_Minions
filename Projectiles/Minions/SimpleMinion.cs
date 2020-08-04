@@ -12,6 +12,7 @@ namespace DemoMod.Projectiles.Minions
 		protected Vector2? vectorToTarget;
 		protected Vector2 oldVectorToIdle;
 		protected Vector2? oldVectorToTarget = null;
+		protected int? oldTargetNpcIndex = null;
 		protected int framesSinceHadTarget = 0;
 		public override void SetStaticDefaults() 
 		{
@@ -40,8 +41,8 @@ namespace DemoMod.Projectiles.Minions
 			projectile.minionSlots = 1f;
 			// Needed so the minion doesn't despawn on collision with enemies or tiles
 			projectile.penetrate = -1;
-			// Makes the minion not go through tiles
-			projectile.tileCollide = true;
+			// Makes the minion go through tiles
+			projectile.tileCollide = false;
         }
 
 
@@ -82,12 +83,16 @@ namespace DemoMod.Projectiles.Minions
 			vectorToTarget = FindTarget();
 			if(vectorToTarget is Vector2 targetPosition)
             {
+				framesSinceHadTarget = 0;
 				TargetedMovement(targetPosition);
                 oldVectorToTarget = vectorToTarget;
-            } else if(oldVectorToTarget is Vector2 oldTarget && framesSinceHadTarget++ < 30)
+				oldTargetNpcIndex = targetNPCIndex;
+            } else if(oldTargetNpcIndex is int previousIndex && framesSinceHadTarget++ < 15)
             {
-				oldVectorToTarget = oldTarget - projectile.velocity;
-				TargetedMovement(oldTarget); // don't immediately give up if losing LOS
+				if(previousIndex < Main.maxNPCs)
+                {
+                    TargetedMovement(Main.npc[previousIndex].Center); // don't immediately give up if losing LOS
+                }
             } else
             {
 				IdleMovement(vectorToIdle);

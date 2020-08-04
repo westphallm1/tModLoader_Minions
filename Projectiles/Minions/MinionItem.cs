@@ -55,7 +55,7 @@ namespace DemoMod.Projectiles.Minions
                     if(p.owner == Main.myPlayer && p.active && p.type == ProjectileType<MinionWaypoint>())
                     {
                         p.position = Main.MouseWorld;
-                        p.timeLeft = 60;
+                        p.timeLeft = MinionWaypoint.duration;
                     }
                 }
             }

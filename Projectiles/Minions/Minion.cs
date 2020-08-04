@@ -51,17 +51,6 @@ namespace DemoMod.Projectiles.Minions
 					return npc.Center;
                 }
             } 
-			else if (player.ownedProjectileCounts[ProjectileType<MinionWaypoint>()] > 0)
-            {
-				foreach (Projectile p in Main.projectile)
-                {
-					if(p.type == ProjectileType<MinionWaypoint>() && p.active && p.owner == Main.myPlayer)
-                    {
-						return p.position;
-                    }
-                }
-
-            }
 			return null;
         }
 
@@ -107,7 +96,36 @@ namespace DemoMod.Projectiles.Minions
 					foundTarget = true;
                 }
             }
-			return foundTarget ? targetCenter : (Vector2?)null;
+			if(foundTarget)
+            {
+				return targetCenter;
+            } else
+            {
+				return BeaconPosition(center, maxRange, noLOSRange);
+            }
+        }
+
+		public Vector2? BeaconPosition(Vector2 center, float maxRange, float noLOSRange = 0)
+        {
+			// should automatically fall through to here if can't hit target
+			if (player.ownedProjectileCounts[ProjectileType<MinionWaypoint>()] > 0)
+            {
+				foreach (Projectile p in Main.projectile)
+                {
+					if(p.type == ProjectileType<MinionWaypoint>() && p.active && p.owner == Main.myPlayer)
+                    {
+						Vector2 target = p.position;
+                        float distance = Vector2.Distance(target, center);
+                        if(distance < noLOSRange || (distance < maxRange && 
+                            Collision.CanHitLine(projectile.Center, 1, 1, target, 1, 1)))
+                        {
+                            return target;
+                        }
+
+                    }
+                }
+            }
+			return null;
         }
 
 		public Vector2? AnyEnemyInRange(float maxRange, Vector2? centeredOn = null)

@@ -18,6 +18,7 @@ namespace DemoMod.Projectiles.Minions
 {
     class MinionWaypoint : ModProjectile
     {
+        public const int duration = 180;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -25,7 +26,7 @@ namespace DemoMod.Projectiles.Minions
             projectile.width = 1;
             projectile.height = 1;
             projectile.tileCollide = false;
-            projectile.timeLeft = 60;
+            projectile.timeLeft = duration;
             projectile.friendly = false;
         }
 
