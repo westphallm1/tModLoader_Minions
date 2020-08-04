@@ -50,6 +50,17 @@ namespace DemoMod.Projectiles.Minions
 					targetNPCIndex = player.MinionAttackTargetNPC;
 					return npc.Center;
                 }
+            } 
+			else if (player.ownedProjectileCounts[ProjectileType<MinionWaypoint>()] > 0)
+            {
+				foreach (Projectile p in Main.projectile)
+                {
+					if(p.type == ProjectileType<MinionWaypoint>() && p.active && p.owner == Main.myPlayer)
+                    {
+						return p.position;
+                    }
+                }
+
             }
 			return null;
         }

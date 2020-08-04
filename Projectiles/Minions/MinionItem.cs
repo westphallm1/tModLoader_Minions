@@ -36,5 +36,37 @@ namespace DemoMod.Projectiles.Minions
 			position = Main.MouseWorld;
 			return true;
 		}
+
+        public override bool AltFunctionUse(Player player)
+        {
+			return true;
+        }
+
+		private void AddWaypoint()
+        {
+			if(Main.player[Main.myPlayer].ownedProjectileCounts[ProjectileType<MinionWaypoint>()] == 0)
+            {
+				Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, ProjectileType<MinionWaypoint>(), 0, 0, Main.myPlayer);
+            } 
+			else
+            {
+                foreach(Projectile p in Main.projectile) 
+                {
+                    if(p.owner == Main.myPlayer && p.active && p.type == ProjectileType<MinionWaypoint>())
+                    {
+                        p.position = Main.MouseWorld;
+                        p.timeLeft = 60;
+                    }
+                }
+            }
+        }
+        public override bool CanUseItem(Player player)
+        {
+			if(player.altFunctionUse == 2)
+            {
+				AddWaypoint();	
+            }
+            return base.CanUseItem(player);
+        }
     }
 }
