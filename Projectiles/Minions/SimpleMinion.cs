@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Mono.Cecil.Pdb;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -14,6 +15,7 @@ namespace DemoMod.Projectiles.Minions
 		protected Vector2? oldVectorToTarget = null;
 		protected int? oldTargetNpcIndex = null;
 		protected int framesSinceHadTarget = 0;
+		protected bool attackThroughWalls = false;
 		public override void SetStaticDefaults() 
 		{
             base.SetStaticDefaults();
@@ -76,25 +78,37 @@ namespace DemoMod.Projectiles.Minions
 			}
 		}
 
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+			return false;
+        }
+
         public override void Behavior()
         {
             targetNPCIndex = null;
 			vectorToIdle = IdleBehavior();
 			vectorToTarget = FindTarget();
+			framesSinceHadTarget++;
 			if(vectorToTarget is Vector2 targetPosition)
             {
+				projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
 				TargetedMovement(targetPosition);
                 oldVectorToTarget = vectorToTarget;
 				oldTargetNpcIndex = targetNPCIndex;
-            } else if(oldTargetNpcIndex is int previousIndex && framesSinceHadTarget++ < 15)
+            } else if(oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < 15)
             {
+				projectile.tileCollide = !attackThroughWalls;
 				if(previousIndex < Main.maxNPCs)
                 {
                     TargetedMovement(Main.npc[previousIndex].Center); // don't immediately give up if losing LOS
                 }
             } else
             {
+				if(framesSinceHadTarget > 30)
+                {
+                    projectile.tileCollide = false;
+                }
 				IdleMovement(vectorToIdle);
             }
 			AfterMoving();

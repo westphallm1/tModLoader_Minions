@@ -29,6 +29,8 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
 
         public override void SetDefaults() {
 			base.SetDefaults();
+			projectile.width = 8;
+			projectile.height = 8;
             backingArray = new float[255];
             CircularVectorQueue.Initialize(backingArray);
             PositionLog = new CircularLengthQueue(backingArray, queueSize: 32)

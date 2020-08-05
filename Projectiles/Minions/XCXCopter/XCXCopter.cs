@@ -72,8 +72,6 @@ namespace DemoMod.Projectiles.Minions.XCXCopter
 
         public sealed override void SetDefaults() {
 			base.SetDefaults();
-			projectile.width = 1;
-			projectile.height = 1;
 			projectile.tileCollide = false;
             projectile.type = ProjectileType<XCXCopterMinion>();
             frameSpeed = 2;

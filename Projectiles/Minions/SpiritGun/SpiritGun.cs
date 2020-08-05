@@ -74,12 +74,13 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
 			base.SetDefaults();
 			projectile.width = 44;
 			projectile.height = 26;
-			projectile.tileCollide = true;
+			projectile.tileCollide = false;
             projectile.type = ProjectileType<SpiritGunMinion>();
             animationFrame = 0;
             framesSinceLastHit = 0;
             projectile.friendly = true;
             hasSetAi1 = false;
+            attackThroughWalls = true;
             activeTargetVectors = new Queue<Vector2>();
 		}
 
@@ -189,6 +190,11 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             Vector2 idlePosition = player.Top;
             idlePosition.X += 48 * -player.direction;
             idlePosition.Y += -32;
+            if(!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+            {
+                idlePosition.X = player.Center.X;
+                idlePosition.Y = player.Center.Y -24;
+            }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
@@ -196,7 +202,6 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
 
         public override void IdleMovement(Vector2 vectorToIdlePosition)
         {
-            projectile.tileCollide = vectorToIdlePosition.Length() < 32;
             base.IdleMovement(vectorToIdlePosition);
             Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3() * 0.75f);
         }

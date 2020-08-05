@@ -67,8 +67,6 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
 
         public sealed override void SetDefaults() {
 			base.SetDefaults();
-			projectile.width = 1;
-			projectile.height = 1;
 			projectile.tileCollide = false;
             projectile.type = ProjectileType<BalloonBuddyMinion>();
         }

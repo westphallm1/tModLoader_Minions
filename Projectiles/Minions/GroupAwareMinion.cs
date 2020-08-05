@@ -79,7 +79,7 @@ namespace DemoMod.Projectiles.Minions
             return currentFrame == attackFrame;
         }
 
-        protected Vector2? FindTargetInTurnOrder(float searchDistance, Vector2 center)
+        protected Vector2? FindTargetInTurnOrder(float searchDistance, Vector2 center, float noLOSDistance = 0)
         {
             if(attackState == AttackState.RETURNING)
             {
@@ -89,12 +89,12 @@ namespace DemoMod.Projectiles.Minions
             {
                 return null;
             }
-            if (PlayerTargetPosition(searchDistance, center) is Vector2 target)
+            if (PlayerTargetPosition(searchDistance, center, noLOSDistance) is Vector2 target)
             {
                 attackState = AttackState.ATTACKING;
                 return target - projectile.Center;
             }
-            else if (ClosestEnemyInRange(searchDistance, center) is Vector2 target2)
+            else if (ClosestEnemyInRange(searchDistance, center, noLOSDistance) is Vector2 target2)
             {
                 attackState = AttackState.ATTACKING;
                 return target2 - projectile.Center;

@@ -18,7 +18,7 @@ namespace DemoMod.Projectiles.Minions
 {
     class MinionWaypoint : ModProjectile
     {
-        public const int duration = 180;
+        public const int duration = 180000; // a long time
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -44,6 +44,10 @@ namespace DemoMod.Projectiles.Minions
             for(int i = 0; i < 2; i++)
             {
                 Dust.NewDust(projectile.Center, 8, 8, DustID.Shadowflame);
+            }
+            if(Vector2.Distance(projectile.position, Main.player[Main.myPlayer].position) > 2000)
+            {
+                projectile.Kill();
             }
         }
 

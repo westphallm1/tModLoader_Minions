@@ -28,7 +28,7 @@ namespace DemoMod.Projectiles.Minions
 			Behavior();
 		}
 
-		public void CheckActive() {
+        public void CheckActive() {
 			// This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
 			if (player.dead || !player.active) {
 				player.ClearBuff(BuffType<T>());
@@ -102,30 +102,40 @@ namespace DemoMod.Projectiles.Minions
             } else
             {
 				return BeaconPosition(center, maxRange, noLOSRange);
-            }
-        }
+            } 
+		}
 
 		public Vector2? BeaconPosition(Vector2 center, float maxRange, float noLOSRange = 0)
         {
 			// should automatically fall through to here if can't hit target
-			if (player.ownedProjectileCounts[ProjectileType<MinionWaypoint>()] > 0)
+			if (player.ownedProjectileCounts[ProjectileType<MinionWaypoint>()] == 0)
+			{
+				return null;
+			}
+			Vector2? waypointCenter = null;
+            foreach (Projectile p in Main.projectile)
             {
-				foreach (Projectile p in Main.projectile)
+                if(p.type == ProjectileType<MinionWaypoint>() && p.active && p.owner == Main.myPlayer)
                 {
-					if(p.type == ProjectileType<MinionWaypoint>() && p.active && p.owner == Main.myPlayer)
+                    Vector2 target = p.position;
+                    float distance = Vector2.Distance(target, center);
+                    if(distance < noLOSRange || (distance < maxRange && 
+                        Collision.CanHitLine(projectile.Center, 1, 1, target, 1, 1)))
                     {
-						Vector2 target = p.position;
-                        float distance = Vector2.Distance(target, center);
-                        if(distance < noLOSRange || (distance < maxRange && 
-                            Collision.CanHitLine(projectile.Center, 1, 1, target, 1, 1)))
-                        {
-                            return target;
-                        }
-
+						waypointCenter = target;
+						break;
                     }
                 }
             }
-			return null;
+			// try again with the beacon position as the central search point
+			if (waypointCenter is Vector2 wCenter && AnyEnemyInRange(maxRange, wCenter) != null)
+            {
+				return wCenter;
+            }
+			else
+            {
+				return null;
+            }
         }
 
 		public Vector2? AnyEnemyInRange(float maxRange, Vector2? centeredOn = null)

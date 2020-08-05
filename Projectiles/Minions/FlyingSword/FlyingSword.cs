@@ -100,6 +100,12 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
             Vector2 idlePosition = player.Center;
             idlePosition.X += (30 + projectile.minionPos * 20) * -player.direction;
             idlePosition.Y += -35 + 5 * (float) Math.Sin(idleAngle);
+            if(!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+            {
+                idlePosition = player.Center;
+                idlePosition.X += 30 * -player.direction;
+                idlePosition.Y += -35;
+            }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;

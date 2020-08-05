@@ -65,8 +65,6 @@ namespace DemoMod.Projectiles.Minions.BoneSerpent
 
         public sealed override void SetDefaults() {
 			base.SetDefaults();
-			projectile.width = 1;
-			projectile.height = 1;
 			projectile.tileCollide = false;
             projectile.type = ProjectileType<BoneSerpentMinion>();
         }

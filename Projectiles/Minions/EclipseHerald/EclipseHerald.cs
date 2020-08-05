@@ -74,6 +74,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
             projectile.ai[1] = 0;
             framesSinceLastHit = 0;
             projectile.friendly = true;
+            attackThroughWalls = true;
             frameSpeed = 5;
 		}
 

@@ -42,7 +42,7 @@ namespace DemoMod.Projectiles.Minions
 			return true;
         }
 
-		private void AddWaypoint()
+		private void ToggleWaypoint()
         {
 			if(Main.player[Main.myPlayer].ownedProjectileCounts[ProjectileType<MinionWaypoint>()] == 0)
             {
@@ -54,8 +54,7 @@ namespace DemoMod.Projectiles.Minions
                 {
                     if(p.owner == Main.myPlayer && p.active && p.type == ProjectileType<MinionWaypoint>())
                     {
-                        p.position = Main.MouseWorld;
-                        p.timeLeft = MinionWaypoint.duration;
+						p.Kill();
                     }
                 }
             }
@@ -64,7 +63,7 @@ namespace DemoMod.Projectiles.Minions
         {
 			if(player.altFunctionUse == 2)
             {
-				AddWaypoint();	
+				ToggleWaypoint();	
             }
             return base.CanUseItem(player);
         }

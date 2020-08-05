@@ -86,6 +86,7 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
             projectile.minionSlots = 1;
             attackFrames = 120;
             animationFrames = 120;
+            attackThroughWalls = true;
             travelVelocity = 8;
 		}
 
@@ -107,7 +108,7 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(800f, projectile.Center) is Vector2 target)
+            if(FindTargetInTurnOrder(800f, projectile.Center, 400f) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;
