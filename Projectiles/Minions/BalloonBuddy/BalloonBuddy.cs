@@ -29,7 +29,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Balloon Buddy Staff");
+			DisplayName.SetDefault("Magic Balloon Wand");
 			Tooltip.SetDefault("Summons an enchanted balloon animal to fight for you!");
             
 		}
@@ -48,11 +48,15 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.ShinyRedBalloon, 1);
-            recipe.AddIngredient(ItemID.SunStone, 15);
+            recipe.AddIngredient(ItemID.GoldBar, 14);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
+            ModRecipe recipe2 = new ModRecipe(mod);
+            recipe2.AddIngredient(ItemID.PlatinumBar, 14);
+            recipe2.AddTile(TileID.Anvils);
+            recipe2.SetResult(this);
+            recipe2.AddRecipe();
         }
     }
 

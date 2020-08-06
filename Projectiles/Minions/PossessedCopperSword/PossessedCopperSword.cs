@@ -52,6 +52,8 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
     {
 
         private readonly float baseRoation = 3 * (float)Math.PI / 4f;
+        private int hitsSinceLastIdle = 0;
+        private int framesSinceLastHit = 0;
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
@@ -73,7 +75,11 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            attackState = AttackState.RETURNING;
+            if(hitsSinceLastIdle++ > 2)
+            {
+                attackState = AttackState.RETURNING;
+            }
+            framesSinceLastHit = 0;
             Lighting.AddLight(target.position, Color.LightYellow.ToVector3());
             Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Gold);
         }
@@ -96,7 +102,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(500f, projectile.Center) is Vector2 target)
+            if(FindTargetInTurnOrder(550f, projectile.Top) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;
@@ -114,7 +120,10 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
             int speed = 8;
             vectorToTargetPosition.Normalize();
             vectorToTargetPosition *= speed;
-            projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+            if(framesSinceLastHit ++ > 10)
+            {
+                projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+            }
             projectile.rotation += (float)Math.PI / 9;
             Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Copper);
         }
@@ -128,6 +137,8 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
             {
                 // return to the attacking state after getting back home
                 attackState = AttackState.IDLE;
+                hitsSinceLastIdle = 0;
+                framesSinceLastHit = 0;
             }
             Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
             if(speedChange.Length() > maxSpeed)
