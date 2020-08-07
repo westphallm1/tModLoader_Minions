@@ -13,12 +13,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DemoMod.Dusts;
 
 namespace DemoMod.Projectiles.Minions
 {
     class MinionWaypoint : ModProjectile
     {
         public const int duration = 180000; // a long time
+        private int rotationFrame = 0;
+        public const int rotationFrames = 60;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -37,17 +40,13 @@ namespace DemoMod.Projectiles.Minions
 
         public override void AI()
         {
-            if(projectile.timeLeft % 6 != 0)
+            rotationFrame = (rotationFrame + 1) % rotationFrames;
+            float startAngle = -2f * (float)Math.PI * rotationFrame / rotationFrames;
+            for(int i = 0; i < 3; i ++)
             {
-                return;
-            }
-            for(int i = 0; i < 2; i++)
-            {
-                Dust.NewDust(projectile.Center, 8, 8, DustID.Shadowflame);
-            }
-            if(Vector2.Distance(projectile.position, Main.player[Main.myPlayer].position) > 2000)
-            {
-                projectile.Kill();
+                float angle = startAngle + i * 2 * (float)Math.PI / 3;
+                Vector2 pos = projectile.Center + 12 * new Vector2((float)Math.Sin(angle), (float)Math.Cos(angle));
+                Dust.NewDust(pos, 1, 1, DustType<MinionWaypointDust>(), 0, 0, newColor: new Color(0.5f, 1, 0.5f));
             }
         }
 
