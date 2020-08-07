@@ -46,7 +46,7 @@ namespace DemoMod.Projectiles.Minions
             {
                 float angle = startAngle + i * 2 * (float)Math.PI / 3;
                 Vector2 pos = projectile.Center + 12 * new Vector2((float)Math.Sin(angle), (float)Math.Cos(angle));
-                Dust.NewDust(pos, 1, 1, DustType<MinionWaypointDust>(), 0, 0, newColor: new Color(0.5f, 1, 0.5f));
+                Dust.NewDust(pos, 1, 1, DustType<MinionWaypointDust>(), newColor: new Color(0.5f, 1, 0.5f), Scale: 1.2f);
             }
         }
 

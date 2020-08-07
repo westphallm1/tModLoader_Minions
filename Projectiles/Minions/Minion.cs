@@ -7,6 +7,7 @@ using static Terraria.ModLoader.ModContent;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using DemoMod.Dusts;
 
 namespace DemoMod.Projectiles.Minions
 {
@@ -128,14 +129,37 @@ namespace DemoMod.Projectiles.Minions
                 }
             }
 			// try again with the beacon position as the central search point
-			if (waypointCenter is Vector2 wCenter && AnyEnemyInRange(maxRange, wCenter) != null)
+			if (waypointCenter is Vector2 wCenter && AnyEnemyInRange(maxRange, wCenter) is Vector2 anyTarget)
             {
+				DrawDirectionDust(wCenter, anyTarget);
 				return wCenter;
             }
 			else
             {
 				return null;
             }
+        }
+
+		private int directionFrame = 0;
+		protected void DrawDirectionDust(Vector2 waypointCenter, Vector2 anyTarget)
+        {
+			if((directionFrame++)%30 != 0)
+            {
+				return;
+            }
+			int lineLength = 64;
+			Vector2 fromVector = projectile.Center - waypointCenter;
+			Vector2 toVector = anyTarget - waypointCenter;
+			fromVector.Normalize();
+			toVector.Normalize();
+			for(int i = 12; i < lineLength; i += 2) 
+            {
+				float scale = 1.5f - 0.015f * i;
+				Dust.NewDust(waypointCenter + fromVector * i, 1, 1, DustType<MinionWaypointDust>(), newColor: new Color(0.5f, 1, 0.5f), Scale: scale);
+				Dust.NewDust(waypointCenter + toVector * i, 1, 1, DustType<MinionWaypointDust>(), newColor: new Color(0.5f, 1, 0.5f), Scale: scale);
+
+            }
+
         }
 
 		public Vector2? AnyEnemyInRange(float maxRange, Vector2? centeredOn = null)

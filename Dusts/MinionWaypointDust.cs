@@ -11,7 +11,6 @@ namespace DemoMod.Dusts
         {
             dust.noGravity = true;
             dust.noLight = true;
-            dust.scale = 1.2f;
         }
 
         public override bool Update(Dust dust)
