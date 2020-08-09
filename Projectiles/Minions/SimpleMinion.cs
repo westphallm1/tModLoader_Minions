@@ -115,6 +115,7 @@ namespace DemoMod.Projectiles.Minions
                 {
                     projectile.tileCollide = false;
                 }
+                oldVectorToTarget = null;
 				IdleMovement(vectorToIdle);
             }
 			AfterMoving();
