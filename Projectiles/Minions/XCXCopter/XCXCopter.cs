@@ -48,16 +48,16 @@ namespace DemoMod.Projectiles.Minions.XCXCopter
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.SoulofLight, 6);
-            recipe.AddIngredient(ItemID.MythrilBar, 12);
+            recipe.AddIngredient(ItemID.AdamantiteBar, 12);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
             ModRecipe recipe2 = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SoulofLight, 6);
-            recipe.AddIngredient(ItemID.TitaniumBar, 12);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            recipe2.AddIngredient(ItemID.SoulofLight, 6);
+            recipe2.AddIngredient(ItemID.TitaniumBar, 12);
+            recipe2.AddTile(TileID.MythrilAnvil);
+            recipe2.SetResult(this);
+            recipe2.AddRecipe();
         }
     }
 

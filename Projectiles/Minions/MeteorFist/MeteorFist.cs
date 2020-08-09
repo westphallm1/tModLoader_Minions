@@ -31,7 +31,7 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 18;
+			item.damage = 15;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
@@ -42,8 +42,7 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.MeteoriteBar, 10);
-            recipe.AddIngredient(ItemID.HellstoneBar, 10);
+            recipe.AddIngredient(ItemID.MeteoriteBar, 14);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
