@@ -104,7 +104,6 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
             idlePosition.Y += 2 + 40 * (float)Math.Sin(idleAngle);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(vectorToIdlePosition, 2000f);
-            Main.NewText(attackState.ToString());
             return vectorToIdlePosition;
         }
 
