@@ -19,6 +19,8 @@ namespace DemoMod.Projectiles.Minions
 
 		protected int? targetNPCIndex;
 
+		protected bool useBeacon = true;
+
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -100,10 +102,13 @@ namespace DemoMod.Projectiles.Minions
 			if(foundTarget)
             {
 				return targetCenter;
-            } else
+            } else if (useBeacon)
             {
 				return BeaconPosition(center, maxRange, noLOSRange);
-            } 
+            } else
+            {
+				return null;
+            }
 		}
 
 		public Vector2? BeaconPosition(Vector2 center, float maxRange, float noLOSRange = 0)

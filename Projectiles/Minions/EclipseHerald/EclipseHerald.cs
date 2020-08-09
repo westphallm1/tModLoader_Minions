@@ -75,6 +75,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
             framesSinceLastHit = 0;
             projectile.friendly = true;
             attackThroughWalls = true;
+            useBeacon = false;
             frameSpeed = 5;
 		}
 
@@ -133,6 +134,11 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
             Vector2 idlePosition = player.Top;
             idlePosition.X += 48 * -player.direction;
             idlePosition.Y += -32;
+            if(!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+            {
+                idlePosition.X = player.Top.X;
+                idlePosition.Y = player.Top.Y - 16;
+            }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;

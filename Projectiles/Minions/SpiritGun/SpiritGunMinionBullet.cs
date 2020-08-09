@@ -29,7 +29,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
         public override void SetDefaults()
 		{
 			projectile.width = 24;
-			projectile.height = 12;
+			projectile.height = 2;
 			projectile.friendly = true;
 			projectile.penetrate = 3;
 			projectile.tileCollide = true;

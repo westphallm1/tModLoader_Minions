@@ -81,6 +81,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             projectile.friendly = true;
             hasSetAi1 = false;
             attackThroughWalls = true;
+            useBeacon = false;
             activeTargetVectors = new Queue<Vector2>();
 		}
 

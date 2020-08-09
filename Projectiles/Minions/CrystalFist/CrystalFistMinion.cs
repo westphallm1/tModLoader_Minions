@@ -34,8 +34,8 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
 			item.damage = 42;
 			item.knockBack = 0.5f;
 			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
+			item.width = 16;
+			item.height = 16;
 			item.value = Item.buyPrice(0, 12, 0, 0);
 			item.rare = ItemRarityID.Pink;
 		}
@@ -81,6 +81,8 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
             projectile.ai[0] = 0;
             attackState = AttackState.IDLE;
             projectile.minionSlots = 0.5f;
+            attackThroughWalls = false;
+            useBeacon = false;
             attackFrames = 30;
 		}
 
