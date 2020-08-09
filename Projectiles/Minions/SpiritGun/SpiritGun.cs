@@ -197,7 +197,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
                 idlePosition.Y = player.Center.Y -24;
             }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

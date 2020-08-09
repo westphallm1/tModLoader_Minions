@@ -64,7 +64,7 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
             idlePosition.X += 30 * -player.direction;
             idlePosition.Y += -5;
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

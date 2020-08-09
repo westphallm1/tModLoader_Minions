@@ -107,7 +107,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
                 idlePosition.Y += -35;
             }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

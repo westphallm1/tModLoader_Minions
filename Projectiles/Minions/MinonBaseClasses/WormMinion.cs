@@ -93,7 +93,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
             idlePosition.X += radius * (float)Math.Cos(Math.PI * projectile.ai[1] / 60);
             idlePosition.Y += -20  + 8 * (float)Math.Sin(Math.PI * projectile.ai[1] / 60);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

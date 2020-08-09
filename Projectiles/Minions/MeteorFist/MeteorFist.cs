@@ -117,7 +117,7 @@ namespace DemoMod.Projectiles.Minions.MeteorFist
             idlePosition.X += 2 + 30 * (float)Math.Sin(idleAngle);
             idlePosition.Y += 2 + 30 * (float)Math.Cos(idleAngle);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

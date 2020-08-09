@@ -140,7 +140,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
                 idlePosition.Y = player.Top.Y - 16;
             }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

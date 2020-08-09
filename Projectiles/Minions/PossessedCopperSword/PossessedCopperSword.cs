@@ -96,7 +96,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
                 idlePosition.Y = player.Center.Y -5;
             }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

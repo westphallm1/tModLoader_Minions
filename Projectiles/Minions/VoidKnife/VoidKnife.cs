@@ -103,7 +103,7 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
             idlePosition.X += 2 + 20 * (float)Math.Cos(idleAngle);
             idlePosition.Y += 2 + 40 * (float)Math.Sin(idleAngle);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 
@@ -200,7 +200,7 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
             // alway clamp to the idle position
             projectile.tileCollide = false;
             
-            if(vectorToIdlePosition.Length() > 32)
+            if(vectorToIdlePosition.Length() > 32 && vectorToIdlePosition.Length() < 1000)
             {
                 WarpWithDust(vectorToIdlePosition, true);
             } else

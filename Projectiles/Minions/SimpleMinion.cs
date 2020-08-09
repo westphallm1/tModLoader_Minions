@@ -125,13 +125,14 @@ namespace DemoMod.Projectiles.Minions
 
 
 		// utility methods
-		public void TeleportToPlayer(Vector2 vectorToIdlePosition, float maxDistance)
+		public void TeleportToPlayer(ref Vector2 vectorToIdlePosition, float maxDistance)
         {
 			if(Main.myPlayer == player.whoAmI && vectorToIdlePosition.Length() > maxDistance)
             {
 				projectile.position += vectorToIdlePosition;
 				projectile.velocity = Vector2.Zero;
 				projectile.netUpdate = true;
+				vectorToIdlePosition = Vector2.Zero;
             }
         }
 

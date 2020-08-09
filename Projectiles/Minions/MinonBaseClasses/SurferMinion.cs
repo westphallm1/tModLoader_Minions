@@ -68,7 +68,7 @@ namespace DemoMod.Projectiles.Minions.MinonBaseClasses
                 idlePosition.Y += -20 + 10 * (float)Math.Sin(idleAngle);
             }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

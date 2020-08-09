@@ -142,7 +142,7 @@ namespace DemoMod.Projectiles.Minions.GoblinGunner
                 idlePosition.X = player.Top.X;
                 idlePosition.Y = player.Top.Y - 16;
             }
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

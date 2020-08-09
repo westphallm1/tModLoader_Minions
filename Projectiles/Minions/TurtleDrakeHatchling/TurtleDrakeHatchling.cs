@@ -86,7 +86,7 @@ namespace DemoMod.Projectiles.Minions.TurtleDrakeHatchling
             idlePosition.X += 48 * -player.direction;
             idlePosition.Y += -32;
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 

@@ -120,7 +120,7 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
             idlePosition.X += 2 + 45 * (float)Math.Sin(idleAngle);
             idlePosition.Y += 2 + 45 * (float)Math.Cos(idleAngle);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-            TeleportToPlayer(vectorToIdlePosition, 2000f);
+            TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
         }
 
