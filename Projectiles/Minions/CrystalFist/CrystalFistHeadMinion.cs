@@ -36,7 +36,7 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
             projectile.friendly = false;
             projectile.ai[0] = 0;
             projectile.minionSlots = 0f;
-            attackThroughWalls = true;
+            attackThroughWalls = false;
         }
 
         public override Vector2? FindTarget()

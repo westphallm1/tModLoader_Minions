@@ -91,7 +91,6 @@ namespace DemoMod.Projectiles.Minions.CrystalFist
             if(projectile.tileCollide)
             {
                 attackState = AttackState.RETURNING;
-                projectile.tileCollide = false;
             }
             return base.OnTileCollide(oldVelocity);
         }

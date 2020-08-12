@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Mono.Cecil.Pdb;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -16,6 +17,8 @@ namespace DemoMod.Projectiles.Minions
 		protected int? oldTargetNpcIndex = null;
 		protected int framesSinceHadTarget = 0;
 		protected bool attackThroughWalls = false;
+        public AttackState attackState = AttackState.IDLE;
+
 		public override void SetStaticDefaults() 
 		{
             base.SetStaticDefaults();
@@ -102,7 +105,7 @@ namespace DemoMod.Projectiles.Minions
 				TargetedMovement(targetPosition);
                 oldVectorToTarget = vectorToTarget;
 				oldTargetNpcIndex = targetNPCIndex;
-            } else if(oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < 15)
+            } else if(attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < 15)
             {
 				projectile.tileCollide = !attackThroughWalls;
 				if(previousIndex < Main.maxNPCs)

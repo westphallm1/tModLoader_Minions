@@ -86,6 +86,12 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
             Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Platinum);
         }
 
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            mod.Logger.Info(projectile.position + " " + projectile.velocity + " " + attackState);
+            return false;
+        }
+
         public override Vector2 IdleBehavior()
         {
             base.IdleBehavior();
@@ -108,6 +114,8 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
             }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+
+            mod.Logger.Info(projectile.position + " " + projectile.velocity + " " + attackState);
             return vectorToIdlePosition;
         }
 
@@ -138,6 +146,10 @@ namespace DemoMod.Projectiles.Minions.FlyingSword
                 projectile.rotation += (float)Math.PI / 9;
             } else
             {
+                if(projectile.velocity == Vector2.Zero)
+                {
+                    projectile.velocity = Vector2.One;
+                }
                 projectile.velocity.Normalize();
                 projectile.velocity *= speed; // travel straight away from the impact
             }

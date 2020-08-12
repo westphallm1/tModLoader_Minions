@@ -22,7 +22,6 @@ namespace DemoMod.Projectiles.Minions
         private Projectile head = null;
         public int attackFrames = 60;
         public int animationFrames = 120;
-        public AttackState attackState = AttackState.IDLE;
 
         public override void SetDefaults()
         {

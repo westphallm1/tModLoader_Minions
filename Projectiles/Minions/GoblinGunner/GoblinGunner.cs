@@ -28,7 +28,7 @@ namespace DemoMod.Projectiles.Minions.GoblinGunner
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Gunner Staff");
+			DisplayName.SetDefault("Goblin Radio Beacon");
 			Tooltip.SetDefault("Summons a goblin gunship to fight for you!");
 		}
 
