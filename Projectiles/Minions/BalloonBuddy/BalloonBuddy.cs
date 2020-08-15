@@ -29,7 +29,7 @@ namespace DemoMod.Projectiles.Minions.BalloonBuddy
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Magic Balloon Wand");
+			DisplayName.SetDefault("Magic Bubble Wand");
 			Tooltip.SetDefault("Summons an enchanted balloon animal to fight for you!");
             
 		}

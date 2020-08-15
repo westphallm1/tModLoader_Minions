@@ -43,8 +43,8 @@ namespace DemoMod.Projectiles.Minions.PaperSurfer
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.ClayBlock, 10);
-            recipe.AddIngredient(ItemID.Cloud, 10);
+            recipe.AddIngredient(ItemID.ClayBlock, 30);
+            recipe.AddIngredient(ItemID.Cloud, 30);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();

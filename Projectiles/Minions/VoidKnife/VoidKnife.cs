@@ -17,7 +17,7 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Void Knife");
-			Description.SetDefault("A possessed dagger will fight for you!");
+			Description.SetDefault("An ethereal dagger will fight for you!");
         }
     }
 
@@ -25,17 +25,17 @@ namespace DemoMod.Projectiles.Minions.VoidKnife
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Void Knife Staff");
-			Tooltip.SetDefault("Summons a possessed dagger to fight for you!");
+			DisplayName.SetDefault("Void Knife");
+			Tooltip.SetDefault("Summons an ethereal dagger to fight for you!");
 		}
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 35;
+			item.damage = 38;
 			item.knockBack = 0.5f;
 			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
+			item.width = 24;
+			item.height = 24;
 			item.value = Item.buyPrice(0, 7, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}

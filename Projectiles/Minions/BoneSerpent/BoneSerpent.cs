@@ -48,7 +48,7 @@ namespace DemoMod.Projectiles.Minions.BoneSerpent
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Bone, 75);
-            recipe.AddTile(TileID.Anvils);
+            recipe.AddTile(TileID.Hellforge);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

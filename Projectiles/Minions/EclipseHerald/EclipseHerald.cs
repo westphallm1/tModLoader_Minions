@@ -38,7 +38,7 @@ namespace DemoMod.Projectiles.Minions.EclipseHerald
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-            item.damage = 50;
+            item.damage = 55;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.Red;
 		}
