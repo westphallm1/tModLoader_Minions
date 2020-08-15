@@ -22,7 +22,7 @@ namespace DemoMod.Projectiles.Minions.SpiritRevolver
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Spirit Revolver");
-			Description.SetDefault("A herald of the eclipse will fight for you!");
+			Description.SetDefault("A group of sentient bullets will fight for you!");
         }
     }
 
