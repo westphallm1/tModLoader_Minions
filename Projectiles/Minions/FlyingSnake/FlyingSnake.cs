@@ -38,7 +38,7 @@ namespace DemoMod.Projectiles.Minions.FlyingSnake
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
-            item.damage = 40;
+            item.damage = 42;
 			item.height = 32;
 			item.value = Item.buyPrice(0, 15, 0, 0);
 			item.rare = ItemRarityID.Lime;

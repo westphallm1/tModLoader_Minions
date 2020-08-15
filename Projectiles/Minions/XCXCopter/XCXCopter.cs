@@ -21,7 +21,7 @@ namespace DemoMod.Projectiles.Minions.XCXCopter
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Copter-X");
-			Description.SetDefault("A helicopter will fight for you!");
+			Description.SetDefault("A flexible helicopter will fight for you!");
         }
     }
 
@@ -30,7 +30,7 @@ namespace DemoMod.Projectiles.Minions.XCXCopter
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Copter-X Staff");
-			Tooltip.SetDefault("Summons a helicopter to fight for you!");
+			Tooltip.SetDefault("Summons a flexible helicopter to fight for you!");
             
 		}
 
@@ -40,7 +40,7 @@ namespace DemoMod.Projectiles.Minions.XCXCopter
 			item.mana = 10;
 			item.width = 32;
             item.damage = 35;
-			item.height = 32;
+			item.height = 34;
 			item.value = Item.buyPrice(0, 15, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}

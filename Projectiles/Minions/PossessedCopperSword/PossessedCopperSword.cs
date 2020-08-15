@@ -16,7 +16,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Copper StarSword");
-			Description.SetDefault("A possessed copper sword will fight for you!");
+			Description.SetDefault("An enchanted copper sword will fight for you!");
         }
     }
 
@@ -25,7 +25,7 @@ namespace DemoMod.Projectiles.Minions.PossessedCopperSword
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Copper StarSword");
-			Tooltip.SetDefault("Summons a possessed sword to fight for you!");
+			Tooltip.SetDefault("Summons an enchanted sword to fight for you!");
 		}
 
 		public override void SetDefaults() {

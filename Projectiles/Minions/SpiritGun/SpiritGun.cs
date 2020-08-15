@@ -13,24 +13,24 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.SpiritGun
+namespace DemoMod.Projectiles.Minions.SpiritRevolver
 {
-    public class SpiritGunMinionBuff: MinionBuff
+    public class SpiritRevolverMinionBuff: MinionBuff
     {
-        public SpiritGunMinionBuff() : base(ProjectileType<SpiritGunMinion>()) { }
+        public SpiritRevolverMinionBuff() : base(ProjectileType<SpiritRevolverMinion>()) { }
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Spirit Gun");
+			DisplayName.SetDefault("Spirit Revolver");
 			Description.SetDefault("A herald of the eclipse will fight for you!");
         }
     }
 
-    public class SpiritGunMinionItem: EmpoweredMinionItem<SpiritGunMinionBuff, SpiritGunMinion>
+    public class SpiritRevolverMinionItem: EmpoweredMinionItem<SpiritRevolverMinionBuff, SpiritRevolverMinion>
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spirit Gun");
+			DisplayName.SetDefault("Spirit Revolver");
 			Tooltip.SetDefault("Summons sentient bullets to fight for you.\nMake sure they don't get hungry...");
 		}
 
@@ -40,7 +40,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
 			item.mana = 10;
 			item.width = 44;
 			item.height = 26;
-            item.damage = 55;
+            item.damage = 53;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.Red;
 		}
@@ -48,13 +48,14 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.SpectreBar, 12);
+            recipe.AddIngredient(ItemID.IllegalGunParts, 1);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
     }
 
-    public class SpiritGunMinion : EmpoweredMinion<SpiritGunMinionBuff>
+    public class SpiritRevolverMinion : EmpoweredMinion<SpiritRevolverMinionBuff>
     {
 
         private int framesSinceLastHit;
@@ -65,7 +66,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
         private bool isReloading;
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spirit Gun");
+			DisplayName.SetDefault("Spirit Revolver");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 2;
 		}
@@ -75,7 +76,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
 			projectile.width = 44;
 			projectile.height = 26;
 			projectile.tileCollide = false;
-            projectile.type = ProjectileType<SpiritGunMinion>();
+            projectile.type = ProjectileType<SpiritRevolverMinion>();
             animationFrame = 0;
             framesSinceLastHit = 0;
             projectile.friendly = true;
@@ -214,7 +215,7 @@ namespace DemoMod.Projectiles.Minions.SpiritGun
             {
                 Vector2 pos = projectile.Center;
                 Projectile.NewProjectile(pos, vectorToTargetPosition,
-                    ProjectileType<SpiritGunMinionBullet>(),
+                    ProjectileType<SpiritRevolverMinionBullet>(),
                     projectile.damage,
                     projectile.knockBack,
                     Main.myPlayer,
