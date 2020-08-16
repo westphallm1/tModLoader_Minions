@@ -31,7 +31,7 @@ namespace DemoMod.Items.Armor
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Mushroom, 5);
+            recipe.AddIngredient(ItemID.Blinkroot, 2);
             recipe.AddIngredient(ItemID.Wood, 15);
             recipe.AddTile(TileID.WorkBenches);
             recipe.SetResult(this);

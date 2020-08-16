@@ -10,7 +10,7 @@ namespace DemoMod.Items.Armor
 	public class ForagerLeggings : ModItem
 	{
 		public override void SetStaticDefaults() {
-			DisplayName.SetDefault("Forager's Legs");
+			DisplayName.SetDefault("Forager's Leggings");
 			Tooltip.SetDefault(
 				"4% increased minion damage\n"
 				+ "5% increased movement speed");
@@ -32,7 +32,7 @@ namespace DemoMod.Items.Armor
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Acorn, 2);
+            recipe.AddIngredient(ItemID.Moonglow, 2);
             recipe.AddIngredient(ItemID.Wood, 12);
             recipe.AddTile(TileID.WorkBenches);
             recipe.SetResult(this);
