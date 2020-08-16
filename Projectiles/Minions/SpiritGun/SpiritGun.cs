@@ -13,11 +13,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.SpiritRevolver
+namespace DemoMod.Projectiles.Minions.SpiritGun
 {
-    public class SpiritRevolverMinionBuff: MinionBuff
+    public class SpiritGunMinionBuff: MinionBuff
     {
-        public SpiritRevolverMinionBuff() : base(ProjectileType<SpiritRevolverMinion>()) { }
+        public SpiritGunMinionBuff() : base(ProjectileType<SpiritGunMinion>()) { }
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -26,7 +26,7 @@ namespace DemoMod.Projectiles.Minions.SpiritRevolver
         }
     }
 
-    public class SpiritRevolverMinionItem: EmpoweredMinionItem<SpiritRevolverMinionBuff, SpiritRevolverMinion>
+    public class SpiritGunMinionItem: EmpoweredMinionItem<SpiritGunMinionBuff, SpiritGunMinion>
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
@@ -55,7 +55,7 @@ namespace DemoMod.Projectiles.Minions.SpiritRevolver
         }
     }
 
-    public class SpiritRevolverMinion : EmpoweredMinion<SpiritRevolverMinionBuff>
+    public class SpiritGunMinion : EmpoweredMinion<SpiritGunMinionBuff>
     {
 
         private int framesSinceLastHit;
@@ -76,7 +76,7 @@ namespace DemoMod.Projectiles.Minions.SpiritRevolver
 			projectile.width = 44;
 			projectile.height = 26;
 			projectile.tileCollide = false;
-            projectile.type = ProjectileType<SpiritRevolverMinion>();
+            projectile.type = ProjectileType<SpiritGunMinion>();
             animationFrame = 0;
             framesSinceLastHit = 0;
             projectile.friendly = true;
@@ -215,7 +215,7 @@ namespace DemoMod.Projectiles.Minions.SpiritRevolver
             {
                 Vector2 pos = projectile.Center;
                 Projectile.NewProjectile(pos, vectorToTargetPosition,
-                    ProjectileType<SpiritRevolverMinionBullet>(),
+                    ProjectileType<SpiritGunMinionBullet>(),
                     projectile.damage,
                     projectile.knockBack,
                     Main.myPlayer,
