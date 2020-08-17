@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DemoMod.Projectiles.Minions
+namespace AmuletOfManyMinions.Projectiles.Minions
 {
     public abstract class SimpleMinion<T> : Minion<T> where T : ModBuff
     {

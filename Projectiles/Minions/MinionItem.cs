@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using System.Linq;
 
-namespace DemoMod.Projectiles.Minions
+namespace AmuletOfManyMinions.Projectiles.Minions
 {
     public abstract class MinionItem <TBuff, TProj> : ModItem where TBuff : ModBuff where TProj: Minion<TBuff>
     {

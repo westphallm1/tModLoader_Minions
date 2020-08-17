@@ -1,4 +1,4 @@
-﻿using DemoMod.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using log4net.Repository.Hierarchy;
 using log4net.Util;
 using Microsoft.Xna.Framework;
@@ -13,7 +13,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.SpiritGun
+namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
     public class SpiritGunMinionBuff: MinionBuff
     {

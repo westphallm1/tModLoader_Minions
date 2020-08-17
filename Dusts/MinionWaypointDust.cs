@@ -1,9 +1,9 @@
-﻿using DemoMod.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace DemoMod.Dusts
+namespace AmuletOfManyMinions.Dusts
 {
     class MinionWaypointDust : ModDust
     {

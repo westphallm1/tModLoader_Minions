@@ -13,9 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DemoMod.Dusts;
+using AmuletOfManyMinions.Dusts;
 
-namespace DemoMod.Projectiles.Minions
+namespace AmuletOfManyMinions.Projectiles.Minions
 {
     class MinionWaypoint : ModProjectile
     {

@@ -9,7 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.MinonBaseClasses
+namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
     public abstract class EmpoweredMinionItem<TBuff, TMinion> : MinionItem<TBuff, TMinion> where TBuff: ModBuff where TMinion: EmpoweredMinion<TBuff>
     {

@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Items.Armor
+namespace AmuletOfManyMinions.Items.Armor
 {
 	[AutoloadEquip(EquipType.Body)]
 	public class ForagerBreastplate : ModItem

@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.FlyingSword
+namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 {
     public class FlyingSwordMinionBuff: MinionBuff
     {

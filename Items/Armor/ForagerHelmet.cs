@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
 
-namespace DemoMod.Items.Armor
+namespace AmuletOfManyMinions.Items.Armor
 {
 	[AutoloadEquip(EquipType.Head)]
 	public class ForagerHelmet : ModItem

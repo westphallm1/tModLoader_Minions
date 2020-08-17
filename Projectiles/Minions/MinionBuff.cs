@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using System.Linq;
 
-namespace DemoMod.Projectiles.Minions
+namespace AmuletOfManyMinions.Projectiles.Minions
 {
     public abstract class MinionBuff : ModBuff
     {

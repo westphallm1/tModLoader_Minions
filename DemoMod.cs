@@ -1,8 +1,8 @@
 using Terraria.ModLoader;
 
-namespace DemoMod
+namespace AmuletOfManyMinions
 {
-	public class DemoMod : Mod
+	public class AmuletOfManyMinions : Mod
 	{
 	}
 }

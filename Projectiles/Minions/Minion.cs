@@ -7,9 +7,9 @@ using static Terraria.ModLoader.ModContent;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
-using DemoMod.Dusts;
+using AmuletOfManyMinions.Dusts;
 
-namespace DemoMod.Projectiles.Minions
+namespace AmuletOfManyMinions.Projectiles.Minions
 {
 	public abstract class Minion<T>  : ModProjectile where T: ModBuff
 	{

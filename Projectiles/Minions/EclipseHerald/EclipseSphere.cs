@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace DemoMod.Projectiles.Minions.EclipseHerald
+namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 {
     class EclipseSphere : ModProjectile {
         private bool hitTarget;

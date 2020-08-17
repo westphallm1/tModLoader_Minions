@@ -1,4 +1,4 @@
-﻿using DemoMod.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using log4net.Repository.Hierarchy;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Serialization;
@@ -9,7 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.StarSurfer
+namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 {
     public class StarSurferMinionBuff : MinionBuff
     {

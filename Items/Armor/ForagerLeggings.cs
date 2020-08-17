@@ -4,7 +4,7 @@ using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
 using System.ComponentModel;
 
-namespace DemoMod.Items.Armor
+namespace AmuletOfManyMinions.Items.Armor
 {
 	[AutoloadEquip(EquipType.Legs)]
 	public class ForagerLeggings : ModItem

@@ -8,7 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.MeteorFist
+namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 {
     public class MeteorFistMinionBuff: MinionBuff
     {

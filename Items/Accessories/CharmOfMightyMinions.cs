@@ -3,9 +3,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-using DemoMod.Projectiles.Minions.VoidKnife;
+using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 
-namespace DemoMod.Items.Accessories
+namespace AmuletOfManyMinions.Items.Accessories
 {
     [AutoloadEquip(EquipType.Neck)]
     class CharmOfMightyMinions : ModItem

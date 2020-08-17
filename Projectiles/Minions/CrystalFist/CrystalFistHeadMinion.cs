@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.CrystalFist
+namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 
 {
     public class CrystalFistHeadMinion : SimpleMinion<CrystalFistMinionBuff>

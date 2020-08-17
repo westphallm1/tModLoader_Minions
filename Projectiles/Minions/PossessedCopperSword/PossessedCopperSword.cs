@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.PossessedCopperSword
+namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 {
     public class CopperSwordMinionBuff: MinionBuff
     {

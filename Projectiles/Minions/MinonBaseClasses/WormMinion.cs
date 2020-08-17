@@ -1,4 +1,4 @@
-﻿using DemoMod.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using log4net.Repository.Hierarchy;
 using log4net.Util;
 using Microsoft.Xna.Framework;
@@ -12,7 +12,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.MinonBaseClasses
+namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
     public abstract class WormMinion<T>: EmpoweredMinion<T> where T: ModBuff
     {

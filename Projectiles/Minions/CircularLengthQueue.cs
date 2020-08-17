@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 
-namespace DemoMod.Projectiles.Minions
+namespace AmuletOfManyMinions.Projectiles.Minions
 {
     public class CircularLengthQueue : CircularVectorQueue
     {

@@ -1,4 +1,4 @@
-﻿using DemoMod.Projectiles.Minions.PaperSurfer;
+﻿using AmuletOfManyMinions.Projectiles.Minions.PaperSurfer;
 using log4net.Repository.Hierarchy;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Serialization;
@@ -10,7 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.MinonBaseClasses
+namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
     public abstract class SurferMinion<T> : GroupAwareMinion<T> where T : ModBuff
     {

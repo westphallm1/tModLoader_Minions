@@ -3,12 +3,12 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-using DemoMod.Projectiles.Minions.PossessedCopperSword;
-using DemoMod.Projectiles.Minions.SpiritGun;
-using DemoMod.Projectiles.Minions.FlyingSword;
-using DemoMod.Projectiles.Minions.VoidKnife;
+using AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword;
+using AmuletOfManyMinions.Projectiles.Minions.SpiritGun;
+using AmuletOfManyMinions.Projectiles.Minions.FlyingSword;
+using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 
-namespace DemoMod.Items.Accessories
+namespace AmuletOfManyMinions.Items.Accessories
 {
     [AutoloadEquip(EquipType.Neck)]
     class AmuletOfManyMinions : ModItem

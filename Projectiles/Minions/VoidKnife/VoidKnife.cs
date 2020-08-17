@@ -8,7 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace DemoMod.Projectiles.Minions.VoidKnife
+namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 {
     public class VoidKnifeMinionBuff: MinionBuff
     {
