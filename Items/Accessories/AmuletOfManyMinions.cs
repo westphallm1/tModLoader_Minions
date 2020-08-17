@@ -43,6 +43,7 @@ namespace DemoMod.Items.Accessories
             recipe.AddIngredient(ItemType<VoidKnifeMinionItem>(), 1);
             recipe.AddIngredient(ItemType<CharmOfManyMinions>(), 1);
             recipe.AddIngredient(ItemType<CharmOfMightyMinions>(), 1);
+            recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

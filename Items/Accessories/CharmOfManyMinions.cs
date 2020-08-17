@@ -36,6 +36,7 @@ namespace DemoMod.Items.Accessories
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.LightShard, 1);
             recipe.AddIngredient(ItemID.SoulofNight, 8);
+            recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

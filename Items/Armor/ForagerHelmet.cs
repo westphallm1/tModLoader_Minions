@@ -11,7 +11,7 @@ namespace DemoMod.Items.Armor
 		public override void SetStaticDefaults() {
 			DisplayName.SetDefault("Forager's Helmet");
 			Tooltip.SetDefault(""
-				+ "3% increased minion damge\n"
+				+ "3% increased minion damage\n"
 				+ "+1 minion knockback");
 		}
 
@@ -32,7 +32,7 @@ namespace DemoMod.Items.Armor
 		}
 
 		public override void UpdateArmorSet(Player player) {
-			player.setBonus = "+1 maximum minions";
+			player.setBonus = "Increases your max minions by 1.";
 			player.maxMinions++;
 		}
 
