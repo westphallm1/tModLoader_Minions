@@ -11,6 +11,17 @@ using AmuletOfManyMinions.Dusts;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
+	public static class Vector2Extensions
+    {
+		// prevent 
+        public static void SafeNormalize(this Vector2 vec)
+        {
+			if(vec != Vector2.Zero)
+            {
+				vec.Normalize();
+            }
+        }
+    }
 	public abstract class Minion<T>  : ModProjectile where T: ModBuff
 	{
         public readonly float PI = (float)Math.PI;
@@ -155,8 +166,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			int lineLength = 64;
 			Vector2 fromVector = projectile.Center - waypointCenter;
 			Vector2 toVector = anyTarget - waypointCenter;
-			fromVector.Normalize();
-			toVector.Normalize();
+			fromVector.SafeNormalize();
+			toVector.SafeNormalize();
 			for(int i = 12; i < lineLength; i += 2) 
             {
 				float scale = 1.5f - 0.015f * i;

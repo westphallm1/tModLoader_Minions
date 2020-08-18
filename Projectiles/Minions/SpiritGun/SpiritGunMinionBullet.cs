@@ -46,7 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
                 velocity = target - projectile.Center;
                 vectorToTarget = velocity;
                 lookingForTarget = false;
-                velocity.Normalize(); 
+                velocity.SafeNormalize(); 
                 velocity *= speed;
                 Dust.NewDust(projectile.Center, 8, 8, DustID.Confetti, -velocity.X, -velocity.Y);
             }           
@@ -59,7 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
             {
                 velocity = new Vector2(projectile.ai[0], projectile.ai[1]);
                 vectorToTarget = velocity;
-                velocity.Normalize();
+                velocity.SafeNormalize();
                 velocity *= speed;
             }
             if(hitTarget)

@@ -107,14 +107,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
             base.TargetedMovement(vectorToTargetPosition);
             float inertia = ComputeInertia();
             float speed = ComputeTargetedSpeed();
-            vectorToTargetPosition.Normalize();
+            vectorToTargetPosition.SafeNormalize();
             vectorToTargetPosition *= speed;
             if(framesSinceLastHit ++ > 4)
             {
                 projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
             } else
             {
-                projectile.velocity.Normalize();
+                projectile.velocity.SafeNormalize();
                 projectile.velocity *= speed; // kick it away from enemies that it's just hit
             }
         }

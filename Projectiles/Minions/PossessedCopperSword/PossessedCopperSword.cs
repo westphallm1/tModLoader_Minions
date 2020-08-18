@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
             // alway clamp to the idle position
             int inertia = 5;
             int speed = 8;
-            vectorToTargetPosition.Normalize();
+            vectorToTargetPosition.SafeNormalize();
             vectorToTargetPosition *= speed;
             if(framesSinceLastHit ++ > 10)
             {
@@ -143,7 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
             Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
             if(speedChange.Length() > maxSpeed)
             {
-                speedChange.Normalize();
+                speedChange.SafeNormalize();
                 speedChange *= maxSpeed;
             }
             projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;

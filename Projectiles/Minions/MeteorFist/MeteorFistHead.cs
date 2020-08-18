@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
             Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
             if (speedChange.Length() > maxSpeed)
             {
-                speedChange.Normalize();
+                speedChange.SafeNormalize();
                 speedChange *= maxSpeed;
             }
             projectile.spriteDirection = -player.direction;
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
             } else if (vectorToTargetPosition.Length() < minDistanceToEnemy){
                 vectorToTargetPosition *= -1;
             }
-            vectorToTargetPosition.Normalize();
+            vectorToTargetPosition.SafeNormalize();
             vectorToTargetPosition *= maxSpeed;
             projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
         }

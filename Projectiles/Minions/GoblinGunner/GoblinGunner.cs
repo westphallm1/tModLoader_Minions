@@ -163,7 +163,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
                 NPC target = Main.npc[npcIdx];
                 // try to predict the position at the time of impact a bit
                 vectorToTargetPosition += (vectorToTargetPosition.Length() / projectileVelocity) * target.velocity;
-                vectorToTargetPosition.Normalize();
+                vectorToTargetPosition.SafeNormalize();
                 vectorToTargetPosition *= projectileVelocity;
                 Vector2 pos = projectile.Center;
                 framesSinceLastHit = 0;

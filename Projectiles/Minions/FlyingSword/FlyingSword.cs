@@ -140,7 +140,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
             framesInAir++;
             if((enemyHitFrame == 0 || enemyHitFrame + 9 < framesInAir) && vectorToTargetPosition.Length() > 8 )
             {
-                vectorToTargetPosition.Normalize();
+                vectorToTargetPosition.SafeNormalize();
                 vectorToTargetPosition *= speed;
                 projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
                 projectile.rotation += (float)Math.PI / 9;
@@ -150,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
                 {
                     projectile.velocity = Vector2.One;
                 }
-                projectile.velocity.Normalize();
+                projectile.velocity.SafeNormalize();
                 projectile.velocity *= speed; // travel straight away from the impact
             }
             if(framesInAir >= maxFramesInAir)
@@ -176,7 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
             Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
             if(speedChange.Length() > maxSpeed)
             {
-                speedChange.Normalize();
+                speedChange.SafeNormalize();
                 speedChange *= maxSpeed;
             }
             projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;

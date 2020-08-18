@@ -154,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
             if(oldVectorToTarget == null && vectorToTarget is Vector2 target)
             {
                 target.Y -= Math.Abs(target.X) / 10; // add a bit of vertical increase to target
-                target.Normalize();
+                target.SafeNormalize();
                 target *= speed;
                 framesInAir = 0;
                 projectile.velocity = target;
@@ -196,7 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
                 Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
                 if(speedChange.Length() > maxSpeed)
                 {
-                    speedChange.Normalize();
+                    speedChange.SafeNormalize();
                     speedChange *= maxSpeed;
                 }
                 projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;

@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
             framesSinceLastHit++;
             if(framesSinceLastHit ++ > 60 && targetNPCIndex is int npcIndex)
             {
-                vectorToTargetPosition.Normalize();
+                vectorToTargetPosition.SafeNormalize();
                 vectorToTargetPosition *= 8;
                 Vector2 pos = projectile.Center;
                 pos.Y -= 24;

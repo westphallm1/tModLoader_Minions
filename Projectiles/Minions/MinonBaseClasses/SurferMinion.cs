@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            projectile.velocity.Normalize();
+            projectile.velocity.SafeNormalize();
             projectile.velocity *= 6; // "kick" it away from the enemy it just hit
             framesSinceDiveBomb = 0;
             base.OnHitNPC(target, damage, knockback, crit);
@@ -113,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
                 speed = diveBombSpeed;
                 projectile.rotation = (projectile.velocity.X > 0 ? 7 : 5) * PI / 4;
             }
-            vectorToTargetPosition.Normalize();
+            vectorToTargetPosition.SafeNormalize();
             vectorToTargetPosition *= speed;
             projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
             projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
@@ -131,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
                 projectile.spriteDirection = (idleAngle % (2* PI)) > PI ? -1 : 1;
             }  else
             {
-                vectorToIdlePosition.Normalize();
+                vectorToIdlePosition.SafeNormalize();
                 vectorToIdlePosition *= maxSpeed;
             }
             projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;

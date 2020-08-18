@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
                 {
                     OnHitTarget();
                 }
-                vectorToTarget.Normalize();
+                vectorToTarget.SafeNormalize();
                 projectile.velocity = vectorToTarget * (6+ Math.Min(5, projectile.ai[0]));
             }
             Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
             hitTarget = true;
             projectile.timeLeft = Math.Min(projectile.timeLeft, 60);
             projectile.position += projectile.velocity;
-            projectile.velocity.Normalize();
+            projectile.velocity.SafeNormalize();
             projectile.velocity *= 2; // slowly drift from place of impact
         }
 

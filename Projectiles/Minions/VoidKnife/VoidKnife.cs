@@ -135,7 +135,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
                 return;
             }
             Vector2 dustIncrement = new Vector2(vectorToNewPosition.X, vectorToNewPosition.Y);
-            dustIncrement.Normalize();
+            dustIncrement.SafeNormalize();
             if(bigDustBefore)
             {
                 for(int i = 0; i < 10; i ++)
@@ -178,7 +178,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             }
             else if (!hasHitEnemy && vectorToTargetPosition != Vector2.Zero)
             {
-                vectorToTargetPosition.Normalize();
+                vectorToTargetPosition.SafeNormalize();
                 projectile.velocity = vectorToTargetPosition * travelVelocity;
             }
             else

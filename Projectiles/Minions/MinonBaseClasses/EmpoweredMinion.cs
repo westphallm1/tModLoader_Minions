@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
         {
             float inertia = ComputeInertia();
             float speed = ComputeTargetedSpeed();
-            vectorToTargetPosition.Normalize();
+            vectorToTargetPosition.SafeNormalize();
             vectorToTargetPosition *= speed;
             projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
         }
@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
             Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
             if(speedChange.Length() > maxSpeed)
             {
-                speedChange.Normalize();
+                speedChange.SafeNormalize();
                 speedChange *= maxSpeed;
             }
             projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;
