@@ -1,1 +1,4 @@
-The Amulet of Many Minions adds over a dozen new minions, several accessories, and an early game armor set to Terraria!
+The Amulet of Many Minions is designed to add variety to the vanilla summoner progression while staying relatively in line with
+vanilla balance. It adds over a dozen new minions, 3 accessories, and an early pre-hardmode armor set to the game.
+
+Note: This mod is currently only tested in single player.
