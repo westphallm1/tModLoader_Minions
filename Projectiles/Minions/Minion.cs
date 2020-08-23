@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			Behavior();
 		}
 
-        public void CheckActive() {
+        public virtual void CheckActive() {
 			// This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
 			if (player.dead || !player.active) {
 				player.ClearBuff(BuffType<T>());

@@ -17,6 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int? oldTargetNpcIndex = null;
 		protected int framesSinceHadTarget = 0;
 		protected bool attackThroughWalls = false;
+        protected int frameSpeed = 5;
         public AttackState attackState = AttackState.IDLE;
 
 		public override void SetStaticDefaults() 
@@ -70,7 +71,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public virtual void Animate(int minFrame = 0, int? maxFrame = null) {
 
 			// This is a simple "loop through all frames from top to bottom" animation
-			int frameSpeed = 5;
 			projectile.frameCounter++;
 			if (projectile.frameCounter >= frameSpeed) {
 				projectile.frameCounter = 0;
