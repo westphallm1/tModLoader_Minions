@@ -5,6 +5,8 @@ using Terraria.ModLoader;
 using AmuletOfManyMinions.Projectiles.Minions;
 using static Terraria.ModLoader.ModContent;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
 {
@@ -15,8 +17,9 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
             public override void SetStaticDefaults()
             {
                 DisplayName.SetDefault("Cannon Of Worms");
-                Tooltip.SetDefault("Shoots a worm to crawl into enemies.\n" +
-                    "Can summon worms for no mana up to your minion count.");
+                Tooltip.SetDefault("Shoots a worm to bump into enemies.\n" +
+                    "Can have more worms active the more minion slots you have\n" +
+                    "(worms do not occupy slots)");
             }
 
             public override void SetDefaults()
@@ -27,12 +30,12 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
                 item.summon = true;
                 item.noMelee = true;
                 item.knockBack = 0.1f;
-                item.damage = 7;
+                item.damage = 12;
                 item.shoot = ProjectileType<WormProjectile>();
                 item.shootSpeed = 9;
                 item.autoReuse = true;
                 item.useTime = 30;
-                item.mana = 5;
+                item.mana = 3;
                 item.useAnimation = 30;
                 item.UseSound = SoundID.Item11;
             }
@@ -40,22 +43,22 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
             public override bool CanUseItem(Player player)
             {
                 // only allow a certain number of worms to be spawned at a time
-                int sum = 0;
+                var currentProjectiles = new List<Projectile>();
                 for(int i = 0; i < Main.maxProjectiles; i++)
                 {
                     Projectile p = Main.projectile[i];
                     if(p.active && p.type == item.shoot && Main.player[p.owner] == player)
                     {
-                        sum++;
+                        currentProjectiles.Add(p);
                     }
                 }
-                if(sum <= 1 * 2* player.maxMinions)
+                if(currentProjectiles.Count >= 1 + player.maxMinions)
                 {
-
-                    item.mana = 0;
-                } else
-                {
-                    item.mana = 5;
+                    Projectile oldest = currentProjectiles.OrderBy(p => p.timeLeft).FirstOrDefault();
+                    if(oldest != default)
+                    {
+                        oldest.Kill();
+                    }
                 }
                 return true;
             }
@@ -63,7 +66,11 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
 
         class WormProjectile : NonMinionSummonedProjectile
         {
+            const int TIME_TO_LIVE = 60 * 60; // 1 minute;
+
             bool hasLanded;
+            int framesToTurn;
+            Random random = new Random();
 
             public override void SetStaticDefaults()
             {
@@ -78,7 +85,8 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
                 projectile.height = 8;
                 projectile.tileCollide = true;
                 hasLanded = false;
-                projectile.timeLeft = 300;
+                projectile.timeLeft = TIME_TO_LIVE;
+                framesToTurn = 400 + 30 * random.Next(-3, 3);
             }
 
             public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
@@ -102,13 +110,17 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
 
             public override void IdleMovement(Vector2 vectorToIdlePosition)
             {
-                if(projectile.timeLeft < 270)
+                if(projectile.timeLeft < TIME_TO_LIVE - 30)
                 {
                     projectile.velocity.Y += .5f;
                 }
                 if(hasLanded)
                 {
                     projectile.velocity.X = Math.Sign(projectile.velocity.X);
+                }
+                if(hasLanded && projectile.timeLeft % framesToTurn == 0) // turn around every so often
+                {
+                    projectile.velocity.X *= -3;
                 }
             }
 

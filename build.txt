@@ -1,4 +1,4 @@
 displayName = The Amulet Of Many Minions
 author = billybobmcbo
-version = 0.1.1
+version = 0.1.2
 homepage = https://forums.terraria.org/index.php?threads/the-amulet-of-many-minions.97188/
