@@ -13,6 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         protected int itemType;
 
         public static List<int> squireTypes = new List<int>();
+        protected Vector2 relativeVelocity = Vector2.Zero;
         public SquireMinion(int itemID)
         {
             itemType = itemID;
@@ -84,7 +85,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
                 speedChange.SafeNormalize();
                 speedChange *= maxSpeed;
             }
-            projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;
+            relativeVelocity = (relativeVelocity * (inertia - 1) + speedChange) / inertia;
+            projectile.velocity = player.velocity + relativeVelocity;
         }
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -97,7 +99,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             float speed = ComputeTargetedSpeed();
             vectorToTargetPosition.SafeNormalize();
             vectorToTargetPosition *= speed;
-            projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+            relativeVelocity = (relativeVelocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+            projectile.velocity = player.velocity + relativeVelocity;
         }
 
         public virtual float ComputeInertia()
@@ -118,7 +121,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
         public virtual float MaxDistanceFromPlayer()
         {
-            return 120;
+            return 80;
         }
 
     }

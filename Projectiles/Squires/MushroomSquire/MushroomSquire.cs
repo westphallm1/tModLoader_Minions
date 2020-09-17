@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
             maxFrame = 4;
             if(vectorToTarget is Vector2 target)
             {
-                projectile.spriteDirection = Math.Sign(target.X);
+                projectile.spriteDirection = Math.Sign((Main.MouseWorld - player.position).X);
             } else if(projectile.velocity.X < -1)
             {
                 projectile.spriteDirection = -1;
