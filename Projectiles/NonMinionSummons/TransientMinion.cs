@@ -6,7 +6,7 @@ using AmuletOfManyMinions.Projectiles.Minions;
 
 namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 {
-    abstract class NonMinionSummonedProjectile : SimpleMinion<ModBuff>
+    abstract class TransientMinion : SimpleMinion<ModBuff>
     {
         public override void SetDefaults()
         {

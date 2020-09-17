@@ -7,6 +7,7 @@ using static Terraria.ModLoader.ModContent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
 {
@@ -17,9 +18,9 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
             public override void SetStaticDefaults()
             {
                 DisplayName.SetDefault("Cannon Of Worms");
-                Tooltip.SetDefault("Shoots a worm to bump into enemies.\n" +
-                    "Can have more worms active the more minion slots you have\n" +
-                    "(worms do not occupy slots)");
+                Tooltip.SetDefault("Summons a sentry\n" +
+                    "Shoots worms to patrol a small area and bump into enemies.\n" +
+                    "Can summon worms up to twice your minion capacity.");
             }
 
             public override void SetDefaults()
@@ -28,6 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
                 item.width = 34;
                 item.height = 24;
                 item.summon = true;
+                item.sentry = true;
                 item.noMelee = true;
                 item.knockBack = 0.1f;
                 item.damage = 12;
@@ -62,15 +64,50 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
                 }
                 return true;
             }
+
+            public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+            {
+                if(!Main.projectile.Where(p=>p.active &&
+                   p.type == ProjectileType<WormSentryProjectile>() && 
+                   Main.player[p.owner] == player).Any())
+                {
+                    // todo honor DD2 accessory
+                    Projectile oldSentry = Main.projectile.Where(p => p.active && p.owner == Main.myPlayer && p.sentry).FirstOrDefault();
+                    if(oldSentry != default)
+                    {
+                        oldSentry.Kill();
+                    }
+                    Projectile.NewProjectile(position, Vector2.Zero, ProjectileType<WormSentryProjectile>(), 0, 0, Main.myPlayer);
+                }
+                return true;
+            }
         }
 
-        class WormProjectile : NonMinionSummonedProjectile
+
+        class WormSentryProjectile : ModProjectile
         {
-            const int TIME_TO_LIVE = 60 * 60; // 1 minute;
+            public override void SetDefaults()
+            {
+                base.SetDefaults();
+                projectile.sentry = true;
+                projectile.timeLeft = WormProjectile.TIME_TO_LIVE;
+            }
+
+            public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+            {
+                return false;
+            }
+            public override string Texture => "Terraria/NPC_0"; 
+
+        }
+
+        class WormProjectile : TransientMinion
+        {
+            public const int TIME_TO_LIVE = 60 * 60; // 1 minute;
 
             bool hasLanded;
             int framesToTurn;
-            Random random = new Random();
+            readonly Random random = new Random();
 
             public override void SetStaticDefaults()
             {
@@ -121,6 +158,13 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons.CannonOfWorms
                 if(hasLanded && projectile.timeLeft % framesToTurn == 0) // turn around every so often
                 {
                     projectile.velocity.X *= -3;
+                }
+
+                if(!Main.projectile.Where(p=>p.active &&
+                   p.type == ProjectileType<WormSentryProjectile>() && 
+                   Main.player[p.owner] == player).Any())
+                {
+                    projectile.Kill();
                 }
             }
 
