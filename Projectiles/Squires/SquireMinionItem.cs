@@ -15,6 +15,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         {
             base.SetDefaults();
             item.autoReuse = true;
+            item.useStyle = ItemUseStyleID.HoldingUp;
+            item.channel = true;
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
@@ -29,15 +31,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         {
             if(player.ownedProjectileCounts[item.shoot] > 0)
             {
-                item.useStyle = ItemUseStyleID.HoldingUp;
-                item.channel = true;
                 item.mana = 0;
                 item.UseSound = null;
+                base.CanUseItem(player); // still trigger waypoint movement
                 return true;
             } else
             {
-                item.useStyle = ItemUseStyleID.SwingThrow;
-                item.channel = false;
                 item.mana = 10;
                 item.UseSound = SoundID.Item44;
                 return base.CanUseItem(player);
