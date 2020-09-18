@@ -33,12 +33,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			base.SetDefaults();
 			item.knockBack = 3f;
 			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
+			item.width = 24;
+			item.height = 38;
             item.damage = 12;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.White;
 		}
+
+        public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+        {
+            Main.NewText("I'm being called!");
+            return false;
+        }
+
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Main.NewText("I'm also being called!");
+        }
+
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

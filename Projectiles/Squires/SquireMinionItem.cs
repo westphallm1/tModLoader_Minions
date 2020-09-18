@@ -29,18 +29,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
         public override bool CanUseItem(Player player)
         {
-            if(player.ownedProjectileCounts[item.shoot] > 0)
+            base.CanUseItem(player);
+            if (player.ownedProjectileCounts[item.shoot] > 0)
             {
-                item.mana = 0;
-                item.UseSound = null;
-                base.CanUseItem(player); // still trigger waypoint movement
-                return true;
-            } else
-            {
-                item.mana = 10;
-                item.UseSound = SoundID.Item44;
-                return base.CanUseItem(player);
+                return false;
             }
+            return true;
         }
     }
 }
