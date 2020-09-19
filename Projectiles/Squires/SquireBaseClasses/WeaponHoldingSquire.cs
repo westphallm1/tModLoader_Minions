@@ -29,6 +29,25 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             useBeacon = false;
         }
 
+        protected virtual int WeaponHitboxEnd()
+        {
+            return 40;
+        }
+
+        protected virtual int WeaponHitboxStart()
+        {
+            return 16;
+        }
+
+        public override Vector2 IdleBehavior()
+        {
+            if(GetSpriteDirection() is int direction)
+            {
+                projectile.spriteDirection = direction;
+            }
+            return base.IdleBehavior();
+        }
+
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             // use a computed weapon hitbox instead of the projectile's natural hitbox
@@ -40,8 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
                 return false;
             }
             Vector2 unitAngle = UnitVectorFromWeaponAngle();
-            int weaponLength = 40;
-            for(int i = 16; i < weaponLength; i+= 8)
+            for(int i = WeaponHitboxStart(); i < WeaponHitboxEnd(); i+= 8)
             {
                 Vector2 tipCenter = projectile.Center + i * unitAngle;
                 Rectangle tipHitbox = new Rectangle((int)tipCenter.X - 8, (int)tipCenter.Y - 8, 16, 16);
@@ -57,8 +75,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D texture = Main.projectileTexture[projectile.type];
-            Rectangle bounds = new Rectangle(0, 4 * 42, projectile.width, projectile.height);
-            Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
+            Rectangle bounds = new Rectangle(0, 4 * 42, texture.Width, projectile.height);
+            Vector2 origin = new Vector2(projectile.width / 2f, bounds.Height / 2f);
             Vector2 pos = projectile.Center;
             float r = projectile.rotation;
             SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
@@ -66,13 +84,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             {
                 if(weaponAngle > (float)Math.PI / 8)
                 {
-                    bounds = new Rectangle(0, 5 * 42, projectile.width, projectile.height);
+                    bounds = new Rectangle(0, 5 * 42, texture.Width, projectile.height);
                 } else if(weaponAngle > -Math.PI/8)
                 {
-                    bounds = new Rectangle(0, 6 * 42, projectile.width, projectile.height);
+                    bounds = new Rectangle(0, 6 * 42, texture.Width, projectile.height);
                 } else
                 {
-                    bounds = new Rectangle(0, 7 * 42, projectile.width, projectile.height);
+                    bounds = new Rectangle(0, 7 * 42, texture.Width, projectile.height);
                 }
                 DrawWeapon(spriteBatch, lightColor);
             }
@@ -98,7 +116,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             }
         }
 
-        protected float SpriteRotationFromWeaponAngle()
+        // valid for diagonal sprites, eg. swords
+        protected virtual float SpriteRotationFromWeaponAngle()
         {
             if(projectile.spriteDirection == 1)
             {
@@ -111,6 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             usingWeapon = true;
+            attackFrame = (attackFrame + 1) % AttackFrames;
             weaponAngle = GetWeaponAngle();
             base.TargetedMovement(vectorToTargetPosition);
         }
@@ -138,19 +158,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
         protected abstract float WeaponOffset();
 
-        protected abstract Texture2D GetWeaponTexture();
-        public override void Animate(int minFrame = 0, int? maxFrame = null)
+        protected virtual int? GetSpriteDirection()
         {
             if(vectorToTarget is Vector2 target)
             {
-                projectile.spriteDirection = Math.Sign((Main.MouseWorld - player.position).X);
+                return Math.Sign((Main.MouseWorld - player.position).X);
             } else if(projectile.velocity.X < -1)
             {
-                projectile.spriteDirection = -1;
+                return -1;
             } else if (projectile.velocity.X > 1)
             {
-                projectile.spriteDirection = 1;
+                return 1;
             }
+            return null;
+        }
+
+        protected abstract Texture2D GetWeaponTexture();
+        public override void Animate(int minFrame = 0, int? maxFrame = null)
+        {
             projectile.rotation = projectile.velocity.X * 0.05f;
             base.Animate(minFrame, maxFrame);
         }

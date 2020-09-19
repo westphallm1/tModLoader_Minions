@@ -44,16 +44,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         public override Vector2? FindTarget()
         {
             // move towards the mouse if player is holding and clicking
+            if(Vector2.Distance(projectile.Center, player.Center) > 1.5 * MaxDistanceFromPlayer())
+            {
+                return null; // force back into non-attacking mode if too far from player
+            }
             if(player.HeldItem.type == itemType && Main.mouseLeft)
             {
                 Vector2 targetFromPlayer = Main.MouseWorld - player.position;
                 if(targetFromPlayer.Length() < MaxDistanceFromPlayer())
                 {
-                    return Main.MouseWorld - projectile.position;
+                    return Main.MouseWorld - projectile.Center;
                 }
                 targetFromPlayer.Normalize();
                 targetFromPlayer *= MaxDistanceFromPlayer();
-                return player.position + targetFromPlayer - projectile.position;
+                return player.position + targetFromPlayer - projectile.Center;
             }
             return null;
         }

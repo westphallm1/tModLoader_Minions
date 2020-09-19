@@ -93,7 +93,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
             float angle0 = 5 * (float)Math.PI / 8;
             float angle1 = -(float)Math.PI/4;
             float angleStep = (angle1 - angle0) / AttackFrames;
-            attackFrame = (attackFrame + 1) % AttackFrames;
             return angle0 + angleStep * attackFrame;
         }
 
