@@ -53,30 +53,29 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
     }
 
 
-    public class MushroomSquireSword : ModProjectile
-    {
-        // just to load a texture, probably overkill
-    }
-
     public class MushroomSquireMinion : WeaponHoldingSquire<MushroomSquireMinionBuff>
     {
 
 
-        protected override int AttackFrames { get => 20; }
-        public MushroomSquireMinion(): base(ItemType<MushroomSquireMinionItem>()) {}
+        protected override int AttackFrames => 20;
+        protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/LeafWings";
+        protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/MushroomSquire/MushroomSquireSword";
 
-		public override void SetStaticDefaults() {
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Mushroom Squire");
-			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 8;
-		}
+        protected override Vector2 WingOffset => new Vector2(-4, 0);
+        public MushroomSquireMinion() : base(ItemType<MushroomSquireMinionItem>()) { }
 
-		public sealed override void SetDefaults() {
-			base.SetDefaults();
-			projectile.width = 26;
-			projectile.height = 30;
-		}
+        public override void SetStaticDefaults() {
+            base.SetStaticDefaults();
+            DisplayName.SetDefault("Mushroom Squire");
+            // Sets the amount of frames this minion has on its spritesheet
+            Main.projFrames[projectile.type] = 5;
+        }
+
+        public sealed override void SetDefaults() {
+            base.SetDefaults();
+            projectile.width = 20;
+            projectile.height = 30;
+        }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
@@ -86,29 +85,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
         protected override float GetWeaponAngle()
         {
-            if(!usingWeapon && attackFrame == 0)
+            if (!usingWeapon && attackFrame == 0)
             {
                 return 0;
             }
             float angle0 = 5 * (float)Math.PI / 8;
-            float angle1 = -(float)Math.PI/4;
+            float angle1 = -(float)Math.PI / 4;
             float angleStep = (angle1 - angle0) / AttackFrames;
             return angle0 + angleStep * attackFrame;
         }
 
-        public override void Animate(int minFrame = 0, int? maxFrame = null)
-        {
-            base.Animate(minFrame, 4);
-        }
+        protected override float WeaponDistanceFromCenter() => 20;
 
-        protected override float WeaponOffset()
-        {
-            return 20;
-        }
-
-        protected override Texture2D GetWeaponTexture()
-        {
-            return Main.projectileTexture[ProjectileType<MushroomSquireSword>()];
-        }
     }
 }

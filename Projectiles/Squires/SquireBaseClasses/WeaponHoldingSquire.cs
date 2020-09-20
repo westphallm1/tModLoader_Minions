@@ -10,12 +10,30 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 {
+
+    public enum WeaponSpriteOrientation
+    {
+        DIAGONAL,
+        VERTICAL
+    }
+
+    public enum WeaponAimMode
+    {
+        FIXED,
+        TOWARDS_MOUSE
+    }
+
     public abstract class WeaponHoldingSquire<T> : SquireMinion<T> where T : ModBuff
     {
         protected bool usingWeapon = false;
-        protected abstract int AttackFrames {
-            get;
-        }
+        protected abstract int AttackFrames { get; }
+        protected virtual int SpaceBetweenFrames => 42;
+        protected virtual int BodyFrames => 1;
+        protected virtual string WingTexturePath => null;
+        protected abstract string WeaponTexturePath { get; }
+        protected virtual Vector2 WingOffset => Vector2.Zero; 
+        protected virtual Vector2 WeaponCenterOfRotation => Vector2.Zero; 
+        protected int wingFrame = 0;
         protected int attackFrame = 0;
         protected float weaponAngle = 0;
         public WeaponHoldingSquire(int itemID) : base(itemID) { }
@@ -72,28 +90,46 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
         }
         protected abstract float GetWeaponAngle();
 
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            if(WingTexturePath != null)
+            {
+                Texture2D wingTexture = ModContent.GetTexture(WingTexturePath);
+                Vector2 wingOffset = WingOffset;
+                wingOffset.X *= projectile.spriteDirection;
+                Vector2 pos = projectile.Center + wingOffset;
+                Rectangle bounds = new Rectangle(0, wingTexture.Height/4 * (wingFrame % 4), wingTexture.Width, wingTexture.Height/4);
+                Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+                SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+                float r = projectile.rotation;
+                spriteBatch.Draw(wingTexture, pos - Main.screenPosition,
+                    bounds, lightColor, r,
+                    origin, 1, effects, 0);
+            }
+            return true;
+        }
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D texture = Main.projectileTexture[projectile.type];
-            Rectangle bounds = new Rectangle(0, 4 * 42, texture.Width, projectile.height);
-            Vector2 origin = new Vector2(projectile.width / 2f, bounds.Height / 2f);
+            Vector2 origin = new Vector2(projectile.width / 2f, projectile.height / 2f);
             Vector2 pos = projectile.Center;
             float r = projectile.rotation;
             SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+            int armFrame;
+            if(!usingWeapon) {
+                armFrame = BodyFrames;
+            } else if(weaponAngle > (float)Math.PI / 8) { 
+                armFrame = BodyFrames + 1;
+            } else if(weaponAngle > -Math.PI/8) {
+                armFrame = BodyFrames + 2;
+            } else { 
+                armFrame = BodyFrames + 3;
+            }            
             if(usingWeapon)
             {
-                if(weaponAngle > (float)Math.PI / 8)
-                {
-                    bounds = new Rectangle(0, 5 * 42, texture.Width, projectile.height);
-                } else if(weaponAngle > -Math.PI/8)
-                {
-                    bounds = new Rectangle(0, 6 * 42, texture.Width, projectile.height);
-                } else
-                {
-                    bounds = new Rectangle(0, 7 * 42, texture.Width, projectile.height);
-                }
                 DrawWeapon(spriteBatch, lightColor);
             }
+            Rectangle bounds = new Rectangle(0, armFrame * SpaceBetweenFrames, projectile.width, projectile.height);
             spriteBatch.Draw(texture, pos - Main.screenPosition,
                 bounds, lightColor, r,
                 origin, 1, effects, 0);
@@ -127,6 +163,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
                 return -((float)Math.PI/4-weaponAngle);
             }
         }
+
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             usingWeapon = true;
@@ -144,19 +181,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
         private void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
         {
-            Texture2D texture = GetWeaponTexture();
+            Texture2D texture = ModContent.GetTexture(WeaponTexturePath);
             Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
             Vector2 origin = new Vector2(bounds.Width/2, bounds.Height/2); // origin should hopefully be more or less center of squire
-            Vector2 center = UnitVectorFromWeaponAngle() * WeaponOffset();
+            Vector2 center = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
             float r = SpriteRotationFromWeaponAngle();
-            Vector2 pos = WeaponCenter() + center;
+            Vector2 weaponOffset = WeaponCenterOfRotation;
+            weaponOffset.X *= projectile.spriteDirection;
+            Vector2 pos = projectile.Center + WeaponCenterOfRotation  + center;
             SpriteEffects effects =  projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
             spriteBatch.Draw(texture, pos - Main.screenPosition,
                 bounds, lightColor, r,
                 origin, 1, effects, 0);
         }
 
-        protected abstract float WeaponOffset();
+        protected abstract float WeaponDistanceFromCenter();
 
         protected virtual int? GetSpriteDirection()
         {
@@ -173,11 +212,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             return null;
         }
 
-        protected abstract Texture2D GetWeaponTexture();
         public override void Animate(int minFrame = 0, int? maxFrame = null)
         {
             projectile.rotation = projectile.velocity.X * 0.05f;
-            base.Animate(minFrame, maxFrame);
+            projectile.frameCounter++;
+            if(projectile.frameCounter == frameSpeed)
+            {
+                projectile.frameCounter = 0;
+                wingFrame += 1;
+            }
         }
 
     }

@@ -52,29 +52,29 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
         }
     }
 
-
-    public class AdamantiteSquireSword : ModProjectile
-    {
-        // just to load a texture, probably overkill
-    }
-
     public class AdamantiteSquireMinion : WeaponHoldingSquire<AdamantiteSquireMinionBuff>
     {
+        protected override int AttackFrames => 30;
 
+        protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 
-        protected override int AttackFrames { get => 30; }
+        protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AdamantiteSquire/AdamantiteSquireSword"; 
+
+        protected override Vector2 WingOffset => new Vector2(-6, 6);
+
+        protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 6);
         public AdamantiteSquireMinion(): base(ItemType<AdamantiteSquireMinionItem>()) {}
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Adamantite Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 8;
+			Main.projFrames[projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-            projectile.width = 36;
+            projectile.width = 22;
 			projectile.height = 32;
 		}
 
@@ -118,12 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
             }
         }
 
-        public override void Animate(int minFrame = 0, int? maxFrame = null)
-        {
-            base.Animate(minFrame, 4);
-        }
-
-        protected override float WeaponOffset()
+        protected override float WeaponDistanceFromCenter()
         {
             if(attackFrame <= 20)
             {
@@ -134,42 +129,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
             }
         }
 
-        protected override int WeaponHitboxStart()
-        {
-            return (int)WeaponOffset() + 20;
-        }
+        protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() + 20;
 
-        protected override int WeaponHitboxEnd()
-        {
-            return (int)WeaponOffset() + 60;
-        }
+        protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 60; 
 
-        protected override Vector2 WeaponCenter()
-        {
-            Vector2 center = projectile.Center;
-            center.X += projectile.spriteDirection * 8;
-            center.Y += 4;
-            return center;
-        }
+        public override float MaxDistanceFromPlayer() => 180;
 
-        public override float MaxDistanceFromPlayer()
-        {
-            return 180;
-        }
+        public override float ComputeTargetedSpeed() => 12;
 
-        public override float ComputeTargetedSpeed()
-        {
-            return 12;
-        }
-
-        public override float ComputeIdleSpeed()
-        {
-            return 12;
-        }
-
-        protected override Texture2D GetWeaponTexture()
-        {
-            return Main.projectileTexture[ProjectileType<AdamantiteSquireSword>()];
-        }
+        public override float ComputeIdleSpeed() => 12;
     }
 }
