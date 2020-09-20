@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
         protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 
-        protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AdamantiteSquire/AdamantiteSquireSword"; 
+        protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AdamantiteSquire/AdamantiteSquireSword";
 
         protected override Vector2 WingOffset => new Vector2(-6, 6);
 
@@ -82,40 +82,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
         {
             target.immune[projectile.owner] = AttackFrames/2;
             base.OnHitNPC(target, damage, knockback, crit);
-        }
-
-        protected override float GetWeaponAngle()
-        {
-            if(!usingWeapon && attackFrame == 0)
-            {
-                return 0;
-            }
-
-            Vector2 attackVector;
-            // when the squire is close enough to the mouse, attack along the 
-            // mouse-player line
-            if(Vector2.Distance(Main.MouseWorld, projectile.Center) < 48)
-            {
-                attackVector = Main.MouseWorld - player.Center;
-            } else
-            {
-                //otherwise, attack along the mouse-squire line
-                attackVector = Main.MouseWorld - WeaponCenter();
-            }
-            if(projectile.spriteDirection == 1)
-            {
-                return -attackVector.ToRotation();
-            } else
-            {
-                // this code is rather unfortunate, but need to normalize
-                // everything to [-Math.PI/2, Math.PI/2] for arm drawing to work
-                float angle = (float) -Math.PI + attackVector.ToRotation();
-                if(angle < -Math.PI / 2)
-                {
-                    angle += 2*(float)Math.PI;
-                }
-                return angle;
-            }
         }
 
         protected override float WeaponDistanceFromCenter()

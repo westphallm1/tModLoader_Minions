@@ -61,6 +61,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
         protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/LeafWings";
         protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/MushroomSquire/MushroomSquireSword";
 
+        protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
+
         protected override Vector2 WingOffset => new Vector2(-4, 0);
         public MushroomSquireMinion() : base(ItemType<MushroomSquireMinionItem>()) { }
 
@@ -81,18 +83,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
         {
             target.immune[projectile.owner] = AttackFrames;
             base.OnHitNPC(target, damage, knockback, crit);
-        }
-
-        protected override float GetWeaponAngle()
-        {
-            if (!usingWeapon && attackFrame == 0)
-            {
-                return 0;
-            }
-            float angle0 = 5 * (float)Math.PI / 8;
-            float angle1 = -(float)Math.PI / 4;
-            float angleStep = (angle1 - angle0) / AttackFrames;
-            return angle0 + angleStep * attackFrame;
         }
 
         protected override float WeaponDistanceFromCenter() => 20;

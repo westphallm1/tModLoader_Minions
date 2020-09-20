@@ -29,9 +29,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
         protected abstract int AttackFrames { get; }
         protected virtual int SpaceBetweenFrames => 42;
         protected virtual int BodyFrames => 1;
+        protected virtual float SwingAngle0 => 5 * (float)Math.PI / 8;
+        protected virtual float SwingAngle1 => -(float)Math.PI / 4;
         protected virtual string WingTexturePath => null;
         protected abstract string WeaponTexturePath { get; }
-        protected virtual Vector2 WingOffset => Vector2.Zero; 
+        protected virtual Vector2 WingOffset => Vector2.Zero;
+        protected virtual WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
+        protected virtual WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.DIAGONAL;
         protected virtual Vector2 WeaponCenterOfRotation => Vector2.Zero; 
         protected int wingFrame = 0;
         protected int attackFrame = 0;
@@ -88,7 +92,63 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             }
             return false;
         }
-        protected abstract float GetWeaponAngle();
+
+        protected float GetFixedWeaponAngle()
+        {
+            float angleStep = (SwingAngle1- SwingAngle0) / AttackFrames;
+            return SwingAngle0 + angleStep * attackFrame;
+
+        }
+
+        protected float GetMouseWeaponAngle()
+        {
+            if(!usingWeapon && attackFrame == 0)
+            {
+                return 0;
+            }
+
+            Vector2 attackVector;
+            // when the squire is close enough to the mouse, attack along the 
+            // mouse-player line
+            if(Vector2.Distance(Main.MouseWorld, projectile.Center) < 48)
+            {
+                attackVector = Main.MouseWorld - player.Center;
+            } else
+            {
+                //otherwise, attack along the mouse-squire line
+                attackVector = Main.MouseWorld - WeaponCenter();
+            }
+            if(projectile.spriteDirection == 1)
+            {
+                return -attackVector.ToRotation();
+            } else
+            {
+                // this code is rather unfortunate, but need to normalize
+                // everything to [-Math.PI/2, Math.PI/2] for arm drawing to work
+                float angle = (float) -Math.PI + attackVector.ToRotation();
+                if(angle < -Math.PI / 2)
+                {
+                    angle += 2*(float)Math.PI;
+                }
+                return angle;
+            }
+        }
+
+        protected virtual float GetWeaponAngle()
+        {
+            if (!usingWeapon && attackFrame == 0)
+            {
+                return 0;
+            }
+            if(aimMode == WeaponAimMode.FIXED)
+            {
+                return GetFixedWeaponAngle();
+            } else
+            {
+                return GetMouseWeaponAngle();
+            }
+
+        }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
