@@ -94,6 +94,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
         public override float ComputeTargetedSpeed() => 8.5f;
 
-        public override float MaxDistanceFromPlayer() => 75;
+        public override float MaxDistanceFromPlayer() => 120;
     }
 }

@@ -77,9 +77,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             {
                 return false;
             }
-            if(!Collision.CanHitLine(projectile.Center, 1, 1, targetHitbox.Center.ToVector2(), 1, 1)) {
-                return false;
-            }
             Vector2 unitAngle = UnitVectorFromWeaponAngle();
             for(int i = WeaponHitboxStart(); i < WeaponHitboxEnd(); i+= 8)
             {
@@ -87,7 +84,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
                 Rectangle tipHitbox = new Rectangle((int)tipCenter.X - 8, (int)tipCenter.Y - 8, 16, 16);
                 if(tipHitbox.Intersects(targetHitbox))
                 {
-                    return true;
+                    return Collision.CanHitLine(
+                        tipHitbox.Center.ToVector2(), 1, 1,
+                        projectile.Center, 1, 1);
                 }
             }
             return false;
@@ -102,11 +101,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
         protected float GetMouseWeaponAngle()
         {
-            if(!usingWeapon && attackFrame == 0)
-            {
-                return 0;
-            }
-
             Vector2 attackVector;
             // when the squire is close enough to the mouse, attack along the 
             // mouse-player line
