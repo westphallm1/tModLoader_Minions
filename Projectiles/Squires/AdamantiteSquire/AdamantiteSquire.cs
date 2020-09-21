@@ -99,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
         protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 60; 
 
-        public override float MaxDistanceFromPlayer() => 180;
+        public override float MaxDistanceFromPlayer() => 220;
 
         public override float ComputeTargetedSpeed() => 12;
 
