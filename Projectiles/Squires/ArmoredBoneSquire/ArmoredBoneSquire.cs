@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			item.mana = 10;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 70;
+            item.damage = 75;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.White;
 		}
@@ -52,9 +52,61 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
         }
     }
 
+    public class ArmoredBoneSquireSpiritProjectile: ModProjectile
+    {
+
+        const int MAX_VELOCITY = 20;
+        public const int STARTING_VELOCITY = 7;
+        const int INERTIA = 20;
+        const float ACCELERATION  = (MAX_VELOCITY - STARTING_VELOCITY)/30f;
+        private float currentSpeed = STARTING_VELOCITY;
+
+        private Vector2 targetPosition = Vector2.Zero;
+        public override void SetDefaults()
+        {
+            projectile.timeLeft = 120;
+            projectile.penetrate = 1;
+            projectile.width = 10;
+            projectile.height = 14;
+            projectile.tileCollide = false;
+            projectile.friendly = true;
+        }
+
+        public override void AI()
+        {
+            Player player = Main.player[Main.myPlayer];
+            Vector2 targetDirection = Main.MouseWorld - player.Center;
+            targetDirection.SafeNormalize();
+            if(targetPosition == Vector2.Zero)
+            {
+                targetPosition = player.Center + targetDirection * Vector2.Distance(player.Center, projectile.Center);
+            }
+            Vector2 vector2Target = targetPosition - projectile.Center;
+            if(vector2Target.Length() < 4 * MAX_VELOCITY)
+            {
+                targetPosition += targetDirection * MAX_VELOCITY;
+                vector2Target = targetPosition - projectile.Center;
+            }
+            if(projectile.timeLeft < 90)
+            {
+                projectile.tileCollide = true;
+            }
+            vector2Target.SafeNormalize();
+            vector2Target *= currentSpeed;
+            projectile.velocity = (projectile.velocity * (INERTIA - 1) + vector2Target) / INERTIA;
+            projectile.rotation = (float) Math.PI/2 + projectile.velocity.ToRotation();
+            if(currentSpeed < MAX_VELOCITY)
+            {
+                currentSpeed += ACCELERATION;
+            }
+            Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3());
+        }
+    }
+
 
     public class ArmoredBoneSquireMinion : WeaponHoldingSquire<ArmoredBoneSquireMinionBuff>
     {
+        private static Random random = new Random();
         protected override int AttackFrames => 27;
         protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
         protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailBall"; 
@@ -67,6 +119,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
         protected override Vector2 WingOffset => new Vector2(-4, 4);
 
         protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
+
+        private int firingFrame1 = 0;
+        private int firingFrame2 = 15;
         public ArmoredBoneSquireMinion() : base(ItemType<ArmoredBoneSquireMinionItem>()) { }
 
         public override void SetStaticDefaults() {
@@ -91,10 +146,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
         {
             base.TargetedMovement(vectorToTargetPosition);
             // bit of a long formula
+            Vector2 angleVector = UnitVectorFromWeaponAngle();
             Vector2 flailPosition = projectile.Center + 
-                WeaponCenterOfRotation + 
-                UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
-            Lighting.AddLight(flailPosition, Color.LightCyan.ToVector3());
+                WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
+            if(attackFrame == 0)
+            {
+                firingFrame1 = random.Next(AttackFrames);
+                firingFrame2 = random.Next(AttackFrames);
+            }
+            if(attackFrame == firingFrame1 || attackFrame == firingFrame2)
+            {
+                Vector2 towardsMouse = Main.MouseWorld - flailPosition;
+                Projectile.NewProjectile(flailPosition,
+                    angleVector * ArmoredBoneSquireSpiritProjectile.STARTING_VELOCITY,
+                    ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
+                    (int)(projectile.damage * 1.25f),
+                    projectile.knockBack,
+                    Main.myPlayer);
+            }
         }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -120,7 +189,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
             base.PostDraw(spriteBatch, lightColor);
         }
 
-        protected override float WeaponDistanceFromCenter() => 55;
+        protected override float WeaponDistanceFromCenter() => 45;
 
         protected override int WeaponHitboxStart() => (int) WeaponDistanceFromCenter() - 10;
         protected override int WeaponHitboxEnd() => (int) WeaponDistanceFromCenter() + 10;
@@ -129,6 +198,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
         public override float ComputeTargetedSpeed() => 18;
 
-        public override float MaxDistanceFromPlayer() => 300;
+        public override float MaxDistanceFromPlayer() => 220;
     }
 }

@@ -37,4 +37,5 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             return true;
         }
     }
+
 }

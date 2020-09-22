@@ -67,13 +67,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             {
                 projectile.spriteDirection = direction;
             }
+            if(usingWeapon || attackFrame > 0)
+            {
+                attackFrame = (attackFrame + 1) % AttackFrames;
+            }
             return base.IdleBehavior();
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             // use a computed weapon hitbox instead of the projectile's natural hitbox
-            if(!usingWeapon)
+            if(!usingWeapon && attackFrame == 0)
             {
                 return false;
             }
@@ -170,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             float r = projectile.rotation;
             SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
             int armFrame;
-            if(!usingWeapon) {
+            if(!usingWeapon && attackFrame == 0) { 
                 armFrame = BodyFrames;
             } else if(weaponAngle > (float)Math.PI / 8) { 
                 armFrame = BodyFrames + 1;
@@ -179,7 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             } else { 
                 armFrame = BodyFrames + 3;
             }            
-            if(usingWeapon)
+            if(usingWeapon || attackFrame > 0)
             {
                 DrawWeapon(spriteBatch, lightColor);
             }
@@ -209,19 +213,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
         // valid for diagonal sprites, eg. swords
         protected virtual float SpriteRotationFromWeaponAngle()
         {
+            float rotationBase = spriteOrientation == WeaponSpriteOrientation.DIAGONAL ?  (float)Math.PI/4 : 0;
             if(projectile.spriteDirection == 1)
             {
-                return (float)Math.PI/4-weaponAngle;
+                return rotationBase-weaponAngle;
             } else
             {
-                return -((float)Math.PI/4-weaponAngle);
+                return -(rotationBase - weaponAngle);
             }
         }
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             usingWeapon = true;
-            attackFrame = (attackFrame + 1) % AttackFrames;
             weaponAngle = GetWeaponAngle();
             base.TargetedMovement(vectorToTargetPosition);
         }
@@ -256,6 +260,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             if(vectorToTarget is Vector2 target)
             {
                 return Math.Sign((Main.MouseWorld - player.position).X);
+            } else if(attackFrame > 0)
+            {
+                // don't change directions while weapon is still out
             } else if(projectile.velocity.X < -1)
             {
                 return -1;

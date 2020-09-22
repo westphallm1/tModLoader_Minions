@@ -95,8 +95,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            if(vectorToTargetPosition.Length() < 4)
+            if(vectorToTargetPosition.Length() < 4 && relativeVelocity.Length() < 1)
             {
+                relativeVelocity = Vector2.Zero;
+                projectile.velocity = player.velocity;
                 return;
             }
             float inertia = ComputeInertia();
