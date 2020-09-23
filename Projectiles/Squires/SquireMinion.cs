@@ -14,6 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
         public static List<int> squireTypes = new List<int>();
         protected Vector2 relativeVelocity = Vector2.Zero;
+
+        protected virtual float IdleDistanceMulitplier => 1.5f;
+
         public SquireMinion(int itemID)
         {
             itemType = itemID;
@@ -44,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         public override Vector2? FindTarget()
         {
             // move towards the mouse if player is holding and clicking
-            if(Vector2.Distance(projectile.Center, player.Center) > 1.5 * MaxDistanceFromPlayer())
+            if(Vector2.Distance(projectile.Center, player.Center) > IdleDistanceMulitplier * MaxDistanceFromPlayer())
             {
                 return null; // force back into non-attacking mode if too far from player
             }

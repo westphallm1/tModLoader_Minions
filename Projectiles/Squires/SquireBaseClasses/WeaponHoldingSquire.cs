@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             base.IdleMovement(vectorToIdlePosition);
         }
 
-        private void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
+        protected void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
         {
             Texture2D texture = ModContent.GetTexture(WeaponTexturePath);
             Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);

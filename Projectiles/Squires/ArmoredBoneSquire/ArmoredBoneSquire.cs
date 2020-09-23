@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			item.mana = 10;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 75;
+            item.damage = 90;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.White;
 		}
@@ -56,12 +56,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
     {
 
         const int MAX_VELOCITY = 20;
-        public const int STARTING_VELOCITY = 7;
-        const int INERTIA = 20;
+        public const int STARTING_VELOCITY = 12;
+        const int INERTIA = 8;
         const float ACCELERATION  = (MAX_VELOCITY - STARTING_VELOCITY)/30f;
         private float currentSpeed = STARTING_VELOCITY;
 
         private Vector2 targetPosition = Vector2.Zero;
+        private Vector2 targetDirection = Vector2.Zero;
         public override void SetDefaults()
         {
             projectile.timeLeft = 120;
@@ -75,8 +76,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
         public override void AI()
         {
             Player player = Main.player[Main.myPlayer];
-            Vector2 targetDirection = Main.MouseWorld - player.Center;
-            targetDirection.SafeNormalize();
+            if(targetDirection == Vector2.Zero)
+            {
+                targetDirection = Main.MouseWorld - player.Center;
+                targetDirection.SafeNormalize();
+            }
             if(targetPosition == Vector2.Zero)
             {
                 targetPosition = player.Center + targetDirection * Vector2.Distance(player.Center, projectile.Center);
@@ -87,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
                 targetPosition += targetDirection * MAX_VELOCITY;
                 vector2Target = targetPosition - projectile.Center;
             }
-            if(projectile.timeLeft < 90)
+            if(projectile.timeLeft < 110)
             {
                 projectile.tileCollide = true;
             }
