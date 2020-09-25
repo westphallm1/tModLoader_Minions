@@ -24,7 +24,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             {
                 return false;
             }
-            return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+            player.AddBuff(item.buffType, 2);
+            Projectile.NewProjectile(player.Center, Vector2.Zero, item.shoot, item.damage, item.knockBack, Main.myPlayer);
+            return true;
         }
 
         public override bool CanUseItem(Player player)

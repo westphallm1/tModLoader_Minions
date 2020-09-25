@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using AmuletOfManyMinions.Projectiles.Minions;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -51,6 +50,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             useBeacon = false;
         }
 
+        protected virtual bool IsAttacking()
+        {
+            return usingWeapon || attackFrame > 0;
+        }
+
         protected virtual int WeaponHitboxEnd()
         {
             return 40;
@@ -67,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             {
                 projectile.spriteDirection = direction;
             }
-            if(usingWeapon || attackFrame > 0)
+            if(IsAttacking())
             {
                 attackFrame = (attackFrame + 1) % AttackFrames;
             }
@@ -77,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             // use a computed weapon hitbox instead of the projectile's natural hitbox
-            if(!usingWeapon && attackFrame == 0)
+            if(!IsAttacking())
             {
                 return false;
             }
@@ -134,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
         protected virtual float GetWeaponAngle()
         {
-            if (!usingWeapon && attackFrame == 0)
+            if (!IsAttacking())
             {
                 return 0;
             }
@@ -174,7 +178,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             float r = projectile.rotation;
             SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
             int armFrame;
-            if(!usingWeapon && attackFrame == 0) { 
+            if(!IsAttacking()) { 
                 armFrame = BodyFrames;
             } else if(weaponAngle > (float)Math.PI / 8) { 
                 armFrame = BodyFrames + 1;
@@ -183,7 +187,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             } else { 
                 armFrame = BodyFrames + 3;
             }            
-            if(usingWeapon || attackFrame > 0)
+            if(IsAttacking())
             {
                 DrawWeapon(spriteBatch, lightColor);
             }
@@ -210,7 +214,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             }
         }
 
-        // valid for diagonal sprites, eg. swords
         protected virtual float SpriteRotationFromWeaponAngle()
         {
             float rotationBase = spriteOrientation == WeaponSpriteOrientation.DIAGONAL ?  (float)Math.PI/4 : 0;
