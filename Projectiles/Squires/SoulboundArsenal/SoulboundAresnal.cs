@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			item.mana = 10;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 36;
+            item.damage = 90;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.White;
 		}
