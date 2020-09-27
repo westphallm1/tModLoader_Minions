@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             Vector2 unitAngle = UnitVectorFromWeaponAngle();
             for(int i = WeaponHitboxStart(); i < WeaponHitboxEnd(); i+= 8)
             {
-                Vector2 tipCenter = projectile.Center + i * unitAngle;
+                Vector2 tipCenter = projectile.Center + WeaponCenterOfRotation + i * unitAngle;
                 Rectangle tipHitbox = new Rectangle((int)tipCenter.X - 8, (int)tipCenter.Y - 8, 16, 16);
                 if(tipHitbox.Intersects(targetHitbox))
                 {
@@ -240,8 +240,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             base.IdleMovement(vectorToIdlePosition);
         }
 
-        protected void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
+        protected virtual void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
         {
+            if(WeaponTexturePath == null)
+            {
+                return;
+            }
             Texture2D texture = ModContent.GetTexture(WeaponTexturePath);
             Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
             Vector2 origin = new Vector2(bounds.Width/2, bounds.Height/2); // origin should hopefully be more or less center of squire
