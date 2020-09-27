@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Titanium Crest");
-			Tooltip.SetDefault("Summons a squire\nAn adamantite squire will fight for you!\nClick to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nAn adamantite squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults() {

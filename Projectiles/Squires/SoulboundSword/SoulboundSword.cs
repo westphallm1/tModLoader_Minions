@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Sword");
-			Tooltip.SetDefault("Summons a squire\nA soulbound sword will fight for you!\nClick to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nA soulbound sword will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults() {

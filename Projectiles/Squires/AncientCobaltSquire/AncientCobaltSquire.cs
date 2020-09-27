@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Crest of Cobalt");
-			Tooltip.SetDefault("Summons a squire\nAn ancient cobalt squire will fight for you!\nClick to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nAn ancient cobalt squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults() {

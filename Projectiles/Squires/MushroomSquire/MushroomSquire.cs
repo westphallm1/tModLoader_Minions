@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of the Forest");
-			Tooltip.SetDefault("Summons a squire\nA mushroom squire will fight for you!\nClick to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nA mushroom squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults() {
