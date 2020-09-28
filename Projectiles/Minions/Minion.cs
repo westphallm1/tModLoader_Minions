@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return null;
         }
 
-		public Vector2? ClosestEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0)
+		public Vector2? ClosestEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true)
         {
 			Vector2 center = centeredOn ?? projectile.Center;
 			Vector2 targetCenter = projectile.position;
@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
                 float between = Vector2.Distance(npc.Center, center);
                 bool closest = Vector2.Distance(center, targetCenter) > between;
 				// don't let a minion infinitely chain attacks off progressively further enemies
-                bool inRange = Vector2.Distance(npc.Center, player.Center) < maxRange;
+                bool inRange = Vector2.Distance(npc.Center, maxRangeFromPlayer ? player.Center : projectile.Center) < maxRange;
                 bool inNoLOSRange = Vector2.Distance(npc.Center, player.Center) < noLOSRange;
                 bool lineOfSight =Collision.CanHitLine(projectile.Center, 1, 1, npc.position, npc.width, npc.height); 
 				if((inNoLOSRange || (lineOfSight && inRange)) && (closest || !foundTarget))

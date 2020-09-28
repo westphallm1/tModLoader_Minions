@@ -6,13 +6,14 @@ using AmuletOfManyMinions.Projectiles.Minions;
 
 namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 {
-    abstract class TransientMinion : SimpleMinion<ModBuff>
+    public abstract class TransientMinion : SimpleMinion<ModBuff>
     {
         public override void SetDefaults()
         {
             base.SetDefaults();
             projectile.minion = false;
             projectile.minionSlots = 0;
+            useBeacon = false;
             ProjectileID.Sets.Homing[projectile.type] = true;
             ProjectileID.Sets.MinionShot[projectile.type] = true;
         }
