@@ -127,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
             base.SetDefaults();
             frameSpeed = 5;
             projectile.timeLeft = 180;
-            projectile.penetrate = 3;
+            projectile.penetrate = 1;
             projectile.friendly = true;
             projectile.width = 48;
             projectile.height = 24;
@@ -136,6 +136,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             canTarget = false;
+        }
+
+        public override void TargetedMovement(Vector2 vectorToTargetPosition)
+        {
+            if(vectorToTargetPosition.Length() < 8)
+            {
+                canTarget = false;
+            }
+            base.TargetedMovement(vectorToTargetPosition);
         }
 
         public override Vector2? FindTarget()
@@ -165,6 +174,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
     {
 
         private static Random random = new Random();
+
+        private bool hasFoundTarget = false;
         public override void SetStaticDefaults()
         {
             Main.projFrames[projectile.type] = 3;
@@ -172,7 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
         public override void SetDefaults()
         {
             base.SetDefaults();
-            projectile.timeLeft = 180;
+            projectile.timeLeft = 60;
             projectile.penetrate = -1;
             projectile.friendly = true;
             projectile.width = 22;
@@ -212,7 +223,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            projectile.timeLeft += 10;
             base.OnHitNPC(target, damage, knockback, crit);
         }
 
@@ -220,6 +230,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
         {
             if(ClosestEnemyInRange(450f, projectile.position, maxRangeFromPlayer: false) is Vector2 closest)
             {
+                if(!hasFoundTarget)
+                {
+                    hasFoundTarget = true;
+                    projectile.timeLeft += 180; // give a bit of extra attack time if we actually find anything
+                }
                 return closest - projectile.position;
             }
             return null;
