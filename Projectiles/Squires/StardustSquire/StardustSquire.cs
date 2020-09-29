@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using System;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
+using AmuletOfManyMinions.Dusts;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 {
@@ -108,6 +109,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
         {
             return vectorToTarget == null;
         }
+
+        public override void Kill(int timeLeft)
+        {
+            for(float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+            {
+                Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
+                Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.LightBlue, Scale: 1f);
+                velocity *= 2;
+                Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.LightBlue, Scale: 1f);
+            }
+        }
     }
 
     public class StardustBeastProjectile : StardustSquireSubProjectile
@@ -136,6 +148,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
             canTarget = false;
         }
 
+        public override Vector2 IdleBehavior()
+        {
+            Vector2 offset = projectile.velocity;
+            offset.Normalize();
+            offset *= 24;
+            for(int i = 0; i < 5; i++)
+            {
+                Vector2 velocity = -projectile.velocity/2 + 4 * new Vector2(Main.rand.NextFloat(), Main.rand.NextFloat());
+                Dust.NewDust(projectile.Center + offset, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.LightBlue, Scale: 0.9f);
+            }
+            return base.IdleBehavior();
+        }
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             if(vectorToTargetPosition.Length() < 8)
@@ -192,11 +216,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
         public override Vector2 IdleBehavior()
         {
             Vector2 vector2Idle = base.IdleBehavior();
-            projectile.rotation = projectile.velocity.X > 0 ? 0 : (float) Math.PI;
-            projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
+            projectile.rotation = projectile.velocity.X >= 0 ? 0 : (float) Math.PI;
+            projectile.spriteDirection = projectile.velocity.X >= 0 ? 1 : -1;
             return vector2Idle;
         }
 
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            return base.OnTileCollide(oldVelocity) && !hasFoundTarget || framesSinceHadTarget > 60;
+        }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {

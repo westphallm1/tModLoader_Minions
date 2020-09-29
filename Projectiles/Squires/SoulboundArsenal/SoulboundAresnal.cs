@@ -102,6 +102,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
             Dust.NewDust(projectile.Center, 1, 1, DustType<MinionWaypointDust>(), newColor: LightColor, Scale: 1.2f);
         }
 
+        public override void Kill(int timeLeft)
+        {
+            for(float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+            {
+                Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
+                Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: LightColor, Scale: 1f);
+            }
+        }
 
     }
     public class SoulboundArsenalArrow: SoulboundArsenalProjectile
@@ -120,6 +128,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
         public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundSword/SoulboundSword";
         protected override Color LightColor => Color.Lavender;
+        public override void SetDefaults()
+        {
+            projectile.penetrate = 3;
+        }
         public override float GetRotation()
         {
             return (float) Math.PI/4 + projectile.velocity.ToRotation();

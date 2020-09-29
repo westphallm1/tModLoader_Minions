@@ -17,6 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             item.autoReuse = true;
             item.useStyle = ItemUseStyleID.HoldingUp;
             item.channel = true;
+            item.noUseGraphic = false;
             item.mana = 0;
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -45,10 +46,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             {
                 item.UseSound = null;
                 item.noUseGraphic = true;
+                item.useStyle = ItemUseStyleID.HoldingUp;
             } else
             {
-                item.UseSound = SoundID.Item44;
-                item.noUseGraphic = false;
+                SetDefaults();
             }
             return true;
         }
