@@ -35,22 +35,27 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		public override void SetDefaults() {
 			base.SetDefaults();
 			item.knockBack = 3f;
-			item.mana = 10;
 			item.width = 24;
 			item.height = 38;
             item.damage = 36;
-			item.value = Item.buyPrice(0, 20, 0, 0);
-			item.rare = ItemRarityID.White;
+			item.value = Item.buyPrice(0, 0, 50, 0);
+			item.rare = ItemRarityID.LightRed;
 		}
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpectreBar, 12);
-            recipe.AddIngredient(ItemID.IllegalGunParts, 1);
-            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.AddIngredient(ItemID.ShadewoodSword, 1);
+            recipe.AddIngredient(ItemID.SoulofNight, 10);
+            recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
+            ModRecipe recipe2 = new ModRecipe(mod);
+            recipe2.AddIngredient(ItemID.EbonwoodSword, 1);
+            recipe2.AddIngredient(ItemID.SoulofNight, 10);
+            recipe2.AddTile(TileID.Anvils);
+            recipe2.SetResult(this);
+            recipe2.AddRecipe();
         }
     }
 

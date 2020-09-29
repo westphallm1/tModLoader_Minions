@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework;
 using System;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Projectiles.Squires.SoulboundSword;
+using AmuletOfManyMinions.Projectiles.Squires.SoulboundBow;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 {
@@ -37,19 +39,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetDefaults() {
 			base.SetDefaults();
 			item.knockBack = 3f;
-			item.mana = 10;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 90;
-			item.value = Item.buyPrice(0, 20, 0, 0);
-			item.rare = ItemRarityID.White;
+            item.damage = 70;
+			item.value = Item.sellPrice(0, 8, 0, 0);
+			item.rare = ItemRarityID.Lime;
 		}
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpectreBar, 12);
-            recipe.AddIngredient(ItemID.IllegalGunParts, 1);
+            recipe.AddIngredient(ItemID.BrokenHeroSword, 1);
+            recipe.AddIngredient(ItemType<SoulboundSwordMinionItem>(), 1);
+            recipe.AddIngredient(ItemType<SoulboundBowMinionItem>(), 1);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

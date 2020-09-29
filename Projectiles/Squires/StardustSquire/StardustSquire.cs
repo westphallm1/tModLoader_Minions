@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Ancient Cobalt Squire");
-			Description.SetDefault("An ancient cobalt squire will follow your orders!");
+			DisplayName.SetDefault("Stardust Squire");
+			Description.SetDefault("A stardust squire will follow your orders!");
         }
     }
 
@@ -27,27 +27,25 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Ancient Crest of Cobalt");
-			Tooltip.SetDefault("Summons a squire\nAn ancient cobalt squire will fight for you!\nClick and hold to guide its attacks");
+			DisplayName.SetDefault("Crest of Stardust");
+			Tooltip.SetDefault("Summons a squire\nA stardust squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults() {
 			base.SetDefaults();
 			item.knockBack = 3f;
-			item.mana = 10;
 			item.width = 24;
 			item.height = 38;
             item.damage = 92;
-			item.value = Item.buyPrice(0, 20, 0, 0);
-			item.rare = ItemRarityID.White;
+			item.value = Item.sellPrice(0, 10, 0, 0);
+			item.rare = ItemRarityID.Red;
 		}
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpectreBar, 12);
-            recipe.AddIngredient(ItemID.IllegalGunParts, 1);
-            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.AddIngredient(ItemID.FragmentStardust, 18);
+            recipe.AddTile(TileID.LunarCraftingStation);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
@@ -240,27 +238,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
             return null;
         }
 
-        public override void TargetedMovement(Vector2 vectorToTargetPosition)
-        {
-            if(vectorToTargetPosition is Vector2 target && target.Length() < 48 && projectile.timeLeft % 3 == 0)
-            {
-                Vector2 relativeVelocity = projectile.velocity;
-                relativeVelocity.Normalize();
-                for(int i = 0; i < 3; i++)
-                {
-                    Vector2 velocity = projectile.velocity + relativeVelocity * 4;
-                    velocity += new Vector2(random.Next(-2, 4), random.Next(-6, 6));
-                    Projectile.NewProjectile(projectile.Center,
-                        velocity, 
-                        ProjectileType<StarFistProjectile>(), 
-                        projectile.damage, 
-                        projectile.knockBack, 
-                        Main.myPlayer);
-                }
-            }
-            base.TargetedMovement(vectorToTargetPosition);
-        }
-
         public override void Animate(int minFrame = 0, int? maxFrame = null)
         {
             base.Animate(minFrame, 1);
@@ -333,7 +310,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
             base.TargetedMovement(vectorToTargetPosition);
             if(attackFrame == 0)
             {
-
                 Vector2 angleVector = UnitVectorFromWeaponAngle();
                 if((attackSequence++ * AttackFrames) % 180 < AttackFrames &&
                     player.ownedProjectileCounts[ProjectileType<StardustGuardianProjectile>()] == 0)

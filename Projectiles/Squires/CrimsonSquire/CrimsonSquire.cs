@@ -33,20 +33,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override void SetDefaults() {
 			base.SetDefaults();
 			item.knockBack = 3.5f;
-			item.mana = 10;
 			item.width = 24;
 			item.height = 38;
             item.damage = 23;
-			item.value = Item.buyPrice(0, 20, 0, 0);
-			item.rare = ItemRarityID.White;
+			item.value = Item.sellPrice(0, 0, 20, 0);
+			item.rare = ItemRarityID.Green;
 		}
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpectreBar, 12);
-            recipe.AddIngredient(ItemID.IllegalGunParts, 1);
-            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.AddIngredient(ItemID.CrimtaneBar, 12);
+            recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

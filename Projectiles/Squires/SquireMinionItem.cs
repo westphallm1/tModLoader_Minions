@@ -17,6 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             item.autoReuse = true;
             item.useStyle = ItemUseStyleID.HoldingUp;
             item.channel = true;
+            item.mana = 0;
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
@@ -24,9 +25,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             {
                 return false;
             }
+            for(int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile p = Main.projectile[i];
+                if(p.active && p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
+                {
+                    p.Kill();
+                }
+            }
             player.AddBuff(item.buffType, 2);
-            Projectile.NewProjectile(player.Center, Vector2.Zero, item.shoot, damage, item.knockBack, Main.myPlayer);
-            return true;
+            Projectile.NewProjectile(player.Center, Vector2.Zero, item.shoot, damage, item.knockBack, player.whoAmI);
+            return false;
         }
 
         public override bool CanUseItem(Player player)
@@ -34,7 +43,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             base.CanUseItem(player);
             if (player.ownedProjectileCounts[item.shoot] > 0)
             {
-                return false;
+                item.UseSound = null;
+                item.noUseGraphic = true;
+            } else
+            {
+                item.UseSound = SoundID.Item44;
+                item.noUseGraphic = false;
             }
             return true;
         }

@@ -33,7 +33,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetDefaults() {
 			base.SetDefaults();
 			item.knockBack = 5.5f;
-			item.mana = 10;
 			item.width = 24;
 			item.height = 38;
             item.damage = 39;

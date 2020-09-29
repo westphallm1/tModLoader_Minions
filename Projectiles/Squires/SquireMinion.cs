@@ -8,15 +8,32 @@ using System.Collections.Generic;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
+
+    public static class SquireMinionTypes
+    {
+        private static HashSet<int> squireTypes = new HashSet<int>();
+
+        public static void Add(int squireType)
+        {
+            squireTypes.Add(squireType);
+        }
+
+        public static bool Contains(int squireType)
+        {
+            return squireTypes.Contains(squireType);
+        }
+    }
+
     public abstract class SquireMinion<T>: SimpleMinion<T> where T : ModBuff 
     {
         protected int itemType;
 
-        public static List<int> squireTypes = new List<int>();
+
         protected Vector2 relativeVelocity = Vector2.Zero;
 
         protected virtual float IdleDistanceMulitplier => 1.5f;
 
+        protected bool returningToPlayer = false;
         public SquireMinion(int itemID)
         {
             itemType = itemID;
@@ -25,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
-            squireTypes.Add(projectile.type);
+            SquireMinionTypes.Add(projectile.type);
 			ProjectileID.Sets.MinionTargettingFeature[projectile.type] = false;
 
 			// These below are needed for a minion
@@ -47,11 +64,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         public override Vector2? FindTarget()
         {
             // move towards the mouse if player is holding and clicking
-            if(Vector2.Distance(projectile.Center, player.Center) > IdleDistanceMulitplier * MaxDistanceFromPlayer())
+            if(returningToPlayer || Vector2.Distance(projectile.Center, player.Center) > IdleDistanceMulitplier * MaxDistanceFromPlayer())
             {
+                returningToPlayer = true;
                 return null; // force back into non-attacking mode if too far from player
             }
-            if(player.HeldItem.type == itemType && Main.mouseLeft)
+            if(player.HeldItem.type == itemType && player.channel)
             {
                 Vector2 targetFromPlayer = Main.MouseWorld - player.position;
                 if(targetFromPlayer.Length() < MaxDistanceFromPlayer())
@@ -91,6 +109,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             {
                 speedChange.SafeNormalize();
                 speedChange *= maxSpeed;
+            } else
+            {
+                returningToPlayer = false;
             }
             relativeVelocity = (relativeVelocity * (inertia - 1) + speedChange) / inertia;
             projectile.velocity = player.velocity + relativeVelocity;
