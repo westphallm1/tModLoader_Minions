@@ -76,6 +76,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
         }
 
 
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            return false;
+        }
+
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             base.TargetedMovement(vectorToTargetPosition);
@@ -100,7 +105,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
         protected override float WeaponDistanceFromCenter() => 6;
 
-        protected override int WeaponHitboxEnd() => 60;
+        protected override int WeaponHitboxEnd() => 6;
 
         public override float ComputeIdleSpeed() => 14;
 

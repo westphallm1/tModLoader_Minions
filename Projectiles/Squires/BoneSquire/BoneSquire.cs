@@ -107,6 +107,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
         public override float ComputeTargetedSpeed() => 9;
 
-        public override float MaxDistanceFromPlayer() => 200;
+        public override float MaxDistanceFromPlayer() => 210;
     }
 }

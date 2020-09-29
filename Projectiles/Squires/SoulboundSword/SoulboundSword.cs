@@ -119,6 +119,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
         public override float ComputeTargetedSpeed() => 13;
 
-        public override float MaxDistanceFromPlayer() => 220;
+        public override float MaxDistanceFromPlayer() => 250;
     }
 }

@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Arsenal");
-			Tooltip.SetDefault("Summons a squire\nA soulbound bow and sword will fight for you!\nClick to guide their attacks");
+			Tooltip.SetDefault("Summons a squire\nA soulbound bow and sword will fight for you!\nClick and hold to guide their attacks");
 		}
 
 		public override void SetDefaults() {
@@ -130,6 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
         protected override Color LightColor => Color.Lavender;
         public override void SetDefaults()
         {
+            base.SetDefaults();
             projectile.penetrate = 3;
         }
         public override float GetRotation()

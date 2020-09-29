@@ -89,6 +89,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
         public override float ComputeTargetedSpeed() => 9;
 
-        public override float MaxDistanceFromPlayer() => 140;
+        public override float MaxDistanceFromPlayer() => 160;
     }
 }

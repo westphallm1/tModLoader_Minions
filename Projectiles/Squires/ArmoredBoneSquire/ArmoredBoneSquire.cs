@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Armored Bone Squire");
-			Description.SetDefault("A bone squire will follow your orders!");
+			Description.SetDefault("An armored bone squire will follow your orders!");
         }
     }
 
@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of Armored Bones");
-			Tooltip.SetDefault("Summons a squire\nA bone squire will fight for you!\nClick and hold to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nAn armored bone squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults() {

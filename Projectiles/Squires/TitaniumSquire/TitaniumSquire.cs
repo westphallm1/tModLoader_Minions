@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Titanium Crest");
-			Tooltip.SetDefault("Summons a squire\nAn adamantite squire will fight for you!\nClick and hold to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nA titanium squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults() {
@@ -36,15 +36,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			item.width = 24;
 			item.height = 38;
             item.damage = 39;
-			item.value = Item.buyPrice(0, 20, 0, 0);
-			item.rare = ItemRarityID.White;
+			item.value = Item.buyPrice(0, 2, 0, 0);
+			item.rare = ItemRarityID.LightRed;
 		}
 
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SpectreBar, 12);
-            recipe.AddIngredient(ItemID.IllegalGunParts, 1);
+            recipe.AddIngredient(ItemID.AdamantiteBar, 14);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
@@ -98,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
         protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 60; 
 
-        public override float MaxDistanceFromPlayer() => 210;
+        public override float MaxDistanceFromPlayer() => 270;
 
         public override float ComputeTargetedSpeed() => 11;
 

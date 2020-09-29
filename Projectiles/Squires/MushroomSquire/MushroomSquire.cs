@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
             base.OnHitNPC(target, damage, knockback, crit);
         }
 
-        public override float MaxDistanceFromPlayer() => 90;
+        public override float MaxDistanceFromPlayer() => 120;
         protected override float WeaponDistanceFromCenter() => 20;
 
     }
