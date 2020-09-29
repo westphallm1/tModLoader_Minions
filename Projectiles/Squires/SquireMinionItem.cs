@@ -46,7 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             {
                 item.UseSound = null;
                 item.noUseGraphic = true;
-                item.useStyle = ItemUseStyleID.HoldingUp;
+                item.useStyle = ItemUseStyleID.HoldingOut;
             } else
             {
                 SetDefaults();

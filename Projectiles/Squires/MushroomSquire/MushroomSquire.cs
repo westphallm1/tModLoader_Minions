@@ -76,12 +76,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
             projectile.height = 30;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.immune[projectile.owner] = AttackFrames;
-            base.OnHitNPC(target, damage, knockback, crit);
-        }
-
         public override float MaxDistanceFromPlayer() => 120;
         protected override float WeaponDistanceFromCenter() => 20;
 

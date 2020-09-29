@@ -63,17 +63,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
             Main.projFrames[projectile.type] = 5;
         }
 
-        public sealed override void SetDefaults() {
-            base.SetDefaults();
-            projectile.width = 22;
-            projectile.height = 32;
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.immune[projectile.owner] = AttackFrames/2;
-            base.OnHitNPC(target, damage, knockback, crit);
-        }
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {

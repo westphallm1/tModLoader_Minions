@@ -77,12 +77,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
             projectile.height = 32;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.immune[projectile.owner] = AttackFrames;
-            base.OnHitNPC(target, damage, knockback, crit);
-        }
-
 
         protected override float WeaponDistanceFromCenter() => 30;
 

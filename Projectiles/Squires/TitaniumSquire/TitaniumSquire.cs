@@ -76,12 +76,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			projectile.height = 32;
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.immune[projectile.owner] = AttackFrames/2;
-            base.OnHitNPC(target, damage, knockback, crit);
-        }
-
         protected override float WeaponDistanceFromCenter()
         {
             if(attackFrame <= 23)

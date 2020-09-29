@@ -49,6 +49,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			projectile.penetrate = -1;
 			// Makes the minion go through tiles
 			projectile.tileCollide = false;
+			// use local projectile i-frames
+			projectile.usesLocalNPCImmunity = true;
+			projectile.localNPCHitCooldown = 10;
         }
 
 

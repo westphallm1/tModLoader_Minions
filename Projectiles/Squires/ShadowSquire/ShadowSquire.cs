@@ -75,12 +75,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
             projectile.height = 32;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.immune[projectile.owner] = AttackFrames;
-            base.OnHitNPC(target, damage, knockback, crit);
-        }
-
         protected override float WeaponDistanceFromCenter() => 20;
 
         protected override int WeaponHitboxEnd() => 45;
