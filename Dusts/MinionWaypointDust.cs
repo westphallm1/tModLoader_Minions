@@ -25,7 +25,17 @@ namespace AmuletOfManyMinions.Dusts
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
-            return new Color(dust.color.R, dust.color.G, dust.color.B, dust.scale * 0.5f);
+            return new Color(dust.color.R, dust.color.G, dust.color.B, (int) (dust.scale * 100));
+        }
+    }
+
+    class MovingWaypointDust : MinionWaypointDust
+    {
+        public override bool Update(Dust dust)
+        {
+            base.Update(dust);
+            dust.position += dust.velocity;
+            return false;
         }
     }
 }

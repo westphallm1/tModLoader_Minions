@@ -53,8 +53,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
         protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
-        protected override Vector2 WingOffset => new Vector2(-4, 0);
+        protected override Vector2 WingOffset => new Vector2(-4, 2);
         public BoneSquireMinion() : base(ItemType<BoneSquireMinionItem>()) { }
+
+		public sealed override void SetDefaults() {
+			base.SetDefaults();
+            projectile.width = 20;
+			projectile.height = 30;
+		}
 
         public override void SetStaticDefaults() {
             base.SetStaticDefaults();

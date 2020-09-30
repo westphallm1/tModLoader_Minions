@@ -137,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
             base.SetDefaults();
             frameSpeed = 5;
             projectile.timeLeft = 180;
-            projectile.penetrate = 1;
+            projectile.penetrate = 3;
             projectile.friendly = true;
             projectile.width = 48;
             projectile.height = 24;

@@ -43,7 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.AdamantiteBar, 14);
+            recipe.AddIngredient(ItemID.TitaniumBar, 14);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
