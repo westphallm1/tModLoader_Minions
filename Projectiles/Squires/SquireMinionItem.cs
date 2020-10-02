@@ -42,6 +42,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         public override bool CanUseItem(Player player)
         {
             base.CanUseItem(player);
+			if(player.altFunctionUse == 2)
+            {
+                return false;
+            }
             if (player.ownedProjectileCounts[item.shoot] > 0)
             {
                 item.UseSound = null;

@@ -47,6 +47,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			projectile.tileCollide = false;
             projectile.friendly = true;
             projectile.usesLocalNPCImmunity = true;
+            // fixed angle weapons are really good at hitting enemies over and over again
+            // so give them a longer cooldown
+            if(aimMode == WeaponAimMode.FIXED)
+            {
+                projectile.localNPCHitCooldown = AttackFrames;
+            } else
+            {
+                projectile.localNPCHitCooldown = AttackFrames / 2;
+            }
             useBeacon = false;
         }
 

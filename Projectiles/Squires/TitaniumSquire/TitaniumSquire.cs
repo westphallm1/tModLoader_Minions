@@ -91,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
         protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 60; 
 
-        public override float MaxDistanceFromPlayer() => 270;
+        public override float MaxDistanceFromPlayer() => 290;
 
         public override float ComputeTargetedSpeed() => 11;
 

@@ -128,6 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
             base.SetDefaults();
             projectile.width = 22;
             projectile.height = 32;
+            projectile.localNPCHitCooldown = AttackFrames / 2;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
