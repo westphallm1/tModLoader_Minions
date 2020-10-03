@@ -61,6 +61,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
             ProjectileID.Sets.MinionShot[projectile.type] = true;
         }
 
+        public override bool? CanCutTiles()
+        {
+            return true;
+        }
+
         public override Vector2? FindTarget()
         {
             // move towards the mouse if player is holding and clicking
