@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.NPCs
         public override void NPCLoot(NPC npc)
         {
             base.NPCLoot(npc);
-            if(npc.type == NPCID.Eyezor && Main.rand.NextFloat() < 0.05f)
+            if(npc.type == NPCID.Eyezor && Main.rand.NextFloat() < 0.10f)
             {
                 Item.NewItem(npc.getRect(), ItemType<SqueyereMinionItem>(), 1);
             }
@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.NPCs
                npc.type == NPCID.AngryBonesBig  || 
                npc.type == NPCID.AngryBonesBigHelmet || 
                npc.type == NPCID.AngryBonesBigMuscle) &&
-               Main.rand.NextFloat() < 0.05f)
+               Main.rand.NextFloat() < 0.02f)
             {
                 Item.NewItem(npc.getRect(), ItemType<BoneSquireMinionItem>(), 1);
             }
@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.NPCs
                npc.type == NPCID.BlueArmoredBonesMace || 
                npc.type == NPCID.BlueArmoredBonesNoPants || 
                npc.type == NPCID.BlueArmoredBonesSword) &&
-               Main.rand.NextFloat() < 0.05f)
+               Main.rand.NextFloat() < 0.03f)
             {
                 Item.NewItem(npc.getRect(), ItemType<ArmoredBoneSquireMinionItem>(), 1);
             }
