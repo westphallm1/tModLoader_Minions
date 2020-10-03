@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 19;
+            item.damage = 16;
 			item.value = Item.sellPrice(0, 0, 20, 0);
 			item.rare = ItemRarityID.Green;
 		}

@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 19;
+            item.damage = 18;
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Orange;
 		}

@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
                 returningToPlayer = true;
                 return null; // force back into non-attacking mode if too far from player
             }
-            if(player.HeldItem.type == itemType && player.channel)
+            if(player.HeldItem.type == itemType && player.channel && player.altFunctionUse != 2)
             {
                 Vector2 targetFromPlayer = Main.MouseWorld - player.position;
                 if(targetFromPlayer.Length() < MaxDistanceFromPlayer())

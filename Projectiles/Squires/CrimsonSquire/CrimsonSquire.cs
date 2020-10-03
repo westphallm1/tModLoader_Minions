@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			item.knockBack = 3.5f;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 23;
+            item.damage = 19;
 			item.value = Item.sellPrice(0, 0, 20, 0);
 			item.rare = ItemRarityID.Green;
 		}

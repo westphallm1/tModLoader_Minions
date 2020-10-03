@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            if(player.ownedProjectileCounts[item.shoot] > 0)
+            if(player.ownedProjectileCounts[item.shoot] > 0 || player.altFunctionUse == 2)
             {
                 return false;
             }
@@ -42,10 +42,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
         public override bool CanUseItem(Player player)
         {
             base.CanUseItem(player);
-			if(player.altFunctionUse == 2)
-            {
-                return false;
-            }
             if (player.ownedProjectileCounts[item.shoot] > 0)
             {
                 item.UseSound = null;
