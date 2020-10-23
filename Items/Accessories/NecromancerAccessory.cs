@@ -1,5 +1,4 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions;
-using AmuletOfManyMinions.Projectiles.NonMinionSummons.WormOnAString;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -37,7 +36,7 @@ namespace AmuletOfManyMinions.Items.Accessories
         {
             Player player = Main.player[projectile.owner];
             bool shouldSpawnProjectile = !target.boss && target.life <= 0 && Main.rand.NextFloat() < onKillChance;
-            shouldSpawnProjectile |= target.boss && Main.rand.NextFloat() < damage / bossLifePerSpawn;
+            shouldSpawnProjectile |= Main.rand.NextFloat() <  damage / (float) bossLifePerSpawn;
             if (!shouldSpawnProjectile)
             {
                 return false;
@@ -50,12 +49,12 @@ namespace AmuletOfManyMinions.Items.Accessories
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
                 Projectile p = Main.projectile[i];
-                if (p.active && p.type == projType && Main.player[p.owner] == player)
+                if (p.active && p.type == projType && p.owner == player.whoAmI)
                 {
                     currentProjectiles.Add(p);
                 }
             }
-            if (currentProjectiles.Count > maxTransientMinions)
+            if (currentProjectiles.Count >= maxTransientMinions)
             {
                 Projectile oldest = currentProjectiles.OrderBy(p => p.timeLeft).FirstOrDefault();
                 if (oldest != default)
@@ -73,10 +72,14 @@ namespace AmuletOfManyMinions.Items.Accessories
     internal class NecromancerAccessoryPlayer: ModPlayer
     {
         public bool wormOnAStringEquipped = false;
+        public bool spiritCallerCharmEquipped = false;
+        public bool techromancerAccessoryEquipped = false;
 
         public override void ResetEffects()
         {
             wormOnAStringEquipped = false;
+            spiritCallerCharmEquipped = false;
+            techromancerAccessoryEquipped = false;
         }
 
         public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)

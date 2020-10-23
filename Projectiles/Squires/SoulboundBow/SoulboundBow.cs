@@ -57,6 +57,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
     public class SoulboundArrow: ModProjectile
     {
 
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            ProjectileID.Sets.MinionShot[projectile.type] = true;
+        }
+
         public override void SetDefaults()
         {
             base.SetDefaults();

@@ -64,6 +64,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
         protected Vector2 expectedPosition = Vector2.Zero;
 
         protected virtual Color LightColor => Color.White;
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            ProjectileID.Sets.MinionShot[projectile.type] = true;
+        }
+
         public override void SetDefaults()
         {
             base.SetDefaults();
