@@ -13,6 +13,7 @@ using AmuletOfManyMinions.Projectiles.Squires.Squeyere;
 using AmuletOfManyMinions.Projectiles.Squires.BoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
+using System.Linq;
 
 namespace AmuletOfManyMinions.NPCs
 {
@@ -21,33 +22,37 @@ namespace AmuletOfManyMinions.NPCs
         public override void NPCLoot(NPC npc)
         {
             base.NPCLoot(npc);
-            if(npc.type == NPCID.Eyezor && Main.rand.NextFloat() < 0.10f)
+            float spawnChance = Main.rand.NextFloat();
+            if(spawnChance < 0.10f && npc.type == NPCID.Eyezor)
             {
                 Item.NewItem(npc.getRect(), ItemType<SqueyereMinionItem>(), 1);
             }
 
-            if((npc.type == NPCID.AngryBones  || 
+            if(spawnChance < 0.01f && (npc.type == NPCID.AngryBones  || 
                npc.type == NPCID.AngryBonesBig  || 
                npc.type == NPCID.AngryBonesBigHelmet || 
-               npc.type == NPCID.AngryBonesBigMuscle) &&
-               Main.rand.NextFloat() < 0.02f)
+               npc.type == NPCID.AngryBonesBigMuscle))
             {
                 Item.NewItem(npc.getRect(), ItemType<BoneSquireMinionItem>(), 1);
             }
 
-            if((npc.type == NPCID.BlueArmoredBones || 
+            if(spawnChance < 0.03f && (npc.type == NPCID.BlueArmoredBones || 
                npc.type == NPCID.BlueArmoredBonesMace || 
                npc.type == NPCID.BlueArmoredBonesNoPants || 
-               npc.type == NPCID.BlueArmoredBonesSword) &&
-               Main.rand.NextFloat() < 0.03f)
+               npc.type == NPCID.BlueArmoredBonesSword))
             {
                 Item.NewItem(npc.getRect(), ItemType<ArmoredBoneSquireMinionItem>(), 1);
             }
 
-            if(npc.type == NPCID.ManEater && Main.rand.NextFloat() < 0.08f)
+            if(spawnChance < 0.08f && npc.type == NPCID.ManEater)
             {
                 Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1);
             }
+            if(spawnChance < 0.03f && npc.TypeName == "Hornet" )
+            {
+                Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1);
+            }
+
         }
     }
 }

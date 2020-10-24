@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 6;
+			item.damage = 8;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;

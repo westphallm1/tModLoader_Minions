@@ -42,9 +42,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.CopperShortsword, 1);
+            recipe.AddIngredient(ItemID.Feather, 8);
             recipe.AddIngredient(ItemID.FallenStar, 3);
-            recipe.AddTile(TileID.Anvils);
+            recipe.AddTile(TileID.SkyMill);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
