@@ -35,7 +35,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
         protected virtual Vector2 WingOffset => Vector2.Zero;
         protected virtual WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
         protected virtual WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.DIAGONAL;
-        protected virtual Vector2 WeaponCenterOfRotation => Vector2.Zero; 
+        protected virtual Vector2 WeaponCenterOfRotation => Vector2.Zero;
+
+        protected virtual float knockbackSelf => 10f;
         protected int wingFrame = 0;
         protected int attackFrame = 0;
         protected float weaponAngle = 0;
@@ -51,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             // so give them a longer cooldown
             if(aimMode == WeaponAimMode.FIXED)
             {
-                projectile.localNPCHitCooldown = AttackFrames;
+                projectile.localNPCHitCooldown = AttackFrames - 2;
             } else
             {
                 projectile.localNPCHitCooldown = AttackFrames / 2;
@@ -107,6 +109,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
                 }
             }
             return false;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            hitDirection = projectile.spriteDirection; // always knock projectile away from player
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            // knock back the squire from the enemy a little bit
+            Vector2 distanceFromNPC = target.Center - projectile.Center;
+            distanceFromNPC.SafeNormalize();
+            relativeVelocity += -distanceFromNPC * knockbackSelf;
         }
 
         protected float GetFixedWeaponAngle()

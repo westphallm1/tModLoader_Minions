@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.knockBack = 3f;
+			item.knockBack = 4.5f;
 			item.width = 24;
 			item.height = 38;
             item.damage = 28;
@@ -53,6 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
         protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
+        protected override float knockbackSelf => 5f;
         protected override Vector2 WingOffset => new Vector2(-4, 2);
         public BoneSquireMinion() : base(ItemType<BoneSquireMinionItem>()) { }
 

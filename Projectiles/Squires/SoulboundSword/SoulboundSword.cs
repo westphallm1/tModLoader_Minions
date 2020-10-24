@@ -71,6 +71,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
         protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
+        protected override float knockbackSelf => 4;
+
         public SoulboundSwordMinion() : base(ItemType<SoulboundSwordMinionItem>()) { }
 
         public override void SetStaticDefaults() {

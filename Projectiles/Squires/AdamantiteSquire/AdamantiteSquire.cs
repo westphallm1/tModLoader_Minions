@@ -60,6 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
         protected override Vector2 WingOffset => new Vector2(-6, 6);
 
+        protected override float knockbackSelf => 5;
         protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 6);
         public AdamantiteSquireMinion(): base(ItemType<AdamantiteSquireMinionItem>()) {}
 

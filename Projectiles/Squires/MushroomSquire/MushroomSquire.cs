@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.knockBack = 3f;
+			item.knockBack = 2f;
 			item.width = 24;
 			item.height = 38;
             item.damage = 10;

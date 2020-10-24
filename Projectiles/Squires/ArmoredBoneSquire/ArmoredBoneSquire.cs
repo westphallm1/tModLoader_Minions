@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.knockBack = 6f;
+			item.knockBack = 7f;
 			item.width = 24;
 			item.height = 38;
             item.damage = 90;
@@ -112,6 +112,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
         protected override Vector2 WingOffset => new Vector2(-4, 4);
 
         protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
+
+        protected override float knockbackSelf => 5f;
 
         private int firingFrame1 = 0;
         private int firingFrame2 = 15;
