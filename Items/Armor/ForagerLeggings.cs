@@ -9,34 +9,38 @@ namespace AmuletOfManyMinions.Items.Armor
 	[AutoloadEquip(EquipType.Legs)]
 	public class ForagerLeggings : ModItem
 	{
-		public override void SetStaticDefaults() {
-			DisplayName.SetDefault("Forager's Leggings");
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Mildew Leggings");
 			Tooltip.SetDefault(
-				"4% increased minion damage\n"
-				+ "5% increased movement speed");
+				"3% increased minion damage\n"
+				+ "10% increased movement speed");
 		}
 
-		public override void SetDefaults() {
-			item.width = 18;
+		public override void SetDefaults()
+		{
+			item.width = 28;
 			item.height = 18;
-			item.value = Item.sellPrice(silver: 1);
+			item.value = Item.sellPrice(silver: 2);
 			item.rare = ItemRarityID.White;
-			item.defense = 3;
+			item.defense = 2;
 		}
 
-		public override void UpdateEquip(Player player) {
-			player.minionDamageMult += 0.04f;
+		public override void UpdateEquip(Player player)
+		{
+			player.minionDamage += 0.03f;
 			player.moveSpeed += 0.05f;
 		}
 
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Moonglow, 2);
-            recipe.AddIngredient(ItemID.Wood, 12);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-        }
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.Moonglow, 1);
+			recipe.AddIngredient(ItemID.Mushroom, 2);
+			recipe.AddIngredient(ItemID.Wood, 16);
+			recipe.AddTile(TileID.WorkBenches);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 	}
 }

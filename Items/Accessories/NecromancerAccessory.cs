@@ -12,7 +12,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Items.Accessories
 {
-    abstract class NecromancerAccessory: ModItem
+    public abstract class NecromancerAccessory: ModItem
     {
         internal static List<NecromancerAccessory> accessories = new List<NecromancerAccessory>();
         protected virtual float spawnVelocity => 0;
@@ -74,12 +74,14 @@ namespace AmuletOfManyMinions.Items.Accessories
         public bool wormOnAStringEquipped = false;
         public bool spiritCallerCharmEquipped = false;
         public bool techromancerAccessoryEquipped = false;
+        internal bool foragerArmorSetEquipped;
 
         public override void ResetEffects()
         {
             wormOnAStringEquipped = false;
             spiritCallerCharmEquipped = false;
             techromancerAccessoryEquipped = false;
+            foragerArmorSetEquipped = false;
         }
 
         public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)

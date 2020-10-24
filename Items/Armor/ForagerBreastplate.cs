@@ -8,34 +8,38 @@ namespace AmuletOfManyMinions.Items.Armor
 	[AutoloadEquip(EquipType.Body)]
 	public class ForagerBreastplate : ModItem
 	{
-		public override void SetStaticDefaults() {
+		public override void SetStaticDefaults()
+		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Forager's Breastplate");
+			DisplayName.SetDefault("Mildew Breastplate");
 			Tooltip.SetDefault(""
-				+ "3% increased minion damge\n"
+				+ "4% increased minion damge\n"
 				+ "+1 minion knockback");
 		}
 
-		public override void SetDefaults() {
-			item.width = 18;
+		public override void SetDefaults()
+		{
+			item.width = 30;
 			item.height = 18;
-			item.value = Item.sellPrice(silver: 1);
+			item.value = Item.sellPrice(silver: 2, copper: 50);
 			item.rare = ItemRarityID.White;
-			item.defense = 4;
+			item.defense = 3;
 		}
 
-		public override void UpdateEquip(Player player) {
-			player.minionDamageMult += 0.03f;
+		public override void UpdateEquip(Player player)
+		{
+			player.minionDamage += 0.04f;
 			player.minionKB += 1;
 		}
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Blinkroot, 2);
-            recipe.AddIngredient(ItemID.Wood, 15);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-        }
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.Daybloom, 1);
+			recipe.AddIngredient(ItemID.Mushroom, 5);
+			recipe.AddIngredient(ItemID.Wood, 20);
+			recipe.AddTile(TileID.WorkBenches);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 	}
 }
