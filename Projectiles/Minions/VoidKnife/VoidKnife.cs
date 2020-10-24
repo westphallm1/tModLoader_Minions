@@ -35,8 +35,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			item.damage = 28;
 			item.knockBack = 0.5f;
 			item.mana = 10;
-			item.width = 24;
-			item.height = 24;
+			item.width = 34;
+			item.height = 34;
 			item.value = Item.buyPrice(0, 7, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
@@ -99,6 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             travelVelocity = 16;
 		}
 
+
         public override Vector2 IdleBehavior()
         {
             base.IdleBehavior();
@@ -108,8 +109,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             int order = minions.IndexOf(projectile);
             idleAngle = (float)(2 * Math.PI * order) / minionCount;
             idleAngle += (2 * (float)Math.PI * minions[0].ai[1]) / animationFrames;
-            idlePosition.X += 2 + 20 * (float)Math.Cos(idleAngle);
-            idlePosition.Y += 2 + 40 * (float)Math.Sin(idleAngle);
+            idlePosition.X += 2 + 30 * (float)Math.Cos(idleAngle);
+            idlePosition.Y += 2 + 5 * (float)Math.Sin(idleAngle);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
@@ -133,7 +134,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             int height = texture.Height / Main.projFrames[projectile.type];
             Rectangle bounds = new Rectangle(0, projectile.frame * height, texture.Width, height);
             Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-
             spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
                 bounds, translucentColor, projectile.rotation,
                 origin, 1, 0, 0);
@@ -166,6 +166,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
                 // do nothing, preDraw will do phase out animation
                 IdleMovement(vectorToIdle);
             }
+
             else if(phaseFrames > maxPhaseFrames/2 && phaseFrames < maxPhaseFrames)
             {
                 if(distanceFromFoe == default)
@@ -218,7 +219,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             } else
             {
                 attackState = AttackState.IDLE;
-                projectile.rotation = idleAngle + (float) Math.PI/2;
+                projectile.rotation = (player.Center - projectile.Center).X * -0.01f;
                 projectile.position += vectorToIdlePosition;
                 projectile.velocity = Vector2.Zero;
             }
