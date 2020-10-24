@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Flying Sword");
+			DisplayName.SetDefault("Clarent");
 			Description.SetDefault("A flying sword will fight for you!");
         }
     }
@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Sword");
+			DisplayName.SetDefault("Clarent");
 			Tooltip.SetDefault("Summons a flying sword to fight for you!");
 		}
 
@@ -33,8 +33,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			item.damage = 48;
 			item.knockBack = 0.5f;
 			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
+			item.width = 50;
+			item.height = 50;
 			item.value = Item.buyPrice(0, 12, 0, 0);
 			item.rare = ItemRarityID.Pink;
 		}
@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Sword");
+			DisplayName.SetDefault("Clarent");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 4;
 		}
@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
                 idleAngle += (2 * (float)Math.PI * minions[0].ai[1]) / animationFrames;
             }
             Vector2 idlePosition = player.Center;
-            idlePosition.X += (30 + projectile.minionPos * 20) * -player.direction;
+            idlePosition.X += (40 + projectile.minionPos * 30) * -player.direction;
             idlePosition.Y += -35 + 5 * (float) Math.Sin(idleAngle);
             if(!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
             {
