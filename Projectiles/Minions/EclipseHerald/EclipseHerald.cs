@@ -26,7 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 
     public class EclipseHeraldMinionItem: EmpoweredMinionItem<EclipseHeraldMinionBuff, EclipseHeraldMinion>
     {
-		public override void SetStaticDefaults() {
+        protected override int dustType => DustID.GoldFlame;
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Eclipse Herald Staff");
 			Tooltip.SetDefault("Can't come to grips \nWith the total eclipse \nJust a slip of your lips \nand you're gone...");

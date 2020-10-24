@@ -26,7 +26,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSnake
 
     public class FlyingSnakeMinionItem: EmpoweredMinionItem<FlyingSnakeMinionBuff, FlyingSnakeMinion>
     {
-		public override void SetStaticDefaults() {
+
+        protected override int dustType => 39;
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Flying Snake Staff");
 			Tooltip.SetDefault("Summons a flying snake to fight for you!");

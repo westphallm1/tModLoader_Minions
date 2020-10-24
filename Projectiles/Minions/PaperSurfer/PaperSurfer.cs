@@ -35,8 +35,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 			item.damage = 12;
 			item.knockBack = 0.5f;
 			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
+			item.width = 38;
+			item.height = 40;
 			item.value = Item.buyPrice(0, 0, 70, 0);
 			item.rare = ItemRarityID.Green;
 		}
@@ -64,6 +64,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
             approachSpeed = 8;
             approachInertia = 40;
             targetSearchDistance = 800;
+            projectile.width = 28;
+            projectile.height = 32;
             projectile.type = ProjectileType<PaperSurferMinion>();
         }
     }

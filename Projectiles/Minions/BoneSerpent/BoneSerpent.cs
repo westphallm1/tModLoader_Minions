@@ -27,7 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
     public class BoneSerpentMinionItem: EmpoweredMinionItem<BoneSerpentMinionBuff, BoneSerpentMinion>
     {
-		public override void SetStaticDefaults() {
+        protected override int dustType => 30;
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bone Serpent Staff");
 			Tooltip.SetDefault("Summons a skeletal dragon to fight for you!");
@@ -56,6 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
     public class BoneSerpentMinion : WormMinion<BoneSerpentMinionBuff>
     {
+
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bone Serpent");

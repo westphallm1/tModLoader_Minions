@@ -27,7 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 
     public class XCXCopterMinionItem: EmpoweredMinionItem<XCXCopterMinionBuff, XCXCopterMinion>
     {
-		public override void SetStaticDefaults() {
+        protected override int dustType => 72;
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Copter-X Staff");
 			Tooltip.SetDefault("Summons a flexible helicopter to fight for you!");

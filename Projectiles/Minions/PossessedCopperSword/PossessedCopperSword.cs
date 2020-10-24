@@ -22,20 +22,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 
     public class CopperSwordMinionItem: MinionItem<CopperSwordMinionBuff, CopperSwordMinion>
     {
-		public override void SetStaticDefaults() {
+        public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/PossessedCopperSword/CopperSwordMinion";
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copper StarSword");
+			DisplayName.SetDefault("Starry SkySlasher");
 			Tooltip.SetDefault("Summons an enchanted sword to fight for you!");
 		}
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 8;
+			item.damage = 12;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 0, 5, 0);
+			item.value = Item.buyPrice(0, 0, 20, 0);
 			item.rare = ItemRarityID.White;
 		}
         public override void AddRecipes()
@@ -57,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copper StarSword");
+			DisplayName.SetDefault("Starry SkySlasher");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
 		}
@@ -102,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(550f, projectile.Top) is Vector2 target)
+            if(FindTargetInTurnOrder(625f, projectile.Top) is Vector2 target)
             {
                 projectile.friendly = true;
                 return target;

@@ -26,7 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 
     public class GoblinGunnerMinionItem: EmpoweredMinionItem<GoblinGunnerMinionBuff, GoblinGunnerMinion>
     {
-		public override void SetStaticDefaults() {
+        protected override int dustType => DustID.Shadowflame;
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Goblin Radio Beacon");
 			Tooltip.SetDefault("Summons a goblin gunship to fight for you!");

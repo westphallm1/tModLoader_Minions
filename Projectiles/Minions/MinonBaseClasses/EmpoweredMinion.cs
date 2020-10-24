@@ -13,8 +13,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
     public abstract class EmpoweredMinionItem<TBuff, TMinion> : MinionItem<TBuff, TMinion> where TBuff: ModBuff where TMinion: EmpoweredMinion<TBuff>
     {
-        protected int dustType = DustID.Confetti;
-        protected int dustCount = 10;
+        protected virtual int dustType => DustID.Confetti;
+        protected virtual int dustCount => 10;
 
         public override void SetDefaults()
         {

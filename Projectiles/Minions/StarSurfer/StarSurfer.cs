@@ -37,8 +37,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
             item.damage = 32;
             item.knockBack = 3f;
             item.mana = 10;
-            item.width = 32;
-            item.height = 32;
+            item.width = 46;
+            item.height = 46;
             item.value = Item.buyPrice(0, 6, 0, 0);
             item.rare = ItemRarityID.LightRed;
         }
@@ -56,6 +56,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 
     public class StarSurferProjectile : ModProjectile
     {
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[projectile.type] = 3;
+        }
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -78,6 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
                 projectile.velocity.Y += 0.5f;
             }
             projectile.rotation += (float)Math.PI / 9;
+            projectile.frame = ((int)projectile.ai[0]) % 3;
             //Dust.NewDust(projectile.position, projectile.width / 2, projectile.height / 2, DustID.Gold, -projectile.velocity.X, -projectile.velocity.Y);
         }
     }
@@ -107,6 +112,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
             approachSpeed = 15;
             approachInertia = 20;
             animationFrames = 160;
+            projectile.width = 26;
+            projectile.height = 32;
             projectile.type = ProjectileType<StarSurferMinion>();
             projectileType = ProjectileType<StarSurferProjectile>();
         }
@@ -140,7 +147,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
                 projectileFrameCount = 0;
                 vectorToTargetPosition.SafeNormalize();
                 vectorToTargetPosition *= projectileVelocity;
-                Projectile.NewProjectile(projectile.position, vectorToTargetPosition, projectileType, projectileDamage, 5, Main.myPlayer);
+                Projectile.NewProjectile(projectile.position, vectorToTargetPosition, projectileType, projectileDamage, 5, Main.myPlayer, ai0: projectile.minionPos);
             }
         }
 
