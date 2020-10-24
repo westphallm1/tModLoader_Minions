@@ -1,5 +1,6 @@
 ﻿using log4net.Repository.Hierarchy;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Void Knife");
+			DisplayName.SetDefault("Void Dagger");
 			Description.SetDefault("An ethereal dagger will fight for you!");
         }
     }
@@ -25,13 +26,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Void Knife");
+			DisplayName.SetDefault("Void Dagger");
 			Tooltip.SetDefault("Summons an ethereal dagger to fight for you!");
 		}
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 38;
+			item.damage = 28;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 24;
@@ -63,14 +64,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
         private int framesInAir;
         private float idleAngle;
-        private int maxFramesInAir = 35;
-        private bool hasHitEnemy = false;
+        private int maxFramesInAir = 120;
         private float travelVelocity;
+        private NPC targetNPC = null;
+        private float distanceFromFoe = default;
+        private float teleportAngle = default;
+        private Vector2 teleportDirection;
+        private int phaseFrames;
+        private int maxPhaseFrames = 60;
+        private int lastHitFrame = 0;
         private Random random = new Random();
+        private int framesWithoutTarget;
 
-		public override void SetStaticDefaults() {
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Void Knife");
+			DisplayName.SetDefault("Void Dagger");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
 		}
@@ -84,11 +92,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             projectile.ai[0] = 0;
             attackState = AttackState.IDLE;
             projectile.minionSlots = 1;
-            attackFrames = 120;
+            attackFrames = 90;
             animationFrames = 120;
             attackThroughWalls = true;
             useBeacon = false;
-            travelVelocity = 8;
+            travelVelocity = 16;
 		}
 
         public override Vector2 IdleBehavior()
@@ -107,11 +115,36 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             return vectorToIdlePosition;
         }
 
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            int alpha = 128;
+            float phaseLength = maxPhaseFrames / 2;
+            if(phaseFrames > 0 && phaseFrames < phaseLength)
+            {
+                alpha -= (int)(128  * phaseFrames/ phaseLength);
+            } else if (phaseFrames >= phaseLength && phaseFrames < maxPhaseFrames)
+            {
+                alpha = (int)(128  * (phaseFrames - phaseLength) / phaseLength);
+            }
+            Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, alpha);
+            Texture2D texture = Main.projectileTexture[projectile.type];
+
+
+            int height = texture.Height / Main.projFrames[projectile.type];
+            Rectangle bounds = new Rectangle(0, projectile.frame * height, texture.Width, height);
+            Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+
+            spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
+                bounds, translucentColor, projectile.rotation,
+                origin, 1, 0, 0);
+            return false;
+        }
+
         public override Vector2? FindTarget()
         {
             if(FindTargetInTurnOrder(800f, projectile.Center, 400f) is Vector2 target)
             {
-                projectile.friendly = true;
+                framesWithoutTarget = 0;
                 return target;
             } else
             {
@@ -120,80 +153,59 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            base.OnHitNPC(target, damage, knockback, crit);
-            hasHitEnemy = true;
-        }
-
-        private void WarpWithDust(Vector2 vectorToNewPosition, bool bigDustBefore)
-        {
-            // don't spam with dust while moving close to the player 
-            if(Vector2.Distance(projectile.position + vectorToNewPosition, player.Center) < 120)
-            {
-                projectile.position += vectorToNewPosition;
-                return;
-            }
-            Vector2 dustIncrement = new Vector2(vectorToNewPosition.X, vectorToNewPosition.Y);
-            dustIncrement.SafeNormalize();
-            if(bigDustBefore)
-            {
-                for(int i = 0; i < 10; i ++)
-                {
-                    Dust.NewDust(projectile.position, 32, 32, DustID.Shadowflame);
-                }
-            }
-            for(int i = 0; i < vectorToNewPosition.Length(); i +=32)
-            {
-                Dust.NewDust(projectile.position + dustIncrement * i, 16, 16, DustID.Shadowflame);
-            }
-            projectile.position += vectorToNewPosition;
-            if(!bigDustBefore)
-            {
-                for(int i = 0; i < 10; i ++)
-                {
-                    Dust.NewDust(projectile.position, 32, 32, DustID.Shadowflame);
-                }
-            }
-        }
-        private void TeleportToEnemy(Vector2 target)
-        {
-            float distanceFromFoe = 80 + random.Next(-20, 20);
-            float teleportAngle = (float)(random.NextDouble() * 2 * Math.PI);
-            Vector2 teleportDirection = new Vector2((float)Math.Cos(teleportAngle), (float)Math.Sin(teleportAngle));
-            projectile.velocity = -travelVelocity * teleportDirection;
-            framesInAir = 0;
-            WarpWithDust(target + distanceFromFoe * teleportDirection, false);
-        }
-
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            if(oldVectorToTarget == null && vectorToTarget is Vector2 target)
+            if(targetNPC is null && targetNPCIndex is int index)
             {
-                TeleportToEnemy(target);
+                targetNPC = Main.npc[index];
+                distanceFromFoe = default;
+                phaseFrames = 0;
+                framesInAir = 0;
+                lastHitFrame = -10;
+            } else if(targetNPC != null && phaseFrames++ < maxPhaseFrames/2) {
+                // do nothing, preDraw will do phase out animation
+                IdleMovement(vectorToIdle);
             }
-            if(framesInAir++ > maxFramesInAir)
+            else if(phaseFrames > maxPhaseFrames/2 && phaseFrames < maxPhaseFrames)
             {
+                if(distanceFromFoe == default)
+                {
+                    distanceFromFoe = 80 + random.Next(-20, 20);
+                    teleportAngle = (float)(random.NextDouble() * 2 * Math.PI);
+                    teleportDirection = new Vector2((float)Math.Cos(teleportAngle), (float)Math.Sin(teleportAngle));
+                } else
+                {
+                    vectorToTargetPosition.SafeNormalize();
+                    projectile.rotation = vectorToTargetPosition.ToRotation() + (float) Math.PI / 2;
+                }
+                // move to fixed position relative to NPC, preDraw will do phase in animation
+                projectile.position = targetNPC.Center + teleportDirection * (distanceFromFoe + phaseFrames);
+                projectile.friendly = false;
+            } else if(framesInAir++ > maxFramesInAir || framesWithoutTarget == 10)
+            {
+                targetNPC = null;
                 attackState = AttackState.RETURNING;
-            }
-            else if (!hasHitEnemy && vectorToTargetPosition != Vector2.Zero)
+            } else if(framesInAir - lastHitFrame > 10)
             {
+                projectile.friendly = true;
                 vectorToTargetPosition.SafeNormalize();
                 projectile.velocity = vectorToTargetPosition * travelVelocity;
-            }
-            else
-            {
-                projectile.rotation += (float)Math.PI / 9;
-                projectile.velocity.Y += 0.2f;
-            }
+                projectile.rotation = vectorToTargetPosition.ToRotation() + (float) Math.PI / 2;
+            } 
             Lighting.AddLight(projectile.position, Color.Purple.ToVector3() * 0.75f);
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            lastHitFrame = framesInAir;
         }
 
         public override void IdleMovement(Vector2 vectorToIdlePosition)
         {
-            if (framesInAir < maxFramesInAir && attackState != AttackState.IDLE)
+            if(attackState == AttackState.ATTACKING)
             {
-                TargetedMovement(Vector2.Zero);
+                framesWithoutTarget++;
+                TargetedMovement(projectile.velocity);
                 return;
             }
             projectile.rotation = (float)Math.PI;
@@ -202,14 +214,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             
             if(vectorToIdlePosition.Length() > 32 && vectorToIdlePosition.Length() < 1000)
             {
-                WarpWithDust(vectorToIdlePosition, true);
+                projectile.position += vectorToIdlePosition;
             } else
             {
                 attackState = AttackState.IDLE;
                 projectile.rotation = idleAngle + (float) Math.PI/2;
                 projectile.position += vectorToIdlePosition;
                 projectile.velocity = Vector2.Zero;
-                hasHitEnemy = false;
             }
         }
     }
