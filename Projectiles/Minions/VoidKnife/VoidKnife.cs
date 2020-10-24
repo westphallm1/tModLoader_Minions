@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 28;
+			item.damage = 32;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 34;
@@ -110,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             idleAngle = (float)(2 * Math.PI * order) / minionCount;
             idleAngle += (2 * (float)Math.PI * minions[0].ai[1]) / animationFrames;
             idlePosition.X += 2 + 30 * (float)Math.Cos(idleAngle);
-            idlePosition.Y += 2 + 5 * (float)Math.Sin(idleAngle);
+            idlePosition.Y += -12 + 5 * (float)Math.Sin(idleAngle);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(ref vectorToIdlePosition, 2000f);
             return vectorToIdlePosition;
@@ -142,7 +142,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
         public override Vector2? FindTarget()
         {
-            if(FindTargetInTurnOrder(800f, projectile.Center, 400f) is Vector2 target)
+            if(FindTargetInTurnOrder(800f, projectile.Center, 600f) is Vector2 target)
             {
                 framesWithoutTarget = 0;
                 return target;
@@ -193,6 +193,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
                 projectile.velocity = vectorToTargetPosition * travelVelocity;
                 projectile.rotation = vectorToTargetPosition.ToRotation() + (float) Math.PI / 2;
             } 
+            if(phaseFrames >= maxPhaseFrames)
+            {
+                Dust.NewDust(projectile.Center, 8, 8, DustID.Shadowflame);
+            }
             Lighting.AddLight(projectile.position, Color.Purple.ToVector3() * 0.75f);
         }
 
@@ -203,10 +207,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
         public override void IdleMovement(Vector2 vectorToIdlePosition)
         {
-            if(attackState == AttackState.ATTACKING)
+            if (attackState == AttackState.ATTACKING)
             {
                 framesWithoutTarget++;
-                TargetedMovement(projectile.velocity);
+                if(phaseFrames < maxPhaseFrames && targetNPC != null)
+                {
+                    TargetedMovement(targetNPC.Center - projectile.Center);
+                } else
+                {
+                    TargetedMovement(projectile.velocity);
+                }
                 return;
             }
             projectile.rotation = (float)Math.PI;

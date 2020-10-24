@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Items.Armor
             frameSpeed = 15;
             projectile.width = 16;
             projectile.height = 16;
-            projectile.tileCollide = false;
+			projectile.tileCollide = true;
 			projectile.penetrate = 1;
 			projectile.friendly = false;
         }
@@ -104,6 +104,11 @@ namespace AmuletOfManyMinions.Items.Armor
             {
                 Dust.NewDust(projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
             }
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+			return oldVelocity.Y > 0 && projectile.velocity.X == oldVelocity.X;
         }
 
         protected override void Move(Vector2 vector2Target, bool isIdle = false)

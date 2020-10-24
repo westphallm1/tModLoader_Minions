@@ -119,9 +119,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             // knock back the squire from the enemy a little bit
-            Vector2 distanceFromNPC = target.Center - projectile.Center;
-            distanceFromNPC.SafeNormalize();
-            relativeVelocity += -distanceFromNPC * knockbackSelf;
+            //Vector2 distanceFromNPC = target.Center - projectile.Center;
+            //distanceFromNPC.SafeNormalize();
+            //relativeVelocity += -distanceFromNPC * knockbackSelf;
         }
 
         protected float GetFixedWeaponAngle()
