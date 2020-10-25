@@ -1,9 +1,15 @@
 The Amulet of Many Minions is designed to add variety to the vanilla summoner progression while staying at least somewhat
 in line with vanilla balance. It adds a new, directly controllable minion type called the Squire,
-over a dozen new "standard" minions, 3 accessories, and an early pre-hardmode armor set to the game.
+over a dozen new minions, 3 accessories, and an early pre-hardmode armor set to the game.
 
 Note: This mod is currently only tested in single player.
 
+
+=== Version History ==
+v0.2.1 - Add many resprites courtesy of SkyanUltra
+       - Polish several minions & armor set based on playtesting feeback
+v0.2 - Squires introduced, minions switched to use local iFrames
+v0.1 - Base minions, armor, and accessories introduced
 Crafting Cheat Sheet (Also available from homepage):
 
 === Minions ===
@@ -54,10 +60,6 @@ Forager's Set - 2 Daybloom + 2 Moonglow + 2 Blinkroot + 36 Wood @ Workbench
 Charm of Many Minions - 1 Light Shard + 8 Soul of Night @ Anvil
 Charm of Mighty Minions - 1 Dark Shard + 8 Soul of Light @ Anvil
 Amulet of Many Minions - Charm of Many Minions + others (See the Guide for more info!)
-
-=== Version History ==
-v0.2 - Squires introduced, minions switched to use local iFrames
-v0.1 - Base minions, armor, and accessories introduced
 
 
 
