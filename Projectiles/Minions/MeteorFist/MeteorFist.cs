@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Meteor Fist Staff");
+			DisplayName.SetDefault("Meteor Fist");
 			Tooltip.SetDefault("Summons a meteor fist to fight for you!");
 		}
 
@@ -34,8 +34,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			item.damage = 12;
 			item.knockBack = 0.5f;
 			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
+			item.width = 26;
+			item.height = 26;
 			item.value = Item.buyPrice(0, 1, 0, 0);
 			item.rare = ItemRarityID.Orange;
 		}

@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
         {
             base.SetDefaults();
             projectile.width = 36;
-            projectile.height = 61;
+            projectile.height = 60;
             projectile.tileCollide = false;
             projectile.friendly = false;
             projectile.ai[0] = 0;

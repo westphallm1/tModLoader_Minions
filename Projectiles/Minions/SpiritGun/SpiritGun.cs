@@ -28,7 +28,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
     public class SpiritGunMinionItem: EmpoweredMinionItem<SpiritGunMinionBuff, SpiritGunMinion>
     {
-		public override void SetStaticDefaults() {
+        protected override int dustType => 137;
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Spirit Revolver");
 			Tooltip.SetDefault("Summons sentient bullets to fight for you.\nMake sure they don't get hungry...");
@@ -38,8 +39,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			base.SetDefaults();
 			item.knockBack = 3f;
 			item.mana = 10;
-			item.width = 44;
-			item.height = 26;
+			item.width = 36;
+			item.height = 22;
             item.damage = 53;
 			item.value = Item.buyPrice(0, 20, 0, 0);
 			item.rare = ItemRarityID.Red;
@@ -73,8 +74,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-			projectile.width = 44;
-			projectile.height = 26;
+			projectile.width = 36;
+			projectile.height = 22;
 			projectile.tileCollide = false;
             projectile.type = ProjectileType<SpiritGunMinion>();
             animationFrame = 0;
@@ -103,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
         private void SpiritDust(int index)
         {
-            Dust.NewDust(GetSpiritLocation(index), 10, 14, DustID.Confetti);
+            Dust.NewDust(GetSpiritLocation(index), 10, 14, 137);
         }
         private void DrawSpirits(SpriteBatch spriteBatch, Color lightColor)
         {
@@ -181,7 +182,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
                 {
                     projectile.ai[1] += 1;
                     Vector2 returned = activeTargetVectors.Dequeue();
-                    Dust.NewDust(returned, 4, 10, DustID.Confetti);
+                    Dust.NewDust(returned, 4, 10, 137);
                 }
             }
             base.IdleBehavior();
@@ -224,7 +225,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
                 activeTargetVectors.Enqueue(projectile.Center + vectorToTargetPosition);
                 for(int i = 0; i < 4; i++)
                 {
-                    Dust.NewDust(projectile.Center + vectorToTargetPosition, 4, 10, DustID.Confetti);
+                    Dust.NewDust(projectile.Center + vectorToTargetPosition, 4, 10, 137);
                 }
                 framesSinceLastHit = 0;
                 if(projectile.ai[1] == 0)
