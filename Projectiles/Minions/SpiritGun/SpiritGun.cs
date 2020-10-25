@@ -181,11 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
                 {
                     projectile.ai[1] += 1;
                     Vector2 returned = activeTargetVectors.Dequeue();
-                    for(int i = 0; i < 4; i++)
-                    {
-                        Dust.NewDust(returned, 4, 10, DustID.Confetti);
-                    }
-                    SpiritDust((int)projectile.ai[1]);
+                    Dust.NewDust(returned, 4, 10, DustID.Confetti);
                 }
             }
             base.IdleBehavior();
@@ -224,7 +220,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
                 Main.PlaySound(SoundID.Item97);
                 // TODO handle flipping and stuff
                 projectile.rotation = vectorToTargetPosition.ToRotation();
-                SpiritDust((int)projectile.ai[1]);
                 projectile.ai[1] -= 1;
                 activeTargetVectors.Enqueue(projectile.Center + vectorToTargetPosition);
                 for(int i = 0; i < 4; i++)

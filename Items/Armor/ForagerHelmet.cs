@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
         public override void Kill(int timeLeft)
         {
-            for(int i = 0; i < 10; i ++)
+            for(int i = 0; i < 3; i ++)
             {
                 Dust.NewDust(projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
             }

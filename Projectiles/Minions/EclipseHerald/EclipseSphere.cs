@@ -59,10 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
             {
                 Vector2 velocity = -projectile.velocity;
                 int dustSize = (int)(2 + 2 * projectile.ai[0]);
-                for(int i = 0; i < 5; i++)
-                {
-                    Dust.NewDust(projectile.Center, dustSize, dustSize, DustID.GoldFlame, velocity.X, velocity.Y);
-                }
+                Dust.NewDust(projectile.Center, dustSize, dustSize, DustID.GoldFlame, velocity.X, velocity.Y);
             }
         }
 

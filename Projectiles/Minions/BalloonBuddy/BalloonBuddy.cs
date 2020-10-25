@@ -62,7 +62,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 
     public class BalloonBuddyMinion : WormMinion<BalloonBuddyMinionBuff>
     {
-		public override void SetStaticDefaults() {
+        protected override float baseDamageRatio => 0.25f;
+        protected override float damageGrowthRatio => 0.75f;
+        public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Balloon Buddy");
 			// Sets the amount of frames this minion has on its spritesheet

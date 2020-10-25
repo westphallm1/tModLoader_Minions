@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using log4net.Repository.Hierarchy;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Serialization;
@@ -141,7 +142,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
             base.TargetedMovement(vectorToTargetPosition);
-            Dust.NewDust(projectile.position, projectile.width / 2, projectile.height / 2, DustID.Gold, -projectile.velocity.X, -projectile.velocity.Y);
+            if(Main.rand.Next(5) == 0)
+            {
+                Dust.NewDust(projectile.Center, 
+                    8, 
+                    8, DustType<StarDust>(),
+                    -projectile.velocity.X,
+                    -projectile.velocity.Y);
+            }
             if (projectileFrameCount++ > projectileFireRate)
             {
                 projectileFrameCount = 0;

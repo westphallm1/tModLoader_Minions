@@ -48,7 +48,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
                 lookingForTarget = false;
                 velocity.SafeNormalize(); 
                 velocity *= speed;
-                Dust.NewDust(projectile.Center, 8, 8, DustID.Confetti, -velocity.X, -velocity.Y);
             }           
         }
 

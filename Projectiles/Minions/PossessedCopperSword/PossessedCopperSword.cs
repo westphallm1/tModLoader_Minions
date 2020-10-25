@@ -1,4 +1,5 @@
-﻿using log4net.Repository.Hierarchy;
+﻿using AmuletOfManyMinions.Dusts;
+using log4net.Repository.Hierarchy;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Copper StarSword");
-			Description.SetDefault("An enchanted copper sword will fight for you!");
+			Description.SetDefault("An enchanted sword will fight for you!");
         }
     }
 
@@ -31,13 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 12;
+			item.damage = 11;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
 			item.value = Item.buyPrice(0, 0, 20, 0);
-			item.rare = ItemRarityID.White;
+			item.rare = ItemRarityID.Green;
 		}
         public override void AddRecipes()
         {
@@ -82,7 +83,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
             }
             framesSinceLastHit = 0;
             Lighting.AddLight(target.position, Color.LightYellow.ToVector3());
-            Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Gold);
         }
 
         public override Vector2 IdleBehavior()
@@ -121,12 +121,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
             int speed = 8;
             vectorToTargetPosition.SafeNormalize();
             vectorToTargetPosition *= speed;
+            if(Main.rand.Next(5) == 0)
+            {
+                Dust.NewDust(projectile.Center, 
+                    projectile.width / 2, 
+                    projectile.height / 2, DustType<StarDust>(),
+                    -projectile.velocity.X,
+                    -projectile.velocity.Y);
+            }
             if(framesSinceLastHit ++ > 10)
             {
                 projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
             }
             projectile.rotation += (float)Math.PI / 9;
-            Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Copper);
         }
 
         public override void IdleMovement(Vector2 vectorToIdlePosition)

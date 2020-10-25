@@ -22,6 +22,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
         private SpriteBatch spriteBatch;
         private Texture2D texture;
         private Color lightColor;
+
+        protected virtual float baseDamageRatio => 0.67f;
+        protected virtual float damageGrowthRatio => 0.33f;
 		public override void SetStaticDefaults() {
             base.SetStaticDefaults();
 			Main.projFrames[projectile.type] = 1;
@@ -121,7 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
         protected override int ComputeDamage()
         {
-            return baseDamage/2 + (baseDamage / 4) * GetSegmentCount();
+            return (int)(baseDamage * baseDamageRatio + baseDamage * damageGrowthRatio * GetSegmentCount());
         }
 
         protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)
