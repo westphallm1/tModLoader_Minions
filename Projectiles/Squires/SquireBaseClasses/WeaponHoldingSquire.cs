@@ -124,11 +124,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
             //relativeVelocity += -distanceFromNPC * knockbackSelf;
         }
 
-        protected float GetFixedWeaponAngle()
+        protected virtual float GetFixedWeaponAngle()
         {
             float angleStep = (SwingAngle1- SwingAngle0) / AttackFrames;
             return SwingAngle0 + angleStep * attackFrame;
-
         }
 
         protected float GetMouseWeaponAngle()
