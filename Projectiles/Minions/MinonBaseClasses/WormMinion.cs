@@ -22,6 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
         private SpriteBatch spriteBatch;
         private Texture2D texture;
         private Color lightColor;
+        protected virtual int cooldownAfterHitFrames => 16;
 
         protected virtual float baseDamageRatio => 0.67f;
         protected virtual float damageGrowthRatio => 0.33f;
@@ -112,7 +113,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
             float speed = ComputeTargetedSpeed();
             vectorToTargetPosition.SafeNormalize();
             vectorToTargetPosition *= speed;
-            if(framesSinceLastHit ++ > 4)
+            framesSinceLastHit++;
+            if(framesSinceLastHit < cooldownAfterHitFrames && framesSinceLastHit > cooldownAfterHitFrames/2)
+            {
+                // start turning so we don't double directly back
+                Vector2 turnVelocity = new Vector2(-projectile.velocity.Y, projectile.velocity.X) / 8;
+                turnVelocity *= Math.Sign(projectile.velocity.X);
+                projectile.velocity += turnVelocity;
+            } else if(framesSinceLastHit ++ > cooldownAfterHitFrames)
             {
                 projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
             } else
