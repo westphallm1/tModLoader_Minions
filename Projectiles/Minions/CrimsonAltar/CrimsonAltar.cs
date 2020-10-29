@@ -68,6 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
         protected override float searchDistance => 220f;
 
         protected virtual int dustType => DustID.Blood;
+        protected virtual int dustFrequency => 5;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -88,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
         {
             base.Move(vector2Target, isIdle);
             projectile.rotation = projectile.velocity.ToRotation() + 3 * (float) Math.PI/ 2;
-            if(Main.rand.Next(5) == 0)
+            if(Main.rand.Next(dustFrequency) == 0)
             {
                 Dust.NewDust(projectile.Center, 1, 1, dustType, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
             }
@@ -129,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(BuffID.Ichor, 120);
+            target.AddBuff(BuffID.Ichor, 90);
         }
     }
 
