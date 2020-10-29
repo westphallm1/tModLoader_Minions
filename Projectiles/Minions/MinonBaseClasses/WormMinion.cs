@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
         public int framesSinceLastHit = 0;
         private SpriteBatch spriteBatch;
         private Texture2D texture;
-        private Color lightColor;
+        protected Color lightColor;
         protected virtual int cooldownAfterHitFrames => 16;
 
         protected virtual float baseDamageRatio => 0.67f;

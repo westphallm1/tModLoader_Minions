@@ -78,6 +78,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions
             return currentFrame == attackFrame;
         }
 
+        public void DistanceFromGroup(ref Vector2 distanceToTarget, int separation = 16, int closeDistance = 32)
+        {
+            // if multiple acorns are gathered on a target, space them out a little bit
+            if(distanceToTarget.Length() < closeDistance)
+            {
+                foreach (Projectile otherAcorn in GetActiveMinions())
+                {
+                    if(otherAcorn.whoAmI == projectile.whoAmI)
+                    {
+                        continue;
+                    }
+                    if(projectile.Hitbox.Intersects(otherAcorn.Hitbox))
+                    {
+                        Vector2 difference = otherAcorn.Center - projectile.Center;
+                        difference.SafeNormalize();
+                        distanceToTarget += -separation * difference;
+                    }
+                }
+            }
+
+        }
+
         protected Vector2? FindTargetInTurnOrder(float searchDistance, Vector2 center, float noLOSDistance = 0)
         {
             if(attackState == AttackState.RETURNING)

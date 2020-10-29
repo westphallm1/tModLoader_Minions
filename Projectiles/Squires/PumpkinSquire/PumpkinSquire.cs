@@ -49,6 +49,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
         const int TIME_TO_LIVE = 120;
         int bounces;
         bool startFalling;
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            ProjectileID.Sets.MinionShot[projectile.type] = true;
+        }
         public override void SetDefaults()
         {
             base.SetDefaults();

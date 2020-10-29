@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Crimson Altar");
-			Description.SetDefault("A goblin gunner will fight for you!");
+			Description.SetDefault("A crimson altar will fight for you!");
         }
     }
 
@@ -29,10 +29,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
     {
         protected override int dustType => DustID.Blood;
 
-        public override string Texture => "Terraria/Item_" + ItemID.CrimsonHeart;
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crimson Altar");
+			DisplayName.SetDefault("Crimson Cell Staff");
 			Tooltip.SetDefault("Summons a crimson altar to fight for you!");
 		}
 
@@ -67,6 +66,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
         protected override float distanceToBumbleBack => 2000f; // don't bumble back
 
         protected override float searchDistance => 220f;
+
+        protected virtual int dustType => DustID.Blood;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -87,7 +88,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
         {
             base.Move(vector2Target, isIdle);
             projectile.rotation = projectile.velocity.ToRotation() + 3 * (float) Math.PI/ 2;
-            Dust.NewDust(projectile.Center, 1, 1, DustID.Blood, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+            if(Main.rand.Next(5) == 0)
+            {
+                Dust.NewDust(projectile.Center, 1, 1, dustType, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+            }
         }
 
         public override void Kill(int timeLeft)
@@ -95,17 +99,32 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
             base.Kill(timeLeft);
             for(int i = 0; i < 3; i++)
             {
-                Dust.NewDust(projectile.Center, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X / 2, projectile.velocity.Y / 2);
+                Dust.NewDust(projectile.Center, projectile.width, projectile.height, dustType, projectile.velocity.X / 2, projectile.velocity.Y / 2);
             }
         }
     }
     public class CrimsonAltarBigCrimera : CrimsonAltarBaseCrimera
     {
         public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/CrimsonAltar/CrimsonAltarCrimera";
+
+        protected override int dustType => 87;
         public override void SetDefaults()
         {
             base.SetDefaults();
-            projectile.scale = 2f;
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Texture2D texture = GetTexture(Texture);
+            Rectangle bounds = new Rectangle(0, 0, 
+                texture.Bounds.Width, texture.Bounds.Height / 2);
+            Vector2 origin = bounds.Center.ToVector2();
+            Vector2 pos = projectile.Center;
+            float r = projectile.rotation;
+            SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+            spriteBatch.Draw(texture, pos - Main.screenPosition,
+                bounds, lightColor, r,
+                origin, 1.5f, 0, 0);
+            return false;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -121,19 +140,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
     {
 
         private int framesSinceLastHit;
-        public override string Texture => "Terraria/Projectile_" + ProjectileID.CrimsonHeart;
+        private int animationFrame;
 
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Gunner");
+			DisplayName.SetDefault("Crimson Cell");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 4;
 		}
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-			projectile.width = 44;
-			projectile.height = 44;
+			projectile.width = 40;
+			projectile.height = 40;
 			projectile.tileCollide = false;
             projectile.type = ProjectileType<CrimsonAltarMinion>();
             projectile.ai[0] = 0;
@@ -142,22 +161,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
             projectile.friendly = true;
             attackThroughWalls = true;
             useBeacon = false;
-            frameSpeed = 5;
 		}
 
 
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 196);
-            Texture2D texture = GetTexture("Terraria/Item_" + ItemID.Ichor);
+            if(projectile.minionSlots < 4)
+            {
+                return;
+            }
+            Texture2D texture = GetTexture(Texture + "_Glow");
             Rectangle bounds = texture.Bounds;
             Vector2 origin = bounds.Center.ToVector2();
-            bounds.Height = (int)(Math.Min(projectile.minionSlots, 4) * bounds.Height / 4f);
             Vector2 pos = projectile.Center;
             float r = projectile.rotation;
             spriteBatch.Draw(texture, pos - Main.screenPosition,
-                bounds, translucentColor, r,
+                bounds, Color.White, r,
                 origin, 1, 0, 0);
         }
 
@@ -165,15 +185,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
         {
             base.IdleBehavior();
             Vector2 idlePosition = player.Top;
-            idlePosition.X += 16 * -player.direction;
+            idlePosition.X += 28 * -player.direction;
             idlePosition.Y += -8;
+            animationFrame+= 1;
             if(!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
             {
                 idlePosition.X = player.Top.X;
                 idlePosition.Y = player.Top.Y - 16;
             }
+            idlePosition.Y += 4 * (float) Math.Sin(animationFrame / 32f);
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+            Lighting.AddLight(projectile.Center, Color.Red.ToVector3() * 0.25f);
             return vectorToIdlePosition;
         }
 
@@ -194,7 +217,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
                 {
                     bool summonBig = projectile.minionSlots >= 4 && Main.rand.Next(4) == 0; 
                     int projType  = summonBig ? ProjectileType<CrimsonAltarBigCrimera>() : ProjectileType<CrimsonAltarCrimera>();
-                    float rangeSquare = Math.Min(200, vectorToTargetPosition.Length() / 2);
+                    float rangeSquare = Math.Min(120, vectorToTargetPosition.Length() / 2);
                     vectorToTargetPosition.X += Main.rand.NextFloat() * rangeSquare - rangeSquare/2; 
                     vectorToTargetPosition.Y += Main.rand.NextFloat() * rangeSquare - rangeSquare/2;
                     int projectileVelocity = summonBig? 8 : 12;
@@ -240,7 +263,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 
         protected override float ComputeSearchDistance()
         {
-            return 500 + 10 * projectile.minionSlots;
+            return 500 + 30 * projectile.minionSlots;
         }
 
         protected override float ComputeInertia()
@@ -266,12 +289,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 
         public override void Animate(int minFrame = 0, int? maxFrame = null)
         {
-            base.Animate(minFrame, maxFrame);
-            if(Math.Abs(projectile.velocity.X) > 2 && vectorToTarget is null)
+            projectile.spriteDirection = 1;
+            projectile.frame = Math.Min(4, (int)projectile.minionSlots) - 1;
+            projectile.rotation += player.direction / 32f;
+            if(Main.rand.Next(120) == 0)
             {
-                projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
+                for(int i = 0; i < 3; i++)
+                {
+                    Dust.NewDust(projectile.Center, 16, 16, DustID.Blood, Main.rand.Next(6) - 3, Main.rand.Next(6) - 3);
+                }
             }
-            projectile.rotation = projectile.velocity.X * 0.05f;
         }
     }
 }
