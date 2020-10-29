@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
         public override void IdleMovement(Vector2 vectorToIdlePosition)
         {
-            if(framesInAir < 10 || Vector2.Distance(player.Center, projectile.Center) > 300f || Math.Abs(player.Center.Y - projectile.Center.Y) > 80f)
+            if(framesInAir < 130 || Vector2.Distance(player.Center, projectile.Center) > 300f || Math.Abs(player.Center.Y - projectile.Center.Y) > 80f)
             {
                 base.IdleMovement(vectorToIdlePosition);
             }
@@ -103,7 +103,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            if(framesInAir < 10)
+            if(framesInAir > 60 && vectorToTargetPosition.Y < 0)
+            {
+                vectorToTargetPosition.Y = 0;
+            }
+            if(framesInAir < 130)
             {
                 base.TargetedMovement(vectorToTargetPosition);
             }
@@ -121,11 +125,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
                 framesInGround ++;
                 framesInAir = 0;
             }
-            if(framesInAir > 10 && projectile.velocity.Y < 16)
+            if(framesInAir > 60 && projectile.velocity.Y < 16)
             {
-                projectile.velocity.Y += 0.25f;
+                projectile.velocity.Y += 0.5f;
             }
-            return base.IdleBehavior();
+            Vector2 vectorToIdle = base.IdleBehavior();
+            vectorToIdle.Y += 48; // circle under the player's feet
+            return vectorToIdle;
         }
         protected override void DrawBody()
         {
@@ -158,21 +164,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
         protected override float ComputeInertia()
         {
-            if(framesInAir > 0)
+            if(framesInAir > 0 || framesInGround < 15)
             {
                 return 30;
-            } else if (framesInGround < 4)
-            {
-                return 10;
             } else
             {
-                return 22 - GetSegmentCount();
+                return 25 - GetSegmentCount();
             }
         }
 
         protected override float ComputeTargetedSpeed()
         {
             return Math.Min(12, 4 + 2 * GetSegmentCount());
+                
         }
 
         protected override float ComputeIdleSpeed()
