@@ -90,7 +90,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
                         bounds, lightColor, r,
                         origin, 1, SpriteEffects.None, 0);
                 }
-
             }
             base.PostDraw(spriteBatch, lightColor);
         }

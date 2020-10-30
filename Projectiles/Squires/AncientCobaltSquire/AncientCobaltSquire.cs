@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
+using AmuletOfManyMinions.Dusts;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 {
@@ -42,18 +43,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
     }
 
 
-    public class AncientCobaltArrow : ModProjectile
+    public class AncientCobaltBolt : ModProjectile
     {
 
+        public override string Texture => "Terraria/Projectile_" + ProjectileID.SapphireBolt;
         public override void SetDefaults()
         {
             base.SetDefaults();
-            projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
+            projectile.CloneDefaults(ProjectileID.SapphireBolt);
+            ProjectileID.Sets.MinionShot[projectile.type] = true;
         }
 
-        public override void Kill(int timeLeft)
+        public override void AI()
         {
-            // don't spawn a wood arrow on kill
+            base.AI();
+            Dust.NewDust(projectile.Center, 1, 1, DustType<MinionWaypointDust>(), 0, 0, Scale: 2f);
         }
     }
 
@@ -61,14 +65,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
     {
         protected override int AttackFrames => 30;
         protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
-        protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AncientCobaltSquire/AncientCobaltBow";
+        protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AncientCobaltSquire/AncientCobaltStaff";
 
         protected override float IdleDistanceMulitplier => 2.5f;
         protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
-        protected override WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.VERTICAL;
+        protected override WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.DIAGONAL;
 
-        protected override Vector2 WingOffset => new Vector2(-4, 0);
+        protected override Vector2 WingOffset => new Vector2(-4, 4);
 
         protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
@@ -103,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
                 angleVector *= projectileVelocity;
                 Projectile.NewProjectile(projectile.Center,
                     angleVector, 
-                    ProjectileType<AncientCobaltArrow>(), 
+                    ProjectileType<AncientCobaltBolt>(), 
                     projectile.damage, 
                     projectile.knockBack, 
                     Main.myPlayer);
