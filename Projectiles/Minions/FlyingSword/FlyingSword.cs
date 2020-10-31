@@ -114,8 +114,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
             }
             Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
             TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-
-            mod.Logger.Info(projectile.position + " " + projectile.velocity + " " + attackState);
             return vectorToIdlePosition;
         }
 

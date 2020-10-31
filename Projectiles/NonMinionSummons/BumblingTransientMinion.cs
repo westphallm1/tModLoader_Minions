@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
     public abstract class BumblingTransientMinion : TransientMinion
     {
         protected float maxSpeed = default;
-        private Vector2 initialVelocity = Vector2.Zero;
-        private int lastHitFrame;
+        protected Vector2 initialVelocity = Vector2.Zero;
+        protected int lastHitFrame;
         protected virtual float inertia => default;
         protected virtual float idleSpeed => default;
 
@@ -30,6 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
         protected virtual float distanceToBumbleBack => default;
 
         protected virtual float searchDistance => default;
+        protected virtual float noLOSSearchDistance => 0;
 
         public override void SetStaticDefaults()
         {
@@ -117,13 +118,14 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
             return false;
         }
 
+        protected virtual bool onAttackCooldown => lastHitFrame - projectile.timeLeft < projectile.localNPCHitCooldown;
         public override Vector2? FindTarget()
         {
-            if(lastHitFrame - projectile.timeLeft < projectile.localNPCHitCooldown)
+            if(onAttackCooldown)
             {
                 return null;
             }
-            if(ClosestEnemyInRange(searchDistance, projectile.position, maxRangeFromPlayer: false) is Vector2 closest)
+            if(ClosestEnemyInRange(searchDistance, projectile.position, noLOSSearchDistance, false) is Vector2 closest)
             {
                 return closest - projectile.position;
             }

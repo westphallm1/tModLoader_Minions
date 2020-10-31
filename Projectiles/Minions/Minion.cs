@@ -51,6 +51,35 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				projectile.timeLeft = 2;
 			}
 		}
+        protected Tile TileAtLocation(Vector2 position)
+        {
+            int x = (int)position.X / 16;
+            int y = (int)position.Y / 16;
+            return Main.tile[x, y];
+        }
+
+		protected bool StandingOnPlatform()
+        {
+			if(projectile.velocity.Y < 0)
+            {
+				return false; // can't be standing if we're ascending
+            }
+			Vector2 bottomOfProjectile = projectile.Bottom;
+			bottomOfProjectile.Y += 8; // go to the next block down
+			Tile tileUnderfoot = TileAtLocation(bottomOfProjectile);
+			return Main.tileSolidTop[tileUnderfoot.type];
+        }
+
+		protected bool DropThroughPlatform()
+        {
+			if(StandingOnPlatform())
+            {
+				projectile.position.Y += 8;
+				return true;
+            }
+			return false;
+        }
+
 		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0)
         {
 			Vector2 center = centeredOn ?? projectile.Center;
@@ -102,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				// don't let a minion infinitely chain attacks off progressively further enemies
                 bool inRange = Vector2.Distance(npc.Center, maxRangeFromPlayer ? player.Center : projectile.Center) < maxRange;
                 bool inNoLOSRange = Vector2.Distance(npc.Center, player.Center) < noLOSRange;
-                bool lineOfSight =Collision.CanHitLine(projectile.Center, 1, 1, npc.position, npc.width, npc.height); 
+                bool lineOfSight = inNoLOSRange || Collision.CanHitLine(projectile.Center, 1, 1, npc.position, npc.width, npc.height); 
 				if((inNoLOSRange || (lineOfSight && inRange)) && (closest || !foundTarget))
                 {
 					targetNPCIndex = i;
