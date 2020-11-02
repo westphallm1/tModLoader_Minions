@@ -80,18 +80,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
         public void DistanceFromGroup(ref Vector2 distanceToTarget, int separation = 16, int closeDistance = 32)
         {
-            // if multiple acorns are gathered on a target, space them out a little bit
+            // if multiple minions are gathered on a target, space them out a little bit
             if(distanceToTarget.Length() < closeDistance)
             {
-                foreach (Projectile otherAcorn in GetActiveMinions())
+                foreach (Projectile otherMinion in GetActiveMinions())
                 {
-                    if(otherAcorn.whoAmI == projectile.whoAmI)
+                    if(otherMinion.whoAmI == projectile.whoAmI)
                     {
                         continue;
                     }
-                    if(projectile.Hitbox.Intersects(otherAcorn.Hitbox))
+                    if(projectile.Hitbox.Intersects(otherMinion.Hitbox))
                     {
-                        Vector2 difference = otherAcorn.Center - projectile.Center;
+                        Vector2 difference = otherMinion.Center - projectile.Center;
                         difference.SafeNormalize();
                         distanceToTarget += -separation * difference;
                     }
