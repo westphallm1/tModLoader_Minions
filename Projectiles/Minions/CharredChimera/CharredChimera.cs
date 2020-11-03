@@ -52,6 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
         int speed = 8;
         int inertia = 16;
         int framesSinceLastHit;
+        int hitsSinceRetreat;
         Projectile body = default;
         public override void SetStaticDefaults()
         {
@@ -70,6 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
             ProjectileID.Sets.Homing[projectile.type] = true;
             ProjectileID.Sets.MinionShot[projectile.type] = true;
             framesSinceLastHit = 10;
+            hitsSinceRetreat = 0;
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -79,7 +81,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
         public override Vector2? FindTarget()
         {
-            if(vectorToIdle.Length() > 300f || projectile.ai[1] == 0)
+            int maxHits = Math.Max(1, 10 - GetActiveMinions().Count());
+            if(vectorToIdle.Length() > 300f || projectile.ai[1] == 0 || hitsSinceRetreat > maxHits)
             {
                 return null;
             }
@@ -95,7 +98,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
         {
             framesSinceLastHit = 0;
             projectile.friendly = false;
-            projectile.velocity = -projectile.velocity;
+            projectile.velocity = -projectile.oldVelocity;
+            hitsSinceRetreat++;
         }
 
         public override Vector2 IdleBehavior()
@@ -120,6 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
             {
                 // the body is responsible for controlling the heads when they're "attached"
                 projectile.ai[1] = 0;
+                hitsSinceRetreat = 0;
                 return;
             } else if (vectorToIdlePosition.Length() > 300f)
             {
@@ -139,6 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
             }
             projectile.ai[1] = 1;
             DistanceFromGroup(ref vectorToTargetPosition, closeDistance: 300);
+            int speed = this.speed + (vectorToTargetPosition.Length() < 48 ? 4 : 0);
             vectorToTargetPosition.Normalize();
             vectorToTargetPosition *= speed;
             if(body != default)
@@ -204,7 +210,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
             Lighting.AddLight(projectile.Center, Color.Red.ToVector3() * 0.5f);
             int headType = ProjectileType<CharredChimeraMinionHead>();
             int currentHeadCount = player.ownedProjectileCounts[headType];
-            for(int i = currentHeadCount; i < projectile.minionSlots; i++)
+            for(int i = currentHeadCount; i < projectile.minionSlots + 1; i++)
             {
                 Projectile.NewProjectile(projectile.Center, projectile.velocity, headType, projectile.damage, projectile.knockBack, player.whoAmI);
             }
@@ -260,7 +266,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
             {
                 return;
             }
-            int attackFrames = 60;
+            int attackFrames = (int)(Math.Min(20, 60 - 5 * projectile.minionSlots) * projectile.minionSlots);
             int attackFrame = animationFrame % attackFrames;
             int interval = (attackFrames / allHeads.Count) % attackFrames;
             for(int i = 0; i < allHeads.Count; i++)
@@ -277,8 +283,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
         private void PositionHeads()
         {
             var heads = allHeads.Where(h=>h.ai[1] != 1).ToList();
-            Vector2 spinalCordEndOffset = new Vector2(24 * projectile.spriteDirection, 4);
-            Vector2 headBasePosition = projectile.Top + spinalCordEndOffset + projectile.velocity;
+            Vector2 spinalCordEndOffset = new Vector2(28 * projectile.spriteDirection, -4);
+            Vector2 headBasePosition = projectile.Top + spinalCordEndOffset + new Vector2(-13, -14) + projectile.velocity;
             if(heads.Count() == 0)
             {
                 return;
@@ -313,8 +319,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
         private void DrawVertibrae(SpriteBatch spriteBatch, Color lightColor, Projectile head)
         {
-            Vector2 spinalCordEndOffset = new Vector2(0, 8);
-            spinalCordEndOffset.X = projectile.spriteDirection == 1 ? 24 : -16;
+            Vector2 spinalCordEndOffset = new Vector2(24 * projectile.spriteDirection, -4);
             Vector2 endPosition = (projectile.Top + spinalCordEndOffset) - head.Center;
             Vector2 center = head.Center;
             Rectangle bounds = new Rectangle(6, 36, 12, 14);
@@ -346,11 +351,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
+            float r = projectile.rotation;
+            Vector2 pos = projectile.Center;
+            Texture2D texture = GetTexture(Texture);
+            SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+            int frameHeight = texture.Height / Main.projFrames[projectile.type];
+            Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+            Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+            spriteBatch.Draw(texture, pos - Main.screenPosition,
+                bounds, lightColor, r,
+                origin, 1, effects, 0);
             foreach(Projectile head in allHeads)
             {
                 DrawVertibrae(spriteBatch, lightColor, head);
             }
-            return true;
+            return false;
         }
 
         private void DrawHeads(SpriteBatch spriteBatch, Color lightColor)
@@ -358,7 +373,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
             Texture2D texture = GetTexture(Texture + "_Head");
             foreach(Projectile head in allHeads)
             {
-                // todo!
                 float r = head.rotation;
                 Vector2 pos = head.Center;
                 SpriteEffects effects = head.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
