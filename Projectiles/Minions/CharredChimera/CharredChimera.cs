@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 41;
+			item.damage = 48;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
             attackFrames = 180;
             ProjectileID.Sets.Homing[projectile.type] = true;
             ProjectileID.Sets.MinionShot[projectile.type] = true;
-            framesSinceLastHit = 10;
+            framesSinceLastHit = 5;
             hitsSinceRetreat = 0;
         }
 
@@ -138,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
-            if(framesSinceLastHit < 10)
+            if(framesSinceLastHit < 5)
             {
                 return;
             }
@@ -407,7 +407,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
         protected override float ComputeTargetedSpeed()
         {
-            return 12;
+            return 14;
         }
 
         protected override float ComputeIdleSpeed()

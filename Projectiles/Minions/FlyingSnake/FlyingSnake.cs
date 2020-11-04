@@ -45,15 +45,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSnake
 			item.value = Item.buyPrice(0, 15, 0, 0);
 			item.rare = ItemRarityID.Lime;
 		}
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.ChlorophyteBar, 12);
-            recipe.AddIngredient(ItemID.LunarTabletFragment, 6);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-        }
     }
 
     public class FlyingSnakeMinion : WormMinion<FlyingSnakeMinionBuff>

@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Ancient Cobalt Squire");
-			Description.SetDefault("An ancient cobalt squire will follow your orders!");
+			DisplayName.SetDefault("Potted Pal");
+			Description.SetDefault("A friendly plant will follow your orders!");
         }
     }
 
@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Crest of Cobalt");
-			Tooltip.SetDefault("Summons a squire\nAn ancient cobalt squire will fight for you!\nClick and hold to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nA friendly plant will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults() {
@@ -48,8 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
         protected float projectileVelocity = 14;
         public PottedPalMinion() : base(ItemType<PottedPalMinionItem>()) { }
         protected int wingFrameCounter = 0;
-        protected int hitCount = 0;
-        static int hitCooldown = 60;
+        static int hitCooldown = 6;
         static int cooldownCounter;
         public override void SetStaticDefaults() {
             base.SetStaticDefaults();
@@ -72,10 +71,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
         {
             wingFrameCounter++;
             cooldownCounter++;
-            if(cooldownCounter == hitCooldown)
-            {
-                hitCount = 0;
-            }
             return base.IdleBehavior();
         }
         public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -94,11 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            hitCount++;
-            if(hitCount >= 3)
-            {
-                cooldownCounter = 0;
-            }
+            projectile.velocity = -projectile.velocity;
         }
 
         public override Vector2? FindTarget()
@@ -111,6 +102,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
         }
         public override void TargetedMovement(Vector2 vectorToTargetPosition)
         {
+            if(cooldownCounter < hitCooldown)
+            {
+                return;
+            }
             if (ClosestEnemyInRange(100f, Main.MouseWorld, maxRangeFromPlayer: false) is Vector2 autoTarget)
             {
                 base.TargetedMovement(autoTarget - projectile.Center);

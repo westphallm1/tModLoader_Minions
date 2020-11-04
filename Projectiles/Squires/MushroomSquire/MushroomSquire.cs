@@ -60,7 +60,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
         protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
-        protected override Vector2 WingOffset => new Vector2(-4, 0);
+        protected override Vector2 WingOffset => new Vector2(-4, 4);
+
+        protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
         public MushroomSquireMinion() : base(ItemType<MushroomSquireMinionItem>()) { }
 
         public override void SetStaticDefaults() {
@@ -72,12 +74,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
         public sealed override void SetDefaults() {
             base.SetDefaults();
-            projectile.width = 20;
+            projectile.width = 24;
             projectile.height = 30;
         }
 
         public override float MaxDistanceFromPlayer() => 120;
-        protected override float WeaponDistanceFromCenter() => 20;
+        protected override float WeaponDistanceFromCenter() => 30;
 
     }
 }

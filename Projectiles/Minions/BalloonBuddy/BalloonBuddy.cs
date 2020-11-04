@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Magic Bubble Wand");
+			DisplayName.SetDefault("Sundae Staff");
 			Tooltip.SetDefault("Summons an enchanted balloon animal to fight for you!");
             
 		}
@@ -39,31 +39,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
-            item.damage = 10;
+            item.damage = 18;
 			item.height = 32;
-			item.value = Item.buyPrice(0, 0, 70, 0);
-			item.rare = ItemRarityID.Green;
+			item.value = Item.buyPrice(0, 3, 0, 0);
+			item.rare = ItemRarityID.Orange;
 		}
-
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.GoldBar, 14);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-            ModRecipe recipe2 = new ModRecipe(mod);
-            recipe2.AddIngredient(ItemID.PlatinumBar, 14);
-            recipe2.AddTile(TileID.Anvils);
-            recipe2.SetResult(this);
-            recipe2.AddRecipe();
-        }
     }
 
     public class BalloonBuddyMinion : WormMinion<BalloonBuddyMinionBuff>
     {
-        protected override float baseDamageRatio => 0.25f;
-        protected override float damageGrowthRatio => 0.75f;
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Balloon Buddy");

@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-            projectile.width = 22;
+            projectile.width = 24;
 			projectile.height = 32;
 		}
 

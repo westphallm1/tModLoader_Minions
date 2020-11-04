@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
         protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AdamantiteSquire/AdamantiteSquireSword";
 
-        protected override Vector2 WingOffset => new Vector2(-6, 6);
+        protected override Vector2 WingOffset => new Vector2(0, 6);
 
         protected override float knockbackSelf => 5;
         protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 6);
@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-            projectile.width = 22;
+            projectile.width = 30;
 			projectile.height = 32;
 		}
 

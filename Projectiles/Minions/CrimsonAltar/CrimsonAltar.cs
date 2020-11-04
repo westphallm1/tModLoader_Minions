@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Crimson Altar");
-			Description.SetDefault("A crimson altar will fight for you!");
+			DisplayName.SetDefault("Crimson Cell");
+			Description.SetDefault("A crimson cell will fight for you!");
         }
     }
 
@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crimson Cell Staff");
-			Tooltip.SetDefault("Summons a crimson altar to fight for you!");
+			Tooltip.SetDefault("Summons a crimson cell to fight for you!");
 		}
 
 		public override void SetDefaults() {
@@ -42,15 +42,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			item.width = 32;
 			item.height = 32;
             item.damage = 15;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			item.value = Item.sellPrice(0, 0, 70, 0);
+			item.rare = ItemRarityID.Green;
 		}
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SoulofNight, 6);
-            recipe.AddIngredient(ItemID.TitaniumBar, 12);
-            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.AddIngredient(ItemID.CrimtaneBar, 12);
+            recipe.AddIngredient(ItemID.TissueSample, 6);
+            recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

@@ -21,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Corruption Altar");
-			Description.SetDefault("A corruption altar will fight for you!");
+			DisplayName.SetDefault("Corrupt Cell");
+			Description.SetDefault("A corrupt cell will fight for you!");
         }
     }
 
@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Corruption Cell Staff");
-			Tooltip.SetDefault("Summons a corruption altar to fight for you!");
+			Tooltip.SetDefault("Summons a corrupt cell to fight for you!");
 		}
 
 		public override void SetDefaults() {
@@ -43,15 +43,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			item.width = 32;
 			item.height = 32;
             item.damage = 14;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			item.value = Item.sellPrice(0, 0, 70, 0);
+			item.rare = ItemRarityID.Green;
 		}
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SoulofNight, 6);
-            recipe.AddIngredient(ItemID.TitaniumBar, 12);
-            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.AddIngredient(ItemID.DemoniteBar, 12);
+            recipe.AddIngredient(ItemID.ShadowScale, 6);
+            recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

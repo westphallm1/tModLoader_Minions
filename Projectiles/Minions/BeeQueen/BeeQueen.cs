@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
         public override void SetDefaults()
         {
             base.SetDefaults();
-			DisplayName.SetDefault("Bee Bombardier");
-			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault("Bumble Bombardier");
+			Description.SetDefault("A bee assistant will fight for you!");
         }
     }
 
@@ -30,8 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
         protected override int dustType => 153;
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bee Bombardier Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault("Bumble Bombardier Staff");
+			Tooltip.SetDefault("Summons a bee assistant to fight for you!");
 		}
 
 		public override void SetDefaults() {
