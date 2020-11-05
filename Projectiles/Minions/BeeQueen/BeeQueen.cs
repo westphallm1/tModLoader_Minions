@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
         protected override int dustType => 153;
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bumble Bombardier Staff");
+			DisplayName.SetDefault("Bee Queen's Crown");
 			Tooltip.SetDefault("Summons a bee assistant to fight for you!");
 		}
 
@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			item.width = 28;
 			item.height = 28;
 			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.White;
+			item.rare = ItemRarityID.Green;
 		}
     }
 

@@ -40,6 +40,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Blue;
 		}
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.Pumpkin, 15);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 
 

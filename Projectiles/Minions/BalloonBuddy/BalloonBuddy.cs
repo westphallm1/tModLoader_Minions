@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Sundae Staff");
+			DisplayName.SetDefault("Sorbet Staff");
 			Tooltip.SetDefault("Summons an enchanted balloon animal to fight for you!");
             
 		}

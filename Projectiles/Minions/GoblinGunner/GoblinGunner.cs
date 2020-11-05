@@ -39,19 +39,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-            item.damage = 32;
+            item.damage = 28;
 			item.value = Item.buyPrice(0, 15, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SoulofNight, 6);
-            recipe.AddIngredient(ItemID.TitaniumBar, 12);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-        }
     }
 
     public class GoblinGunnerMinionGuns: ModProjectile { }
@@ -87,9 +78,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
     {
 
         private int framesSinceLastHit;
-        private const int AnimationFrames = 120;
-
-        private Random random = new Random();
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Goblin Gunner");

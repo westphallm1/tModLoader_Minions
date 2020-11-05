@@ -59,7 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 		public sealed override void SetDefaults() {
 			base.SetDefaults();
-            projectile.width = 20;
+            projectile.width = 22;
 			projectile.height = 30;
             projectile.localNPCHitCooldown = AttackFrames / 2;
 		}

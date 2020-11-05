@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 11;
+			item.damage = 13;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;

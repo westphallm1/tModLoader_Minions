@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
-            item.damage = 35;
+            item.damage = 43;
 			item.height = 34;
 			item.value = Item.buyPrice(0, 15, 0, 0);
 			item.rare = ItemRarityID.LightRed;
@@ -48,8 +48,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.SoulofLight, 6);
-            recipe.AddIngredient(ItemID.AdamantiteBar, 12);
+            recipe.AddIngredient(ItemID.MechanicalLens, 1);
+            recipe.AddIngredient(ItemID.HallowedBar, 12);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

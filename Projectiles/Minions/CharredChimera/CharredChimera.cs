@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
         {
             base.SetDefaults();
 			DisplayName.SetDefault("Charred Chimera");
-			Description.SetDefault("A winged acorn will fight for you!");
+			Description.SetDefault("A charred chimera will fight for you!");
         }
     }
 
@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
         protected override int dustType => 54;
         public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Charred Chimera Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault("Charred Spinal Cord");
+			Tooltip.SetDefault("Summons a charred chimera fight for you!");
 		}
 
 		public override void SetDefaults() {
