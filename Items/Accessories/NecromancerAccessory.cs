@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Items.Armor;
+using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -75,6 +76,7 @@ namespace AmuletOfManyMinions.Items.Accessories
         public bool spiritCallerCharmEquipped = false;
         public bool techromancerAccessoryEquipped = false;
         internal bool foragerArmorSetEquipped;
+        internal int summonFlatDamage;
 
         public override void ResetEffects()
         {
@@ -82,6 +84,7 @@ namespace AmuletOfManyMinions.Items.Accessories
             spiritCallerCharmEquipped = false;
             techromancerAccessoryEquipped = false;
             foragerArmorSetEquipped = false;
+            summonFlatDamage = 0;
         }
 
         public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)
@@ -97,6 +100,8 @@ namespace AmuletOfManyMinions.Items.Accessories
                     accessory.ModifyPlayerWeaponDamage(this, item, ref add, ref mult, ref flat);
                 }
             }
+            // a bit hacky, will wanna make this nicer eventually
+            flat += summonFlatDamage;
         }
     }
 

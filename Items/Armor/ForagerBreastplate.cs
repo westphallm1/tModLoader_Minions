@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Items.Accessories;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,8 +14,8 @@ namespace AmuletOfManyMinions.Items.Armor
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Mildew Breastplate");
 			Tooltip.SetDefault(""
-				+ "4% increased minion damge\n"
-				+ "+1 minion knockback");
+				+ "Increases minion damage by 1\n"
+				+ "Increased minion knockback by 1");
 		}
 
 		public override void SetDefaults()
@@ -28,7 +29,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamage += 0.04f;
+			player.GetModPlayer<NecromancerAccessoryPlayer>().summonFlatDamage += 1;
 			player.minionKB += 1;
 		}
 		public override void AddRecipes()

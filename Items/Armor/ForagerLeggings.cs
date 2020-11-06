@@ -12,9 +12,7 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Mildew Leggings");
-			Tooltip.SetDefault(
-				"3% increased minion damage\n"
-				+ "10% increased movement speed");
+			Tooltip.SetDefault("");
 		}
 
 		public override void SetDefaults()
@@ -28,15 +26,12 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamage += 0.03f;
-			player.moveSpeed += 0.05f;
 		}
 
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.Moonglow, 1);
-			recipe.AddIngredient(ItemID.Mushroom, 2);
 			recipe.AddIngredient(ItemID.Wood, 16);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);

@@ -14,9 +14,9 @@ namespace AmuletOfManyMinions.Items.Armor
 	public class ForagerHelmet : NecromancerAccessory
 	{
         protected override float baseDamage => 6;
-        protected override int bossLifePerSpawn => 30;
+        protected override int bossLifePerSpawn => 80;
         protected override int maxTransientMinions => 3;
-        protected override float onKillChance => .4f;
+        protected override float onKillChance => .3f;
 
         protected override int projType => ProjectileType<ForagerMushroom>();
 
@@ -26,8 +26,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Mildew Cap");
 			Tooltip.SetDefault(""
-				+ "Increases minion damage by 5%\n"
-				+ "Increases minion knockback by 1");
+				+ "Increases minion damage by 1");
 		}
 
 		public override void SetDefaults()
@@ -46,8 +45,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamage += 0.05f;
-			player.minionKB += 1f;
+			player.GetModPlayer<NecromancerAccessoryPlayer>().summonFlatDamage += 1;
 		}
 
 		public override void UpdateArmorSet(Player player)
