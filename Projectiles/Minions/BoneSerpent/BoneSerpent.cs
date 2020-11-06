@@ -187,11 +187,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
         public override Vector2? FindTarget()
         {
             float searchDistance = ComputeSearchDistance();
-            if (PlayerTargetPosition(searchDistance, player.Center, searchDistance) is Vector2 target)
+            if (PlayerTargetPosition(searchDistance, player.Center, searchDistance * 0.67f, losCenter: player.Center ) is Vector2 target)
             {
                 return target - projectile.Center;
             }
-            else if (ClosestEnemyInRange(searchDistance, player.Center, searchDistance) is Vector2 target2)
+            else if (ClosestEnemyInRange(searchDistance, player.Center, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target2)
             {
                 return target2 - projectile.Center;
             }

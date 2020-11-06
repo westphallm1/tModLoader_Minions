@@ -19,6 +19,7 @@ using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
 using AmuletOfManyMinions.Projectiles.Squires.PottedPal;
 using AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy;
+using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
 
 namespace AmuletOfManyMinions.NPCs
 {
@@ -38,6 +39,11 @@ namespace AmuletOfManyMinions.NPCs
                 Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1);
             }
 
+            if(spawnChance < 0.33f && npc.type == NPCID.QueenBee)
+            {
+                Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1);
+            }
+
             if(spawnChance < 0.01f && (npc.type == NPCID.AngryBones  || 
                npc.type == NPCID.AngryBonesBig  || 
                npc.type == NPCID.AngryBonesBigHelmet || 
@@ -51,7 +57,7 @@ namespace AmuletOfManyMinions.NPCs
                 Item.NewItem(npc.getRect(), ItemType<BoneSerpentMinionItem>(), 1);
             }
 
-            if(spawnChance < 0.167f && npc.type == NPCID.GoblinSummoner)
+            if(spawnChance < 0.33f && npc.type == NPCID.GoblinSummoner)
             {
                 Item.NewItem(npc.getRect(), ItemType<GoblinGunnerMinionItem>(), 1);
             }
@@ -61,7 +67,7 @@ namespace AmuletOfManyMinions.NPCs
                 Item.NewItem(npc.getRect(), ItemType<SqueyereMinionItem>(), 1);
             }
 
-            if(spawnChance < 0.167f && npc.type == NPCID.Plantera)
+            if(spawnChance < 0.33f && npc.type == NPCID.Plantera)
             {
                 Item.NewItem(npc.getRect(), ItemType<PottedPalMinionItem>(), 1);
             }

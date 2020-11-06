@@ -32,12 +32,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 		public override void SetDefaults() {
 			base.SetDefaults();
-			item.damage = 32;
+			item.damage = 27;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 34;
 			item.height = 34;
-			item.value = Item.buyPrice(0, 7, 0, 0);
+			item.value = Item.sellPrice(0, 1, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
 
@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
         private int framesInAir;
         private float idleAngle;
-        private int maxFramesInAir = 120;
+        private int maxFramesInAir = 60;
         private float travelVelocity;
         private NPC targetNPC = null;
         private float distanceFromFoe = default;
@@ -92,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
             projectile.ai[0] = 0;
             attackState = AttackState.IDLE;
             projectile.minionSlots = 1;
-            attackFrames = 90;
+            attackFrames = 120;
             animationFrames = 120;
             attackThroughWalls = true;
             useBeacon = false;

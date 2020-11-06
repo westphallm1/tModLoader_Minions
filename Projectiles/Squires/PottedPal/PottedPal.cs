@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
     {
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Ancient Crest of Cobalt");
+			DisplayName.SetDefault("Potted Pal");
 			Tooltip.SetDefault("Summons a squire\nA friendly plant will fight for you!\nClick and hold to guide its attacks");
 		}
 
@@ -37,8 +37,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			item.width = 24;
 			item.height = 38;
             item.damage = 60;
-			item.value = Item.sellPrice(0, 0, 1, 0);
-			item.rare = ItemRarityID.Orange;
+			item.value = Item.sellPrice(0, 5, 0, 0);
+			item.rare = ItemRarityID.Pink;
 		}
     }
 

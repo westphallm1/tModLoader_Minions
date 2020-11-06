@@ -80,15 +80,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return false;
         }
 
-		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0)
+		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, Vector2? losCenter = null)
         {
 			Vector2 center = centeredOn ?? projectile.Center;
+			Vector2 losCenterVector = losCenter ?? projectile.Center;
 			if(player.HasMinionAttackTargetNPC)
             {
 				NPC npc = Main.npc[player.MinionAttackTargetNPC];
 				float distance = Vector2.Distance(npc.Center, center);
 				if(distance < noLOSRange || (distance < maxRange && 
-					Collision.CanHitLine(projectile.Center, 1, 1, npc.position, npc.width, npc.height)))
+					Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height)))
                 {
 					targetNPCIndex = player.MinionAttackTargetNPC;
 					return npc.Center;
@@ -114,10 +115,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return null;
         }
 
-		public Vector2? ClosestEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true)
+		public Vector2? ClosestEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
         {
 			Vector2 center = centeredOn ?? projectile.Center;
 			Vector2 targetCenter = projectile.position;
+			Vector2 losCenterVector = losCenter ?? projectile.Center; 
 			bool foundTarget = false;
 			for(int i = 0; i < Main.maxNPCs; i++)
             {
@@ -131,7 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				// don't let a minion infinitely chain attacks off progressively further enemies
                 bool inRange = Vector2.Distance(npc.Center, maxRangeFromPlayer ? player.Center : projectile.Center) < maxRange;
                 bool inNoLOSRange = Vector2.Distance(npc.Center, player.Center) < noLOSRange;
-                bool lineOfSight = inNoLOSRange || Collision.CanHitLine(projectile.Center, 1, 1, npc.position, npc.width, npc.height); 
+                bool lineOfSight = inNoLOSRange || Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height); 
 				if((inNoLOSRange || (lineOfSight && inRange)) && (closest || !foundTarget))
                 {
 					targetNPCIndex = i;
