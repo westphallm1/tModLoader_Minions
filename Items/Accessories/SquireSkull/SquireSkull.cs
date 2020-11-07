@@ -6,14 +6,15 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AmuletOfManyMinions.Items.Accessories
+namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 {
 	class SquireSkullAccessory : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
 			Tooltip.SetDefault("Enchants your squire with a cursed skull!\n" +
-				"Adds a rotating debuff to squire damage");
+				"Slightly increases squire damage and adds a rotating debuff to squire attacks.");
+			DisplayName.SetDefault("Cursed Squire Skull");
 		}
 
 		public override void SetDefaults()
@@ -37,6 +38,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 		int animationFrame;
 		int DebuffCycleFrames = 360;
 		int AnimationFrames = 120;
+
+		public override void SetStaticDefaults()
+		{
+			Main.projFrames[projectile.type] = 24;
+		}
 		public override void SetDefaults()
 		{
 			projectile.friendly = false;
@@ -50,24 +56,25 @@ namespace AmuletOfManyMinions.Items.Accessories
 		{
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			Projectile squire = squirePlayer.GetSquire();
-			if(squire == null)
+			if(squire == null || !squirePlayer.squireSkullAccessory)
 			{
 				return projectile.velocity;
 			}
 			projectile.timeLeft = 2;
 			animationFrame++;
-			int cycleFrame = debuffCycle;
-			if(cycleFrame == 0)
+			if(debuffCycle == 0)
 			{
 				squirePlayer.squireDebuffOnHit = -1;
-			} else if (cycleFrame == 1)
+			} else if (debuffCycle == 1)
 			{
-				squirePlayer.squireDebuffOnHit = BuffID.CursedInferno;
-				squirePlayer.squireDebuffTime = 60;
+				squirePlayer.squireDebuffOnHit = BuffID.OnFire;
+				squirePlayer.squireDebuffTime = 180;
+				Lighting.AddLight(projectile.position, Color.Orange.ToVector3() * 0.25f);
 			} else
 			{
-				squirePlayer.squireDebuffOnHit = BuffID.Ichor;
-				squirePlayer.squireDebuffTime = 60;
+				squirePlayer.squireDebuffOnHit = BuffID.Poisoned;
+				squirePlayer.squireDebuffTime = 180;
+				Lighting.AddLight(projectile.position, Color.Aquamarine.ToVector3() * 0.25f);
 			}
 
 			int angleFrame = animationFrame % AnimationFrames;
@@ -87,15 +94,15 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 
 				minFrame = 0;
-				maxFrame = 2;
+				maxFrame = 8;
 			} else if (debuffCycle == 1)
 			{
-				minFrame = 1;
-				maxFrame = 3;
+				minFrame = 8;
+				maxFrame = 16;
 			} else
 			{
-				minFrame = 2;
-				maxFrame = 4;
+				minFrame = 16;
+				maxFrame = 24;
 			}
 			base.Animate(minFrame, maxFrame);
 		}

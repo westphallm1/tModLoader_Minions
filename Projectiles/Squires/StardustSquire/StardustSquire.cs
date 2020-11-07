@@ -59,6 +59,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		private Vector2 initialVelocity = Vector2.Zero;
 		private float maxSpeed = default;
 		protected float inertia = 8;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			ProjectileID.Sets.MinionShot[projectile.type] = false; // hack to undo TransientMinion.SetStaticDefaults
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+		}
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 100);

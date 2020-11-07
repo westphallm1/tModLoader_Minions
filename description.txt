@@ -6,6 +6,9 @@ Note: This mod is currently only tested in single player.
 
 
 === Version History ==
+v0.3.0 - Many more resprites courtesy of SkyanUltra
+       - Re-AI several minions to make more unique
+       - Add 4 new Minions and 2 new Squires
 v0.2.1 - Add many resprites courtesy of SkyanUltra
        - Polish several minions & armor set based on playtesting feeback
 v0.2 - Squires introduced, minions switched to use local iFrames
@@ -15,19 +18,21 @@ Crafting Cheat Sheet (Also available from homepage):
 === Minions ===
 --- Pre Hardmode ---
 Flying Acorn - 6 Acorn, 12 Wood @ Workbench
-Copper StarSword - 1 Copper Shortsword, 3 Fallen Stars @ Anvil
 Paper Surfer - 30 Clay Blocks, 30 Cloud Blocks @ Anvil
-Balloon Buddy - 14 Gold or Platinum Bars @ Anvil
+Corrupt/Crimson Cell - 12 Demonite/Crimtane Bars + 6 Shadow Scales/Tissue Samples @ Anvil
+Starry Skysword - 8 Feathers, 3 Fallen Stars @ Anvil
 Meteor Fist - 14 Meteor Bars @ Anvil
-Bone Serpent - 75 Bones @ Hellforge
+Bumble Bombarier - Bee Queen (33%)
+Balloon Buddy - Sold by Party Girl
 --- Hardmode ---
+Bone Serpent - WoF (25%)
 Star Surfer - 6 Fallen Stars, 10 Souls of Light @ Anvil
 Void Knife - 50 Throwing Knives, 10 Souls of Night @ Anvil
-Copter-X - 12 Adamantite Bars, 6 Souls of Light @ Anvil
-Goblin Gunner - 12 Titanium Bars, 6 Souls of Night @ Mythril Anvil
-Flying Sword - 12 Hallowed Bars @ Mythril Anvil
+Goblin Gunner - Goblin Summoner (33%)
+Copter-X - 12 Hallowed Bars, 1 Mechanical Lens @ Mythril Anvil
+The Clarent - 12 Hallowed Bars, 10 Souls of Flight @ Mythril Anvil
 Crystal Fist - 10 Crystal Shards, 10 Souls of Might @ Mythril Anvil
-Flying Snake - 12 Chlorophite Bars, 6 Solar Tablet Fragments @ Mythril Anvil
+Charred Chimera - Hell Armored Bones (2.5%)
 Spirit Revolver - 12 Spectre Bars, 1 Illegal Gun Parts @ Mythril Anvil
 Eclipse Herald - 18 Solar Fragments @ Ancient Manipulator
 
@@ -35,6 +40,7 @@ Eclipse Herald - 18 Solar Fragments @ Ancient Manipulator
 === Squires ===
 --- Pre Hardmode ---
 Mushroom Squire - 8 Mushrooms, 18 Wood @ Anvil
+Pumpkin Squire - 15 Pumpkins @ Anvil
 Shadow Squire - 12 Demonite Bars @ Anvil
 Crimson Squire - 12 Crimtane Bars @ Anvil
 Ancient Cobalt Squire - 8% drop from Man Eaters
@@ -46,16 +52,19 @@ Adamantite Squire - 14 Adamantite Bars @ Mythril Anvil
 Titanium Squire - 14 Titanium Bars @ Mythril Anvil
 Squ-Eye-re - 10% drop from Eyezor
 Soulbound Arsenal - 1 Soulbound Sword + 1 Soulbound Bow + 1 Broken Hero's Sword @ Mythril Anvil
+Potted Pal - Plantera (25%)
 Armored Bone Squire - 3% drop from Blue Armored Bones
 Stardust Squire - 18 Stardust Fragments @ Mythril Anvil
 
 
 === Armor ===
 --- Pre Hardmode ---
-Forager's Set - 2 Daybloom + 2 Moonglow + 2 Blinkroot + 36 Wood @ Workbench
+Mildew Set - Mushrooms + Daybloom + Wood @ Workbench
 
 
 === Accessories ===
+--- Pre Hardmode ---
+Cursed Squire Skull - Skeletron (50%)
 --- Hardmode ---
 Charm of Many Minions - 1 Light Shard + 8 Soul of Night @ Anvil
 Charm of Mighty Minions - 1 Dark Shard + 8 Soul of Light @ Anvil

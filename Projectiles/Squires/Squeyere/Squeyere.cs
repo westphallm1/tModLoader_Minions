@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
@@ -40,6 +41,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		}
 	}
 
+	public class SqueyereLaser: ModProjectile
+	{
+		public override string Texture => "Terraria/Projectile_"+ProjectileID.GreenLaser;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.CloneDefaults(ProjectileID.GreenLaser);
+		}
+	}
 
 	public class SqueyereMinion : WeaponHoldingSquire<SqueyereMinionBuff>
 	{

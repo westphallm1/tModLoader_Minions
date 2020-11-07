@@ -12,6 +12,7 @@ namespace AmuletOfManyMinions
 			NPCSets.Load();
 			SquireMinionTypes.Load();
 			NecromancerAccessory.Load();
+			SquireGlobalProjectile.Load();
 		}
 
 		public override void PostSetupContent()
@@ -24,6 +25,7 @@ namespace AmuletOfManyMinions
 			NPCSets.Unload();
 			SquireMinionTypes.Unload();
 			NecromancerAccessory.Unload();
+			SquireGlobalProjectile.Unload();
 		}
 	}
 }

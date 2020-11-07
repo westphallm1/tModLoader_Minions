@@ -108,6 +108,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			framesSinceHadTarget++;
 			if (vectorToTarget is Vector2 targetPosition)
 			{
+				if(player.whoAmI == Main.myPlayer && oldVectorToTarget == null)
+				{
+					projectile.netUpdate = true;
+				}
 				projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
 				TargetedMovement(targetPosition);
@@ -127,6 +131,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				if (framesSinceHadTarget > 30)
 				{
 					projectile.tileCollide = false;
+				}
+				if(player.whoAmI == Main.myPlayer && oldVectorToTarget != null)
+				{
+					projectile.netUpdate = true;
 				}
 				oldVectorToTarget = null;
 				IdleMovement(vectorToIdle);

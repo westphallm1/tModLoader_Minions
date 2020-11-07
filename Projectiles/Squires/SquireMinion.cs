@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -135,6 +136,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				float xVelDiff = Math.Abs(projectile.oldVelocity.X - projectile.velocity.X);
+				float yVelDiff = Math.Abs(projectile.oldVelocity.Y - projectile.velocity.Y);
+				if(xVelDiff > 1 || yVelDiff > 1)
+				{
+					projectile.netUpdate = true;
+				}
+			}
 			if (vectorToTargetPosition.Length() < 4 && relativeVelocity.Length() < 1)
 			{
 				relativeVelocity = Vector2.Zero;

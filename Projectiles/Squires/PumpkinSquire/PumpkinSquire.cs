@@ -60,8 +60,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
 		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

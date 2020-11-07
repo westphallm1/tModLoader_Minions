@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 		public override void SetStaticDefaults()
 		{
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
 		}
 
 		public override void SetDefaults()
@@ -61,7 +61,29 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		public override void AI()
 		{
 			base.AI();
-			Dust.NewDust(projectile.Center, 1, 1, DustType<MinionWaypointDust>(), 0, 0, Scale: 2f);
+			for (int i = 0; i < 2; i ++)
+			{
+				int dustSpawned = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88, projectile.velocity.X, projectile.velocity.Y, 50, default, 1.2f);
+				Main.dust[dustSpawned].noGravity = true;
+				Main.dust[dustSpawned].velocity *= 0.3f;
+			}
+			if (projectile.ai[1] == 0f)
+			{
+				projectile.ai[1] = 1f;
+				Main.PlaySound(SoundID.Item8, projectile.position);
+			}
+		}
+		public override void Kill(int timeLeft)
+		{
+			base.Kill(timeLeft);
+			Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y);
+			for (int i = 0; i < 15; i++)
+			{
+				int dustCreated = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88, projectile.oldVelocity.X, projectile.oldVelocity.Y, 50, default(Color), 1.2f);
+				Main.dust[dustCreated].noGravity = true;
+				Main.dust[dustCreated].scale *= 1.25f;
+				Main.dust[dustCreated].velocity *= 0.5f;
+			}
 		}
 	}
 
@@ -115,13 +137,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				{
 					Projectile.NewProjectile(projectile.Center,
 						angleVector,
-						ProjectileID.SapphireBolt,
+						ProjectileType<AncientCobaltBolt>(),
 						projectile.damage,
 						projectile.knockBack,
 						Main.myPlayer);
 				}
 			}
 		}
+
 
 		protected override float WeaponDistanceFromCenter() => 12;
 

@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Items.Accessories;
+using AmuletOfManyMinions.Items.Accessories.SquireSkull;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void ResetEffects()
 		{
 			squireSkullAccessory = false;
-			squireDebuffOnHit = -1;
 		}
 
 		public bool HasSquire()
@@ -46,6 +46,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			return null;
 		}
 
+		public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)
+		{
+			base.ModifyWeaponDamage(item, ref add, ref mult, ref flat);
+			if(!SquireMinionTypes.Contains(item.shoot))
+			{
+				return;
+			}
+			if(squireSkullAccessory)
+			{
+				mult += 0.1f;
+			}
+		}
 		public override void PostUpdate()
 		{
 			Projectile mySquire = GetSquire();
@@ -54,16 +66,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, skullType, 0, 0, player.whoAmI);
 			}
+			if(player.ownedProjectileCounts[skullType] == 0)
+			{
+				squireDebuffOnHit = -1;
+			}
 		}
 	}
 
-	class SquireShotProjectile: GlobalProjectile
+	class SquireGlobalProjectile: GlobalProjectile
 	{
-		public static bool[] isSquireShot;
+		public static HashSet<int> isSquireShot;
 
 		public static void Load()
 		{
-			isSquireShot = new bool[Main.maxProjectiles];
+			isSquireShot = new HashSet<int>();
 		}
 
 		public static void Unload()
@@ -73,23 +89,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
 		{
-			if(!SquireMinionTypes.Contains(projectile.type) && !isSquireShot[projectile.whoAmI])
+			if(!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
 			{
 				return;
 			}
 			SquireModPlayer player = Main.player[projectile.owner].GetModPlayer<SquireModPlayer>();
 			int debuffType = player.squireDebuffOnHit;
 			int duration = player.squireDebuffTime;
-			if(debuffType == -1)
+			if(debuffType == -1 || Main.rand.NextFloat() > 0.25f)
 			{
 				return;
 			}
 			target.AddBuff(debuffType, duration);
-		}
-
-		public override void Kill(Projectile projectile, int timeLeft)
-		{
-			isSquireShot[projectile.whoAmI] = false;
 		}
 	}
 }

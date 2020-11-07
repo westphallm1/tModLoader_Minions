@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy;
+﻿using AmuletOfManyMinions.Items.Accessories.SquireSkull;
+using AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy;
 using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
 using AmuletOfManyMinions.Projectiles.Minions.CharredChimera;
@@ -35,6 +36,11 @@ namespace AmuletOfManyMinions.NPCs
 			if (spawnChance < 0.33f && npc.type == NPCID.QueenBee)
 			{
 				Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1, prefixGiven: -1);
+			}
+
+			if(spawnChance < 0.5f && npc.type == NPCID.SkeletronHead)
+			{
+				Item.NewItem(npc.getRect(), ItemType<SquireSkullAccessory>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.01f && NPCSets.angryBones.Contains(npc.netID))

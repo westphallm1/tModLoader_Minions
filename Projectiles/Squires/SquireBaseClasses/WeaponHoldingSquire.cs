@@ -121,6 +121,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			//Vector2 distanceFromNPC = target.Center - projectile.Center;
 			//distanceFromNPC.SafeNormalize();
 			//relativeVelocity += -distanceFromNPC * knockbackSelf;
+			base.OnHitNPC(target, damage, knockback, crit);
 		}
 
 		protected virtual float GetFixedWeaponAngle()

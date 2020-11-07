@@ -88,6 +88,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				OnEmpower();
 				projectile.ai[0] = 0;
+				if(player.whoAmI == Main.myPlayer)
+				{
+					projectile.netUpdate = true;
+				}
 			}
 			projectile.damage = ComputeDamage();
 			return Vector2.Zero;

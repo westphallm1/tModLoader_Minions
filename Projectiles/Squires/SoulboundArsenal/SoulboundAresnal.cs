@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
 		}
 
 		public override void SetDefaults()
