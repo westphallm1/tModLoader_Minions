@@ -10,7 +10,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 	public static class SquireMinionTypes
 	{
-		private static HashSet<int> squireTypes = new HashSet<int>();
+		public static HashSet<int> squireTypes = new HashSet<int>();
 
 		public static void Add(int squireType)
 		{
