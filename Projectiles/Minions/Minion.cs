@@ -157,15 +157,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public Vector2? BeaconPosition(Vector2 center, float maxRange, float noLOSRange = 0)
 		{
+			int type = MinionWaypoint.Type;
 			// should automatically fall through to here if can't hit target
-			if (player.ownedProjectileCounts[ProjectileType<MinionWaypoint>()] == 0)
+			if (player.ownedProjectileCounts[type] == 0)
 			{
 				return null;
 			}
 			Vector2? waypointCenter = null;
-			foreach (Projectile p in Main.projectile)
+			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
-				if (p.type == ProjectileType<MinionWaypoint>() && p.active && p.owner == Main.myPlayer)
+				Projectile p = Main.projectile[i];
+				if (p.active && p.owner == Main.myPlayer && p.type == type)
 				{
 					Vector2 target = p.position;
 					float distance = Vector2.Distance(target, center);

@@ -237,20 +237,25 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				Vector2 angleVector = UnitVectorFromWeaponAngle();
-				angleVector *= projectileVelocity;
-				float[] amplitudes = { 16, 16, 0 };
-				float[] phases = { (float)(3 * Math.PI / 2), (float)(Math.PI / 2), 0 };
-				for (int i = 0; i < 2; i++)
+				if (Main.myPlayer == player.whoAmI)
 				{
-					Projectile.NewProjectile(projectile.Center,
-						angleVector,
-						ProjectileType<SoulboundArsenalArrow>(),
-						projectile.damage,
-						projectile.knockBack,
-						Main.myPlayer,
-						amplitudes[i],
-						phases[i]);
+					int type = ProjectileType<SoulboundArsenalArrow>();
+					Vector2 angleVector = UnitVectorFromWeaponAngle();
+					angleVector *= projectileVelocity;
+					float[] amplitudes = { 16, 16, 0 };
+					float[] phases = { (float)(3 * Math.PI / 2), (float)(Math.PI / 2), 0 };
+					for (int i = 0; i < 2; i++)
+					{
+						Projectile.NewProjectile(
+							projectile.Center,
+							angleVector,
+							type,
+							projectile.damage,
+							projectile.knockBack,
+							Main.myPlayer,
+							amplitudes[i],
+							phases[i]);
+					}
 				}
 			}
 		}
@@ -285,15 +290,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override Vector2 IdleBehavior()
 		{
-			if (player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0)
+			if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0)
 			{
 				Projectile.NewProjectile(
 					projectile.position,
 					projectile.velocity,
 					ProjectileType<SoulboundArsenalBowMinion>(),
 					projectile.damage,
-					projectile.knockBack
-					, Main.myPlayer,
+					projectile.knockBack,
+					Main.myPlayer,
 					projectile.identity);
 			}
 			Lighting.AddLight(projectile.Center, Color.Purple.ToVector3() * 0.5f);
@@ -315,16 +320,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;
-				vector2Mouse.Normalize();
-				vector2Mouse *= projectileVelocity;
-				Projectile.NewProjectile(projectile.Center,
-					vector2Mouse,
-					ProjectileType<SoulboundArsenalSwordProjectile>(),
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer,
-					8);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;
+					vector2Mouse.Normalize();
+					vector2Mouse *= projectileVelocity;
+					Projectile.NewProjectile(projectile.Center,
+						vector2Mouse,
+						ProjectileType<SoulboundArsenalSwordProjectile>(),
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer,
+						8);
+				}
 			}
 		}
 

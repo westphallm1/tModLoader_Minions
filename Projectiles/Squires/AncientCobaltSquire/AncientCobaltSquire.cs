@@ -46,11 +46,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 	{
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.SapphireBolt;
+
+		public override void SetStaticDefaults()
+		{
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			projectile.CloneDefaults(ProjectileID.SapphireBolt);
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 
 		public override void AI()
@@ -106,12 +111,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				angleVector *= projectileVelocity;
-				Projectile.NewProjectile(projectile.Center,
-					angleVector,
-					ProjectileID.SapphireBolt,
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(projectile.Center,
+						angleVector,
+						ProjectileID.SapphireBolt,
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer);
+				}
 			}
 		}
 

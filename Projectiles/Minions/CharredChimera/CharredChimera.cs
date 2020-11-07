@@ -57,6 +57,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[projectile.type] = 2;
+			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
@@ -67,8 +69,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			projectile.width = 16;
 			projectile.height = 16;
 			attackFrames = 180;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 			framesSinceLastHit = 5;
 			hitsSinceRetreat = 0;
 		}
@@ -211,9 +211,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			Lighting.AddLight(projectile.Center, Color.Red.ToVector3() * 0.5f);
 			int headType = ProjectileType<CharredChimeraMinionHead>();
 			int currentHeadCount = player.ownedProjectileCounts[headType];
-			for (int i = currentHeadCount; i < projectile.minionSlots + 1; i++)
+			if (Main.myPlayer == player.whoAmI)
 			{
-				Projectile.NewProjectile(projectile.Center, projectile.velocity, headType, projectile.damage, projectile.knockBack, player.whoAmI);
+				for (int i = currentHeadCount; i < projectile.minionSlots + 1; i++)
+				{
+					Projectile.NewProjectile(projectile.Center, projectile.velocity, headType, projectile.damage, projectile.knockBack, player.whoAmI);
+				}
 			}
 			allHeads = GetMinionsOfType(ProjectileType<CharredChimeraMinionHead>());
 			TellHeadsToAttack();

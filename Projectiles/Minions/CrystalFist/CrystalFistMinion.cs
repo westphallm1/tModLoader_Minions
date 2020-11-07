@@ -102,7 +102,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			base.IdleBehavior();
 			List<Projectile> minions = GetActiveMinions();
 			Projectile leader = GetFirstMinion(minions);
-			if (leader.minionPos == projectile.minionPos &&
+			if (Main.myPlayer == player.whoAmI &&
+				leader.minionPos == projectile.minionPos &&
 				player.ownedProjectileCounts[ProjectileType<CrystalFistHeadMinion>()] == 0)
 			{
 				Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<CrystalFistHeadMinion>(), 0, 0, Main.myPlayer);

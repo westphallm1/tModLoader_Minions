@@ -101,7 +101,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			base.IdleBehavior();
 			List<Projectile> minions = GetActiveMinions();
 			Projectile leader = GetFirstMinion(minions);
-			if (leader.minionPos == projectile.minionPos &&
+			if (Main.myPlayer == player.whoAmI &&
+				leader.minionPos == projectile.minionPos &&
 				player.ownedProjectileCounts[ProjectileType<MeteorFistHead>()] == 0)
 			{
 				Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<MeteorFistHead>(), 0, 0, Main.myPlayer);

@@ -50,6 +50,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// use local projectile i-frames
 			projectile.usesLocalNPCImmunity = true;
 			projectile.localNPCHitCooldown = 10;
+			// Makes sure this projectile is synced to other newly joined players 
+			projectile.netImportant = true;
 		}
 
 

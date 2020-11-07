@@ -16,7 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[projectile.type] = 1;
+			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
+
 		public override void SetDefaults()
 		{
 			projectile.width = 24;
@@ -27,9 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			projectile.timeLeft = 120;
 			hitTarget = false;
 			lookingForTarget = false;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
+
 		private void LookForTarget()
 		{
 			if ((PlayerTargetPosition(600) ?? ClosestEnemyInRange(600)) is Vector2 target)

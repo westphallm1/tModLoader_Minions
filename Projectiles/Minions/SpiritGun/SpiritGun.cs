@@ -210,14 +210,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			if (framesSinceLastHit > 15 && projectile.ai[1] > 0 && !isReloading)
 			{
 				Vector2 pos = projectile.Center;
-				Projectile.NewProjectile(pos, vectorToTargetPosition,
-					ProjectileType<SpiritGunMinionBullet>(),
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer,
-					vectorToTargetPosition.X,
-					vectorToTargetPosition.Y);
-				Main.PlaySound(SoundID.Item97);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(
+						pos,
+						vectorToTargetPosition,
+						ProjectileType<SpiritGunMinionBullet>(),
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer,
+						vectorToTargetPosition.X,
+						vectorToTargetPosition.Y);
+				}
+				Main.PlaySound(SoundID.Item97, pos);
 				// TODO handle flipping and stuff
 				projectile.rotation = vectorToTargetPosition.ToRotation();
 				projectile.ai[1] -= 1;

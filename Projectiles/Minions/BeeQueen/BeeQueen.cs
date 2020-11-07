@@ -77,6 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				return;
 			}
 			inSummoningMode = true;
+			projectile.netUpdate = true; //TODO investigate if this is enough
 			projectile.friendly = false;
 			projectile.timeLeft = timeToLive - (int)projectile.ai[0] - 1;
 			projectile.velocity = Vector2.Zero;
@@ -88,6 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
+			//Calling clientside
 			EnterSummoningMode();
 		}
 
@@ -122,13 +124,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				{
 					Dust.NewDust(projectile.Top, 16, 16, 153);
 				}
-				Projectile.NewProjectile(
-					projectile.Center,
-					rememberedEnemyAngle,
-					ProjectileType<HoneySlime>(),
-					projectile.damage,
-					projectile.knockBack,
-					player.whoAmI);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(
+						projectile.Center,
+						rememberedEnemyAngle,
+						ProjectileType<HoneySlime>(),
+						projectile.damage,
+						projectile.knockBack,
+						player.whoAmI);
+				}
 			}
 			if (projectile.timeLeft == 60)
 			{
@@ -239,7 +244,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 					break;
 				}
 			}
-			if (Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
+			if (Main.myPlayer == player.whoAmI && Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
 			{
 				Projectile.NewProjectile(
 					projectile.Center,
