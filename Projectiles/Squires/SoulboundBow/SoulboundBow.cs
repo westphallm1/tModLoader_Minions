@@ -149,15 +149,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				Vector2 angleVector = UnitVectorFromWeaponAngle();
-				angleVector *= projectileVelocity;
-				Projectile.NewProjectile(projectile.Center,
-					angleVector,
-					ProjectileType<SoulboundArrow>(),
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer);
-				Main.PlaySound(SoundID.Item39);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Vector2 angleVector = UnitVectorFromWeaponAngle();
+					angleVector *= projectileVelocity;
+					Projectile.NewProjectile(
+						projectile.Center,
+						angleVector,
+						ProjectileType<SoulboundArrow>(),
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer);
+				}
+				Main.PlaySound(SoundID.Item39, projectile.Center);
 			}
 		}
 

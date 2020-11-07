@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 {
 	public abstract class NecromancerAccessory : ModItem
 	{
-		internal static List<NecromancerAccessory> accessories = new List<NecromancerAccessory>();
+		internal static List<NecromancerAccessory> accessories;
 		protected virtual float spawnVelocity => 0;
 
 		protected virtual float onKillChance => 0;
@@ -19,6 +19,17 @@ namespace AmuletOfManyMinions.Items.Accessories
 		protected virtual int projType => 0;
 		protected virtual int maxTransientMinions => 0;
 		protected virtual float baseDamage => 0;
+
+		public static void Load()
+		{
+			accessories = new List<NecromancerAccessory>();
+		}
+
+		public static void Unload()
+		{
+			accessories?.Clear();
+			accessories = null;
+		}
 
 		internal virtual void ModifyPlayerWeaponDamage(NecromancerAccessoryPlayer necromancerAccessoryPlayer, Item item, ref float add, ref float mult, ref float flat)
 		{

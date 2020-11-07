@@ -57,7 +57,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		public override void SetStaticDefaults()
 		{
 			Main.projFrames[projectile.type] = 3;
+			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -69,9 +72,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			projectile.height = 8;
 			projectile.friendly = true;
 			projectile.ignoreWater = true;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
+
 		public override void AI()
 		{
 			base.AI();
@@ -103,7 +105,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.damage = 35;
 			diveBombFrameRateLimit = 30;
 			diveBombSpeed = 20;
 			diveBombInertia = 10;
@@ -112,7 +113,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			animationFrames = 160;
 			projectile.width = 26;
 			projectile.height = 32;
-			projectile.type = ProjectileType<StarSurferMinion>();
 			projectileType = ProjectileType<StarSurferProjectile>();
 		}
 
@@ -150,9 +150,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			if (projectileFrameCount++ > projectileFireRate)
 			{
 				projectileFrameCount = 0;
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= projectileVelocity;
-				Projectile.NewProjectile(projectile.position, vectorToTargetPosition, projectileType, projectileDamage, 5, Main.myPlayer, ai0: projectile.minionPos);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					vectorToTargetPosition.SafeNormalize();
+					vectorToTargetPosition *= projectileVelocity;
+					Projectile.NewProjectile(projectile.position, vectorToTargetPosition, projectileType, projectileDamage, 5, Main.myPlayer, ai0: projectile.minionPos);
+				}
 			}
 		}
 

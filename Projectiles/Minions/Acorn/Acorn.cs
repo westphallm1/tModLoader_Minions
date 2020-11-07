@@ -134,7 +134,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 					break;
 				}
 			}
-			if (IsMyTurn() && Math.Abs(vectorAbove.X) <= 32)
+			if (Main.myPlayer == player.whoAmI && IsMyTurn() && Math.Abs(vectorAbove.X) <= 32)
 			{
 				Projectile.NewProjectile(
 					projectile.Center,

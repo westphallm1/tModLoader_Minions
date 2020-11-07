@@ -24,57 +24,52 @@ namespace AmuletOfManyMinions.NPCs
 
 			if (spawnChance < 0.08f && npc.type == NPCID.ManEater)
 			{
-				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1, prefixGiven: -1);
 			}
-			if (spawnChance < 0.03f && npc.TypeName == "Hornet")
+
+			if (spawnChance < 0.03f && NPCSets.hornets.Contains(npc.netID))
 			{
-				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.33f && npc.type == NPCID.QueenBee)
 			{
-				Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.01f && (npc.type == NPCID.AngryBones ||
-			   npc.type == NPCID.AngryBonesBig ||
-			   npc.type == NPCID.AngryBonesBigHelmet ||
-			   npc.type == NPCID.AngryBonesBigMuscle))
+			if (spawnChance < 0.01f && NPCSets.angryBones.Contains(npc.netID))
 			{
-				Item.NewItem(npc.getRect(), ItemType<BoneSquireMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<BoneSquireMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.25f && npc.type == NPCID.WallofFlesh)
 			{
-				Item.NewItem(npc.getRect(), ItemType<BoneSerpentMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<BoneSerpentMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.33f && npc.type == NPCID.GoblinSummoner)
 			{
-				Item.NewItem(npc.getRect(), ItemType<GoblinGunnerMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<GoblinGunnerMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.10f && npc.type == NPCID.Eyezor)
 			{
-				Item.NewItem(npc.getRect(), ItemType<SqueyereMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<SqueyereMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.33f && npc.type == NPCID.Plantera)
 			{
-				Item.NewItem(npc.getRect(), ItemType<PottedPalMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<PottedPalMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.03f && (npc.type == NPCID.BlueArmoredBones ||
-			   npc.type == NPCID.BlueArmoredBonesMace ||
-			   npc.type == NPCID.BlueArmoredBonesNoPants ||
-			   npc.type == NPCID.BlueArmoredBonesSword))
+			if (spawnChance < 0.03f && NPCSets.blueArmoredBones.Contains(npc.netID))
 			{
-				Item.NewItem(npc.getRect(), ItemType<ArmoredBoneSquireMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<ArmoredBoneSquireMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.025f && npc.TypeName == "Hell Armored Bones")
+			if (spawnChance < 0.025f && NPCSets.hellArmoredBones.Contains(npc.netID))
 			{
-				Item.NewItem(npc.getRect(), ItemType<CharredChimeraMinionItem>(), 1);
+				Item.NewItem(npc.getRect(), ItemType<CharredChimeraMinionItem>(), 1, prefixGiven: -1);
 			}
 		}
 

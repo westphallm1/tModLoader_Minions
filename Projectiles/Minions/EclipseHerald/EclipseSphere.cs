@@ -15,6 +15,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[projectile.type] = 6;
+			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
@@ -25,8 +27,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			projectile.tileCollide = false;
 			projectile.timeLeft = 300;
 			hitTarget = false;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 		public override void AI()
 		{

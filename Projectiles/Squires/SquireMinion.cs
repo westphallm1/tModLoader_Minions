@@ -10,7 +10,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 	public static class SquireMinionTypes
 	{
-		public static HashSet<int> squireTypes = new HashSet<int>();
+		public static HashSet<int> squireTypes;
+
+		public static void Load()
+		{
+			squireTypes = new HashSet<int>();
+		}
+
+		public static void Unload()
+		{
+			squireTypes = null;
+		}
 
 		public static void Add(int squireType)
 		{
@@ -44,6 +54,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			SquireMinionTypes.Add(projectile.type);
 			ProjectileID.Sets.MinionTargettingFeature[projectile.type] = false;
 
+			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
+
 			// These below are needed for a minion
 			// Denotes that this projectile is a pet or minion
 			Main.projPet[projectile.type] = false;
@@ -56,8 +69,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			base.SetDefaults();
 			projectile.minion = false;
 			projectile.minionSlots = 0;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 
 		public override bool? CanCutTiles()

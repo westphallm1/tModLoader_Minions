@@ -155,13 +155,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
-				Vector2 towardsMouse = Main.MouseWorld - flailPosition;
-				Projectile.NewProjectile(flailPosition,
-					angleVector * ArmoredBoneSquireSpiritProjectile.STARTING_VELOCITY,
-					ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
-					(int)(projectile.damage * 1.25f),
-					projectile.knockBack,
-					Main.myPlayer);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(
+						flailPosition,
+						angleVector * ArmoredBoneSquireSpiritProjectile.STARTING_VELOCITY,
+						ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
+						(int)(projectile.damage * 1.25f),
+						projectile.knockBack,
+						Main.myPlayer);
+				}
+				Main.PlaySound(SoundID.Item1, flailPosition);
 			}
 		}
 

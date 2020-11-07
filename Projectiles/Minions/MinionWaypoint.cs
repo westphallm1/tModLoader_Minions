@@ -13,6 +13,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public const int duration = 180000; // a long time
 		private int rotationFrame = 0;
 		public const int rotationFrames = 60;
+
+		public static int Type => ProjectileType<MinionWaypoint>();
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
