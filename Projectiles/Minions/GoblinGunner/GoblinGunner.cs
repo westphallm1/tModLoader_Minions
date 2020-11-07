@@ -157,12 +157,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 				Vector2 pos = projectile.Center;
 				framesSinceLastHit = 0;
 				projectile.spriteDirection = vectorToTargetPosition.X > 0 ? -1 : 1;
-				Projectile.NewProjectile(pos, vectorToTargetPosition,
-					ProjectileType<GoblinGunnerBullet>(),
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer);
-				Main.PlaySound(SoundID.Item97);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(
+						pos,
+						vectorToTargetPosition,
+						ProjectileType<GoblinGunnerBullet>(),
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer);
+				}
+				Main.PlaySound(SoundID.Item97, pos);
 			}
 		}
 

@@ -161,13 +161,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 				vectorToTargetPosition *= 8;
 				Vector2 pos = projectile.Center;
 				pos.Y -= 24;
-				Projectile.NewProjectile(pos, vectorToTargetPosition,
-					ProjectileType<EclipseSphere>(),
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer,
-					projectile.minionSlots - 1,
-					npcIndex);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(
+						pos,
+						vectorToTargetPosition,
+						ProjectileType<EclipseSphere>(),
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer,
+						projectile.minionSlots - 1,
+						npcIndex);
+				}
 				framesSinceLastHit = 0;
 			}
 		}

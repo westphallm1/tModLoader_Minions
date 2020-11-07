@@ -177,15 +177,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;
-				vector2Mouse.Normalize();
-				vector2Mouse *= projectileVelocity;
-				Projectile.NewProjectile(projectile.Center,
-					vector2Mouse,
-					ProjectileType<PumpkinBomb>(),
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;
+					vector2Mouse.Normalize();
+					vector2Mouse *= projectileVelocity;
+					Projectile.NewProjectile(projectile.Center,
+						vector2Mouse,
+						ProjectileType<PumpkinBomb>(),
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer);
+				}
 			}
 		}
 

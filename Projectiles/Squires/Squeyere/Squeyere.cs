@@ -85,17 +85,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				Vector2 angleVector = UnitVectorFromWeaponAngle();
-				angleVector *= projectileVelocity;
-				Vector2 weaponCenter = WeaponCenterOfRotation;
-				weaponCenter.X *= projectile.spriteDirection;
-				Vector2 tipCenter = projectile.Center + weaponCenter;
-				Projectile.NewProjectile(tipCenter,
-					angleVector,
-					ProjectileID.GreenLaser,
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Vector2 angleVector = UnitVectorFromWeaponAngle();
+					angleVector *= projectileVelocity;
+					Vector2 weaponCenter = WeaponCenterOfRotation;
+					weaponCenter.X *= projectile.spriteDirection;
+					Vector2 tipCenter = projectile.Center + weaponCenter;
+					Projectile.NewProjectile(
+						tipCenter,
+						angleVector,
+						ProjectileID.GreenLaser,
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer);
+				}
 
 				Main.PlaySound(SoundID.Item33, projectile.Center);
 			}

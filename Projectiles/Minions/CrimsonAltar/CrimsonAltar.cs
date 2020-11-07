@@ -226,11 +226,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 					vectorToTargetPosition *= projectileVelocity;
 					Vector2 pos = projectile.Center;
 					framesSinceLastHit = 0;
-					Projectile.NewProjectile(pos, vectorToTargetPosition,
-						projType,
-						projectile.damage,
-						projectile.knockBack,
-						Main.myPlayer);
+					if (Main.myPlayer == player.whoAmI)
+					{
+						Projectile.NewProjectile(
+							pos,
+							vectorToTargetPosition,
+							projType,
+							projectile.damage,
+							projectile.knockBack,
+							Main.myPlayer);
+					}
 				}
 			}
 		}

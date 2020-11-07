@@ -106,12 +106,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				angleVector *= projectileVelocity;
-				Projectile.NewProjectile(projectile.Center,
-					angleVector,
-					ProjectileID.SapphireBolt,
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(projectile.Center,
+						angleVector,
+						ProjectileID.SapphireBolt,
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer);
+				}
 			}
 		}
 

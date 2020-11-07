@@ -345,23 +345,31 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				if ((attackSequence++ * AttackFrames) % 180 < AttackFrames &&
 					player.ownedProjectileCounts[ProjectileType<StardustGuardianProjectile>()] == 0)
 				{
-					angleVector *= projectileVelocity * 0.75f;
-					Projectile.NewProjectile(projectile.Center,
-						angleVector,
-						ProjectileType<StardustGuardianProjectile>(),
-						projectile.damage,
-						projectile.knockBack,
-						Main.myPlayer);
+					if (Main.myPlayer == player.whoAmI)
+					{
+						angleVector *= projectileVelocity * 0.75f;
+						Projectile.NewProjectile(
+							projectile.Center,
+							angleVector,
+							ProjectileType<StardustGuardianProjectile>(),
+							projectile.damage,
+							projectile.knockBack,
+							Main.myPlayer);
+					}
 				}
 				else
 				{
-					angleVector *= projectileVelocity;
-					Projectile.NewProjectile(projectile.Center,
-						angleVector,
-						ProjectileType<StardustBeastProjectile>(),
-						projectile.damage,
-						projectile.knockBack,
-						Main.myPlayer);
+					if (Main.myPlayer == player.whoAmI)
+					{
+						angleVector *= projectileVelocity;
+						Projectile.NewProjectile(
+							projectile.Center,
+							angleVector,
+							ProjectileType<StardustBeastProjectile>(),
+							projectile.damage,
+							projectile.knockBack,
+							Main.myPlayer);
+					}
 				}
 			}
 		}

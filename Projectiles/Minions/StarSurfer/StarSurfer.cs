@@ -150,9 +150,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			if (projectileFrameCount++ > projectileFireRate)
 			{
 				projectileFrameCount = 0;
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= projectileVelocity;
-				Projectile.NewProjectile(projectile.position, vectorToTargetPosition, projectileType, projectileDamage, 5, Main.myPlayer, ai0: projectile.minionPos);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					vectorToTargetPosition.SafeNormalize();
+					vectorToTargetPosition *= projectileVelocity;
+					Projectile.NewProjectile(projectile.position, vectorToTargetPosition, projectileType, projectileDamage, 5, Main.myPlayer, ai0: projectile.minionPos);
+				}
 			}
 		}
 

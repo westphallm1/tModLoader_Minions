@@ -122,13 +122,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				{
 					Dust.NewDust(projectile.Top, 16, 16, 153);
 				}
-				Projectile.NewProjectile(
-					projectile.Center,
-					rememberedEnemyAngle,
-					ProjectileType<HoneySlime>(),
-					projectile.damage,
-					projectile.knockBack,
-					player.whoAmI);
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(
+						projectile.Center,
+						rememberedEnemyAngle,
+						ProjectileType<HoneySlime>(),
+						projectile.damage,
+						projectile.knockBack,
+						player.whoAmI);
+				}
 			}
 			if (projectile.timeLeft == 60)
 			{
@@ -239,7 +242,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 					break;
 				}
 			}
-			if (Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
+			if (Main.myPlayer == player.whoAmI && Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
 			{
 				Projectile.NewProjectile(
 					projectile.Center,

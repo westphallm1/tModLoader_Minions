@@ -211,9 +211,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			Lighting.AddLight(projectile.Center, Color.Red.ToVector3() * 0.5f);
 			int headType = ProjectileType<CharredChimeraMinionHead>();
 			int currentHeadCount = player.ownedProjectileCounts[headType];
-			for (int i = currentHeadCount; i < projectile.minionSlots + 1; i++)
+			if (Main.myPlayer == player.whoAmI)
 			{
-				Projectile.NewProjectile(projectile.Center, projectile.velocity, headType, projectile.damage, projectile.knockBack, player.whoAmI);
+				for (int i = currentHeadCount; i < projectile.minionSlots + 1; i++)
+				{
+					Projectile.NewProjectile(projectile.Center, projectile.velocity, headType, projectile.damage, projectile.knockBack, player.whoAmI);
+				}
 			}
 			allHeads = GetMinionsOfType(ProjectileType<CharredChimeraMinionHead>());
 			TellHeadsToAttack();
