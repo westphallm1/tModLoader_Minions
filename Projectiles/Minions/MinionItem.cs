@@ -42,17 +42,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return true;
 		}
 
-		private void ToggleWaypoint()
+		private void ToggleWaypoint(Player player)
 		{
-			if (Main.player[Main.myPlayer].ownedProjectileCounts[ProjectileType<MinionWaypoint>()] == 0)
+			int type = MinionWaypoint.Type;
+			if (player.ownedProjectileCounts[type] == 0)
 			{
-				Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, ProjectileType<MinionWaypoint>(), 0, 0, Main.myPlayer);
+				Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, type, 0, 0, player.whoAmI);
 			}
 			else
 			{
 				foreach (Projectile p in Main.projectile)
 				{
-					if (p.owner == Main.myPlayer && p.active && p.type == ProjectileType<MinionWaypoint>())
+					if (p.active && p.owner == player.whoAmI && p.type == type)
 					{
 						p.Kill();
 					}
@@ -61,9 +62,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		}
 		public override bool CanUseItem(Player player)
 		{
-			if (player.altFunctionUse == 2)
+			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
-				ToggleWaypoint();
+				ToggleWaypoint(player);
 			}
 			return base.CanUseItem(player);
 		}
