@@ -26,7 +26,8 @@ namespace AmuletOfManyMinions.NPCs
 			{
 				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1, prefixGiven: -1);
 			}
-			if (spawnChance < 0.03f && npc.TypeName == "Hornet") //hacky, should use a custom set and check npc.netID
+
+			if (spawnChance < 0.03f && NPCSets.hornets.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1, prefixGiven: -1);
 			}
@@ -36,10 +37,7 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.01f && (npc.type == NPCID.AngryBones ||
-			   npc.type == NPCID.AngryBonesBig ||
-			   npc.type == NPCID.AngryBonesBigHelmet ||
-			   npc.type == NPCID.AngryBonesBigMuscle))
+			if (spawnChance < 0.01f && NPCSets.angryBones.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<BoneSquireMinionItem>(), 1, prefixGiven: -1);
 			}
@@ -64,15 +62,12 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<PottedPalMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.03f && (npc.type == NPCID.BlueArmoredBones ||
-			   npc.type == NPCID.BlueArmoredBonesMace ||
-			   npc.type == NPCID.BlueArmoredBonesNoPants ||
-			   npc.type == NPCID.BlueArmoredBonesSword))
+			if (spawnChance < 0.03f && NPCSets.blueArmoredBones.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<ArmoredBoneSquireMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.025f && npc.TypeName == "Hell Armored Bones") //hacky, should use a custom set and check npc.netID
+			if (spawnChance < 0.025f && NPCSets.hellArmoredBones.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<CharredChimeraMinionItem>(), 1, prefixGiven: -1);
 			}

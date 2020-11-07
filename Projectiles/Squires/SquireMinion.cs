@@ -19,7 +19,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public static void Unload()
 		{
-			squireTypes?.Clear();
 			squireTypes = null;
 		}
 
