@@ -51,8 +51,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else
 			{
-				foreach (Projectile p in Main.projectile)
+				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
+					Projectile p = Main.projectile[i];
 					if (p.active && p.owner == player.whoAmI && p.type == type)
 					{
 						p.Kill();

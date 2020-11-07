@@ -164,8 +164,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				return null;
 			}
 			Vector2? waypointCenter = null;
-			foreach (Projectile p in Main.projectile)
+			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
+				Projectile p = Main.projectile[i];
 				if (p.active && p.owner == Main.myPlayer && p.type == type)
 				{
 					Vector2 target = p.position;
