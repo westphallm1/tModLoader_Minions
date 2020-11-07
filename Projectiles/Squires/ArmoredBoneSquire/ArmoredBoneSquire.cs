@@ -165,6 +165,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 						projectile.knockBack,
 						Main.myPlayer);
 				}
+				Main.PlaySound(SoundID.Item1, flailPosition);
 			}
 		}
 
