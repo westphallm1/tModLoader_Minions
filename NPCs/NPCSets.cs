@@ -49,13 +49,6 @@ namespace AmuletOfManyMinions.NPCs
 			hornets.Add(NPCID.LittleHornetSpikey);
 			hornets.Add(NPCID.LittleHornetStingy);
 
-			//Moss
-			hornets.Add(NPCID.TinyMossHornet);
-			hornets.Add(NPCID.LittleMossHornet);
-			hornets.Add(NPCID.MossHornet);
-			hornets.Add(NPCID.BigMossHornet);
-			hornets.Add(NPCID.GiantMossHornet);
-
 			angryBones.Add(NPCID.AngryBones);
 			angryBones.Add(NPCID.AngryBonesBig);
 			angryBones.Add(NPCID.AngryBonesBigHelmet);
