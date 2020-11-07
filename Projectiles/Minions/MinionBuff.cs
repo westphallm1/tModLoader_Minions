@@ -1,30 +1,34 @@
-﻿using Terraria;
+﻿using System.Linq;
+using Terraria;
 using Terraria.ModLoader;
-using System.Linq;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
-    public abstract class MinionBuff : ModBuff
-    {
-        private int[] projectileTypes;
-        public MinionBuff(params int[] projectileTypes)
-        {
-            this.projectileTypes = projectileTypes;
-        }
+	public abstract class MinionBuff : ModBuff
+	{
+		private int[] projectileTypes;
+		public MinionBuff(params int[] projectileTypes)
+		{
+			this.projectileTypes = projectileTypes;
+		}
 
-		public override void SetDefaults() {
+		public override void SetDefaults()
+		{
 			Main.buffNoSave[Type] = true;
 			Main.buffNoTimeDisplay[Type] = true;
 		}
 
-		public override void Update(Player player, ref int buffIndex) {
-			if (projectileTypes.Select(p=>player.ownedProjectileCounts[p]).Sum() > 0) {
+		public override void Update(Player player, ref int buffIndex)
+		{
+			if (projectileTypes.Select(p => player.ownedProjectileCounts[p]).Sum() > 0)
+			{
 				player.buffTime[buffIndex] = 18000;
 			}
-			else {
+			else
+			{
 				player.DelBuff(buffIndex);
 				buffIndex--;
 			}
 		}
-    }
+	}
 }

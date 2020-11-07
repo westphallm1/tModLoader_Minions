@@ -1,6 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Mono.Cecil.Pdb;
-using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -8,8 +6,8 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
-    public abstract class SimpleMinion<T> : Minion<T> where T : ModBuff
-    {
+	public abstract class SimpleMinion<T> : Minion<T> where T : ModBuff
+	{
 		protected Vector2 vectorToIdle;
 		protected Vector2? vectorToTarget;
 		protected Vector2 oldVectorToIdle;
@@ -17,12 +15,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int? oldTargetNpcIndex = null;
 		protected int framesSinceHadTarget = 0;
 		protected bool attackThroughWalls = false;
-        protected int frameSpeed = 5;
-        public AttackState attackState = AttackState.IDLE;
+		protected int frameSpeed = 5;
+		public AttackState attackState = AttackState.IDLE;
 
-		public override void SetStaticDefaults() 
+		public override void SetStaticDefaults()
 		{
-            base.SetStaticDefaults();
+			base.SetStaticDefaults();
 			// This is necessary for right-click targeting
 			ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
 
@@ -35,9 +33,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			ProjectileID.Sets.Homing[projectile.type] = true;
 		}
 
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
 			// These below are needed for a minion weapon
 			// Only controls if it deals damage to enemies on contact (more on that later)
 			projectile.friendly = true;
@@ -52,16 +50,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// use local projectile i-frames
 			projectile.usesLocalNPCImmunity = true;
 			projectile.localNPCHitCooldown = 10;
-        }
+		}
 
 
 		// Here you can decide if your minion breaks things like grass or pots
-		public override bool? CanCutTiles() {
+		public override bool? CanCutTiles()
+		{
 			return false;
 		}
 
 		// This is mandatory if your minion deals contact damage (further related stuff in AI() in the Movement region)
-		public override bool MinionContactDamage() {
+		public override bool MinionContactDamage()
+		{
 			return true;
 		}
 
@@ -71,91 +71,97 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public abstract void TargetedMovement(Vector2 vectorToTargetPosition);
 
 		public virtual void AfterMoving() { }
-		public virtual void Animate(int minFrame = 0, int? maxFrame = null) {
+		public virtual void Animate(int minFrame = 0, int? maxFrame = null)
+		{
 
 			// This is a simple "loop through all frames from top to bottom" animation
 			projectile.frameCounter++;
-			if (projectile.frameCounter >= frameSpeed) {
+			if (projectile.frameCounter >= frameSpeed)
+			{
 				projectile.frameCounter = 0;
 				projectile.frame++;
-				if (projectile.frame >= (maxFrame ?? Main.projFrames[projectile.type])) {
+				if (projectile.frame >= (maxFrame ?? Main.projFrames[projectile.type]))
+				{
 					projectile.frame = minFrame;
 				}
 			}
 		}
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
+		public override bool OnTileCollide(Vector2 oldVelocity)
+		{
 			return false;
-        }
+		}
 
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
-        {
+		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+		{
 			fallThrough = true;
 			return true;
-        }
+		}
 
-        public override void Behavior()
-        {
-            targetNPCIndex = null;
+		public override void Behavior()
+		{
+			targetNPCIndex = null;
 			vectorToIdle = IdleBehavior();
 			vectorToTarget = FindTarget();
 			framesSinceHadTarget++;
-			if(vectorToTarget is Vector2 targetPosition)
-            {
+			if (vectorToTarget is Vector2 targetPosition)
+			{
 				projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
 				TargetedMovement(targetPosition);
-                oldVectorToTarget = vectorToTarget;
+				oldVectorToTarget = vectorToTarget;
 				oldTargetNpcIndex = targetNPCIndex;
-            } else if(attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < 15)
-            {
+			}
+			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < 15)
+			{
 				projectile.tileCollide = !attackThroughWalls;
-				if(previousIndex < Main.maxNPCs)
-                {
-                    TargetedMovement(Main.npc[previousIndex].Center); // don't immediately give up if losing LOS
-                }
-            } else
-            {
-				if(framesSinceHadTarget > 30)
-                {
-                    projectile.tileCollide = false;
-                }
-                oldVectorToTarget = null;
+				if (previousIndex < Main.maxNPCs)
+				{
+					TargetedMovement(Main.npc[previousIndex].Center); // don't immediately give up if losing LOS
+				}
+			}
+			else
+			{
+				if (framesSinceHadTarget > 30)
+				{
+					projectile.tileCollide = false;
+				}
+				oldVectorToTarget = null;
 				IdleMovement(vectorToIdle);
-            }
+			}
 			AfterMoving();
 			Animate();
 			oldVectorToIdle = vectorToIdle;
-        }
+		}
 
 
 		// utility methods
 		public void TeleportToPlayer(ref Vector2 vectorToIdlePosition, float maxDistance)
-        {
-			if(Main.myPlayer == player.whoAmI && vectorToIdlePosition.Length() > maxDistance)
-            {
+		{
+			if (Main.myPlayer == player.whoAmI && vectorToIdlePosition.Length() > maxDistance)
+			{
 				projectile.position += vectorToIdlePosition;
 				projectile.velocity = Vector2.Zero;
 				projectile.netUpdate = true;
 				vectorToIdlePosition = Vector2.Zero;
-            }
-        }
+			}
+		}
 
 
-        public List<Projectile> GetMinionsOfType(int projectileType)
-        {
+		public List<Projectile> GetMinionsOfType(int projectileType)
+		{
 			var otherMinions = new List<Projectile>();
-			for (int i = 0; i < Main.maxProjectiles; i++) {
+			for (int i = 0; i < Main.maxProjectiles; i++)
+			{
 				// Fix overlap with other minions
 				Projectile other = Main.projectile[i];
-				if (other.active && other.owner == projectile.owner && other.type == projectileType )
+				if (other.active && other.owner == projectile.owner && other.type == projectileType)
 				{
 					otherMinions.Add(other);
 				}
 			}
-            otherMinions.Sort((x, y)=>x.minionPos - y.minionPos);
+			otherMinions.Sort((x, y) => x.minionPos - y.minionPos);
 			return otherMinions;
-        }
-    }
+		}
+	}
 }

@@ -1,8 +1,6 @@
 using Terraria;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
-using System.ComponentModel;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Armor
 {
