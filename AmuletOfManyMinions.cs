@@ -4,5 +4,6 @@ namespace AmuletOfManyMinions
 {
 	public class AmuletOfManyMinions : Mod
 	{
+
 	}
 }
