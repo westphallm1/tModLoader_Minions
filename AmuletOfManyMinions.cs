@@ -1,4 +1,5 @@
 using AmuletOfManyMinions.Items.Accessories;
+using AmuletOfManyMinions.Projectiles.Squires;
 using System.Collections.Generic;
 using Terraria.ModLoader;
 
@@ -8,13 +9,14 @@ namespace AmuletOfManyMinions
 	{
 		public override void Load()
 		{
-			NecromancerAccessory.accessories = new List<NecromancerAccessory>();
+			SquireMinionTypes.Load();
+			NecromancerAccessory.Load();
 		}
 
 		public override void Unload()
 		{
-			NecromancerAccessory.accessories?.Clear();
-			NecromancerAccessory.accessories = null;
+			SquireMinionTypes.Unload();
+			NecromancerAccessory.Unload();
 		}
 	}
 }
