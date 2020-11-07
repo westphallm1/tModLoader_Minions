@@ -14,8 +14,6 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			projectile.minion = false;
 			projectile.minionSlots = 0;
 			useBeacon = false;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 
 		public override void SetStaticDefaults()
@@ -23,6 +21,9 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			base.SetStaticDefaults();
 			// This is necessary for right-click targeting
 			ProjectileID.Sets.MinionTargettingFeature[projectile.type] = false;
+
+			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
 
 			// These below are needed for a minion
 			// Denotes that this projectile is a pet or minion

@@ -47,6 +47,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 
 	public class GoblinGunnerBullet : ModProjectile
 	{
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[projectile.type] = 1;
+			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -56,14 +64,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			projectile.penetrate = 3;
 			projectile.tileCollide = true;
 			projectile.timeLeft = 60;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
-		}
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
 		}
 
 		public override void AI()

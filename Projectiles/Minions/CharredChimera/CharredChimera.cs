@@ -57,6 +57,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[projectile.type] = 2;
+			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
@@ -67,8 +69,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			projectile.width = 16;
 			projectile.height = 16;
 			attackFrames = 180;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 			framesSinceLastHit = 5;
 			hitsSinceRetreat = 0;
 		}
