@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 {
 	public abstract class NecromancerAccessory : ModItem
 	{
-		internal static List<NecromancerAccessory> accessories = new List<NecromancerAccessory>();
+		internal static List<NecromancerAccessory> accessories;
 		protected virtual float spawnVelocity => 0;
 
 		protected virtual float onKillChance => 0;
