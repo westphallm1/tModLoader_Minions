@@ -77,6 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				return;
 			}
 			inSummoningMode = true;
+			projectile.netUpdate = true; //TODO investigate if this is enough
 			projectile.friendly = false;
 			projectile.timeLeft = timeToLive - (int)projectile.ai[0] - 1;
 			projectile.velocity = Vector2.Zero;
@@ -88,6 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
+			//Calling clientside
 			EnterSummoningMode();
 		}
 
