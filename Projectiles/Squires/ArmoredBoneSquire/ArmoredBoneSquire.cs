@@ -63,12 +63,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			projectile.friendly = true;
 		}
 
+		public bool SetDirection
+		{
+			get => projectile.localAI[0] != 0f;
+			set => projectile.localAI[0] = value ? 1f : 0f;
+		}
+
 		public override void AI()
 		{
 			Player player = Main.player[Main.myPlayer];
-			if (targetDirection == Vector2.Zero)
+			if (targetDirection == Vector2.Zero && !SetDirection)
 			{
-				targetDirection = Main.MouseWorld - player.Center;
+				SetDirection = true;
+				//Take the initially given velocity and use it as the direction
+				targetDirection = projectile.velocity;
 				targetDirection.SafeNormalize();
 			}
 			if (targetPosition == Vector2.Zero)
@@ -88,12 +96,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			vector2Target.SafeNormalize();
 			vector2Target *= currentSpeed;
 			projectile.velocity = (projectile.velocity * (INERTIA - 1) + vector2Target) / INERTIA;
-			projectile.rotation = (float)Math.PI / 2 + projectile.velocity.ToRotation();
+			projectile.rotation = MathHelper.PiOver2 + projectile.velocity.ToRotation();
 			if (currentSpeed < MAX_VELOCITY)
 			{
 				currentSpeed += ACCELERATION;
 			}
-			Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3());
+			Lighting.AddLight(projectile.Center, Color.LightCyan.ToVector3());
 		}
 	}
 
