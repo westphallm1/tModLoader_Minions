@@ -107,6 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			{
 				return;
 			}
+			//TODO Mouse
 			if (ClosestEnemyInRange(100f, Main.MouseWorld, maxRangeFromPlayer: false) is Vector2 autoTarget)
 			{
 				base.TargetedMovement(autoTarget - projectile.Center);
