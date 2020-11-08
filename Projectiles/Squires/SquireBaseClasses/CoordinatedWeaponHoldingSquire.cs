@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 {
 	/// <summary>
-	/// Uses ai[0] for attackSequence
+	/// Uses ai[0] for attackSequence (by passing projectile.identity)
 	/// </summary>
 	public abstract class CoordinatedWeaponHoldingSquire<T> : WeaponHoldingSquire<T> where T : ModBuff
 	{

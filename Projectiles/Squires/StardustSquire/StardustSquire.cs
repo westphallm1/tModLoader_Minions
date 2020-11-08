@@ -202,14 +202,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 	public class StardustGuardianProjectile : StardustSquireSubProjectile
 	{
-
-		private static Random random = new Random();
-
 		private bool hasFoundTarget = false;
+
 		public override void SetStaticDefaults()
 		{
 			Main.projFrames[projectile.type] = 3;
 		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -246,8 +245,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			{
 				Vector2 offset = projectile.velocity;
 				offset.Normalize();
-				offset *= random.Next(12, 18);
-				float rotation = projectile.rotation + (float)(Math.PI / 6 - random.NextDouble() * Math.PI / 3);
+				offset *= Main.rand.Next(12, 18);
+				float rotation = projectile.rotation + (float)(Math.PI / 6 - Main.rand.NextDouble() * Math.PI / 3);
 				spriteBatch.Draw(texture, projectile.Center + offset - Main.screenPosition,
 					texture.Bounds, translucentColor, rotation,
 					texture.Bounds.Center.ToVector2(), 1, 0, 0);

@@ -75,6 +75,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			if (targetDirection == Vector2.Zero && !SetDirection)
 			{
 				SetDirection = true;
+
+				Main.PlaySound(SoundID.Item1, projectile.Center);
+
 				//Take the initially given velocity and use it as the direction
 				targetDirection = projectile.velocity;
 				targetDirection.SafeNormalize();
@@ -108,7 +111,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 	public class ArmoredBoneSquireMinion : WeaponHoldingSquire<ArmoredBoneSquireMinionBuff>
 	{
-		private static Random random = new Random();
 		protected override int AttackFrames => 27;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailBall";
@@ -158,8 +160,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 				WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
 			if (attackFrame == 0)
 			{
-				firingFrame1 = random.Next(AttackFrames);
-				firingFrame2 = random.Next(AttackFrames);
+				firingFrame1 = Main.rand.Next(AttackFrames);
+				firingFrame2 = Main.rand.Next(AttackFrames);
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
@@ -173,7 +175,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 						projectile.knockBack,
 						Main.myPlayer);
 				}
-				Main.PlaySound(SoundID.Item1, flailPosition);
 			}
 		}
 
