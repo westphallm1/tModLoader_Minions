@@ -66,7 +66,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		{
 			base.SetDefaults();
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<XCXCopterMinion>();
 			frameSpeed = 2;
 		}
 

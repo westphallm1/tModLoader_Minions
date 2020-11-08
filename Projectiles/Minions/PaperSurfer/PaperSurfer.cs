@@ -63,7 +63,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 			targetSearchDistance = 800;
 			projectile.width = 28;
 			projectile.height = 32;
-			projectile.type = ProjectileType<PaperSurferMinion>();
 		}
 	}
 }

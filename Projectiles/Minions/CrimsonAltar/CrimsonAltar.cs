@@ -135,6 +135,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 	public class CrimsonAltarCrimera : CrimsonAltarBaseCrimera
 	{
 	}
+
 	public class CrimsonAltarMinion : EmpoweredMinion<CrimsonAltarMinionBuff>
 	{
 
@@ -155,9 +156,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			projectile.width = 40;
 			projectile.height = 40;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<CrimsonAltarMinion>();
-			projectile.ai[0] = 0;
-			projectile.ai[1] = 0;
 			framesSinceLastHit = 0;
 			projectile.friendly = true;
 			attackThroughWalls = true;

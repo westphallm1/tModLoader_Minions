@@ -59,6 +59,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		}
 	}
 
+	/// <summary>
+	/// Uses ai[0] and 1 for amplitude and phase
+	/// </summary>
 	public abstract class SoulboundArsenalProjectile : ModProjectile
 	{
 		public static int TimeLeft = 180;

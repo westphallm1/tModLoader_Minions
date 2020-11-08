@@ -44,6 +44,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		}
 	}
 
+	/// <summary>
+	/// uses ai[0] for the spawn frequency
+	/// </summary>
 	public class BeeQueenBucket : TransientMinion
 	{
 
@@ -177,7 +180,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			base.SetDefaults();
 			projectile.width = 32;
 			projectile.height = 32;
-			projectile.type = ProjectileType<BeeQueenMinion>();
 			frameSpeed = 15;
 			animationFrameCounter = 0;
 			reloadStartFrame = -reloadCycleLength;

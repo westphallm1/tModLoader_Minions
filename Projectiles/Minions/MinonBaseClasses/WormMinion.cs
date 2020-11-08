@@ -6,6 +6,9 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
+	/// <summary>
+	/// Uses ai[1] for idle movement cycling
+	/// </summary>
 	public abstract class WormMinion<T> : EmpoweredMinion<T> where T : ModBuff
 	{
 		private float[] backingArray;

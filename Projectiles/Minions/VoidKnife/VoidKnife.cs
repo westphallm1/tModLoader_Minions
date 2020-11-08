@@ -90,8 +90,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			projectile.width = 16;
 			projectile.height = 16;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<VoidKnifeMinion>();
-			projectile.ai[0] = 0;
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 1;
 			attackFrames = 120;

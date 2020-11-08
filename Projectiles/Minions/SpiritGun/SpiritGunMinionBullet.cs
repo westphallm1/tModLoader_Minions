@@ -5,6 +5,9 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
+	/// <summary>
+	/// Uses ai to pass a Vector2
+	/// </summary>
 	class SpiritGunMinionBullet : Minion<ModBuff>
 	{
 		bool hitTarget;

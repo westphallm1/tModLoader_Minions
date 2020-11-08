@@ -53,6 +53,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 	}
 
+	/// <summary>
+	/// Uses ai[1]
+	/// </summary>
 	public class SpiritGunMinion : EmpoweredMinion<SpiritGunMinionBuff>
 	{
 
@@ -76,7 +79,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			projectile.width = 36;
 			projectile.height = 22;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<SpiritGunMinion>();
 			animationFrame = 0;
 			framesSinceLastHit = 0;
 			projectile.friendly = true;

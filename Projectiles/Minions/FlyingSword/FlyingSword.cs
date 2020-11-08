@@ -73,8 +73,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			projectile.width = 16;
 			projectile.height = 16;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<FlyingSwordMinion>();
-			projectile.ai[0] = 0;
 			attackState = AttackState.IDLE;
 			attackFrames = 120;
 		}

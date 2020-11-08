@@ -3,6 +3,9 @@ using Terraria;
 using Terraria.ModLoader;
 namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 {
+	/// <summary>
+	/// Uses ai[0] for attackSequence
+	/// </summary>
 	public abstract class CoordinatedWeaponHoldingSquire<T> : WeaponHoldingSquire<T> where T : ModBuff
 	{
 

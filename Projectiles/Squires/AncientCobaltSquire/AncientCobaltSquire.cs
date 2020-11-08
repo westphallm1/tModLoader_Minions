@@ -67,10 +67,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				Main.dust[dustSpawned].noGravity = true;
 				Main.dust[dustSpawned].velocity *= 0.3f;
 			}
-			if (projectile.ai[1] == 0f)
+			if (projectile.localAI[0] == 0f)
 			{
-				projectile.ai[1] = 1f;
-				Main.PlaySound(SoundID.Item8, projectile.position);
+				projectile.localAI[0] = 1f;
+				Main.PlaySound(SoundID.Item8, projectile.Center);
 			}
 		}
 		public override void Kill(int timeLeft)

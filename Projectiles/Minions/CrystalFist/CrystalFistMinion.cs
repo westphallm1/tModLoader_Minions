@@ -79,8 +79,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			projectile.width = 32;
 			projectile.height = 20;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<CrystalFistMinion>();
-			projectile.ai[0] = 0;
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 0.5f;
 			attackThroughWalls = false;

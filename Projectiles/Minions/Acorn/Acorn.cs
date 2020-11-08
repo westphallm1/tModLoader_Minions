@@ -103,7 +103,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			projectile.height = 16;
 			drawOffsetX = (projectile.width - 44) / 2;
 			attackFrames = 60;
-			projectile.type = ProjectileType<AcornMinion>();
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
