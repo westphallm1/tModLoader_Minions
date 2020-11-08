@@ -167,9 +167,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			{
 				if (Main.myPlayer == player.whoAmI)
 				{
+					Vector2 velocity = Main.MouseWorld - projectile.Center;
+					velocity.SafeNormalize();
+					velocity *= ArmoredBoneSquireSpiritProjectile.STARTING_VELOCITY;
 					Projectile.NewProjectile(
 						flailPosition,
-						angleVector * ArmoredBoneSquireSpiritProjectile.STARTING_VELOCITY,
+						velocity,
 						ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
 						(int)(projectile.damage * 1.25f),
 						projectile.knockBack,
