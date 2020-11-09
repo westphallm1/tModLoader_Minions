@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using Terraria;
 
 namespace AmuletOfManyMinions.Core.Netcode.Packets
 {
@@ -8,9 +10,9 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 	public abstract class MPPacket
 	{
 		//Shortcut
-		public void Send(int to = -1, int from = -1)
+		public void Send(int to = -1, int from = -1, Func<Player, bool> bcCondition = null)
 		{
-			NetHandler.Send(this, to, from);
+			NetHandler.Send(this, to, from, bcCondition);
 		}
 
 		/// <summary>

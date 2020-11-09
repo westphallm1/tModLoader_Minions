@@ -85,7 +85,8 @@ namespace AmuletOfManyMinions.Core.Netcode
 		/// </summary>
 		/// <param name="to">The client whoAmI, -1 if everyone</param>
 		/// <param name="from">The client the packet originated from</param>
-		public static void Send<T>(T packet, int to = -1, int from = -1) where T : MPPacket
+		/// <param name="bcCondition">Decide if the packet should be broadcasted to a specific player</param>
+		public static void Send<T>(T packet, int to = -1, int from = -1, Func<Player, bool> bcCondition = null) where T : MPPacket
 		{
 			if (Main.netMode == NetmodeID.SinglePlayer)
 			{
@@ -114,7 +115,7 @@ namespace AmuletOfManyMinions.Core.Netcode
 				{
 					for (int i = 0; i < Main.maxPlayers; i++)
 					{
-						if (i != from && Netplay.Clients[i].State >= 10)
+						if (i != from && Netplay.Clients[i].State >= 10 && (bcCondition?.Invoke(Main.player[i]) ?? true))
 						{
 							modPacket.Send(i);
 						}

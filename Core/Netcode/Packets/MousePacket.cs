@@ -47,7 +47,13 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 
 			if (Main.netMode == NetmodeID.Server)
 			{
-				new MousePacket(whoAmI, position).Send(from: sender);
+				new MousePacket(whoAmI, position).Send(from: sender, bcCondition: delegate (Player otherPlayer)
+				{
+					//Only send to other player if he's in visible range
+					Rectangle bounds = Utils.CenteredRectangle(player.Center, new Vector2(1920, 1080) * 1.5f);
+					Point otherPlayerCenter = otherPlayer.Center.ToPoint();
+					return bounds.Contains(otherPlayerCenter);
+				});
 			}
 		}
 	}
