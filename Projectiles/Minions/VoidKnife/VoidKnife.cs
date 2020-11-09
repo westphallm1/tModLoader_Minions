@@ -217,6 +217,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
+			//TODO move this code somewhere with manual collision checking that isnt purely clientside (and also works on special enemies)
+			//Bug can be seen with target reticle from SA in singleplayer even
 			lastHitFrame = framesInAir;
 		}
 
