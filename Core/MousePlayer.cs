@@ -44,7 +44,6 @@ namespace AmuletOfManyMinions.Core
 		/// </summary>
 		private Vector2? MousePosition = null;
 
-
 		/// <summary>
 		/// Targeted mouse position
 		/// </summary>
