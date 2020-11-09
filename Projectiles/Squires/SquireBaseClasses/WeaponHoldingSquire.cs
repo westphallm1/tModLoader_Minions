@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
@@ -136,30 +137,35 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			// when the squire is close enough to the mouse, attack along the 
 			// mouse-player line
 			//TODO Mouse
-			if (Vector2.Distance(Main.MouseWorld, projectile.Center) < 48)
+			Vector2? _mouseWorld = player.GetModPlayer<MousePlayer>().GetMousePosition();
+			if (_mouseWorld is Vector2 mouseWorld)
 			{
-				attackVector = Main.MouseWorld - player.Center;
-			}
-			else
-			{
-				//otherwise, attack along the mouse-squire line
-				attackVector = Main.MouseWorld - WeaponCenter();
-			}
-			if (projectile.spriteDirection == 1)
-			{
-				return -attackVector.ToRotation();
-			}
-			else
-			{
-				// this code is rather unfortunate, but need to normalize
-				// everything to [-Math.PI/2, Math.PI/2] for arm drawing to work
-				float angle = (float)-Math.PI + attackVector.ToRotation();
-				if (angle < -Math.PI / 2)
+				if (Vector2.Distance(mouseWorld, projectile.Center) < 48)
 				{
-					angle += 2 * (float)Math.PI;
+					attackVector = mouseWorld - player.Center;
 				}
-				return angle;
+				else
+				{
+					//otherwise, attack along the mouse-squire line
+					attackVector = mouseWorld - WeaponCenter();
+				}
+				if (projectile.spriteDirection == 1)
+				{
+					return -attackVector.ToRotation();
+				}
+				else
+				{
+					// this code is rather unfortunate, but need to normalize
+					// everything to [-Math.PI/2, Math.PI/2] for arm drawing to work
+					float angle = (float)-Math.PI + attackVector.ToRotation();
+					if (angle < -Math.PI / 2)
+					{
+						angle += 2 * (float)Math.PI;
+					}
+					return angle;
+				}
 			}
+			return 0f;
 		}
 
 		protected virtual float GetWeaponAngle()
@@ -303,7 +309,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			//TODO Mouse
 			if (vectorToTarget is Vector2 target)
 			{
-				return Math.Sign((Main.MouseWorld - player.position).X);
+				return Math.Sign((Main.MouseWorld - player.Center).X);
 			}
 			else if (attackFrame > 0)
 			{

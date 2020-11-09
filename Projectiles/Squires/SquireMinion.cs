@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -87,15 +88,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 			if (player.HeldItem.type == itemType && player.channel && player.altFunctionUse != 2)
 			{
+				MousePlayer mPlayer = player.GetModPlayer<MousePlayer>();
+				mPlayer.SetMousePosition();
 				//TODO Mouse
-				Vector2 targetFromPlayer = Main.MouseWorld - player.Center;
-				if (targetFromPlayer.Length() < MaxDistanceFromPlayer())
+				Vector2? _mouseWorld = mPlayer.GetMousePosition();
+				if (_mouseWorld is Vector2 mouseWorld)
 				{
-					return Main.MouseWorld - projectile.Center;
+					Vector2 targetFromPlayer = mouseWorld - player.Center;
+					if (targetFromPlayer.Length() < MaxDistanceFromPlayer())
+					{
+						return mouseWorld - projectile.Center;
+					}
+					targetFromPlayer.Normalize();
+					targetFromPlayer *= MaxDistanceFromPlayer();
+					return player.Center + targetFromPlayer - projectile.Center;
 				}
-				targetFromPlayer.Normalize();
-				targetFromPlayer *= MaxDistanceFromPlayer();
-				return player.Center + targetFromPlayer - projectile.Center;
 			}
 			return null;
 		}
@@ -118,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			// alway clamp to the idle position
+			// always clamp to the idle position
 			float inertia = ComputeInertia();
 			float maxSpeed = ComputeIdleSpeed();
 			Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
@@ -137,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if (player.whoAmI == Main.myPlayer)
 			{
 				float xVelDiff = Math.Abs(projectile.oldVelocity.X - projectile.velocity.X);
 				float yVelDiff = Math.Abs(projectile.oldVelocity.Y - projectile.velocity.Y);
