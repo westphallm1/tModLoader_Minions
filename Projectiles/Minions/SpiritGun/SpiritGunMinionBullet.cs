@@ -5,12 +5,15 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
-	/// <summary>
-	/// Uses ai to pass a Vector2
-	/// </summary>
+	// <summary>
+	// Uses ai[0] to track whether we've hit a target yet
+	// </summary>
 	class SpiritGunMinionBullet : Minion<ModBuff>
 	{
-		bool hitTarget;
+		bool hitTarget {
+			get => projectile.ai[0] != 0;
+			set => projectile.ai[0] = value ? 1 : 0;
+		}
 		bool lookingForTarget;
 		const int speed = 26;
 		Vector2 velocity = default;
@@ -52,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			player = Main.player[projectile.owner];
 			if (velocity == default)
 			{
-				velocity = new Vector2(projectile.ai[0], projectile.ai[1]);
+				velocity = projectile.velocity;
 				vectorToTarget = velocity;
 				velocity.SafeNormalize();
 				velocity *= speed;
@@ -77,7 +80,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			hitTarget = true;
+			if(player.whoAmI == Main.myPlayer && !hitTarget)
+			{
+				hitTarget = true;
+				projectile.netUpdate = true; // let other clients know to stop using ai
+			}
 		}
 
 		public override void Behavior()

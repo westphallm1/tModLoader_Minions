@@ -84,6 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected int frameSpeed = 15;
 		protected int baseDamage = -1;
+		protected int previousEmpowerCount = 0;
 
 		public override void SetStaticDefaults()
 		{
@@ -105,11 +106,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			get => player == null ? 0: player.ownedProjectileCounts[CounterType];
 		}
 
+		public virtual void OnEmpower()
+		{
+
+		}
+
 		public override Vector2 IdleBehavior()
 		{
 			if (baseDamage == -1)
 			{
 				baseDamage = projectile.damage;
+			}
+			if(EmpowerCount > previousEmpowerCount)
+			{
+				OnEmpower();
+				previousEmpowerCount = EmpowerCount;
 			}
 			projectile.damage = ComputeDamage();
 			return Vector2.Zero;

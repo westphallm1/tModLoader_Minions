@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		protected override int MinionType => ProjectileType<SpiritGunMinion>();
 	}
 	/// <summary>
-	/// Uses ai[1]
+	/// Uses ai[1] to track fired vs unfired bullets
 	/// </summary>
 	public class SpiritGunMinion : EmpoweredMinion<SpiritGunMinionBuff>
 	{
@@ -65,9 +65,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;
 		private int animationFrame;
-		private bool hasSetAi1; // this seems like a major hack. Need to set ai[1] = 2 exactly once
 		private Queue<Vector2> activeTargetVectors;
 		private bool isReloading;
+
+		private float unfiredShots
+		{
+			get => projectile.ai[1];
+			set => projectile.ai[1] = value;
+		}
+
 		protected override int CounterType => ProjectileType<SpiritGunCounterMinion>();
 		public override void SetStaticDefaults()
 		{
@@ -86,7 +92,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			animationFrame = 0;
 			framesSinceLastHit = 0;
 			projectile.friendly = true;
-			hasSetAi1 = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 			activeTargetVectors = new Queue<Vector2>();
@@ -116,7 +121,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			Rectangle bounds = new Rectangle(0, projectile.height, 10, 14);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Texture2D texture = Main.projectileTexture[projectile.type];
-			for (int i = 0; i < projectile.ai[1]; i++)
+			for (int i = 0; i < unfiredShots; i++)
 			{
 				spriteBatch.Draw(texture, GetSpiritLocation(i) - Main.screenPosition,
 					bounds, lightColor, 0,
@@ -158,13 +163,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			return true;
 		}
 
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			unfiredShots = 1;
+		}
+
+		public override void OnEmpower()
+		{
+			base.OnEmpower();
+			projectile.ai[1] += 1;
+		}
 		public override Vector2 IdleBehavior()
 		{
-			if (!hasSetAi1)
-			{
-				projectile.ai[1] = 2;
-				hasSetAi1 = true;
-			}
 			// this is a little messy
 			int reloadSpeed = Math.Max(3, 30 / Math.Max((int)EmpowerCount, 1));
 			int reloadDelay = Math.Max(10, 45 - 4 * (int)EmpowerCount);
@@ -173,16 +184,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			bool timeSinceReload = isReloading && framesSinceLastHit > reloadDelay;
 			if ((timeBetweenShots || timeSinceReload) && framesSinceLastHit % reloadSpeed == 0)
 			{
-				if (projectile.ai[1] == EmpowerCount + 1)
+				if (unfiredShots == EmpowerCount + 1)
 				{
 					isReloading = false;
-					activeTargetVectors = new Queue<Vector2>();
-				}
-				if (projectile.ai[1] < EmpowerCount + 1)
+					activeTargetVectors.Clear();
+				} else if (unfiredShots < EmpowerCount + 1)
 				{
-					projectile.ai[1] += 1;
-					Vector2 returned = activeTargetVectors.Dequeue();
-					Dust.NewDust(returned, 4, 10, 137);
+					unfiredShots += 1;
+					// the count can sometimes get desynced in multiplayer since ai is synced and 
+					// the target queue isn't, this is a lazy failsafe against that
+					if(activeTargetVectors.Count > 0)
+					{
+						Vector2 returned = activeTargetVectors.Dequeue();
+						Dust.NewDust(returned, 4, 10, 137);
+					}
 				}
 			}
 			base.IdleBehavior();
@@ -208,7 +223,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			IdleMovement(vectorToIdle);
-			if (framesSinceLastHit > 15 && projectile.ai[1] > 0 && !isReloading)
+			if (framesSinceLastHit > 15 && unfiredShots > 0 && !isReloading)
 			{
 				Vector2 pos = projectile.Center;
 				if (Main.myPlayer == player.whoAmI)
@@ -219,21 +234,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 						ProjectileType<SpiritGunMinionBullet>(),
 						projectile.damage,
 						projectile.knockBack,
-						Main.myPlayer,
-						vectorToTargetPosition.X,
-						vectorToTargetPosition.Y);
+						Main.myPlayer);
 				}
 				Main.PlaySound(SoundID.Item97, pos);
 				// TODO handle flipping and stuff
 				projectile.rotation = vectorToTargetPosition.ToRotation();
-				projectile.ai[1] -= 1;
+				unfiredShots -= 1;
 				activeTargetVectors.Enqueue(projectile.Center + vectorToTargetPosition);
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < 3; i++)
 				{
 					Dust.NewDust(projectile.Center + vectorToTargetPosition, 4, 10, 137);
 				}
 				framesSinceLastHit = 0;
-				if (projectile.ai[1] == 0)
+				if (unfiredShots == 0)
 				{
 					isReloading = true;
 				}

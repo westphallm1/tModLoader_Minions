@@ -220,6 +220,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 				{
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, headType, projectile.damage, projectile.knockBack, player.whoAmI);
 				}
+				
+				if(currentHeadCount > EmpowerCount + 1)
+				{
+					allHeads = GetMinionsOfType(ProjectileType<CharredChimeraMinionHead>());
+					allHeads[0].Kill(); // get rid of a head if there's too many
+				}
 			}
 			allHeads = GetMinionsOfType(ProjectileType<CharredChimeraMinionHead>());
 			TellHeadsToAttack();
