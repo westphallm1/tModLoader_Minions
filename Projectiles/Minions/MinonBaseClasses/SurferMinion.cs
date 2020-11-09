@@ -35,7 +35,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			projectile.width = 16;
 			projectile.height = 16;
 			projectile.tileCollide = false;
-			projectile.ai[0] = 0;
 			attackState = AttackState.IDLE;
 			attackFrames = 30;
 			animationFrames = 240;

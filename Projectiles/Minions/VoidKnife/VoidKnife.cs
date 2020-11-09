@@ -73,7 +73,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 		private int phaseFrames;
 		private int maxPhaseFrames = 60;
 		private int lastHitFrame = 0;
-		private Random random = new Random();
 		private int framesWithoutTarget;
 
 		public override void SetStaticDefaults()
@@ -90,8 +89,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			projectile.width = 16;
 			projectile.height = 16;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<VoidKnifeMinion>();
-			projectile.ai[0] = 0;
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 1;
 			attackFrames = 120;
@@ -109,8 +106,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			Vector2 idlePosition = player.Center;
 			int minionCount = minions.Count;
 			int order = minions.IndexOf(projectile);
-			idleAngle = (float)(2 * Math.PI * order) / minionCount;
-			idleAngle += (2 * (float)Math.PI * minions[0].ai[1]) / animationFrames;
+			idleAngle = (float)(MathHelper.TwoPi * order) / minionCount;
+			idleAngle += (MathHelper.TwoPi * minions[0].ai[1]) / animationFrames;
 			idlePosition.X += 2 + 30 * (float)Math.Cos(idleAngle);
 			idlePosition.Y += -12 + 5 * (float)Math.Sin(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
@@ -136,7 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 			int height = texture.Height / Main.projFrames[projectile.type];
 			Rectangle bounds = new Rectangle(0, projectile.frame * height, texture.Width, height);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			Vector2 origin = bounds.Size() / 2;
 			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
 				bounds, translucentColor, projectile.rotation,
 				origin, 1, 0, 0);
@@ -175,19 +172,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 			else if (phaseFrames > maxPhaseFrames / 2 && phaseFrames < maxPhaseFrames)
 			{
-				if (distanceFromFoe == default)
+				//TODO void knife ai
+				//This section might require a slight change of the behavior regarding the teleporting to work properly for MP
+				//Randomized stuff should only be decided by the client
+				//That would require a change of the ai so it doesnt move for other clients during this phase
+				if (Main.myPlayer == player.whoAmI)
 				{
-					distanceFromFoe = 80 + random.Next(-20, 20);
-					teleportAngle = (float)(random.NextDouble() * 2 * Math.PI);
-					teleportDirection = new Vector2((float)Math.Cos(teleportAngle), (float)Math.Sin(teleportAngle));
+					if (distanceFromFoe == default)
+					{
+						distanceFromFoe = 80 + Main.rand.Next(-20, 20);
+						teleportAngle = Main.rand.NextFloat(MathHelper.TwoPi);
+						teleportDirection = teleportAngle.ToRotationVector2();
+						// move to fixed position relative to NPC, preDraw will do phase in animation
+						projectile.Center = targetNPC.Center + teleportDirection * (distanceFromFoe + phaseFrames);
+						projectile.netUpdate = true;
+					}
+					else
+					{
+						vectorToTargetPosition.SafeNormalize();
+						projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.PiOver2;
+					}
+					//Don't change position continuously, bandaid fix until a proper way for it to work in MP is figured out
 				}
-				else
-				{
-					vectorToTargetPosition.SafeNormalize();
-					projectile.rotation = vectorToTargetPosition.ToRotation() + (float)Math.PI / 2;
-				}
-				// move to fixed position relative to NPC, preDraw will do phase in animation
-				projectile.position = targetNPC.Center + teleportDirection * (distanceFromFoe + phaseFrames);
 				projectile.friendly = false;
 			}
 			else if (framesInAir++ > maxFramesInAir || framesWithoutTarget == 10)
@@ -200,13 +206,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 				projectile.friendly = true;
 				vectorToTargetPosition.SafeNormalize();
 				projectile.velocity = vectorToTargetPosition * travelVelocity;
-				projectile.rotation = vectorToTargetPosition.ToRotation() + (float)Math.PI / 2;
+				projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.PiOver2;
 			}
 			if (phaseFrames >= maxPhaseFrames)
 			{
 				Dust.NewDust(projectile.Center, 8, 8, DustID.Shadowflame);
 			}
-			Lighting.AddLight(projectile.position, Color.Purple.ToVector3() * 0.75f);
+			Lighting.AddLight(projectile.Center, Color.Purple.ToVector3() * 0.75f);
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

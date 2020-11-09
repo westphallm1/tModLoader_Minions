@@ -28,6 +28,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		protected bool useBeacon = true;
 
+		public bool Spawned { get; private set; }
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -35,8 +37,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public override void AI()
 		{
 			player = Main.player[projectile.owner];
+			if (!Spawned)
+			{
+				Spawned = true;
+				OnSpawn();
+			}
 			CheckActive();
 			Behavior();
+		}
+
+		public virtual void OnSpawn()
+		{
+
 		}
 
 		public virtual void CheckActive()

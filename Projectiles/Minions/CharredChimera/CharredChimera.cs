@@ -174,7 +174,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			projectile.type = ProjectileType<CharredChimeraMinion>();
 			DisplayName.SetDefault("Charred Chimera");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 4;

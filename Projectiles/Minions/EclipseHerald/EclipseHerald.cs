@@ -51,6 +51,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		}
 	}
 
+	/// <summary>
+	/// Uses ai[1] to track animation frames
+	/// </summary>
 	public class EclipseHeraldMinion : EmpoweredMinion<EclipseHeraldMinionBuff>
 	{
 
@@ -70,9 +73,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			projectile.width = 66;
 			projectile.height = 60;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<EclipseHeraldMinion>();
-			projectile.ai[0] = 0;
-			projectile.ai[1] = 0;
 			framesSinceLastHit = 0;
 			projectile.friendly = true;
 			attackThroughWalls = true;

@@ -48,6 +48,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 	}
 
+	/// <summary>
+	/// Uses ai[0] to detect empowering
+	/// </summary>
 	public abstract class EmpoweredMinion<T> : SimpleMinion<T> where T : ModBuff
 	{
 		protected abstract int ComputeDamage();

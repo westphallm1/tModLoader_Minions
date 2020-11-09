@@ -4,8 +4,10 @@ using Terraria;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
-
 {
+	/// <summary>
+	/// Uses ai[0] to track animation frames
+	/// </summary>
 	public class CrystalFistHeadMinion : SimpleMinion<CrystalFistMinionBuff>
 	{
 		protected int targetedInertia = 15;
@@ -17,7 +19,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			projectile.type = ProjectileType<CrystalFistHeadMinion>();
 			DisplayName.SetDefault("Crystal Fist");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
@@ -30,7 +31,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			projectile.height = 60;
 			projectile.tileCollide = false;
 			projectile.friendly = false;
-			projectile.ai[0] = 0;
 			projectile.minionSlots = 0f;
 			attackThroughWalls = false;
 		}

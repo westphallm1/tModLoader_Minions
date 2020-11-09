@@ -90,9 +90,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			projectile.width = 44;
 			projectile.height = 44;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<GoblinGunnerMinion>();
-			projectile.ai[0] = 0;
-			projectile.ai[1] = 0;
 			framesSinceLastHit = 0;
 			projectile.friendly = true;
 			attackThroughWalls = true;

@@ -6,6 +6,9 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 {
+	/// <summary>
+	/// Uses ai[0] to track the frame/size, and ai[1] to track the target npc
+	/// </summary>
 	class EclipseSphere : ModProjectile
 	{
 		private bool hitTarget;

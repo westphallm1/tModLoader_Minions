@@ -87,14 +87,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 			if (player.HeldItem.type == itemType && player.channel && player.altFunctionUse != 2)
 			{
-				Vector2 targetFromPlayer = Main.MouseWorld - player.position;
+				//TODO Mouse
+				Vector2 targetFromPlayer = Main.MouseWorld - player.Center;
 				if (targetFromPlayer.Length() < MaxDistanceFromPlayer())
 				{
 					return Main.MouseWorld - projectile.Center;
 				}
 				targetFromPlayer.Normalize();
 				targetFromPlayer *= MaxDistanceFromPlayer();
-				return player.position + targetFromPlayer - projectile.Center;
+				return player.Center + targetFromPlayer - projectile.Center;
 			}
 			return null;
 		}

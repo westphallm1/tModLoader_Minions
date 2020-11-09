@@ -135,6 +135,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			Vector2 attackVector;
 			// when the squire is close enough to the mouse, attack along the 
 			// mouse-player line
+			//TODO Mouse
 			if (Vector2.Distance(Main.MouseWorld, projectile.Center) < 48)
 			{
 				attackVector = Main.MouseWorld - player.Center;
@@ -299,6 +300,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
 		protected virtual int? GetSpriteDirection()
 		{
+			//TODO Mouse
 			if (vectorToTarget is Vector2 target)
 			{
 				return Math.Sign((Main.MouseWorld - player.position).X);

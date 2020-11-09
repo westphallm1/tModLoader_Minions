@@ -50,13 +50,15 @@ namespace AmuletOfManyMinions.Items.Accessories.WormOnAString
 			return player.wormOnAStringEquipped;
 		}
 	}
+
+	/// <summary>
+	/// Uses ai[0] for the turn frame counter
+	/// </summary>
 	public class WormProjectile : TransientMinion
 	{
 		public const int TIME_TO_LIVE = 60 * 4;
 
 		bool hasLanded;
-		int framesToTurn;
-		readonly Random random = new Random();
 
 		public override void SetStaticDefaults()
 		{
@@ -72,7 +74,18 @@ namespace AmuletOfManyMinions.Items.Accessories.WormOnAString
 			projectile.tileCollide = true;
 			hasLanded = false;
 			projectile.timeLeft = TIME_TO_LIVE;
-			framesToTurn = 400 + 30 * random.Next(-3, 3);
+		}
+
+		public ref float FramesToTurn => ref projectile.ai[0];
+
+		public override void OnSpawn()
+		{
+			FramesToTurn = 400;
+			if (Main.myPlayer == player.whoAmI)
+			{
+				FramesToTurn += 30 * Main.rand.Next(-3, 3);
+				projectile.netUpdate = true;
+			}
 		}
 
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
@@ -104,7 +117,7 @@ namespace AmuletOfManyMinions.Items.Accessories.WormOnAString
 			{
 				projectile.velocity.X = Math.Sign(projectile.velocity.X);
 			}
-			if (hasLanded && projectile.timeLeft % framesToTurn == 0) // turn around every so often
+			if (hasLanded && projectile.timeLeft % (int)FramesToTurn == 0) // turn around every so often
 			{
 				projectile.velocity.X *= -3;
 			}

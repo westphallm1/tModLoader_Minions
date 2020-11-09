@@ -79,8 +79,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			projectile.width = 16;
 			projectile.height = 16;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<MeteorFistMinion>();
-			projectile.ai[0] = 0;
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 0.5f;
 			attackFrames = 30;

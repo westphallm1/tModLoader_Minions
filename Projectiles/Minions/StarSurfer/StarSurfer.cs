@@ -52,6 +52,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		}
 	}
 
+	/// <summary>
+	/// Uses ai[0] for its frame given on spawn
+	/// </summary>
 	public class StarSurferProjectile : ModProjectile
 	{
 		public override void SetStaticDefaults()

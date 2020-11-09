@@ -76,7 +76,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		{
 			base.SetDefaults();
 			attackThroughWalls = true;
-			projectile.type = ProjectileType<BoneSerpentMinion>();
 			framesInAir = 0;
 			framesInGround = 0;
 		}

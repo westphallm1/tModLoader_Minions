@@ -15,7 +15,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			projectile.type = ProjectileType<MeteorFistHead>();
 			DisplayName.SetDefault("Meteor Fist");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 2;
@@ -28,7 +27,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			projectile.height = 28;
 			projectile.tileCollide = false;
 			projectile.friendly = false;
-			projectile.ai[0] = 0;
 			projectile.minionSlots = 0f;
 		}
 

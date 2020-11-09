@@ -63,12 +63,23 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			projectile.friendly = true;
 		}
 
+		public bool SetDirection
+		{
+			get => projectile.localAI[0] != 0f;
+			set => projectile.localAI[0] = value ? 1f : 0f;
+		}
+
 		public override void AI()
 		{
 			Player player = Main.player[Main.myPlayer];
-			if (targetDirection == Vector2.Zero)
+			if (targetDirection == Vector2.Zero && !SetDirection)
 			{
-				targetDirection = Main.MouseWorld - player.Center;
+				SetDirection = true;
+
+				Main.PlaySound(SoundID.Item1, projectile.Center);
+
+				//Take the initially given velocity and use it as the direction
+				targetDirection = projectile.velocity;
 				targetDirection.SafeNormalize();
 			}
 			if (targetPosition == Vector2.Zero)
@@ -88,19 +99,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			vector2Target.SafeNormalize();
 			vector2Target *= currentSpeed;
 			projectile.velocity = (projectile.velocity * (INERTIA - 1) + vector2Target) / INERTIA;
-			projectile.rotation = (float)Math.PI / 2 + projectile.velocity.ToRotation();
+			projectile.rotation = MathHelper.PiOver2 + projectile.velocity.ToRotation();
 			if (currentSpeed < MAX_VELOCITY)
 			{
 				currentSpeed += ACCELERATION;
 			}
-			Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3());
+			Lighting.AddLight(projectile.Center, Color.LightCyan.ToVector3());
 		}
 	}
 
 
 	public class ArmoredBoneSquireMinion : WeaponHoldingSquire<ArmoredBoneSquireMinionBuff>
 	{
-		private static Random random = new Random();
 		protected override int AttackFrames => 27;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailBall";
@@ -150,22 +160,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 				WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
 			if (attackFrame == 0)
 			{
-				firingFrame1 = random.Next(AttackFrames);
-				firingFrame2 = random.Next(AttackFrames);
+				firingFrame1 = Main.rand.Next(AttackFrames);
+				firingFrame2 = Main.rand.Next(AttackFrames);
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
 				if (Main.myPlayer == player.whoAmI)
 				{
+					Vector2 velocity = Main.MouseWorld - projectile.Center;
+					velocity.SafeNormalize();
+					velocity *= ArmoredBoneSquireSpiritProjectile.STARTING_VELOCITY;
 					Projectile.NewProjectile(
 						flailPosition,
-						angleVector * ArmoredBoneSquireSpiritProjectile.STARTING_VELOCITY,
+						velocity,
 						ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
 						(int)(projectile.damage * 1.25f),
 						projectile.knockBack,
 						Main.myPlayer);
 				}
-				Main.PlaySound(SoundID.Item1, flailPosition);
 			}
 		}
 

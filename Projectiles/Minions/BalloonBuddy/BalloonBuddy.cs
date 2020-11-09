@@ -55,7 +55,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		{
 			base.SetDefaults();
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<BalloonBuddyMinion>();
 		}
 
 

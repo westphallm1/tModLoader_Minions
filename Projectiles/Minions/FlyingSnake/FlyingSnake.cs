@@ -57,7 +57,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSnake
 		{
 			base.SetDefaults();
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<FlyingSnakeMinion>();
 			frameSpeed = 5;
 		}
 

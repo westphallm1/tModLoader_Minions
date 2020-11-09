@@ -114,9 +114,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			projectile.width = 40;
 			projectile.height = 50;
 			projectile.tileCollide = false;
-			projectile.type = ProjectileType<CorruptionAltarMinion>();
-			projectile.ai[0] = 0;
-			projectile.ai[1] = 0;
 			framesSinceLastHit = 0;
 			projectile.friendly = true;
 			attackThroughWalls = true;
