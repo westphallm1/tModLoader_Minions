@@ -2,7 +2,7 @@
 using System;
 using Terraria.ModLoader;
 
-namespace AmuletOfManyMinions.Projectiles.Minions
+namespace AmuletOfManyMinions.Core.Minions
 {
 	public class CircularVectorQueue
 	{
