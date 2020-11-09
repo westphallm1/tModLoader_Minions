@@ -10,7 +10,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 {
 	public class BoneSerpentMinionBuff : MinionBuff
 	{
-		public BoneSerpentMinionBuff() : base(ProjectileType<BoneSerpentMinion>()) { }
+		public BoneSerpentMinionBuff() : base(ProjectileType<BoneSerpentCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		}
 	}
 
-	public class BoneSerpentMinionItem : EmpoweredMinionItem<BoneSerpentMinionBuff, BoneSerpentMinion>
+	public class BoneSerpentMinionItem : EmpoweredMinionItem<BoneSerpentMinionBuff, BoneSerpentCounterMinion>
 	{
 		protected override int dustType => 30;
 		public override void SetStaticDefaults()
@@ -51,11 +51,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		}
 	}
 
+	public class BoneSerpentCounterMinion : CounterMinion<BoneSerpentMinionBuff> {
+		protected override int MinionType => ProjectileType<BoneSerpentMinion>();
+	}
+
 	public class BoneSerpentMinion : WormMinion<BoneSerpentMinionBuff>
 	{
 
 		private int framesInAir;
 		private int framesInGround;
+		protected override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

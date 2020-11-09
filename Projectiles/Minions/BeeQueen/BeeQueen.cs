@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 {
 	public class BeeQueenMinionBuff : MinionBuff
 	{
-		public BeeQueenMinionBuff() : base(ProjectileType<BeeQueenMinion>()) { }
+		public BeeQueenMinionBuff() : base(ProjectileType<BeeQueenCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		}
 	}
 
-	public class BeeQueenMinionItem : EmpoweredMinionItem<BeeQueenMinionBuff, BeeQueenMinion>
+	public class BeeQueenMinionItem : EmpoweredMinionItem<BeeQueenMinionBuff, BeeQueenCounterMinion>
 	{
 		protected override int dustType => 153;
 		public override void SetStaticDefaults()
@@ -160,13 +160,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			}
 		}
 	}
+	public class BeeQueenCounterMinion : CounterMinion<BeeQueenMinionBuff> {
+		protected override int MinionType => ProjectileType<BeeQueenMinion>();
+	}
 
 	public class BeeQueenMinion : EmpoweredMinion<BeeQueenMinionBuff>
 	{
 		int animationFrameCounter = 0;
-		int reloadCycleLength => Math.Max(120, 300 - 20 * (int)projectile.minionSlots);
+		int reloadCycleLength => Math.Max(120, 300 - 20 * EmpowerCount);
 
 		int reloadStartFrame = 0;
+
+		protected override int CounterType => ProjectileType<BeeQueenCounterMinion>();
 
 		public override void SetStaticDefaults()
 		{
@@ -255,7 +260,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 					projectile.damage,
 					projectile.knockBack,
 					player.whoAmI,
-					ai0: Math.Max(45, 100 - 10 * projectile.minionSlots));
+					ai0: Math.Max(45, 100 - 10 * EmpowerCount));
 				reloadStartFrame = animationFrameCounter;
 			}
 			vectorAbove.SafeNormalize();
@@ -301,12 +306,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (int)(baseDamage * projectile.minionSlots / 4);
+			return baseDamage + (int)(baseDamage * EmpowerCount / 4);
 		}
 
 		protected override float ComputeSearchDistance()
 		{
-			return 550f + 20f * projectile.minionSlots;
+			return 550f + 20f * EmpowerCount;
 		}
 
 		protected override float ComputeInertia()
@@ -316,7 +321,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 
 		protected override float ComputeTargetedSpeed()
 		{
-			return Math.Min(11.5f, 8f + 0.5f * projectile.minionSlots);
+			return Math.Min(11.5f, 8f + 0.5f * EmpowerCount);
 		}
 
 		protected override float ComputeIdleSpeed()

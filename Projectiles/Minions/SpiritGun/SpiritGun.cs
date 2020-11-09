@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
 	public class SpiritGunMinionBuff : MinionBuff
 	{
-		public SpiritGunMinionBuff() : base(ProjectileType<SpiritGunMinion>()) { }
+		public SpiritGunMinionBuff() : base(ProjectileType<SpiritGunCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 	}
 
-	public class SpiritGunMinionItem : EmpoweredMinionItem<SpiritGunMinionBuff, SpiritGunMinion>
+	public class SpiritGunMinionItem : EmpoweredMinionItem<SpiritGunMinionBuff, SpiritGunCounterMinion>
 	{
 		protected override int dustType => 137;
 		public override void SetStaticDefaults()
@@ -53,6 +53,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 	}
 
+	public class SpiritGunCounterMinion : CounterMinion<SpiritGunMinionBuff> {
+		protected override int MinionType => ProjectileType<SpiritGunMinion>();
+	}
 	/// <summary>
 	/// Uses ai[1]
 	/// </summary>
@@ -65,6 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		private bool hasSetAi1; // this seems like a major hack. Need to set ai[1] = 2 exactly once
 		private Queue<Vector2> activeTargetVectors;
 		private bool isReloading;
+		protected override int CounterType => ProjectileType<SpiritGunCounterMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -97,7 +101,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		{
 			float r = (float)(2 * Math.PI * animationFrame) / AnimationFrames;
 			Vector2 pos = projectile.Center;
-			float r1 = r + 2 * (float)Math.PI * index / (projectile.minionSlots + 1);
+			float r1 = r + 2 * (float)Math.PI * index / (EmpowerCount + 1);
 			Vector2 pos1 = pos + new Vector2((float)Math.Cos(r1), (float)Math.Sin(r1)) * 32;
 			return pos1;
 
@@ -153,11 +157,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			DrawShadows(spriteBatch, lightColor);
 			return true;
 		}
-		protected override void OnEmpower()
-		{
-			base.OnEmpower();
-			projectile.ai[1] += 1;
-		}
 
 		public override Vector2 IdleBehavior()
 		{
@@ -167,19 +166,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 				hasSetAi1 = true;
 			}
 			// this is a little messy
-			int reloadSpeed = Math.Max(3, 30 / (int)projectile.minionSlots);
-			int reloadDelay = Math.Max(10, 45 - 4 * (int)projectile.minionSlots);
+			int reloadSpeed = Math.Max(3, 30 / Math.Max((int)EmpowerCount, 1));
+			int reloadDelay = Math.Max(10, 45 - 4 * (int)EmpowerCount);
 			framesSinceLastHit++;
 			bool timeBetweenShots = framesSinceLastHit > 2 * reloadDelay;
 			bool timeSinceReload = isReloading && framesSinceLastHit > reloadDelay;
 			if ((timeBetweenShots || timeSinceReload) && framesSinceLastHit % reloadSpeed == 0)
 			{
-				if (projectile.ai[1] == projectile.minionSlots + 1)
+				if (projectile.ai[1] == EmpowerCount + 1)
 				{
 					isReloading = false;
 					activeTargetVectors = new Queue<Vector2>();
 				}
-				if (projectile.ai[1] < projectile.minionSlots + 1)
+				if (projectile.ai[1] < EmpowerCount + 1)
 				{
 					projectile.ai[1] += 1;
 					Vector2 returned = activeTargetVectors.Dequeue();
@@ -248,7 +247,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 5) * (int)projectile.minionSlots;
+			return baseDamage + (baseDamage / 5) * (int)EmpowerCount;
 		}
 
 

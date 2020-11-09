@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Terraria;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {

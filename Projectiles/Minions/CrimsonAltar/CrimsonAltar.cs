@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 {
 	public class CrimsonAltarMinionBuff : MinionBuff
 	{
-		public CrimsonAltarMinionBuff() : base(ProjectileType<CrimsonAltarMinion>()) { }
+		public CrimsonAltarMinionBuff() : base(ProjectileType<CrimsonAltarCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		}
 	}
 
-	public class CrimsonAltarMinionItem : EmpoweredMinionItem<CrimsonAltarMinionBuff, CrimsonAltarMinion>
+	public class CrimsonAltarMinionItem : EmpoweredMinionItem<CrimsonAltarMinionBuff, CrimsonAltarCounterMinion>
 	{
 		protected override int dustType => DustID.Blood;
 
@@ -136,11 +136,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 	{
 	}
 
+	public class CrimsonAltarCounterMinion : CounterMinion<CrimsonAltarMinionBuff> {
+		protected override int MinionType => ProjectileType<CrimsonAltarMinion>();
+	}
 	public class CrimsonAltarMinion : EmpoweredMinion<CrimsonAltarMinionBuff>
 	{
 
 		private int framesSinceLastHit;
 		private int animationFrame;
+		protected override int CounterType => ProjectileType<CrimsonAltarCounterMinion>();
 
 		public override void SetStaticDefaults()
 		{
@@ -166,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if (projectile.minionSlots < 4)
+			if (EmpowerCount < 4)
 			{
 				return;
 			}
@@ -212,9 +216,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			if (framesSinceLastHit++ > rateOfFire)
 			{
 				framesSinceLastHit = 0;
-				for (int i = 0; i < projectile.minionSlots; i++)
+				for (int i = 0; i < EmpowerCount; i++)
 				{
-					bool summonBig = projectile.minionSlots >= 4 && Main.rand.Next(4) == 0;
+					bool summonBig = EmpowerCount >= 4 && Main.rand.Next(4) == 0;
 					int projType = summonBig ? ProjectileType<CrimsonAltarBigCrimera>() : ProjectileType<CrimsonAltarCrimera>();
 					float rangeSquare = Math.Min(120, vectorToTargetPosition.Length() / 2);
 					vectorToTargetPosition.X += Main.rand.NextFloat() * rangeSquare - rangeSquare / 2;
@@ -240,7 +244,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 8) * (int)projectile.minionSlots; // only scale up damage a little bit
+			return baseDamage + (baseDamage / 8) * (int)EmpowerCount; // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()
@@ -267,7 +271,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 
 		protected override float ComputeSearchDistance()
 		{
-			return 500 + 30 * projectile.minionSlots;
+			return 500 + 30 * EmpowerCount;
 		}
 
 		protected override float ComputeInertia()
@@ -294,7 +298,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			projectile.spriteDirection = 1;
-			projectile.frame = Math.Min(4, (int)projectile.minionSlots) - 1;
+			projectile.frame = Math.Min(4, (int)EmpowerCount) - 1;
 			projectile.rotation += player.direction / 32f;
 			if (Main.rand.Next(120) == 0)
 			{
