@@ -40,13 +40,10 @@ namespace AmuletOfManyMinions.Core.Netcode
 		private static void RegisterPackets()
 		{
 			Type mpPacketType = typeof(MPPacket);
-			foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(mpPacketType)))
-			{
-				if (ID.ContainsKey(type))
-				{
-					throw new Exception($"{nameof(NetHandler)} already contains a packet of this given type {type.FullName}");
-				}
+			IEnumerable<Type> mpPacketTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(mpPacketType));
 
+			foreach (var type in mpPacketTypes)
+			{
 				MPPacket packet = (MPPacket)Activator.CreateInstance(type);
 
 				int count = Packets.Count;
@@ -100,7 +97,7 @@ namespace AmuletOfManyMinions.Core.Netcode
 			ModPacket modPacket = Mod.GetPacket();
 
 			modPacket.Write((byte)ID[type]); //Write the ID first
-			packet.Send(modPacket, to, from); //Let the packet write its data
+			packet.Send(modPacket); //Let the packet write its data
 
 			try
 			{

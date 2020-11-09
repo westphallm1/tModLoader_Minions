@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 		/// <summary>
 		/// Write data to the packet
 		/// </summary>
-		public abstract void Send(BinaryWriter writer, int to = -1, int from = -1);
+		public abstract void Send(BinaryWriter writer);
 
 		/// <summary>
 		/// Any class fields are possibly uninitialized here, they should only be used for Send

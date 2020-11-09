@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 			y = (ushort)(position.Y / precision);
 		}
 
-		public override void Send(BinaryWriter writer, int to = -1, int from = -1)
+		public override void Send(BinaryWriter writer)
 		{
 			writer.Write((byte)whoAmI);
 			writer.Write((ushort)x);
