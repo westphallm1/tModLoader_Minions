@@ -37,12 +37,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public override void AI()
 		{
 			player = Main.player[projectile.owner];
+			CheckActive();
 			if (!Spawned)
 			{
 				Spawned = true;
 				OnSpawn();
 			}
-			CheckActive();
 			Behavior();
 		}
 

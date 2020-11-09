@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 {
 	public class EclipseHeraldMinionBuff : MinionBuff
 	{
-		public EclipseHeraldMinionBuff() : base(ProjectileType<EclipseHeraldMinion>()) { }
+		public EclipseHeraldMinionBuff() : base(ProjectileType<EclipseHeraldCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		}
 	}
 
-	public class EclipseHeraldMinionItem : EmpoweredMinionItem<EclipseHeraldMinionBuff, EclipseHeraldMinion>
+	public class EclipseHeraldMinionItem : EmpoweredMinionItem<EclipseHeraldMinionBuff, EclipseHeraldCounterMinion>
 	{
 		protected override int dustType => DustID.GoldFlame;
 		public override void SetStaticDefaults()
@@ -51,6 +51,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		}
 	}
 
+	public class EclipseHeraldCounterMinion : CounterMinion<EclipseHeraldMinionBuff> {
+		protected override int MinionType => ProjectileType<EclipseHeraldMinion>();
+	}
 	/// <summary>
 	/// Uses ai[1] to track animation frames
 	/// </summary>
@@ -59,6 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;
+		protected override int CounterType => ProjectileType<EclipseHeraldCounterMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -91,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			pos.Y -= 24;
 			pos.X -= 8 * projectile.spriteDirection;
 			float r = (float)(2 * Math.PI * projectile.ai[1]) / AnimationFrames;
-			int index = Math.Min(5, (int)projectile.minionSlots - 1);
+			int index = Math.Min(5, (int)EmpowerCount - 1);
 			Rectangle bounds = new Rectangle(0, 64 * index, 64, 64);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Texture2D texture = Main.projectileTexture[ProjectileType<EclipseSphere>()];
@@ -170,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 						projectile.damage,
 						projectile.knockBack,
 						Main.myPlayer,
-						projectile.minionSlots - 1,
+						EmpowerCount - 1,
 						npcIndex);
 				}
 				framesSinceLastHit = 0;
@@ -184,7 +188,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		}
 		protected override int ComputeDamage()
 		{
-			return baseDamage / 2 + (baseDamage / 2) * (int)projectile.minionSlots;
+			return baseDamage / 2 + (baseDamage / 2) * (int)EmpowerCount;
 		}
 
 		private Vector2? GetTargetVector()
@@ -211,7 +215,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 
 		protected override float ComputeSearchDistance()
 		{
-			return 700 + 100 * projectile.minionSlots;
+			return 700 + 100 * EmpowerCount;
 		}
 
 		protected override float ComputeInertia()

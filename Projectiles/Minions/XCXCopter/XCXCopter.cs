@@ -10,7 +10,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 {
 	public class XCXCopterMinionBuff : MinionBuff
 	{
-		public XCXCopterMinionBuff() : base(ProjectileType<XCXCopterMinion>()) { }
+		public XCXCopterMinionBuff() : base(ProjectileType<XCXCopterCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		}
 	}
 
-	public class XCXCopterMinionItem : EmpoweredMinionItem<XCXCopterMinionBuff, XCXCopterMinion>
+	public class XCXCopterMinionItem : EmpoweredMinionItem<XCXCopterMinionBuff, XCXCopterCounterMinion>
 	{
 		protected override int dustType => 72;
 		public override void SetStaticDefaults()
@@ -52,8 +52,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		}
 	}
 
+	public class XCXCopterCounterMinion : CounterMinion<XCXCopterMinionBuff> {
+		protected override int MinionType => ProjectileType<XCXCopterMinion>();
+	}
 	public class XCXCopterMinion : WormMinion<XCXCopterMinionBuff>
 	{
+		protected override int CounterType => ProjectileType<XCXCopterCounterMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

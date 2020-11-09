@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 {
 	public class CorruptionAltarMinionBuff : MinionBuff
 	{
-		public CorruptionAltarMinionBuff() : base(ProjectileType<CorruptionAltarMinion>()) { }
+		public CorruptionAltarMinionBuff() : base(ProjectileType<CorruptionAltarCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		}
 	}
 
-	public class CorruptionAltarMinionItem : EmpoweredMinionItem<CorruptionAltarMinionBuff, CorruptionAltarMinion>
+	public class CorruptionAltarMinionItem : EmpoweredMinionItem<CorruptionAltarMinionBuff, CorruptionAltarCounterMinion>
 	{
 		protected override int dustType => DustID.Blood;
 
@@ -94,11 +94,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 	public class CorruptionAltarEater : CorruptionAltarBaseEater
 	{
 	}
+	public class CorruptionAltarCounterMinion : CounterMinion<CorruptionAltarMinionBuff> {
+		protected override int MinionType => ProjectileType<CorruptionAltarMinion>();
+	}
+
 	public class CorruptionAltarMinion : EmpoweredMinion<CorruptionAltarMinionBuff>
 	{
 
 		private int framesSinceLastHit;
 		private int animationFrame;
+		protected override int CounterType => ProjectileType<CorruptionAltarCounterMinion>();
 
 		public override void SetStaticDefaults()
 		{
@@ -124,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if (projectile.minionSlots < 4)
+			if (EmpowerCount < 4)
 			{
 				return;
 			}
@@ -166,14 +171,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			// stay floating behind the player at all times
 			IdleMovement(vectorToIdle);
 			framesSinceLastHit++;
-			int rateOfFire = Math.Max(90, 120 - 5 * (int)projectile.minionSlots);
+			int rateOfFire = Math.Max(90, 120 - 5 * (int)EmpowerCount);
 			if (framesSinceLastHit++ > rateOfFire)
 			{
-				int minionsToSpawn = Math.Max(1, Main.rand.Next(1) + (int)projectile.minionSlots - 1);
+				int minionsToSpawn = Math.Max(1, Main.rand.Next(1) + (int)EmpowerCount - 1);
 				framesSinceLastHit = 0;
 				for (int i = 0; i < minionsToSpawn; i++)
 				{
-					bool summonBig = projectile.minionSlots >= 4 && Main.rand.Next(4) == 0;
+					bool summonBig = EmpowerCount >= 4 && Main.rand.Next(4) == 0;
 					int projType = summonBig ? ProjectileType<CorruptionAltarBigEater>() : ProjectileType<CorruptionAltarEater>();
 					float rangeSquare = Math.Min(120, vectorToTargetPosition.Length() / 2);
 					vectorToTargetPosition.X += Main.rand.NextFloat() * rangeSquare - rangeSquare / 2;
@@ -199,7 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 8) * (int)projectile.minionSlots; // only scale up damage a little bit
+			return baseDamage + (baseDamage / 8) * (int)EmpowerCount; // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()
@@ -226,7 +231,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 
 		protected override float ComputeSearchDistance()
 		{
-			return 500 + 30 * projectile.minionSlots;
+			return 500 + 30 * EmpowerCount;
 		}
 
 		protected override float ComputeInertia()
@@ -253,7 +258,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			projectile.spriteDirection = 1;
-			projectile.frame = Math.Min(4, (int)projectile.minionSlots) - 1;
+			projectile.frame = Math.Min(4, (int)EmpowerCount) - 1;
 			projectile.rotation = (float)(Math.PI / 8 * Math.Cos(2 * Math.PI * animationFrame / 120f));
 
 			if (Main.rand.Next(120) == 0)

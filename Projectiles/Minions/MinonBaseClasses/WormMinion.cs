@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected int GetSegmentCount()
 		{
-			return (int)projectile.minionSlots;
+			return EmpowerCount;
 		}
 
 		public override Vector2 IdleBehavior()

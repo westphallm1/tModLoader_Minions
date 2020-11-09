@@ -9,7 +9,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 {
 	public class BalloonBuddyMinionBuff : MinionBuff
 	{
-		public BalloonBuddyMinionBuff() : base(ProjectileType<BalloonBuddyMinion>()) { }
+		public BalloonBuddyMinionBuff() : base(ProjectileType<BalloonBuddyCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		}
 	}
 
-	public class BalloonBuddyMinionItem : EmpoweredMinionItem<BalloonBuddyMinionBuff, BalloonBuddyMinion>
+	public class BalloonBuddyMinionItem : EmpoweredMinionItem<BalloonBuddyMinionBuff, BalloonBuddyCounterMinion>
 	{
 		public override void SetStaticDefaults()
 		{
@@ -41,8 +41,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		}
 	}
 
+
+	public class BalloonBuddyCounterMinion : CounterMinion<BalloonBuddyMinionBuff> {
+		protected override int MinionType => ProjectileType<BalloonBuddyMinion>();
+	}
+
 	public class BalloonBuddyMinion : WormMinion<BalloonBuddyMinionBuff>
 	{
+
+		protected override int CounterType => ProjectileType<BalloonBuddyCounterMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

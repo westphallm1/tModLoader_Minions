@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 {
 	public class GoblinGunnerMinionBuff : MinionBuff
 	{
-		public GoblinGunnerMinionBuff() : base(ProjectileType<GoblinGunnerMinion>()) { }
+		public GoblinGunnerMinionBuff() : base(ProjectileType<GoblinGunnerCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		}
 	}
 
-	public class GoblinGunnerMinionItem : EmpoweredMinionItem<GoblinGunnerMinionBuff, GoblinGunnerMinion>
+	public class GoblinGunnerMinionItem : EmpoweredMinionItem<GoblinGunnerMinionBuff, GoblinGunnerCounterMinion>
 	{
 		protected override int dustType => DustID.Shadowflame;
 		public override void SetStaticDefaults()
@@ -72,8 +72,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			Lighting.AddLight(projectile.position, Color.Violet.ToVector3() * 0.5f);
 		}
 	}
+	public class GoblinGunnerCounterMinion : CounterMinion<GoblinGunnerMinionBuff> {
+		protected override int MinionType => ProjectileType<GoblinGunnerMinion>();
+	}
 	public class GoblinGunnerMinion : EmpoweredMinion<GoblinGunnerMinionBuff>
 	{
+		protected override int CounterType => ProjectileType<GoblinGunnerCounterMinion>();
 
 		private int framesSinceLastHit;
 		public override void SetStaticDefaults()
@@ -103,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		{
 			Texture2D texture = Main.projectileTexture[ProjectileType<GoblinGunnerMinionGuns>()];
 			Vector2 angle = vectorToTarget ?? new Vector2(-projectile.spriteDirection, 0);
-			int frame = Math.Min(4, (int)projectile.minionSlots - 1);
+			int frame = Math.Min(4, (int)EmpowerCount - 1);
 			Rectangle bounds = new Rectangle(0, 14 * frame, 14, 14);
 			int distanceFromOrigin = framesSinceLastHit > 3 ? 34 : 32;
 			Vector2 origin = new Vector2(distanceFromOrigin, bounds.Height / 2f);
@@ -142,7 +146,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			// stay floating behind the player at all times
 			IdleMovement(vectorToIdle);
 			framesSinceLastHit++;
-			int rateOfFire = Math.Max(8, 35 - 3 * (int)projectile.minionSlots);
+			int rateOfFire = Math.Max(8, 35 - 3 * (int)EmpowerCount);
 			int projectileVelocity = 40;
 			if (framesSinceLastHit++ > rateOfFire && targetNPCIndex is int npcIdx)
 			{
@@ -175,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		}
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 12) * (int)projectile.minionSlots; // only scale up damage a little bit
+			return baseDamage + (baseDamage / 12) * (int)EmpowerCount; // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()
@@ -202,7 +206,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 
 		protected override float ComputeSearchDistance()
 		{
-			return 800 + 20 * projectile.minionSlots;
+			return 800 + 20 * EmpowerCount;
 		}
 
 		protected override float ComputeInertia()

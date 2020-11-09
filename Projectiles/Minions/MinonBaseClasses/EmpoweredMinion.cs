@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,7 +7,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	public abstract class EmpoweredMinionItem<TBuff, TMinion> : MinionItem<TBuff, TMinion> where TBuff : ModBuff where TMinion : EmpoweredMinion<TBuff>
+	public abstract class EmpoweredMinionItem<TBuff, TMinion> : MinionItem<TBuff, TMinion> where TBuff : ModBuff where TMinion : Minion<TBuff>
 	{
 		protected virtual int dustType => DustID.Confetti;
 		protected virtual int dustCount => 3;
@@ -20,37 +21,59 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.SetStaticDefaults();
 		}
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+	}
+
+	// Invisible minion that exists to track the empower count of empowered minions
+	// Works around many of the issues involved with changing a projectiles minionSlots
+	public abstract class CounterMinion<T> : SimpleMinion<T> where T : ModBuff
+	{
+		public override string Texture => "Terraria/Item_0";
+
+		protected virtual int MinionType => default;
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if (player.ownedProjectileCounts[item.shoot] == 0)
+			return false;
+		}
+
+
+		public override void Behavior()
+		{
+			projectile.friendly = false;
+			projectile.velocity = Vector2.Zero;
+			projectile.position = player.Center;
+			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[MinionType] == 0)
 			{
-				player.AddBuff(BuffType<TBuff>(), 2);
-				Projectile.NewProjectile(position - new Vector2(5, 0), new Vector2(speedX, speedY), item.shoot, damage, knockBack, Main.myPlayer);
-			}
-			else
-			{
-				for (int i = 0; i < Main.maxProjectiles; i++)
+				// hack to prevent multiple 
+				if(GetMinionsOfType(projectile.type)[0].whoAmI == projectile.whoAmI)
 				{
-					Projectile other = Main.projectile[i];
-					if (other.active && other.owner == Main.myPlayer && other.type == item.shoot && other.minionSlots < player.maxMinions)
-					{
-						other.ai[0] = 1;
-						for (int j = 0; j < dustCount; j++)
-						{
-							Dust.NewDust(other.position, other.width, other.height, dustType);
-						}
-						break;
-					}
+					Projectile.NewProjectile(player.Top, Vector2.Zero, MinionType, projectile.damage, projectile.knockBack, Main.myPlayer);
 				}
 			}
-			return false;
+		}
+		public override Vector2? FindTarget()
+		{
+			// no op
+			return null;
+		}
+
+		public override Vector2 IdleBehavior()
+		{
+			// no op
+			return Vector2.Zero;
+		}
+
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			// no op
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			// no op
 		}
 
 	}
 
-	/// <summary>
-	/// Uses ai[0] to detect empowering
-	/// </summary>
 	public abstract class EmpoweredMinion<T> : SimpleMinion<T> where T : ModBuff
 	{
 		protected abstract int ComputeDamage();
@@ -61,24 +84,31 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected int frameSpeed = 15;
 		protected int baseDamage = -1;
-
-		protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
+		protected int previousEmpowerCount = 0;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// These below are needed for a minion
-			// Denotes that this projectile is a pet or minion
-			Main.projPet[projectile.type] = false;
-			// This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
-			ProjectileID.Sets.MinionSacrificable[projectile.type] = false; // don't let you sacrifice 
+			// the empowered minion is technically a sub-minion if its counter minion, not a main minion
+			ProjectileID.Sets.MinionShot[projectile.type] = true; 
 		}
-		protected virtual void OnEmpower()
+		public override void SetDefaults()
 		{
-			if (projectile.minionSlots < player.maxMinions)
-			{
-				projectile.minionSlots += 1;
-			}
+			base.SetDefaults();
+			projectile.minion = false;
+			projectile.minionSlots = 0;
+		}
+
+		protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
+
+		protected virtual int CounterType => default;
+		protected int EmpowerCount {
+			get => player == null ? 0: player.ownedProjectileCounts[CounterType];
+		}
+
+		public virtual void OnEmpower()
+		{
+
 		}
 
 		public override Vector2 IdleBehavior()
@@ -87,14 +117,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				baseDamage = projectile.damage;
 			}
-			if (projectile.ai[0] == 1)
+			if(EmpowerCount > previousEmpowerCount)
 			{
 				OnEmpower();
-				projectile.ai[0] = 0;
-				if(player.whoAmI == Main.myPlayer)
-				{
-					projectile.netUpdate = true;
-				}
+				previousEmpowerCount = EmpowerCount;
 			}
 			projectile.damage = ComputeDamage();
 			return Vector2.Zero;

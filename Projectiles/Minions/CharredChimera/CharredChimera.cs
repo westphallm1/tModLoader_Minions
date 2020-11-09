@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 {
 	public class CharredChimeraMinionBuff : MinionBuff
 	{
-		public CharredChimeraMinionBuff() : base(ProjectileType<CharredChimeraMinion>()) { }
+		public CharredChimeraMinionBuff() : base(ProjectileType<CharredChimeraCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		}
 	}
 
-	public class CharredChimeraMinionItem : EmpoweredMinionItem<CharredChimeraMinionBuff, CharredChimeraMinion>
+	public class CharredChimeraMinionItem : EmpoweredMinionItem<CharredChimeraMinionBuff, CharredChimeraCounterMinion>
 	{
 		protected override int dustType => 54;
 		public override void SetStaticDefaults()
@@ -160,6 +160,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			// no op
 		}
 	}
+	public class CharredChimeraCounterMinion : CounterMinion<CharredChimeraMinionBuff> {
+		protected override int MinionType => ProjectileType<CharredChimeraMinion>();
+	}
 	public class CharredChimeraMinion : EmpoweredMinion<CharredChimeraMinionBuff>
 	{
 		protected int targetedInertia = 15;
@@ -168,6 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		protected int minDistanceToEnemy = 200;
 		protected int animationFrames = 120;
 		protected int animationFrame = 0;
+		protected override int CounterType => ProjectileType<CharredChimeraCounterMinion>();
 
 		protected List<Projectile> allHeads = default;
 
@@ -212,9 +216,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			int currentHeadCount = player.ownedProjectileCounts[headType];
 			if (Main.myPlayer == player.whoAmI)
 			{
-				for (int i = currentHeadCount; i < projectile.minionSlots + 1; i++)
+				for (int i = currentHeadCount; i < EmpowerCount + 1; i++)
 				{
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, headType, projectile.damage, projectile.knockBack, player.whoAmI);
+				}
+				
+				if(currentHeadCount > EmpowerCount + 1)
+				{
+					allHeads = GetMinionsOfType(ProjectileType<CharredChimeraMinionHead>());
+					allHeads[0].Kill(); // get rid of a head if there's too many
 				}
 			}
 			allHeads = GetMinionsOfType(ProjectileType<CharredChimeraMinionHead>());
@@ -270,7 +280,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			{
 				return;
 			}
-			int attackFrames = (int)(Math.Min(20, 60 - 5 * projectile.minionSlots) * projectile.minionSlots);
+			int attackFrames = (int)(Math.Min(20, 60 - 5 * EmpowerCount) * Math.Max(EmpowerCount, 1));
 			int attackFrame = animationFrame % attackFrames;
 			int interval = (attackFrames / allHeads.Count) % attackFrames;
 			for (int i = 0; i < allHeads.Count; i++)
