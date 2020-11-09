@@ -90,7 +90,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				MousePlayer mPlayer = player.GetModPlayer<MousePlayer>();
 				mPlayer.SetMousePosition();
-				//TODO Mouse
 				Vector2? _mouseWorld = mPlayer.GetMousePosition();
 				if (_mouseWorld is Vector2 mouseWorld)
 				{

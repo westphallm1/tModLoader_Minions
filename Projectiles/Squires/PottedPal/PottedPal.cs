@@ -108,6 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 				return;
 			}
 			//TODO Mouse
+			//Slight AI change required so this doesn't have to poll mouse position every tick, maybe remove this code entirely?
 			if (ClosestEnemyInRange(100f, Main.MouseWorld, maxRangeFromPlayer: false) is Vector2 autoTarget)
 			{
 				base.TargetedMovement(autoTarget - projectile.Center);

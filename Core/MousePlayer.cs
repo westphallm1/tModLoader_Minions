@@ -3,10 +3,12 @@ using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 using Terraria.ID;
 using AmuletOfManyMinions.Core.Netcode.Packets;
-using System;
 
 namespace AmuletOfManyMinions.Core
 {
+	/// <summary>
+	/// Helper ModPlayer used to wrap around Main.MouseWorld so it's multiplayer compatible
+	/// </summary>
 	public class MousePlayer : ModPlayer
 	{
 		/*
@@ -15,30 +17,47 @@ namespace AmuletOfManyMinions.Core
 		 *     - It can be null! (if client B hasn't received A's mouse position yet)
 		 * 
 		 * How this works:
-		 * - Client A makes it clear that he wants his mouse position to sync, initiates sending process
+		 * - Client A makes it clear that he wants his mouse position to sync, initiates sending process (by using {SetMousePosition()})
 		 *     - Sending process is send MouseWorld every {updateRate} ticks while client wants it
 		 * - Server receives, resends to clients (one of them B)
 		 *     - B receives {NextMousePosition}, and:
-		 *         - if it's the first position received: sets {MousePosition} directly
+		 *         - if it's the first position received: sets calls {SetNextMousePosition()}
 		 *         - else: use UpdateRule() to move {MousePosition} towards the received value
 		 *     - If B holds a MousePosition and timeout is reached (no more incoming packets hopefully):
-		 *         - nulls {MousePosition}
+		 *         - nulls {MousePosition} and sets related fields to default
 		 */
 
+		/// <summary>
+		/// Primarily used clientside to send regular updates to the server
+		/// </summary>
 		private int updateRate;
 
+		/// <summary>
+		/// Timeout threshold for when to stop expecting updates for mouse position
+		/// </summary>
 		private int timeout;
 
 		private int timeoutTimer;
 
-		private Vector2? OldNextMousePosition = null;
+		/// <summary>
+		/// "Real" mouse position
+		/// </summary>
+		private Vector2? MousePosition = null;
 
+
+		/// <summary>
+		/// Targeted mouse position
+		/// </summary>
 		private Vector2? NextMousePosition = null;
 
-		private Vector2? MousePosition = null;
+		/// <summary>
+		/// Previous position (to reset timeout)
+		/// </summary>
+		private Vector2? OldNextMousePosition = null;
 
 		public override void Initialize()
 		{
+			Reset();
 			timeout = 30;
 			updateRate = 5;
 		}
@@ -69,6 +88,8 @@ namespace AmuletOfManyMinions.Core
 			{
 				if (NextMousePosition == null || Main.GameUpdateCount % updateRate == 0)
 				{
+					//If hasn't sent a mouse position recently, or when an update is required
+
 					//Required so client also updates this variable even though its not used directly
 					NextMousePosition = Main.MouseWorld;
 
