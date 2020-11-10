@@ -33,9 +33,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			base.SetDefaults();
 			projectile.width = 8;
 			projectile.height = 8;
-			backingArray = new float[255];
+			backingArray = new float[1024];
 			CircularVectorQueue.Initialize(backingArray);
-			PositionLog = new CircularLengthQueue(backingArray, queueSize: 32)
+			PositionLog = new CircularLengthQueue(backingArray, queueSize: 510, maxLength: 1200)
 			{
 				mod = mod
 			};
@@ -89,11 +89,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.IdleBehavior();
 			projectile.ai[1] = (projectile.ai[1] + 1) % 240;
-			int radius = 48;
-			Vector2 maxCircle = player.Top + new Vector2(48, -20);
+			int radius = 48 + 2 * EmpowerCount;
+			float yRadius = 8 + 0.5f * EmpowerCount;
 			Vector2 idlePosition = player.Top;
 			idlePosition.X += radius * (float)Math.Cos(Math.PI * projectile.ai[1] / 60);
-			idlePosition.Y += -20 + 8 * (float)Math.Sin(Math.PI * projectile.ai[1] / 60);
+			idlePosition.Y += -20 + EmpowerCount + yRadius * (float)Math.Sin(Math.PI * projectile.ai[1] / 60);
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
