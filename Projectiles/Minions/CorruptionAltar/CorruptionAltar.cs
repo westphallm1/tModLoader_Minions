@@ -74,13 +74,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D texture = GetTexture(Texture);
+			Color maskColor = new Color(96, 248, 2);
 			Rectangle bounds = new Rectangle(0, 0,
 				texture.Bounds.Width, texture.Bounds.Height / 2);
 			Vector2 origin = bounds.Center.ToVector2();
 			Vector2 pos = projectile.Center;
 			float r = projectile.rotation;
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r,
+				bounds, maskColor, r,
 				origin, 1.5f, 0, 0);
 			return false;
 		}

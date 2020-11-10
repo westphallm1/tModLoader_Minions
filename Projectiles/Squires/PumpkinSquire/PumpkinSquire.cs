@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		{
 			base.SetDefaults();
 			DisplayName.SetDefault("Pumpkin Squire");
-			Description.SetDefault("An ancient cobalt squire will follow your orders!");
+			Description.SetDefault("An pumpkin squire will follow your orders!");
 		}
 	}
 

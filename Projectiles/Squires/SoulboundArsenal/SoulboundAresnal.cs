@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -240,6 +241,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
+				Main.PlaySound(new LegacySoundStyle(2, 102), projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					int type = ProjectileType<SoulboundArsenalArrow>();
@@ -323,6 +325,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
+				Main.PlaySound(new LegacySoundStyle(2, 71), projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;

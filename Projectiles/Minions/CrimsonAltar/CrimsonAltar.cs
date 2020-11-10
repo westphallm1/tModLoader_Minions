@@ -114,6 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D texture = GetTexture(Texture);
+			Color maskColor = new Color(254, 202, 80);
 			Rectangle bounds = new Rectangle(0, 0,
 				texture.Bounds.Width, texture.Bounds.Height / 2);
 			Vector2 origin = bounds.Center.ToVector2();
@@ -121,7 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			float r = projectile.rotation;
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r,
+				bounds, maskColor, r,
 				origin, 1.5f, 0, 0);
 			return false;
 		}
