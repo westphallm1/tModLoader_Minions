@@ -115,15 +115,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			hitDirection = projectile.spriteDirection; // always knock projectile away from player
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-			// knock back the squire from the enemy a little bit
-			//Vector2 distanceFromNPC = target.Center - projectile.Center;
-			//distanceFromNPC.SafeNormalize();
-			//relativeVelocity += -distanceFromNPC * knockbackSelf;
-			base.OnHitNPC(target, damage, knockback, crit);
-		}
-
 		protected virtual float GetFixedWeaponAngle()
 		{
 			float angleStep = (SwingAngle1 - SwingAngle0) / AttackFrames;

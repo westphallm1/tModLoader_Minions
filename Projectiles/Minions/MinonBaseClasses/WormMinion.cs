@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			return vectorToIdlePosition;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitTarget(NPC target)
 		{
 			framesSinceLastHit = 0;
 		}

@@ -151,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			projectile.height = 24;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitTarget(NPC target)
 		{
 			canTarget = false;
 		}
@@ -252,11 +252,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					texture.Bounds.Center.ToVector2(), 1, 0, 0);
 			}
 			base.PostDraw(spriteBatch, lightColor);
-		}
-
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-			base.OnHitNPC(target, damage, knockback, crit);
 		}
 
 		public override Vector2? FindTarget()

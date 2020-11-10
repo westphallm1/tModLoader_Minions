@@ -181,11 +181,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-			base.OnHitNPC(target, damage, knockback, crit);
-			framesSinceLastHit = 0;
-		}
 		protected override int ComputeDamage()
 		{
 			return baseDamage / 2 + (baseDamage / 2) * (int)EmpowerCount;

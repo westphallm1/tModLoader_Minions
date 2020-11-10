@@ -18,6 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		const int speed = 26;
 		Vector2 velocity = default;
 		Vector2 vectorToTarget = default;
+		NPC targetNPC = null;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -40,13 +41,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		private void LookForTarget()
 		{
-			if ((PlayerTargetPosition(600) ?? ClosestEnemyInRange(600)) is Vector2 target)
+			if ((PlayerTargetPosition(600) ?? ClosestEnemyInRange(600)) is Vector2 target && targetNPCIndex is int targetIdx)
 			{
 				velocity = target - projectile.Center;
 				vectorToTarget = velocity;
 				lookingForTarget = false;
 				velocity.SafeNormalize();
 				velocity *= speed;
+				targetNPC = Main.npc[targetIdx];
 			}
 		}
 
@@ -76,16 +78,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			projectile.rotation = velocity.ToRotation();
 			projectile.velocity = velocity;
 			Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3());
-		}
-
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-			if(player.whoAmI == Main.myPlayer && !hitTarget)
+			// MP-safe collision check
+			if(targetNPC != null && targetNPC.active && 
+				Vector2.DistanceSquared(targetNPC.Center, projectile.Center) < projectile.velocity.LengthSquared())
 			{
 				hitTarget = true;
-				projectile.netUpdate = true; // let other clients know to stop using ai
 			}
 		}
+
 
 		public override void Behavior()
 		{

@@ -67,13 +67,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			return vectorToIdlePosition;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitTarget(NPC target)
 		{
 			projectile.velocity.SafeNormalize();
 			projectile.velocity *= 6; // "kick" it away from the enemy it just hit
 			framesSinceDiveBomb = 0;
-			base.OnHitNPC(target, damage, knockback, crit);
 		}
+
 		public override Vector2? FindTarget()
 		{
 			if (FindTargetInTurnOrder(targetSearchDistance, projectile.Center) is Vector2 target)

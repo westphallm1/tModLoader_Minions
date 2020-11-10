@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			attackFrames = 60;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitTarget(NPC target)
 		{
 			if (hitsSinceLastIdle++ > 2)
 			{

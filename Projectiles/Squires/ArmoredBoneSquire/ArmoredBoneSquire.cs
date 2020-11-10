@@ -146,11 +146,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			projectile.localNPCHitCooldown = AttackFrames / 2;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-			base.OnHitNPC(target, damage, knockback, crit);
-		}
-
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);

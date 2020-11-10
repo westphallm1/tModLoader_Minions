@@ -139,9 +139,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				oldVectorToTarget = null;
 				IdleMovement(vectorToIdle);
 			}
+			if(targetNPCIndex is int idx && (Colliding(projectile.Hitbox, Main.npc[idx].Hitbox) ?? false))
+			{
+				OnHitTarget(Main.npc[idx]);	
+			}
 			AfterMoving();
 			Animate();
 			oldVectorToIdle = vectorToIdle;
+		}
+
+		/**
+		 * Multiplayer safe approximation of OnHitNPC
+		 */
+		public virtual void OnHitTarget(NPC target)
+		{
+
 		}
 
 

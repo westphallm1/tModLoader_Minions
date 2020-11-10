@@ -172,11 +172,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-			base.OnHitNPC(target, damage, knockback, crit);
-			framesSinceLastHit = 0;
-		}
 		protected override int ComputeDamage()
 		{
 			return baseDamage + (baseDamage / 12) * (int)EmpowerCount; // only scale up damage a little bit

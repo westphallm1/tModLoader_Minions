@@ -144,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitTarget(NPC target)
 		{
 			framesInAir = Math.Max(framesInAir, 12); // force a return shortly after hitting a target
 			Dust.NewDust(projectile.position, 16, 16, DustID.PinkCrystalShard, projectile.velocity.X / 2, projectile.velocity.Y / 2);

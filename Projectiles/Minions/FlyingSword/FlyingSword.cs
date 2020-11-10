@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			attackFrames = 120;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitTarget(NPC target)
 		{
 			if (hitCount++ >= maxHitCount)
 			{

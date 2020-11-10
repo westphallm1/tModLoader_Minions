@@ -215,7 +215,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			Lighting.AddLight(projectile.Center, Color.Purple.ToVector3() * 0.75f);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitTarget(NPC target)
 		{
 			lastHitFrame = framesInAir;
 		}
