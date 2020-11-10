@@ -280,7 +280,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			{
 				return;
 			}
-			int attackFrames = (int)(Math.Min(20, 60 - 5 * EmpowerCount) * Math.Max(EmpowerCount, 1));
+			int attackFrames = (int)(Math.Max(20, 60 - 5 * EmpowerCount) * Math.Max(EmpowerCount, 1));
 			int attackFrame = animationFrame % attackFrames;
 			int interval = (attackFrames / allHeads.Count) % attackFrames;
 			for (int i = 0; i < allHeads.Count; i++)

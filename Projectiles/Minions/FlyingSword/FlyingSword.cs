@@ -87,12 +87,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			Dust.NewDust(projectile.Center, projectile.width / 2, projectile.height / 2, DustID.Platinum);
 		}
 
-		public override bool OnTileCollide(Vector2 oldVelocity)
-		{
-			mod.Logger.Info(projectile.position + " " + projectile.velocity + " " + attackState);
-			return false;
-		}
-
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
