@@ -63,11 +63,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				projectile.timeLeft = 2;
 			}
 		}
+
 		protected Tile TileAtLocation(Vector2 position)
 		{
 			int x = (int)position.X / 16;
 			int y = (int)position.Y / 16;
-			return Main.tile[x, y];
+			//null-safe
+			return Framing.GetTileSafely(x, y);
 		}
 
 		protected bool StandingOnPlatform()

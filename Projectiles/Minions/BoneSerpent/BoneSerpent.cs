@@ -71,10 +71,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
 		protected bool InTheGround(Vector2 position)
 		{
-			int x = (int)position.X / 16;
-			int y = (int)position.Y / 16;
-			Tile tile = Main.tile[x, y];
-			return Main.tile[x, y].collisionType == 1 || Main.tileSolidTop[tile.type];
+			Tile tile = TileAtLocation(position);
+			return tile.collisionType == 1 || Main.tileSolidTop[tile.type];
 		}
 
 		public sealed override void SetDefaults()
