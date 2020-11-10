@@ -91,6 +91,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			projectile.velocity = -projectile.velocity;
+			projectile.velocity.SafeNormalize();
+			projectile.velocity *= ComputeTargetedSpeed();
 		}
 
 		public override Vector2? FindTarget()
@@ -108,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 				return;
 			}
 			// Cling to the closest enemy a little bit
-			if (ClosestEnemyInRange(48f, projectile.Center, maxRangeFromPlayer: false) is Vector2 autoTarget)
+			if (vectorToTargetPosition.Length() < 100f && ClosestEnemyInRange(100f, projectile.Center, maxRangeFromPlayer: false) is Vector2 autoTarget)
 			{
 				base.TargetedMovement(autoTarget - projectile.Center);
 			}

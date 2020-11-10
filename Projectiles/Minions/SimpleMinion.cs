@@ -16,6 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int framesSinceHadTarget = 0;
 		protected bool attackThroughWalls = false;
 		protected int frameSpeed = 5;
+		protected int proximityForOnHitTarget = 24;
+		protected int targetFrameCounter = 0;
 		public AttackState attackState = AttackState.IDLE;
 
 		public override void SetStaticDefaults()
@@ -139,8 +141,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				oldVectorToTarget = null;
 				IdleMovement(vectorToIdle);
 			}
-			if(targetNPCIndex is int idx && (Colliding(projectile.Hitbox, Main.npc[idx].Hitbox) ?? false))
+			if(targetNPCIndex is int idx &&
+				targetFrameCounter ++ > projectile.localNPCHitCooldown && 
+				vectorToTarget is Vector2 target && target.LengthSquared() < proximityForOnHitTarget * proximityForOnHitTarget)
 			{
+				targetFrameCounter = 0;
 				OnHitTarget(Main.npc[idx]);	
 			}
 			AfterMoving();

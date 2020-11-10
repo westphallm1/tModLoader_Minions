@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Terraria;
 
-namespace AmuletOfManyMinions.Projectiles.Minions
+namespace AmuletOfManyMinions.Core.Minions
 {
 	public class CircularLengthQueue : CircularVectorQueue
 	{

@@ -38,6 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			attackState = AttackState.IDLE;
 			attackFrames = 30;
 			animationFrames = 240;
+			projectile.localNPCHitCooldown = 20;
 			projectile.frame = (2 * projectile.minionPos) % 6;
 		}
 
@@ -93,8 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			int inertia = approachInertia;
 			int speed = approachSpeed;
 
-			projectile.friendly = framesSinceDiveBomb++ > 20; // limit rate of attack
-			if (framesSinceDiveBomb < diveBombFrameRateLimit || Math.Abs(vectorToTargetPosition.X) > diveBombHorizontalRange)
+			if (framesSinceDiveBomb++ < diveBombFrameRateLimit || Math.Abs(vectorToTargetPosition.X) > diveBombHorizontalRange)
 			{
 				// always aim for "above" while approaching, if it's in the line of sight
 				if (Collision.CanHitLine(projectile.Center, 1, 1,
