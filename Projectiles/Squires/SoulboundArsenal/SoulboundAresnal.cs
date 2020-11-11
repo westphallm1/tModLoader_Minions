@@ -46,6 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			item.damage = 70;
 			item.value = Item.sellPrice(0, 8, 0, 0);
 			item.rare = ItemRarityID.Lime;
+			item.noUseGraphic = true;
 		}
 
 		public override void AddRecipes()
@@ -57,6 +58,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			recipe.AddTile(TileID.MythrilAnvil);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
+		}
+		public override bool CanUseItem(Player player)
+		{
+			var canUse = base.CanUseItem(player);
+			item.noUseGraphic = true;
+			return canUse;
 		}
 	}
 

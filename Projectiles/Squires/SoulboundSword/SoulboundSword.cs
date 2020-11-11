@@ -41,6 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			item.damage = 32;
 			item.value = Item.buyPrice(0, 0, 50, 0);
 			item.rare = ItemRarityID.LightRed;
+			item.noUseGraphic = true;
 		}
 
 		public override void AddRecipes()
@@ -57,6 +58,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			recipe2.AddTile(TileID.Anvils);
 			recipe2.SetResult(this);
 			recipe2.AddRecipe();
+		}
+		public override bool CanUseItem(Player player)
+		{
+			var canUse = base.CanUseItem(player);
+			item.noUseGraphic = true;
+			return canUse;
 		}
 	}
 
