@@ -20,9 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		}
 	}
 
-	public class EclipseHeraldMinionItem : EmpoweredMinionItem<EclipseHeraldMinionBuff, EclipseHeraldCounterMinion>
+	public class EclipseHeraldMinionItem : MinionItem<EclipseHeraldMinionBuff, EclipseHeraldCounterMinion>
 	{
-		protected override int dustType => DustID.GoldFlame;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -62,6 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;
+		protected override int dustType => DustID.GoldFlame;
 		protected override int CounterType => ProjectileType<EclipseHeraldCounterMinion>();
 		public override void SetStaticDefaults()
 		{

@@ -21,9 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		}
 	}
 
-	public class CharredChimeraMinionItem : EmpoweredMinionItem<CharredChimeraMinionBuff, CharredChimeraCounterMinion>
+	public class CharredChimeraMinionItem : MinionItem<CharredChimeraMinionBuff, CharredChimeraCounterMinion>
 	{
-		protected override int dustType => 54;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -171,6 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		protected int minDistanceToEnemy = 200;
 		protected int animationFrames = 120;
 		protected int animationFrame = 0;
+		protected override int dustType => 54;
 		protected override int CounterType => ProjectileType<CharredChimeraCounterMinion>();
 
 		protected List<Projectile> allHeads = default;

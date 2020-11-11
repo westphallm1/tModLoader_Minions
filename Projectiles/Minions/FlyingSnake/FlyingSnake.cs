@@ -18,10 +18,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSnake
 		}
 	}
 
-	public class FlyingSnakeMinionItem : EmpoweredMinionItem<FlyingSnakeMinionBuff, FlyingSnakeCounterMinion>
+	public class FlyingSnakeMinionItem : MinionItem<FlyingSnakeMinionBuff, FlyingSnakeCounterMinion>
 	{
 
-		protected override int dustType => 39;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -49,6 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSnake
 	public class FlyingSnakeMinion : WormMinion<FlyingSnakeMinionBuff>
 	{
 		protected override int CounterType => ProjectileType<FlyingSnakeCounterMinion>();
+		protected override int dustType => 39;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

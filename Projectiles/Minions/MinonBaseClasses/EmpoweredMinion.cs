@@ -7,22 +7,6 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	public abstract class EmpoweredMinionItem<TBuff, TMinion> : MinionItem<TBuff, TMinion> where TBuff : ModBuff where TMinion : Minion<TBuff>
-	{
-		protected virtual int dustType => DustID.Confetti;
-		protected virtual int dustCount => 3;
-
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-		}
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
-	}
-
 	// Invisible minion that exists to track the empower count of empowered minions
 	// Works around many of the issues involved with changing a projectiles minionSlots
 	public abstract class CounterMinion<T> : SimpleMinion<T> where T : ModBuff
@@ -85,6 +69,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected int frameSpeed = 15;
 		protected int baseDamage = -1;
 		protected int previousEmpowerCount = 0;
+		protected virtual int dustType => DustID.Confetti;
+		protected virtual int dustCount => 3;
 
 		public override void SetStaticDefaults()
 		{
@@ -108,7 +94,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public virtual void OnEmpower()
 		{
-
+			// little visual effect on empower
+			for(int i = 0; i < dustCount; i ++)
+			{
+				Dust.NewDust(projectile.Center, 16, 16, dustType);
+			}
 		}
 
 		public override Vector2 IdleBehavior()

@@ -20,9 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		}
 	}
 
-	public class GoblinGunnerMinionItem : EmpoweredMinionItem<GoblinGunnerMinionBuff, GoblinGunnerCounterMinion>
+	public class GoblinGunnerMinionItem : MinionItem<GoblinGunnerMinionBuff, GoblinGunnerCounterMinion>
 	{
-		protected override int dustType => DustID.Shadowflame;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -80,6 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		protected override int CounterType => ProjectileType<GoblinGunnerCounterMinion>();
 
 		private int framesSinceLastHit;
+		protected override int dustType => DustID.Shadowflame;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

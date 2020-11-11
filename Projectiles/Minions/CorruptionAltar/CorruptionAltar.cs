@@ -21,9 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		}
 	}
 
-	public class CorruptionAltarMinionItem : EmpoweredMinionItem<CorruptionAltarMinionBuff, CorruptionAltarCounterMinion>
+	public class CorruptionAltarMinionItem : MinionItem<CorruptionAltarMinionBuff, CorruptionAltarCounterMinion>
 	{
-		protected override int dustType => DustID.Blood;
 
 		public override void SetStaticDefaults()
 		{
@@ -104,6 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 
 		private int framesSinceLastHit;
 		private int animationFrame;
+		protected override int dustType => DustID.Blood;
 		protected override int CounterType => ProjectileType<CorruptionAltarCounterMinion>();
 
 		public override void SetStaticDefaults()

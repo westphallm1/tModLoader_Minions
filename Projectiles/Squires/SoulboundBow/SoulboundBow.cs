@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -89,6 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		protected override float IdleDistanceMulitplier => 3;
 		public override string Texture => "Terraria/Item_0";
 
+		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
 		protected override WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.VERTICAL;

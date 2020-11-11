@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -76,7 +77,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			{
 				SetDirection = true;
 
-				Main.PlaySound(SoundID.Item1, projectile.Center);
 
 				//Take the initially given velocity and use it as the direction
 				targetDirection = projectile.velocity;
@@ -125,6 +125,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
 		protected override float knockbackSelf => 5f;
+
+		protected override LegacySoundStyle attackSound => SoundID.Item1;
 
 		private int firingFrame1 = 0;
 		private int firingFrame2 = 15;

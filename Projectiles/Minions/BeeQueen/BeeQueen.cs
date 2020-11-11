@@ -21,9 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		}
 	}
 
-	public class BeeQueenMinionItem : EmpoweredMinionItem<BeeQueenMinionBuff, BeeQueenCounterMinion>
+	public class BeeQueenMinionItem : MinionItem<BeeQueenMinionBuff, BeeQueenCounterMinion>
 	{
-		protected override int dustType => 153;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -170,6 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		int reloadCycleLength => Math.Max(120, 300 - 20 * EmpowerCount);
 
 		int reloadStartFrame = 0;
+		protected override int dustType => 153;
 
 		protected override int CounterType => ProjectileType<BeeQueenCounterMinion>();
 

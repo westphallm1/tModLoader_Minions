@@ -19,9 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		}
 	}
 
-	public class BoneSerpentMinionItem : EmpoweredMinionItem<BoneSerpentMinionBuff, BoneSerpentCounterMinion>
+	public class BoneSerpentMinionItem : MinionItem<BoneSerpentMinionBuff, BoneSerpentCounterMinion>
 	{
-		protected override int dustType => 30;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -41,14 +40,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			item.value = Item.buyPrice(0, 1, 0, 0);
 			item.rare = ItemRarityID.Orange;
 		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Bone, 75);
-			recipe.AddTile(TileID.Hellforge);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
 	}
 
 	public class BoneSerpentCounterMinion : CounterMinion<BoneSerpentMinionBuff> {
@@ -60,6 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
 		private int framesInAir;
 		private int framesInGround;
+		protected override int dustType => 30;
 		protected override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
 		public override void SetStaticDefaults()
 		{

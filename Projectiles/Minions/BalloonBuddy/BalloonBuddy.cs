@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		}
 	}
 
-	public class BalloonBuddyMinionItem : EmpoweredMinionItem<BalloonBuddyMinionBuff, BalloonBuddyCounterMinion>
+	public class BalloonBuddyMinionItem : MinionItem<BalloonBuddyMinionBuff, BalloonBuddyCounterMinion>
 	{
 		public override void SetStaticDefaults()
 		{

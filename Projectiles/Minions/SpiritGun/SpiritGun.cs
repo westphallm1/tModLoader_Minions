@@ -21,9 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 	}
 
-	public class SpiritGunMinionItem : EmpoweredMinionItem<SpiritGunMinionBuff, SpiritGunCounterMinion>
+	public class SpiritGunMinionItem : MinionItem<SpiritGunMinionBuff, SpiritGunCounterMinion>
 	{
-		protected override int dustType => 137;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -67,6 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		private int animationFrame;
 		private Queue<Vector2> activeTargetVectors;
 		private bool isReloading;
+		protected override int dustType => 137;
 
 		private float unfiredShots
 		{

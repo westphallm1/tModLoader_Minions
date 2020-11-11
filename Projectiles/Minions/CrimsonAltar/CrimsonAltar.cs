@@ -21,9 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		}
 	}
 
-	public class CrimsonAltarMinionItem : EmpoweredMinionItem<CrimsonAltarMinionBuff, CrimsonAltarCounterMinion>
+	public class CrimsonAltarMinionItem : MinionItem<CrimsonAltarMinionBuff, CrimsonAltarCounterMinion>
 	{
-		protected override int dustType => DustID.Blood;
 
 		public override void SetStaticDefaults()
 		{
@@ -146,6 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		private int framesSinceLastHit;
 		private int animationFrame;
 		protected override int CounterType => ProjectileType<CrimsonAltarCounterMinion>();
+		protected override int dustType => DustID.Blood;
 
 		public override void SetStaticDefaults()
 		{

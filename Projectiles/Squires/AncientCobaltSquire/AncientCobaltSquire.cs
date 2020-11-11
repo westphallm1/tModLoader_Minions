@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -89,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 	public class AncientCobaltSquireMinion : WeaponHoldingSquire<AncientCobaltSquireMinionBuff>
 	{
-		protected override int AttackFrames => 30;
+		protected override int AttackFrames => 45;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AncientCobaltSquire/AncientCobaltStaff";
 
@@ -102,7 +103,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
+		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 43);
+
 		protected float projectileVelocity = 14;
+
+
 		public AncientCobaltSquireMinion() : base(ItemType<AncientCobaltSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()

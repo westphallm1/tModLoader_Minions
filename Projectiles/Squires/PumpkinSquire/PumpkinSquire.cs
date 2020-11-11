@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -136,6 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
+		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 19);
 		protected float projectileVelocity = 8;
 
 		public PumpkinSquireMinion() : base(ItemType<PumpkinSquireMinionItem>()) { }

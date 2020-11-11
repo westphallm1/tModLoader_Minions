@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -35,6 +37,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected virtual WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 		protected virtual WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.DIAGONAL;
 		protected virtual Vector2 WeaponCenterOfRotation => Vector2.Zero;
+
+		protected virtual LegacySoundStyle attackSound => SoundID.Item1;
 
 		protected virtual float knockbackSelf => 10f;
 		protected int wingFrame = 0;
@@ -262,6 +266,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			usingWeapon = true;
 			weaponAngle = GetWeaponAngle();
+			if(attackFrame == 0 && attackSound != null)
+			{
+				Main.PlaySound(attackSound, projectile.Center);
+			}
 			base.TargetedMovement(vectorToTargetPosition);
 		}
 
