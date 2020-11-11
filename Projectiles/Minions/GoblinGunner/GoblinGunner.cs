@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			projectile.width = 24;
 			projectile.height = 2;
 			projectile.friendly = true;
-			projectile.penetrate = 3;
+			projectile.penetrate = 1;
 			projectile.tileCollide = true;
 			projectile.timeLeft = 60;
 		}

@@ -30,6 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			projectile.tileCollide = false;
 			projectile.timeLeft = 300;
 			hitTarget = false;
+			projectile.usesLocalNPCImmunity = true;
+			projectile.localNPCHitCooldown = 20;
 		}
 		public override void AI()
 		{
@@ -46,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			if (!hitTarget && targetNPC.active)
 			{
 				Vector2 vectorToTarget = targetNPC.Center - projectile.Center;
-				if (vectorToTarget.Length() < 4)
+				if (vectorToTarget.Length() < 32)
 				{
 					OnHitTarget();
 				}
