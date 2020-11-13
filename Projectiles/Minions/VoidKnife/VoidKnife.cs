@@ -74,6 +74,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 		private int maxPhaseFrames = 60;
 		private int lastHitFrame = 0;
 		private int framesWithoutTarget;
+		private bool targetIsDead;
+		private bool lastActive;
 
 		public override void SetStaticDefaults()
 		{
@@ -96,6 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			attackThroughWalls = true;
 			useBeacon = false;
 			travelVelocity = 16;
+			targetIsDead = false;
 		}
 
 
@@ -156,20 +159,33 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
+
 			if (targetNPC is null && targetNPCIndex is int index)
 			{
 				targetNPC = Main.npc[index];
+				
 				distanceFromFoe = default;
 				phaseFrames = 0;
 				framesInAir = 0;
 				lastHitFrame = -10;
+				targetIsDead = false;
+				lastActive = true;
+			} else if(!targetIsDead && targetNPC != null && lastActive && !targetNPC.active)
+			{
+				phaseFrames = maxPhaseFrames;
+				framesInAir = Math.Max(framesInAir, maxFramesInAir - 15);
+				targetIsDead = true;
+				lastActive = false;
+				float r = projectile.rotation + 3*(float)Math.PI/2;
+				projectile.velocity = new Vector2((float)Math.Cos(r), (float)Math.Sin(r));
+				projectile.velocity *= travelVelocity;
 			}
-			else if (targetNPC != null && phaseFrames++ < maxPhaseFrames / 2)
+
+			if (targetNPC != null && phaseFrames++ < maxPhaseFrames / 2)
 			{
 				// do nothing, preDraw will do phase out animation
 				IdleMovement(vectorToIdle);
 			}
-
 			else if (phaseFrames > maxPhaseFrames / 2 && phaseFrames < maxPhaseFrames)
 			{
 				//TODO void knife ai
@@ -195,21 +211,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 					//Don't change position continuously, bandaid fix until a proper way for it to work in MP is figured out
 				}
 				projectile.friendly = false;
-			}
-			else if (framesInAir++ > maxFramesInAir || framesWithoutTarget == 10)
+			} else
 			{
-				targetNPC = null;
-				attackState = AttackState.RETURNING;
-			}
-			else if (framesInAir - lastHitFrame > 10)
-			{
-				projectile.friendly = true;
-				vectorToTargetPosition.SafeNormalize();
-				projectile.velocity = vectorToTargetPosition * travelVelocity;
-				projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.PiOver2;
-			}
-			if (phaseFrames >= maxPhaseFrames)
-			{
+				if (framesInAir++ > maxFramesInAir || framesWithoutTarget == 10)
+				{
+					targetNPC = null;
+					attackState = AttackState.RETURNING;
+				}
+				else if (framesInAir - lastHitFrame > 10 && !targetIsDead)
+				{
+					projectile.friendly = true;
+					vectorToTargetPosition.SafeNormalize();
+					projectile.velocity = vectorToTargetPosition * travelVelocity;
+					projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.PiOver2;
+				}
 				Dust.NewDust(projectile.Center, 8, 8, DustID.Shadowflame);
 			}
 			Lighting.AddLight(projectile.Center, Color.Purple.ToVector3() * 0.75f);

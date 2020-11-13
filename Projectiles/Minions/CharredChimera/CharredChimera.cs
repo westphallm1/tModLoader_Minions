@@ -370,12 +370,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		{
 			float r = projectile.rotation;
 			Vector2 pos = projectile.Center;
-			Texture2D texture = GetTexture(Texture);
+			Texture2D bodyTexture = GetTexture(Texture);
+			Texture2D ribsTexture = GetTexture(Texture + "_Ribs");
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			int frameHeight = bodyTexture.Height / Main.projFrames[projectile.type];
+			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, bodyTexture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			spriteBatch.Draw(ribsTexture, pos - Main.screenPosition,
+				ribsTexture.Bounds, lightColor, r,
+				ribsTexture.Bounds.Center.ToVector2(), 1, effects, 0);
+			DrawHeart(spriteBatch, lightColor);
+			spriteBatch.Draw(bodyTexture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
 			foreach (Projectile head in allHeads)
@@ -383,6 +388,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 				DrawVertibrae(spriteBatch, lightColor, head);
 			}
 			return false;
+		}
+
+		private void DrawHeart(SpriteBatch spriteBatch, Color lightColor)
+		{
+			Vector2 heartCenter = projectile.Center + new Vector2(16 * projectile.spriteDirection, 0);
+			Texture2D heartTexture = GetTexture(Texture + "_Heart");
+			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Rectangle bounds = heartTexture.Bounds;
+			Vector2 origin = bounds.Center.ToVector2();
+			float r = 0;
+			int beatFrame = animationFrame % (animationFrames / 2);
+			float scale = beatFrame < animationFrames / 8? 
+				1 + (float)(0.25 * Math.Sin(8 * Math.PI * beatFrame / animationFrames)) : 
+				1 + (float)(0.125 * Math.Sin(Math.PI/2 + 4 * Math.PI * beatFrame / animationFrames));
+			spriteBatch.Draw(heartTexture, heartCenter - Main.screenPosition,
+				bounds, lightColor, r,
+				origin, scale, effects, 0);
 		}
 
 		private void DrawHeads(SpriteBatch spriteBatch, Color lightColor)
