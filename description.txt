@@ -1,18 +1,18 @@
 The Amulet of Many Minions is designed to add variety to the vanilla summoner progression while staying at least somewhat
 in line with vanilla balance. It adds a new, directly controllable minion type called the Squire,
-over a dozen new minions, 3 accessories, and an early pre-hardmode armor set to the game.
-
-Note: This mod is currently only tested in single player.
-
+over a 15 new minions, various accessories, and an early pre-hardmode armor set to the game.
 
 === Version History ==
-v0.3.0 - Many more resprites courtesy of SkyanUltra
+v0.3.0 - Multiplayer support! 
+       - Many more updated sprites
        - Re-AI several minions to make more unique
-       - Add 4 new Minions and 2 new Squires
+       - Add 4 new Minions, 2 new Squires, and 1 new accessory
+       - Change several drop/crafting recipes (check the Cheat Sheet!) 
 v0.2.1 - Add many resprites courtesy of SkyanUltra
        - Polish several minions & armor set based on playtesting feeback
 v0.2 - Squires introduced, minions switched to use local iFrames
 v0.1 - Base minions, armor, and accessories introduced
+
 Crafting Cheat Sheet (Also available from homepage):
 
 === Minions ===
@@ -64,7 +64,7 @@ Mildew Set - Mushrooms + Daybloom + Wood @ Workbench
 
 === Accessories ===
 --- Pre Hardmode ---
-Cursed Squire Skull - Skeletron (50%)
+Necro Pendant - Skeletron (50%)
 --- Hardmode ---
 Charm of Many Minions - 1 Light Shard + 8 Soul of Night @ Anvil
 Charm of Mighty Minions - 1 Dark Shard + 8 Soul of Light @ Anvil
