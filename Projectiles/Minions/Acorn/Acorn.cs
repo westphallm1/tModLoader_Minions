@@ -137,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			{
 				Projectile.NewProjectile(
 					projectile.Center,
-					new Vector2(vectorAbove.X / 8, 2),
+					new Vector2(vectorAbove.X / 8 + projectile.velocity.X, 2),
 					ProjectileType<AcornBomb>(),
 					projectile.damage,
 					projectile.knockBack,

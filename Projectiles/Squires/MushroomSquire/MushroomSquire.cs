@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			item.knockBack = 2f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 10;
+			item.damage = 9;
 			item.value = Item.sellPrice(0, 0, 0, 75);
 			item.rare = ItemRarityID.White;
 		}

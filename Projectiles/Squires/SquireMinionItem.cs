@@ -48,7 +48,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 			else
 			{
-				SetDefaults();
+				item.useStyle = ItemUseStyleID.HoldingUp;
+				item.noUseGraphic = false;
+				item.UseSound = SoundID.Item44;
 			}
 			return true;
 		}
