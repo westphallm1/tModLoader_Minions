@@ -61,11 +61,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			Main.projFrames[projectile.type] = 1;
 		}
 
-		protected bool InTheGround(Vector2 position)
-		{
-			Tile tile = TileAtLocation(position);
-			return tile.collisionType == 1 || Main.tileSolidTop[tile.type];
-		}
 
 		public sealed override void SetDefaults()
 		{

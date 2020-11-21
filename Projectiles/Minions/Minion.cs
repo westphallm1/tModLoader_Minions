@@ -71,6 +71,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			//null-safe
 			return Framing.GetTileSafely(x, y);
 		}
+		protected bool InTheGround(Vector2 position)
+		{
+			Tile tile = TileAtLocation(position);
+			return tile.collisionType == 1 || Main.tileSolidTop[tile.type];
+		}
 
 		protected bool StandingOnPlatform()
 		{
@@ -82,6 +87,38 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			bottomOfProjectile.Y += 8; // go to the next block down
 			Tile tileUnderfoot = TileAtLocation(bottomOfProjectile);
 			return Main.tileSolidTop[tileUnderfoot.type];
+		}
+
+		// This may or may not be less efficient than the regular Collisions methods
+		// time will tell
+		protected Vector2? NearestGroundLocation(Vector2? searchStart = null, int maxSearchDistance = 320)
+		{
+			for(int i = 8; i < maxSearchDistance; i+= 16)
+			{
+				Vector2 searchPoint = searchStart ?? projectile.Bottom;
+				searchPoint.Y += i;
+				if(InTheGround(searchPoint))
+				{
+					return searchPoint;
+				}
+			}
+			return null;
+		}
+
+		protected Vector2? NearestLedgeLocation(Vector2 searchDirection, Vector2? searchStart = null, int maxSearchDistance = 48)
+		{
+			for(int i = 8; i < maxSearchDistance; i+= 16)
+			{
+				Vector2 searchPoint = searchStart ?? projectile.Top;
+				searchPoint.Y -= i;
+				Vector2 nextPointOver = searchPoint;
+				nextPointOver.X += 16 * Math.Sign(searchDirection.X);
+				if(!InTheGround(searchPoint) && !InTheGround(nextPointOver))
+				{
+					return searchPoint;
+				}
+			}
+			return null;
 		}
 
 		protected bool DropThroughPlatform()
