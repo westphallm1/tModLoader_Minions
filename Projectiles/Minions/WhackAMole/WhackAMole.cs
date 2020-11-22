@@ -61,6 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		protected int? teleportStartFrame = null;
 		protected Vector2 teleportDestination;
 		private bool didHitWall = false;
+		private bool isOnGround = false;
 		
 		public override void SetStaticDefaults()
 		{
@@ -101,7 +102,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			new Vector2(-16, 0),
 			new Vector2(-8, -14),
 			new Vector2(16, 0),
-			new Vector2(8, -14)
+			new Vector2(8, -14),
+			new Vector2(0, -28)
 		};
 
 		// x offset of every mole
@@ -111,7 +113,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			8,
 			8,
 			0,
+			0,
 			0
+		};
+
+		private static int[] widths =
+		{
+			24,
+			32,
+			32,
+			48,
+			48,
+			48
 		};
 
 		// color of every mole
@@ -120,6 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			new Color(101, 196, 255),
 			new Color(153, 221, 146),
 			new Color(255, 101, 132),
+			new Color(233, 229, 146),
 			new Color(173, 101, 255),
 			new Color(255, 101, 244),
 		};
@@ -139,15 +153,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				{
 					int teleportFrame = animationFrame - teleportStart;
 					int teleportHalf = TeleportFrames / 2;
+					float heightToSink = 24 - positionOffsets[i].Y;
 					if(teleportFrame < teleportHalf)
 					{
-						offsetPixels = -(int)(24 * (float)teleportFrame / teleportHalf);
+						offsetPixels = -(int)(heightToSink * (float)teleportFrame / teleportHalf);
 					}
 					else
 					{
-						offsetPixels = -(int)(24 * (float)(TeleportFrames - teleportFrame) / teleportHalf);
+						offsetPixels = -(int)(heightToSink * (float)(TeleportFrames - teleportFrame) / teleportHalf);
 					}
 					pos.X += positionOffsets[i].X;
+					pos.Y += positionOffsets[i].Y /2;
 				} else 
 				{
 					offsetPixels = (int) (3 * Math.Sin(headBobOffset * i + 2 * Math.PI * (animationFrame % AnimationFrames) / AnimationFrames));
@@ -179,6 +195,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			animationFrame++;
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			isOnGround = InTheGround(new Vector2(projectile.Bottom.X, projectile.Bottom.Y + 8));
 			return vectorToIdlePosition;
 		}
 
@@ -198,7 +215,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			SetFlyingState();
-			if(isFlying)
+			if(teleportStartFrame != null)
+			{
+				DoTeleport();
+			} else if(isFlying)
 			{
 				IdleFlyingMovement(vectorToIdlePosition);
 			} else
@@ -221,7 +241,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			incrementVector.Normalize();
 			float maxLength = vectorToTarget.Length();
 			Vector2? clearSpace = null;
-			for(int i = increment; i < maxLength; i++)
+			for(int i = 48; i < maxLength; i+= increment)
 			{
 				Vector2 position = projectile.Center + incrementVector * i;
 				if(!InTheGround(position))
@@ -235,9 +255,41 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			}
 			if(clearSpace is Vector2 clear && NearestGroundLocation(searchStart: clear) is Vector2 clearGround)
 			{
-				clearGround.Y -= (projectile.height + 16);
+				clearGround.Y -= clearGround.Y % 16; // snap to the nearest block
+				clearGround.Y -= projectile.height;
 				teleportDestination = clearGround;
-				teleportDestination.X -= projectile.width / 2;
+				teleportDestination.X += Math.Sign(vectorToTarget.X) * projectile.width / 2;
+				teleportStartFrame = animationFrame;
+			}
+		}
+
+		// See if there's a solid block with *top* between us and the target, and teleport on
+		// top of it if so
+		private void TeleportTowardsCeiling(Vector2 vectorToTarget, int increment = 16)
+		{
+			vectorToTarget.Y -= 16; // give a bit of leeway
+			vectorToTarget.X = 0; // only go straight up
+			Vector2 incrementVector = vectorToTarget;
+			incrementVector.Normalize();
+			float maxLength = vectorToTarget.Length();
+			Vector2? clearSpace = null;
+			bool hasFoundGround = false;
+			for(int i = 16; i < maxLength; i+= increment)
+			{
+				Vector2 position = projectile.Center + incrementVector * i;
+				bool inTheGround = InTheGround(position);
+				hasFoundGround |= inTheGround;
+				if(hasFoundGround && !inTheGround)
+				{
+					clearSpace = position;
+					break;
+				}
+			}
+			if(clearSpace is Vector2 clear && NearestGroundLocation(searchStart: clear) is Vector2 clearGround)
+			{
+				clearGround.Y -= clearGround.Y % 16; // snap to the nearest block
+				clearGround.Y -= (projectile.height);
+				teleportDestination = clearGround;
 				teleportStartFrame = animationFrame;
 			}
 		}
@@ -246,6 +298,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		{
 			projectile.velocity = Vector2.Zero;
 			int teleportFrame = animationFrame - (int)teleportStartFrame;
+			int width = widths[Math.Min(shades.Length, EmpowerCount) - 1];
+			if (teleportFrame == 1 || teleportFrame == 1+ TeleportFrames/2)
+			{
+				Collision.HitTiles(projectile.Bottom + new Vector2(-width / 2, 8), new Vector2(0, 8), width, 8);
+			}
 			if(teleportFrame == TeleportFrames / 2)
 			{
 				// do the actual teleport
@@ -263,23 +320,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		public void IdleGroundedMovement(Vector2 vectorToIdlePosition)
 		{
-			if(teleportStartFrame != null)
-			{
-				DoTeleport();
-				return;
-			}
 			bool needsToGoThroughWall = didHitWall && vectorToIdlePosition.Length() > 32;
-			bool needsToGoThroughFloor = vectorToIdlePosition.Y > 32 &&
-				Math.Abs(vectorToIdlePosition.X) < 32 &&
-				InTheGround(new Vector2(projectile.Bottom.X, projectile.Bottom.Y + 8));
-			if(needsToGoThroughFloor || needsToGoThroughWall)
+			bool needsToGoThroughFloor = isOnGround && vectorToIdlePosition.Y > 32 &&
+				Math.Abs(vectorToIdlePosition.X) < 32;
+			bool needsToGoThroughCeiling = isOnGround && vectorToIdlePosition.Y < -64 &&
+				Math.Abs(vectorToIdlePosition.X) < 32;
+			if(needsToGoThroughFloor || needsToGoThroughWall || needsToGoThroughCeiling)
 			{
-				if(didHitWall && NearestLedgeLocation(vectorToIdlePosition) is Vector2 ledge)
+				if(needsToGoThroughWall && NearestLedgeLocation(vectorToIdlePosition) != null)
 				{
 					projectile.velocity.Y = -4;
-				} else
+				} else if(needsToGoThroughWall || needsToGoThroughFloor)
 				{
 					TeleportTowardsTarget(vectorToIdlePosition);
+				} else if(needsToGoThroughCeiling)
+				{
+					TeleportTowardsCeiling(vectorToIdlePosition);
 				}
 				didHitWall = false;
 				return;
