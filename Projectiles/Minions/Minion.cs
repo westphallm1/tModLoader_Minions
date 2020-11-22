@@ -89,8 +89,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return Main.tileSolidTop[tileUnderfoot.type];
 		}
 
-		// This may or may not be less efficient than the regular Collisions methods
-		// time will tell
+		// Find the nearest tile that's directly beneath the minion and directly above the ground eg:
+		//
+		//     M
+		//
+		//     X
+		// GGGGGGGGGGG
 		protected Vector2? NearestGroundLocation(Vector2? searchStart = null, int maxSearchDistance = 320)
 		{
 			for(int i = 8; i < maxSearchDistance; i+= 16)
@@ -105,6 +109,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return null;
 		}
 
+		// Find the nearest tile that's 'up a ledge' from the minion, eg:
+		//
+		//
+		// X
+		// G
+		// G M
+		// GGGGG
 		protected Vector2? NearestLedgeLocation(Vector2 searchDirection, Vector2? searchStart = null, int maxSearchDistance = 48)
 		{
 			for(int i = 8; i < maxSearchDistance; i+= 16)
@@ -113,7 +124,48 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				searchPoint.Y -= i;
 				Vector2 nextPointOver = searchPoint;
 				nextPointOver.X += 16 * Math.Sign(searchDirection.X);
-				if(!InTheGround(searchPoint) && !InTheGround(nextPointOver))
+				bool searchPointInGround = InTheGround(searchPoint);
+				if(searchPointInGround)
+				{
+					return null; // the ledge is obstructed, we can't climb it
+				} else if(!InTheGround(nextPointOver))
+				{
+					return searchPoint;
+				}
+			}
+			return null;
+		}
+
+		// Find the nearest tile that's 'down a ledge' from the minion, eg:
+		//
+		//
+		// M
+		// GGGGGGGG X
+		// GGGGGGGG
+		// GGGGGGGGGG
+		protected Vector2? NearestCliffLocation(Vector2 searchDirection, int cliffHeight = 48, Vector2? searchStart = null, int maxSearchDistance = 48)
+		{
+			for(int i = 0; i < maxSearchDistance; i+= 16)
+			{
+				Vector2 searchPoint = searchStart ?? projectile.Bottom;
+				searchPoint.Y -= 8; // make sure the block above is also air
+				searchPoint.X += i * Math.Sign(searchDirection.X);
+				bool isAllAir = true;
+				for(int j = 0; j < cliffHeight; j+= 16)
+				{
+					Vector2 dropPoint = searchPoint + new Vector2(0, j);
+					if(InTheGround(dropPoint))
+					{
+						if (j == 0)
+						{
+							// there's an obstruction between us and the ledge, so we can't fall
+							return null;
+						}
+						isAllAir = false;
+						break;
+					}
+				}
+				if(isAllAir)
 				{
 					return searchPoint;
 				}
