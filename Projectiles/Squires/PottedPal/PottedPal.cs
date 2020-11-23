@@ -92,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		{
 			projectile.velocity = -projectile.velocity;
 			projectile.velocity.SafeNormalize();
-			projectile.velocity *= ComputeTargetedSpeed();
+			projectile.velocity *= ModifiedTargetedSpeed();
 		}
 
 		public override Vector2? FindTarget()

@@ -3,7 +3,9 @@ using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.NPCs;
 using AmuletOfManyMinions.Projectiles.Squires;
 using System.IO;
+using Terraria;
 using Terraria.ModLoader;
+using static AmuletOfManyMinions.Items.Armor.RoyalArmor.RoyalGown;
 
 namespace AmuletOfManyMinions
 {
@@ -16,6 +18,10 @@ namespace AmuletOfManyMinions
 			SquireMinionTypes.Load();
 			NecromancerAccessory.Load();
 			SquireGlobalProjectile.Load();
+			if(!Main.dedServ)
+			{
+				AddEquipTexture(null, EquipType.Legs, "RoyalGown_Legs", "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
+			}
 		}
 
 		public override void PostSetupContent()

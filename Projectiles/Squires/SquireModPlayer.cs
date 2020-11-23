@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Items.Accessories.SquireSkull;
+using AmuletOfManyMinions.Items.Armor.RoyalArmor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +12,25 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
-	class SquireModPlayer : ModPlayer
+	public class SquireModPlayer : ModPlayer
 	{
 		public bool squireSkullAccessory;
 		public int squireDebuffOnHit = -1;
+		public float squireTravelSpeedMultiplier;
+		public float squireRangeMultiplier;
+		public float squireAttackSpeedMultiplier;
+		public float squireDamageMultiplierBonus;
 		internal int squireDebuffTime;
+		internal bool royalArmorSetEquipped;
 
 		public override void ResetEffects()
 		{
 			squireSkullAccessory = false;
+			royalArmorSetEquipped = false;
+			squireAttackSpeedMultiplier = 1;
+			squireTravelSpeedMultiplier = 1;
+			squireRangeMultiplier = 1;
+			squireDamageMultiplierBonus = 0;
 		}
 
 		public bool HasSquire()
@@ -53,18 +64,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				return;
 			}
-			if(squireSkullAccessory)
-			{
-				mult += 0.1f;
-			}
+			mult += squireDamageMultiplierBonus;
 		}
 		public override void PostUpdate()
 		{
 			Projectile mySquire = GetSquire();
 			int skullType = ProjectileType<SquireSkullProjectile>();
-			if(player.whoAmI == Main.myPlayer && mySquire != null && squireSkullAccessory && player.ownedProjectileCounts[skullType] == 0)
+			int crownType = ProjectileType<RoyalCrownProjectile>();
+			bool canSummonAccessory = player.whoAmI == Main.myPlayer && mySquire != null;
+			if(canSummonAccessory && squireSkullAccessory && player.ownedProjectileCounts[skullType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, skullType, 0, 0, player.whoAmI);
+			}
+			if(canSummonAccessory && royalArmorSetEquipped && player.ownedProjectileCounts[crownType] == 0)
+			{
+				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, crownType, 0, 0, player.whoAmI);
 			}
 			if(player.ownedProjectileCounts[skullType] == 0)
 			{

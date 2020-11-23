@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			Vector2? vector2Target = base.FindTarget();
 			if (vector2Target != null)
 			{
-				if (IsBoss && attackFrame == AttackFrames - 1)
+				if (IsBoss && attackFrame == ModifiedAttackFrames - 1)
 				{
 					attackSequence = (attackSequence + 1) % AttackSequenceLength;
 					projectile.ai[0] = attackSequence;
@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 				// default frame increment path gets blocked, need to recreate here
 				if (!IsAttacking())
 				{
-					attackFrame = (attackFrame + 1) % AttackFrames;
+					attackFrame = (attackFrame + 1) % ModifiedAttackFrames;
 				}
 				if (!IsMyTurn())
 				{

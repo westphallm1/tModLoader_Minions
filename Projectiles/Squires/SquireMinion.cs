@@ -45,6 +45,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		protected virtual float IdleDistanceMulitplier => 1.5f;
 
 		protected bool returningToPlayer = false;
+
+		protected int baseLocalIFrames;
+
+		protected virtual bool travelRangeCanBeModified => true;
 		public SquireMinion(int itemID)
 		{
 			itemType = itemID;
@@ -73,6 +77,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			projectile.minionSlots = 0;
 		}
 
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			baseLocalIFrames = projectile.localNPCHitCooldown;
+		}
+
 		public override bool? CanCutTiles()
 		{
 			return true;
@@ -81,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override Vector2? FindTarget()
 		{
 			// move towards the mouse if player is holding and clicking
-			if (returningToPlayer || Vector2.Distance(projectile.Center, player.Center) > IdleDistanceMulitplier * MaxDistanceFromPlayer())
+			if (returningToPlayer || Vector2.Distance(projectile.Center, player.Center) > IdleDistanceMulitplier * ModifiedMaxDistance())
 			{
 				returningToPlayer = true;
 				return null; // force back into non-attacking mode if too far from player
@@ -99,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 						return mouseWorld - projectile.Center;
 					}
 					targetFromPlayer.Normalize();
-					targetFromPlayer *= MaxDistanceFromPlayer();
+					targetFromPlayer *= ModifiedMaxDistance();
 					return player.Center + targetFromPlayer - projectile.Center;
 				}
 			}
@@ -112,6 +122,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			Vector2 idlePosition = player.Top;
 			idlePosition.X += 24 * -player.direction;
 			idlePosition.Y += -8;
+			// not sure what side effects changing this each frame might have
+			projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition.X = player.Center.X;
@@ -126,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			// always clamp to the idle position
 			float inertia = ComputeInertia();
-			float maxSpeed = ComputeIdleSpeed();
+			float maxSpeed = ModifiedIdleSpeed();
 			Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
 			if (speedChange.Length() > maxSpeed)
 			{
@@ -159,12 +171,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				return;
 			}
 			float inertia = ComputeInertia();
-			float speed = ComputeTargetedSpeed();
+			float speed = ModifiedTargetedSpeed();
 			vectorToTargetPosition.SafeNormalize();
 			vectorToTargetPosition *= speed;
 			relativeVelocity = (relativeVelocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 			projectile.velocity = player.velocity + relativeVelocity;
 		}
+
+		public float ModifiedTargetedSpeed() => ComputeTargetedSpeed() * player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier;
+		public float ModifiedIdleSpeed() => ComputeIdleSpeed() * player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier;
+
+		public float ModifiedMaxDistance() => MaxDistanceFromPlayer() * (travelRangeCanBeModified ? player.GetModPlayer<SquireModPlayer>().squireRangeMultiplier : 1);
 
 		public virtual float ComputeInertia()
 		{

@@ -27,6 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 	{
 		protected bool usingWeapon = false;
 		protected abstract int AttackFrames { get; }
+
 		protected virtual int SpaceBetweenFrames => 42;
 		protected virtual int BodyFrames => 1;
 		protected virtual float SwingAngle0 => 5 * (float)Math.PI / 8;
@@ -88,10 +89,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			}
 			if (IsAttacking())
 			{
-				attackFrame = (attackFrame + 1) % AttackFrames;
+				attackFrame = (attackFrame + 1) % ModifiedAttackFrames;
 			}
 			return base.IdleBehavior();
 		}
+
+		protected int ModifiedAttackFrames => (int)(AttackFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier); 
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
@@ -122,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
 		protected virtual float GetFixedWeaponAngle()
 		{
-			float angleStep = (SwingAngle1 - SwingAngle0) / AttackFrames;
+			float angleStep = (SwingAngle1 - SwingAngle0) / ModifiedAttackFrames;
 			return SwingAngle0 + angleStep * attackFrame;
 		}
 
