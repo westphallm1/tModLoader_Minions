@@ -38,11 +38,11 @@ namespace AmuletOfManyMinions.Items.Accessories.SpiritCallerCharm
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<NecromancerAccessoryPlayer>().spiritCallerCharmEquipped = true;
+			player.GetModPlayer<MinionSpawningItemPlayer>().spiritCallerCharmEquipped = true;
 			player.minionDamageMult += 0.08f;
 		}
 
-		internal override bool IsEquipped(NecromancerAccessoryPlayer player)
+		internal override bool IsEquipped(MinionSpawningItemPlayer player)
 		{
 			return player.spiritCallerCharmEquipped;
 		}

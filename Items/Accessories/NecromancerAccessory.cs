@@ -1,11 +1,15 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
+using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Items.Accessories
 {
@@ -31,7 +35,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			accessories = null;
 		}
 
-		internal virtual void ModifyPlayerWeaponDamage(NecromancerAccessoryPlayer necromancerAccessoryPlayer, Item item, ref float add, ref float mult, ref float flat)
+		internal virtual void ModifyPlayerWeaponDamage(MinionSpawningItemPlayer necromancerAccessoryPlayer, Item item, ref float add, ref float mult, ref float flat)
 		{
 			// no op
 		}
@@ -74,16 +78,17 @@ namespace AmuletOfManyMinions.Items.Accessories
 			return true;
 		}
 
-		internal abstract bool IsEquipped(NecromancerAccessoryPlayer player);
+		internal abstract bool IsEquipped(MinionSpawningItemPlayer player);
 	}
 
-	internal class NecromancerAccessoryPlayer : ModPlayer
+	internal class MinionSpawningItemPlayer : ModPlayer
 	{
 		public bool wormOnAStringEquipped = false;
 		public bool spiritCallerCharmEquipped = false;
 		public bool techromancerAccessoryEquipped = false;
 		internal bool foragerArmorSetEquipped;
 		internal int summonFlatDamage;
+		internal bool illusionistArmorSetEquipped;
 
 		public override void ResetEffects()
 		{
@@ -91,6 +96,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			spiritCallerCharmEquipped = false;
 			techromancerAccessoryEquipped = false;
 			foragerArmorSetEquipped = false;
+			illusionistArmorSetEquipped = false;
 			summonFlatDamage = 0;
 		}
 
@@ -110,9 +116,73 @@ namespace AmuletOfManyMinions.Items.Accessories
 			// a bit hacky, will wanna make this nicer eventually
 			flat += summonFlatDamage;
 		}
+
+		public static readonly PlayerLayer IllusionistRobeLegs = new PlayerLayer("AmuletOfManyMinions", "IllusionistRobeLegs", PlayerLayer.Legs, delegate (PlayerDrawInfo drawInfo)
+		{
+			Player drawPlayer = drawInfo.drawPlayer;
+			Mod mod = ModLoader.GetMod("AmuletOfManyMinions");
+			Texture2D texture;
+			// this may not be the most efficient
+			if(drawPlayer.armor.Any(item=>item.type == ItemType<IllusionistCorruptRobe>())) 
+			{
+				texture = mod.GetTexture("Items/Armor/IllusionistArmor/IllusionistCorruptRobe_Legs");
+			} else if (drawPlayer.armor.Any(item=>item.type == ItemType<IllusionistCrimsonRobe>()))
+			{
+				texture = mod.GetTexture("Items/Armor/IllusionistArmor/IllusionistCrimsonRobe_Legs");
+			} else
+			{
+				return;
+			}
+			Vector2 Position = drawInfo.position;
+			Position.Y += 14;
+			Color color = Lighting.GetColor((int)(drawPlayer.Center.X / 16), (int)(drawPlayer.Center.Y / 16));
+			Vector2 pos = new Vector2((float)((int)(Position.X - Main.screenPosition.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(Position.Y - Main.screenPosition.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2));
+			DrawData value = new DrawData(texture, pos, new Microsoft.Xna.Framework.Rectangle?(drawPlayer.legFrame), color, drawPlayer.legRotation, drawInfo.legOrigin, 1f, drawInfo.spriteEffects, 0);
+			Main.playerDrawData.Add(value);
+		});
+
+		public override void ModifyDrawLayers(List<PlayerLayer> layers)
+		{
+			int legLayer = layers.FindIndex(layer => layer.Name.Equals("Legs"));
+			if(legLayer != -1)
+			{
+				IllusionistRobeLegs.visible = true;
+				layers.Insert(legLayer + 1, IllusionistRobeLegs);
+			}
+		}
+		public List<Projectile> GetMinionsOfType(int projectileType)
+		{
+			var otherMinions = new List<Projectile>();
+			for (int i = 0; i < Main.maxProjectiles; i++)
+			{
+				// Fix overlap with other minions
+				Projectile other = Main.projectile[i];
+				if (other.active && other.owner == player.whoAmI && other.type == projectileType)
+				{
+					otherMinions.Add(other);
+				}
+			}
+			otherMinions.Sort((x, y) => x.minionPos - y.minionPos);
+			return otherMinions;
+		}
+
+		public override void PostUpdate()
+		{
+			// determine whether to give the player a "spawning wisps" buff
+			int projectileType = ProjectileType<IllusionistWisp>();
+			if(illusionistArmorSetEquipped && GetMinionsOfType(projectileType).Count < 3)
+			{
+				int buffType = BuffType<IllusionistWispBuff>();
+				if (!player.HasBuff(buffType))
+				{
+					player.AddBuff(buffType, 180);
+					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(15 * player.minionDamageMult), 0.1f, player.whoAmI);
+				} 
+			}
+		}
 	}
 
-	class NecromancerMinionGlobalProjectile : GlobalProjectile
+	class MinionSpawningItemGlobalProjectile : GlobalProjectile
 	{
 		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
 		{
@@ -121,7 +191,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 				return;
 			}
 			Player player = Main.player[projectile.owner];
-			NecromancerAccessoryPlayer modPlayer = player.GetModPlayer<NecromancerAccessoryPlayer>();
+			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
 			foreach (NecromancerAccessory accessory in NecromancerAccessory.accessories)
 			{
 				if (accessory.IsEquipped(modPlayer))

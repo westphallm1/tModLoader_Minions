@@ -37,6 +37,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			return squire.Center  - projectile.position;
 		}
 
+		public bool SquireAttacking()
+		{
+			return player.channel && SquireMinionTypes.Contains(player.HeldItem.shoot);
+		}
+
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			projectile.position += vectorToIdlePosition;

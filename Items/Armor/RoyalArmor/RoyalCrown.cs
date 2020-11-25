@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -78,7 +79,9 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			{
 				projectile.damage = 5 * squire.damage / 6;
 			}
-			return base.IdleBehavior();
+			Vector2 crownOffset = new Vector2(0, -14);
+			crownOffset.Y += 2 * (float)Math.Sin(2 * Math.PI * animationFrame / 60f);
+			return base.IdleBehavior() + crownOffset;
 		}
 
 		protected override bool IsEquipped(SquireModPlayer player)
@@ -97,7 +100,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			} else
 			{
 				returnedToHeadFrame = returnedToHeadFrame ?? animationFrame;
-				projectile.position = squire.Center + new Vector2(-projectile.width / 2, -12 - projectile.height/2);
+				projectile.position += vectorToIdlePosition - new Vector2(projectile.width, projectile.height) / 2;
 				projectile.velocity = Vector2.Zero;
 				returning = false;
 			}
@@ -113,8 +116,11 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override Vector2? FindTarget()
 		{
-			if(returnedToHeadFrame is int frame && animationFrame - frame > 60 && 
-				!returning && ClosestEnemyInRange(196, maxRangeFromPlayer: false) is Vector2 target)
+			if(SquireAttacking() &&
+				returnedToHeadFrame is int frame &&
+				animationFrame - frame > 60 && 
+				!returning &&
+				ClosestEnemyInRange(196, maxRangeFromPlayer: false) is Vector2 target)
 			{
 				projectile.friendly = true;
 				projectile.tileCollide = true;
@@ -144,6 +150,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		{
 			if(vectorToTarget is null || returning)
 			{
+				projectile.rotation = (float)(Math.PI / 12 * Math.Cos(2 * Math.PI * animationFrame / 60f));
 				if(squire.spriteDirection == 1)
 				{
 					projectile.frame = 0;

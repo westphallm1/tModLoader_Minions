@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<NecromancerAccessoryPlayer>().summonFlatDamage += 1;
+			player.GetModPlayer<MinionSpawningItemPlayer>().summonFlatDamage += 1;
 		}
 
 		public override void UpdateArmorSet(Player player)
@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			player.setBonus = "Increases your max minions by 1\n"
 				+ "Your minions will release damaging fungi while attacking";
 			player.maxMinions++;
-			player.GetModPlayer<NecromancerAccessoryPlayer>().foragerArmorSetEquipped = true;
+			player.GetModPlayer<MinionSpawningItemPlayer>().foragerArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}
 
@@ -66,7 +66,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			recipe.AddRecipe();
 		}
 
-		internal override bool IsEquipped(NecromancerAccessoryPlayer player)
+		internal override bool IsEquipped(MinionSpawningItemPlayer player)
 		{
 			return player.foragerArmorSetEquipped;
 		}

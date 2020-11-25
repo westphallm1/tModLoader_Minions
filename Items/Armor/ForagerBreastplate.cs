@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<NecromancerAccessoryPlayer>().summonFlatDamage += 1;
+			player.GetModPlayer<MinionSpawningItemPlayer>().summonFlatDamage += 1;
 			player.minionKB += 1;
 		}
 		public override void AddRecipes()

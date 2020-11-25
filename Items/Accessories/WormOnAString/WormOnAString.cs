@@ -37,15 +37,15 @@ namespace AmuletOfManyMinions.Items.Accessories.WormOnAString
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<NecromancerAccessoryPlayer>().wormOnAStringEquipped = true;
+			player.GetModPlayer<MinionSpawningItemPlayer>().wormOnAStringEquipped = true;
 		}
 
-		internal override void ModifyPlayerWeaponDamage(NecromancerAccessoryPlayer necromancerAccessoryPlayer, Item item, ref float add, ref float mult, ref float flat)
+		internal override void ModifyPlayerWeaponDamage(MinionSpawningItemPlayer necromancerAccessoryPlayer, Item item, ref float add, ref float mult, ref float flat)
 		{
 			flat += 1;
 		}
 
-		internal override bool IsEquipped(NecromancerAccessoryPlayer player)
+		internal override bool IsEquipped(MinionSpawningItemPlayer player)
 		{
 			return player.wormOnAStringEquipped;
 		}

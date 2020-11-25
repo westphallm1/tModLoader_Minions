@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			DisplayName.SetDefault("Royal Gown");
 			Tooltip.SetDefault(""
 				+ "Increases minion damage by 12%\n"
-				+ "Increases squire travel range by 10%");
+				+ "Increases squire travel range by 3 blocks");
 		}
 
 		public override void SetDefaults()
@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().squireRangeMultiplier += 0.1f;
+			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 48f;
 			player.minionDamageMult += 0.12f;
 		}
 

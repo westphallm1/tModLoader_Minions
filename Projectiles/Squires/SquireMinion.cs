@@ -49,6 +49,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		protected int baseLocalIFrames;
 
 		protected virtual bool travelRangeCanBeModified => true;
+
+		protected virtual bool attackSpeedCanBeModified => true;
 		public SquireMinion(int itemID)
 		{
 			itemType = itemID;
@@ -123,7 +125,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			idlePosition.X += 24 * -player.direction;
 			idlePosition.Y += -8;
 			// not sure what side effects changing this each frame might have
-			projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
+			if(attackSpeedCanBeModified)
+			{
+				projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
+			}
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition.X = player.Center.X;
@@ -155,15 +160,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if (player.whoAmI == Main.myPlayer)
-			{
-				float xVelDiff = Math.Abs(projectile.oldVelocity.X - projectile.velocity.X);
-				float yVelDiff = Math.Abs(projectile.oldVelocity.Y - projectile.velocity.Y);
-				if(xVelDiff > 1 || yVelDiff > 1)
-				{
-					projectile.netUpdate = true;
-				}
-			}
 			if (vectorToTargetPosition.Length() < 4 && relativeVelocity.Length() < 1)
 			{
 				relativeVelocity = Vector2.Zero;
@@ -181,7 +177,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public float ModifiedTargetedSpeed() => ComputeTargetedSpeed() * player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier;
 		public float ModifiedIdleSpeed() => ComputeIdleSpeed() * player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier;
 
-		public float ModifiedMaxDistance() => MaxDistanceFromPlayer() * (travelRangeCanBeModified ? player.GetModPlayer<SquireModPlayer>().squireRangeMultiplier : 1);
+		public float ModifiedMaxDistance() => MaxDistanceFromPlayer() + (travelRangeCanBeModified ? player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus : 0);
 
 		public virtual float ComputeInertia()
 		{

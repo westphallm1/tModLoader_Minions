@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public bool squireSkullAccessory;
 		public int squireDebuffOnHit = -1;
 		public float squireTravelSpeedMultiplier;
-		public float squireRangeMultiplier;
+		public float squireRangeFlatBonus;
 		public float squireAttackSpeedMultiplier;
 		public float squireDamageMultiplierBonus;
 		internal int squireDebuffTime;
@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			royalArmorSetEquipped = false;
 			squireAttackSpeedMultiplier = 1;
 			squireTravelSpeedMultiplier = 1;
-			squireRangeMultiplier = 1;
+			squireRangeFlatBonus = 0;
 			squireDamageMultiplierBonus = 0;
 		}
 
@@ -65,6 +65,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				return;
 			}
 			mult += squireDamageMultiplierBonus;
+		}
+
+		public override void PreUpdate()
+		{
+			base.PreUpdate();
+			// check for double tap
+			//int tapDirection = Main.ReversedUpDownArmorSetBonuses ? 1 : 0;
+			//if(player.doubleTapCardinalTimer[tapDirection] > 0)
+			//{
+			//	Main.NewText("Double tap!");
+			//}
 		}
 		public override void PostUpdate()
 		{

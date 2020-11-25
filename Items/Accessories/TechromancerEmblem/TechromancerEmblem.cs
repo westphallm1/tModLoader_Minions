@@ -39,11 +39,11 @@ namespace AmuletOfManyMinions.Items.Accessories.TechromancerEmblem
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<NecromancerAccessoryPlayer>().techromancerAccessoryEquipped = true;
+			player.GetModPlayer<MinionSpawningItemPlayer>().techromancerAccessoryEquipped = true;
 			player.minionDamageMult += 0.12f;
 		}
 
-		internal override bool IsEquipped(NecromancerAccessoryPlayer player)
+		internal override bool IsEquipped(MinionSpawningItemPlayer player)
 		{
 			return player.techromancerAccessoryEquipped;
 		}
