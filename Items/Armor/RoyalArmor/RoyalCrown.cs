@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		{
 			if(squire != null)
 			{
-				projectile.damage = 5 * squire.damage / 6;
+				projectile.damage = Math.Max(1, 5 * squire.damage / 6);
 			}
 			Vector2 crownOffset = new Vector2(0, -14);
 			crownOffset.Y += 2 * (float)Math.Sin(2 * Math.PI * animationFrame / 60f);
@@ -148,6 +148,10 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
+			if(squire is null)
+			{
+				return;
+			}
 			if(vectorToTarget is null || returning)
 			{
 				projectile.rotation = (float)(Math.PI / 12 * Math.Cos(2 * Math.PI * animationFrame / 60f));

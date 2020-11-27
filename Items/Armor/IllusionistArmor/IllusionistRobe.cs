@@ -11,7 +11,8 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Illusionist Robe");
-			Tooltip.SetDefault("+1 Max Minions");
+			Tooltip.SetDefault("+1 Max Minions\n" +
+				"+4% Minion Damage");
 		}
 
 		public override void SetDefaults()
@@ -26,6 +27,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.maxMinions += 1;
+			player.minionDamageMult += 0.04f;
 		}
 	}
 

@@ -168,16 +168,19 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void PostUpdate()
 		{
-			// determine whether to give the player a "spawning wisps" buff
 			int projectileType = ProjectileType<IllusionistWisp>();
 			if(illusionistArmorSetEquipped && GetMinionsOfType(projectileType).Count < 3)
 			{
 				int buffType = BuffType<IllusionistWispBuff>();
+				// this is a hacky check
+				bool isCorrupt = player.armor.Any(i => i.type == ItemType<IllusionistCorruptHood>());
 				if (!player.HasBuff(buffType))
 				{
-					player.AddBuff(buffType, 180);
-					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(15 * player.minionDamageMult), 0.1f, player.whoAmI);
-				} 
+					player.AddBuff(buffType, IllusionistWisp.SpawnFrequency);
+				} else if (player.buffTime[player.FindBuffIndex(buffType)] == 1)
+				{
+					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamageMult), 0.1f, player.whoAmI, ai0: isCorrupt? 0: 1);
+				}
 			}
 		}
 	}
@@ -197,6 +200,14 @@ namespace AmuletOfManyMinions.Items.Accessories
 				if (accessory.IsEquipped(modPlayer))
 				{
 					accessory.SpawnProjectileOnChance(projectile, target, damage);
+				}
+			}
+			int wispType = ProjectileType<IllusionistWisp>();
+			List<Projectile> wisps = modPlayer.GetMinionsOfType(wispType);
+			if (wisps.Count == 3 && wisps.All(p => p.timeLeft <= 10))
+			{
+				foreach(Projectile wisp in wisps) {
+					wisp.ai[1] = target.whoAmI;
 				}
 			}
 		}

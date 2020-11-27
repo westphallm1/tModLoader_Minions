@@ -17,7 +17,8 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Illusionist Hood");
-			Tooltip.SetDefault("+1 Max Minions");
+			Tooltip.SetDefault("+1 Max Minions\n" +
+				"+4% Minion Damage");
 		}
 
 		public override void SetDefaults()
@@ -38,6 +39,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.maxMinions += 1;
+			player.minionDamageMult += 0.04f;
 		}
 
 		public override void ArmorSetShadows(Player player)
@@ -83,8 +85,18 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		}
 	}
 
+	// Uses ai[0] for corrupt vs. crimson
+	// ai[1] for attack synchronization
 	public class IllusionistWisp : TransientMinion
 	{
+		public static int SpawnFrequency = 60;
+		private bool isCorrupt => projectile.ai[0] == 0;
+
+		private int targetNPC => (int)projectile.ai[1];
+
+		int animationFrame = 0; // this really needs to be in Minion
+
+		bool isAttacking = false;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -98,6 +110,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			projectile.timeLeft = 62;
 			attackThroughWalls = true;
 			frameSpeed = 5;
+			projectile.penetrate = 1;
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -106,6 +119,18 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			if(player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped)
 			{
 				projectile.timeLeft = Math.Max(projectile.timeLeft, 2);
+			}
+			animationFrame++;
+			
+			if(targetNPC != 0 && !isAttacking)
+			{
+				projectile.netUpdate = true;
+				projectile.friendly = true;
+				isAttacking = true;
+			}
+			if(isAttacking && !Main.npc[targetNPC].active)
+			{
+				projectile.Kill();
 			}
 
 			Vector2 offsetVector;
@@ -121,8 +146,9 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 					offsetVector = new Vector2(0, -40);
 					break;
 			}
+			offsetVector.Y += 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 120);
 			Lighting.AddLight(projectile.Center, Color.LimeGreen.ToVector3() * 0.25f);
-			return player.Center - projectile.position +  offsetVector;
+			return player.Center - projectile.Center +  offsetVector;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -136,9 +162,37 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			projectile.friendly = false;
 		}
 
+		public override void Kill(int timeLeft)
+		{
+			int dustType = isCorrupt ? 89 : 87;
+			for(int i = 0; i < 3; i++)
+			{
+				Dust.NewDust(projectile.position, 16, 16, dustType);
+			}
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			vectorToTargetPosition.Normalize();
+			vectorToTargetPosition *= 8;
+			int inertia = 8;
+			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+		}
+
+		public override Vector2? FindTarget()
+		{
+			if(!isAttacking)
+			{
+				return null;
+			}  else
+			{
+				return Main.npc[targetNPC].Center - projectile.Center;
+			}
+		}
+
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			Color translucentColor = new Color(66, 213, 0, 100);
+			Color translucentColor = isCorrupt ? new Color(160, 213, 137, 100) : new Color(253, 204, 129, 100);
 			float r = projectile.rotation;
 			Vector2 pos = projectile.Center;
 			SpriteEffects effects = player.direction < 0 ? 0 : SpriteEffects.FlipHorizontally;
@@ -146,9 +200,10 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			int frameHeight = texture.Height / Main.projFrames[projectile.type];
 			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			float scale = 1f - projectile.timeLeft / 62f;
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
 				bounds, translucentColor, r,
-				origin, 0.75f, effects, 0);
+				origin, scale, effects, 0);
 			return false;
 		}
 	}
