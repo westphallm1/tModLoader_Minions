@@ -316,7 +316,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		}
 
-		public Vector2? AnyEnemyInRange(float maxRange, Vector2? centeredOn = null)
+		public Vector2? AnyEnemyInRange(float maxRange, Vector2? centeredOn = null, bool noLOS = false)
 		{
 			Vector2 center = centeredOn ?? projectile.Center;
 			for (int i = 0; i < Main.maxNPCs; i++)
@@ -328,9 +328,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 				// 
 				bool inRange = Vector2.Distance(center, npc.Center) < maxRange;
-				bool lineOfSight = Collision.CanHitLine(center, 1, 1, npc.Center, 1, 1);
+				bool lineOfSight = noLOS || (inRange && Collision.CanHitLine(center, 1, 1, npc.Center, 1, 1));
 				if (lineOfSight && inRange)
 				{
+					targetNPCIndex = npc.whoAmI;
 					return npc.Center;
 				}
 			}
