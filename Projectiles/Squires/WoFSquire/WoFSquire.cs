@@ -47,6 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class GuideVoodooSquireMinionItem : SquireMinionItem<GuideVoodooSquireMinionBuff, GuideVoodooSquireMinion>
 	{
+		public override string Texture => "Terraria/Item_" + ItemID.GuideVoodooDoll;
 		private int wofType => ProjectileType<WoFSquireMinion>();
 		public override void SetStaticDefaults()
 		{
@@ -61,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			item.knockBack = 5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 120;
+			item.damage = 90;
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -228,7 +229,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			int nToDraw = 4;
 			float velocityFraction = 0.75f;
 			Vector2 velocity = -projectile.velocity;
-			velocity.Y = 0;
+			if(Math.Abs(velocity.Y) > 4)
+			{
+				velocity.Y = 4 * Math.Sign(velocity.Y);
+			}
 			float r = projectile.rotation;
 			SpriteEffects effects = projectile.spriteDirection == -1 ? 0 : SpriteEffects.FlipHorizontally;
 			Texture2D texture = GetTexture(Texture);
@@ -277,6 +281,23 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		}
 
+		public override void Kill(int timeLeft)
+		{
+			Vector2 goreVelocity = projectile.velocity;
+			goreVelocity.Normalize();
+			goreVelocity *= 4f;
+			int gore1 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFEyeGore"), 1f);
+			int gore2 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFEyeGore"), 1f);
+			int gore3 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFHammerGore"), 1f);
+			foreach(int gore in new int[]{gore1, gore2, gore3}) {
+				Main.gore[gore].timeLeft = 180; // make it last not as long
+				Main.gore[gore].alpha = 128; // make it transparent
+			}
+			for(int i = 0; i < 8; i++)
+			{
+				Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y);
+			}
+		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			if(vectorToIdle.Length() < 32)
@@ -457,9 +478,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				Vector2 goreVelocity = projectile.velocity;
 				goreVelocity.Normalize();
 				goreVelocity *= 4f;
-				Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideGore"), 1f);
-				Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideBodyGore"), 1f);
-				Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideLegsGore"), 1f);
+				int gore1 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideGore"), 1f);
+				int gore2 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideBodyGore"), 1f);
+				int gore3 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideLegsGore"), 1f);
+				foreach(int gore in new int[]{gore1, gore2, gore3}) {
+					Main.gore[gore].timeLeft = 180; // make it last not as long
+					Main.gore[gore].alpha = 128; // make it transparent
+				}
 				for(int i = 0; i < 6; i++)
 				{
 					Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y);
@@ -467,7 +492,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 				if(player.whoAmI == Main.myPlayer)
 				{
-					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 8); // evolved form lasts 20 seconds
+					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 6); // evolved form lasts 20 seconds
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
 				}
 			}
