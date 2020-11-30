@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		internal virtual bool SpawnProjectileOnChance(Projectile projectile, NPC target, int damage)
 		{
 			Player player = Main.player[projectile.owner];
-			bool shouldSpawnProjectile = !target.boss && target.life <= 0 && Main.rand.NextFloat() < onKillChance;
+			bool shouldSpawnProjectile = player.whoAmI == Main.myPlayer && !target.boss && target.life <= 0 && Main.rand.NextFloat() < onKillChance;
 			shouldSpawnProjectile |= Main.rand.NextFloat() < damage / (float)bossLifePerSpawn;
 			if (!shouldSpawnProjectile)
 			{
@@ -168,6 +168,10 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void PostUpdate()
 		{
+			if(player.whoAmI != Main.myPlayer)
+			{
+				return;
+			}
 			int projectileType = ProjectileType<IllusionistWisp>();
 			if(illusionistArmorSetEquipped && GetMinionsOfType(projectileType).Count < 3)
 			{

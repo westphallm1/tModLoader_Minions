@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Items.Accessories;
+using AmuletOfManyMinions.Items.Accessories.SquireBat;
 using AmuletOfManyMinions.Items.Accessories.SquireSkull;
 using AmuletOfManyMinions.Items.Armor.RoyalArmor;
 using System;
@@ -22,10 +23,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public float squireDamageMultiplierBonus;
 		internal int squireDebuffTime;
 		internal bool royalArmorSetEquipped;
+		internal bool squireBatAccessory;
+
+		// shouldn't be hand-rolling key press detection but here we are
+		private bool didReleaseTap;
+		private bool didDoubleTap;
 
 		public override void ResetEffects()
 		{
 			squireSkullAccessory = false;
+			squireBatAccessory = false;
 			royalArmorSetEquipped = false;
 			squireAttackSpeedMultiplier = 1;
 			squireTravelSpeedMultiplier = 1;
@@ -67,22 +74,43 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			mult += squireDamageMultiplierBonus;
 		}
 
+		private void MyDidDoubleTap()
+		{
+			int tapDirection = Main.ReversedUpDownArmorSetBonuses ? 1 : 0;
+			bool tappedRecently = player.doubleTapCardinalTimer[tapDirection] > 0;
+			bool didReleaseTapThisFrame = tapDirection == 0 ?
+				player.releaseDown:
+				player.releaseUp;
+			bool didTapThisFrame = tapDirection == 0 ?
+				player.controlDown:
+				player.controlUp;
+			didDoubleTap = false;
+			if(!tappedRecently)
+			{
+				didReleaseTap = false;
+			} else if (didReleaseTapThisFrame && tappedRecently)
+			{
+				didReleaseTap = true;
+			} else if(tappedRecently && didReleaseTap && didTapThisFrame)
+			{
+				didDoubleTap = true;
+				didReleaseTap = false;
+			}
+		}
+
 		public override void PreUpdate()
 		{
-			base.PreUpdate();
-			// check for double tap
-			//int tapDirection = Main.ReversedUpDownArmorSetBonuses ? 1 : 0;
-			//if(player.doubleTapCardinalTimer[tapDirection] > 0)
-			//{
-			//	Main.NewText("Double tap!");
-			//}
+			MyDidDoubleTap();
 		}
-		public override void PostUpdate()
+
+		private void SummonSquireSubMinions()
 		{
 			Projectile mySquire = GetSquire();
 			int skullType = ProjectileType<SquireSkullProjectile>();
 			int crownType = ProjectileType<RoyalCrownProjectile>();
+			int batType = ProjectileType<SquireBatProjectile>();
 			bool canSummonAccessory = player.whoAmI == Main.myPlayer && mySquire != null;
+			// summon the appropriate squire orbiter(s)
 			if(canSummonAccessory && squireSkullAccessory && player.ownedProjectileCounts[skullType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, skullType, 0, 0, player.whoAmI);
@@ -91,9 +119,49 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, crownType, 0, 0, player.whoAmI);
 			}
-			if(player.ownedProjectileCounts[skullType] == 0)
+			if(canSummonAccessory && squireBatAccessory && player.ownedProjectileCounts[batType] == 0)
+			{
+				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, batType, 0, 0, player.whoAmI);
+			}
+
+		}
+
+		public override void PostUpdate()
+		{
+
+			SummonSquireSubMinions();
+			// apply bat buff if set bonus active
+			int buffType = BuffType<SquireBatBuff>();
+			int debuffType = BuffType<SquireBatDebuff>();
+			if(squireBatAccessory && didDoubleTap && !player.HasBuff(buffType) && !player.HasBuff(debuffType))
+			{
+				player.AddBuff(buffType, SquireBatAccessory.BuffTime);
+			}
+			// undo buff from skill orbiter
+			if(player.ownedProjectileCounts[ProjectileType<SquireSkullProjectile>()] == 0)
 			{
 				squireDebuffOnHit = -1;
+			}
+		}
+
+		public override void PostUpdateBuffs()
+		{
+			int buffType = BuffType<SquireBatBuff>();
+			int debuffType = BuffType<SquireBatDebuff>();
+			if(player.HasBuff(buffType))
+			{
+				squireAttackSpeedMultiplier *= 0.75f; // 25% attack speed bonus
+				squireTravelSpeedMultiplier += 0.25f; // 25% move speed bonus
+				if(player.buffTime[player.FindBuffIndex(buffType)] == 1)
+				{
+					// switch from buff to debuff
+					player.AddBuff(debuffType, SquireBatAccessory.DebuffTime);
+				}
+			} else if (player.HasBuff(debuffType))
+			{
+				squireTravelSpeedMultiplier -= 0.2f; // reduce move speed 20%
+				squireAttackSpeedMultiplier *= 1.2f; // 20% attack speed decrease
+				player.minionDamageMult -= 0.15f; // reduce damage 15%
 			}
 		}
 	}
