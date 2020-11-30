@@ -107,6 +107,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
+		protected override bool travelRangeCanBeModified => false;
+
 		protected float projectileVelocity = 18;
 		public SoulboundBowMinion() : base(ItemType<SoulboundBowMinionItem>()) { }
 

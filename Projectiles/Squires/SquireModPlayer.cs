@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using AmuletOfManyMinions.Items.Armor.AridArmor;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
@@ -31,6 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		// shouldn't be hand-rolling key press detection but here we are
 		private bool didReleaseTap;
 		private bool didDoubleTap;
+		internal bool aridArmorSetEquipped;
 
 		public override void ResetEffects()
 		{
@@ -107,12 +109,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			MyDidDoubleTap();
 		}
 
+		private int modifiedFixedDamage(int damage)
+		{
+			return (int)(damage * player.minionDamageMult * squireDamageMultiplierBonus);
+		}
+
 		private void SummonSquireSubMinions()
 		{
 			Projectile mySquire = GetSquire();
 			int skullType = ProjectileType<SquireSkullProjectile>();
 			int crownType = ProjectileType<RoyalCrownProjectile>();
 			int batType = ProjectileType<SquireBatProjectile>();
+			int tumblerType = ProjectileType<AridTumblerProjectile>();
 			bool canSummonAccessory = player.whoAmI == Main.myPlayer && mySquire != null;
 			// summon the appropriate squire orbiter(s)
 			if(canSummonAccessory && squireSkullAccessory && player.ownedProjectileCounts[skullType] == 0)
@@ -121,11 +129,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 			if(canSummonAccessory && royalArmorSetEquipped && player.ownedProjectileCounts[crownType] == 0)
 			{
-				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, crownType, 0, 0, player.whoAmI);
+				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, crownType, modifiedFixedDamage(12), 0, player.whoAmI);
 			}
 			if(canSummonAccessory && squireBatAccessory && player.ownedProjectileCounts[batType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, batType, 0, 0, player.whoAmI);
+			}
+			if(canSummonAccessory && aridArmorSetEquipped && player.ownedProjectileCounts[tumblerType] == 0)
+			{
+				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, tumblerType, modifiedFixedDamage(18), 0, player.whoAmI);
 			}
 
 		}

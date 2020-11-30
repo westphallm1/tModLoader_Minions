@@ -106,6 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
 		protected override Vector2 WingOffset => new Vector2(-4, 0);
+		protected override bool travelRangeCanBeModified => false;
 
 		//unfortunately just flipping the the direction doesn't look great for this one
 		protected override Vector2 WeaponCenterOfRotation => projectile.spriteDirection == 1 ? new Vector2(4, -6) : new Vector2(8, -6);

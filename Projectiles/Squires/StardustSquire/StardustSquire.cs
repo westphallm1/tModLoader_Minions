@@ -293,6 +293,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		protected float projectileVelocity = 14;
 		private int attackSequence = 0; // kinda replicate CoordinatedWeaponHoldingSquire but not quire
+		protected override bool travelRangeCanBeModified => false;
 		public StardustSquireMinion() : base(ItemType<StardustSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()

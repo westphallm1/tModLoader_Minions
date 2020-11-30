@@ -107,6 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 		protected float projectileVelocity = 14;
 
+		protected override bool travelRangeCanBeModified => false;
 
 		public AncientCobaltSquireMinion() : base(ItemType<AncientCobaltSquireMinionItem>()) { }
 

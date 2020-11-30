@@ -173,6 +173,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override int AttackSequenceLength => 4;
 
+		protected override bool travelRangeCanBeModified => false;
+
 		protected int projectileVelocity = 18;
 
 		public override float ComputeIdleSpeed() => 13;

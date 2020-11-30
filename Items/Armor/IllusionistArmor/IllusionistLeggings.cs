@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			item.height = 18;
 			item.value = Item.sellPrice(silver: 2);
 			item.rare = ItemRarityID.White;
-			item.defense = 2;
+			item.defense = 6;
 		}
 
 		public override void UpdateEquip(Player player)

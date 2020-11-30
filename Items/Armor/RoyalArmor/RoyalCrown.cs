@@ -44,18 +44,24 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases your max minions by 1\n"
-				+ "Your minions will release damaging fungi while attacking";
-			player.maxMinions++;
+			player.setBonus = "A floating crown will assist your squire in combat!";
 			player.GetModPlayer<SquireModPlayer>().royalArmorSetEquipped = true;
-			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}
 	}
 
-	public class RoyalCrownProjectile : SquireAccessoryMinion
+	public class RoyalCrownProjectile : SquireBoomerangMinion
 	{
-		private bool returning = false;
-		private int? returnedToHeadFrame = -10;
+
+		protected override int idleVelocity => 12;
+
+		protected override int targetedVelocity => 8;
+
+		protected override int inertia => 4;
+
+		protected override int attackRange => 196;
+
+		protected override int attackCooldown => 60;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -68,18 +74,11 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			projectile.width = 20;
 			projectile.height = 14;
 			frameSpeed = 3;
-			projectile.penetrate = -1;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 30;
-			attackThroughWalls = true;
 		}
+
 		public override Vector2 IdleBehavior()
 		{
-			if(squire != null)
-			{
-				projectile.damage = Math.Max(1, 5 * squire.damage / 6);
-			}
-			Vector2 crownOffset = new Vector2(0, -14);
+			Vector2 crownOffset = new Vector2(0, -10);
 			crownOffset.Y += 2 * (float)Math.Sin(2 * Math.PI * animationFrame / 60f);
 			return base.IdleBehavior() + crownOffset;
 		}
@@ -87,63 +86,6 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		protected override bool IsEquipped(SquireModPlayer player)
 		{
 			return player.royalArmorSetEquipped;
-		}
-
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
-		{
-			if (vectorToIdlePosition.Length() > 32)
-			{
-				vectorToIdlePosition.Normalize();
-				vectorToIdlePosition *= 12;
-				int inertia = 4;
-				projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
-			} else
-			{
-				returnedToHeadFrame = returnedToHeadFrame ?? animationFrame;
-				projectile.position += vectorToIdlePosition - new Vector2(projectile.width, projectile.height) / 2;
-				projectile.velocity = Vector2.Zero;
-				returning = false;
-			}
-		}
-
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
-			vectorToTargetPosition.Normalize();
-			vectorToTargetPosition *= 8;
-			int inertia = 4;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
-		}
-
-		public override Vector2? FindTarget()
-		{
-			if(SquireAttacking() &&
-				returnedToHeadFrame is int frame &&
-				animationFrame - frame > 60 && 
-				!returning &&
-				ClosestEnemyInRange(196, maxRangeFromPlayer: false) is Vector2 target)
-			{
-				projectile.friendly = true;
-				projectile.tileCollide = true;
-				return target - projectile.Center;
-			}
-			projectile.friendly = false;
-			projectile.tileCollide = false;
-			return null;
-		}
-
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-			returnedToHeadFrame = null;
-			returning = true;
-		}
-
-		public override void OnHitTarget(NPC target)
-		{
-			if(player.whoAmI != Main.myPlayer)
-			{
-				returnedToHeadFrame = null;
-				returning = true;
-			}
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

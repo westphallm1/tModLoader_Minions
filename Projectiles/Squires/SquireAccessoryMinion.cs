@@ -8,9 +8,13 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
+	// Uses localAi[1] for animation frame
 	public abstract class SquireAccessoryMinion : TransientMinion
 	{
-		protected int animationFrame;
+		protected int animationFrame {
+			get => (int)projectile.localAI[1];
+			set => projectile.localAI[1] = value;
+		}
 
 		protected abstract bool IsEquipped(SquireModPlayer player);
 
@@ -34,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 			projectile.timeLeft = 2;
 			animationFrame++;
-			return squire.Center  - projectile.position;
+			return squire.Center  - projectile.Center;
 		}
 
 		public bool SquireAttacking()

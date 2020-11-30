@@ -88,6 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
 
 		protected float projectileVelocity = 12;
+		protected override bool travelRangeCanBeModified => false;
 
 
 		public GuideSquireMinion() : base(ItemType<GuideSquireMinionItem>()) { }

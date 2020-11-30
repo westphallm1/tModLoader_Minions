@@ -140,6 +140,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 19);
 		protected float projectileVelocity = 8;
 
+		protected override bool travelRangeCanBeModified => false;
 		public PumpkinSquireMinion() : base(ItemType<PumpkinSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
