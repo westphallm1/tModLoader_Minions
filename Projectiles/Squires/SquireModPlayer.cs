@@ -1,7 +1,9 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
-using AmuletOfManyMinions.Items.Accessories.SquireBat;
+﻿using AmuletOfManyMinions.Items.Accessories.SquireBat;
 using AmuletOfManyMinions.Items.Accessories.SquireSkull;
 using AmuletOfManyMinions.Items.Armor.RoyalArmor;
+using AmuletOfManyMinions.Dusts;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public float squireRangeFlatBonus;
 		public float squireAttackSpeedMultiplier;
 		public float squireDamageMultiplierBonus;
+		public float squireDamageOnHitMultiplier;
 		internal int squireDebuffTime;
 		internal bool royalArmorSetEquipped;
 		internal bool squireBatAccessory;
@@ -36,6 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			royalArmorSetEquipped = false;
 			squireAttackSpeedMultiplier = 1;
 			squireTravelSpeedMultiplier = 1;
+			squireDamageOnHitMultiplier = 1;
 			squireRangeFlatBonus = 0;
 			squireDamageMultiplierBonus = 0;
 		}
@@ -159,9 +163,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				}
 			} else if (player.HasBuff(debuffType))
 			{
-				squireTravelSpeedMultiplier -= 0.2f; // reduce move speed 20%
-				squireAttackSpeedMultiplier *= 1.2f; // 20% attack speed decrease
-				player.minionDamageMult -= 0.15f; // reduce damage 15%
+				squireAttackSpeedMultiplier *= 1.1f; // 10% attack speed decrease
+				squireDamageOnHitMultiplier -= 0.1f; // reduce damage 10%
 			}
 		}
 	}
@@ -169,15 +172,74 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 	class SquireGlobalProjectile: GlobalProjectile
 	{
 		public static HashSet<int> isSquireShot;
+		// buffs that affect your squire
+		public static HashSet<int> squireBuffTypes;
+		public static HashSet<int> squireDebuffTypes;
 
 		public static void Load()
 		{
 			isSquireShot = new HashSet<int>();
+			squireBuffTypes = new HashSet<int>();
+			squireDebuffTypes = new HashSet<int>();
 		}
 
 		public static void Unload()
 		{
 			isSquireShot = null;
+			squireBuffTypes = null;
+			squireDebuffTypes = null;
+		}
+		private void doBuffDust(Projectile projectile, int dustType)
+		{
+			Vector2 dustVelocity = new Vector2(0, -Main.rand.NextFloat() * 0.25f - 0.5f);
+			for(int i = 0; i < 3; i++)
+			{
+				Vector2 offset = new Vector2(10 * (i-1), (i == 1 ? -4 : 4) + Main.rand.Next(-2, 2));
+				Dust dust = Dust.NewDustPerfect(projectile.Top + offset, dustType, dustVelocity, Scale: 1f);
+				dust.customData = projectile.whoAmI;
+			}
+		}
+
+		// add buff/debuff dusts if we've got a squire affecting buff or debuff
+		public override void PostAI(Projectile projectile)
+		{
+			if(!SquireMinionTypes.Contains(projectile.type))
+			{
+				return;
+			}
+			Player player = Main.player[projectile.owner];
+			foreach(int buffType in player.buffType) {
+				bool debuff = false;
+				
+				if (squireDebuffTypes.Contains(buffType))
+				{
+					debuff = true;
+				} else if(!squireBuffTypes.Contains(buffType))
+				{
+					continue;
+				}
+				int timeLeft = player.buffTime[player.FindBuffIndex(buffType)];
+				if(timeLeft % 60 == 0)
+				{
+					doBuffDust(projectile, debuff ? DustType<MinusDust>() : DustType<PlusDust>());
+				}
+				break;
+			}
+		}
+
+		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			if(!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
+			{
+				return;
+			}
+			float multiplier = Main.player[projectile.owner].GetModPlayer<SquireModPlayer>().squireDamageOnHitMultiplier;
+			if(multiplier == 1)
+			{
+				return;
+			}
+			// may need to manually apply defense formula
+			damage = (int)(damage * multiplier);
 		}
 
 		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)

@@ -19,6 +19,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 			Description.SetDefault("A Feral Bite is enhancing your squire's attack and movement speed!");
 			Main.debuff[Type] = true; // can't cancel it, even if it's a 'buff'
 			Main.buffNoSave[Type] = true;
+			SquireGlobalProjectile.squireBuffTypes.Add(Type);
 		}
 	}
 	class SquireBatDebuff: ModBuff
@@ -30,6 +31,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 			Description.SetDefault("A Feral Bite is reducing your squire's damage!");
 			Main.debuff[Type] = true;
 			Main.buffNoSave[Type] = true;
+			SquireGlobalProjectile.squireDebuffTypes.Add(Type);
 		}
 	}
 	class SquireBatAccessory : ModItem
@@ -98,32 +100,11 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 				if (buffFrame < 30)
 				{
 					radius = 28 - 20 * buffFrame / 30f;
-				} else if (buffTime < 30)
+				} else if (buffFrame < 60)
 				{
-					radius = 28 - 20 * buffTime / 30f;
-				} else
-				{
-					radius = 8;
+					radius = 28 - 20 * (60 - buffFrame) / 30f;
 				}
-				if (buffTime % 60 == 0)
-				{
-					for (int i = 0; i < 3; i++)
-					{
-						// little visual to draw attention to bite
-						Dust.NewDust(squire.position, squire.width, squire.height, DustType<PlusDust>());
-					}
-				}
-			} else if (player.HasBuff(debuffType)) {
-				int debuffTime = player.buffTime[player.FindBuffIndex(debuffType)];
-				if (debuffTime  % 60 == 0)
-				{
-					for (int i = 0; i < 3; i++)
-					{
-						// little visual to draw attention to bite
-						Dust.NewDust(squire.position, squire.width, squire.height, DustType<MinusDust>());
-					}
-				}
-			}
+			} 
 			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
 			return (squire.Center + angleVector) - projectile.Center;
 		}
