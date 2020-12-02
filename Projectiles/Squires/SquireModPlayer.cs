@@ -28,17 +28,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		internal int squireDebuffTime;
 		internal bool royalArmorSetEquipped;
 		internal bool squireBatAccessory;
+		internal bool aridArmorSetEquipped;
 
 		// shouldn't be hand-rolling key press detection but here we are
 		private bool didReleaseTap;
 		private bool didDoubleTap;
-		internal bool aridArmorSetEquipped;
 
 		public override void ResetEffects()
 		{
 			squireSkullAccessory = false;
 			squireBatAccessory = false;
 			royalArmorSetEquipped = false;
+			aridArmorSetEquipped = false;
 			squireAttackSpeedMultiplier = 1;
 			squireTravelSpeedMultiplier = 1;
 			squireDamageOnHitMultiplier = 1;

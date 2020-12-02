@@ -106,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				if (_mouseWorld is Vector2 mouseWorld)
 				{
 					Vector2 targetFromPlayer = mouseWorld - player.Center;
-					if (targetFromPlayer.Length() < MaxDistanceFromPlayer())
+					if (targetFromPlayer.Length() < ModifiedMaxDistance())
 					{
 						return mouseWorld - projectile.Center;
 					}
