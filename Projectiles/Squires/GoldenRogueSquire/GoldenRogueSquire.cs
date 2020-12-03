@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -44,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	{
 		protected override int AttackFrames => 25;
 
-		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
+		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/GoldenWings";
 
 		protected override string WeaponTexturePath => "Terraria/Item_"+ItemID.MagicDagger;
 
@@ -71,6 +72,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			projectile.height = 32;
 		}
 
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			// glowy golden wings
+			return base.PreDraw(spriteBatch, Color.White);
+		}
+
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
@@ -91,6 +98,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 					
 				}
 			}
+		}
+
+		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			Texture2D glow = GetTexture(Texture + "_Glow");
+			float r = projectile.rotation;
+			Vector2 pos = projectile.Center;
+			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Rectangle bounds = glow.Bounds;
+			Vector2 origin = bounds.Center.ToVector2();
+			spriteBatch.Draw(glow, pos - Main.screenPosition,
+				bounds, Color.White, r,
+				origin, 1, effects, 0);
+			base.PostDraw(spriteBatch, lightColor);
 		}
 
 		public override float MaxDistanceFromPlayer() => 300;
