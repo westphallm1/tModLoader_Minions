@@ -294,15 +294,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			Texture2D texture = ModContent.GetTexture(WeaponTexturePath);
 			Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
-			Vector2 center = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
 			float r = SpriteRotationFromWeaponAngle();
-			Vector2 weaponOffset = WeaponCenterOfRotation;
-			weaponOffset.X *= projectile.spriteDirection;
-			Vector2 pos = projectile.Center + WeaponCenterOfRotation + center;
+			Vector2 pos = GetWeaponSpriteLocation();
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
+		}
+
+		protected virtual Vector2 GetWeaponSpriteLocation()
+		{
+			Vector2 center = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
+			Vector2 weaponOffset = WeaponCenterOfRotation;
+			weaponOffset.X *= projectile.spriteDirection;
+			return projectile.Center + WeaponCenterOfRotation + center;
 		}
 
 		protected abstract float WeaponDistanceFromCenter();
