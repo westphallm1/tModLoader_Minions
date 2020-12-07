@@ -59,7 +59,7 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Mushroom, 8);
+			recipe.AddIngredient(ItemID.Mushroom, 4);
 			recipe.AddIngredient(ItemID.Wood, 12);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);

@@ -29,7 +29,6 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Moonglow, 1);
 			recipe.AddIngredient(ItemID.Wood, 16);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);

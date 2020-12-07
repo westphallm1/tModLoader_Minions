@@ -29,6 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		internal bool royalArmorSetEquipped;
 		internal bool squireBatAccessory;
 		internal bool aridArmorSetEquipped;
+		internal bool hardmodeOreSquireArmorSetEquipped;
+		internal bool spookyArmorSetEquipped;
 
 		// shouldn't be hand-rolling key press detection but here we are
 		private bool didReleaseTap;
@@ -40,6 +42,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			squireBatAccessory = false;
 			royalArmorSetEquipped = false;
 			aridArmorSetEquipped = false;
+			hardmodeOreSquireArmorSetEquipped = false;
+			spookyArmorSetEquipped = false;
 			squireAttackSpeedMultiplier = 1;
 			squireTravelSpeedMultiplier = 1;
 			squireDamageOnHitMultiplier = 1;
