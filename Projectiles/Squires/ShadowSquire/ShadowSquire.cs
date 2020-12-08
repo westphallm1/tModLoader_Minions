@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 16;
+			item.damage = 20;
 			item.value = Item.sellPrice(0, 0, 20, 0);
 			item.rare = ItemRarityID.Green;
 		}
@@ -43,6 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.DemoniteBar, 12);
+			recipe.AddIngredient(ItemID.ShadowScale, 6);
 			recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
@@ -84,6 +85,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 		public override float ComputeTargetedSpeed() => 9;
 
-		public override float MaxDistanceFromPlayer() => 160;
+		public override float MaxDistanceFromPlayer() => 200;
 	}
 }

@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Guide Crest");
-			Tooltip.SetDefault("Summons a squire\nGuide the guide (or an unholy manifestation assuming his image)!\nClick and hold to guide its attacks!");
+			DisplayName.SetDefault("Guide Friendship Bracelet");
+			Tooltip.SetDefault("Summons a squire\nClick and hold to guide its attacks!\n'Maybe you're not such a terrible person...'");
 		}
 
 		public override void SetDefaults()
@@ -36,9 +36,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 13;
+			item.damage = 15;
 			item.value = Item.sellPrice(0, 0, 1, 0);
-			item.rare = ItemRarityID.Orange;
+			item.rare = ItemRarityID.Blue;
 		}
 	}
 

@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			item.knockBack = 3.5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 19;
+			item.damage = 23;
 			item.value = Item.sellPrice(0, 0, 20, 0);
 			item.rare = ItemRarityID.Green;
 		}
@@ -43,6 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.CrimtaneBar, 12);
+			recipe.AddIngredient(ItemID.TissueSample, 6);
 			recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
@@ -87,6 +88,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 		public override float ComputeTargetedSpeed() => 8.5f;
 
-		public override float MaxDistanceFromPlayer() => 150;
+		public override float MaxDistanceFromPlayer() => 280;
 	}
 }

@@ -47,13 +47,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class GuideVoodooSquireMinionItem : SquireMinionItem<GuideVoodooSquireMinionBuff, GuideVoodooSquireMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.GuideVoodooDoll;
 		private int wofType => ProjectileType<WoFSquireMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Guide Crest");
-			Tooltip.SetDefault("Summons a squire\nGuide the guide (or an unholy manifestation assuming his image)!\nClick and hold to guide its attacks!\n'You are a *REALLY* terrible person'");
+			DisplayName.SetDefault("True Guide Voodoo Doll");
+			Tooltip.SetDefault("Summons a squire\nClick and hold to guide its attacks!\n'You are a *REALLY* terrible person'");
 		}
 
 		public override void SetDefaults()
@@ -64,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			item.height = 38;
 			item.damage = 90;
 			item.value = Item.sellPrice(0, 0, 1, 0);
-			item.rare = ItemRarityID.Orange;
+			item.rare = ItemRarityID.Red;
 		}
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
