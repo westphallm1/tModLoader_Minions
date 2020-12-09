@@ -172,7 +172,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			// stay floating behind the player at all times
 			IdleMovement(vectorToIdle);
 			framesSinceLastHit++;
-			int rateOfFire = Math.Max(90, 120 - 5 * (int)EmpowerCount);
+			int rateOfFire = Math.Max(70, 120 - 10 * EmpowerCount);
 			if (framesSinceLastHit++ > rateOfFire)
 			{
 				int minionsToSpawn = Math.Max(1, Main.rand.Next(1) + (int)EmpowerCount - 1);

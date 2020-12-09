@@ -1,4 +1,7 @@
-﻿using AmuletOfManyMinions.Items.Accessories.SquireSkull;
+﻿using AmuletOfManyMinions.Items.Accessories.SquireBat;
+using AmuletOfManyMinions.Items.Accessories.SquireSkull;
+using AmuletOfManyMinions.Items.Armor.RoyalArmor;
+using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy;
 using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
@@ -7,8 +10,10 @@ using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
 using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
 using AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.BoneSquire;
+using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
 using AmuletOfManyMinions.Projectiles.Squires.PottedPal;
 using AmuletOfManyMinions.Projectiles.Squires.Squeyere;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,6 +27,25 @@ namespace AmuletOfManyMinions.NPCs
 		{
 			base.NPCLoot(npc);
 			float spawnChance = Main.rand.NextFloat();
+
+			if(npc.type == NPCID.Guide)
+			{
+				if (Main.npc.Any(n => n.active && NPCSets.lunarBosses.Contains(n.type)))
+				{
+					Item.NewItem(npc.getRect(), ItemType<GuideHair>(), 1);
+				} else if (NPC.downedBoss1 || NPC.downedSlimeKing)
+				{
+					Item.NewItem(npc.getRect(), ItemType<GuideSquireMinionItem>(), 1, prefixGiven: -1);
+				}
+			}
+
+			if(spawnChance < 0.33f && npc.type == NPCID.KingSlime)
+			{
+				Item.NewItem(npc.getRect(), ItemType<RoyalCrown>(), 1);
+			} else if (spawnChance < 0.66f && npc.type == NPCID.KingSlime)
+			{
+				Item.NewItem(npc.getRect(), ItemType<RoyalGown>(), 1);
+			}
 
 			if (spawnChance < 0.08f && npc.type == NPCID.ManEater)
 			{
@@ -51,6 +75,11 @@ namespace AmuletOfManyMinions.NPCs
 			if (spawnChance < 0.25f && npc.type == NPCID.WallofFlesh)
 			{
 				Item.NewItem(npc.getRect(), ItemType<BoneSerpentMinionItem>(), 1, prefixGiven: -1);
+			}
+
+			if (spawnChance < 0.05f && npc.type == NPCID.GiantBat)
+			{
+				Item.NewItem(npc.getRect(), ItemType<SquireBatAccessory>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.33f && npc.type == NPCID.GoblinSummoner)
@@ -84,6 +113,12 @@ namespace AmuletOfManyMinions.NPCs
 			if (type == NPCID.PartyGirl)
 			{
 				shop.item[nextSlot].SetDefaults(ItemType<BalloonBuddyMinionItem>());
+				nextSlot++;
+			}
+
+			if(type == NPCID.Clothier)
+			{
+				shop.item[nextSlot].SetDefaults(ItemID.AncientCloth);
 				nextSlot++;
 			}
 		}

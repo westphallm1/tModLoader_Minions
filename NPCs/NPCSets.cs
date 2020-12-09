@@ -16,12 +16,15 @@ namespace AmuletOfManyMinions.NPCs
 
 		public static HashSet<int> hellArmoredBones;
 
+		public static HashSet<int> lunarBosses;
+
 		public static void Load()
 		{
 			hornets = new HashSet<int>();
 			angryBones = new HashSet<int>();
 			blueArmoredBones = new HashSet<int>();
 			hellArmoredBones = new HashSet<int>();
+			lunarBosses = new HashSet<int>();
 		}
 
 		public static void Populate()
@@ -63,6 +66,12 @@ namespace AmuletOfManyMinions.NPCs
 			hellArmoredBones.Add(NPCID.HellArmoredBonesMace);
 			hellArmoredBones.Add(NPCID.HellArmoredBonesSword);
 			hellArmoredBones.Add(NPCID.HellArmoredBonesSpikeShield);
+
+			lunarBosses.Add(NPCID.LunarTowerNebula);
+			lunarBosses.Add(NPCID.LunarTowerSolar);
+			lunarBosses.Add(NPCID.LunarTowerStardust);
+			lunarBosses.Add(NPCID.LunarTowerVortex);
+			lunarBosses.Add(NPCID.MoonLordCore);
 		}
 
 		public static void Unload()
@@ -71,6 +80,7 @@ namespace AmuletOfManyMinions.NPCs
 			angryBones = null;
 			blueArmoredBones = null;
 			hellArmoredBones = null;
+			lunarBosses = null;
 		}
 	}
 }

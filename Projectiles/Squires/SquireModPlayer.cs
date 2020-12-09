@@ -13,6 +13,7 @@ using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using AmuletOfManyMinions.Items.Armor.AridArmor;
+using AmuletOfManyMinions.Items.Accessories.TechnoCharm;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
@@ -35,6 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		// shouldn't be hand-rolling key press detection but here we are
 		private bool didReleaseTap;
 		private bool didDoubleTap;
+		internal bool squireTechnoSkullAccessory;
 
 		public override void ResetEffects()
 		{
@@ -123,6 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			Projectile mySquire = GetSquire();
 			int skullType = ProjectileType<SquireSkullProjectile>();
+			int technoSkullType = ProjectileType<TechnoCharmProjectile>();
 			int crownType = ProjectileType<RoyalCrownProjectile>();
 			int batType = ProjectileType<SquireBatProjectile>();
 			int tumblerType = ProjectileType<AridTumblerProjectile>();
@@ -131,6 +134,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if(canSummonAccessory && squireSkullAccessory && player.ownedProjectileCounts[skullType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, skullType, 0, 0, player.whoAmI);
+			}
+			if(canSummonAccessory && squireTechnoSkullAccessory && player.ownedProjectileCounts[technoSkullType] == 0)
+			{
+				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, technoSkullType, 0, 0, player.whoAmI);
 			}
 			if(canSummonAccessory && royalArmorSetEquipped && player.ownedProjectileCounts[crownType] == 0)
 			{

@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSpyglass
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 			ModRecipe recipe2 = new ModRecipe(mod);
-			recipe2.AddIngredient(ItemID.GoldBar, 6);
+			recipe2.AddIngredient(ItemID.PlatinumBar, 6);
 			recipe2.AddIngredient(ItemID.Lens, 4);
 			recipe2.AddTile(TileID.Anvils);
 			recipe2.SetResult(this);

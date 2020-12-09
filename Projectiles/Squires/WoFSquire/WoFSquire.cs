@@ -1,6 +1,8 @@
 ﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
+using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
 using AmuletOfManyMinions.Projectiles.Squires.Squeyere;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -61,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			item.knockBack = 5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 90;
+			item.damage = 120;
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Red;
 		}
@@ -89,6 +91,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				item.UseSound = SoundID.Item44;
 			}
 			return true;
+		}
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.GuideVoodooDoll, 1);
+			recipe.AddIngredient(ItemType<GuideSquireMinionItem>(), 1);
+			recipe.AddIngredient(ItemType<GuideHair>(), 1);
+			recipe.AddTile(TileID.LunarCraftingStation);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 
@@ -323,7 +335,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override float ComputeIdleSpeed() => 18;
 
 		// needs to slow down a little so dash is visible
-		public override float ComputeTargetedSpeed() => isDashing? 16 : 18;
+		public override float ComputeTargetedSpeed() => isDashing? 16 / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier : 18;
 
 		public override float ComputeInertia() => isDashing? 4: base.ComputeInertia();
 
@@ -491,7 +503,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 				if(player.whoAmI == Main.myPlayer)
 				{
-					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 6); // evolved form lasts 20 seconds
+					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
 				}
 			}

@@ -5,6 +5,9 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
+using System.Linq;
+using AmuletOfManyMinions.Items.Accessories.TechnoCharm;
 
 namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 {
@@ -30,7 +33,13 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 		{
 			player.GetModPlayer<SquireModPlayer>().squireSkullAccessory = true;
 			player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier *= 0.95f;
-			player.GetModPlayer<SquireModPlayer>().squireDamageMultiplierBonus += 0.1f;
+			player.GetModPlayer<SquireModPlayer>().squireDamageMultiplierBonus += 0.08f;
+		}
+		public override bool CanEquipAccessory(Player player, int slot)
+		{
+			// don't allow side by side with squire skull, so their debuffs don't overwrite each other
+			int skullType = ItemType<TechnoCharmAccessory>();
+			return slot > 9 || !player.armor.Skip(3).Take(5 + player.extraAccessorySlots).Any(a=>!a.IsAir && a.type == skullType);
 		}
 	}
 
@@ -50,7 +59,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 
 		public override Vector2 IdleBehavior()
 		{
-			base.IdleBehavior();
+			Vector2 idleVector = base.IdleBehavior();
 			if(debuffCycle == 0)
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Bleeding;
@@ -70,7 +79,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 			int angleFrame = animationFrame % AnimationFrames;
 			float angle = 2 * (float)(Math.PI * angleFrame) / AnimationFrames;
 			Vector2 angleVector = 32 * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-			return (squire.Center + angleVector) - projectile.Center;
+			return idleVector + angleVector;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
