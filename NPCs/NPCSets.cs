@@ -18,6 +18,8 @@ namespace AmuletOfManyMinions.NPCs
 
 		public static HashSet<int> lunarBosses;
 
+		public static HashSet<int> preHardmodeIceEnemies;
+
 		public static void Load()
 		{
 			hornets = new HashSet<int>();
@@ -25,6 +27,7 @@ namespace AmuletOfManyMinions.NPCs
 			blueArmoredBones = new HashSet<int>();
 			hellArmoredBones = new HashSet<int>();
 			lunarBosses = new HashSet<int>();
+			preHardmodeIceEnemies = new HashSet<int>();
 		}
 
 		public static void Populate()
@@ -72,6 +75,11 @@ namespace AmuletOfManyMinions.NPCs
 			lunarBosses.Add(NPCID.LunarTowerStardust);
 			lunarBosses.Add(NPCID.LunarTowerVortex);
 			lunarBosses.Add(NPCID.MoonLordCore);
+
+			preHardmodeIceEnemies.Add(NPCID.IceBat);
+			preHardmodeIceEnemies.Add(NPCID.SnowFlinx);
+			preHardmodeIceEnemies.Add(NPCID.UndeadViking);
+			preHardmodeIceEnemies.Add(NPCID.SpikedIceSlime);
 		}
 
 		public static void Unload()
@@ -81,6 +89,7 @@ namespace AmuletOfManyMinions.NPCs
 			blueArmoredBones = null;
 			hellArmoredBones = null;
 			lunarBosses = null;
+			preHardmodeIceEnemies = null;
 		}
 	}
 }

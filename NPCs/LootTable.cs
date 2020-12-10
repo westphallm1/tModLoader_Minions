@@ -13,6 +13,7 @@ using AmuletOfManyMinions.Projectiles.Squires.BoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
 using AmuletOfManyMinions.Projectiles.Squires.PottedPal;
 using AmuletOfManyMinions.Projectiles.Squires.Squeyere;
+using AmuletOfManyMinions.Projectiles.Squires.VikingSquire;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
@@ -37,6 +38,11 @@ namespace AmuletOfManyMinions.NPCs
 				{
 					Item.NewItem(npc.getRect(), ItemType<GuideSquireMinionItem>(), 1, prefixGiven: -1);
 				}
+			}
+
+			if(spawnChance < 0.03f && NPCSets.preHardmodeIceEnemies.Contains(npc.netID))
+			{
+				Item.NewItem(npc.getRect(), ItemType<VikingSquireMinionItem>(), 1);
 			}
 
 			if(spawnChance < 0.33f && npc.type == NPCID.KingSlime)

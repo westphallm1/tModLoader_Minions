@@ -42,16 +42,18 @@ namespace AmuletOfManyMinions
 				int tileFrame = chestTile.frameX / 36;
 				if(tileFrame == frozenFrame && (!didPlaceVikingSquire || Main.rand.Next(3) == 0))
 				{
-					didPlaceVikingSquire = true;
-					itemType = ItemType<VikingSquireMinionItem>();
+					// ice chests are rarer than I thought, make an npc drop instead
+					//didPlaceVikingSquire = true;
+					//itemType = ItemType<VikingSquireMinionItem>();
 				} else if(tileFrame == shadowFrame && (!didPlaceShadowSquire || Main.rand.Next(4) == 0))
 				{
 					didPlaceShadowSquire = true;
 					itemType = ItemType<GoldenRogueSquireMinionItem>();
 				} else if(tileFrame == waterFrame && (!didPlaceSeaSquire || Main.rand.Next(6) == 0))
 				{
-					didPlaceSeaSquire = true;
-					itemType = ItemType<SeaSquireMinionItem>();
+					// don't care for chest-only items
+					//didPlaceSeaSquire = true;
+					//itemType = ItemType<SeaSquireMinionItem>();
 				}
 			}
 			return itemType;

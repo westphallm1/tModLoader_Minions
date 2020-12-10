@@ -41,13 +41,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		public override void AddRecipes()
 		{
-			//ModRecipe recipe = new ModRecipe(mod);
-			//recipe.AddIngredient(ItemID.Trident, 1);
-			//recipe.AddIngredient(ItemID.Coral, 3);
-			//recipe.AddIngredient(ItemID.Starfish, 3);
-			//recipe.AddTile(TileID.Anvils);
-			//recipe.SetResult(this);
-			//recipe.AddRecipe();
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.Coral, 3);
+			recipe.AddIngredient(ItemID.Starfish, 3);
+			recipe.AddIngredient(ItemID.Seashell, 3);
+			recipe.AddIngredient(ItemID.SharkFin, 1);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 
