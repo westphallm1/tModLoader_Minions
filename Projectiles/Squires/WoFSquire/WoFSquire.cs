@@ -33,8 +33,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public WoFSquireMinionBuff() : base(ProjectileType<WoFSquireMinion>()) { }
 		public override void SetDefaults()
 		{
-			DisplayName.SetDefault("Guide Squire");
-			Description.SetDefault("You can guide the Guide!");
+			DisplayName.SetDefault("Wall of Flesh Squire");
+			Description.SetDefault("You can guide the Wall of Flesh!");
 		}
 		public override void Update(Player player, ref int buffIndex)
 		{

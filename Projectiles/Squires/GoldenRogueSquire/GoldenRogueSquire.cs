@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			base.SetDefaults();
 			DisplayName.SetDefault("Golden Rogue Squire");
-			Description.SetDefault("An golden rogue squire will follow your orders!");
+			Description.SetDefault("A golden rogue squire will follow your orders!");
 		}
 	}
 	public class GoldenRogueSquireMinionItem : SquireMinionItem<GoldenRogueSquireMinionBuff, GoldenRogueSquireMinion>
@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Golden Rogue Crest");
-			Tooltip.SetDefault("Summons a squire\nAn adamantite squire will fight for you!\nClick and hold to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nA golden rogue squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults()
