@@ -21,27 +21,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		}
 	}
 
-	public class WhackAMoleMinionItem : MinionItem<WhackAMoleMinionBuff, WhackAMoleCounterMinion>
-	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Magic Mole Hammer");
-			Tooltip.SetDefault("Summons a magic whack-a-mole to fight for you!\nDon't bonk it too hard...");
-		}
+	//public class WhackAMoleMinionItem : MinionItem<WhackAMoleMinionBuff, WhackAMoleCounterMinion>
+	//{
+	//	public override void SetStaticDefaults()
+	//	{
+	//		base.SetStaticDefaults();
+	//		DisplayName.SetDefault("Magic Mole Hammer");
+	//		Tooltip.SetDefault("Summons a magic whack-a-mole to fight for you!\nDon't bonk it too hard...");
+	//	}
 
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			item.knockBack = 3f;
-			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
-			item.damage = 34;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.LightRed;
-		}
-	}
+	//	public override void SetDefaults()
+	//	{
+	//		base.SetDefaults();
+	//		item.knockBack = 3f;
+	//		item.mana = 10;
+	//		item.width = 32;
+	//		item.height = 32;
+	//		item.damage = 34;
+	//		item.value = Item.buyPrice(0, 15, 0, 0);
+	//		item.rare = ItemRarityID.LightRed;
+	//	}
+	//}
 
 	public class WhackAMoleMinionProjectile : ModProjectile
 	{

@@ -47,12 +47,12 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<RoyalGown>(), 1);
 			}
 
-			if (spawnChance < 0.08f && npc.type == NPCID.ManEater)
+			if (spawnChance < 0.12f && npc.type == NPCID.ManEater)
 			{
 				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.03f && NPCSets.hornets.Contains(npc.netID))
+			if (spawnChance < 0.04f && NPCSets.hornets.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1, prefixGiven: -1);
 			}
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if(spawnChance < 0.5f && npc.type == NPCID.SkeletronHead)
+			if((Main.expertMode || spawnChance < 0.5f) && npc.type == NPCID.SkeletronHead)
 			{
 				Item.NewItem(npc.getRect(), ItemType<SquireSkullAccessory>(), 1, prefixGiven: -1);
 			}

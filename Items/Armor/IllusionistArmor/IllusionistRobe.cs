@@ -24,6 +24,11 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			item.defense = 7;
 		}
 
+		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+		{
+			drawAltHair = true;
+		}
+
 		public override void UpdateEquip(Player player)
 		{
 			player.maxMinions += 1;
@@ -34,10 +39,28 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	[AutoloadEquip(EquipType.Body)]
 	public class IllusionistCorruptRobe : BaseIllusionistRobe
 	{
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.ShadowScale, 20);
+			recipe.AddIngredient(ItemID.Bone, 35);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 	}
 
 	[AutoloadEquip(EquipType.Body)]
 	public class IllusionistCrimsonRobe : BaseIllusionistRobe
 	{
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.TissueSample, 20);
+			recipe.AddIngredient(ItemID.Bone, 35);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 	}
 }

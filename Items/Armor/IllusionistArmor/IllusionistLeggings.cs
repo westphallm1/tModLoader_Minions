@@ -40,12 +40,30 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	[AutoloadEquip(EquipType.Legs)]
 	public class IllusionistCorruptLeggings: BaseIllusionistLeggings
 	{
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.ShadowScale, 15);
+			recipe.AddIngredient(ItemID.Bone, 30);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 
 	}
 
 	[AutoloadEquip(EquipType.Legs)]
 	public class IllusionistCrimsonLeggings: BaseIllusionistLeggings
 	{
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.TissueSample, 15);
+			recipe.AddIngredient(ItemID.Bone, 30);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 
 	}
 

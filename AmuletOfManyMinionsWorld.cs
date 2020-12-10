@@ -15,6 +15,9 @@ namespace AmuletOfManyMinions
 {
 	class AmuletOfManyMinionsWorld : ModWorld
 	{
+		private bool didPlaceShadowSquire;
+		private bool didPlaceSeaSquire;
+		private bool didPlaceVikingSquire;
 		private void placeItemInChest(Chest chest, int itemType)
 		{
 			for(int i = 0; i < 40; i++)
@@ -30,22 +33,24 @@ namespace AmuletOfManyMinions
 		private int? getItemForChest(Chest chest)
 		{
 			int frozenFrame = 11;
-			int shadowFrame = 3;
+			int shadowFrame = 4;
 			int waterFrame = 17;
 			int? itemType = null;
 			Tile chestTile = Main.tile[chest.x, chest.y];
 			if(chestTile.type == TileID.Containers)
 			{
 				int tileFrame = chestTile.frameX / 36;
-				bool doPlace = Main.rand.Next(6) == 0;
-				if(doPlace && tileFrame == frozenFrame)
+				if(tileFrame == frozenFrame && (!didPlaceVikingSquire || Main.rand.Next(3) == 0))
 				{
+					didPlaceVikingSquire = true;
 					itemType = ItemType<VikingSquireMinionItem>();
-				} else if(doPlace && tileFrame == shadowFrame)
+				} else if(tileFrame == shadowFrame && (!didPlaceShadowSquire || Main.rand.Next(4) == 0))
 				{
+					didPlaceShadowSquire = true;
 					itemType = ItemType<GoldenRogueSquireMinionItem>();
-				} else if(doPlace && tileFrame == waterFrame)
+				} else if(tileFrame == waterFrame && (!didPlaceSeaSquire || Main.rand.Next(6) == 0))
 				{
+					didPlaceSeaSquire = true;
 					itemType = ItemType<SeaSquireMinionItem>();
 				}
 			}
@@ -54,6 +59,9 @@ namespace AmuletOfManyMinions
 		// populate chests
 		public override void PostWorldGen()
 		{
+			didPlaceShadowSquire = false;
+			didPlaceVikingSquire = false;
+			didPlaceSeaSquire = false;
 			for(int chestIdx = 0; chestIdx < Main.chest.Length; chestIdx++)
 			{
 				Chest chest = Main.chest[chestIdx];

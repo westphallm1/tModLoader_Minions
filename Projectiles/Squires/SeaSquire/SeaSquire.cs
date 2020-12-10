@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 5.5f;
+			item.knockBack = 2.5f;
 			item.width = 28;
 			item.height = 32;
 			item.damage = 14;
@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 	public class SeaSquireMinion : WeaponHoldingSquire<SeaSquireMinionBuff>
 	{
-		protected override int AttackFrames => 40;
+		protected override int AttackFrames => 35;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 
@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		protected override float WeaponDistanceFromCenter()
 		{
-			float spearSpeed = 3f;
+			float spearSpeed = 3.25f;
 			int reachFrames = 20;
 			int spearStart = 20;
 

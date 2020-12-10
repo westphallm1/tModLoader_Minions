@@ -64,12 +64,30 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	[AutoloadEquip(EquipType.Head)]
 	public class IllusionistCorruptHood: BaseIllusionistHood
 	{
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.ShadowScale, 10);
+			recipe.AddIngredient(ItemID.Bone, 20);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 
 	}
 
 	[AutoloadEquip(EquipType.Head)]
 	public class IllusionistCrimsonHood: BaseIllusionistHood
 	{
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.TissueSample, 10);
+			recipe.AddIngredient(ItemID.Bone, 20);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 
 	}
 

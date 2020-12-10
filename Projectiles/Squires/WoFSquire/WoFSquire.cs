@@ -503,7 +503,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 				if(player.whoAmI == Main.myPlayer)
 				{
-					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
+					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 180 * 20); // evolved form lasts 3 minutes
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
 				}
 			}

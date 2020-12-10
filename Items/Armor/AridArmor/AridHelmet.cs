@@ -57,8 +57,9 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.AncientCloth, 5);
-			recipe.AddIngredient(ItemID.AntlionMandible, 5);
+			recipe.AddIngredient(ItemID.AncientCloth, 3);
+			recipe.AddIngredient(ItemID.AntlionMandible, 3);
+			recipe.AddIngredient(ItemID.FossilOre, 10);
 			recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
