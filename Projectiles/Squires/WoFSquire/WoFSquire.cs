@@ -145,6 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			animationFrame++;
 			return base.IdleBehavior() + new Vector2(-player.direction * 8, 0);
 		}
+
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			int maxDashDistance = 80;

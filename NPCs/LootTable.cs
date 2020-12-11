@@ -45,12 +45,20 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<VikingSquireMinionItem>(), 1);
 			}
 
-			if(spawnChance < 0.5f && npc.type == NPCID.KingSlime)
+			if(npc.type == NPCID.KingSlime)
 			{
-				Item.NewItem(npc.getRect(), ItemType<RoyalCrown>(), 1);
-			} else if (npc.type == NPCID.KingSlime)
-			{
-				Item.NewItem(npc.getRect(), ItemType<RoyalGown>(), 1);
+				// always give the player the part of the set they're missing
+				Player lootRecipient = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
+				if(!lootRecipient.inventory.Any(item=>(!item.IsAir) && item.type == ItemType<RoyalCrown>()))
+				{
+					Item.NewItem(npc.getRect(), ItemType<RoyalCrown>(), 1);
+				} else if (!lootRecipient.inventory.Any(item=>(!item.IsAir) && item.type == ItemType<RoyalGown>()))
+				{
+					Item.NewItem(npc.getRect(), ItemType<RoyalGown>(), 1);
+				} else
+				{
+					Item.NewItem(npc.getRect(), spawnChance < 0.5f ? ItemType<RoyalGown>() :ItemType<RoyalCrown>(), 1);
+				}
 			}
 
 			if (spawnChance < 0.12f && npc.type == NPCID.ManEater)
