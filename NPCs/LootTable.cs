@@ -45,10 +45,10 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<VikingSquireMinionItem>(), 1);
 			}
 
-			if(spawnChance < 0.33f && npc.type == NPCID.KingSlime)
+			if(spawnChance < 0.5f && npc.type == NPCID.KingSlime)
 			{
 				Item.NewItem(npc.getRect(), ItemType<RoyalCrown>(), 1);
-			} else if (spawnChance < 0.66f && npc.type == NPCID.KingSlime)
+			} else if (npc.type == NPCID.KingSlime)
 			{
 				Item.NewItem(npc.getRect(), ItemType<RoyalGown>(), 1);
 			}

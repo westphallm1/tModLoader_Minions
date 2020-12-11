@@ -82,7 +82,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 				attackState = AttackState.RETURNING;
 			}
 			framesSinceLastHit = 0;
-			Lighting.AddLight(target.position, Color.LightYellow.ToVector3());
 		}
 
 		public override Vector2 IdleBehavior()
@@ -98,6 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			Lighting.AddLight(projectile.Center, Color.LightYellow.ToVector3() * 0.125f);
 			return vectorToIdlePosition;
 		}
 
