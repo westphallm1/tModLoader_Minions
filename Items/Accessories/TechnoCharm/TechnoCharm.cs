@@ -15,8 +15,8 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Enchants your squire with a mechanical skull!\n" +
-				"Increases squire damage and adds a rotating debuff to squire attacks.");
+			Tooltip.SetDefault("Increases squire damage by 12%" +
+				"\nSummons a mechanical skull that grants a rotating debuff to squire attacks");
 			DisplayName.SetDefault("Techno Pendant");
 		}
 
@@ -26,14 +26,13 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 			item.height = 32;
 			item.accessory = true;
 			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.LightRed;
+			item.rare = ItemRarityID.LightPurple;
 		}
 
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SoulofFright, 10);
-			recipe.AddIngredient(ItemID.SummonerEmblem, 1);
+			recipe.AddIngredient(ItemID.AvengerEmblem, 1);
 			recipe.AddIngredient(ItemType<SquireSkullAccessory>(), 1);
 			recipe.AddTile(TileID.TinkerersWorkbench);
 			recipe.SetResult(this);
@@ -63,6 +62,13 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 		public override void SetStaticDefaults()
 		{
 			Main.projFrames[projectile.type] = 8;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 20;
+			projectile.height = 16;
 		}
 
 		private int debuffCycle => (animationFrame % DebuffCycleFrames) / (DebuffCycleFrames / 3);

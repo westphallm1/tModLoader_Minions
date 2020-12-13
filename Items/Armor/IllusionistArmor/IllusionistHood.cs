@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Illusionist Hood");
-			Tooltip.SetDefault("+1 Max Minions\n" +
-				"+4% Minion Damage");
+			Tooltip.SetDefault("Increases your max number of minions by 1" +
+							   "\nIncreases minion damage by 4%");
 		}
 
 		public override void SetDefaults()

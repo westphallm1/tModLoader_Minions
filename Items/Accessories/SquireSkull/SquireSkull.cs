@@ -15,8 +15,8 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Enchants your squire with a cursed skull!\n" +
-				"Slightly increases squire damage and adds a rotating debuff to squire attacks.");
+			Tooltip.SetDefault("Increases squire damage by 10%" +
+							   "\nSummons a cursed skull that grants a rotating debuff to squire attacks");
 			DisplayName.SetDefault("Necro Pendant");
 		}
 
@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 			item.height = 32;
 			item.accessory = true;
 			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.LightRed;
+			item.rare = ItemRarityID.Orange;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -52,6 +52,13 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 		public override void SetStaticDefaults()
 		{
 			Main.projFrames[projectile.type] = 24;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 16;
+			projectile.height = 16;
 		}
 
 		private int debuffCycle => (animationFrame % DebuffCycleFrames) / (DebuffCycleFrames / 3);

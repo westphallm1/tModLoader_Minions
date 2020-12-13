@@ -61,6 +61,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void Kill(int timeLeft)
 		{
 			// don't spawn the arrow
+			for(int i = 0; i < 6; i++)
+			{
+				Dust.NewDust(projectile.position, projectile.width, projectile.height, 158);
+			}
+		}
+
+		public override void AI()
+		{
+			base.AI();
+			Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire);
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)

@@ -20,8 +20,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		protected Projectile squire;
 		protected SquireModPlayer squirePlayer;
+
 		public override void SetDefaults()
 		{
+			base.SetDefaults();
 			projectile.friendly = false;
 			projectile.tileCollide = false;
 			projectile.timeLeft = 2;

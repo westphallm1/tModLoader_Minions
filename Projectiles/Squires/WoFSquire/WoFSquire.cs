@@ -119,6 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		private Vector2?[] laserTargets; 
 		private int[] laserFrames; 
+
 		public WoFSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -146,12 +147,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			return base.IdleBehavior() + new Vector2(-player.direction * 8, 0);
 		}
 
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			projectile.friendly = false;
+			isDashing = false;
+			base.IdleMovement(vectorToIdlePosition);
+		}
+
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			int maxDashDistance = 80;
 			float dashCheckDistance = 1.25f * maxDashDistance;
 			float searchDistance = 2 * dashCheckDistance;
 			int collisionStep = 8;
+			projectile.friendly = true;
 			isDashing = false;
 			Vector2? _nearestNPCVector = AnyEnemyInRange(searchDistance, projectile.Center);
 			if(_nearestNPCVector is Vector2 nearestNPCVector)
@@ -366,6 +375,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		protected int knockbackCounter = 0;
 
+		protected override LegacySoundStyle attackSound => null;
+
 
 		public GuideVoodooSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
@@ -504,7 +515,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 				if(player.whoAmI == Main.myPlayer)
 				{
-					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 180 * 20); // evolved form lasts 3 minutes
+					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 3 minutes
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
 				}
 			}

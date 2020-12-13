@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -193,7 +194,9 @@ namespace AmuletOfManyMinions.Items.Accessories
 	{
 		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
 		{
-			if (!projectile.minion && !ProjectileID.Sets.MinionShot[projectile.type])
+			if (!projectile.minion && 
+				!ProjectileID.Sets.MinionShot[projectile.type] && 
+				!SquireGlobalProjectile.isSquireShot.Contains(projectile.type))
 			{
 				return;
 			}

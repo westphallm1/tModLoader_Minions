@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 			item.height = 32;
 			item.accessory = true;
 			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.Red;
+			item.rare = ItemRarityID.LightRed;
 			
 		}
 

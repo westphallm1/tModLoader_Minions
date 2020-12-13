@@ -15,10 +15,9 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Increases view range for squires\n" +
-				"(Right click to zoom out)\n" +
-				"10% increased minion damage\n" +
-				"Increases the range of your squire by 5 blocks");
+			Tooltip.SetDefault("Increases view range for squires (Right Click to zoom out)" +
+							"\n10% increased minion damage" +
+							"\nIncreases squire travel range by 5 blocks");
 		}
 
 		public override void SetDefaults()

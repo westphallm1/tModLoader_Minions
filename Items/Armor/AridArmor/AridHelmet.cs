@@ -89,8 +89,8 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 24;
+			projectile.width = 18;
+			projectile.height = 18;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -99,7 +99,9 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 			float angle = 2 * (float)(Math.PI * angleFrame) / AnimationFrames;
 			float radius = 30;
 			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-			return base.IdleBehavior() + angleVector;
+			// offset downward vertically a bit
+			// the scale messes with the positioning in some way
+			return base.IdleBehavior() + angleVector + new Vector2(0, 8);
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
