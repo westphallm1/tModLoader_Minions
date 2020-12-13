@@ -40,7 +40,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 			projectile.timeLeft = 2;
 			animationFrame++;
-			return squire.Center  - projectile.Center;
+			Vector2 target = squire.Center - projectile.Center;
+			TeleportToPlayer(ref target, 2000f);
+			return target;
 		}
 
 		public bool SquireAttacking()
