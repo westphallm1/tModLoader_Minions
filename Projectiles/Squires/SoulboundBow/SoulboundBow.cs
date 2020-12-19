@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 
 		protected override bool travelRangeCanBeModified => false;
 
-		protected float projectileVelocity = 18;
+		protected override float projectileVelocity => 18;
 		public SoulboundBowMinion() : base(ItemType<SoulboundBowMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -164,7 +164,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
-					angleVector *= projectileVelocity;
+					angleVector *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(
 						projectile.Center,
 						angleVector,

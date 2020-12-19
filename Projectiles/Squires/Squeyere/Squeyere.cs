@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		//unfortunately just flipping the the direction doesn't look great for this one
 		protected override Vector2 WeaponCenterOfRotation => projectile.spriteDirection == 1 ? new Vector2(4, -6) : new Vector2(8, -6);
 
-		protected float projectileVelocity = 30;
+		protected override float projectileVelocity => 24;
 
 		public SqueyereMinion() : base(ItemType<SqueyereMinionItem>()) { }
 
@@ -144,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
-					angleVector *= projectileVelocity;
+					angleVector *= ModifiedProjectileVelocity();
 					Vector2 weaponCenter = WeaponCenterOfRotation;
 					weaponCenter.X *= projectile.spriteDirection;
 					Vector2 tipCenter = projectile.Center + weaponCenter;

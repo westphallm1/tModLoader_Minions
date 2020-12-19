@@ -138,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
 		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 19);
-		protected float projectileVelocity = 8;
+		protected override float projectileVelocity => 8;
 
 		protected override bool travelRangeCanBeModified => false;
 		public PumpkinSquireMinion() : base(ItemType<PumpkinSquireMinionItem>()) { }
@@ -185,7 +185,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 				{
 					Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;
 					vector2Mouse.Normalize();
-					vector2Mouse *= projectileVelocity;
+					vector2Mouse *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(projectile.Center,
 						vector2Mouse,
 						ProjectileType<PumpkinBomb>(),

@@ -14,6 +14,7 @@ using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
 using AmuletOfManyMinions.Projectiles.Squires.PottedPal;
 using AmuletOfManyMinions.Projectiles.Squires.Squeyere;
 using AmuletOfManyMinions.Projectiles.Squires.VikingSquire;
+using System;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
@@ -24,10 +25,28 @@ namespace AmuletOfManyMinions.NPCs
 {
 	class LootTable : GlobalNPC
 	{
+		public static void SpawnRoyalArmor(Player lootRecipient, Action<int> spawnAction)
+		{
+			// always give the player the part of the set they're missing, if they're missing a part
+			int itemType;
+			if(!lootRecipient.inventory.Any(item=>(!item.IsAir) && item.type == ItemType<RoyalCrown>()))
+			{
+				itemType = ItemType<RoyalCrown>();
+			} else if (!lootRecipient.inventory.Any(item=>(!item.IsAir) && item.type == ItemType<RoyalGown>()))
+			{
+				itemType = ItemType<RoyalGown>();
+			} else
+			{
+				itemType = Main.rand.Next() < 0.5f ? ItemType<RoyalGown>() : ItemType<RoyalCrown>();
+			}
+			spawnAction.Invoke(itemType);
+		}
+
 		public override void NPCLoot(NPC npc)
 		{
 			base.NPCLoot(npc);
-			float spawnChance = Main.rand.NextFloat();
+			// make all spawn chances more likely on expert mode
+			float spawnChance = Main.rand.NextFloat() * (Main.expertMode ? 0.67f : 1);
 
 			if(npc.type == NPCID.Guide)
 			{
@@ -45,20 +64,10 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<VikingSquireMinionItem>(), 1);
 			}
 
-			if(npc.type == NPCID.KingSlime)
+			if(npc.type == NPCID.KingSlime && !Main.expertMode)
 			{
-				// always give the player the part of the set they're missing
 				Player lootRecipient = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
-				if(!lootRecipient.inventory.Any(item=>(!item.IsAir) && item.type == ItemType<RoyalCrown>()))
-				{
-					Item.NewItem(npc.getRect(), ItemType<RoyalCrown>(), 1);
-				} else if (!lootRecipient.inventory.Any(item=>(!item.IsAir) && item.type == ItemType<RoyalGown>()))
-				{
-					Item.NewItem(npc.getRect(), ItemType<RoyalGown>(), 1);
-				} else
-				{
-					Item.NewItem(npc.getRect(), spawnChance < 0.5f ? ItemType<RoyalGown>() :ItemType<RoyalCrown>(), 1);
-				}
+				SpawnRoyalArmor(lootRecipient, item => Item.NewItem(npc.getRect(), item, 1));
 			}
 
 			if (spawnChance < 0.12f && npc.type == NPCID.ManEater)
@@ -136,5 +145,18 @@ namespace AmuletOfManyMinions.NPCs
 				nextSlot++;
 			}
 		}
+	}
+
+	public class BossBagGlobalItem: GlobalItem
+	{
+
+		public override void OpenVanillaBag(string context, Player player, int arg)
+		{
+			if(arg == ItemID.KingSlimeBossBag)
+			{
+				LootTable.SpawnRoyalArmor(player, item=>player.QuickSpawnItem(item));
+			}
+		}
+
 	}
 }

@@ -1,8 +1,17 @@
 The Amulet of Many Minions is designed to add variety to the vanilla summoner progression while staying at least somewhat
 in line with vanilla balance. It adds a new, directly controllable minion type called the Squire,
-over a 15 new minions, various accessories, and an early pre-hardmode armor set to the game.
+over 15 new minions, and several armor sets and accessories for both Squires and minions. 
 
 === Version History ==
+v0.4.0 - Aquire the Squire!
+       - Squire attack speed, travel range, and travel speed can now be buffed by armor and accessories
+       - Add 4 Squire-centric accessories
+       - Add 1 pre-hardmode Summoner armor set
+       - Add 2 pre-hardmode Squire-centric armor sets
+       - Add 3 hardmode helmets with variant Squire-centric set bonuses 
+       - Add 3 early pre-hardmode Squires
+       - Add 1 late pre-hardmode Squire
+       - Add 1 post-Plantera Squire
 v0.3.0 - Multiplayer support! 
        - Many more updated sprites
        - Re-AI several minions to make more unique
@@ -13,63 +22,54 @@ v0.2.1 - Add many resprites courtesy of SkyanUltra
 v0.2 - Squires introduced, minions switched to use local iFrames
 v0.1 - Base minions, armor, and accessories introduced
 
-Crafting Cheat Sheet (Also available from homepage):
+A cheat sheet for getting started is given below. A complete list mod content can be found from the homepage.
 
 === Minions ===
 --- Pre Hardmode ---
 Flying Acorn - 6 Acorn, 12 Wood @ Workbench
 Paper Surfer - 30 Clay Blocks, 30 Cloud Blocks @ Anvil
 Corrupt/Crimson Cell - 12 Demonite/Crimtane Bars + 6 Shadow Scales/Tissue Samples @ Anvil
-Starry Skysword - 8 Feathers, 3 Fallen Stars @ Anvil
+Starry Skysword - 8 Feathers, 3 Fallen Stars @ Sky Forge
 Meteor Fist - 14 Meteor Bars @ Anvil
-Bumble Bombarier - Bee Queen (33%)
 Balloon Buddy - Sold by Party Girl
 --- Hardmode ---
-Bone Serpent - WoF (25%)
 Star Surfer - 6 Fallen Stars, 10 Souls of Light @ Anvil
 Void Knife - 50 Throwing Knives, 10 Souls of Night @ Anvil
 Goblin Gunner - Goblin Summoner (33%)
-Copter-X - 12 Hallowed Bars, 1 Mechanical Lens @ Mythril Anvil
 The Clarent - 12 Hallowed Bars, 10 Souls of Flight @ Mythril Anvil
-Crystal Fist - 10 Crystal Shards, 10 Souls of Might @ Mythril Anvil
 Charred Chimera - Hell Armored Bones (2.5%)
 Spirit Revolver - 12 Spectre Bars, 1 Illegal Gun Parts @ Mythril Anvil
-Eclipse Herald - 18 Solar Fragments @ Ancient Manipulator
 
 
 === Squires ===
 --- Pre Hardmode ---
 Mushroom Squire - 8 Mushrooms, 18 Wood @ Anvil
-Pumpkin Squire - 15 Pumpkins @ Anvil
-Shadow Squire - 12 Demonite Bars @ Anvil
-Crimson Squire - 12 Crimtane Bars @ Anvil
-Ancient Cobalt Squire - 8% drop from Man Eaters
-Bone Squire - 2% drop from Angry Bones
+Sea Squire - 3 Starfish + 3 Sea Shells + 3 Coral + 1 Shark Fin @ Anvil
+Shadow/Crimson Squire - 12 Demonite/Crimtane Bars + 6 Shadow Scales/Tissue Samples @ Anvil
+Ancient Cobalt Squire - 12% drop from Man Eaters
+Golden Rogue Squire - Shadow Chests
 --- Hardmode ---
 Soulbound Sword - 1 Shadewood Sword or Ebonwood Sword, 10 Souls of Night @ Anvil
 Soulbound Bow - 1 Pearlwood Bow , 10 Souls of Light @ Anvil
-Adamantite Squire - 14 Adamantite Bars @ Mythril Anvil
-Titanium Squire - 14 Titanium Bars @ Mythril Anvil
-Squ-Eye-re - 10% drop from Eyezor
+Adamantite/Titanium Squire - 14 Adamantite/Titanium Bars @ Mythril Anvil
 Soulbound Arsenal - 1 Soulbound Sword + 1 Soulbound Bow + 1 Broken Hero's Sword @ Mythril Anvil
 Potted Pal - Plantera (25%)
-Armored Bone Squire - 3% drop from Blue Armored Bones
 Stardust Squire - 18 Stardust Fragments @ Mythril Anvil
 
 
 === Armor ===
 --- Pre Hardmode ---
 Mildew Set - Mushrooms + Daybloom + Wood @ Workbench
-
+Royal Squire Set (Helmet + Chestplate) - King Slime
+Arid Set - Antlion Mandibles + Sturdy Fossils + Ancient Cloth (Sold by Clothier)
+Illusionist Armor - Bones + Shadow Scales/Tissue Samples 
 
 === Accessories ===
 --- Pre Hardmode ---
+Squire Scope - Gold Bars + Lenses
 Necro Pendant - Skeletron (50%)
 --- Hardmode ---
 Charm of Many Minions - 1 Light Shard + 8 Soul of Night @ Anvil
 Charm of Mighty Minions - 1 Dark Shard + 8 Soul of Light @ Anvil
+Techno Pendant - Necro Pendant + Avenger Emblem
 Amulet of Many Minions - Charm of Many Minions + others (See the Guide for more info!)
-
-
-
-

@@ -51,6 +51,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		protected virtual bool travelRangeCanBeModified => true;
 
 		protected virtual bool attackSpeedCanBeModified => true;
+
+		protected virtual float projectileVelocity => default;
 		public SquireMinion(int itemID)
 		{
 			itemType = itemID;
@@ -160,11 +162,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if (vectorToTargetPosition.Length() < 4 && relativeVelocity.Length() < 1)
+			if (vectorToTargetPosition.Length() < 8 && relativeVelocity.Length() < 4)
 			{
 				relativeVelocity = Vector2.Zero;
 				projectile.velocity = player.velocity;
+				projectile.position += vectorToTargetPosition;
 				return;
+			} else if (relativeVelocity.Length() > vectorToTargetPosition.Length()/3)
+			{
+				relativeVelocity *= 0.9f;
 			}
 			float inertia = ComputeInertia();
 			float speed = ModifiedTargetedSpeed();
@@ -178,6 +184,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public float ModifiedIdleSpeed() => ComputeIdleSpeed() * player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier;
 
 		public float ModifiedMaxDistance() => MaxDistanceFromPlayer() + (travelRangeCanBeModified ? player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus : 0);
+
+		// increase projectile velocity based on max travel distance, since projectile shooting squires
+		// can't take advantage of it
+		// 15 blocks extra range doubles projectile speed
+		protected float ModifiedProjectileVelocity() => projectileVelocity * (1 + player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus / 240f);
 
 		public virtual float ComputeInertia()
 		{

@@ -327,7 +327,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			}
 			else if (vectorToTarget is Vector2 target)
 			{
-				if(target.Length() < 32f)
+				if(target.Length() < 64f && !isDashing)
 				{
 					projectile.spriteDirection = player.Center.X - projectile.Center.X > 0 ? -1 : 1;
 				} else if(relativeVelocity.X > 2)
@@ -363,8 +363,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
 		protected override bool attackSpeedCanBeModified => false;
-
-		protected float projectileVelocity = 12;
 
 		protected int mockHealth;
 

@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Copper StarSword");
+			DisplayName.SetDefault("Starry SkySlasher");
 			Description.SetDefault("An enchanted sword will fight for you!");
 		}
 	}

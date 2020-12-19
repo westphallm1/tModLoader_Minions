@@ -291,7 +291,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 43);
 
-		protected float projectileVelocity = 14;
+		protected override float projectileVelocity => 14;
 		private int attackSequence = 0; // kinda replicate CoordinatedWeaponHoldingSquire but not quire
 		protected override bool travelRangeCanBeModified => false;
 		public StardustSquireMinion() : base(ItemType<StardustSquireMinionItem>()) { }
@@ -351,7 +351,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				{
 					if (Main.myPlayer == player.whoAmI)
 					{
-						angleVector *= projectileVelocity * 0.75f;
+						angleVector *= ModifiedProjectileVelocity() * 0.75f;
 						Projectile.NewProjectile(
 							projectile.Center,
 							angleVector,
@@ -365,7 +365,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				{
 					if (Main.myPlayer == player.whoAmI)
 					{
-						angleVector *= projectileVelocity;
+						angleVector *= ModifiedProjectileVelocity();
 						Projectile.NewProjectile(
 							projectile.Center,
 							angleVector,

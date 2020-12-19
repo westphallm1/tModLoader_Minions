@@ -175,7 +175,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		protected override bool travelRangeCanBeModified => false;
 
-		protected int projectileVelocity = 18;
+		protected override float projectileVelocity => 18;
 
 		public override float ComputeIdleSpeed() => 13;
 
@@ -255,7 +255,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				{
 					int type = ProjectileType<SoulboundArsenalArrow>();
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
-					angleVector *= projectileVelocity;
+					angleVector *= ModifiedProjectileVelocity();
 					float[] amplitudes = { 16, 16, 0 };
 					float[] phases = { (float)(3 * Math.PI / 2), (float)(Math.PI / 2), 0 };
 					for (int i = 0; i < 2; i++)
@@ -339,7 +339,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				{
 					Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;
 					vector2Mouse.Normalize();
-					vector2Mouse *= projectileVelocity;
+					vector2Mouse *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(projectile.Center,
 						vector2Mouse,
 						ProjectileType<SoulboundArsenalSwordProjectile>(),

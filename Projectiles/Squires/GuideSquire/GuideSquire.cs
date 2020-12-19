@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
 
-		protected float projectileVelocity = 12;
+		protected override float projectileVelocity => 12;
 		protected override bool travelRangeCanBeModified => false;
 
 
@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			if (attackFrame == 0)
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
-				angleVector *= projectileVelocity;
+				angleVector *= ModifiedProjectileVelocity();
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(projectile.Center,
