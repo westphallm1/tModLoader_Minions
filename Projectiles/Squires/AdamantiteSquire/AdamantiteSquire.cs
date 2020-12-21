@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			item.knockBack = 5.5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 36;
+			item.damage = 38;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
 	public class AdamantiteSquireMinion : WeaponHoldingSquire<AdamantiteSquireMinionBuff>
 	{
-		protected override int AttackFrames => 30;
+		protected override int AttackFrames => 28;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 

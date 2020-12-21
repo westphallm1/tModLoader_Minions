@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			item.knockBack = 4.5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 28;
+			item.damage = 29;
 			item.value = Item.sellPrice(0, 0, 50, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -105,6 +105,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 		public override float ComputeTargetedSpeed() => 9;
 
-		public override float MaxDistanceFromPlayer() => 210;
+		public override float MaxDistanceFromPlayer() => 224;
 	}
 }

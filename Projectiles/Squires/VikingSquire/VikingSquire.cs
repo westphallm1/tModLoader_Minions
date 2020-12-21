@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 			item.knockBack = 4.5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 11;
+			item.damage = 12;
 			item.value = Item.sellPrice(0, 0, 50, 0);
 			item.rare = ItemRarityID.Blue;
 		}
@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 
 	public class VikingSquireMinion : WeaponHoldingSquire<VikingSquireMinionBuff>
 	{
-		protected override int AttackFrames => 20;
+		protected override int AttackFrames => 25;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/VikingSquire/VikingSquireAxe";
 

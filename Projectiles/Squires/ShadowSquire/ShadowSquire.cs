@@ -32,9 +32,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		{
 			base.SetDefaults();
 			item.knockBack = 3f;
-			item.width = 24;
+			item.width = 20;
 			item.height = 38;
-			item.damage = 20;
+			item.damage = 21;
 			item.value = Item.sellPrice(0, 0, 20, 0);
 			item.rare = ItemRarityID.Green;
 		}
@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 	public class ShadowSquireMinion : WeaponHoldingSquire<ShadowSquireMinionBuff>
 	{
-		protected override int AttackFrames => 25;
+		protected override int AttackFrames => 22;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.WarAxeoftheNight;
 

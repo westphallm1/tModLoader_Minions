@@ -207,7 +207,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			return false;
 		}
 
-		public override float MaxDistanceFromPlayer() => 230;
+		public override float MaxDistanceFromPlayer() => 232;
 
 		public override float ComputeTargetedSpeed() => 11;
 

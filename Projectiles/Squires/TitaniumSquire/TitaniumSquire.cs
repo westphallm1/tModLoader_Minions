@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			item.knockBack = 5.5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 39;
+			item.damage = 41;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 	public class TitaniumSquireMinion : WeaponHoldingSquire<TitaniumSquireMinionBuff>
 	{
-		protected override int AttackFrames => 35;
+		protected override int AttackFrames => 32;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 

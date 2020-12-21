@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 14;
+			item.damage = 20;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;

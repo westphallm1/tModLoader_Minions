@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 	public class CrimsonSquireMinion : WeaponHoldingSquire<CrimsonSquireMinionBuff>
 	{
-		protected override int AttackFrames => 30;
+		protected override int AttackFrames => 25;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.BloodLustCluster;
 

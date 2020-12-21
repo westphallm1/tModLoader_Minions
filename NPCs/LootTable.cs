@@ -28,17 +28,7 @@ namespace AmuletOfManyMinions.NPCs
 		public static void SpawnRoyalArmor(Player lootRecipient, Action<int> spawnAction)
 		{
 			// always give the player the part of the set they're missing, if they're missing a part
-			int itemType;
-			if(!lootRecipient.inventory.Any(item=>(!item.IsAir) && item.type == ItemType<RoyalCrown>()))
-			{
-				itemType = ItemType<RoyalCrown>();
-			} else if (!lootRecipient.inventory.Any(item=>(!item.IsAir) && item.type == ItemType<RoyalGown>()))
-			{
-				itemType = ItemType<RoyalGown>();
-			} else
-			{
-				itemType = Main.rand.Next() < 0.5f ? ItemType<RoyalGown>() : ItemType<RoyalCrown>();
-			}
+			int itemType = NPC.killCount[NPCID.KingSlime] % 2 == 1 ? ItemType<RoyalCrown>() : ItemType<RoyalGown>();
 			spawnAction.Invoke(itemType);
 		}
 
@@ -59,16 +49,11 @@ namespace AmuletOfManyMinions.NPCs
 				}
 			}
 
-			if(spawnChance < 0.03f && NPCSets.preHardmodeIceEnemies.Contains(npc.netID))
+			if(spawnChance < 0.05f && NPCSets.preHardmodeIceEnemies.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<VikingSquireMinionItem>(), 1);
 			}
 
-			if(npc.type == NPCID.KingSlime && !Main.expertMode)
-			{
-				Player lootRecipient = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
-				SpawnRoyalArmor(lootRecipient, item => Item.NewItem(npc.getRect(), item, 1));
-			}
 
 			if (spawnChance < 0.12f && npc.type == NPCID.ManEater)
 			{
@@ -80,24 +65,9 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<AncientCobaltSquireMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.33f && npc.type == NPCID.QueenBee)
-			{
-				Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1, prefixGiven: -1);
-			}
-
-			if((Main.expertMode || spawnChance < 0.5f) && npc.type == NPCID.SkeletronHead)
-			{
-				Item.NewItem(npc.getRect(), ItemType<SquireSkullAccessory>(), 1, prefixGiven: -1);
-			}
-
-			if (spawnChance < 0.01f && NPCSets.angryBones.Contains(npc.netID))
+			if (spawnChance < 0.015f && NPCSets.angryBones.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<BoneSquireMinionItem>(), 1, prefixGiven: -1);
-			}
-
-			if (spawnChance < 0.25f && npc.type == NPCID.WallofFlesh)
-			{
-				Item.NewItem(npc.getRect(), ItemType<BoneSerpentMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.05f && npc.type == NPCID.GiantBat)
@@ -115,11 +85,6 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<SqueyereMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if (spawnChance < 0.33f && npc.type == NPCID.Plantera)
-			{
-				Item.NewItem(npc.getRect(), ItemType<PottedPalMinionItem>(), 1, prefixGiven: -1);
-			}
-
 			if (spawnChance < 0.03f && NPCSets.blueArmoredBones.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<ArmoredBoneSquireMinionItem>(), 1, prefixGiven: -1);
@@ -128,6 +93,35 @@ namespace AmuletOfManyMinions.NPCs
 			if (spawnChance < 0.025f && NPCSets.hellArmoredBones.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<CharredChimeraMinionItem>(), 1, prefixGiven: -1);
+			}
+
+			if(!Main.expertMode)
+			{
+				if(npc.type == NPCID.KingSlime)
+				{
+					Player lootRecipient = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
+					SpawnRoyalArmor(lootRecipient, item => Item.NewItem(npc.getRect(), item, 1));
+				}
+
+				if (spawnChance < 0.33f && npc.type == NPCID.Plantera)
+				{
+					Item.NewItem(npc.getRect(), ItemType<PottedPalMinionItem>(), 1, prefixGiven: -1);
+				}
+
+				if (spawnChance < 0.33f && npc.type == NPCID.QueenBee)
+				{
+					Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1, prefixGiven: -1);
+				}
+
+				if(spawnChance < 0.5f && npc.type == NPCID.SkeletronHead)
+				{
+					Item.NewItem(npc.getRect(), ItemType<SquireSkullAccessory>(), 1, prefixGiven: -1);
+				}
+
+				if (spawnChance < 0.25f && npc.type == NPCID.WallofFlesh)
+				{
+					Item.NewItem(npc.getRect(), ItemType<BoneSerpentMinionItem>(), 1, prefixGiven: -1);
+				}
 			}
 		}
 
@@ -152,9 +146,35 @@ namespace AmuletOfManyMinions.NPCs
 
 		public override void OpenVanillaBag(string context, Player player, int arg)
 		{
-			if(arg == ItemID.KingSlimeBossBag)
+			float spawnChance = Main.rand.NextFloat();
+			switch(arg)
 			{
-				LootTable.SpawnRoyalArmor(player, item=>player.QuickSpawnItem(item));
+				case ItemID.KingSlimeBossBag:
+					LootTable.SpawnRoyalArmor(player, item => player.QuickSpawnItem(item));
+					break;
+				case ItemID.QueenBeeBossBag:
+					if(spawnChance < 0.67f)
+					{
+						player.QuickSpawnItem(ItemType<BeeQueenMinionItem>());
+					}
+					break;
+				case ItemID.SkeletronBossBag:
+					player.QuickSpawnItem(ItemType<SquireSkullAccessory>());
+					break;
+				case ItemID.WallOfFleshBossBag:
+					if (spawnChance < 0.67f)
+					{
+						player.QuickSpawnItem(ItemType<BoneSerpentMinionItem>());
+					}
+					break;
+				case ItemID.PlanteraBossBag:
+					if (spawnChance < 0.67f)
+					{
+						player.QuickSpawnItem(ItemType<PottedPalMinionItem>());
+					}
+					break;
+				default:
+					break;
 			}
 		}
 

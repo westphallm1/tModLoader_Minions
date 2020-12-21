@@ -78,6 +78,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, projectile.width, projectile.height);
 			return base.OnTileCollide(oldVelocity);
 		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			if(Main.rand.Next(3) == 0)
+			{
+				target.AddBuff(BuffID.OnFire, 180);
+			}
+		}
 	}
 
 	public class GuideSquireMinion : WeaponHoldingSquire<GuideSquireMinionBuff>
