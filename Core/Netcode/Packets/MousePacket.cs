@@ -5,10 +5,8 @@ using Terraria.ID;
 
 namespace AmuletOfManyMinions.Core.Netcode.Packets
 {
-	public class MousePacket : MPPacket
+	public class MousePacket : PlayerPacket
 	{
-		readonly byte whoAmI;
-
 		readonly ushort x;
 		readonly ushort y;
 
@@ -20,34 +18,30 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 		//For reflection
 		public MousePacket() { }
 
-		public MousePacket(int whoAmI, Vector2 position)
+		public MousePacket(Player player, Vector2 position) : base(player)
 		{
-			this.whoAmI = (byte)whoAmI;
 			x = (ushort)(position.X / precision);
 			y = (ushort)(position.Y / precision);
 		}
 
-		public override void Send(BinaryWriter writer)
+		protected override void PostSend(BinaryWriter writer, Player player)
 		{
-			writer.Write((byte)whoAmI);
 			writer.Write((ushort)x);
 			writer.Write((ushort)y);
 		}
 
-		public override void Receive(BinaryReader reader, int sender)
+		protected override void PostReceive(BinaryReader reader, int sender, Player player)
 		{
-			byte whoAmI = reader.ReadByte();
 			ushort x = reader.ReadUInt16();
 			ushort y = reader.ReadUInt16();
 
 			Vector2 position = new Vector2(x, y) * precision;
 
-			Player player = Main.player[whoAmI];
 			player.GetModPlayer<MousePlayer>().SetNextMousePosition(position);
 
 			if (Main.netMode == NetmodeID.Server)
 			{
-				new MousePacket(whoAmI, position).Send(from: sender, bcCondition: delegate (Player otherPlayer)
+				new MousePacket(player, position).Send(from: sender, bcCondition: delegate (Player otherPlayer)
 				{
 					//Only send to other player if he's in visible range
 					Rectangle bounds = Utils.CenteredRectangle(player.Center, new Vector2(1920, 1080) * 1.5f);
