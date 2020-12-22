@@ -43,7 +43,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 	public class PottedPalMinion : SquireMinion<PottedPalMinionBuff>
 	{
-		protected float projectileVelocity = 14;
 		public PottedPalMinion() : base(ItemType<PottedPalMinionItem>()) { }
 		protected int wingFrameCounter = 0;
 		static int hitCooldown = 6;

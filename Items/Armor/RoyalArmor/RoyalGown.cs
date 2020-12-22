@@ -38,5 +38,16 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			robes = true;
 			equipSlot = mod.GetEquipSlot("RoyalGown_Legs", EquipType.Legs);
 		}
+		public override void AddRecipes()
+		{
+			foreach(int metalId in new int []{ ItemID.GoldBar, ItemID.PlatinumBar}) {
+				ModRecipe recipe = new ModRecipe(mod);
+				recipe.AddIngredient(ItemID.Gel, 30);
+				recipe.AddIngredient(metalId, 15);
+				recipe.AddTile(TileID.Solidifier);
+				recipe.SetResult(this);
+				recipe.AddRecipe();
+			}
+		}
 	}
 }

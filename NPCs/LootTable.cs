@@ -25,13 +25,6 @@ namespace AmuletOfManyMinions.NPCs
 {
 	class LootTable : GlobalNPC
 	{
-		public static void SpawnRoyalArmor(Player lootRecipient, Action<int> spawnAction)
-		{
-			// always give the player the part of the set they're missing, if they're missing a part
-			int itemType = NPC.killCount[NPCID.KingSlime] % 2 == 1 ? ItemType<RoyalCrown>() : ItemType<RoyalGown>();
-			spawnAction.Invoke(itemType);
-		}
-
 		public override void NPCLoot(NPC npc)
 		{
 			base.NPCLoot(npc);
@@ -97,12 +90,6 @@ namespace AmuletOfManyMinions.NPCs
 
 			if(!Main.expertMode)
 			{
-				if(npc.type == NPCID.KingSlime)
-				{
-					Player lootRecipient = Main.player[Player.FindClosest(npc.position, npc.width, npc.height)];
-					SpawnRoyalArmor(lootRecipient, item => Item.NewItem(npc.getRect(), item, 1));
-				}
-
 				if (spawnChance < 0.33f && npc.type == NPCID.Plantera)
 				{
 					Item.NewItem(npc.getRect(), ItemType<PottedPalMinionItem>(), 1, prefixGiven: -1);
@@ -149,9 +136,6 @@ namespace AmuletOfManyMinions.NPCs
 			float spawnChance = Main.rand.NextFloat();
 			switch(arg)
 			{
-				case ItemID.KingSlimeBossBag:
-					LootTable.SpawnRoyalArmor(player, item => player.QuickSpawnItem(item));
-					break;
 				case ItemID.QueenBeeBossBag:
 					if(spawnChance < 0.67f)
 					{

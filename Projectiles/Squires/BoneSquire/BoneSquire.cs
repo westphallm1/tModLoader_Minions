@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 	public class BoneSquireMinion : WeaponHoldingSquire<BoneSquireMinionBuff>
 	{
-		protected override int AttackFrames => 30;
+		protected override int AttackFrames => 25;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailBall";
 

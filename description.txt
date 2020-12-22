@@ -3,6 +3,11 @@ in line with vanilla balance. It adds a new, directly controllable minion type c
 over 15 new minions, and several armor sets and accessories for both Squires and minions. 
 
 === Version History ==
+v0.4.0.1 - Tweaks & Bugfixes
+       - Slightly buff dps of most direct contact squires
+       - Make Royal Armor craftable
+       - Squires oscillate around the mouse less when coming to a stop
+       - Squire travel range now buffs projectile velocity of ranged squires
 v0.4.0 - Aquire the Squire!
        - Squire attack speed, travel range, and travel speed can now be buffed by armor and accessories
        - Add 4 Squire-centric accessories
