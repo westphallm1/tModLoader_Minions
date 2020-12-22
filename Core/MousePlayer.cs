@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Core
 					NextMousePosition = Main.MouseWorld;
 
 					//Send packet
-					new MousePacket(player.whoAmI, Main.MouseWorld).Send();
+					new MousePacket(player, Main.MouseWorld).Send();
 				}
 			}
 		}
