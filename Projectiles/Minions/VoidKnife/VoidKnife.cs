@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -59,30 +60,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 	}
 
 
-	public class VoidKnifeMinion : GroupAwareMinion<VoidKnifeMinionBuff>
+	public class VoidKnifeMinion : TeleportingWeaponMinion<VoidKnifeMinionBuff>
 	{
-
-		private int framesInAir;
-		private float idleAngle;
-		private int maxFramesInAir = 60;
-		private float travelVelocity;
-		private NPC targetNPC = null;
-		private float distanceFromFoe = default;
-		private float teleportAngle = default;
-		private Vector2 teleportDirection;
-		private int phaseFrames;
-		private int maxPhaseFrames = 60;
-		private int lastHitFrame = 0;
-		private int framesWithoutTarget;
-		private bool targetIsDead;
-		private bool lastActive;
-
+		protected override Vector3 lightColor => Color.Purple.ToVector3() * 0.75f;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Void Dagger");
-			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
 		}
 
 		public sealed override void SetDefaults()
@@ -101,22 +85,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			targetIsDead = false;
 		}
 
-
-		public override Vector2 IdleBehavior()
-		{
-			base.IdleBehavior();
-			List<Projectile> minions = GetActiveMinions();
-			Vector2 idlePosition = player.Center;
-			int minionCount = minions.Count;
-			int order = minions.IndexOf(projectile);
-			idleAngle = (float)(MathHelper.TwoPi * order) / minionCount;
-			idleAngle += (MathHelper.TwoPi * minions[0].ai[1]) / animationFrames;
-			idlePosition.X += 2 + 30 * (float)Math.Cos(idleAngle);
-			idlePosition.Y += -12 + 5 * (float)Math.Sin(idleAngle);
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			return vectorToIdlePosition;
-		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
@@ -143,128 +111,55 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			return false;
 		}
 
-		public override Vector2? FindTarget()
+		public override void WindUpBehavior(ref Vector2 vectorToTargetPosition)
 		{
-			if (FindTargetInTurnOrder(800f, projectile.Center, 600f) is Vector2 target)
+			//TODO void knife ai
+			//This section might require a slight change of the behavior regarding the teleporting to work properly for MP
+			//Randomized stuff should only be decided by the client
+			//That would require a change of the ai so it doesnt move for other clients during this phase
+			if (Main.myPlayer == player.whoAmI)
 			{
-				framesWithoutTarget = 0;
-				return target;
-			}
-			else
-			{
-				projectile.friendly = false;
-				return null;
-			}
-		}
-
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
-
-			if (targetNPC is null && targetNPCIndex is int index)
-			{
-				targetNPC = Main.npc[index];
-				
-				distanceFromFoe = default;
-				phaseFrames = 0;
-				framesInAir = 0;
-				lastHitFrame = -10;
-				targetIsDead = false;
-				lastActive = true;
-			} else if(!targetIsDead && targetNPC != null && lastActive && !targetNPC.active)
-			{
-				phaseFrames = maxPhaseFrames;
-				framesInAir = Math.Max(framesInAir, maxFramesInAir - 15);
-				targetIsDead = true;
-				lastActive = false;
-				float r = projectile.rotation + 3*(float)Math.PI/2;
-				projectile.velocity = new Vector2((float)Math.Cos(r), (float)Math.Sin(r));
-				projectile.velocity *= travelVelocity;
-			}
-
-			if (targetNPC != null && phaseFrames++ < maxPhaseFrames / 2)
-			{
-				// do nothing, preDraw will do phase out animation
-				IdleMovement(vectorToIdle);
-			}
-			else if (phaseFrames > maxPhaseFrames / 2 && phaseFrames < maxPhaseFrames)
-			{
-				//TODO void knife ai
-				//This section might require a slight change of the behavior regarding the teleporting to work properly for MP
-				//Randomized stuff should only be decided by the client
-				//That would require a change of the ai so it doesnt move for other clients during this phase
-				if (Main.myPlayer == player.whoAmI)
+				if (distanceFromFoe == default)
 				{
-					if (distanceFromFoe == default)
-					{
-						distanceFromFoe = 80 + Main.rand.Next(-20, 20);
-						teleportAngle = Main.rand.NextFloat(MathHelper.TwoPi);
-						teleportDirection = teleportAngle.ToRotationVector2();
-						// move to fixed position relative to NPC, preDraw will do phase in animation
-						projectile.Center = targetNPC.Center + teleportDirection * (distanceFromFoe + phaseFrames);
-						projectile.netUpdate = true;
-					}
-					else
-					{
-						vectorToTargetPosition.SafeNormalize();
-						projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.PiOver2;
-					}
-					//Don't change position continuously, bandaid fix until a proper way for it to work in MP is figured out
-				}
-				projectile.friendly = false;
-			} else
-			{
-				if (framesInAir++ > maxFramesInAir || framesWithoutTarget == 10)
-				{
-					targetNPC = null;
-					attackState = AttackState.RETURNING;
-				}
-				else if (framesInAir - lastHitFrame > 10 && !targetIsDead)
-				{
-					projectile.friendly = true;
-					vectorToTargetPosition.SafeNormalize();
-					projectile.velocity = vectorToTargetPosition * travelVelocity;
-					projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.PiOver2;
-				}
-				Dust.NewDust(projectile.Center, 8, 8, DustID.Shadowflame);
-			}
-			Lighting.AddLight(projectile.Center, Color.Purple.ToVector3() * 0.75f);
-		}
-
-		public override void OnHitTarget(NPC target)
-		{
-			lastHitFrame = framesInAir;
-		}
-
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
-		{
-			if (attackState == AttackState.ATTACKING)
-			{
-				framesWithoutTarget++;
-				if (phaseFrames < maxPhaseFrames && targetNPC != null)
-				{
-					TargetedMovement(targetNPC.Center - projectile.Center);
+					distanceFromFoe = 80 + Main.rand.Next(-20, 20);
+					teleportAngle = Main.rand.NextFloat(MathHelper.TwoPi);
+					teleportDirection = teleportAngle.ToRotationVector2();
+					// move to fixed position relative to NPC, preDraw will do phase in animation
+					projectile.Center = targetNPC.Center + teleportDirection * (distanceFromFoe + phaseFrames);
+					projectile.netUpdate = true;
 				}
 				else
 				{
-					TargetedMovement(projectile.velocity);
+					vectorToTargetPosition.SafeNormalize();
+					projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.PiOver2;
 				}
-				return;
+				//Don't change position continuously, bandaid fix until a proper way for it to work in MP is figured out
 			}
-			projectile.rotation = (float)Math.PI;
-			// alway clamp to the idle position
-			projectile.tileCollide = false;
+		}
 
-			if (vectorToIdlePosition.Length() > 32 && vectorToIdlePosition.Length() < 1000)
+		public override void SwingBehavior(ref Vector2 vectorToTargetPosition)
+		{
+			if (framesInAir++ > maxFramesInAir || framesWithoutTarget == 10)
 			{
-				projectile.position += vectorToIdlePosition;
+				targetNPC = null;
+				attackState = AttackState.RETURNING;
 			}
-			else
+			else if (framesInAir - lastHitFrame > 10 && !targetIsDead)
 			{
-				attackState = AttackState.IDLE;
-				projectile.rotation = (player.Center - projectile.Center).X * -0.01f;
-				projectile.position += vectorToIdlePosition;
-				projectile.velocity = Vector2.Zero;
+				projectile.friendly = true;
+				vectorToTargetPosition.SafeNormalize();
+				projectile.velocity = vectorToTargetPosition * travelVelocity;
+				projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.PiOver2;
 			}
+			Dust.NewDust(projectile.Center, 8, 8, DustID.Shadowflame);
+		}
+
+		public override void OnLoseTarget(ref Vector2 vectorToTargetPosition)
+		{
+			framesInAir = Math.Max(framesInAir, maxFramesInAir - 15);
+			float r = projectile.rotation + 3*(float)Math.PI/2;
+			projectile.velocity = new Vector2((float)Math.Cos(r), (float)Math.Sin(r));
+			projectile.velocity *= travelVelocity;
 		}
 	}
 }
