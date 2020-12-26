@@ -26,6 +26,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public int attackFrames = 60;
 		public int animationFrames = 120;
 
+		public int animationFrame
+		{
+			get => (int)projectile.ai[1];
+			set => projectile.ai[1] = value;
+		}
+		public int attackFrame
+		{
+			get => (int)projectile.ai[0];
+			set => projectile.ai[0] = value;
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -64,8 +75,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			leader = null;
 			others = null;
 			head = null;
-			projectile.ai[0] = (projectile.ai[0] + 1) % attackFrames;
-			projectile.ai[1] = (projectile.ai[1] + 1) % animationFrames;
+			attackFrame = (attackFrame + 1) % attackFrames;
+			animationFrame = (animationFrame + 1) % animationFrames;
 			return default;
 		}
 

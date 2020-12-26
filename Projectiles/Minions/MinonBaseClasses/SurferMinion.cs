@@ -20,6 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected int approachInertia = 40;
 		protected int targetSearchDistance = 800;
 		protected int idleCircle = 40;
+		protected int idleInertia = 15;
 
 		public override void SetStaticDefaults()
 		{
@@ -120,7 +121,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			// alway clamp to the idle position
 			projectile.tileCollide = false;
-			int inertia = 15;
 			int maxSpeed = 12;
 			if (vectorToIdlePosition.Length() < maxSpeed)
 			{
@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				vectorToIdlePosition.SafeNormalize();
 				vectorToIdlePosition *= maxSpeed;
 			}
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
+			projectile.velocity = (projectile.velocity * (idleInertia - 1) + vectorToIdlePosition) / idleInertia;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
