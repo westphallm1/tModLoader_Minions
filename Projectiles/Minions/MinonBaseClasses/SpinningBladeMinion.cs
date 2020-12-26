@@ -62,6 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			targetSearchDistance = 800;
 			projectile.width = 16;
 			projectile.height = 16;
 			attackFrames = 60;
@@ -74,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				projectile.rotation = projectile.velocity.X * 0.05f;
 			} else
 			{
-				projectile.rotation += 0.1f;
+				projectile.rotation += 0.15f;
 			}
 		}
 
@@ -130,17 +131,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
+		protected virtual float GetBackBladeAngle() 
+		{
+			return (6 * MathHelper.Pi * animationFrame) / animationFrames;
+		}
+
+		protected virtual float GetFrontBladeAngle() {
+			return -GetBackBladeAngle();
+		}
+
+		protected virtual float GetSpinningBladeAngle()
+		{
+			return projectile.rotation;
+		}
+
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			// draw the back blade
-			float bladeAngle = (3 * MathHelper.Pi * animationFrame) / animationFrames;
 			if(!isSpinning)
 			{
-				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, -bladeAngle);
-				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, bladeAngle);
+				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetBackBladeAngle());
+				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetFrontBladeAngle());
 			} else
 			{
-				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, projectile.rotation);
+				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetSpinningBladeAngle());
 			}
 			SpinningBladeDrawer.DrawGlow(this, spriteBatch);
 			return false;

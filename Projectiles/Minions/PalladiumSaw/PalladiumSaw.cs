@@ -8,47 +8,55 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.SilverCross
+namespace AmuletOfManyMinions.Projectiles.Minions.PalladiumSaw
 {
-	public class SilverCrossMinionBuff : MinionBuff
+	public class PalladiumSawMinionBuff : MinionBuff
 	{
-		public SilverCrossMinionBuff() : base(ProjectileType<SilverCrossMinion>()) { }
+		public PalladiumSawMinionBuff() : base(ProjectileType<PalladiumSawMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Silver Cross");
-			Description.SetDefault("Ne-ver let you go-o.");
+			DisplayName.SetDefault("Palladium Saw");
+			Description.SetDefault("Let 'er Rip!");
 		}
 	}
 
-	public class SilverCrossMinionItem : MinionItem<SilverCrossMinionBuff, SilverCrossMinion>
+	public class PalladiumSawMinionItem : MinionItem<PalladiumSawMinionBuff, PalladiumSawMinion>
 	{
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Silver Cross Staff");
-			Tooltip.SetDefault("Summons a spinning silver cross to fight for you!");
+			DisplayName.SetDefault("Palladium Saw Staff");
+			Tooltip.SetDefault("Summons a spinning palladium saw to fight for you!");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 9;
+			item.damage = 23;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
 			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.White;
+			item.rare = ItemRarityID.Orange;
+		}
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.PalladiumBar, 12);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 
 
 	// Uses ai[1] to check when to stop moving
-	public class SilverCrossSplitProjectile : ModProjectile, ISpinningBladeMinion
+	public class PalladiumSawSplitProjectile : ModProjectile, ISpinningBladeMinion
 	{
 
-		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/SilverCross/SilverCrossMinion";
+		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/PalladiumSaw/PalladiumSawMinion";
 
 		public override void SetDefaults()
 		{
@@ -85,14 +93,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SilverCross
 		}
 	}
 
-	public class SilverCrossMinion : SpinningBladeMinion<SilverCrossMinionBuff>, ISpinningBladeMinion
+	public class PalladiumSawMinion : SpinningBladeMinion<PalladiumSawMinionBuff>, ISpinningBladeMinion
 	{
-		protected override int bladeType => ProjectileType<SilverCrossSplitProjectile>();
+		protected override int bladeType => ProjectileType<PalladiumSawSplitProjectile>();
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Silver Cross");
+			DisplayName.SetDefault("Palladium Saw");
 		}
 
 		public override void SetDefaults()
@@ -121,18 +129,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SilverCross
 
 		protected override void SummonSecondBlade(Vector2 vectorToTargetPosition)
 		{
+			Vector2 launchVelocity = vectorToTargetPosition;
+			launchVelocity.SafeNormalize();
+			launchVelocity *= SpinVelocity;
+			npcVelocity = Main.npc[(int)targetNPCIndex].velocity;
+			launchVelocity += launchVelocity;
+			spinVector = launchVelocity;
 			if (Main.myPlayer == player.whoAmI)
 			{
-				Vector2 launchVelocity = vectorToTargetPosition;
-				launchVelocity.SafeNormalize();
-				launchVelocity *= SpinVelocity;
-				npcVelocity = Main.npc[(int)targetNPCIndex].velocity;
-				launchVelocity += launchVelocity;
-				spinVector = launchVelocity;
 				int projId = Projectile.NewProjectile(
 					projectile.Center,
 					launchVelocity,
-					ProjectileType<SilverCrossSplitProjectile>(),
+					ProjectileType<PalladiumSawSplitProjectile>(),
 					projectile.damage,
 					projectile.knockBack,
 					player.whoAmI,

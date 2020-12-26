@@ -8,47 +8,55 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.TungstenStar
+namespace AmuletOfManyMinions.Projectiles.Minions.CobaltStar
 {
-	public class TungstenStarMinionBuff : MinionBuff
+	public class CobaltStarMinionBuff : MinionBuff
 	{
-		public TungstenStarMinionBuff() : base(ProjectileType<TungstenStarMinion>()) { }
+		public CobaltStarMinionBuff() : base(ProjectileType<CobaltStarMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Tungsten Star");
-			Description.SetDefault("I'll never let you down, and I'll never let you go.");
+			DisplayName.SetDefault("Cobalt Star");
+			Description.SetDefault("You know you make me feel like, a Cobalt Star...");
 		}
 	}
 
-	public class TungstenStarMinionItem : MinionItem<TungstenStarMinionBuff, TungstenStarMinion>
+	public class CobaltStarMinionItem : MinionItem<CobaltStarMinionBuff, CobaltStarMinion>
 	{
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Tungsten Star Staff");
-			Tooltip.SetDefault("Summons a spinning silver cross to fight for you!");
+			DisplayName.SetDefault("Cobalt Star Staff");
+			Tooltip.SetDefault("Summons a pair of cobalt throwing stars to fight for you!");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 11;
+			item.damage = 26;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
 			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.White;
+			item.rare = ItemRarityID.Orange;
+		}
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.CobaltBar, 12);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 
 
 	// Uses ai[1] to check when to start colliding with tiles
-	public class TungstenFallingStarProjectile : ModProjectile, ISpinningBladeMinion
+	public class CobaltFallingStarProjectile : ModProjectile, ISpinningBladeMinion
 	{
 
-		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/TungstenStar/TungstenStarMinion";
+		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/CobaltStar/CobaltStarMinion";
 
 		public override void SetDefaults()
 		{
@@ -85,14 +93,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TungstenStar
 		}
 	}
 
-	public class TungstenStarMinion : SpinningBladeMinion<TungstenStarMinionBuff>, ISpinningBladeMinion
+	public class CobaltStarMinion : SpinningBladeMinion<CobaltStarMinionBuff>, ISpinningBladeMinion
 	{
-		protected override int bladeType => ProjectileType<TungstenFallingStarProjectile>();
+		protected override int bladeType => ProjectileType<CobaltFallingStarProjectile>();
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Silver Cross");
+			DisplayName.SetDefault("Cobalt Star");
 		}
 
 		public override void SetDefaults()
@@ -128,16 +136,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TungstenStar
 			projectile.friendly = false; // only summoned projectiles can deal damage
 		}
 
-		protected override float GetBackBladeAngle() 
-		{
-			return (4 * MathHelper.Pi * animationFrame) / animationFrames;
-		}
-
-		protected override float GetFrontBladeAngle()
-		{
-			return projectile.velocity.X * 0.05f;
-		}
-
 		protected override void SummonSecondBlade(Vector2 vectorToTargetPosition)
 		{
 			npcVelocity = Main.npc[(int)targetNPCIndex].velocity;
@@ -151,7 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TungstenStar
 				Projectile.NewProjectile(
 					launchPosition,
 					launchVelocity,
-					ProjectileType<TungstenFallingStarProjectile>(),
+					ProjectileType<CobaltFallingStarProjectile>(),
 					projectile.damage,
 					projectile.knockBack,
 					player.whoAmI,
