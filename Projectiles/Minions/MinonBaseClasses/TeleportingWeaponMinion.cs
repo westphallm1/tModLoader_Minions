@@ -29,6 +29,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal bool targetIsDead;
 		internal bool lastActive;
 
+		protected virtual int searchDistance => 800;
+		protected virtual int noLOSSearchDistance => 600;
+
 
 		public override void SetStaticDefaults()
 		{
@@ -55,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override Vector2? FindTarget()
 		{
-			if (FindTargetInTurnOrder(800f, projectile.Center, 600f) is Vector2 target)
+			if (FindTargetInTurnOrder(searchDistance, projectile.Center, noLOSSearchDistance) is Vector2 target)
 			{
 				framesWithoutTarget = 0;
 				return target;
