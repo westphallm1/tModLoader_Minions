@@ -79,11 +79,42 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 		}
 
-		protected abstract void DoDrift(Vector2 driftVelocity);
-		protected abstract void DoSpin(Vector2 spinVelocity);
-		protected abstract void StopSpin();
+		protected virtual void DoDrift(Vector2 driftVelocity)
+		{
+			projectile.velocity = driftVelocity;
+		}
 
-		protected abstract void SummonSecondBlade(Vector2 vectorToTargetPosition);
+		protected virtual void DoSpin(Vector2 spinVelocity)
+		{
+			projectile.velocity = spinVelocity;
+		}
+
+		protected virtual void StopSpin()
+		{
+			projectile.velocity = Vector2.Zero;
+		}
+
+		protected virtual void SummonSecondBlade(Vector2 vectorToTargetPosition)
+		{
+			Vector2 launchVelocity = vectorToTargetPosition;
+			launchVelocity.SafeNormalize();
+			launchVelocity *= SpinVelocity;
+			npcVelocity = Main.npc[(int)targetNPCIndex].velocity;
+			launchVelocity += launchVelocity;
+			spinVector = launchVelocity;
+			if (Main.myPlayer == player.whoAmI)
+			{
+				int projId = Projectile.NewProjectile(
+					projectile.Center,
+					launchVelocity,
+					bladeType,
+					projectile.damage,
+					projectile.knockBack,
+					player.whoAmI,
+					ai1: SpinAnimationLength - SpinTravelLength);
+				Main.projectile[projId].timeLeft = SpinAnimationLength + 1;
+			}
+		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{

@@ -110,51 +110,50 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CobaltStar
 			projectile.height = 16;
 			attackFrames = 60;
 			idleInertia = 8;
-			SpinAnimationLength = 30;
-			SpinTravelLength = 0;
+			SpinAnimationLength = 40;
 		}
 
-		protected override void DoDrift(Vector2 driftVelocity)
-		{
-			DistanceFromGroup(ref driftVelocity);
-			projectile.velocity = driftVelocity;
-		}
+		//protected override void DoDrift(Vector2 driftVelocity)
+		//{
+		//	DistanceFromGroup(ref driftVelocity);
+		//	projectile.velocity = driftVelocity;
+		//}
 
-		protected override void DoSpin(Vector2 spinVelocity)
-		{
-			projectile.velocity = spinVelocity;
-		}
+		//protected override void DoSpin(Vector2 spinVelocity)
+		//{
+		//	projectile.velocity = spinVelocity;
+		//}
 
-		protected override void StopSpin()
-		{
-			// no op
-		}
+		//protected override void StopSpin()
+		//{
+		//	// no op
+		//}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
-			base.TargetedMovement(vectorToTargetPosition);
-			projectile.friendly = false; // only summoned projectiles can deal damage
-		}
+		//public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		//{
+		//	base.TargetedMovement(vectorToTargetPosition);
+		//	projectile.friendly = false; // only summoned projectiles can deal damage
+		//}
 
-		protected override void SummonSecondBlade(Vector2 vectorToTargetPosition)
-		{
-			npcVelocity = Main.npc[(int)targetNPCIndex].velocity;
-			Vector2 npcCenter = Main.npc[(int)targetNPCIndex].Center;
-			float incoingAngle = MathHelper.PiOver2 + Main.rand.NextFloat(MathHelper.Pi / 4) - MathHelper.PiOver2 / 8;
-			Vector2 angleVector = incoingAngle.ToRotationVector2();
-			Vector2 launchPosition = npcCenter + -128 * angleVector;
-			Vector2 launchVelocity = SpinVelocity * angleVector + new Vector2(npcVelocity.X, 0);
-			if (Main.myPlayer == player.whoAmI)
-			{
-				Projectile.NewProjectile(
-					launchPosition,
-					launchVelocity,
-					ProjectileType<CobaltFallingStarProjectile>(),
-					projectile.damage,
-					projectile.knockBack,
-					player.whoAmI,
-					ai1: projectile.Center.Y + vectorToTargetPosition.Y);
-			}
-		}
+		//protected override void SummonSecondBlade(Vector2 vectorToTargetPosition)
+		//{
+		//	npcVelocity = Main.npc[(int)targetNPCIndex].velocity;
+		//	Vector2 npcCenter = Main.npc[(int)targetNPCIndex].Center;
+		//	float incoingAngle = MathHelper.PiOver2 + Main.rand.NextFloat(MathHelper.Pi / 4) - MathHelper.PiOver2 / 8;
+		//	Vector2 angleVector = incoingAngle.ToRotationVector2();
+		//	Vector2 launchPosition = npcCenter + -128 * angleVector;
+		//	Vector2 launchVelocity = SpinVelocity * angleVector + new Vector2(npcVelocity.X, 0);
+		//	if (Main.myPlayer == player.whoAmI)
+		//	{
+		//		Projectile.NewProjectile(
+		//			launchPosition,
+		//			launchVelocity,
+		//			ProjectileType<CobaltFallingStarProjectile>(),
+		//			projectile.damage,
+		//			projectile.knockBack,
+		//			player.whoAmI,
+		//			ai1: projectile.Center.Y + vectorToTargetPosition.Y);
+		//	}
+		//}
 	}
 }

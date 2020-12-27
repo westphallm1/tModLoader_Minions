@@ -109,44 +109,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PalladiumSaw
 			projectile.width = 16;
 			projectile.height = 16;
 			attackFrames = 60;
+			SpinAnimationLength = 50;
 			idleInertia = 8;
-		}
-
-		protected override void DoDrift(Vector2 driftVelocity)
-		{
-			projectile.velocity = driftVelocity;
-		}
-
-		protected override void DoSpin(Vector2 spinVelocity)
-		{
-			projectile.velocity = spinVelocity;
-		}
-
-		protected override void StopSpin()
-		{
-			projectile.velocity = Vector2.Zero;
-		}
-
-		protected override void SummonSecondBlade(Vector2 vectorToTargetPosition)
-		{
-			Vector2 launchVelocity = vectorToTargetPosition;
-			launchVelocity.SafeNormalize();
-			launchVelocity *= SpinVelocity;
-			npcVelocity = Main.npc[(int)targetNPCIndex].velocity;
-			launchVelocity += launchVelocity;
-			spinVector = launchVelocity;
-			if (Main.myPlayer == player.whoAmI)
-			{
-				int projId = Projectile.NewProjectile(
-					projectile.Center,
-					launchVelocity,
-					ProjectileType<PalladiumSawSplitProjectile>(),
-					projectile.damage,
-					projectile.knockBack,
-					player.whoAmI,
-					ai1: SpinAnimationLength - SpinTravelLength);
-				Main.projectile[projId].timeLeft = SpinAnimationLength + 1;
-			}
 		}
 	}
 }
