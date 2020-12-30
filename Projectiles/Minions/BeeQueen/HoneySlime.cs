@@ -8,7 +8,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 {
-	public class HoneySlime : BumblingTransientMinion
+	public class HoneySlime : BumblingTransientMinion, IGroundAwareMinion
 	{
 		protected override int timeToLive => 60 * 3; // 3 seconds;
 		protected override float inertia => didLand ? 1 : 12;
@@ -19,10 +19,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		protected override float noLOSSearchDistance => 350f;
 		protected override float distanceToBumbleBack => 8000f; // don't bumble back
 
+		public int animationFrame { get; set; }
+
 		int defaultMaxSpeed = 4;
 		int defaultJumpVelocity = 6;
 		int minFrame;
 		bool didLand = false;
+
+		GroundAwarenessHelper gHelper;
 
 		public override void SetStaticDefaults()
 		{
@@ -40,6 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			attackThroughWalls = false;
 			projectile.tileCollide = true;
 			minFrame = 2 * Main.rand.Next(3);
+			gHelper = new GroundAwarenessHelper(this);
 		}
 
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
@@ -78,7 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			{
 				return;
 			}
-			if (vectorToTargetPosition.Y > 32 && DropThroughPlatform())
+			if (vectorToTargetPosition.Y > 32 && gHelper.DropThroughPlatform())
 			{
 				didLand = false; // now falling through the air again
 				return;

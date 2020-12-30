@@ -46,13 +46,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override int MinionType => ProjectileType<BoneSerpentMinion>();
 	}
 
-	public class BoneSerpentMinion : WormMinion<BoneSerpentMinionBuff>
+	public class BoneSerpentMinion : WormMinion<BoneSerpentMinionBuff>, IGroundAwareMinion
 	{
 
 		private int framesInAir;
 		private int framesInGround;
+		private GroundAwarenessHelper gHelper;
 		protected override int dustType => 30;
 		protected override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
+
+		public int animationFrame { get; set; }
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -68,6 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			attackThroughWalls = true;
 			framesInAir = 0;
 			framesInGround = 0;
+			gHelper = new GroundAwarenessHelper(this);
 		}
 
 		protected override void DrawHead()
@@ -102,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
 		public override Vector2 IdleBehavior()
 		{
-			if (!InTheGround(projectile.Center))
+			if (!gHelper.InTheGround(projectile.Center))
 			{
 				framesInAir++;
 				framesInGround = 0;

@@ -74,14 +74,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CobaltStar
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			return true;
+			return false;
 		}
 
 		public override void AI()
 		{
-			if(projectile.position.Y >= projectile.ai[1])
+			if(projectile.timeLeft < projectile.ai[1])
 			{
-				projectile.tileCollide = true;
+				projectile.velocity = Vector2.Zero;
 			}
 			projectile.rotation += 0.1f;
 		}
