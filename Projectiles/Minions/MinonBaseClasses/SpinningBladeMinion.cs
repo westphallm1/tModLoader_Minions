@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		}
 	}
 
-	public abstract class SpinningBladeMinion<T> : SurferMinion<T>, ISpinningBladeMinion where T: ModBuff
+	public abstract class SpinningBladeMinion<T> : HeadCirclingGroupAwareMinion<T>, ISpinningBladeMinion where T: ModBuff
 	{
 		internal bool isSpinning = false;
 		internal Vector2 spinVector = default;

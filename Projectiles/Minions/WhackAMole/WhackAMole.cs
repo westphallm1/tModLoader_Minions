@@ -73,6 +73,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			}
 		}
 
+		public override void Kill(int timeLeft)
+		{
+			int dustIdx = Dust.NewDust(projectile.Center, 8, 8, 192, newColor: WhackAMoleMinion.shades[(int)projectile.ai[0]], Scale: 1.2f);
+			Main.dust[dustIdx].velocity = projectile.velocity / 2;
+			Main.dust[dustIdx].noLight = false;
+			Main.dust[dustIdx].noGravity = true;
+		}
+
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D texture = GetTexture(Texture);
@@ -151,6 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			projectile.height = 24;
 			projectile.tileCollide = false;
 			projectile.friendly = true;
+			projectile.localNPCHitCooldown = 30;
 			attackThroughWalls = false;
 			useBeacon = false;
 			frameSpeed = 5;
@@ -317,7 +326,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			int attackRate = Math.Max(10, 60 / (DrawIndex+1));
+			int attackRate = 60;
 			bool isAttackFrame = player.whoAmI == Main.myPlayer && animationFrame % attackRate == 0 && gHelper.teleportStartFrame == null;
 			bool canHitTarget = isAttackFrame && Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToTargetPosition, 1, 1);
 			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 96 && vectorToTargetPosition.Y < -24;
@@ -325,14 +334,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			if(player.whoAmI == Main.myPlayer && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
 			{
 				Vector2 velocity = vectorToTargetPosition;
-				velocity += Main.npc[(int)targetNPCIndex].velocity;
 				velocity.SafeNormalize();
 				velocity *= 12;
+				velocity.X += Main.npc[(int)targetNPCIndex].velocity.X;
 				Projectile.NewProjectile(
 					projectile.Center, 
 					velocity, 
 					ProjectileType<WhackAMoleMinionProjectile>(), 
-					baseDamage, 
+					projectile.damage, 
 					projectile.knockBack, 
 					player.whoAmI, 
 					projectileIndex);
@@ -349,7 +358,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, player.Center, noLOSRange: searchDistance) is Vector2 target)
 			{
 				return target - projectile.Center;
 			}
@@ -413,7 +422,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		{
 			projectile.velocity.Y = -4;
 			gHelper.isOnGround = false;
-			gHelper.offTheGroundFrames = 20;
+			if(gHelper.offTheGroundFrames < 20)
+			{
+				gHelper.offTheGroundFrames = 20;
+			}
 			return true;
 		}
 	}

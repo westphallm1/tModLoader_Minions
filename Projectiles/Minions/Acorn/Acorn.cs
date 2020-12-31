@@ -87,7 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			}
 		}
 	}
-	public class AcornMinion : SurferMinion<AcornMinionBuff>
+	public class AcornMinion : HeadCirclingGroupAwareMinion<AcornMinionBuff>
 	{
 		public override void SetStaticDefaults()
 		{

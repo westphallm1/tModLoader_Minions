@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		}
 	}
 
-	public class SlimepireMinion : SurferMinion<SlimepireMinionBuff>, IGroundAwareMinion
+	public class SlimepireMinion : HeadCirclingGroupAwareMinion<SlimepireMinionBuff>, IGroundAwareMinion
 	{
 		private GroundAwarenessHelper gHelper;
 		private float intendedX = 0;

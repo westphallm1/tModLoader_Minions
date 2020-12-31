@@ -62,7 +62,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal bool isFlying {
 			get => _isFlying;
 			set {
-				Main.NewText(self.animationFrame - lastTransformedFrame);
 				if(self.animationFrame - lastTransformedFrame > transformRateLimit)
 				{
 					lastTransformedFrame = self.animationFrame;
@@ -81,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal GetUnstuckDelegate GetUnstuck;
 		internal StuckInfo stuckInfo;
 		internal int lastTransformedFrame = -1;
-		internal int transformRateLimit = 0;
+		internal int transformRateLimit = 15;
 
 		private Projectile projectile => self.projectile;
 		public GroundAwarenessHelper(IGroundAwareMinion self)

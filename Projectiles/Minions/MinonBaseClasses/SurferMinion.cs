@@ -6,9 +6,8 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	public abstract class SurferMinion<T> : GroupAwareMinion<T> where T : ModBuff
+	public abstract class SurferMinion<T> : HeadCirclingGroupAwareMinion<T> where T : ModBuff
 	{
-		protected float idleAngle;
 		protected int framesSinceDiveBomb = 0;
 		protected int diveBombHeightRequirement = 40;
 		protected int diveBombHeightTarget = 120;
@@ -18,9 +17,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected int diveBombInertia = 15;
 		protected int approachSpeed = 8;
 		protected int approachInertia = 40;
-		protected int targetSearchDistance = 800;
-		protected int idleCircle = 40;
-		protected int idleInertia = 15;
 
 		public override void SetStaticDefaults()
 		{
@@ -30,64 +26,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Main.projFrames[projectile.type] = 6;
 		}
 
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.tileCollide = false;
-			attackState = AttackState.IDLE;
-			attackFrames = 30;
-			animationFrames = 240;
-			projectile.localNPCHitCooldown = 20;
-			projectile.frame = (2 * projectile.minionPos) % 6;
-		}
-
-		public override Vector2 IdleBehavior()
-		{
-			base.IdleBehavior();
-			List<Projectile> minions = GetActiveMinions();
-			Vector2 idlePosition = player.Top;
-			int minionCount = minions.Count;
-			// this was silently failing sometimes, don't know why
-			if (minionCount > 0)
-			{
-				int radius = idleCircle;
-				Vector2 maxCircle = player.Top + new Vector2(idleCircle, -20);
-				if (!Collision.CanHitLine(maxCircle, 1, 1, player.Top, 1, 1))
-				{
-					radius = 7;
-				}
-				int order = minions.IndexOf(projectile);
-				idleAngle = (2 * PI * order) / minionCount;
-				idleAngle += 2 * PI * minions[0].ai[1] / animationFrames;
-				idlePosition.X += 2 + radius * (float)Math.Cos(idleAngle);
-				idlePosition.Y += -20 + 10 * (float)Math.Sin(idleAngle);
-			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			return vectorToIdlePosition;
-		}
-
 		public override void OnHitTarget(NPC target)
 		{
 			projectile.velocity.SafeNormalize();
 			projectile.velocity *= 6; // "kick" it away from the enemy it just hit
 			framesSinceDiveBomb = 0;
-		}
-
-		public override Vector2? FindTarget()
-		{
-			if (FindTargetInTurnOrder(targetSearchDistance, projectile.Center) is Vector2 target)
-			{
-				projectile.friendly = true;
-				return target;
-			}
-			else
-			{
-				projectile.friendly = false;
-				return null;
-			}
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -115,24 +58,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			vectorToTargetPosition *= speed;
 			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 			projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
-		}
-
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
-		{
-			// alway clamp to the idle position
-			projectile.tileCollide = false;
-			int maxSpeed = 12;
-			if (vectorToIdlePosition.Length() < maxSpeed)
-			{
-				projectile.rotation = 0;
-				projectile.spriteDirection = (idleAngle % (2 * PI)) > PI ? -1 : 1;
-			}
-			else
-			{
-				vectorToIdlePosition.SafeNormalize();
-				vectorToIdlePosition *= maxSpeed;
-			}
-			projectile.velocity = (projectile.velocity * (idleInertia - 1) + vectorToIdlePosition) / idleInertia;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
