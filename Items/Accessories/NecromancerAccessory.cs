@@ -91,6 +91,30 @@ namespace AmuletOfManyMinions.Items.Accessories
 		internal int summonFlatDamage;
 		internal bool illusionistArmorSetEquipped;
 
+		static Color[] MinionColors = new Color[]
+		{
+			Color.Red,
+			Color.LimeGreen,
+			Color.Blue,
+			Color.Orange,
+			Color.Indigo,
+			Color.Yellow,
+			Color.Violet,
+			Color.Crimson,
+			Color.Green,
+			Color.RoyalBlue,
+			Color.Aquamarine,
+			Color.Gold,
+			Color.Purple,
+		};
+
+		internal int colorIdx = 0;
+
+		public Color GetNextColor()
+		{
+			return MinionColors[colorIdx++ % MinionColors.Length];
+		}
+
 		public override void ResetEffects()
 		{
 			wormOnAStringEquipped = false;

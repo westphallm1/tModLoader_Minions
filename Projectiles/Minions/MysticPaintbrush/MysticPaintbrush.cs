@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -82,7 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			Color.Purple,
 		};
 
-		protected Color brushColor => BrushColors[projectile.minionPos % BrushColors.Length];
+		protected Color brushColor;
 		protected override Vector3 lightColor => brushColor.ToVector3() * 0.75f;
 		protected override int maxFramesInAir => 20;
 		public override void SetStaticDefaults()
@@ -109,6 +110,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			targetIsDead = false;
 		}
 
+
+		public override void OnSpawn()
+		{
+			brushColor = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColor();
+		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{

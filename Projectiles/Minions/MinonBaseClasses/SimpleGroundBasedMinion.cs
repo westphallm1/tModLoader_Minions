@@ -128,6 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual bool ScaleLedge(Vector2 vector)
 		{
+			vector.Y *= 2;
 			gHelper.DoJump(vector, defaultJumpVelocity, maxJumpVelocity);
 			return true;
 		}

@@ -10,32 +10,32 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
+namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 {
-	public class SlimecartMinionBuff : MinionBuff
+	public class ExciteSkullMinionBuff : MinionBuff
 	{
-		public SlimecartMinionBuff() : base(ProjectileType<SlimecartMinion>()) { }
+		public ExciteSkullMinionBuff() : base(ProjectileType<ExciteSkullMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Slimecart");
+			DisplayName.SetDefault("ExciteSkull");
 			Description.SetDefault("A winged acorn will fight for you!");
 		}
 	}
 
-	public class SlimecartMinionItem : MinionItem<SlimecartMinionBuff, SlimecartMinion>
+	public class ExciteSkullMinionItem : MinionItem<ExciteSkullMinionBuff, ExciteSkullMinion>
 	{
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slimecart Staff");
+			DisplayName.SetDefault("ExciteSkull Staff");
 			Tooltip.SetDefault("Summons a winged slime to fight for you!");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 10;
+			item.damage = 19;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
@@ -45,14 +45,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		}
 	}
 
-	public class SlimecartMinion : SimpleGroundBasedMinion<SlimecartMinionBuff>, IGroundAwareMinion
+	public class ExciteSkullMinion : SimpleGroundBasedMinion<ExciteSkullMinionBuff>, IGroundAwareMinion
 	{
-		private Color slimeColor;
+		private Color flairColor;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slimecart");
+			DisplayName.SetDefault("ExciteSkull");
 			Main.projFrames[projectile.type] = 4;
 		}
 
@@ -67,43 +67,42 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
-			maxJumpVelocity = 12;
+			maxJumpVelocity = 13;
+			searchDistance = 700;
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D texture;
 			Vector2 pos = projectile.Center;
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			float brightness = (lightColor.R + lightColor.G + lightColor.B) / (3f * 255f);
-			Color slimeColor = this.slimeColor;
-			slimeColor.R = (byte)(slimeColor.R * brightness);
-			slimeColor.G = (byte)(slimeColor.G * brightness);
-			slimeColor.B = (byte)(slimeColor.B * brightness);
-			if(gHelper.isFlying)
-			{
-				texture = GetTexture(Texture+"_Umbrella");
-				spriteBatch.Draw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
-					texture.Bounds, lightColor, 0,
-					texture.Bounds.Center.ToVector2(), 1, effects, 0);
-				texture = GetTexture(Texture+"_UmbrellaGlow");
-				spriteBatch.Draw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
-					texture.Bounds, slimeColor, 0,
-					texture.Bounds.Center.ToVector2(), 1, effects, 0);
-			}
-			texture = GetTexture(Texture+"_Slime");
-			spriteBatch.Draw(texture, pos + new Vector2(0, -14) - Main.screenPosition,
-				texture.Bounds, slimeColor, 0,
-				texture.Bounds.Center.ToVector2(), 1, effects, 0);
-			texture = GetTexture(Texture+"_Hat");
-			spriteBatch.Draw(texture, pos + new Vector2(0, -23) - Main.screenPosition,
+			Color flairColor = this.flairColor;
+			flairColor.R = (byte)(flairColor.R * brightness);
+			flairColor.G = (byte)(flairColor.G * brightness);
+			flairColor.B = (byte)(flairColor.B * brightness);
+			//texture = GetTexture(Texture+"_Glow");
+			//spriteBatch.Draw(texture, pos - Main.screenPosition,
+			//	texture.Bounds, flairColor, projectile.rotation,
+			//	texture.Bounds.Center.ToVector2(), 1, effects, 0);
+			texture = GetTexture(Texture+"_Rider");
+			spriteBatch.Draw(texture, pos + new Vector2(0, -8) - Main.screenPosition,
 				texture.Bounds, lightColor, 0,
 				texture.Bounds.Center.ToVector2(), 1, effects, 0);
-			return true;
+			texture = GetTexture(Texture+"_RiderGlow");
+			spriteBatch.Draw(texture, pos + new Vector2(0, -8) - Main.screenPosition,
+				texture.Bounds, flairColor, 0,
+				texture.Bounds.Center.ToVector2(), 1, effects, 0);
+			if(gHelper.isFlying && animationFrame % 3 == 0)
+			{
+				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+				Main.dust[idx].alpha = 112;
+				Main.dust[idx].scale = .9f;
+			}
 		}
 
 		public override void OnSpawn()
 		{
-			slimeColor = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColor();
+			flairColor = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColor();
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -130,8 +129,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			{
 				gHelper.DoJump(vector);
 			}
-			int xInertia = 8;
-			int xMaxSpeed = 8;
+			int xInertia = 7;
+			int xMaxSpeed = 9;
 			if(vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
 				projectile.velocity.X = player.velocity.X;
