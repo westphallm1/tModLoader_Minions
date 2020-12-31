@@ -35,13 +35,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 53;
+			item.damage = 14;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 34;
 			item.height = 34;
-			item.value = Item.sellPrice(0, 1, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			item.value = Item.buyPrice(0, 5, 0, 0);
+			item.rare = ItemRarityID.Blue;
 		}
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
@@ -49,15 +49,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
 			Projectile.NewProjectile(position - new Vector2(5, 0), new Vector2(speedX, speedY), item.shoot, damage, knockBack, Main.myPlayer);
 			return false;
-		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SoulofNight, 10);
-			recipe.AddIngredient(ItemID.ThrowingKnife, 50);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
 		}
 	}
 
@@ -69,7 +60,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 		float swingPerFrame = MathHelper.Pi / 20;
 		float initialWindUp = MathHelper.PiOver4;
 
-		protected override int searchDistance => 1100;
+		protected override int searchDistance => 600;
+		protected override int noLOSSearchDistance => 0;
+
 		private Vector2 swingCenter = default;
 
 		static Color[] BrushColors = new Color[]
@@ -107,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			projectile.tileCollide = false;
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 1;
-			attackFrames = 40;
+			attackFrames = 90;
 			animationFrames = 120;
 			attackThroughWalls = true;
 			useBeacon = false;
