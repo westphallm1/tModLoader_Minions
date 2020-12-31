@@ -18,6 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int frameSpeed = 5;
 		protected int proximityForOnHitTarget = 24;
 		protected int targetFrameCounter = 0;
+		protected int noLOSPursuitTime = 15; // time to chase the NPC after losing sight
 		public AttackState attackState = AttackState.IDLE;
 
 		public override void SetStaticDefaults()
@@ -120,12 +121,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				oldVectorToTarget = vectorToTarget;
 				oldTargetNpcIndex = targetNPCIndex;
 			}
-			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < 15)
+			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < noLOSPursuitTime)
 			{
 				projectile.tileCollide = !attackThroughWalls;
-				if (previousIndex < Main.maxNPCs)
+				if(!Main.npc[previousIndex].active)
 				{
-					TargetedMovement(Main.npc[previousIndex].Center); // don't immediately give up if losing LOS
+					oldTargetNpcIndex = null;
+					oldVectorToTarget = null;
+				} else if (previousIndex < Main.maxNPCs)
+				{
+					vectorToTarget = Main.npc[previousIndex].Center - projectile.Center;
+					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
 				}
 			}
 			else

@@ -159,13 +159,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			projectileIndex = 0;
 			gHelper = new GroundAwarenessHelper(this)
 			{
-				ScaleLedge = ScaleLedge
+				ScaleLedge = ScaleLedge,
+				GetUnstuck = DoTeleport,
+				IdleFlyingMovement = IdleFlyingMovement,
+				IdleGroundedMovement = IdleGroundedMovement
 			};
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			gHelper.SetDidHitWall(oldVelocity);
+			gHelper.DoTileCollide(oldVelocity);
 			return false;
 		}
 
@@ -228,6 +231,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
+			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
 			Vector2 idlePosition = gHelper.isFlying ? player.Top : player.Bottom;
 			idlePosition.X += 48 * -player.direction;
 			Vector2 idleHitLine = player.Center;
@@ -259,17 +263,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			gHelper.SetFlyingState(vectorToIdle, vectorToTarget, ComputeSearchDistance(), idleGroundDistance);
-			if(gHelper.teleportStartFrame != null)
-			{
-				DoTeleport();
-			} else if(gHelper.isFlying)
-			{
-				IdleFlyingMovement(vectorToIdlePosition);
-			} else
-			{
-				IdleGroundedMovement(vectorToIdlePosition);
-			}
+			gHelper.DoIdleMovement(vectorToIdlePosition, vectorToTarget, ComputeSearchDistance(), idleGroundDistance);
 		}
 
 		public void IdleFlyingMovement(Vector2 vectorToIdlePosition)
@@ -278,10 +272,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
-		private void DoTeleport()
+		private void DoTeleport(Vector2 destination, int startFrame, ref bool done)
 		{
 			projectile.velocity = Vector2.Zero;
-			int teleportFrame = animationFrame - (int)gHelper.teleportStartFrame;
+			int teleportFrame = animationFrame - startFrame;
 			int width = widths[DrawIndex];
 			if (teleportFrame == 1 || teleportFrame == 1+ TeleportFrames/2)
 			{
@@ -290,10 +284,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			if(teleportFrame == TeleportFrames / 2)
 			{
 				// do the actual teleport
-				projectile.position = gHelper.teleportDestination;
+				projectile.position = destination;
 			} else if(teleportFrame >= TeleportFrames)
 			{
-				gHelper.teleportStartFrame = null;
+				done = true;
 			}
 		}
 
@@ -309,12 +303,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			{
 				gHelper.GetUnstuckByTeleporting(info, vectorToIdlePosition);
 			}
-			projectile.tileCollide = true;
-			if (projectile.velocity.Y > 16)
-			{
-				projectile.velocity.Y = 16;
-			}
-			projectile.velocity.Y += 0.5f ;
+			gHelper.ApplyGravity();
 			float intendedY = projectile.velocity.Y;
 			base.IdleMovement(vectorToIdlePosition);
 			projectile.velocity.Y = intendedY;
@@ -333,7 +322,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			bool canHitTarget = isAttackFrame && Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToTargetPosition, 1, 1);
 			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 96 && vectorToTargetPosition.Y < -24;
 			bool isAttackingFromAir = isAttackFrame && gHelper.isFlying;
-			if(isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
+			if(player.whoAmI == Main.myPlayer && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
 			{
 				Vector2 velocity = vectorToTargetPosition;
 				velocity += Main.npc[(int)targetNPCIndex].velocity;
@@ -360,11 +349,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, 0.75f * searchDistance, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
 			{
 				return target - projectile.Center;
 			}
-			else if (ClosestEnemyInRange(searchDistance, player.Center, 0.75f * searchDistance, losCenter: player.Center) is Vector2 target2)
+			else if (ClosestEnemyInRange(searchDistance, player.Center) is Vector2 target2)
 			{
 				return target2 - projectile.Center;
 			}

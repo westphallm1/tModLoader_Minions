@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	public interface IGroundAwareMinion
 	{
 		Projectile projectile { get; }
-		int animationFrame { get; }
+		int animationFrame { get; set; }
 	}
 
 	public struct StuckInfo
@@ -23,19 +23,65 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal bool overLedge;
 
 		internal bool isStuck => throughWall || throughCeiling || throughFloor || overCliff || overLedge;
+
+		public override string ToString()
+		{
+			string val = "";
+			if(throughWall)
+			{
+				val += "Wall, ";
+			}
+			if(throughCeiling)
+			{
+				val += "Ceil, ";
+			}
+			if(throughFloor)
+			{
+				val += "Floor, ";
+			}
+			if(overCliff)
+			{
+				val += "Cliff, ";
+			}
+			if(overLedge)
+			{
+				val += "Ledge, ";
+			}
+			return val;
+		}
 	}
 
 	public delegate bool TryWithVector(Vector2 vector);
+	public delegate void DoWithVector(Vector2 vector);
+	public delegate void GetUnstuckDelegate(Vector2 destination, int startFrame, ref bool done);
 	public class GroundAwarenessHelper
 	{
 		internal IGroundAwareMinion self;
 		internal bool didHitWall;
-		internal bool isFlying;
+		private bool _isFlying;
+		internal bool isFlying {
+			get => _isFlying;
+			set {
+				Main.NewText(self.animationFrame - lastTransformedFrame);
+				if(self.animationFrame - lastTransformedFrame > transformRateLimit)
+				{
+					lastTransformedFrame = self.animationFrame;
+					_isFlying = value;
+				}
+			}
+		}
 		internal bool isOnGround;
+		internal bool didJustLand;
 		internal int offTheGroundFrames;
 		internal Vector2 teleportDestination;
 		internal int? teleportStartFrame;
 		internal TryWithVector ScaleLedge;
+		internal DoWithVector IdleFlyingMovement;
+		internal DoWithVector IdleGroundedMovement;
+		internal GetUnstuckDelegate GetUnstuck;
+		internal StuckInfo stuckInfo;
+		internal int lastTransformedFrame = -1;
+		internal int transformRateLimit = 0;
 
 		private Projectile projectile => self.projectile;
 		public GroundAwarenessHelper(IGroundAwareMinion self)
@@ -65,6 +111,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			bottomOfProjectile.Y += 8; // go to the next block down
 			Tile tileUnderfoot = TileAtLocation(bottomOfProjectile);
 			return Main.tileSolidTop[tileUnderfoot.type];
+		}
+		internal bool StandingOnSlope()
+		{
+			if (projectile.velocity.Y < 0)
+			{
+				return false; // can't be standing if we're ascending
+			}
+			Vector2 bottomOfProjectile = projectile.Bottom;
+			bottomOfProjectile.Y += 8; // go to the next block down
+			Tile tileUnderfoot = TileAtLocation(bottomOfProjectile);
+			return tileUnderfoot.leftSlope() || tileUnderfoot.rightSlope();
 		}
 
 		// Find the nearest tile that's directly beneath the minion and directly above the ground eg:
@@ -156,6 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			if (StandingOnPlatform())
 			{
 				projectile.position.Y += 8;
+				didJustLand = false;
 				return true;
 			}
 			return false;
@@ -163,7 +221,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal StuckInfo GetStuckInfo(Vector2 vectorToIdlePosition)
 		{
-			StuckInfo stuckInfo = new StuckInfo();
+			stuckInfo = new StuckInfo();
 			stuckInfo.throughWall = didHitWall && vectorToIdlePosition.Length() > 32;
 			stuckInfo.throughFloor = isOnGround && vectorToIdlePosition.Y > 32 && Math.Abs(vectorToIdlePosition.X) < 32;
 			stuckInfo.throughCeiling = isOnGround && vectorToIdlePosition.Y < -64 &&
@@ -175,7 +233,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		// if we've run up against a block or a ledge, find the nearest clear space in the direction
 		// of the target
-		private bool TeleportTowardsTarget(Vector2 vectorToTarget, int increment = 16)
+		private bool FindEmptySpaceNearTarget(Vector2 vectorToTarget, int increment = 16)
 		{
 			Vector2 incrementVector = vectorToTarget;
 			incrementVector.Normalize();
@@ -210,7 +268,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		// See if there's a solid block with *top* between us and the target, and teleport on
 		// top of it if so
-		private bool TeleportTowardsCeiling(Vector2 vectorToTarget, int increment = 16)
+		private bool FindEmptySpaceThroughCeiling(Vector2 vectorToTarget, int increment = 16)
 		{
 			vectorToTarget.Y -= 16; // give a bit of leeway
 			vectorToTarget.X = 0; // only go straight up
@@ -248,39 +306,60 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				return true;
 			}
 			bool ableToNavigate = false;
-			if(stuckInfo.overLedge && ScaleLedge == null ? false : ScaleLedge(vectorToIdlePosition))
+			if(stuckInfo.overLedge && (ScaleLedge == null ? false : ScaleLedge(vectorToIdlePosition)))
 			{
 				ableToNavigate = true;
 			} else if(stuckInfo.throughCeiling)
 			{
-				ableToNavigate = TeleportTowardsCeiling(vectorToIdlePosition);
+				ableToNavigate = FindEmptySpaceThroughCeiling(vectorToIdlePosition);
 			} else 
 			{
-				ableToNavigate = TeleportTowardsTarget(vectorToIdlePosition);
+				ableToNavigate = FindEmptySpaceNearTarget(vectorToIdlePosition);
 			} 
 			didHitWall = false;
 			isFlying = !ableToNavigate;
-			//Main.NewText("F: " + needsToGoThroughFloor + 
-			//	" W: " + needsToGoThroughWall + 
-			//	" C: " + needsToGoThroughCeiling + 
-			//	" L: " + needsToGoOverLedge + 
-			//	" S: " + ableToNavigate);
 			return ableToNavigate;
 
 		}
 
-		internal void SetDidHitWall(Vector2 oldVelocity)
+		internal void DoTileCollide(Vector2 oldVelocity)
 		{
 			if(oldVelocity.X != 0 && projectile.velocity.X == 0)
 			{
 				didHitWall = true;
 			}
+			if(oldVelocity.Y >= 0 && projectile.velocity.Y == 0)
+			{
+				didJustLand = true;
+			}
+			else if (oldVelocity.Y == 0.5f && projectile.velocity.Y == 0.5f)
+			{
+				// extra check for landing on a slope
+				didJustLand = true;
+			}
+		}
+
+		internal void DoJump(Vector2 vectorToTarget, int defaultJumpVelocity = 4, int maxJumpVelocity = 12)
+		{
+			if (vectorToTarget.Y < -8 * defaultJumpVelocity)
+			{
+				projectile.velocity.Y = Math.Max(-maxJumpVelocity, vectorToTarget.Y / 8);
+			}
+			else
+			{
+				projectile.velocity.Y = -defaultJumpVelocity;
+			}
+			didJustLand = false;
 		}
 
 		internal void SetIsOnGround()
 		{
 			isOnGround = InTheGround(new Vector2(projectile.Bottom.X, projectile.Bottom.Y + 8)) ||
 				InTheGround(new Vector2(projectile.Bottom.X, projectile.Bottom.Y + 24));
+			if(!didJustLand)
+			{
+				didJustLand |= StandingOnSlope();
+			}
 		}
 
 		internal void SetOffTheGroundFrames()
@@ -297,7 +376,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// determine whether the minion should be flying or not
 		internal void SetFlyingState(Vector2 vectorToIdle, Vector2? vectorToTarget, float targetSearchDistance, float maxDistanceAboveGround)
 		{
-			Vector2? theGround = NearestGroundLocation();
+			Vector2? theGround = NearestGroundLocation(maxSearchDistance: (int)maxDistanceAboveGround);
 			if(vectorToIdle.Length() > targetSearchDistance || 
 				(vectorToTarget is null && (vectorToIdle.Y > maxDistanceAboveGround || theGround is null)))
 			{
@@ -305,6 +384,36 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			} else if (!InTheGround(projectile.Bottom) && Math.Abs(vectorToIdle.Y) < maxDistanceAboveGround/2 && theGround != null)
 			{
 				isFlying = false;
+			}
+		}
+
+		internal void ApplyGravity()
+		{
+			projectile.tileCollide = true;
+			projectile.velocity.Y += 0.5f ;
+			if (projectile.velocity.Y > 16)
+			{
+				projectile.velocity.Y = 16;
+			}
+		}
+
+		internal void DoIdleMovement(Vector2 vectorToIdle, Vector2? vectorToTarget, float targetSearchDistance, float maxDistanceAboveGround)
+		{
+			SetFlyingState(vectorToIdle, vectorToTarget, targetSearchDistance, maxDistanceAboveGround);
+			if(teleportStartFrame != null && GetUnstuck != null)
+			{
+				bool done = false;
+				GetUnstuck(teleportDestination, (int)teleportStartFrame, ref done);
+				if(done)
+				{
+					teleportStartFrame = null;
+				}
+			} else if(isFlying && IdleFlyingMovement != null)
+			{
+				IdleFlyingMovement(vectorToIdle);
+			} else
+			{
+				IdleGroundedMovement?.Invoke(vectorToIdle);
 			}
 		}
 	}
