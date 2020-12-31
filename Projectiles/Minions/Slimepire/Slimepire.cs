@@ -42,14 +42,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		}
 	}
 
-	public class SlimepireMinion : HeadCirclingGroupAwareMinion<SlimepireMinionBuff>, IGroundAwareMinion
+	public class SlimepireMinion : SimpleGroundBasedMinion<SlimepireMinionBuff>, IGroundAwareMinion
 	{
-		private GroundAwarenessHelper gHelper;
 		private float intendedX = 0;
-		int searchDistance = 600;
-		private int lastHitFrame;
 
-		public int animationFrame { get; set; }
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -66,159 +62,35 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			drawOriginOffsetY = (projectile.height - 32) / 2;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
-			gHelper = new GroundAwarenessHelper(this)
-			{
-				ScaleLedge = ScaleLedge,
-				IdleFlyingMovement = IdleFlyingMovement,
-				IdleGroundedMovement = IdleGroundedMovement,
-				GetUnstuck = GetUnstuck,
-				transformRateLimit = 60
-			};
+			startFlyingAtTargetHeight = 96;
+			startFlyingAtTargetDist = 64;
+			defaultJumpVelocity = 4;
+			maxJumpVelocity = 12;
 		}
 
-		public override Vector2 IdleBehavior()
+		protected override bool DoPreStuckCheckGroundedMovement()
 		{
-			animationFrame++;
-			gHelper.SetIsOnGround();
-			// the ground-based slime can sometimes bounce its way around 
-			// a corner, but the flying version can't
-			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
-			return base.IdleBehavior();
-		}
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
-		{
-			projectile.spriteDirection = vectorToIdlePosition.X > 0 ? -1 : 1;
-			gHelper.DoIdleMovement(vectorToIdlePosition, vectorToTarget, searchDistance, 180f);
-		}
-
-		private void GetUnstuck(Vector2 destination, int startFrame, ref bool done)
-		{
-			if(vectorToTarget is null || gHelper.stuckInfo.overCliff)
-			{
-				Vector2 vectorToUnstuck = destination - projectile.Center;
-				if(vectorToUnstuck.Length() < 16)
-				{
-					done = true;
-				} else
-				{
-					base.IdleMovement(vectorToUnstuck);
-				}
-			} else
-			{
-				base.IdleMovement(vectorToIdle);
-				if(vectorToIdle.Length() < 16)
-				{
-					done = true;
-				}
-			}
-		}
-
-		private void IdleGroundedMovement(Vector2 vector)
-		{
-			gHelper.ApplyGravity();
-			if (vector.Y < -96 && Math.Abs(vector.X) < 64 && vectorToTarget != null)
-			{
-				gHelper.isFlying = true;
-				if(gHelper.isFlying)
-				{
-					IdleFlyingMovement(vector);
-				}
-				return;
-			}
 			if(!gHelper.didJustLand)
 			{
 				projectile.velocity.X = intendedX;
 				// only path after landing
-				return;
+				return false;
 			}
-			if(vector.Y > 0 && gHelper.DropThroughPlatform())
-			{
-				return;
-			}
-			StuckInfo info = gHelper.GetStuckInfo(vector);
-			if(info.isStuck)
-			{
-				gHelper.GetUnstuckByTeleporting(info, vector);
-			}
+			return true;
+		}
+		protected override void DoGroundedMovement(Vector2 vector)
+		{
 			gHelper.DoJump(vector);
 			int maxHorizontalSpeed = vector.Y < -64 ? 3 : 6;
-			projectile.velocity.X = Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) /16) * Math.Sign(vector.X);
+			projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) /16)) * Math.Sign(vector.X);
 			intendedX = projectile.velocity.X;
-		}
-
-		private void IdleFlyingMovement(Vector2 vector)
-		{
-			if (!gHelper.DropThroughPlatform() && animationFrame - lastHitFrame > 15)
-			{
-				base.IdleMovement(vector);
-			}
-		}
-
-		public override void OnHitTarget(NPC target)
-		{
-			lastHitFrame = animationFrame;
-		}
-
-		private bool ScaleLedge(Vector2 vector)
-		{
-			gHelper.DoJump(vector);
-			return true;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			minFrame = gHelper.isFlying ? 0 : 4;
 			maxFrame = gHelper.isFlying ? 4 : 6;
-			projectile.frameCounter++;
-			if(projectile.frame < minFrame)
-			{
-				projectile.frame = minFrame;
-			}
-			if (projectile.frameCounter >= frameSpeed)
-			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= maxFrame)
-				{
-					projectile.frame = minFrame;
-				}
-			}
-		}
-
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
-			IdleMovement(vectorToTargetPosition);
-			projectile.tileCollide = true;
-		}
-		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
-		{
-			fallThrough = false;
-			return true;
-		}
-		public override bool OnTileCollide(Vector2 oldVelocity)
-		{
-			gHelper.DoTileCollide(oldVelocity);
-			return false;
-		}
-
-		public override Vector2? FindTarget()
-		{
-			if(Vector2.Distance(player.Center, projectile.Center) > 1.5f * searchDistance)
-			{
-				return null;
-			} 
-			else if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
-			{
-				return target - projectile.Center;
-			}
-			else if (ClosestEnemyInRange(searchDistance, player.Center) is Vector2 target2)
-			{
-				return target2 - projectile.Center;
-			}
-			else
-			{
-				return null;
-			}
+			base.Animate(minFrame, maxFrame);
 		}
 	}
 }

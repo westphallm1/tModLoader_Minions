@@ -340,6 +340,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal void DoJump(Vector2 vectorToTarget, int defaultJumpVelocity = 4, int maxJumpVelocity = 12)
 		{
+			if(!didJustLand)
+			{
+				return;
+			}
 			if (vectorToTarget.Y < -8 * defaultJumpVelocity)
 			{
 				projectile.velocity.Y = Math.Max(-maxJumpVelocity, vectorToTarget.Y / 8);
@@ -386,10 +390,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 
-		internal void ApplyGravity()
+		internal void ApplyGravity(int maxUpwardVelocity = 12)
 		{
 			projectile.tileCollide = true;
 			projectile.velocity.Y += 0.5f ;
+			if(projectile.velocity.Y < -maxUpwardVelocity)
+			{
+				projectile.velocity.Y = -maxUpwardVelocity;
+			}
 			if (projectile.velocity.Y > 16)
 			{
 				projectile.velocity.Y = 16;
