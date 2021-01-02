@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("ExciteSkull");
-			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault("Skull Biker");
+			Description.SetDefault("A skeletal motorcyclist is fighting for you!");
 		}
 	}
 
@@ -28,20 +28,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("ExciteSkull Staff");
-			Tooltip.SetDefault("Summons a winged slime to fight for you!");
+			DisplayName.SetDefault("Skeletal Keychain");
+			Tooltip.SetDefault("Summons a skull biker to fight for you!");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 19;
+			item.damage = 20;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.White;
+			item.value = Item.buyPrice(0, 1, 50, 0);
+			item.rare = ItemRarityID.Green;
 		}
 	}
 
@@ -137,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if(animationFrame - lastHitFrame > 8)
+			if(animationFrame - lastHitFrame > 10)
 			{
 				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}

@@ -98,18 +98,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				return;
 			}
-			StuckInfo info = gHelper.GetStuckInfo(vector);
-			if(info.isStuck)
+			if(CheckForStuckness())
 			{
-				gHelper.GetUnstuckByTeleporting(info, vector);
+				StuckInfo info = gHelper.GetStuckInfo(vector);
+				if(info.isStuck)
+				{
+					gHelper.GetUnstuckByTeleporting(info, vector);
+				}
 			}
 			DoGroundedMovement(vector);
 		}
 
 		protected virtual bool DoPreStuckCheckGroundedMovement()
 		{
-			// by default, only check for stuckness every 5 frames
-			return animationFrame % 5 == 0;
+			return true;
+		}
+
+		protected virtual bool CheckForStuckness()
+		{
+			return animationFrame % 5 == 0; // by default, only check for stuckness every 5 frames
 		}
 
 		protected abstract void DoGroundedMovement(Vector2 vector);

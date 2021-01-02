@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Star-eyed Mole");
+			DisplayName.SetDefault("Jellybean Mole");
 			Description.SetDefault("A magic mole will fight for you!");
 		}
 	}
@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Magic Mole Hammer");
-			Tooltip.SetDefault("Summons a magic whack-a-mole to fight for you!\nDon't bonk it too hard...");
+			DisplayName.SetDefault("Magic Jelly Bean Jar");
+			Tooltip.SetDefault("Summons a stack of magic moles to fight for you!");
 		}
 
 		public override void SetDefaults()
@@ -103,6 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		protected int idleGroundDistance = 300;
 		protected int idleStopChasingDistance = 800;
+		protected int lastHitFrame = -1;
 		public int animationFrame { get; set; }
 		protected int AnimationFrames = 60;
 		protected int TeleportFrames = 60;
@@ -313,9 +314,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				gHelper.GetUnstuckByTeleporting(info, vectorToIdlePosition);
 			}
 			gHelper.ApplyGravity();
-			float intendedY = projectile.velocity.Y;
-			base.IdleMovement(vectorToIdlePosition);
-			projectile.velocity.Y = intendedY;
+			if(animationFrame - lastHitFrame > 10)
+			{
+				float intendedY = projectile.velocity.Y;
+				base.IdleMovement(vectorToIdlePosition);
+				projectile.velocity.Y = intendedY;
+			}
+		}
+
+		public override void OnHitTarget(NPC target)
+		{
+			lastHitFrame = animationFrame;
 		}
 
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)

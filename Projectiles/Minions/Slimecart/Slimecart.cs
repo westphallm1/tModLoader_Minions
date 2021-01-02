@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		{
 			base.SetDefaults();
 			DisplayName.SetDefault("Slimecart");
-			Description.SetDefault("A winged acorn will fight for you!");
+			Description.SetDefault("A slime miner will fight for you!");
 		}
 	}
 
@@ -29,19 +29,32 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slimecart Staff");
-			Tooltip.SetDefault("Summons a winged slime to fight for you!");
+			Tooltip.SetDefault("Summons slime miner to fight for you!");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 10;
+			item.damage = 9;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 2, 0);
+			item.value = Item.buyPrice(0, 0, 5, 0);
 			item.rare = ItemRarityID.White;
+		}
+		public override void AddRecipes()
+		{
+			foreach(int itemId in new int[] { ItemID.SilverBar, ItemID.TungstenBar})
+			{
+				ModRecipe recipe = new ModRecipe(mod);
+				recipe.AddIngredient(ItemID.Minecart, 1);
+				recipe.AddIngredient(ItemID.MiningHelmet, 1);
+				recipe.AddIngredient(itemId, 1);
+				recipe.AddTile(TileID.Anvils);
+				recipe.SetResult(this);
+				recipe.AddRecipe();
+			}
 		}
 	}
 
@@ -138,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if(animationFrame - lastHitFrame > 8)
+			if(animationFrame - lastHitFrame > 15)
 			{
 				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}

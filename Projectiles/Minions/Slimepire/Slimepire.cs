@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		{
 			base.SetDefaults();
 			DisplayName.SetDefault("Slimepire");
-			Description.SetDefault("A winged acorn will fight for you!");
+			Description.SetDefault("A vampire slime will fight for you!");
 		}
 	}
 
@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slimepire Staff");
-			Tooltip.SetDefault("Summons a winged slime to fight for you!");
+			Tooltip.SetDefault("Summons a vampire slime to fight for you!");
 		}
 
 		public override void SetDefaults()
@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			item.width = 28;
 			item.height = 28;
 			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.White;
+			item.rare = ItemRarityID.Blue;
 		}
 	}
 
@@ -76,6 +76,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 				// only path after landing
 				return false;
 			}
+			return true;
+		}
+
+		protected override bool CheckForStuckness()
+		{
 			return true;
 		}
 		protected override void DoGroundedMovement(Vector2 vector)

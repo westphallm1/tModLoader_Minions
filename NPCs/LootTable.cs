@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<SquireBatAccessory>(), 1, prefixGiven: -1);
 			}
 
-			if(spawnChance < 0.05f && npc.type == NPCID.DiggerHead)
+			if(spawnChance < 0.1f && npc.type == NPCID.DiggerHead)
 			{
 				Item.NewItem(npc.getRect(), ItemType<WhackAMoleMinionItem>(), 1, prefixGiven: -1);
 			}
