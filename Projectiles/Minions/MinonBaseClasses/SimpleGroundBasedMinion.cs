@@ -34,6 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			gHelper = new GroundAwarenessHelper(this)
 			{
 				ScaleLedge = ScaleLedge,
+				CrossCliff = CrossCliff,
 				IdleFlyingMovement = IdleFlyingMovement,
 				IdleGroundedMovement = IdleGroundedMovement,
 				GetUnstuck = GetUnstuck,
@@ -128,8 +129,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual bool ScaleLedge(Vector2 vector)
 		{
-			vector.Y *= 2;
+			vector.Y = Math.Min(vector.Y - 32f, (vectorToTarget ?? vectorToIdle).Y);
 			gHelper.DoJump(vector, defaultJumpVelocity, maxJumpVelocity);
+			return true;
+		}
+
+		protected virtual bool CrossCliff(Vector2 vector)
+		{
+			// always jump the same height, since we don't get info about how wide the gap is
+			if(Math.Abs(vector.X) < 32)
+			{
+				gHelper.DoJump(new Vector2(0, -maxJumpVelocity * 4), defaultJumpVelocity, maxJumpVelocity);
+			}
 			return true;
 		}
 

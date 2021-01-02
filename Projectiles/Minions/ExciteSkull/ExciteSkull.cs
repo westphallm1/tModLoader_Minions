@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			{
 				gHelper.DoJump(vector);
 			}
-			int xInertia = 7;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 7;
 			int xMaxSpeed = 9;
 			if(vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{

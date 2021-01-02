@@ -21,7 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal bool throughFloor;
 		internal bool overCliff;
 		internal bool overLedge;
-
+		internal Vector2 ledgeDestination;
+		internal Vector2 cliffDestination;
 		internal bool isStuck => throughWall || throughCeiling || throughFloor || overCliff || overLedge;
 
 		public override string ToString()
@@ -75,6 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal Vector2 teleportDestination;
 		internal int? teleportStartFrame;
 		internal TryWithVector ScaleLedge;
+		internal TryWithVector CrossCliff;
 		internal DoWithVector IdleFlyingMovement;
 		internal DoWithVector IdleGroundedMovement;
 		internal GetUnstuckDelegate GetUnstuck;
@@ -225,8 +227,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			stuckInfo.throughFloor = isOnGround && vectorToIdlePosition.Y > 32 && Math.Abs(vectorToIdlePosition.X) < 32;
 			stuckInfo.throughCeiling = isOnGround && vectorToIdlePosition.Y < -64 &&
 				Math.Abs(vectorToIdlePosition.X) < 32 && !Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToIdlePosition, 1, 1);
-			stuckInfo.overCliff = isOnGround && NearestCliffLocation(vectorToIdlePosition, maxSearchDistance: 32, cliffHeight: 128) != null;
-			stuckInfo.overLedge = stuckInfo.throughWall && NearestLedgeLocation(vectorToIdlePosition, maxSearchDistance: 128) != null;
+			if(isOnGround && NearestCliffLocation(vectorToIdlePosition, maxSearchDistance: 32, cliffHeight: 128) is Vector2 cliff)
+			{
+				stuckInfo.overCliff = true;
+				stuckInfo.cliffDestination = cliff;
+			}
+			if(stuckInfo.throughWall && NearestLedgeLocation(vectorToIdlePosition, maxSearchDistance: 128) is Vector2 ledge)
+			{
+				stuckInfo.overLedge = true;
+				stuckInfo.ledgeDestination = ledge;
+			}
 			return stuckInfo;
 		}
 
@@ -305,9 +315,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				return true;
 			}
 			bool ableToNavigate = false;
-			if(stuckInfo.overLedge && (ScaleLedge == null ? false : ScaleLedge(vectorToIdlePosition)))
+			if(stuckInfo.overLedge && ScaleLedge != null)
 			{
-				ableToNavigate = true;
+				ableToNavigate = ScaleLedge(stuckInfo.ledgeDestination - projectile.Bottom);
+			} else if(stuckInfo.overCliff && CrossCliff != null)
+			{
+				ableToNavigate = CrossCliff(stuckInfo.cliffDestination - projectile.Bottom);
 			} else if(stuckInfo.throughCeiling)
 			{
 				ableToNavigate = FindEmptySpaceThroughCeiling(vectorToIdlePosition);

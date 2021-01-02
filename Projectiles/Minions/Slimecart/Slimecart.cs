@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			{
 				gHelper.DoJump(vector);
 			}
-			int xInertia = 8;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 8;
 			if(vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
