@@ -7,6 +7,12 @@ using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
 using AmuletOfManyMinions.Projectiles.Minions.CharredChimera;
 using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
+using AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush;
+using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
+using AmuletOfManyMinions.Projectiles.Minions.Slimepire;
+using AmuletOfManyMinions.Projectiles.Minions.StarSurfer;
+using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
+using AmuletOfManyMinions.Projectiles.Minions.WhackAMole;
 using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
 using AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.BoneSquire;
@@ -68,6 +74,26 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<SquireBatAccessory>(), 1, prefixGiven: -1);
 			}
 
+			if(spawnChance < 0.05f && npc.type == NPCID.DiggerHead)
+			{
+				Item.NewItem(npc.getRect(), ItemType<WhackAMoleMinionItem>(), 1, prefixGiven: -1);
+			}
+
+			if(spawnChance < 0.33f && npc.type == NPCID.BigMimicHallow)
+			{
+				Item.NewItem(npc.getRect(), ItemType<StarSurferMinionItem>(), 1, prefixGiven: -1);
+			}
+
+			if(spawnChance < 0.33f && npc.type == NPCID.BigMimicCrimson)
+			{
+				Item.NewItem(npc.getRect(), ItemType<NullHatchetMinionItem>(), 1, prefixGiven: -1);
+			}
+
+			if(spawnChance < 0.33f && npc.type == NPCID.BigMimicCorruption)
+			{
+				Item.NewItem(npc.getRect(), ItemType<VoidKnifeMinionItem>(), 1, prefixGiven: -1);
+			}
+
 			if (spawnChance < 0.33f && npc.type == NPCID.GoblinSummoner)
 			{
 				Item.NewItem(npc.getRect(), ItemType<GoblinGunnerMinionItem>(), 1, prefixGiven: -1);
@@ -86,6 +112,12 @@ namespace AmuletOfManyMinions.NPCs
 			if (spawnChance < 0.025f && NPCSets.hellArmoredBones.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<CharredChimeraMinionItem>(), 1, prefixGiven: -1);
+			}
+
+			// drop from any enemy during a blood moon in pre-hardmode
+			if(spawnChance < 0.04f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue &&  Main.bloodMoon && !Main.hardMode)
+			{
+				Item.NewItem(npc.getRect(), ItemType<SlimepireMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			if(!Main.expertMode)
@@ -123,6 +155,12 @@ namespace AmuletOfManyMinions.NPCs
 			if(type == NPCID.Clothier)
 			{
 				shop.item[nextSlot].SetDefaults(ItemID.AncientCloth);
+				nextSlot++;
+			}
+			
+			if(type == NPCID.Painter && NPC.downedBoss1)
+			{
+				shop.item[nextSlot].SetDefaults(ItemType<MysticPaintbrushMinionItem>());
 				nextSlot++;
 			}
 		}

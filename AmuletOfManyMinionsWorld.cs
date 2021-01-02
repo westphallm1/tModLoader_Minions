@@ -10,6 +10,7 @@ using static Terraria.ModLoader.ModContent;
 using AmuletOfManyMinions.Projectiles.Squires.VikingSquire;
 using AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire;
 using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
+using AmuletOfManyMinions.Projectiles.Minions.ExciteSkull;
 
 namespace AmuletOfManyMinions
 {
@@ -18,6 +19,7 @@ namespace AmuletOfManyMinions
 		private bool didPlaceShadowSquire;
 		private bool didPlaceSeaSquire;
 		private bool didPlaceVikingSquire;
+		private bool didPlaceExciteSkull;
 		private void placeItemInChest(Chest chest, int itemType)
 		{
 			for(int i = 0; i < 40; i++)
@@ -34,6 +36,7 @@ namespace AmuletOfManyMinions
 		{
 			int frozenFrame = 11;
 			int shadowFrame = 4;
+			int lockedGoldFrame = 2;
 			int waterFrame = 17;
 			int? itemType = null;
 			Tile chestTile = Main.tile[chest.x, chest.y];
@@ -54,6 +57,11 @@ namespace AmuletOfManyMinions
 					// don't care for chest-only items
 					//didPlaceSeaSquire = true;
 					//itemType = ItemType<SeaSquireMinionItem>();
+				} else if (tileFrame == lockedGoldFrame && (!didPlaceExciteSkull || Main.rand.Next(6) == 0))
+				{
+					didPlaceExciteSkull = true;
+					itemType = ItemType<ExciteSkullMinionItem>();
+
 				}
 			}
 			return itemType;

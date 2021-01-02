@@ -40,16 +40,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			item.value = Item.buyPrice(0, 6, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
-
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SoulofLight, 10);
-			recipe.AddIngredient(ItemID.FallenStar, 6);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
 	}
 
 	/// <summary>

@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.FlyingSword;
+using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
 using AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword;
 using AmuletOfManyMinions.Projectiles.Minions.SpiritGun;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
@@ -35,16 +36,19 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<CopperSwordMinionItem>(), 1);
-			recipe.AddIngredient(ItemType<SpiritGunMinionItem>(), 1);
-			recipe.AddIngredient(ItemType<FlyingSwordMinionItem>(), 1);
-			recipe.AddIngredient(ItemType<VoidKnifeMinionItem>(), 1);
-			recipe.AddIngredient(ItemType<CharmOfManyMinions>(), 1);
-			recipe.AddIngredient(ItemType<CharmOfMightyMinions>(), 1);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			foreach(int itemId in new int[] { ItemType<VoidKnifeMinionItem>(), ItemType<NullHatchetMinionItem>()})
+			{
+				ModRecipe recipe = new ModRecipe(mod);
+				recipe.AddIngredient(ItemType<CopperSwordMinionItem>(), 1);
+				recipe.AddIngredient(ItemType<SpiritGunMinionItem>(), 1);
+				recipe.AddIngredient(ItemType<FlyingSwordMinionItem>(), 1);
+				recipe.AddIngredient(itemId, 1);
+				recipe.AddIngredient(ItemType<CharmOfManyMinions>(), 1);
+				recipe.AddIngredient(ItemType<CharmOfMightyMinions>(), 1);
+				recipe.AddTile(TileID.MythrilAnvil);
+				recipe.SetResult(this);
+				recipe.AddRecipe();
+			}
 		}
 
 	}
