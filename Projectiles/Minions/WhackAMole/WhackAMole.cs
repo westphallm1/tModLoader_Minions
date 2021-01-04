@@ -41,6 +41,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			item.value = Item.buyPrice(0, 15, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.SoulofLight, 10);
+			recipe.AddIngredient(ItemID.PixieDust, 15);
+			recipe.AddIngredient(ItemID.StarinaBottle, 5);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
+		}
 	}
 
 	public class WhackAMoleMinionProjectile : ModProjectile
@@ -59,18 +69,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			projectile.width = 16;
 			projectile.height = 16;
 			projectile.friendly = true;
-			projectile.penetrate = 1;
+			projectile.penetrate = 2;
 			projectile.tileCollide = true;
 			projectile.timeLeft = 60;
+			projectile.usesLocalNPCImmunity = true;
 		}
 
 		public override void AI()
 		{
 			projectile.rotation += 0.25f;
-			if(projectile.timeLeft < 30 && projectile.velocity.Y < 16)
-			{
-				projectile.velocity.Y += 0.5f;
-			}
 		}
 
 		public override void Kill(int timeLeft)
@@ -101,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		protected override int dustType => DustID.Dirt;
 
-		protected int idleGroundDistance = 300;
+		protected int idleGroundDistance = 128;
 		protected int idleStopChasingDistance = 800;
 		protected int lastHitFrame = -1;
 		public int animationFrame { get; set; }
@@ -340,12 +347,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			bool canHitTarget = isAttackFrame && Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToTargetPosition, 1, 1);
 			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 96 && vectorToTargetPosition.Y < -24;
 			bool isAttackingFromAir = isAttackFrame && gHelper.isFlying;
-			if(player.whoAmI == Main.myPlayer && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
+			if(player.whoAmI == Main.myPlayer  && targetNPCIndex is int targetIdx && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
 			{
 				Vector2 velocity = vectorToTargetPosition;
 				velocity.SafeNormalize();
 				velocity *= 12;
-				velocity.X += Main.npc[(int)targetNPCIndex].velocity.X;
+				velocity.X += Main.npc[targetIdx].velocity.X;
 				Projectile.NewProjectile(
 					projectile.Center, 
 					velocity, 
@@ -387,7 +394,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		protected override float ComputeSearchDistance()
 		{
-			return 700 + 25 * EmpowerCount;
+			return 800 + 25 * EmpowerCount;
 		}
 
 		protected override float ComputeInertia()

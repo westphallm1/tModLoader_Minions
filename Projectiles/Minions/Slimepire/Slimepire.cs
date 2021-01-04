@@ -26,19 +26,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slimepire Staff");
-			Tooltip.SetDefault("Summons a vampire slime to fight for you!");
+			Tooltip.SetDefault("Summons a vampire slime to fight for you!\nIgnores 10 enemy defense");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 10;
+			item.damage = 20;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.Blue;
+			item.value = Item.buyPrice(0, 2, 0, 0);
+			item.rare = ItemRarityID.LightRed;
 		}
 	}
 
@@ -66,6 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
 			maxJumpVelocity = 12;
+			searchDistance = 825;
 		}
 
 		protected override bool DoPreStuckCheckGroundedMovement()
@@ -85,8 +86,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		}
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
+			// always jump "long" if we're far away from the enemy
+			if(Math.Abs(vector.X) > startFlyingAtTargetDist && vector.Y < -32)
+			{
+				vector.Y = -32;
+			}
 			gHelper.DoJump(vector);
-			int maxHorizontalSpeed = vector.Y < -64 ? 3 : 6;
+			int maxHorizontalSpeed = vector.Y < -64 ? 4 : 8;
 			projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) /16)) * Math.Sign(vector.X);
 			intendedX = projectile.velocity.X;
 		}
@@ -96,6 +102,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			minFrame = gHelper.isFlying ? 0 : 4;
 			maxFrame = gHelper.isFlying ? 4 : 6;
 			base.Animate(minFrame, maxFrame);
+		}
+
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			// manually bypass defense
+			// this may not be wholly correct
+			int defenseBypass = 10;
+			int defense = Math.Min(target.defense, defenseBypass);
+			damage += defense / 2;
 		}
 	}
 }

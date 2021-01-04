@@ -74,11 +74,6 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<SquireBatAccessory>(), 1, prefixGiven: -1);
 			}
 
-			if(spawnChance < 0.1f && npc.type == NPCID.DiggerHead)
-			{
-				Item.NewItem(npc.getRect(), ItemType<WhackAMoleMinionItem>(), 1, prefixGiven: -1);
-			}
-
 			if(spawnChance < 0.33f && npc.type == NPCID.BigMimicHallow)
 			{
 				Item.NewItem(npc.getRect(), ItemType<StarSurferMinionItem>(), 1, prefixGiven: -1);
@@ -115,7 +110,7 @@ namespace AmuletOfManyMinions.NPCs
 			}
 
 			// drop from any enemy during a blood moon in pre-hardmode
-			if(spawnChance < 0.04f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue &&  Main.bloodMoon && !Main.hardMode)
+			if(spawnChance < 0.04f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue &&  Main.bloodMoon && Main.hardMode)
 			{
 				Item.NewItem(npc.getRect(), ItemType<SlimepireMinionItem>(), 1, prefixGiven: -1);
 			}

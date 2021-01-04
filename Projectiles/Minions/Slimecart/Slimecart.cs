@@ -175,6 +175,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
+			if(gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4 && animationFrame % 5 == 0)
+			{
+				Vector2 pos = projectile.Bottom;
+				pos.Y -= 4;
+				int idx = Dust.NewDust(pos, 8, 8, 16, -projectile.velocity.X / 2, 0, newColor: Color.Coral);
+				Main.dust[idx].scale = .8f;
+				Main.dust[idx].alpha = 112;
+			}
 		}
 	}
 }

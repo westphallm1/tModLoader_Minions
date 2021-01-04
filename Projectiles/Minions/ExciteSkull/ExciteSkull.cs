@@ -92,12 +92,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			spriteBatch.Draw(texture, pos + new Vector2(0, -8) - Main.screenPosition,
 				texture.Bounds, flairColor, 0,
 				texture.Bounds.Center.ToVector2(), 1, effects, 0);
-			if(gHelper.isFlying && animationFrame % 3 == 0)
-			{
-				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
-				Main.dust[idx].alpha = 112;
-				Main.dust[idx].scale = .9f;
-			}
 		}
 
 		public override void OnSpawn()
@@ -161,6 +155,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
+			if(((gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4) || gHelper.isFlying) && animationFrame % 3 == 0)
+			{
+				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+				Main.dust[idx].alpha = 112;
+				Main.dust[idx].scale = .9f;
+			}
 		}
 	}
 }

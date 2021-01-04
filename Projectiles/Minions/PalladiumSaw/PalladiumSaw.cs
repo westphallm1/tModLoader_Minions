@@ -21,35 +21,35 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PalladiumSaw
 		}
 	}
 
-	public class PalladiumSawMinionItem : MinionItem<PalladiumSawMinionBuff, PalladiumSawMinion>
-	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Palladium Saw Staff");
-			Tooltip.SetDefault("Summons a spinning palladium saw to fight for you!");
-		}
+	//public class PalladiumSawMinionItem : MinionItem<PalladiumSawMinionBuff, PalladiumSawMinion>
+	//{
+	//	public override void SetStaticDefaults()
+	//	{
+	//		base.SetStaticDefaults();
+	//		DisplayName.SetDefault("Palladium Saw Staff");
+	//		Tooltip.SetDefault("Summons a spinning palladium saw to fight for you!");
+	//	}
 
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			item.damage = 23;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.Orange;
-		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.PalladiumBar, 12);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
-	}
+	//	public override void SetDefaults()
+	//	{
+	//		base.SetDefaults();
+	//		item.damage = 23;
+	//		item.knockBack = 0.5f;
+	//		item.mana = 10;
+	//		item.width = 28;
+	//		item.height = 28;
+	//		item.value = Item.buyPrice(0, 0, 2, 0);
+	//		item.rare = ItemRarityID.Orange;
+	//	}
+	//	public override void AddRecipes()
+	//	{
+	//		ModRecipe recipe = new ModRecipe(mod);
+	//		recipe.AddIngredient(ItemID.PalladiumBar, 12);
+	//		recipe.AddTile(TileID.Anvils);
+	//		recipe.SetResult(this);
+	//		recipe.AddRecipe();
+	//	}
+	//}
 
 
 	// Uses ai[1] to check when to stop moving

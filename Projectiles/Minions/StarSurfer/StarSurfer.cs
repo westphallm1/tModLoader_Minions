@@ -40,6 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			item.value = Item.buyPrice(0, 6, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
+
 	}
 
 	/// <summary>

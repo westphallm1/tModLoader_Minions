@@ -419,7 +419,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal void DoIdleMovement(Vector2 vectorToIdle, Vector2? vectorToTarget, float targetSearchDistance, float maxDistanceAboveGround)
 		{
-			SetFlyingState(vectorToIdle, vectorToTarget, targetSearchDistance, maxDistanceAboveGround);
+			SetFlyingState(vectorToIdle, vectorToTarget, vectorToTarget == null ? 400f : targetSearchDistance, maxDistanceAboveGround);
 			if(teleportStartFrame != null && GetUnstuck != null)
 			{
 				bool done = false;

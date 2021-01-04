@@ -90,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				return;
 			}
 			gHelper.ApplyGravity();
-			if(vector.Y > 0 && gHelper.DropThroughPlatform())
+			if(vector.Y > 32 && gHelper.DropThroughPlatform())
 			{
 				return;
 			}
