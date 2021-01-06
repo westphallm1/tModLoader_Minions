@@ -13,9 +13,9 @@ namespace AmuletOfManyMinions.Items.Armor
 	public class ForagerHelmet : NecromancerAccessory
 	{
 		protected override float baseDamage => 5;
-		protected override int bossLifePerSpawn => 250;
+		protected override float onHitChance => 0.075f;
 		protected override int maxTransientMinions => 2;
-		protected override float onKillChance => .2f;
+		protected override float onKillChance => .25f;
 
 		protected override int projType => ProjectileType<ForagerMushroom>();
 

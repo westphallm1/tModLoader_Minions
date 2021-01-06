@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 9;
+			item.damage = 10;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				ModRecipe recipe = new ModRecipe(mod);
 				recipe.AddIngredient(ItemID.Minecart, 1);
 				recipe.AddIngredient(ItemID.MiningHelmet, 1);
-				recipe.AddIngredient(itemId, 1);
+				recipe.AddIngredient(itemId, 12);
 				recipe.AddTile(TileID.Anvils);
 				recipe.SetResult(this);
 				recipe.AddRecipe();
@@ -134,6 +134,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				idlePosition = player.Center;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
 		

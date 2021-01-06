@@ -114,6 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 				idlePosition = player.Center;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
 		

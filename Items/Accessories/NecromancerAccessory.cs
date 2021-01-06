@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		protected virtual float spawnVelocity => 0;
 
 		protected virtual float onKillChance => 0;
-		protected virtual int bossLifePerSpawn => 0;
+		protected virtual float onHitChance => 0;
 		protected virtual int projType => 0;
 		protected virtual int maxTransientMinions => 0;
 		protected virtual float baseDamage => 0;
@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		{
 			Player player = Main.player[projectile.owner];
 			bool shouldSpawnProjectile = player.whoAmI == Main.myPlayer && !target.boss && target.life <= 0 && Main.rand.NextFloat() < onKillChance;
-			shouldSpawnProjectile |= Main.rand.NextFloat() < damage / (float)bossLifePerSpawn;
+			shouldSpawnProjectile |= Main.rand.NextFloat() < onHitChance;
 			if (!shouldSpawnProjectile)
 			{
 				return false;
