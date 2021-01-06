@@ -1,8 +1,14 @@
 The Amulet of Many Minions is designed to add variety to the vanilla summoner progression while staying at least somewhat
 in line with vanilla balance. It adds a new, directly controllable minion type called the Squire,
-over 15 new minions, and several armor sets and accessories for both Squires and minions. 
+over 20 new minions, and several armor sets and accessories for both Squires and minions. 
 
 === Version History ==
+v0.5.0 - Minion Progression Update
+       - Add new ground-based minion AI style
+       - Add 2 new early pre-hardmode minions
+       - Add 1 late pre-hardmode minion
+       - Add 3 early hardmode minions
+       - Move several existing minions to Big Mimic drops
 v0.4.0.1 - Tweaks & Bugfixes
        - Slightly buff dps of most direct contact squires
        - Make Royal Armor craftable
@@ -32,14 +38,15 @@ A cheat sheet for getting started is given below. A complete list mod content ca
 === Minions ===
 --- Pre Hardmode ---
 Flying Acorn - 6 Acorn, 12 Wood @ Workbench
-Paper Surfer - 30 Clay Blocks, 30 Cloud Blocks @ Anvil
+Miner Slime - Mining Helmet + Minecart + Silver/Tungsten Bars @ Anvil 
 Corrupt/Crimson Cell - 12 Demonite/Crimtane Bars + 6 Shadow Scales/Tissue Samples @ Anvil
 Starry Skysword - 8 Feathers, 3 Fallen Stars @ Sky Forge
 Meteor Fist - 14 Meteor Bars @ Anvil
 Balloon Buddy - Sold by Party Girl
 --- Hardmode ---
-Star Surfer - 6 Fallen Stars, 10 Souls of Light @ Anvil
-Void Knife - 50 Throwing Knives, 10 Souls of Night @ Anvil
+Magic Mole - 5 Stars in a Bottle, 15 Pixie Dust, 10 Souls of Light @ Anvil
+Star Surfer - Big Hallowed Mimic
+Void Knife/Null Hatchet - Big Corrupt/Crimson Mimic
 Goblin Gunner - Goblin Summoner (33%)
 The Clarent - 12 Hallowed Bars, 10 Souls of Flight @ Mythril Anvil
 Charred Chimera - Hell Armored Bones (2.5%)
