@@ -82,6 +82,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public bool IsMyTurn()
 		{
+			if(player.ownedProjectileCounts[projectile.type] == 1)
+			{
+				// don't obey cycle if only one minion
+				return true;
+			}
 			var minions = GetActiveMinions();
 			var leader = GetFirstMinion(minions);
 			int order = projectile.minionPos - leader.minionPos;

@@ -81,6 +81,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 			// This is a simple "loop through all frames from top to bottom" animation
 			projectile.frameCounter++;
+			if(projectile.frame < minFrame)
+			{
+				projectile.frame = minFrame;
+			}
 			if (projectile.frameCounter >= frameSpeed)
 			{
 				projectile.frameCounter = 0;
