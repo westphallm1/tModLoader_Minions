@@ -3,6 +3,7 @@ in line with vanilla balance. It adds a new, directly controllable minion type c
 over 20 new minions, and several armor sets and accessories for both Squires and minions. 
 
 === Version History ==
+v0.5.0.1 - Fix major bug with bee queen minion
 v0.5.0 - Minion Progression Update
        - Add new ground-based minion AI style
        - Add 2 new early pre-hardmode minions

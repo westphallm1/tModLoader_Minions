@@ -251,7 +251,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 					break;
 				}
 			}
-			if (Main.myPlayer == player.whoAmI && Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
+			if (readyToAttack && Main.myPlayer == player.whoAmI && Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
 			{
 				Projectile.NewProjectile(
 					projectile.Center,

@@ -58,6 +58,11 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}
+
+		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+		{
+			drawAltHair = true;
+		}
 	}
 
 
