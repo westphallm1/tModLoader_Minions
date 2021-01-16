@@ -304,7 +304,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			{
 				gHelper.DropThroughPlatform();
 			}
-			int speed = Math.Abs(vectorAbove.X) < 64 ? 12 : 9;
+			int speed = Math.Abs(vectorAbove.X) < 64 ? 14 : 11;
 			DistanceFromGroup(ref vectorAbove);
 			vectorAbove.SafeNormalize();
 			vectorAbove *= speed;
