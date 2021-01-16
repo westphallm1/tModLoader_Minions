@@ -368,6 +368,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			didJustLand = false;
 		}
 
+		internal void ClimbOneBlock()
+		{
+			projectile.position.Y -= 16;
+			projectile.position.X += 4 * Math.Sign(projectile.oldVelocity.X);
+			projectile.velocity.X = projectile.oldVelocity.X;
+		}
+
 		internal void SetIsOnGround()
 		{
 			isOnGround = InTheGround(new Vector2(projectile.Bottom.X, projectile.Bottom.Y + 8)) ||

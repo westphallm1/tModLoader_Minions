@@ -25,28 +25,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Stonecloud Staff");
+			DisplayName.SetDefault("Cloud in a Boulder");
 			Tooltip.SetDefault("Summons an extremely dense cloud to fight for you!\nDeals high damage, but attacks very slowly");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 32;
-			item.knockBack = 5.5f;
+			item.damage = 34;
+			item.knockBack = 5f;
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
 			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.Blue;
-		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Wood, 10);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			item.rare = ItemRarityID.LightRed;
 		}
 	}
 
@@ -151,7 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		private void doShockwaveCalculations()
 		{
 			int shockwaveFramesElapsed = animationFrame - shockwaveStartFrame;
-			projectile.knockBack = shockwaveFramesElapsed < ShockwaveTotalFrames ? 1.5f * defaultKnockback : defaultKnockback;
+			projectile.knockBack = shockwaveFramesElapsed < ShockwaveTotalFrames ? defaultKnockback + 2 : defaultKnockback;
 			if(shockwaveFramesElapsed > ShockwaveMaxSpeedFrames)
 			{
 				shockwaveHitboxSpeed *= ShockwaveDecay;
