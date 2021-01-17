@@ -87,6 +87,71 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			fallThrough = false;
 			return true;
 		}
+
+		public override void Kill(int timeLeft)
+		{
+			// only spawn 1ish cactus per volley
+			// this can spawn cacti upon hitting walls/ceilings/enemies , but that's ok
+			if(projectile.owner == Main.myPlayer && Main.rand.Next(3) == 0)
+			{
+				Projectile.NewProjectile(
+					projectile.position, 
+					Vector2.Zero, 
+					ProjectileType<PricklyPearCactusProjectile>(), 
+					projectile.damage, 
+					projectile.knockBack, 
+					projectile.owner);
+
+			}
+		}
+	}
+
+	public class PricklyPearCactusProjectile : ModProjectile
+	{
+		const int TIME_TO_LIVE = 180;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[projectile.type] = 4;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 16;
+			projectile.height = 32;
+			projectile.timeLeft = TIME_TO_LIVE;
+			projectile.tileCollide = true;
+			projectile.penetrate = -1;
+			projectile.friendly = true;
+			projectile.usesLocalNPCImmunity = true;
+		}
+
+		public override void AI()
+		{
+			projectile.velocity.Y += 0.5f;
+			if(projectile.timeLeft > 20 && projectile.frame < 3 && projectile.frameCounter++ >= 5)
+			{
+				projectile.frameCounter = 0;
+				projectile.frame++;
+			} else if (projectile.timeLeft <= 20 && projectile.frame > 0 && projectile.frameCounter++ >= 5)
+			{
+				projectile.frameCounter = 0;
+				projectile.frame--;
+			}
+		}
+
+		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+		{
+			fallThrough = false;
+			return true;
+		}
+
+		public override bool OnTileCollide(Vector2 oldVelocity)
+		{
+			return false;
+		}
 	}
 
 	public class PricklyPearMinion : SimpleGroundBasedMinion<PricklyPearMinionBuff>, IGroundAwareMinion
@@ -95,7 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		int lastFiredFrame = 0;
 		int fireRate = 90;
 		// don't get too close
-		int preferredDistanceFromTarget = 64;
+		int preferredDistanceFromTarget = 96;
 		float[] seedAngles = { MathHelper.Pi / 6, MathHelper.PiOver2, 5 * MathHelper.Pi / 6 };
 		public override void SetStaticDefaults()
 		{
@@ -142,7 +207,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if(vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if(vector.Y < - 3 * projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
@@ -154,13 +219,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if(animationFrame - lastHitFrame > 15)
+			// only change speed if the target is a decent distance away
+			if(Math.Abs(vector.X) > 4)
 			{
 				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
-			}
-			else
-			{
-				projectile.velocity.X = Math.Sign(projectile.velocity.X) * xMaxSpeed * 0.75f;
 			}
 		}
 
