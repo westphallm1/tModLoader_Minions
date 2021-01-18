@@ -126,6 +126,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			projectile.penetrate = -1;
 			projectile.friendly = true;
 			projectile.usesLocalNPCImmunity = true;
+			drawOriginOffsetY = 2;
 		}
 
 		public override void AI()
