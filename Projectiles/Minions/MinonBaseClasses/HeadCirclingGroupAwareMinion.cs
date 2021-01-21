@@ -15,6 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected int targetSearchDistance = 800;
 		protected int idleCircle = 40;
 		protected int idleInertia = 15;
+		protected int maxSpeed = 12;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -72,7 +73,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			// alway clamp to the idle position
 			projectile.tileCollide = false;
-			int maxSpeed = 12;
 			if (vectorToIdlePosition.Length() < maxSpeed)
 			{
 				projectile.rotation = 0;
