@@ -257,14 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected virtual float SpriteRotationFromWeaponAngle()
 		{
 			float rotationBase = spriteOrientation == WeaponSpriteOrientation.DIAGONAL ? (float)Math.PI / 4 : 0;
-			if (projectile.spriteDirection == 1)
-			{
-				return rotationBase - weaponAngle;
-			}
-			else
-			{
-				return -(rotationBase - weaponAngle);
-			}
+			return projectile.spriteDirection * (rotationBase - weaponAngle);
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)

@@ -65,9 +65,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		const int explosionRespawnTime = 60;
 		const int explosionRadius = 96;
 		const int explosionAttackRechargeTime = 96;
-		int lastExplosionFrame = -explosionAttackRechargeTime;
+		int lastExplosionFrame = 0;
 		private Vector2 explosionLocation;
-		private bool isDropping = false;
+		private bool isDropping = true;
 
 		private bool didJustRespawn => animationFrame - lastExplosionFrame == explosionRespawnTime;
 		private bool canAttack => animationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
@@ -361,30 +361,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		{
 			Texture2D texture = GetTexture(Texture + "_Arms");
 			int frame = 0;
-			float shootAngle = default;
-			if(vectorToTarget != null && lastShotVector != default && framesSinceLastHit <= 15)
+			float shootSlope = default;
+			if(framesSinceHadTarget < 30 && lastShotVector != default && framesSinceLastHit <= 30)
 			{
-				// this code is rather unfortunate, but need to normalize
-				// everything to [-Math.PI/2, Math.PI/2] for arm drawing to work
-				shootAngle = (float)-Math.PI + (projectile.spriteDirection * lastShotVector).ToRotation();
-				if (shootAngle < -Math.PI / 2)
-				{
-					shootAngle += 2 * (float)Math.PI;
-				}
+				float denominator = Math.Max(Math.Abs(lastShotVector.X), 1);
+				shootSlope = lastShotVector.Y / denominator;
 			}
-			if(shootAngle != default)
+			if(shootSlope != default)
 			{
-				if(shootAngle > MathHelper.Pi / 6)
+				if(shootSlope > 0.75f)
 				{
 					frame = 1;
-				} else if (shootAngle > -MathHelper.Pi/6)
+				} else if (shootSlope > -0.75f)
 				{
 					frame = 2;
 				} else
 				{
 					frame = 3;
 				}
-
+				DrawWeapon(spriteBatch, lightColor);
 			}
 			Rectangle bounds = new Rectangle(0, frame * texture.Height/4, texture.Width, texture.Height/4);
 			Vector2 origin = new Vector2(bounds.Width/2, bounds.Height / 2);
@@ -392,6 +387,42 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			SpriteEffects effects = projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
 				bounds, lightColor, projectile.rotation,
+				origin, 1, effects, 0);
+		}
+
+		// lifted from WeaponHoldingSquire
+		private float GetWeaponAngle(Vector2 attackVector)
+		{
+			if (projectile.spriteDirection == 1)
+			{
+				return attackVector.ToRotation();
+			}
+			else
+			{
+				// this code is rather unfortunate, but need to normalize
+				// everything to [-Math.PI/2, Math.PI/2] for arm drawing to work
+				float angle = (float)-Math.PI + attackVector.ToRotation();
+				if (angle < -Math.PI / 2)
+				{
+					angle += 2 * (float)Math.PI;
+				}
+				return angle;
+			}
+		}
+
+		private void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
+		{
+			Vector2 offset = lastShotVector;
+			offset.Y *= -1;
+			offset.SafeNormalize();
+			Texture2D texture = GetTexture(Texture+"_Gun");
+			Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
+			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
+			float r = GetWeaponAngle(offset);
+			Vector2 pos = projectile.Center + new Vector2(0, 8) + 16 * offset;
+			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			spriteBatch.Draw(texture, pos - Main.screenPosition,
+				bounds, lightColor, r,
 				origin, 1, effects, 0);
 		}
 
@@ -424,6 +455,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				NPC target = Main.npc[npcIdx];
 				// try to predict the position at the time of impact a bit
 				lastShotVector = vectorToTargetPosition;
+				lastShotVector.Y *= -1;
 				vectorToTargetPosition += (vectorToTargetPosition.Length() / projectileVelocity) * target.velocity;
 				vectorToTargetPosition.SafeNormalize();
 				vectorToTargetPosition *= projectileVelocity;
