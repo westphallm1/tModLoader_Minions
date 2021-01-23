@@ -19,6 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int proximityForOnHitTarget = 24;
 		protected int targetFrameCounter = 0;
 		protected int noLOSPursuitTime = 15; // time to chase the NPC after losing sight
+
+		internal int animationFrame { get; set; }
 		public AttackState attackState = AttackState.IDLE;
 
 		public override void SetStaticDefaults()
@@ -55,6 +57,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			projectile.localNPCHitCooldown = 10;
 			// Makes sure this projectile is synced to other newly joined players 
 			projectile.netImportant = true;
+
+			new Helper(this);
+			
 		}
 
 

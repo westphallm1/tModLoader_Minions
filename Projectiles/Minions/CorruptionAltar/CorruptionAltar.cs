@@ -102,7 +102,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 	{
 
 		private int framesSinceLastHit;
-		private int animationFrame;
 		protected override int dustType => DustID.Blood;
 		protected override int CounterType => ProjectileType<CorruptionAltarCounterMinion>();
 

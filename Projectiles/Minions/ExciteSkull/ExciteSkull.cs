@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 		}
 		public override Vector2 IdleBehavior()
 		{
-			animationFrame++;
+			groupAnimationFrame++;
 			gHelper.SetIsOnGround();
 			// the ground-based slime can sometimes bounce its way around 
 			// a corner, but the flying version can't
@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if(animationFrame - lastHitFrame > 10)
+			if(groupAnimationFrame - lastHitFrame > 10)
 			{
 				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if(((gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4) || gHelper.isFlying) && animationFrame % 3 == 0)
+			if(((gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4) || gHelper.isFlying) && groupAnimationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;

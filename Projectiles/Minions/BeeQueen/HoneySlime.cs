@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		protected override float noLOSSearchDistance => 350f;
 		protected override float distanceToBumbleBack => 8000f; // don't bumble back
 
-		public int animationFrame { get; set; }
+		public int groupAnimationFrame { get; set; }
 
 		int defaultMaxSpeed = 4;
 		int defaultJumpVelocity = 6;

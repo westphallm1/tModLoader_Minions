@@ -194,7 +194,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 		public override Vector2 IdleBehavior()
 		{
-			animationFrame++;
+			groupAnimationFrame++;
 			gHelper.SetIsOnGround();
 			// the ground-based slime can sometimes bounce its way around 
 			// a corner, but the flying version can't
@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		private void FireSeeds()
 		{
 			int seedVelocity = 7;
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = groupAnimationFrame;
 			if(player.whoAmI == Main.myPlayer)
 			{
 				foreach(float seedAngle in seedAngles)
@@ -261,7 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 			if(Math.Abs(vectorToTargetPosition.X) < 1.5f * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= fireRate)
+				groupAnimationFrame - lastFiredFrame >= fireRate)
 			{
 				FireSeeds();
 			}

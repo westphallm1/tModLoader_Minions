@@ -63,7 +63,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;
-		private int animationFrame;
 		private Queue<Vector2> activeTargetVectors;
 		private bool isReloading;
 		protected override int dustType => 137;

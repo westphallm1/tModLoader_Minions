@@ -113,7 +113,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class WoFSquireMinion : SquireMinion<WoFSquireMinionBuff>
 	{
-		int animationFrame = 0;
 		int dashDirection = 1;
 		bool isDashing;
 

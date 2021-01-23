@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected int defaultJumpVelocity;
 		protected int maxJumpVelocity;
 
-		new public int animationFrame { get; set; }
+		new public int groupAnimationFrame { get; set; }
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override Vector2 IdleBehavior()
 		{
-			animationFrame++;
+			groupAnimationFrame++;
 			gHelper.SetIsOnGround();
 			// the ground-based slime can sometimes bounce its way around 
 			// a corner, but the flying version can't
@@ -116,14 +116,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual bool CheckForStuckness()
 		{
-			return animationFrame % 5 == 0; // by default, only check for stuckness every 5 frames
+			return groupAnimationFrame % 5 == 0; // by default, only check for stuckness every 5 frames
 		}
 
 		protected abstract void DoGroundedMovement(Vector2 vector);
 
 		protected virtual void IdleFlyingMovement(Vector2 vector)
 		{
-			if (!gHelper.DropThroughPlatform() && animationFrame - lastHitFrame > 15)
+			if (!gHelper.DropThroughPlatform() && groupAnimationFrame - lastHitFrame > 15)
 			{
 				base.IdleMovement(vector);
 			}
@@ -131,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override void OnHitTarget(NPC target)
 		{
-			lastHitFrame = animationFrame;
+			lastHitFrame = groupAnimationFrame;
 		}
 
 		protected virtual bool ScaleLedge(Vector2 vector)

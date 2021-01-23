@@ -53,7 +53,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		private float shockwaveHitboxRadius;
 		private float shockwaveHitboxSpeed;
-		new int animationFrame = 0;
 		int stoneStartFrame;
 		bool didHitGround = false;
 		bool isStone = false;

@@ -68,9 +68,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		private Vector2 explosionLocation;
 		private bool isDropping = true;
 
-		private bool didJustRespawn => animationFrame - lastExplosionFrame == explosionRespawnTime;
-		private bool canAttack => animationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
-		private bool isRespawning => animationFrame - lastExplosionFrame < explosionRespawnTime;
+		private bool didJustRespawn => groupAnimationFrame - lastExplosionFrame == explosionRespawnTime;
+		private bool canAttack => groupAnimationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
+		private bool isRespawning => groupAnimationFrame - lastExplosionFrame < explosionRespawnTime;
 
 		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
 		{
@@ -107,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 		public override Vector2 IdleBehavior()
 		{
-			animationFrame++;
+			groupAnimationFrame++;
 			gHelper.SetIsOnGround();
 			// the ground-based slime can sometimes bounce its way around 
 			// a corner, but the flying version can't
@@ -220,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 			} else if (vectorToTargetPosition.Length() < explosionRadius/2)
 			{
-				lastExplosionFrame = animationFrame;
+				lastExplosionFrame = groupAnimationFrame;
 				explosionLocation = projectile.Center;
 				isDropping = true;
 				Main.PlaySound(SoundID.Item62, projectile.Center);
@@ -277,7 +277,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				return;
 			}
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
-			if(state == GroundAnimationState.FLYING && animationFrame % 3 == 0)
+			if(state == GroundAnimationState.FLYING && groupAnimationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;
@@ -288,7 +288,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 		public override void AfterMoving()
 		{
-			projectile.friendly = isRespawning && animationFrame - lastExplosionFrame <= 15;
+			projectile.friendly = isRespawning && groupAnimationFrame - lastExplosionFrame <= 15;
 			// Lifted from EmpoweredMinion.cs
 			int minionType = ProjectileType<GoblinTechnomancerMinion>();
 			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[minionType] == 0)
@@ -308,7 +308,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		private int framesSinceLastHit;
 		protected override int dustType => DustID.Shadowflame;
 
-		int animationFrame = 0;
 		private Vector2 lastShotVector;
 
 		public override void SetStaticDefaults()

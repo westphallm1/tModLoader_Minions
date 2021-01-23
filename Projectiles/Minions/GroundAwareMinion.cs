@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	public interface IGroundAwareMinion
 	{
 		Projectile projectile { get; }
-		int animationFrame { get; set; }
+		int groupAnimationFrame { get; set; }
 	}
 
 	public enum GroundAnimationState
@@ -71,9 +71,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal bool isFlying {
 			get => _isFlying;
 			set {
-				if(self.animationFrame - lastTransformedFrame > transformRateLimit)
+				if(self.groupAnimationFrame - lastTransformedFrame > transformRateLimit)
 				{
-					lastTransformedFrame = self.animationFrame;
+					lastTransformedFrame = self.groupAnimationFrame;
 					_isFlying = value;
 				}
 			}
@@ -278,7 +278,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				clearGround.Y -= projectile.height;
 				teleportDestination = clearGround;
 				teleportDestination.X += Math.Sign(vectorToTarget.X) * projectile.width / 2;
-				teleportStartFrame = self.animationFrame;
+				teleportStartFrame = self.groupAnimationFrame;
 				return true;
 			}
 			return false;
@@ -311,7 +311,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				clearGround.Y -= clearGround.Y % 16; // snap to the nearest block
 				clearGround.Y -= (projectile.height);
 				teleportDestination = clearGround;
-				teleportStartFrame = self.animationFrame;
+				teleportStartFrame = self.groupAnimationFrame;
 				return true;
 			}
 			return false;

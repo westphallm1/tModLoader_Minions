@@ -143,7 +143,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 	{
 
 		private int framesSinceLastHit;
-		private int animationFrame;
 		protected override int CounterType => ProjectileType<CrimsonAltarCounterMinion>();
 		protected override int dustType => DustID.Blood;
 

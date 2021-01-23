@@ -120,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		}
 		public override Vector2 IdleBehavior()
 		{
-			animationFrame++;
+			groupAnimationFrame++;
 			gHelper.SetIsOnGround();
 			// the ground-based slime can sometimes bounce its way around 
 			// a corner, but the flying version can't
@@ -152,7 +152,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if(animationFrame - lastHitFrame > 15)
+			if(groupAnimationFrame - lastHitFrame > 15)
 			{
 				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -176,7 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if(gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4 && animationFrame % 5 == 0)
+			if(gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4 && groupAnimationFrame % 5 == 0)
 			{
 				Vector2 pos = projectile.Bottom;
 				pos.Y -= 4;

@@ -169,7 +169,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		protected int maxDistanceFromPlayer = 850;
 		protected int minDistanceToEnemy = 200;
 		protected int animationFrames = 120;
-		protected int animationFrame = 0;
 		protected override int dustType => 54;
 		protected override int CounterType => ProjectileType<CharredChimeraCounterMinion>();
 

@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public int attackFrames = 60;
 		public int animationFrames = 120;
 
-		public int animationFrame
+		public int groupAnimationFrame
 		{
 			get => (int)projectile.ai[1];
 			set => projectile.ai[1] = value;
@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			others = null;
 			head = null;
 			attackFrame = (attackFrame + 1) % attackFrames;
-			animationFrame = (animationFrame + 1) % animationFrames;
+			groupAnimationFrame = (groupAnimationFrame + 1) % animationFrames;
 			return default;
 		}
 

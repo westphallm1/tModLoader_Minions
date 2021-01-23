@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 	// Uses localAi[1] for animation frame
 	public abstract class SquireAccessoryMinion : TransientMinion
 	{
-		protected int animationFrame {
+		new protected int animationFrame {
 			get => (int)projectile.localAI[1];
 			set => projectile.localAI[1] = value;
 		}

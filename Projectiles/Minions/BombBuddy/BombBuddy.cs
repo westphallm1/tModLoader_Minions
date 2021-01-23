@@ -73,9 +73,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			[GroundAnimationState.WALKING] = (2, 12),
 		};
 
-		private bool didJustRespawn => animationFrame - lastExplosionFrame == explosionRespawnTime;
-		private bool canAttack => animationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
-		private bool isRespawning => animationFrame - lastExplosionFrame < explosionRespawnTime;
+		private bool didJustRespawn => groupAnimationFrame - lastExplosionFrame == explosionRespawnTime;
+		private bool canAttack => groupAnimationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
+		private bool isRespawning => groupAnimationFrame - lastExplosionFrame < explosionRespawnTime;
 
 		public override void SetStaticDefaults()
 		{
@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 
 		public override Vector2 IdleBehavior()
 		{
-			animationFrame++;
+			groupAnimationFrame++;
 			gHelper.SetIsOnGround();
 			// the ground-based slime can sometimes bounce its way around 
 			// a corner, but the flying version can't
@@ -173,7 +173,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 				projectile.velocity = player.velocity;
 			} else if (vectorToTargetPosition.Length() < explosionRadius/2)
 			{
-				lastExplosionFrame = animationFrame;
+				lastExplosionFrame = groupAnimationFrame;
 				explosionLocation = projectile.Center;
 				Main.PlaySound(SoundID.Item62, projectile.Center);
 				DoExplosionEffects();
@@ -239,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
-			if(state == GroundAnimationState.FLYING && animationFrame % 3 == 0)
+			if(state == GroundAnimationState.FLYING && groupAnimationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;
@@ -249,7 +249,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 
 		public override void AfterMoving()
 		{
-			projectile.friendly = isRespawning && animationFrame - lastExplosionFrame <= 15;
+			projectile.friendly = isRespawning && groupAnimationFrame - lastExplosionFrame <= 15;
 		}
 	}
 }

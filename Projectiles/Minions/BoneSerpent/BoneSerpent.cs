@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override int dustType => 30;
 		protected override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
 
-		public int animationFrame { get; set; }
+		public int groupAnimationFrame { get; set; }
 
 		public override void SetStaticDefaults()
 		{
