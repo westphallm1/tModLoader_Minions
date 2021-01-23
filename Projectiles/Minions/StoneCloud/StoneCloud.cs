@@ -124,7 +124,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override Vector2 IdleBehavior()
 		{
-			animationFrame++;
 			projectile.friendly = isStone;
 			Vector2 vectorToIdle = base.IdleBehavior();
 			int framesAsStone = animationFrame - stoneStartFrame;

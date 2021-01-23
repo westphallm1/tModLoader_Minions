@@ -404,7 +404,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			animationFrame++;
 			Vector2 idlePosition = player.Top;
 			idlePosition.X += 32 * -player.direction;
 			idlePosition.Y += -24 + 8 * (float)Math.Sin(MathHelper.TwoPi * (animationFrame % 120) / 120);

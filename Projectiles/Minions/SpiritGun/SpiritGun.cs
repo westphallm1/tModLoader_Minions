@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			animationFrame = (animationFrame + 1) % AnimationFrames;
+			animationFrame %= AnimationFrames;
 			DrawSpirits(spriteBatch, lightColor);
 			DrawShadows(spriteBatch, lightColor);
 			return true;

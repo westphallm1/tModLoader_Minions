@@ -200,7 +200,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			animationFrame++;
 			float idleAngle = (float)Math.PI * 2 * (animationFrame % animationFrames) / animationFrames;
 			idlePosition.X += 70 * -player.direction;
 			idlePosition.Y += -5 + 8 * (float)Math.Sin(idleAngle);

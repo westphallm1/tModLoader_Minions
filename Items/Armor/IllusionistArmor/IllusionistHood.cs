@@ -117,8 +117,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		private int targetNPC => (int)projectile.ai[1];
 
-		int animationFrame = 0; // this really needs to be in Minion
-
 		bool isAttacking = false;
 		public override void SetStaticDefaults()
 		{
@@ -143,7 +141,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			{
 				projectile.timeLeft = Math.Max(projectile.timeLeft, 2);
 			}
-			animationFrame++;
 			
 			if(targetNPC != 0 && !isAttacking)
 			{

@@ -142,7 +142,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override Vector2 IdleBehavior()
 		{
 			Lighting.AddLight(projectile.Center, Color.Red.ToVector3() * 0.75f);
-			animationFrame++;
 			return base.IdleBehavior() + new Vector2(-player.direction * 8, 0);
 		}
 

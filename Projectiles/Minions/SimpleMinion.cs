@@ -57,9 +57,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			projectile.localNPCHitCooldown = 10;
 			// Makes sure this projectile is synced to other newly joined players 
 			projectile.netImportant = true;
-
-			new Helper(this);
-			
 		}
 
 
@@ -118,6 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			vectorToIdle = IdleBehavior();
 			vectorToTarget = FindTarget();
 			framesSinceHadTarget++;
+			animationFrame++;
 			if (vectorToTarget is Vector2 targetPosition)
 			{
 				if(player.whoAmI == Main.myPlayer && oldVectorToTarget == null)

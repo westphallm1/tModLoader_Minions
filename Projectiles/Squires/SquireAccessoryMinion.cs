@@ -39,7 +39,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				return projectile.velocity;
 			}
 			projectile.timeLeft = 2;
-			animationFrame++;
 			Vector2 target = squire.Center - projectile.Center;
 			TeleportToPlayer(ref target, 2000f);
 			return target;
