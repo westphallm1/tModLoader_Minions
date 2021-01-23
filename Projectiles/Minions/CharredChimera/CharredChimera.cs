@@ -193,6 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			DisplayName.SetDefault("Charred Chimera");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 4;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -214,7 +215,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
 			float idleAngle = (float)Math.PI * 2 * (animationFrame % animationFrames) / animationFrames;
-			idlePosition.X += 70 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -5 + 8 * (float)Math.Sin(idleAngle);
 			if (!Collision.CanHit(idlePosition, 1, 1, player.Top, 1, 1))
 			{

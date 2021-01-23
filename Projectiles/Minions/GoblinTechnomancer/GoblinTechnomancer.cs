@@ -303,6 +303,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			DisplayName.SetDefault("Goblin Technomancer");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -392,7 +393,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += 32 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -24 + 8 * (float)Math.Sin(MathHelper.TwoPi * (animationFrame % 120) / 120);
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))

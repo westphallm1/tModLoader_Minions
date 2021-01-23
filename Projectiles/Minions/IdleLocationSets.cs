@@ -48,10 +48,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return otherMinions;
 		}
 
-		public static int GetXOffsetInSet(HashSet<int> matchingSet, Projectile self, int spacing = 4)
+		public static int GetXOffsetInSet(List<Projectile> projectiles, Projectile self, int spacing = 4)
 		{
 			int offset = 0;
-			foreach(Projectile proj in GetProjectilesInSet(matchingSet, self.owner))
+			foreach(Projectile proj in projectiles)
 			{
 				// minion hitboxes are usually a bit smaller than the texture to fit in 2x2 blocks,
 				// so include extra spacing with each offset
@@ -62,6 +62,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 			}
 			return offset;
+
+		}
+		public static int GetXOffsetInSet(HashSet<int> matchingSet, Projectile self, int spacing = 4)
+		{
+			return GetXOffsetInSet(GetProjectilesInSet(matchingSet, self.owner), self, spacing);
 		}
 	}
 }

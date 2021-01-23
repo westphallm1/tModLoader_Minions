@@ -113,6 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			DisplayName.SetDefault("Corruption Cell");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 4;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -149,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += 28 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -8;
 			animationFrame += 1;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))

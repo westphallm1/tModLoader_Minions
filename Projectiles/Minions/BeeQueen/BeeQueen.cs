@@ -181,6 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bee Bombardier");
 			Main.projFrames[projectile.type] = 6;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public override void SetDefaults()
@@ -211,7 +212,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			base.IdleBehavior();
 			float idleAngle = (float)(2 * Math.PI * animationFrameCounter % 240) / 240;
 			Vector2 idlePosition = player.Center;
-			idlePosition.X += 40 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -35 + 5 * (float)Math.Sin(idleAngle);
 			if (!Collision.CanHit(idlePosition, 1, 1, player.Center, 1, 1))
 			{

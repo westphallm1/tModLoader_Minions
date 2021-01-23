@@ -20,6 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			DisplayName.SetDefault("Meteor Fist");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 2;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -56,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += 30 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -5;
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);

@@ -82,6 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			DisplayName.SetDefault("Spirit Revolver");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 2;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -203,7 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			}
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += 48 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -32;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{

@@ -24,6 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			DisplayName.SetDefault("Crystal Fist");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -63,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			Vector2 idlePosition = player.Top;
 			projectile.ai[0] = (projectile.ai[0] + 1) % animationFrames;
 			float idleAngle = (float)Math.PI * 2 * projectile.ai[0] / animationFrames;
-			idlePosition.X += 30 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -5 + 8 * (float)Math.Sin(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);

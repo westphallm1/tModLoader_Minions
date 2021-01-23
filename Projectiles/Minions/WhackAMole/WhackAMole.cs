@@ -160,6 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			DisplayName.SetDefault("Goblin Gunner");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
+			IdleLocationSets.trailingOnGround.Add(projectile.type);
 		}
 
 
@@ -255,7 +256,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			Vector2 idlePosition = gHelper.isFlying ? player.Top : player.Bottom;
 			idlePosition.X += 48 * -player.direction;
 			Vector2 idleHitLine = player.Center;
-			idleHitLine.X += 48 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, projectile);
 			if (!Collision.CanHitLine(idleHitLine, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition = player.Bottom;

@@ -72,6 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			DisplayName.SetDefault("Eclipse Herald");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 9;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -140,7 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += 48 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -32;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{

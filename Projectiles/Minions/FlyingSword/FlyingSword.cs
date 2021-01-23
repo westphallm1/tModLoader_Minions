@@ -66,6 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			DisplayName.SetDefault("Clarent");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 4;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -91,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			List<Projectile> minions = GetActiveMinions();
+			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.trailingInAir, projectile.owner);
 			int minionCount = minions.Count;
 			int order = minions.IndexOf(projectile);
 			float idleAngle = (float)(2 * Math.PI * order) / minionCount;
@@ -100,7 +101,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 				idleAngle += (2 * (float)Math.PI * groupAnimationFrame) / groupAnimationFrames;
 			}
 			Vector2 idlePosition = player.Center;
-			idlePosition.X += (40 + projectile.minionPos * 30) * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(minions, projectile);
 			idlePosition.Y += -35 + 5 * (float)Math.Sin(idleAngle);
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
