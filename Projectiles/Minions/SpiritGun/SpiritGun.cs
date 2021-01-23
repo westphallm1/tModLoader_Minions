@@ -52,15 +52,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 	}
 
-	public class SpiritGunCounterMinion : CounterMinion<SpiritGunMinionBuff> {
+	public class SpiritGunCounterMinion : CounterMinion {
+
+		protected override int BuffId => BuffType<SpiritGunMinionBuff>();
 		protected override int MinionType => ProjectileType<SpiritGunMinion>();
 	}
 	/// <summary>
 	/// Uses ai[1] to track fired vs unfired bullets
 	/// </summary>
-	public class SpiritGunMinion : EmpoweredMinion<SpiritGunMinionBuff>
+	public class SpiritGunMinion : EmpoweredMinion
 	{
-
+		protected override int BuffId => BuffType<SpiritGunMinionBuff>();
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;
 		private Queue<Vector2> activeTargetVectors;

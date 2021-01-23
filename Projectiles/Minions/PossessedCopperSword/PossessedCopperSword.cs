@@ -50,9 +50,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			recipe.AddRecipe();
 		}
 	}
-	public class CopperSwordMinion : GroupAwareMinion<CopperSwordMinionBuff>
+	public class CopperSwordMinion : GroupAwareMinion
 	{
-
+		protected override int BuffId => BuffType<CopperSwordMinionBuff>();
 		private readonly float baseRoation = 3 * (float)Math.PI / 4f;
 		private int hitsSinceLastIdle = 0;
 		private int framesSinceLastHit = 0;

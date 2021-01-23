@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	/// <summary>
 	/// Uses ai[0] for attack frames, and ai[1] for animation frames
 	/// </summary>
-	public abstract class GroupAwareMinion<T> : SimpleMinion<T> where T : ModBuff
+	public abstract class GroupAwareMinion : SimpleMinion
 	{
 
 		private List<Projectile> others = null;

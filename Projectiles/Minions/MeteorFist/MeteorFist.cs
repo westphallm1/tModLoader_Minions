@@ -59,9 +59,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 	}
 
 
-	public class MeteorFistMinion : GroupAwareMinion<MeteorFistMinionBuff>
+	public class MeteorFistMinion : GroupAwareMinion
 	{
 
+		protected override int BuffId => BuffType<MeteorFistMinionBuff>();
 		private int framesInAir;
 		private float idleAngle;
 

@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
-	public abstract class SimpleMinion<T> : Minion<T> where T : ModBuff
+	public abstract class SimpleMinion : Minion
 	{
 		protected Vector2 vectorToIdle;
 		protected Vector2? vectorToTarget;

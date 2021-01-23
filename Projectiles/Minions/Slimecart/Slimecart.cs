@@ -58,8 +58,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		}
 	}
 
-	public class SlimecartMinion : SimpleGroundBasedMinion<SlimecartMinionBuff>, IGroundAwareMinion
+	public class SlimecartMinion : SimpleGroundBasedMinion, IGroundAwareMinion
 	{
+		protected override int BuffId => BuffType<SlimecartMinionBuff>();
 		private Color slimeColor;
 
 		public override void SetStaticDefaults()

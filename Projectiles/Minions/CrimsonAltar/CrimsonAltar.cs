@@ -106,6 +106,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/CrimsonAltar/CrimsonAltarCrimera";
 
 		protected override int dustType => 87;
+
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -136,12 +138,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 	{
 	}
 
-	public class CrimsonAltarCounterMinion : CounterMinion<CrimsonAltarMinionBuff> {
+	public class CrimsonAltarCounterMinion : CounterMinion {
+		protected override int BuffId => BuffType<CrimsonAltarMinionBuff>();
 		protected override int MinionType => ProjectileType<CrimsonAltarMinion>();
 	}
-	public class CrimsonAltarMinion : EmpoweredMinion<CrimsonAltarMinionBuff>
+	public class CrimsonAltarMinion : EmpoweredMinion
 	{
-
+		protected override int BuffId => BuffType<CrimsonAltarMinionBuff>();
 		private int framesSinceLastHit;
 		protected override int CounterType => ProjectileType<CrimsonAltarCounterMinion>();
 		protected override int dustType => DustID.Blood;

@@ -71,11 +71,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			Lighting.AddLight(projectile.position, Color.Violet.ToVector3() * 0.5f);
 		}
 	}
-	public class GoblinGunnerCounterMinion : CounterMinion<GoblinGunnerMinionBuff> {
+	public class GoblinGunnerCounterMinion : CounterMinion {
+		
+		protected override int BuffId => BuffType<GoblinGunnerMinionBuff>();
 		protected override int MinionType => ProjectileType<GoblinGunnerMinion>();
 	}
-	public class GoblinGunnerMinion : EmpoweredMinion<GoblinGunnerMinionBuff>
+	public class GoblinGunnerMinion : EmpoweredMinion
 	{
+		protected override int BuffId => BuffType<GoblinGunnerMinionBuff>();
 		protected override int CounterType => ProjectileType<GoblinGunnerCounterMinion>();
 
 		private int framesSinceLastHit;

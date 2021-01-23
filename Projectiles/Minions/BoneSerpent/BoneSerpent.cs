@@ -42,12 +42,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		}
 	}
 
-	public class BoneSerpentCounterMinion : CounterMinion<BoneSerpentMinionBuff> {
+	public class BoneSerpentCounterMinion : CounterMinion {
+		protected override int BuffId => BuffType<BoneSerpentMinionBuff>();
 		protected override int MinionType => ProjectileType<BoneSerpentMinion>();
 	}
 
-	public class BoneSerpentMinion : WormMinion<BoneSerpentMinionBuff>, IGroundAwareMinion
+	public class BoneSerpentMinion : WormMinion, IGroundAwareMinion
 	{
+		protected override int BuffId => BuffType<BoneSerpentMinionBuff>();
 
 		private int framesInAir;
 		private int framesInGround;

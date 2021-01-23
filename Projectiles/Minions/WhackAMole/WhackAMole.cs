@@ -99,11 +99,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		}
 	}
 
-	public class WhackAMoleCounterMinion : CounterMinion<WhackAMoleMinionBuff> {
+	public class WhackAMoleCounterMinion : CounterMinion {
+
+		protected override int BuffId => BuffType<WhackAMoleMinionBuff>();
 		protected override int MinionType => ProjectileType<WhackAMoleMinion>();
 	}
-	public class WhackAMoleMinion : EmpoweredMinion<WhackAMoleMinionBuff>, IGroundAwareMinion
+	public class WhackAMoleMinion : EmpoweredMinion, IGroundAwareMinion
 	{
+
+		protected override int BuffId => BuffType<WhackAMoleMinionBuff>();
 		protected override int CounterType => ProjectileType<WhackAMoleCounterMinion>();
 
 		protected override int dustType => DustID.Dirt;

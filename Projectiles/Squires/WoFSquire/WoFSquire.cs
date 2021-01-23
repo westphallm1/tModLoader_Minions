@@ -111,8 +111,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override Color lightColor => Color.Purple;
 	}
 
-	public class WoFSquireMinion : SquireMinion<WoFSquireMinionBuff>
+	public class WoFSquireMinion : SquireMinion
 	{
+		protected override int BuffId => BuffType<WoFSquireMinionBuff>();
 		int dashDirection = 1;
 		bool isDashing;
 
@@ -350,8 +351,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override float MaxDistanceFromPlayer() => 700f;
 	}
 
-	public class GuideVoodooSquireMinion : WeaponHoldingSquire<GuideVoodooSquireMinionBuff>
+	public class GuideVoodooSquireMinion : WeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<GuideVoodooSquireMinionBuff>();
 		protected override int AttackFrames => 40;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => null;

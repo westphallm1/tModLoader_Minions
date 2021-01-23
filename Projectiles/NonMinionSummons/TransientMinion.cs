@@ -6,8 +6,9 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 {
-	public abstract class TransientMinion : SimpleMinion<ModBuff>
+	public abstract class TransientMinion : SimpleMinion
 	{
+		protected override int BuffId => -1;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

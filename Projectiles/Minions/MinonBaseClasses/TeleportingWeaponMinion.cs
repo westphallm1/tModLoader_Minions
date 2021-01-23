@@ -10,7 +10,7 @@ using static Terraria.ModLoader.ModContent;
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
 
-	public abstract class TeleportingWeaponMinion<T> : GroupAwareMinion<T> where T: ModBuff
+	public abstract class TeleportingWeaponMinion : GroupAwareMinion
 	{
 
 		internal int framesInAir;

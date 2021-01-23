@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 	}
-	public abstract class Minion<T> : ModProjectile where T : ModBuff
+	public abstract class Minion : ModProjectile 
 	{
 		public readonly float PI = (float)Math.PI;
 
@@ -26,9 +26,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		protected int? targetNPCIndex;
 
+
 		protected bool useBeacon = true;
 
 		public bool Spawned { get; private set; }
+
+		protected abstract int BuffId { get; }
 
 		public override void SetStaticDefaults()
 		{
@@ -56,9 +59,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
 			if (player.dead || !player.active)
 			{
-				player.ClearBuff(BuffType<T>());
+				player.ClearBuff(BuffId);
 			}
-			if (player.HasBuff(BuffType<T>()))
+			if (player.HasBuff(BuffId))
 			{
 				projectile.timeLeft = 2;
 			}

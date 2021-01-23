@@ -45,8 +45,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 		}
 	}
 
-	public class ExciteSkullMinion : SimpleGroundBasedMinion<ExciteSkullMinionBuff>, IGroundAwareMinion
+	public class ExciteSkullMinion : SimpleGroundBasedMinion, IGroundAwareMinion
 	{
+		protected override int BuffId => BuffType<ExciteSkullMinionBuff>();
 		private Color flairColor;
 
 		public override void SetStaticDefaults()

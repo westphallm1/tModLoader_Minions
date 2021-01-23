@@ -8,12 +8,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 	// <summary>
 	// Uses ai[0] to track whether we've hit a target yet
 	// </summary>
-	class SpiritGunMinionBullet : Minion<ModBuff>
+	class SpiritGunMinionBullet : Minion
 	{
 		bool hitTarget {
 			get => projectile.ai[0] != 0;
 			set => projectile.ai[0] = value ? 1 : 0;
 		}
+
+		protected override int BuffId => -1;
+
 		bool lookingForTarget;
 		const int speed = 26;
 		Vector2 velocity = default;

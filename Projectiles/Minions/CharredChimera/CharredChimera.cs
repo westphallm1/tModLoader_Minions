@@ -43,10 +43,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		}
 	}
 
-	public class CharredChimeraMinionHead : GroupAwareMinion<CharredChimeraMinionBuff>
+	public class CharredChimeraMinionHead : GroupAwareMinion
 	{
 
 		public override string Texture => "Terraria/Item_0";
+
+		protected override int BuffId => BuffType<CharredChimeraMinionBuff>();
+
 		int speed = 8;
 		int inertia = 16;
 		int framesSinceLastHit;
@@ -159,11 +162,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			// no op
 		}
 	}
-	public class CharredChimeraCounterMinion : CounterMinion<CharredChimeraMinionBuff> {
+	public class CharredChimeraCounterMinion : CounterMinion {
+		protected override int BuffId => BuffType<CharredChimeraMinionBuff>();
 		protected override int MinionType => ProjectileType<CharredChimeraMinion>();
 	}
-	public class CharredChimeraMinion : EmpoweredMinion<CharredChimeraMinionBuff>
+	public class CharredChimeraMinion : EmpoweredMinion
 	{
+		protected override int BuffId => BuffType<CharredChimeraMinionBuff>();
 		protected int targetedInertia = 15;
 		protected int targetedSpeed = 12;
 		protected int maxDistanceFromPlayer = 850;

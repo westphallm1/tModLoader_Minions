@@ -155,8 +155,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		}
 	}
 
-	public class PricklyPearMinion : SimpleGroundBasedMinion<PricklyPearMinionBuff>, IGroundAwareMinion
+	public class PricklyPearMinion : SimpleGroundBasedMinion, IGroundAwareMinion
 	{
+		protected override int BuffId => BuffType<PricklyPearMinionBuff>();
 		int lastFiredFrame = 0;
 		int fireRate = 90;
 		// don't get too close

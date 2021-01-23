@@ -50,14 +50,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		}
 	}
 
-	public class EclipseHeraldCounterMinion : CounterMinion<EclipseHeraldMinionBuff> {
+	public class EclipseHeraldCounterMinion : CounterMinion {
+
+		protected override int BuffId => BuffType<EclipseHeraldMinionBuff>();
 		protected override int MinionType => ProjectileType<EclipseHeraldMinion>();
 	}
 	/// <summary>
 	/// Uses ai[1] to track animation frames
 	/// </summary>
-	public class EclipseHeraldMinion : EmpoweredMinion<EclipseHeraldMinionBuff>
+	public class EclipseHeraldMinion : EmpoweredMinion
 	{
+		protected override int BuffId => BuffType<EclipseHeraldMinionBuff>();
 
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;

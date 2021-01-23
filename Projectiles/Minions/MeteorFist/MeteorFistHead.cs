@@ -5,12 +5,14 @@ using static Terraria.ModLoader.ModContent;
 namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 
 {
-	public class MeteorFistHead : SimpleMinion<MeteorFistMinionBuff>
+	public class MeteorFistHead : SimpleMinion
 	{
 		protected int targetedInertia = 15;
 		protected int targetedSpeed = 9;
 		protected int maxDistanceFromPlayer = 600;
 		protected int minDistanceToEnemy = 200;
+
+		protected override int BuffId => BuffType<MeteorFistMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{

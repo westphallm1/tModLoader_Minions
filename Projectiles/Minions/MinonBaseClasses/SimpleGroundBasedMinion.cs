@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	public abstract class SimpleGroundBasedMinion<T> : HeadCirclingGroupAwareMinion<T>, IGroundAwareMinion where T : ModBuff
+	public abstract class SimpleGroundBasedMinion : HeadCirclingGroupAwareMinion, IGroundAwareMinion
 	{
 		protected GroundAwarenessHelper gHelper;
 		protected int searchDistance = 600;

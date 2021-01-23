@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		}
 	}
 
-	public abstract class SquireMinion<T> : SimpleMinion<T> where T : ModBuff
+	public abstract class SquireMinion : SimpleMinion
 	{
 		protected int itemType;
 

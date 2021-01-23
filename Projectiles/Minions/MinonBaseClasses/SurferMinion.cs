@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	public abstract class SurferMinion<T> : HeadCirclingGroupAwareMinion<T> where T : ModBuff
+	public abstract class SurferMinion : HeadCirclingGroupAwareMinion
 	{
 		protected int framesSinceDiveBomb = 0;
 		protected int diveBombHeightRequirement = 40;

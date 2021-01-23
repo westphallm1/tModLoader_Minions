@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
-	public abstract class SquireMinionItem<TBuff, TProj> : MinionItem<TBuff, TProj> where TBuff : ModBuff where TProj : SquireMinion<TBuff>
+	public abstract class SquireMinionItem<TBuff, TProj> : MinionItem<TBuff, TProj> where TBuff : ModBuff where TProj : SquireMinion
 	{
 
 		public override void SetDefaults()

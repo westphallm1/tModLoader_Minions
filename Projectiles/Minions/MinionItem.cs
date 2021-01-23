@@ -6,7 +6,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
-	public abstract class MinionItem<TBuff, TProj> : ModItem where TBuff : ModBuff where TProj : Minion<TBuff>
+	public abstract class MinionItem<TBuff, TProj> : ModItem where TBuff : ModBuff where TProj : Minion
 	{
 		public override void SetStaticDefaults()
 		{

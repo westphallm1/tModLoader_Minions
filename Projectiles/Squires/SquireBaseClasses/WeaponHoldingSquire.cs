@@ -23,7 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		TOWARDS_MOUSE
 	}
 
-	public abstract class WeaponHoldingSquire<T> : SquireMinion<T> where T : ModBuff
+	public abstract class WeaponHoldingSquire : SquireMinion
 	{
 		protected bool usingWeapon = false;
 		protected abstract int AttackFrames { get; }

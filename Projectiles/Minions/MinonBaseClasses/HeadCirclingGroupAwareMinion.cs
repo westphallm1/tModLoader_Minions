@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	public abstract class HeadCirclingGroupAwareMinion<T>: GroupAwareMinion<T> where T : ModBuff
+	public abstract class HeadCirclingGroupAwareMinion: GroupAwareMinion
 	{
 		protected float idleAngle;
 		protected int targetSearchDistance = 800;

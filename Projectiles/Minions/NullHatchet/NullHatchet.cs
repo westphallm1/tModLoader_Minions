@@ -52,9 +52,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 	}
 
 
-	public class NullHatchetMinion : TeleportingWeaponMinion<NullHatchetMinionBuff>
+	public class NullHatchetMinion : TeleportingWeaponMinion
 	{
 
+		protected override int BuffId => BuffType<NullHatchetMinionBuff>();
 		float windUpPerFrame = MathHelper.Pi / 60;
 		float swingPerFrame = MathHelper.Pi / 20;
 		float initialWindUp = MathHelper.PiOver4;

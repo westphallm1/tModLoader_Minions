@@ -9,7 +9,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
 	// Invisible minion that exists to track the empower count of empowered minions
 	// Works around many of the issues involved with changing a projectiles minionSlots
-	public abstract class CounterMinion<T> : SimpleMinion<T> where T : ModBuff
+	public abstract class CounterMinion : SimpleMinion
 	{
 		public override string Texture => "Terraria/Item_0";
 
@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 	}
 
-	public abstract class EmpoweredMinion<T> : SimpleMinion<T> where T : ModBuff
+	public abstract class EmpoweredMinion : SimpleMinion
 	{
 		protected abstract int ComputeDamage();
 		protected abstract float ComputeSearchDistance();

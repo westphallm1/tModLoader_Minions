@@ -47,8 +47,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 			recipe.AddRecipe();
 		}
 	}
-	public class PaperSurferMinion : SurferMinion<PaperSurferMinionBuff>
+	public class PaperSurferMinion : SurferMinion
 	{
+		protected override int BuffId => BuffType<PaperSurferMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

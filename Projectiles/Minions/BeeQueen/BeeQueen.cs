@@ -159,12 +159,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			}
 		}
 	}
-	public class BeeQueenCounterMinion : CounterMinion<BeeQueenMinionBuff> {
+	public class BeeQueenCounterMinion : CounterMinion {
+		
+		protected override int BuffId => BuffType<BeeQueenMinionBuff>();
 		protected override int MinionType => ProjectileType<BeeQueenMinion>();
 	}
 
-	public class BeeQueenMinion : EmpoweredMinion<BeeQueenMinionBuff>
+	public class BeeQueenMinion : EmpoweredMinion
 	{
+		protected override int BuffId => BuffType<BeeQueenMinionBuff>();
 		int animationFrameCounter = 0;
 		int reloadCycleLength => Math.Max(120, 300 - 20 * EmpowerCount);
 

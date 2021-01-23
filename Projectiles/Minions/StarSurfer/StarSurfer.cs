@@ -80,9 +80,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			//Dust.NewDust(projectile.position, projectile.width / 2, projectile.height / 2, DustID.Gold, -projectile.velocity.X, -projectile.velocity.Y);
 		}
 	}
-	public class StarSurferMinion : SurferMinion<StarSurferMinionBuff>
+	public class StarSurferMinion : SurferMinion
 	{
 
+		protected override int BuffId => BuffType<StarSurferMinionBuff>();
 
 		protected int projectileFireRate = 120;
 		protected int projectileDamage = 30;

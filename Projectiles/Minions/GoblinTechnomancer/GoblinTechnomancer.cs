@@ -59,8 +59,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		}
 	}
 
-	public class GoblinTechnomancerBombMinion : SimpleGroundBasedMinion<GoblinTechnomancerMinionBuff>, IGroundAwareMinion
+	public class GoblinTechnomancerBombMinion : SimpleGroundBasedMinion, IGroundAwareMinion
 	{
+		protected override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
 		const int explosionRespawnTime = 60;
 		const int explosionRadius = 96;
 		const int explosionAttackRechargeTime = 96;
@@ -301,8 +302,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			}
 		}
 	}
-	public class GoblinTechnomancerMinion : EmpoweredMinion<GoblinTechnomancerMinionBuff>
+	public class GoblinTechnomancerMinion : EmpoweredMinion
 	{
+		protected override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
 		protected override int CounterType => ProjectileType<GoblinTechnomancerBombMinion>();
 
 		private int framesSinceLastHit;

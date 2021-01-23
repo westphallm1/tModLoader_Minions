@@ -8,13 +8,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 	/// <summary>
 	/// Uses ai[0] to track animation frames
 	/// </summary>
-	public class CrystalFistHeadMinion : SimpleMinion<CrystalFistMinionBuff>
+	public class CrystalFistHeadMinion : SimpleMinion
 	{
 		protected int targetedInertia = 15;
 		protected int targetedSpeed = 12;
 		protected int maxDistanceFromPlayer = 850;
 		protected int minDistanceToEnemy = 200;
 		protected int animationFrames = 120;
+
+		protected override int BuffId => BuffType<CrystalFistMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{
