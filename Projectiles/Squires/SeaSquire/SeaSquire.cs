@@ -52,8 +52,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		}
 	}
 
-	public class SeaSquireMinion : WeaponHoldingSquire<SeaSquireMinionBuff>
+	public class SeaSquireMinion : WeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<SeaSquireMinionBuff>();
 		protected override int AttackFrames => 35;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";

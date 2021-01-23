@@ -96,8 +96,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override string Texture => "Terraria/Projectile_"+ProjectileID.GreenLaser;
 	}
 
-	public class SqueyereMinion : WeaponHoldingSquire<SqueyereMinionBuff>
+	public class SqueyereMinion : WeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<SqueyereMinionBuff>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => null;

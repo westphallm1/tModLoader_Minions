@@ -51,8 +51,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 	}
 
 
-	public class ShadowSquireMinion : WeaponHoldingSquire<ShadowSquireMinionBuff>
+	public class ShadowSquireMinion : WeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<ShadowSquireMinionBuff>();
 		protected override int AttackFrames => 22;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.WarAxeoftheNight;

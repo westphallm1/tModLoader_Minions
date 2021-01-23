@@ -88,8 +88,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		}
 	}
 
-	public class GuideSquireMinion : WeaponHoldingSquire<GuideSquireMinionBuff>
+	public class GuideSquireMinion : WeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<GuideSquireMinionBuff>();
 		protected override int AttackFrames => 40;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.WoodenBow;

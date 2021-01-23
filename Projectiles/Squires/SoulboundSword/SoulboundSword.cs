@@ -67,8 +67,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		}
 	}
 
-	public class SoulboundSwordMinion : WeaponHoldingSquire<SoulboundSwordMinionBuff>
+	public class SoulboundSwordMinion : WeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<SoulboundSwordMinionBuff>();
 		protected override int AttackFrames => 15;
 		protected override string WingTexturePath => null;
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/SoulboundSword/SoulboundSword";

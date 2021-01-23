@@ -157,8 +157,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		}
 	}
 
-	public abstract class SoulboundArsenalBaseMinion : CoordinatedWeaponHoldingSquire<SoulboundArsenalMinionBuff>
+	public abstract class SoulboundArsenalBaseMinion : CoordinatedWeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<SoulboundArsenalMinionBuff>();
 		protected SoulboundArsenalBaseMinion(int itemID) : base(itemID) { }
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => null;

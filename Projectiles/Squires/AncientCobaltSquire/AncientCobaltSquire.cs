@@ -88,8 +88,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		}
 	}
 
-	public class AncientCobaltSquireMinion : WeaponHoldingSquire<AncientCobaltSquireMinionBuff>
+	public class AncientCobaltSquireMinion : WeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<AncientCobaltSquireMinionBuff>();
 		protected override int AttackFrames => 45;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AncientCobaltSquire/AncientCobaltStaff";

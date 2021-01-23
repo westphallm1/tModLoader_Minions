@@ -275,8 +275,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		}
 	}
 
-	public class StardustSquireMinion : WeaponHoldingSquire<StardustSquireMinionBuff>
+	public class StardustSquireMinion : WeaponHoldingSquire
 	{
+		protected override int BuffId => BuffType<StardustSquireMinionBuff>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => null;
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.StardustDragonStaff;
