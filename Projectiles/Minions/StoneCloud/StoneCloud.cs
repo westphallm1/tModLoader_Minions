@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		}
 	}
 
-	public class StoneCloudMinion : HeadCirclingGroupAwareMinion, IGroundAwareMinion
+	public class StoneCloudMinion : HeadCirclingGroupAwareMinion
 	{
 		protected override int BuffId => BuffType<StoneCloudMinionBuff>();
 

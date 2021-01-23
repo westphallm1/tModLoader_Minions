@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override int MinionType => ProjectileType<BoneSerpentMinion>();
 	}
 
-	public class BoneSerpentMinion : WormMinion, IGroundAwareMinion
+	public class BoneSerpentMinion : WormMinion
 	{
 		protected override int BuffId => BuffType<BoneSerpentMinionBuff>();
 
@@ -56,8 +56,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		private GroundAwarenessHelper gHelper;
 		protected override int dustType => 30;
 		protected override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
-
-		public int groupAnimationFrame { get; set; }
 
 		public override void SetStaticDefaults()
 		{

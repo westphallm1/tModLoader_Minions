@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		}
 	}
 
-	public class PricklyPearMinion : SimpleGroundBasedMinion, IGroundAwareMinion
+	public class PricklyPearMinion : SimpleGroundBasedMinion
 	{
 		protected override int BuffId => BuffType<PricklyPearMinionBuff>();
 		int lastFiredFrame = 0;
@@ -196,7 +196,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 		public override Vector2 IdleBehavior()
 		{
-			groupAnimationFrame++;
 			gHelper.SetIsOnGround();
 			// the ground-based slime can sometimes bounce its way around 
 			// a corner, but the flying version can't
@@ -230,7 +229,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
-			if(Math.Abs(vector.X) > 4)
+			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
+			{
+				projectile.velocity.X = Main.npc[idx].velocity.X;
+			}
+			else
 			{
 				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -239,7 +242,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		private void FireSeeds()
 		{
 			int seedVelocity = 7;
-			lastFiredFrame = groupAnimationFrame;
+			lastFiredFrame = animationFrame;
 			if(player.whoAmI == Main.myPlayer)
 			{
 				foreach(float seedAngle in seedAngles)
@@ -263,7 +266,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 			if(Math.Abs(vectorToTargetPosition.X) < 1.5f * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget &&
-				groupAnimationFrame - lastFiredFrame >= fireRate)
+				animationFrame - lastFiredFrame >= fireRate)
 			{
 				FireSeeds();
 			}

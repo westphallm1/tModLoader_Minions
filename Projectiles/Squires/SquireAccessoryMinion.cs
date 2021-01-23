@@ -32,6 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override Vector2 IdleBehavior()
 		{
+			animationFrame++;
 			squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squire = squirePlayer.GetSquire();
 			if(squire == null || !IsEquipped(squirePlayer))

@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	public abstract class SimpleGroundBasedMinion : HeadCirclingGroupAwareMinion, IGroundAwareMinion
+	public abstract class SimpleGroundBasedMinion : HeadCirclingGroupAwareMinion
 	{
 		protected GroundAwarenessHelper gHelper;
 		protected int searchDistance = 600;
@@ -19,7 +19,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected int defaultJumpVelocity;
 		protected int maxJumpVelocity;
 
-		new public int groupAnimationFrame { get; set; }
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -44,12 +43,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override Vector2 IdleBehavior()
 		{
-			groupAnimationFrame++;
 			gHelper.SetIsOnGround();
-			// the ground-based slime can sometimes bounce its way around 
-			// a corner, but the flying version can't
+			// the ground-based minions can sometimes jump/bounce to get themselves unstuck
+			// , but the flying versions can't
 			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
-			return base.IdleBehavior();
+			List<Projectile> minions = GetActiveMinions();
+			int order = minions.IndexOf(projectile);
+			Vector2 idlePosition = player.Center;
+			idlePosition.X += (40 + order * 38) * -player.direction;
+			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			{
+				idlePosition = player.Center;
+			}
+			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			return vectorToIdlePosition;
 		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
@@ -116,14 +124,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual bool CheckForStuckness()
 		{
-			return groupAnimationFrame % 5 == 0; // by default, only check for stuckness every 5 frames
+			return animationFrame % 5 == 0; // by default, only check for stuckness every 5 frames
 		}
 
 		protected abstract void DoGroundedMovement(Vector2 vector);
 
 		protected virtual void IdleFlyingMovement(Vector2 vector)
 		{
-			if (!gHelper.DropThroughPlatform() && groupAnimationFrame - lastHitFrame > 15)
+			if (!gHelper.DropThroughPlatform() && animationFrame - lastHitFrame > 15)
 			{
 				base.IdleMovement(vector);
 			}
@@ -131,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override void OnHitTarget(NPC target)
 		{
-			lastHitFrame = groupAnimationFrame;
+			lastHitFrame = animationFrame;
 		}
 
 		protected virtual bool ScaleLedge(Vector2 vector)

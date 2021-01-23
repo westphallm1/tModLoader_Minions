@@ -164,7 +164,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual float GetBackBladeAngle() 
 		{
-			return (6 * MathHelper.Pi * groupAnimationFrame) / animationFrames;
+			return (6 * MathHelper.Pi * animationFrame) / animationFrames;
 		}
 
 		protected virtual float GetFrontBladeAngle() {

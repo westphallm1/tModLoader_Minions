@@ -8,7 +8,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 {
-	public class HoneySlime : BumblingTransientMinion, IGroundAwareMinion
+	public class HoneySlime : BumblingTransientMinion
 	{
 		protected override int timeToLive => 60 * 3; // 3 seconds;
 		protected override float inertia => didLand ? 1 : 12;
@@ -18,8 +18,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		protected override float searchDistance => 350f;
 		protected override float noLOSSearchDistance => 350f;
 		protected override float distanceToBumbleBack => 8000f; // don't bumble back
-
-		public int groupAnimationFrame { get; set; }
 
 		int defaultMaxSpeed = 4;
 		int defaultJumpVelocity = 6;

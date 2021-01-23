@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		protected override int BuffId => BuffType<WhackAMoleMinionBuff>();
 		protected override int MinionType => ProjectileType<WhackAMoleMinion>();
 	}
-	public class WhackAMoleMinion : EmpoweredMinion, IGroundAwareMinion
+	public class WhackAMoleMinion : EmpoweredMinion
 	{
 
 		protected override int BuffId => BuffType<WhackAMoleMinionBuff>();
@@ -115,7 +115,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		protected int idleGroundDistance = 128;
 		protected int idleStopChasingDistance = 800;
 		protected int lastHitFrame = -1;
-		public int groupAnimationFrame { get; set; }
 		protected int AnimationFrames = 60;
 		protected int TeleportFrames = 60;
 		private int projectileIndex;
@@ -175,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			attackThroughWalls = false;
 			useBeacon = false;
 			frameSpeed = 5;
-			groupAnimationFrame = 0;
+			animationFrame = 0;
 			projectile.hide = true;
 			projectileIndex = 0;
 			gHelper = new GroundAwarenessHelper(this)
@@ -208,7 +207,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				Vector2 pos = projectile.Center;
 				if (gHelper.teleportStartFrame is int teleportStart) 
 				{
-					int teleportFrame = groupAnimationFrame - teleportStart;
+					int teleportFrame = animationFrame - teleportStart;
 					int teleportHalf = TeleportFrames / 2;
 					float heightToSink = 24 - positionOffsets[i].Y;
 					if(teleportFrame < teleportHalf)
@@ -223,7 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 					pos.Y += positionOffsets[i].Y /2;
 				} else 
 				{
-					offsetPixels = (int) (3 * Math.Sin(headBobOffset * i + 2 * Math.PI * (groupAnimationFrame % AnimationFrames) / AnimationFrames));
+					offsetPixels = (int) (3 * Math.Sin(headBobOffset * i + 2 * Math.PI * (animationFrame % AnimationFrames) / AnimationFrames));
 					pos += positionOffsets[i];
 				}
 				Rectangle bounds = new Rectangle(0, 0, 24, 24 + offsetPixels);
@@ -261,7 +260,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			{
 				idlePosition = player.Bottom;
 			}
-			groupAnimationFrame++;
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			gHelper.SetIsOnGround();
@@ -296,7 +294,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		private void DoTeleport(Vector2 destination, int startFrame, ref bool done)
 		{
 			projectile.velocity = Vector2.Zero;
-			int teleportFrame = groupAnimationFrame - startFrame;
+			int teleportFrame = animationFrame - startFrame;
 			int width = widths[DrawIndex];
 			if (teleportFrame == 1 || teleportFrame == 1+ TeleportFrames/2)
 			{
@@ -325,7 +323,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				gHelper.GetUnstuckByTeleporting(info, vectorToIdlePosition);
 			}
 			gHelper.ApplyGravity();
-			if(groupAnimationFrame - lastHitFrame > 10)
+			if(animationFrame - lastHitFrame > 10)
 			{
 				float intendedY = projectile.velocity.Y;
 				base.IdleMovement(vectorToIdlePosition);
@@ -335,7 +333,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		public override void OnHitTarget(NPC target)
 		{
-			lastHitFrame = groupAnimationFrame;
+			lastHitFrame = animationFrame;
 		}
 
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
@@ -347,7 +345,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			int attackRate = 60;
-			bool isAttackFrame = player.whoAmI == Main.myPlayer && groupAnimationFrame % attackRate == 0 && gHelper.teleportStartFrame == null;
+			bool isAttackFrame = player.whoAmI == Main.myPlayer && animationFrame % attackRate == 0 && gHelper.teleportStartFrame == null;
 			bool canHitTarget = isAttackFrame && Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToTargetPosition, 1, 1);
 			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 96 && vectorToTargetPosition.Y < -24;
 			bool isAttackingFromAir = isAttackFrame && gHelper.isFlying;

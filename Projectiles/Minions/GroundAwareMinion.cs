@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	public interface IGroundAwareMinion
 	{
 		Projectile projectile { get; }
-		int groupAnimationFrame { get; set; }
+		int animationFrame { get; set; }
 	}
 
 	public enum GroundAnimationState
@@ -65,15 +65,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	public delegate void GetUnstuckDelegate(Vector2 destination, int startFrame, ref bool done);
 	public class GroundAwarenessHelper
 	{
-		internal IGroundAwareMinion self;
+		internal SimpleMinion self;
 		internal bool didHitWall;
 		private bool _isFlying;
 		internal bool isFlying {
 			get => _isFlying;
 			set {
-				if(self.groupAnimationFrame - lastTransformedFrame > transformRateLimit)
+				if(self.animationFrame - lastTransformedFrame > transformRateLimit)
 				{
-					lastTransformedFrame = self.groupAnimationFrame;
+					lastTransformedFrame = self.animationFrame;
 					_isFlying = value;
 				}
 			}
@@ -94,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		private int slowFrameCount;
 
 		private Projectile projectile => self.projectile;
-		public GroundAwarenessHelper(IGroundAwareMinion self)
+		public GroundAwarenessHelper(SimpleMinion self)
 		{
 			this.self = self;
 		}
@@ -278,7 +278,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				clearGround.Y -= projectile.height;
 				teleportDestination = clearGround;
 				teleportDestination.X += Math.Sign(vectorToTarget.X) * projectile.width / 2;
-				teleportStartFrame = self.groupAnimationFrame;
+				teleportStartFrame = self.animationFrame;
 				return true;
 			}
 			return false;
@@ -311,7 +311,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				clearGround.Y -= clearGround.Y % 16; // snap to the nearest block
 				clearGround.Y -= (projectile.height);
 				teleportDestination = clearGround;
-				teleportStartFrame = self.groupAnimationFrame;
+				teleportStartFrame = self.animationFrame;
 				return true;
 			}
 			return false;
