@@ -38,19 +38,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			base.SetStaticDefaults();
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
+			IdleLocationSets.circlingBody.Add(projectile.type);
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			List<Projectile> minions = GetActiveMinions();
+			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingBody, player.whoAmI);
 			Vector2 idlePosition = player.Center;
-			int minionCount = minions.Count;
-			int order = minions.IndexOf(projectile);
-			idleAngle = (float)(MathHelper.TwoPi * order) / minionCount;
-			idleAngle += (MathHelper.TwoPi * minions[0].ai[1]) / animationFrames;
-			idlePosition.X += 2 + 30 * (float)Math.Cos(idleAngle);
-			idlePosition.Y += -12 + 5 * (float)Math.Sin(idleAngle);
+			if(minions.Count > 0)
+			{
+				int minionCount = minions.Count;
+				int order = minions.IndexOf(projectile);
+				idleAngle = (float)(MathHelper.TwoPi * order) / minionCount;
+				idleAngle += (MathHelper.TwoPi * groupAnimationFrame) / groupAnimationFrames;
+				idlePosition.X += 2 + 30 * (float)Math.Cos(idleAngle);
+				idlePosition.Y += -12 + 5 * (float)Math.Sin(idleAngle);
+			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;

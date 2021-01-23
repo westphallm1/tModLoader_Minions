@@ -90,6 +90,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		internal bool foragerArmorSetEquipped;
 		internal int summonFlatDamage;
 		internal bool illusionistArmorSetEquipped;
+		internal int idleMinionSyncronizationFrame = 0;
 
 		static Color[] MinionColors = new Color[]
 		{
@@ -193,6 +194,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void PostUpdate()
 		{
+			idleMinionSyncronizationFrame++;
 			if(player.whoAmI != Main.myPlayer)
 			{
 				return;

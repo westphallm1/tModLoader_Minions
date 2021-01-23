@@ -55,6 +55,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		int framesSinceLastHit;
 		int hitsSinceRetreat;
 		Projectile body = default;
+
+		// overwrites default usage in GroupAwareMinion
+		float attackingFlag
+		{
+			get => projectile.ai[1];
+			set => projectile.ai[1] = value;
+		}
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -83,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		public override Vector2? FindTarget()
 		{
 			int maxHits = Math.Max(1, 10 - GetActiveMinions().Count());
-			if (vectorToIdle.Length() > 300f || projectile.ai[1] == 0 || hitsSinceRetreat > maxHits)
+			if (vectorToIdle.Length() > 300f || attackingFlag == 0 || hitsSinceRetreat > maxHits)
 			{
 				return null;
 			}
@@ -145,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			{
 				return;
 			}
-			projectile.ai[1] = 1;
+			attackingFlag = 1;
 			DistanceFromGroup(ref vectorToTargetPosition, closeDistance: 300);
 			int speed = this.speed + (vectorToTargetPosition.Length() < 48 ? 4 : 0);
 			vectorToTargetPosition.Normalize();

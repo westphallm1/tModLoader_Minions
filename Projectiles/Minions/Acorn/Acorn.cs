@@ -95,6 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Flying Acorn");
 			Main.projFrames[projectile.type] = 4;
+			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
 
 		public override void SetDefaults()

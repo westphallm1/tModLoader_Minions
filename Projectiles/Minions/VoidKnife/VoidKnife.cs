@@ -71,7 +71,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 1;
 			attackFrames = 120;
-			animationFrames = 120;
 			attackThroughWalls = true;
 			useBeacon = false;
 			travelVelocity = 16;

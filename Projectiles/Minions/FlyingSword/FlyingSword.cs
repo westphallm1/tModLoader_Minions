@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			float idleAngle = (float)(2 * Math.PI * order) / minionCount;
 			if (minions.Count > 0)
 			{
-				idleAngle += (2 * (float)Math.PI * minions[0].ai[1]) / animationFrames;
+				idleAngle += (2 * (float)Math.PI * groupAnimationFrame) / groupAnimationFrames;
 			}
 			Vector2 idlePosition = player.Center;
 			idlePosition.X += (40 + projectile.minionPos * 30) * -player.direction;

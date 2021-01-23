@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Items.Accessories;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -21,6 +22,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int noLOSPursuitTime = 15; // time to chase the NPC after losing sight
 
 		public int animationFrame { get; set; }
+
+		public int groupAnimationFrames = 180;
+		public int groupAnimationFrame
+		{
+			get => player.GetModPlayer<MinionSpawningItemPlayer>().idleMinionSyncronizationFrame % groupAnimationFrames;
+		}
 		public AttackState attackState = AttackState.IDLE;
 
 		public override void SetStaticDefaults()

@@ -78,7 +78,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 1;
 			attackFrames = 60;
-			animationFrames = 120;
 			attackThroughWalls = true;
 			useBeacon = false;
 			travelVelocity = 16;

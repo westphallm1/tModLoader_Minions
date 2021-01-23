@@ -105,7 +105,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			diveBombInertia = 10;
 			approachSpeed = 15;
 			approachInertia = 20;
-			animationFrames = 160;
 			projectile.width = 26;
 			projectile.height = 32;
 			projectileType = ProjectileType<StarSurferProjectile>();

@@ -70,6 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Stone Cloud");
 			Main.projFrames[projectile.type] = 6;
+			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

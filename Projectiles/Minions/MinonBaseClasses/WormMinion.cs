@@ -2,14 +2,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	/// <summary>
-	/// Uses ai[1] for idle movement cycling
-	/// </summary>
 	public abstract class WormMinion : EmpoweredMinion
 	{
 		private float[] backingArray;
@@ -26,6 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[projectile.type] = 1;
+			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
 
 		public override void SetDefaults()
@@ -88,12 +87,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			projectile.ai[1] = (projectile.ai[1] + 1) % 240;
-			int radius = player.velocity.Length() < 4 ? 48 + 2 * EmpowerCount: 48;
-			float yRadius = player.velocity.Length() < 4 ? 8 + 0.5f * EmpowerCount: 8;
+			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingHead, player.whoAmI);
+			int minionCount = minions.Count;
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += radius * (float)Math.Cos(Math.PI * projectile.ai[1] / 60);
-			idlePosition.Y += -20 + EmpowerCount + yRadius * (float)Math.Sin(Math.PI * projectile.ai[1] / 60);
+			// this was silently failing sometimes, don't know why
+			if (minionCount > 0)
+			{
+				int radius = player.velocity.Length() < 4 ? 48 + 2 * EmpowerCount: 48;
+				float yRadius = player.velocity.Length() < 4 ? 8 + 0.5f * EmpowerCount: 8;
+				int order = minions.IndexOf(projectile);
+				float idleAngle = (2 * PI * order) / minionCount;
+				idleAngle += 2 * PI * groupAnimationFrame / groupAnimationFrames;
+				idlePosition.X += radius * (float)Math.Cos(idleAngle);
+				idlePosition.Y += -20 + EmpowerCount + yRadius * (float)Math.Sin(idleAngle);
+			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;

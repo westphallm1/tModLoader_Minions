@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Items.Accessories;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -15,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	}
 
 	/// <summary>
-	/// Uses ai[0] for attack frames, and ai[1] for animation frames
+	/// Uses ai[0] for attack frames
 	/// </summary>
 	public abstract class GroupAwareMinion : SimpleMinion
 	{
@@ -24,13 +25,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		private Projectile leader = null;
 		private Projectile head = null;
 		public int attackFrames = 60;
-		public int animationFrames = 120;
-
-		public int groundAnimationFrame
-		{
-			get => (int)projectile.ai[1];
-			set => projectile.ai[1] = value;
-		}
 		public int attackFrame
 		{
 			get => (int)projectile.ai[0];
@@ -76,7 +70,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			others = null;
 			head = null;
 			attackFrame = (attackFrame + 1) % attackFrames;
-			groundAnimationFrame = (groundAnimationFrame + 1) % animationFrames;
 			return default;
 		}
 

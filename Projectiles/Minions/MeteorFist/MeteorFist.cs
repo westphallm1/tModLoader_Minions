@@ -116,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			int minionCount = minions.Count;
 			int order = minions.IndexOf(projectile);
 			idleAngle = (float)(2 * Math.PI * order) / minionCount;
-			idleAngle += projectile.spriteDirection * 2 * (float)Math.PI * minions[0].ai[1] / animationFrames;
+			idleAngle += projectile.spriteDirection * 2 * (float)Math.PI * groupAnimationFrame / groupAnimationFrames;
 			idlePosition.X += 2 + 30 * (float)Math.Sin(idleAngle);
 			idlePosition.Y += 2 + 30 * (float)Math.Cos(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;

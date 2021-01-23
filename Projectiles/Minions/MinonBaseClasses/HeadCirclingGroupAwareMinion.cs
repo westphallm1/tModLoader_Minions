@@ -24,7 +24,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			projectile.tileCollide = false;
 			attackState = AttackState.IDLE;
 			attackFrames = 30;
-			animationFrames = 240;
 			projectile.localNPCHitCooldown = 20;
 			projectile.frame = (2 * projectile.minionPos) % 6;
 		}
@@ -32,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			List<Projectile> minions = GetActiveMinions();
+			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingHead, player.whoAmI);
 			Vector2 idlePosition = player.Top;
 			int minionCount = minions.Count;
 			// this was silently failing sometimes, don't know why
@@ -46,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				}
 				int order = minions.IndexOf(projectile);
 				idleAngle = (2 * PI * order) / minionCount;
-				idleAngle += 2 * PI * minions[0].ai[1] / animationFrames;
+				idleAngle += 2 * PI * groupAnimationFrame / groupAnimationFrames;
 				idlePosition.X += 2 + radius * (float)Math.Cos(idleAngle);
 				idlePosition.Y += -20 + 10 * (float)Math.Sin(idleAngle);
 			}

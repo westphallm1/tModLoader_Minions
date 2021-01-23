@@ -103,7 +103,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 1;
 			attackFrames = 90;
-			animationFrames = 120;
 			attackThroughWalls = true;
 			useBeacon = false;
 			travelVelocity = 16;
