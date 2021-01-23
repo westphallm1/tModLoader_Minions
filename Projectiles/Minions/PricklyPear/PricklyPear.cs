@@ -72,6 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			projectile.tileCollide = true;
 			projectile.penetrate = 1;
 			projectile.friendly = true;
+			projectile.usesLocalNPCImmunity = true;
 		}
 
 		public override void AI()
