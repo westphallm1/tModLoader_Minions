@@ -22,6 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
+			IdleLocationSets.trailingOnGround.Add(projectile.type);
 		}
 
 		public override void SetDefaults()
@@ -47,10 +48,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			// the ground-based minions can sometimes jump/bounce to get themselves unstuck
 			// , but the flying versions can't
 			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
-			List<Projectile> minions = GetActiveMinions();
-			int order = minions.IndexOf(projectile);
 			Vector2 idlePosition = player.Center;
-			idlePosition.X += (40 + order * 38) * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, projectile);
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition = player.Center;

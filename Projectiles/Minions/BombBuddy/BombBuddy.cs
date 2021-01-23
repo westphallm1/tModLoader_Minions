@@ -100,25 +100,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			maxJumpVelocity = 12;
 		}
 
-		public override Vector2 IdleBehavior()
-		{
-			gHelper.SetIsOnGround();
-			// the ground-based slime can sometimes bounce its way around 
-			// a corner, but the flying version can't
-			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
-			List<Projectile> minions = GetActiveMinions();
-			int order = minions.IndexOf(projectile);
-			Vector2 idlePosition = player.Center;
-			idlePosition.X += (36 + order * 26) * -player.direction;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
-			{
-				idlePosition = player.Center;
-			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			return vectorToIdlePosition;
-		}
-
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			// use a rectangular hitbox for the explosion. Easier than the alternative

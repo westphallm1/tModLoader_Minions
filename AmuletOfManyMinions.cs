@@ -1,6 +1,7 @@
 using AmuletOfManyMinions.Core.Netcode;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.NPCs;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires;
 using System.IO;
 using Terraria;
@@ -18,6 +19,7 @@ namespace AmuletOfManyMinions
 			SquireMinionTypes.Load();
 			NecromancerAccessory.Load();
 			SquireGlobalProjectile.Load();
+			IdleLocationSets.Load();
 			if(!Main.dedServ)
 			{
 				AddEquipTexture(null, EquipType.Legs, "RoyalGown_Legs", "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
@@ -36,6 +38,7 @@ namespace AmuletOfManyMinions
 			SquireMinionTypes.Unload();
 			NecromancerAccessory.Unload();
 			SquireGlobalProjectile.Unload();
+			IdleLocationSets.Unload();
 		}
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
