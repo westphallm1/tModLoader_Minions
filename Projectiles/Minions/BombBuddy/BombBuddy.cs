@@ -65,6 +65,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		const int explosionAttackRechargeTime = 120;
 		int lastExplosionFrame = -explosionAttackRechargeTime;
 		private Vector2 explosionLocation;
+		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+		{
+			[GroundAnimationState.FLYING] = (1, 1),
+			[GroundAnimationState.JUMPING] = (1, 1),
+			[GroundAnimationState.STANDING] = (0, 0),
+			[GroundAnimationState.WALKING] = (2, 12),
+		};
 
 		private bool didJustRespawn => animationFrame - lastExplosionFrame == explosionRespawnTime;
 		private bool canAttack => animationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
@@ -231,41 +238,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(gHelper.isFlying)
+			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			if(state == GroundAnimationState.FLYING && animationFrame % 3 == 0)
 			{
-				projectile.rotation = 0.05f * projectile.velocity.X;
-			} else
-			{
-				projectile.rotation = 0;
+				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+				Main.dust[idx].alpha = 112;
+				Main.dust[idx].scale = .9f;
 			}
-			if(!gHelper.didJustLand || gHelper.isFlying)
-			{
-				// jumping or flying
-				projectile.frame = 1;
-				projectile.spriteDirection = Math.Sign(projectile.velocity.X);
-				if(gHelper.isFlying && animationFrame % 3 == 0)
-				{
-					int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
-					Main.dust[idx].alpha = 112;
-					Main.dust[idx].scale = .9f;
-				}
-				return;
-			} else if (gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 1)
-			{
-				// standing still
-				slowFrameCount++;
-				if(slowFrameCount > 15)
-				{
-					projectile.frame = 0;
-				}
-				return;
-			} else
-			{
-				slowFrameCount = 0;
-			}
-			minFrame = 2;
-			maxFrame = 12;
-			base.Animate(minFrame, maxFrame);
 		}
 
 		public override void AfterMoving()

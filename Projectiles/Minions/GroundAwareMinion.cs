@@ -14,6 +14,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		int animationFrame { get; set; }
 	}
 
+	public enum GroundAnimationState
+	{
+		WALKING,
+		JUMPING,
+		FLYING,
+		STANDING
+	}
+
 	public struct StuckInfo
 	{
 		internal bool throughWall;
@@ -83,6 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal StuckInfo stuckInfo;
 		internal int lastTransformedFrame = -1;
 		internal int transformRateLimit = 15;
+		private int slowFrameCount;
 
 		private Projectile projectile => self.projectile;
 		public GroundAwarenessHelper(IGroundAwareMinion self)
@@ -350,6 +359,44 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				didJustLand = true;
 			}
 		}
+
+		internal GroundAnimationState GetAnimationState()
+		{
+			if(isFlying)
+			{
+				return GroundAnimationState.FLYING;
+			} else if (!didJustLand)
+			{
+				return GroundAnimationState.JUMPING;
+			} else
+			{
+				if(Math.Abs(projectile.velocity.X) < 1)
+				{
+					// standing still
+					slowFrameCount++;
+				} else
+				{
+					slowFrameCount = 0;
+				}
+				return slowFrameCount >= 15 ? GroundAnimationState.STANDING : GroundAnimationState.WALKING;
+			}
+		}
+
+		internal GroundAnimationState DoGroundAnimation(Dictionary<GroundAnimationState, (int, int?)> frameInfo , Action<int, int?> animate)
+		{
+			GroundAnimationState state = GetAnimationState();
+			projectile.rotation = state == GroundAnimationState.FLYING ? 0.05f * projectile.velocity.X : 0;
+			(int, int?) pair = frameInfo[state];
+			if(pair.Item2 is int maxFrame)
+			{
+				animate(pair.Item1, maxFrame);
+			} else
+			{
+				projectile.frame = pair.Item1;
+			}
+			return state;
+		}
+
 
 		internal void DoJump(Vector2 vectorToTarget, int defaultJumpVelocity = 4, int maxJumpVelocity = 12)
 		{

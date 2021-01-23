@@ -157,12 +157,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 	public class PricklyPearMinion : SimpleGroundBasedMinion<PricklyPearMinionBuff>, IGroundAwareMinion
 	{
-		private int slowFrameCount = 0;
 		int lastFiredFrame = 0;
 		int fireRate = 90;
 		// don't get too close
 		int preferredDistanceFromTarget = 96;
 		float[] seedAngles = { MathHelper.Pi / 6, MathHelper.PiOver2, 5 * MathHelper.Pi / 6 };
+		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+		{
+			[GroundAnimationState.FLYING] = (6, 10),
+			[GroundAnimationState.JUMPING] = (0, 0),
+			[GroundAnimationState.STANDING] = (1, 1),
+			[GroundAnimationState.WALKING] = (0, 6),
+		};
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -270,44 +277,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			projectile.friendly = false;
 		}
-
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(gHelper.isFlying)
-			{
-				projectile.rotation = 0.05f * projectile.velocity.X;
-			} else
-			{
-				projectile.rotation = 0;
-			}
-			if(!gHelper.didJustLand && !gHelper.isFlying)
-			{
-				// jumping but not flying
-				projectile.frame = 0;
-				return;
-			} else if (gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 1)
-			{
-				slowFrameCount++;
-				if(slowFrameCount > 15)
-				{
-					projectile.frame = 1;
-				}
-				return;
-			} else
-			{
-				slowFrameCount = 0;
-			}
-			if(gHelper.isFlying)
-			{
-				minFrame = 6;
-				maxFrame = 10;
-			} else
-			{
-				minFrame = 0;
-				maxFrame = 6;
-			}
-			base.Animate(minFrame, maxFrame);
-			if(vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
+			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
 				projectile.spriteDirection = Math.Sign(target.X);
 			}

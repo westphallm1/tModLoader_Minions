@@ -61,7 +61,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 	public class GoblinTechnomancerBombMinion : SimpleGroundBasedMinion<GoblinTechnomancerMinionBuff>, IGroundAwareMinion
 	{
-		private int slowFrameCount = 0;
 		const int explosionRespawnTime = 60;
 		const int explosionRadius = 96;
 		const int explosionAttackRechargeTime = 96;
@@ -72,6 +71,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		private bool didJustRespawn => animationFrame - lastExplosionFrame == explosionRespawnTime;
 		private bool canAttack => animationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
 		private bool isRespawning => animationFrame - lastExplosionFrame < explosionRespawnTime;
+
+		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+		{
+			[GroundAnimationState.FLYING] = (1, 1),
+			[GroundAnimationState.JUMPING] = (1, 1),
+			[GroundAnimationState.STANDING] = (0, 0),
+			[GroundAnimationState.WALKING] = (2, 9),
+		};
 
 		public override void SetStaticDefaults()
 		{
@@ -193,7 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				gHelper.DoJump(vector);
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 3f : 8;
-			float xMaxSpeed = 16f;
+			float xMaxSpeed = 14f;
 			if(vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
 				projectile.velocity.X = player.velocity.X;
@@ -247,9 +254,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			}
 			for (int i= 0; i < 20; i ++)
 			{
-				//int dustIdx = Dust.NewDust(position, width, height, 6, 0f, 0f, 100, default, 3.5f);
-				//Main.dust[dustIdx].noGravity = true;
-				//Main.dust[dustIdx].velocity *= 7f;
 				int dustIdx = Dust.NewDust(position, width, height, DustID.Shadowflame, 0f, 0f, 100, default, 1.5f);
 				Main.dust[dustIdx].velocity *= 3f;
 			}
@@ -266,48 +270,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(isDropping)
+			if (isDropping)
 			{
 				projectile.rotation += 0.05f;
-			} else if(gHelper.isFlying)
-			{
-				projectile.rotation = 0.05f * projectile.velocity.X;
-			} else
-			{
-				projectile.rotation = 0;
-			}
-			if(isDropping)
-			{
 				projectile.frame = 9;
 				return;
-			} else if(!gHelper.didJustLand || gHelper.isFlying)
-			{
-				// jumping or flying
-				projectile.frame = 1;
-				projectile.spriteDirection = Math.Sign(projectile.velocity.X);
-				if(gHelper.isFlying && animationFrame % 3 == 0)
-				{
-					int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
-					Main.dust[idx].alpha = 112;
-					Main.dust[idx].scale = .9f;
-				}
-				return;
-			} else if (gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 1)
-			{
-				// standing still
-				slowFrameCount++;
-				if(slowFrameCount > 15)
-				{
-					projectile.frame = 0;
-				}
-				return;
-			} else
-			{
-				slowFrameCount = 0;
 			}
-			minFrame = 2;
-			maxFrame = 9;
-			base.Animate(minFrame, maxFrame);
+			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			if(state == GroundAnimationState.FLYING && animationFrame % 3 == 0)
+			{
+				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+				Main.dust[idx].alpha = 112;
+				Main.dust[idx].scale = .9f;
+			}
+			return;
 		}
 
 		public override void AfterMoving()
@@ -448,7 +424,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			// stay floating behind the player at all times
 			IdleMovement(vectorToIdle);
 			framesSinceLastHit++;
-			int rateOfFire = 90;
+			int rateOfFire = Math.Max(50, 90 - 5 * EmpowerCount);
 			int projectileVelocity = 40;
 			if (framesSinceLastHit++ > rateOfFire && targetNPCIndex is int npcIdx)
 			{
@@ -477,7 +453,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage/2 + (baseDamage / 6) * EmpowerCount; // only scale up damage a little bit
+			return baseDamage/2 + (baseDamage / 8) * EmpowerCount; // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()
