@@ -91,6 +91,10 @@ namespace AmuletOfManyMinions.Items.Accessories
 		internal int summonFlatDamage;
 		internal bool illusionistArmorSetEquipped;
 		internal int idleMinionSyncronizationFrame = 0;
+		internal int minionVarietyBonusCount = 0;
+		internal float minionVarietyDamageBonus = 0;
+		internal int minionVarietyDamageFlatBonus = 0;
+		private HashSet<int> uniqueMinionTypes = new HashSet<int>();
 
 		static Color[] MinionColors = new Color[]
 		{
@@ -124,6 +128,23 @@ namespace AmuletOfManyMinions.Items.Accessories
 			foragerArmorSetEquipped = false;
 			illusionistArmorSetEquipped = false;
 			summonFlatDamage = 0;
+			minionVarietyDamageBonus = 0.04f;
+			minionVarietyDamageFlatBonus = 0;
+		}
+		public override void PreUpdate()
+		{
+			// Get unique minion count for player
+			uniqueMinionTypes.Clear();
+			foreach(Projectile proj in Main.projectile)
+			{
+				// only count minions that take up slots (no squires, temporary projectiles that were lazily coded
+				// as minions, etc.)
+				if(proj.active && proj.owner == player.whoAmI && proj.minionSlots > 0)
+				{
+					uniqueMinionTypes.Add(proj.type);
+				}
+			}
+			minionVarietyBonusCount = uniqueMinionTypes.Count - 1;
 		}
 
 		public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)
@@ -213,16 +234,49 @@ namespace AmuletOfManyMinions.Items.Accessories
 					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamageMult), 0.1f, player.whoAmI, ai0: isCorrupt? 0: 1);
 				}
 			}
+			if(minionVarietyBonusCount > 0)
+			{
+				int buffType = BuffType<MinionVarietyBuff>();
+				if (!player.HasBuff(buffType))
+				{
+					player.AddBuff(buffType, 2);
+				}
+			}
+		}
+	}
+
+	public class MinionVarietyBuff: ModBuff
+	{
+		public override void SetDefaults()
+		{
+			Main.buffNoSave[Type] = true;
+			Main.debuff[Type] = true; // don't allow cancellation
+			Main.buffNoTimeDisplay[Type] = true;
+			DisplayName.SetDefault("Minion Variety!");
+		}
+
+		public override void ModifyBuffTip(ref string tip, ref int rare)
+		{
+			// assuming this is only called client-side and it's always the owner who mouses over the buff tip
+			// this may not be the best way to update text
+			Player player = Main.player[Main.myPlayer];
+			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
+			float varietyBonus = modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus * 100;
+			tip = varietyBonus.ToString("0") + "% Minion Variety Damage Bonus";
 		}
 	}
 
 	class MinionSpawningItemGlobalProjectile : GlobalProjectile
 	{
+		private bool DoesSummonDamage(Projectile projectile)
+		{
+			return projectile.minion ||
+				ProjectileID.Sets.MinionShot[projectile.type] ||
+				SquireGlobalProjectile.isSquireShot.Contains(projectile.type);
+		}
 		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
 		{
-			if (!projectile.minion && 
-				!ProjectileID.Sets.MinionShot[projectile.type] && 
-				!SquireGlobalProjectile.isSquireShot.Contains(projectile.type))
+			if (!DoesSummonDamage(projectile))
 			{
 				return;
 			}
@@ -243,6 +297,19 @@ namespace AmuletOfManyMinions.Items.Accessories
 					wisp.ai[1] = target.whoAmI;
 				}
 			}
+		}
+
+		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			if (!DoesSummonDamage(projectile))
+			{
+				return;
+			}
+			Player player = Main.player[projectile.owner];
+			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
+			float damageMult = 1 + modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus;
+			float damageAdd = modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageFlatBonus;
+			damage = (int)(damage * damageMult + damageAdd);
 		}
 	}
 }

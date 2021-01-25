@@ -16,7 +16,8 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void SetStaticDefaults()
 		{
 			Tooltip.SetDefault("Increases your max number of minions by 2\n" +
-				"Greatly improves minion damage");
+				"Greatly improves minion damage,\n" +
+				"and increases minion variety bonus by 3%");
 		}
 
 		public override void SetDefaults()
@@ -30,8 +31,9 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.25f;
+			player.minionDamageMult += 0.2f;
 			player.maxMinions += 2;
+			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus += 0.03f;
 		}
 
 		public override void AddRecipes()

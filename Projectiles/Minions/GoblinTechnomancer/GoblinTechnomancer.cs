@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Bomb Buddy");
-			Description.SetDefault("A bomb buddy will explode for you!");
+			DisplayName.SetDefault("Goblin Technomancer");
+			Description.SetDefault("A goblin Technomancer will fight for you!");
 		}
 	}
 
@@ -30,8 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Unstable Detonator");
-			Tooltip.SetDefault("Summons a bomb buddy to fight for you!");
+			DisplayName.SetDefault("Cyberpunk Hair Styling Kit");
+			Tooltip.SetDefault("Summons a goblin technomancer to fight for you!");
 		}
 
 		public override void SetDefaults()
@@ -43,7 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			item.width = 28;
 			item.height = 28;
 			item.value = Item.buyPrice(0, 0, 5, 0);
-			item.rare = ItemRarityID.Blue;
+			item.rare = ItemRarityID.Yellow;
 		}
 		public override void AddRecipes()
 		{
