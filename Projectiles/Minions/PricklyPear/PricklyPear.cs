@@ -72,7 +72,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			projectile.tileCollide = true;
 			projectile.penetrate = 1;
 			projectile.friendly = true;
-			projectile.usesLocalNPCImmunity = true;
 		}
 
 		public override void AI()
@@ -127,6 +126,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			projectile.penetrate = -1;
 			projectile.friendly = true;
 			projectile.usesLocalNPCImmunity = true;
+			// don't instakill an an enemy that falls onto a cactus
+			projectile.localNPCHitCooldown = 30; 
 			drawOriginOffsetY = 2;
 		}
 

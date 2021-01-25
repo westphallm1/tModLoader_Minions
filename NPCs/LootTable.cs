@@ -7,10 +7,12 @@ using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
 using AmuletOfManyMinions.Projectiles.Minions.CharredChimera;
 using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
+using AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer;
 using AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush;
 using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
 using AmuletOfManyMinions.Projectiles.Minions.Slimepire;
 using AmuletOfManyMinions.Projectiles.Minions.StarSurfer;
+using AmuletOfManyMinions.Projectiles.Minions.StoneCloud;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 using AmuletOfManyMinions.Projectiles.Minions.WhackAMole;
 using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
@@ -67,6 +69,11 @@ namespace AmuletOfManyMinions.NPCs
 			if (spawnChance < 0.015f && NPCSets.angryBones.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<BoneSquireMinionItem>(), 1, prefixGiven: -1);
+			}
+
+			if (spawnChance < 0.12f && npc.type == NPCID.AngryNimbus)
+			{
+				Item.NewItem(npc.getRect(), ItemType<StoneCloudMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			if (spawnChance < 0.05f && npc.type == NPCID.GiantBat)
@@ -156,6 +163,12 @@ namespace AmuletOfManyMinions.NPCs
 			if(type == NPCID.Painter && NPC.downedBoss1)
 			{
 				shop.item[nextSlot].SetDefaults(ItemType<MysticPaintbrushMinionItem>());
+				nextSlot++;
+			}
+
+			if(type == NPCID.Stylist && NPC.downedPlantBoss)
+			{
+				shop.item[nextSlot].SetDefaults(ItemType<GoblinTechnomancerMinionItem>());
 				nextSlot++;
 			}
 		}

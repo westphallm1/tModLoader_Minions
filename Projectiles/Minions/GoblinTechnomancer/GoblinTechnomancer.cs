@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 5, 0);
+			item.value = Item.buyPrice(gold: 25);
 			item.rare = ItemRarityID.Yellow;
 		}
 		public override void AddRecipes()

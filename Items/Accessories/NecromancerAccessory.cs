@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			foragerArmorSetEquipped = false;
 			illusionistArmorSetEquipped = false;
 			summonFlatDamage = 0;
-			minionVarietyDamageBonus = 0.04f;
+			minionVarietyDamageBonus = 0.03f;
 			minionVarietyDamageFlatBonus = 0;
 		}
 		public override void PreUpdate()
@@ -144,7 +144,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 					uniqueMinionTypes.Add(proj.type);
 				}
 			}
-			minionVarietyBonusCount = uniqueMinionTypes.Count - 1;
+			minionVarietyBonusCount = uniqueMinionTypes.Count;
 		}
 
 		public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)
@@ -234,7 +234,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamageMult), 0.1f, player.whoAmI, ai0: isCorrupt? 0: 1);
 				}
 			}
-			if(minionVarietyBonusCount > 0)
+			if(minionVarietyBonusCount > 1)
 			{
 				int buffType = BuffType<MinionVarietyBuff>();
 				if (!player.HasBuff(buffType))
@@ -307,9 +307,13 @@ namespace AmuletOfManyMinions.Items.Accessories
 			}
 			Player player = Main.player[projectile.owner];
 			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
-			float damageMult = 1 + modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus;
-			float damageAdd = modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageFlatBonus;
-			damage = (int)(damage * damageMult + damageAdd);
+			// require multiple minion types for any bonus
+			if(modPlayer.minionVarietyBonusCount > 1)
+			{
+				float damageMult = 1 + modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus;
+				float damageAdd = modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageFlatBonus;
+				damage = (int)(damage * damageMult + damageAdd);
+			}
 		}
 	}
 }
