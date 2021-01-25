@@ -59,6 +59,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			Vector2 idlePosition = player.Top;
 			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -5;
+			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			{
+				idlePosition = player.Center;
+			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;

@@ -66,6 +66,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			float idleAngle = (float)Math.PI * 2 * projectile.ai[0] / animationFrames;
 			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -5 + 8 * (float)Math.Sin(idleAngle);
+			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			{
+				idlePosition = player.Center;
+			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;

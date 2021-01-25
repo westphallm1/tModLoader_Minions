@@ -254,7 +254,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			base.IdleBehavior();
 			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
 			Vector2 idlePosition = gHelper.isFlying ? player.Top : player.Bottom;
-			idlePosition.X += 48 * -player.direction;
 			Vector2 idleHitLine = player.Center;
 			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, projectile);
 			if (!Collision.CanHitLine(idleHitLine, 1, 1, player.Center, 1, 1))
@@ -324,6 +323,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				gHelper.GetUnstuckByTeleporting(info, vectorToIdlePosition);
 			}
 			gHelper.ApplyGravity();
+			if(vectorToIdlePosition.Y < -projectile.height && Math.Abs(vectorToIdlePosition.X) < 96)
+			{
+				gHelper.DoJump(vectorToIdlePosition);
+			}
 			if(animationFrame - lastHitFrame > 10)
 			{
 				float intendedY = projectile.velocity.Y;
@@ -345,10 +348,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			int attackRate = 60;
-			bool isAttackFrame = player.whoAmI == Main.myPlayer && animationFrame % attackRate == 0 && gHelper.teleportStartFrame == null;
+			int attackRate = Math.Max(40, 65 - 5 * EmpowerCount);
+			bool isAttackFrame = player.whoAmI == Main.myPlayer && animationFrame % attackRate == 0;
 			bool canHitTarget = isAttackFrame && Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToTargetPosition, 1, 1);
-			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 96 && vectorToTargetPosition.Y < -24;
+			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 160  && vectorToTargetPosition.Y < -24;
 			bool isAttackingFromAir = isAttackFrame && gHelper.isFlying;
 			if(player.whoAmI == Main.myPlayer  && targetNPCIndex is int targetIdx && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
 			{
@@ -366,7 +369,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 					projectileIndex);
 				projectileIndex = (projectileIndex + 1) % (DrawIndex + 1);	
 			}
-			IdleMovement(gHelper.isFlying? vectorToIdle : vectorToTargetPosition);
+			if(gHelper.isFlying)
+			{
+				// try to stay below target while flying at it
+				vectorToTargetPosition.Y += 48;
+			}
+			IdleMovement(vectorToTargetPosition);
 		}
 
 		protected override int ComputeDamage()
@@ -414,7 +422,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		protected override float ComputeIdleSpeed()
 		{
-			return gHelper.isFlying ? 12 : 6 + (vectorToTarget == null ? 0 : Math.Min(2, 0.5f * EmpowerCount));
+			return gHelper.isFlying ? 13 : 8 + (vectorToTarget == null ? 0 : Math.Min(2, 0.5f * EmpowerCount));
 		}
 
 		protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)
