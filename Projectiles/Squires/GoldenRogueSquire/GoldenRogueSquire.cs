@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			item.knockBack = 4.0f;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 10;
+            item.damage = 33;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		}
 		public override void AI()
 		{
-			Projectile parent = Main.projectile[(int)projectile.ai[0]];
+            Projectile parent = Main.projectile[(int)projectile.ai[0]];
 			if(baseVelocity == default)
 			{
 				baseVelocity = projectile.velocity;
@@ -107,6 +107,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 				projectile.rotation += 0.15f;
 				projectile.velocity.X *= 0.99f;
 			}
+		}
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			// manually bypass defense
+			// this may not be wholly correct
+			int defenseBypass = 20;
+			int defense = Math.Min(target.defense, defenseBypass);
+			damage += defense / 2;
 		}
 	}
 
@@ -155,12 +163,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.TargetedMovement(vectorToTargetPosition);
+            base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				if (Main.myPlayer == player.whoAmI)
 				{
-					Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
+                    Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 					vector2Mouse *= daggerSpeed;
 					Vector2 tangent = new Vector2(vector2Mouse.Y, -vector2Mouse.X);
 					tangent.Normalize();
