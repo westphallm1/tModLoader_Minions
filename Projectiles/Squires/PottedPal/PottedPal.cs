@@ -1,9 +1,11 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
@@ -34,14 +36,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 60;
+			item.damage = 51;
 			item.value = Item.sellPrice(0, 5, 0, 0);
 			item.rare = ItemRarityID.Pink;
 		}
 	}
 
-
-	public class PottedPalMinion : SquireMinion<PottedPalMinionBuff>
+    public class PottedPalMinion : SquireMinion<PottedPalMinionBuff>
 	{
 		public PottedPalMinion() : base(ItemType<PottedPalMinionItem>()) { }
 		protected int wingFrameCounter = 0;
@@ -61,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			projectile.width = 16;
 			projectile.height = 16;
 			frameSpeed = 15;
-			projectile.localNPCHitCooldown = 25;
+			projectile.localNPCHitCooldown = 10;
 			cooldownCounter = hitCooldown;
 		}
 
@@ -112,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			if (vectorToTargetPosition.Length() < 100f && ClosestEnemyInRange(100f, projectile.Center, maxRangeFromPlayer: false) is Vector2 autoTarget)
 			{
 				base.TargetedMovement(autoTarget - projectile.Center);
-			}
+            }
 			else
 			{
 				base.TargetedMovement(vectorToTargetPosition);
