@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		{
 			base.SetDefaults();
 			DisplayName.SetDefault("Soulbound Sword");
-			Description.SetDefault("A soulbound bow will follow your orders!");
+			Description.SetDefault("A soulbound sword will follow your orders!");
 		}
 	}
 
@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Sword");
-			Tooltip.SetDefault("Summons a squire\nA soulbound sword will fight for you!\nClick and hold to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nAn enchanted sword will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults()
@@ -122,10 +122,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
 			base.PostDraw(spriteBatch, translucentColor);
 		}
-
+        
+        //BUUUURN
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.ShadowFlame, 120);
+        }
+        
 		protected override float WeaponDistanceFromCenter() => 30;
 
-		protected override int WeaponHitboxEnd() => 45;
+		protected override int WeaponHitboxStart() => 30;
+        
+        protected override int WeaponHitboxEnd() => 50;
 
 		public override float ComputeIdleSpeed() => 13;
 
