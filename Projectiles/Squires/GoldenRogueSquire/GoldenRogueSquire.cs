@@ -66,6 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			projectile.timeLeft = TimeToLive;
 			projectile.friendly = true;
 			projectile.tileCollide = true;
+			projectile.minion = true;
 			baseVelocity = default;
 		}
 
