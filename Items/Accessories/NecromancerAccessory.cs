@@ -129,7 +129,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 			illusionistArmorSetEquipped = false;
 			summonFlatDamage = 0;
 			minionVarietyDamageBonus = 0.03f;
-			minionVarietyDamageFlatBonus = 0;
 		}
 		public override void PreUpdate()
 		{
@@ -311,8 +310,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			if(modPlayer.minionVarietyBonusCount > 1)
 			{
 				float damageMult = 1 + modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus;
-				float damageAdd = modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageFlatBonus;
-				damage = (int)(damage * damageMult + damageAdd);
+				damage = (int)(damage * damageMult);
 			}
 		}
 	}
