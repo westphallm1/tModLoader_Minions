@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 5f;
+			item.knockBack = 3.5f;
 			item.width = 24;
 			item.height = 38;
 			item.damage = 17;
@@ -72,13 +72,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			projectile.timeLeft = TIME_TO_LIVE;
 			projectile.friendly = true;
 			projectile.tileCollide = true;
-			bounces = 3;
+			projectile.penetrate = 3;
+            bounces = 3;
 			startFalling = false;
 		}
 
 		public override void AI()
 		{
-			if (projectile.timeLeft < TIME_TO_LIVE - 30)
+			if (projectile.timeLeft < TIME_TO_LIVE - 15)
 			{
 				startFalling = true;
 			}
@@ -88,16 +89,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 				projectile.rotation += 0.2f * Math.Sign(projectile.velocity.X);
 			}
 		}
-
-		public override bool OnTileCollide(Vector2 oldVelocity)
+        
+        public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if (oldVelocity.Y > 0 && projectile.velocity.Y == 0)
+            if (oldVelocity.Y > 0 && projectile.velocity.Y == 0)
 			{
-				projectile.velocity.Y = -2 * bounces;
+				projectile.velocity.Y = -3 * bounces;
 				// make sure not to collide right away again
 				projectile.position.Y -= 8;
 				projectile.velocity.X *= 0.67f;
 				bounces--;
+                Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y, 1, 1f, Main.rand.Next(1));
 			}
 			if (oldVelocity.Y < 0)
 			{
@@ -113,7 +115,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void Kill(int timeLeft)
 		{
 			// don't explode
-			Vector2 direction = -projectile.velocity;
+			Main.PlaySound(new LegacySoundStyle(4, 1).WithPitchVariance(.5f), projectile.position);
+            Vector2 direction = -projectile.velocity;
 			direction.Normalize();
 			for (int i = 0; i < 3; i++)
 			{
@@ -124,12 +127,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 	public class PumpkinSquireMinion : WeaponHoldingSquire<PumpkinSquireMinionBuff>
 	{
-		protected override int AttackFrames => 45;
+		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/SpookyWings";
 		protected override string WeaponTexturePath => null;
 
 		protected override float IdleDistanceMulitplier => 2.5f;
-		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
+		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
 		protected override WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.VERTICAL;
 
@@ -183,8 +186,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			{
 				if (Main.myPlayer == player.whoAmI)
 				{
-					Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;
-					vector2Mouse.Normalize();
+					Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 					vector2Mouse *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(projectile.Center,
 						vector2Mouse,
