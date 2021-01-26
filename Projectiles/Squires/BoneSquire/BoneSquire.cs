@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -32,10 +32,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 4.5f;
+			item.knockBack = 7.0f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 29;
+			item.damage = 40;
 			item.value = Item.sellPrice(0, 0, 50, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 	public class BoneSquireMinion : WeaponHoldingSquire<BoneSquireMinionBuff>
 	{
-		protected override int AttackFrames => 25;
+		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailBall";
 
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			base.SetDefaults();
 			projectile.width = 22;
 			projectile.height = 30;
-			projectile.localNPCHitCooldown = AttackFrames / 2;
+			projectile.localNPCHitCooldown = AttackFrames / 3;
 		}
 
 		public override void SetStaticDefaults()
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			base.PostDraw(spriteBatch, lightColor);
 		}
 
-		protected override float WeaponDistanceFromCenter() => 45;
+		protected override float WeaponDistanceFromCenter() => 60;
 
 		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() - 10;
 		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 10;
