@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -33,10 +33,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 5.5f;
+			item.knockBack = 4.0f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 22;
+            item.damage = 10;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -61,6 +61,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			base.SetDefaults();
 			projectile.penetrate = 1;
+            projectile.width = 12;
+            projectile.height = 12;
 			projectile.timeLeft = TimeToLive;
 			projectile.friendly = true;
 			projectile.tileCollide = true;
@@ -110,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 	public class GoldenRogueSquireMinion : WeaponHoldingSquire<GoldenRogueSquireMinionBuff>
 	{
-		protected override int AttackFrames => 30;
+        protected override int AttackFrames => 15;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/GoldenWings";
 
