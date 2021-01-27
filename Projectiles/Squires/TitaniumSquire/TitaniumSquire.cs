@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		{
 			base.SetDefaults();
 			DisplayName.SetDefault("Titanium Squire");
-			Description.SetDefault("An adamantite squire will follow your orders!");
+			Description.SetDefault("A titanium squire will follow your orders!");
 		}
 	}
 
@@ -31,10 +31,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 5.5f;
+			item.knockBack = 8f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 41;
+			item.damage = 51;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 	public class TitaniumSquireMinion : WeaponHoldingSquire<TitaniumSquireMinionBuff>
 	{
-		protected override int AttackFrames => 32;
+		protected override int AttackFrames => 38;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 
@@ -80,19 +80,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 		protected override float WeaponDistanceFromCenter()
 		{
-			if (attackFrame <= 23)
+			//All of this is based on the weapon sprite and AttackFrames above.
+            int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
+            int spearLength = GetTexture(WeaponTexturePath).Width; //A decent aproximation of how long the spear is.
+            int spearStart = (spearLength / 3); //Two thirds of the spear starts behind by default.
+            float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
+            if (attackFrame <= reachFrames)
 			{
-				return 4 * attackFrame - 30;
+				return spearSpeed * attackFrame - spearStart;
 			}
 			else
 			{
-				return (4 * 23 - 30) - 4 * (attackFrame - 23);
+				return (spearSpeed * reachFrames - spearStart) - spearSpeed * (attackFrame - reachFrames);
 			}
 		}
 
-		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() + 20;
+		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() + 35;
 
-		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 60;
+		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 45;
 
 		public override float MaxDistanceFromPlayer() => 290;
 

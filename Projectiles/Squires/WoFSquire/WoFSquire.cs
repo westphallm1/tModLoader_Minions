@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			item.knockBack = 5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 120;
+			item.damage = 130;
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Red;
 		}

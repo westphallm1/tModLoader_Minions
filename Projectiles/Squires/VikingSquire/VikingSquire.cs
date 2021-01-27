@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		{
 			base.SetDefaults();
 			DisplayName.SetDefault("Viking Squire");
-			Description.SetDefault("A dual wielding viking squire will follow your orders!");
+			Description.SetDefault("A dual-wielding viking squire will follow your orders!");
 		}
 	}
 
@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 			item.knockBack = 4.5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 12;
+			item.damage = 8;
 			item.value = Item.sellPrice(0, 0, 50, 0);
 			item.rare = ItemRarityID.Blue;
 		}
@@ -44,12 +44,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 
 	public class VikingSquireMinion : WeaponHoldingSquire<VikingSquireMinionBuff>
 	{
-		protected override int AttackFrames => 25;
+		protected override int AttackFrames => 15;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/VikingSquire/VikingSquireAxe";
-
-		// swing weapon in a full circle
-		// protected override float SwingAngle1 => SwingAngle0 - 2 * (float)Math.PI;
 
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 

@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -31,10 +31,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
+			item.knockBack = 4f;
 			item.width = 20;
 			item.height = 38;
-			item.damage = 21;
+			item.damage = 20;
 			item.value = Item.sellPrice(0, 0, 20, 0);
 			item.rare = ItemRarityID.Green;
 		}
@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 	public class ShadowSquireMinion : WeaponHoldingSquire<ShadowSquireMinionBuff>
 	{
-		protected override int AttackFrames => 22;
+		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.WarAxeoftheNight;
 
@@ -79,12 +79,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 		protected override float WeaponDistanceFromCenter() => 20;
 
-		protected override int WeaponHitboxEnd() => 45;
+		protected override int WeaponHitboxEnd() => 40;
 
 		public override float ComputeIdleSpeed() => 9;
 
 		public override float ComputeTargetedSpeed() => 9;
 
-		public override float MaxDistanceFromPlayer() => 200;
+		public override float MaxDistanceFromPlayer() => 210;
 	}
 }

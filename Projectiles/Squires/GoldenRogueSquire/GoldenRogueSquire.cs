@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -33,10 +33,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 5.5f;
+			item.knockBack = 4.0f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 22;
+            item.damage = 33;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -61,9 +61,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			base.SetDefaults();
 			projectile.penetrate = 1;
+            projectile.width = 12;
+            projectile.height = 12;
 			projectile.timeLeft = TimeToLive;
 			projectile.friendly = true;
 			projectile.tileCollide = true;
+			projectile.minion = true;
 			baseVelocity = default;
 		}
 
@@ -86,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		}
 		public override void AI()
 		{
-			Projectile parent = Main.projectile[(int)projectile.ai[0]];
+            Projectile parent = Main.projectile[(int)projectile.ai[0]];
 			if(baseVelocity == default)
 			{
 				baseVelocity = projectile.velocity;
@@ -106,11 +109,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 				projectile.velocity.X *= 0.99f;
 			}
 		}
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			// manually bypass defense
+			// this may not be wholly correct
+			int defenseBypass = 20;
+			int defense = Math.Min(target.defense, defenseBypass);
+			damage += defense / 2;
+		}
 	}
 
 	public class GoldenRogueSquireMinion : WeaponHoldingSquire<GoldenRogueSquireMinionBuff>
 	{
-		protected override int AttackFrames => 30;
+        protected override int AttackFrames => 15;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/GoldenWings";
 
@@ -153,12 +164,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.TargetedMovement(vectorToTargetPosition);
+            base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				if (Main.myPlayer == player.whoAmI)
 				{
-					Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
+                    Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 					vector2Mouse *= daggerSpeed;
 					Vector2 tangent = new Vector2(vector2Mouse.Y, -vector2Mouse.X);
 					tangent.Normalize();
