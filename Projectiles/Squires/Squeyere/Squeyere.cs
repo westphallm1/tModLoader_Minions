@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,16 +27,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of Eyes");
 			Tooltip.SetDefault("Summons a squire\nA Squeyere will fight for you!\nClick and hold to guide its attacks\n" +
-				"'Sq-Eye-Re. Get it?'");
+				"'Squ-Eye-Re. Get it?'");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
+			item.knockBack = 6f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 47;
+			item.damage = 80;
 			item.value = Item.sellPrice(0, 4, 0, 0);
 			item.rare = ItemRarityID.Pink;
 		}
@@ -56,15 +56,26 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			projectile.friendly = true;
 			projectile.penetrate = 1;
 			projectile.timeLeft = 60;
+            projectile.minion = true; //Bandaid fix?
+            projectile.width = 12;
+			projectile.height = 12;
 		}
 
 		public virtual Color lightColor => Color.Green;
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void AI()
+		{
+			//This caused the projectile to render at a wrong rotation for a single frame, leaving it here 'cause i don't know if this was important, i just moved it to the predraw override.
+            //projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			Lighting.AddLight(projectile.position, this.lightColor.ToVector3());
+			base.AI();
+		}
+        
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			// manually draw at 2x scale with transparency
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 128);
-			float r = projectile.rotation;
+			float r = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Vector2 pos = projectile.Center;
 			SpriteEffects effects = projectile.velocity.X < 0 ? 0 : SpriteEffects.FlipHorizontally;
 			Texture2D texture = GetTexture(Texture);
@@ -76,16 +87,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				origin, 1.5f, effects, 0);
 			return false;
 		}
-		public override void AI()
-		{
-			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2; 
-			Lighting.AddLight(projectile.position, this.lightColor.ToVector3());
-			base.AI();
-		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, 16, 16);
+			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
+            Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, 16, 16);
 			return true;
 		}
 
@@ -98,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 	public class SqueyereMinion : WeaponHoldingSquire<SqueyereMinionBuff>
 	{
-		protected override int AttackFrames => 30;
+		protected override int AttackFrames => 60;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => null;
 
@@ -111,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		//unfortunately just flipping the the direction doesn't look great for this one
 		protected override Vector2 WeaponCenterOfRotation => projectile.spriteDirection == 1 ? new Vector2(4, -6) : new Vector2(8, -6);
 
-		protected override float projectileVelocity => 24;
+		protected override float projectileVelocity => 24f;
 
 		public SqueyereMinion() : base(ItemType<SqueyereMinionItem>()) { }
 
@@ -139,7 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			if (attackFrame == 0)
+			if (attackFrame == 0 || attackFrame == 10 || attackFrame == 20)
 			{
 				if (Main.myPlayer == player.whoAmI)
 				{
@@ -157,7 +163,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 						Main.myPlayer);
 				}
 
-				Main.PlaySound(SoundID.Item33, projectile.Center);
+				Main.PlaySound(SoundID.Item33.WithVolume(.5f), projectile.Center); //Why is it so LOUD?!
 			}
 		}
 
