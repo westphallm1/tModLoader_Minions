@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			item.knockBack = 5.5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 38;
+			item.damage = 33;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 	public class AdamantiteSquireMinion : WeaponHoldingSquire
 	{
 		protected override int BuffId => BuffType<AdamantiteSquireMinionBuff>();
-		protected override int AttackFrames => 28;
+		protected override int AttackFrames => 25;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 
@@ -81,19 +81,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
 		protected override float WeaponDistanceFromCenter()
 		{
-			if (attackFrame <= 20)
+			//All of this is based on the weapon sprite and AttackFrames above.
+            int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
+            int spearLength = GetTexture(WeaponTexturePath).Width; //A decent aproximation of how long the spear is.
+            int spearStart = (spearLength / 3); //Two thirds of the spear starts behind by default.
+            float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
+            if (attackFrame <= reachFrames)
 			{
-				return 4 * attackFrame - 30;
+				return spearSpeed * attackFrame - spearStart;
 			}
 			else
 			{
-				return (4 * 20 - 30) - 4 * (attackFrame - 20);
+				return (spearSpeed * reachFrames - spearStart) - spearSpeed * (attackFrame - reachFrames);
 			}
 		}
 
-		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() + 20;
+		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() + 35;
 
-		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 60;
+		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 45;
 
 		public override float MaxDistanceFromPlayer() => 300;
 

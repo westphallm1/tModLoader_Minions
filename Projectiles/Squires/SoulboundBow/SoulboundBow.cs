@@ -1,7 +1,9 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -38,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 28;
+			item.damage = 35;
 			item.value = Item.sellPrice(0, 0, 50, 0);
 			item.rare = ItemRarityID.LightRed;
 			item.noUseGraphic = true;
@@ -66,7 +68,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 	public class SoulboundArrow : ModProjectile
 	{
 
-		public override void SetStaticDefaults()
+        protected virtual Color LightColor => new Color(1f, 0f, 0.8f, 1f);
+        public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
@@ -76,16 +79,33 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		{
 			base.SetDefaults();
 			projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
+            projectile.ranged = false; //Bandaid fix
+            projectile.minion = true;
 		}
-
+        
 		public override void AI()
 		{
 			base.AI();
-			Lighting.AddLight(projectile.Center, Color.LightPink.ToVector3() * 0.5f);
+            Lighting.AddLight(projectile.Center, Color.LightPink.ToVector3() * 0.5f);
 		}
-		public override void Kill(int timeLeft)
+        
+        //Maybe in the future turn them bright pink instead of yellow. Will need a custom debuff though.
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.Ichor, 120);
+        }
+		
+        public override void Kill(int timeLeft)
 		{
-			// don't spawn a wood arrow on kill
+			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
+            // don't spawn an arrow on kill
+            for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+			{
+				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
+                int dustCreated = Dust.NewDust(projectile.position, 1, 1, 255, velocity.X, velocity.Y, 50, default(Color), Scale: 1.4f);
+                Main.dust[dustCreated].noGravity = true;
+                Main.dust[dustCreated].velocity *= 0.8f;
+			}
 		}
 	}
 

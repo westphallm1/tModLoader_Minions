@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 18;
+            item.damage = 10;
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -46,7 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 	public class AncientCobaltBolt : ModProjectile
 	{
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.SapphireBolt;
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.WaterStream;
 
 		public override void SetStaticDefaults()
 		{
@@ -56,42 +56,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.CloneDefaults(ProjectileID.SapphireBolt);
-		}
-
-		public override void AI()
-		{
-			base.AI();
-			for (int i = 0; i < 2; i ++)
-			{
-				int dustSpawned = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88, projectile.velocity.X, projectile.velocity.Y, 50, default, 1.2f);
-				Main.dust[dustSpawned].noGravity = true;
-				Main.dust[dustSpawned].velocity *= 0.3f;
-			}
-			if (projectile.localAI[0] == 0f)
-			{
-				projectile.localAI[0] = 1f;
-				Main.PlaySound(SoundID.Item8, projectile.Center);
-			}
-		}
-		public override void Kill(int timeLeft)
-		{
-			base.Kill(timeLeft);
-			Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y);
-			for (int i = 0; i < 15; i++)
-			{
-				int dustCreated = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88, projectile.oldVelocity.X, projectile.oldVelocity.Y, 50, default(Color), 1.2f);
-				Main.dust[dustCreated].noGravity = true;
-				Main.dust[dustCreated].scale *= 1.25f;
-				Main.dust[dustCreated].velocity *= 0.5f;
-			}
+			projectile.CloneDefaults(ProjectileID.WaterStream);
+            projectile.magic = false; //Bandaid fix
 		}
 	}
 
 	public class AncientCobaltSquireMinion : WeaponHoldingSquire
 	{
 		protected override int BuffId => BuffType<AncientCobaltSquireMinionBuff>();
-		protected override int AttackFrames => 45;
+        protected override int AttackFrames => 8;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AncientCobaltSquire/AncientCobaltStaff";
 
@@ -104,9 +77,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 43);
+		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 13);
 
-		protected override float projectileVelocity => 14;
+		protected override float projectileVelocity => 8;
 
 		protected override bool travelRangeCanBeModified => false;
 

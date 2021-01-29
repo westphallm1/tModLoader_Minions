@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SoulboundBow;
 using AmuletOfManyMinions.Projectiles.Squires.SoulboundSword;
@@ -122,7 +122,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override void Kill(int timeLeft)
 		{
-			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
+            for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
 				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: LightColor, Scale: 1f);
@@ -134,18 +135,26 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 	{
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundArrow";
 
-		protected override Color LightColor => Color.LightPink;
-
+		protected override Color LightColor => new Color(1f, 0.5f, 1f, 1f);
+        public override void SetDefaults()
+		{
+			base.SetDefaults();
+            projectile.minion = true; //Bandaid fix?
+		}
 		public override float GetRotation()
 		{
 			return (float)Math.PI / 2 + projectile.velocity.ToRotation();
 		}
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.Ichor, 120);
+        }
 	}
 	public class SoulboundArsenalSwordProjectile : SoulboundArsenalProjectile
 	{
 
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundSword/SoulboundSword";
-		protected override Color LightColor => Color.Lavender;
+		protected override Color LightColor => new Color(0.75f, 0f, 1f, 1f);
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -155,6 +164,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		{
 			return (float)Math.PI / 4 + projectile.velocity.ToRotation();
 		}
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            target.AddBuff(BuffID.ShadowFlame, 120);
+        }
 	}
 
 	public abstract class SoulboundArsenalBaseMinion : CoordinatedWeaponHoldingSquire

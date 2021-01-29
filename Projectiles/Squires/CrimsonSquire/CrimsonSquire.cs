@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -31,10 +31,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3.5f;
+			item.knockBack = 5f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 23;
+			item.damage = 28;
 			item.value = Item.sellPrice(0, 0, 20, 0);
 			item.rare = ItemRarityID.Green;
 		}
@@ -54,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 	public class CrimsonSquireMinion : WeaponHoldingSquire
 	{
 		protected override int BuffId => BuffType<CrimsonSquireMinionBuff>();
-		protected override int AttackFrames => 25;
+		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.BloodLustCluster;
 

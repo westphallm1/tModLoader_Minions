@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
@@ -59,7 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 	{
 		private Vector2 initialVelocity = Vector2.Zero;
 		private float maxSpeed = default;
-		protected float inertia = 8;
+		protected float inertia = 16;
 
 		public override void SetStaticDefaults()
 		{
@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override Vector2 IdleBehavior()
 		{
-			Lighting.AddLight(projectile.Center, Color.LightBlue.ToVector3());
+			Lighting.AddLight(projectile.Center, Color.DeepSkyBlue.ToVector3());
 			projectile.rotation = projectile.velocity.ToRotation();
 			if (initialVelocity == Vector2.Zero)
 			{
@@ -121,20 +121,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override void Kill(int timeLeft)
 		{
-			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+			Main.PlaySound(SoundID.Item20, projectile.position);
+            for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
-				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.LightBlue, Scale: 1f);
+				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 1f);
 				velocity *= 2;
-				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.LightBlue, Scale: 1f);
+				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 1f);
 			}
 		}
 	}
 
 	public class StardustBeastProjectile : StardustSquireSubProjectile
 	{
-
-		private bool canTarget = true;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -152,11 +151,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			projectile.height = 24;
 		}
 
-		public override void OnHitTarget(NPC target)
-		{
-			canTarget = false;
-		}
-
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 offset = projectile.velocity;
@@ -164,23 +158,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			offset *= 24;
 			for (int i = 0; i < 5; i++)
 			{
-				Vector2 velocity = -projectile.velocity / 2 + 4 * new Vector2(Main.rand.NextFloat(), Main.rand.NextFloat());
-				Dust.NewDust(projectile.Center + offset, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.LightBlue, Scale: 0.9f);
+				Vector2 velocity = -projectile.velocity / 8 + 4 * new Vector2(Main.rand.NextFloat(), Main.rand.NextFloat());
+				Dust.NewDust(projectile.Center + offset, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 0.9f);
 			}
 			return base.IdleBehavior();
 		}
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if (vectorToTargetPosition.Length() < 8)
-			{
-				canTarget = false;
-			}
 			base.TargetedMovement(vectorToTargetPosition);
 		}
 
 		public override Vector2? FindTarget()
 		{
-			if (canTarget && ClosestEnemyInRange(300f, projectile.position, maxRangeFromPlayer: false) is Vector2 closest)
+			if (ClosestEnemyInRange(300f, projectile.position, maxRangeFromPlayer: false) is Vector2 closest)
 			{
 				return closest - projectile.position;
 			}
@@ -314,7 +304,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-
+            Lighting.AddLight(projectile.Center, Color.DeepSkyBlue.ToVector3());
 			int projType = ProjectileType<StardustGuardianProjectile>();
 			if (player.ownedProjectileCounts[projType] == 0)
 			{
@@ -357,7 +347,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 							projectile.Center,
 							angleVector,
 							ProjectileType<StardustGuardianProjectile>(),
-							projectile.damage,
+							projectile.damage / 3,
 							projectile.knockBack,
 							Main.myPlayer);
 					}

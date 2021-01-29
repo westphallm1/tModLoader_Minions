@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -46,66 +46,86 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 	public class ArmoredBoneSquireSpiritProjectile : ModProjectile
 	{
 
-		const int MAX_VELOCITY = 20;
-		public const int STARTING_VELOCITY = 12;
-		const int INERTIA = 8;
-		const float ACCELERATION = (MAX_VELOCITY - STARTING_VELOCITY) / 30f;
-		private float currentSpeed = STARTING_VELOCITY;
+		public static int TimeLeft = 1800; //Don't worry, this becomes like half a second if there's no target.
+		public static bool enemyNearby = false;
 
-		private Vector2 targetPosition = Vector2.Zero;
-		private Vector2 targetDirection = Vector2.Zero;
-		public override void SetDefaults()
+        const int MAX_VELOCITY = 14;
+        public const int STARTING_VELOCITY = 0;
+        const float ACCELERATION = 0.2f;
+        float currentSpeed = STARTING_VELOCITY;
+		
+        public override void SetStaticDefaults()
+        {
+			ProjectileID.Sets.Homing[projectile.type] = true;
+		}
+
+        public override void SetDefaults()
 		{
-			projectile.timeLeft = 120;
+			projectile.timeLeft = 1800;
 			projectile.penetrate = 1;
-			projectile.width = 10;
-			projectile.height = 14;
+			projectile.width = 8;
+			projectile.height = 8;
 			projectile.tileCollide = false;
 			projectile.friendly = true;
 		}
 
-		public bool SetDirection
-		{
-			get => projectile.localAI[0] != 0f;
-			set => projectile.localAI[0] = value ? 1f : 0f;
-		}
-
-		public override void AI()
-		{
-			Player player = Main.player[Main.myPlayer];
-			if (targetDirection == Vector2.Zero && !SetDirection)
-			{
-				SetDirection = true;
-
-
-				//Take the initially given velocity and use it as the direction
-				targetDirection = projectile.velocity;
-				targetDirection.SafeNormalize();
-			}
-			if (targetPosition == Vector2.Zero)
-			{
-				targetPosition = player.Center + targetDirection * Vector2.Distance(player.Center, projectile.Center);
-			}
-			Vector2 vector2Target = targetPosition - projectile.Center;
-			if (vector2Target.Length() < 4 * MAX_VELOCITY)
-			{
-				targetPosition += targetDirection * MAX_VELOCITY;
-				vector2Target = targetPosition - projectile.Center;
-			}
-			if (projectile.timeLeft < 110)
-			{
-				projectile.tileCollide = true;
-			}
-			vector2Target.SafeNormalize();
-			vector2Target *= currentSpeed;
-			projectile.velocity = (projectile.velocity * (INERTIA - 1) + vector2Target) / INERTIA;
-			projectile.rotation = MathHelper.PiOver2 + projectile.velocity.ToRotation();
-			if (currentSpeed < MAX_VELOCITY)
+        public override void AI()
+        {
+            Vector2 move = Vector2.Zero;
+            float lockonDistance = 500f;
+            enemyNearby = false;
+            projectile.localAI[0] = 0;
+            for (int i = 0; i < 200; i++)
+            {   
+                if (Main.npc[i].active && !Main.npc[i].dontTakeDamage && !Main.npc[i].friendly)
+                {
+                    Vector2 newMove = Main.npc[i].Center - projectile.Center;
+                    float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
+                    if (distanceTo < lockonDistance)
+                    {
+                        move = newMove;
+                        lockonDistance = distanceTo;
+                        enemyNearby = true;
+                    }
+                }
+            }
+            
+            if (currentSpeed < MAX_VELOCITY)
 			{
 				currentSpeed += ACCELERATION;
 			}
-			Lighting.AddLight(projectile.Center, Color.LightCyan.ToVector3());
-		}
+            projectile.rotation = MathHelper.PiOver2 + projectile.velocity.ToRotation();   
+            AdjustMagnitude(ref move);
+			projectile.velocity = (5 * projectile.velocity + move); //This controls how fast the projectile turns.
+			AdjustMagnitude(ref projectile.velocity);
+            Lighting.AddLight(projectile.Center, Color.Cyan.ToVector3());
+            
+            if (enemyNearby)
+            {
+                int bonedust = Dust.NewDust(projectile.position, projectile.width, projectile.height, 137, 0f, 0f, 0, Scale: 1f);
+                Main.dust[bonedust].position.X = projectile.Center.X - 4f + (float)Main.rand.Next(-2, 3);
+                Main.dust[bonedust].position.Y = projectile.Center.Y - (float)Main.rand.Next(-2, 3);
+                Main.dust[bonedust].noGravity = true;
+            }
+            if (!enemyNearby) 
+            {
+                projectile.rotation = 0;
+                projectile.timeLeft -= 60;
+                projectile.velocity = Vector2.Zero;
+                int idlebonedust = Dust.NewDust(projectile.position, 4, 4, 137, projectile.velocity.X, projectile.velocity.Y, 0, Scale: 1f);
+                Main.dust[idlebonedust].position.Y = projectile.Center.Y + 2f;
+                Main.dust[idlebonedust].noGravity = true;
+            }
+        }
+
+        private void AdjustMagnitude(ref Vector2 vector)
+        {
+            float magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+            if (magnitude > currentSpeed)
+            {
+                vector *= currentSpeed / magnitude;
+            }
+        }
 	}
 
 
@@ -146,10 +166,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			base.SetDefaults();
 			projectile.width = 20;
 			projectile.height = 32;
-			projectile.localNPCHitCooldown = AttackFrames / 2;
+			projectile.localNPCHitCooldown = AttackFrames / 3;
 		}
-
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+        
+        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			// glowy face mask.
+			return base.PreDraw(spriteBatch, Color.White);
+		}
+        
+        public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
 			// bit of a long formula
@@ -163,25 +189,33 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
-				if (Main.myPlayer == player.whoAmI)
+                if (Main.myPlayer == player.whoAmI)
 				{
-					Vector2 velocity = Main.MouseWorld - projectile.Center;
-					velocity.SafeNormalize();
-					velocity *= ArmoredBoneSquireSpiritProjectile.STARTING_VELOCITY;
-					Projectile.NewProjectile(
+                    Projectile.NewProjectile(
 						flailPosition,
-						velocity,
+						Vector2.Zero,
 						ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
-						(int)(projectile.damage * 1.25f),
-						projectile.knockBack,
+						(int)(projectile.damage / 2),
+						projectile.knockBack / 2,
 						Main.myPlayer);
+                    Main.PlaySound(SoundID.Item20, projectile.position);
 				}
 			}
 		}
 
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if (usingWeapon)
+            Texture2D glow = GetTexture(Texture + "_Glow");
+			float glowR = projectile.rotation;
+			Vector2 glowpos = projectile.Center;
+			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Rectangle glowbounds = glow.Bounds;
+			Vector2 gloworigin = glowbounds.Center.ToVector2();
+			spriteBatch.Draw(glow, glowpos - Main.screenPosition,
+				glowbounds, Color.White, glowR,
+				gloworigin, 1, effects, 0);
+            
+            if (usingWeapon)
 			{
 				Texture2D chainTexture = GetTexture("AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailChain");
 				Vector2 chainVector = UnitVectorFromWeaponAngle();

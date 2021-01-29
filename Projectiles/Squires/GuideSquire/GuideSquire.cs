@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 15;
+			item.damage = 30;
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Blue;
 		}
@@ -61,7 +61,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void Kill(int timeLeft)
 		{
 			// don't spawn the arrow
-			for(int i = 0; i < 6; i++)
+			Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y);
+            for(int i = 0; i < 6; i++)
 			{
 				Dust.NewDust(projectile.position, projectile.width, projectile.height, 158);
 			}
