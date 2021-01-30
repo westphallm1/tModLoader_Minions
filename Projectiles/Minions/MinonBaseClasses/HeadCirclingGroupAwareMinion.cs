@@ -14,8 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected float idleAngle;
 		protected int targetSearchDistance = 800;
 		protected int idleCircle = 40;
+		protected int idleCircleHeight = 10;
 		protected int idleInertia = 15;
 		protected int maxSpeed = 12;
+		
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -28,17 +30,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			projectile.frame = (2 * projectile.minionPos) % 6;
 		}
 
+		public virtual List<Projectile> GetIdleSpaceSharingMinions()
+		{
+			return IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingHead, player.whoAmI);
+		}
+
+		public virtual Vector2 CenterOfRotation()
+		{
+			return player.Top;
+		}
+
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingHead, player.whoAmI);
-			Vector2 idlePosition = player.Top;
+			List<Projectile> minions = GetIdleSpaceSharingMinions();
+			Vector2 idlePosition = CenterOfRotation();
 			int minionCount = minions.Count;
 			// this was silently failing sometimes, don't know why
 			if (minionCount > 0)
 			{
 				int radius = idleCircle;
-				Vector2 maxCircle = player.Top + new Vector2(idleCircle, -20);
+				Vector2 maxCircle = CenterOfRotation() + new Vector2(idleCircle, -20);
 				if (!Collision.CanHitLine(maxCircle, 1, 1, player.Top, 1, 1))
 				{
 					radius = 7;
@@ -47,7 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				idleAngle = (2 * PI * order) / minionCount;
 				idleAngle += 2 * PI * groupAnimationFrame / groupAnimationFrames;
 				idlePosition.X += 2 + radius * (float)Math.Cos(idleAngle);
-				idlePosition.Y += -20 + 10 * (float)Math.Sin(idleAngle);
+				idlePosition.Y += -20 + idleCircleHeight * (float)Math.Sin(idleAngle);
 			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);

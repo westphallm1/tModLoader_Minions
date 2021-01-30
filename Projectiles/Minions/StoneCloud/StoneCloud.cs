@@ -263,12 +263,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			int targetAbove = 80;
 			Vector2 vectorAbove = vectorToTargetPosition;
 			projectile.friendly = false;
-			for (int i = 16; i < targetAbove; i+= 8)
+			// only check for exact position once close to target
+			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
 			{
-				vectorAbove = new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - i);
-				if (!Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorAbove, 1, 1))
+				for (int i = 16; i < targetAbove; i += 8)
 				{
-					break;
+					vectorAbove = new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - i);
+					if (!Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorAbove, 1, 1))
+					{
+						break;
+					}
 				}
 			}
 			myTurnToDrop |= Math.Abs(vectorAbove.X) < 64 && IsMyTurn();

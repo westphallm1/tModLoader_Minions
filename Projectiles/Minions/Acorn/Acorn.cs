@@ -127,12 +127,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			int targetAbove = 80;
 			Vector2 vectorAbove = vectorToTargetPosition;
 			projectile.friendly = false;
-			for (int i = 16; i < targetAbove; i++)
+			// only check for exact position once close to target
+			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
 			{
-				vectorAbove = new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - i);
-				if (!Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorAbove, 1, 1))
+				for (int i = 16; i < targetAbove; i++)
 				{
-					break;
+					vectorAbove = new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - i);
+					if (!Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorAbove, 1, 1))
+					{
+						break;
+					}
 				}
 			}
 			if (Main.myPlayer == player.whoAmI && IsMyTurn() && Math.Abs(vectorAbove.X) <= 32)

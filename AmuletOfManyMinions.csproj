@@ -15,5 +15,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Items\Accessories\SkeletonDoll\" />
+    <Folder Include="Projectiles\Minions\TechnoNecromancer\" />
   </ItemGroup>
 </Project>

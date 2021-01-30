@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 {
 	public class GoblinTechnomancerMinionBuff : MinionBuff
 	{
-		public GoblinTechnomancerMinionBuff() : base(ProjectileType<GoblinTechnomancerBombMinion>()) { }
+		public GoblinTechnomancerMinionBuff() : base(ProjectileType<GoblinTechnomancerMinion>(), ProjectileType<GoblinTechnomancerProbeMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		}
 	}
 
-	public class GoblinTechnomancerMinionItem : MinionItem<GoblinTechnomancerMinionBuff, GoblinTechnomancerBombMinion>
+	public class GoblinTechnomancerMinionItem : MinionItem<GoblinTechnomancerMinionBuff, GoblinTechnomancerProbeMinion>
 	{
 		public override void SetStaticDefaults()
 		{
@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 60;
+			item.damage = 45;
 			item.knockBack = 5.5f;
 			item.mana = 10;
 			item.width = 28;
@@ -47,238 +47,123 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		}
 	}
 
-	public class GoblinTechnomancerBombMinion : SimpleGroundBasedMinion
+	// Uses LocalAI[0] to indicate whether the projectile is close to its orbit position
+	public class GoblinTechnomancerProbeMinion : HeadCirclingGroupAwareMinion
 	{
 		protected override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
-		const int explosionRespawnTime = 60;
-		const int explosionRadius = 96;
-		const int explosionAttackRechargeTime = 96;
-		int lastExplosionFrame = 0;
-		private Vector2 explosionLocation;
-		private bool isDropping = true;
+		int lastShootFrame = 0;
+		int shotsFired = 0;
 
-		private bool didJustRespawn => animationFrame - lastExplosionFrame == explosionRespawnTime;
-		private bool canAttack => animationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
-		private bool isRespawning => animationFrame - lastExplosionFrame < explosionRespawnTime;
-
-		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+		bool isCloseToCenter
 		{
-			[GroundAnimationState.FLYING] = (1, 1),
-			[GroundAnimationState.JUMPING] = (1, 1),
-			[GroundAnimationState.STANDING] = (0, 0),
-			[GroundAnimationState.WALKING] = (2, 9),
-		};
+			get => projectile.localAI[0] == 1;
+			set => projectile.localAI[0] = value ? 1 : 0;
+		}
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Technomancer Bomb");
-			Main.projFrames[projectile.type] = 10;
+			DisplayName.SetDefault("Goblin Technomancer Probe");
+			Main.projFrames[projectile.type] = 1;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 30;
-			projectile.height = 30;
-			drawOriginOffsetY = -10;
-			drawOriginOffsetX = -2;
+			projectile.width = 16;
+			projectile.height = 16;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			maxJumpVelocity = 12;
-			searchDistance = 900;
+			projectile.timeLeft = 3;
 			maxSpeed = 14;
-			idleInertia = 6;
-		}
-
-		public override Vector2 IdleBehavior()
-		{
-			isDropping &= !canAttack;
-			return base.IdleBehavior();
-		}
-
-		public override bool OnTileCollide(Vector2 oldVelocity)
-		{
-			isDropping = false;
-			return base.OnTileCollide(oldVelocity);
-		}
-
-		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-		{
-			// use a rectangular hitbox for the explosion. Easier than the alternative
-			projHitbox = new Rectangle(
-				(int)explosionLocation.X - explosionRadius, 
-				(int)explosionLocation.Y - explosionRadius, 
-				2*explosionRadius, 
-				2*explosionRadius);
-			if(Vector2.DistanceSquared(explosionLocation, targetHitbox.Center.ToVector2()) < explosionRadius * explosionRadius)
-			{
-				return true;
-			}
-			return  base.Colliding(projHitbox, targetHitbox);
-		}
-
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-		{
-			if(Main.rand.Next(2) == 0)
-			{
-				target.AddBuff(BuffID.ShadowFlame, 180);
-			}
-		}
-
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
-		{
-			if(!DoInactiveMovement())
-			{
-				base.IdleMovement(vectorToIdlePosition);
-			}
-		}
-
-		private bool DoInactiveMovement()
-		{
-			if(isRespawning)
-			{
-				Projectile summoner = GetMinionsOfType(ProjectileType<GoblinTechnomancerMinion>()).FirstOrDefault();
-
-				// clamp to the summoner while respawning
-				if(summoner != default)
-				{
-					projectile.Top = summoner.Center;
-					projectile.velocity = summoner.velocity;
-				}
-				else
-				{
-					projectile.position = player.position;
-					projectile.velocity = player.velocity;
-				}
-				return true;
-			} else if (isDropping)
-			{
-				if(projectile.velocity.Y < 16)
-				{
-					projectile.velocity.Y += 0.6f;
-				}
-				projectile.tileCollide = true;
-				return true;
-			}
-			return false;
-		}
-		protected override void DoGroundedMovement(Vector2 vector)
-		{
-
-			if(vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
-			{
-				gHelper.DoJump(vector);
-			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 3f : 8;
-			float xMaxSpeed = 14f;
-			if(vectorToTarget is null && Math.Abs(vector.X) < 8)
-			{
-				projectile.velocity.X = player.velocity.X;
-				return;
-			}
-			DistanceFromGroup(ref vector);
-			projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
-		}
-
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
-			if(DoInactiveMovement())
-			{
-				return;
-			} else if (isDropping)
-			{
-
-			} else if (vectorToTargetPosition.Length() < explosionRadius/2)
-			{
-				lastExplosionFrame = animationFrame;
-				explosionLocation = projectile.Center;
-				isDropping = true;
-				Main.PlaySound(SoundID.Item62, projectile.Center);
-				DoExplosionEffects();
-			} else
-			{
-				base.TargetedMovement(canAttack ? vectorToTargetPosition : vectorToIdle);
-			}
-		}
-
-		public override Vector2? FindTarget()
-		{
-
-			return canAttack? base.FindTarget() : null;
+			idleInertia = 1;
+			idleCircle = 20;
+			idleCircleHeight = 5;
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			return !isRespawning;
+			return !isCloseToCenter;
 		}
 
-		private void DoExplosionEffects()
+		public override List<Projectile> GetIdleSpaceSharingMinions()
 		{
-			Vector2 position = projectile.position;
-			int width = 22;
-			int height = 22;
-			for (int i = 0; i < 30; i++)
-			{
-				int dustIdx = Dust.NewDust(position, width, height, 31, 0f, 0f, 100, default, 1.5f);
-				Main.dust[dustIdx].velocity *= 1.4f;
-			}
-			for (int i= 0; i < 20; i ++)
-			{
-				int dustIdx = Dust.NewDust(position, width, height, DustID.Shadowflame, 0f, 0f, 100, default, 1.5f);
-				Main.dust[dustIdx].velocity *= 3f;
-			}
-			for (float goreVel = 0.4f; goreVel < 0.8f; goreVel += 0.4f)
-			{
-				foreach(Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1)})
-				{
-					int goreIdx = Gore.NewGore(position, default, Main.rand.Next(61, 64));
-					Main.gore[goreIdx].velocity *= goreVel;
-					Main.gore[goreIdx].velocity += offset;
-				}
-			}
+			return GetMinionsOfType(projectile.type);
 		}
 
-		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		public override Vector2 CenterOfRotation()
 		{
-			if (isDropping)
-			{
-				projectile.rotation += 0.05f;
-				projectile.frame = 9;
-				return;
-			}
-			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
-			if(state == GroundAnimationState.FLYING && animationFrame % 3 == 0)
-			{
-				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
-				Main.dust[idx].alpha = 112;
-				Main.dust[idx].scale = .9f;
-			}
-			return;
+			Projectile center = GetMinionsOfType(ProjectileType<GoblinTechnomancerMinion>()).FirstOrDefault();
+			return center == default ? player.Top : center.Bottom;
 		}
 
 		public override void AfterMoving()
 		{
-			projectile.friendly = isRespawning && animationFrame - lastExplosionFrame <= 15;
 			// Lifted from EmpoweredMinion.cs
+			projectile.friendly = false;
 			int minionType = ProjectileType<GoblinTechnomancerMinion>();
-			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[minionType] == 0)
+			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[minionType] == 0)
 			{
 				// hack to prevent multiple 
-				if(GetMinionsOfType(projectile.type)[0].whoAmI == projectile.whoAmI)
+				if (GetMinionsOfType(projectile.type)[0].whoAmI == projectile.whoAmI)
 				{
 					Projectile.NewProjectile(player.Top, Vector2.Zero, minionType, projectile.damage, projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
+
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			isCloseToCenter = vectorToIdlePosition.LengthSquared() < 16 * 16;
+			base.IdleMovement(vectorToIdlePosition);
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			int travelSpeed = 14;
+			int rateOfFire = 60;
+			int projectileVelocity = 20;
+			int inertia = 10;
+			projectile.spriteDirection = 1;
+			projectile.rotation = (-vectorToTargetPosition).ToRotation();
+			Vector2 lineOfFire = vectorToTargetPosition;
+			Vector2 oppositeVector = -vectorToTargetPosition;
+			oppositeVector.SafeNormalize();
+			float targetDistanceFromFoe = 64f;
+			if(targetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
+			{
+				// use the average of the width and height to get an approximate "radius" for the enemy
+				NPC npc = Main.npc[targetIdx];
+				Rectangle hitbox = npc.Hitbox;
+				targetDistanceFromFoe += (hitbox.Width + hitbox.Height) / 4;
+			}
+			vectorToTargetPosition += targetDistanceFromFoe * oppositeVector;
+			if(player.whoAmI == Main.myPlayer && animationFrame - lastShootFrame > rateOfFire && vectorToTargetPosition.LengthSquared() < 24 * 24)
+			{
+				lineOfFire.SafeNormalize();
+				lineOfFire *= projectileVelocity;
+				lastShootFrame = animationFrame;
+				Projectile.NewProjectile(
+					projectile.Center,
+					lineOfFire,
+					ProjectileType<GoblinGunnerBullet>(),
+					projectile.damage,
+					projectile.knockBack,
+					Main.myPlayer);
+			}
+			DistanceFromGroup(ref vectorToTargetPosition);
+			if(vectorToTargetPosition.Length() > travelSpeed)
+			{
+				vectorToTargetPosition.SafeNormalize();
+				vectorToTargetPosition *= travelSpeed;
+			}
+			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+		}
 	}
+
 	public class GoblinTechnomancerMinion : EmpoweredMinion
 	{
 		protected override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
-		protected override int CounterType => ProjectileType<GoblinTechnomancerBombMinion>();
+		protected override int CounterType => ProjectileType<GoblinTechnomancerProbeMinion>();
 
 		private int framesSinceLastHit;
 		protected override int dustType => DustID.Shadowflame;
@@ -306,7 +191,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			useBeacon = false;
 		}
 
+		private void DrawProbes(SpriteBatch spriteBatch, Color lightColor, int spriteDirectionFilter)
+		{
+			List<Projectile> closeProbes = GetMinionsOfType(CounterType)
+				.Where(p=>p.localAI[0] == 1 && p.spriteDirection == spriteDirectionFilter)
+				.ToList();
+			Texture2D texture = Main.projectileTexture[CounterType];
+			SpriteEffects effects = spriteDirectionFilter == -1 ? SpriteEffects.FlipHorizontally : 0;
+			Rectangle bounds = texture.Bounds;
+			Vector2 origin = bounds.Center.ToVector2();
+			foreach(Projectile probe in closeProbes)
+			{
+				spriteBatch.Draw(texture, probe.Center - Main.screenPosition,
+					bounds, lightColor, probe.rotation,
+					origin, 1, effects, 0);
+			}
 
+		}
+
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			DrawProbes(spriteBatch, lightColor, -1);
+			return true;
+		}
 
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
@@ -339,6 +247,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
 				bounds, lightColor, projectile.rotation,
 				origin, 1, effects, 0);
+
+			DrawProbes(spriteBatch, lightColor, 1);
 		}
 
 		// lifted from WeaponHoldingSquire
