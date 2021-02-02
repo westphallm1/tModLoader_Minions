@@ -3,18 +3,17 @@ in line with vanilla balance. It adds a new, directly controllable minion type c
 over 20 new minions, and several armor sets and accessories for both Squires and minions. 
 
 === Version History ==
-v0.5.0.1 - Fix major bug with bee queen minion
+v0.6.0 - Minion Mix 'n' Match
+       - Minions of different types now properly space out while idling by the player
+       - Minion Variety Bonus: damage bonus based on number of unique minions!
+       - 5 new minons: 2 early pre-hardmode, 1 early hardmode, 2 late hardmode
+       - New attack patterns and general polish for several squires, courtesy of Metallumere
 v0.5.0 - Minion Progression Update
        - Add new ground-based minion AI style
        - Add 2 new early pre-hardmode minions
        - Add 1 late pre-hardmode minion
        - Add 3 early hardmode minions
        - Move several existing minions to Big Mimic drops
-v0.4.0.1 - Tweaks & Bugfixes
-       - Slightly buff dps of most direct contact squires
-       - Make Royal Armor craftable
-       - Squires oscillate around the mouse less when coming to a stop
-       - Squire travel range now buffs projectile velocity of ranged squires
 v0.4.0 - Aquire the Squire!
        - Squire attack speed, travel range, and travel speed can now be buffed by armor and accessories
        - Add 4 Squire-centric accessories
@@ -24,15 +23,7 @@ v0.4.0 - Aquire the Squire!
        - Add 3 early pre-hardmode Squires
        - Add 1 late pre-hardmode Squire
        - Add 1 post-Plantera Squire
-v0.3.0 - Multiplayer support! 
-       - Many more updated sprites
-       - Re-AI several minions to make more unique
-       - Add 4 new Minions, 2 new Squires, and 1 new accessory
-       - Change several drop/crafting recipes (check the Cheat Sheet!) 
-v0.2.1 - Add many resprites courtesy of SkyanUltra
-       - Polish several minions & armor set based on playtesting feeback
-v0.2 - Squires introduced, minions switched to use local iFrames
-v0.1 - Base minions, armor, and accessories introduced
+~~ See the Wiki for older changelogs ~~
 
 A cheat sheet for getting started is given below. A complete list mod content can be found from the homepage.
 
