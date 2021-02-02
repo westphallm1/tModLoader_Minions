@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 30;
+			item.damage = 24;
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Blue;
 		}
@@ -92,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 	public class GuideSquireMinion : WeaponHoldingSquire
 	{
 		protected override int BuffId => BuffType<GuideSquireMinionBuff>();
-		protected override int AttackFrames => 40;
+		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.WoodenBow;
 

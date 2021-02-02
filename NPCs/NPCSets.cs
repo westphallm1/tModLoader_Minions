@@ -20,6 +20,8 @@ namespace AmuletOfManyMinions.NPCs
 
 		public static HashSet<int> preHardmodeIceEnemies;
 
+		public static HashSet<int> necromancers;
+
 		public static void Load()
 		{
 			hornets = new HashSet<int>();
@@ -28,6 +30,7 @@ namespace AmuletOfManyMinions.NPCs
 			hellArmoredBones = new HashSet<int>();
 			lunarBosses = new HashSet<int>();
 			preHardmodeIceEnemies = new HashSet<int>();
+			necromancers = new HashSet<int>();
 		}
 
 		public static void Populate()
@@ -80,6 +83,9 @@ namespace AmuletOfManyMinions.NPCs
 			preHardmodeIceEnemies.Add(NPCID.SnowFlinx);
 			preHardmodeIceEnemies.Add(NPCID.UndeadViking);
 			preHardmodeIceEnemies.Add(NPCID.SpikedIceSlime);
+
+			necromancers.Add(NPCID.Necromancer);
+			necromancers.Add(NPCID.NecromancerArmored);
 		}
 
 		public static void Unload()
@@ -90,6 +96,7 @@ namespace AmuletOfManyMinions.NPCs
 			hellArmoredBones = null;
 			lunarBosses = null;
 			preHardmodeIceEnemies = null;
+			necromancers = null;
 		}
 	}
 }

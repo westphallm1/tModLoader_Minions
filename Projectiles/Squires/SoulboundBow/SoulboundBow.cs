@@ -89,12 +89,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
             Lighting.AddLight(projectile.Center, Color.LightPink.ToVector3() * 0.5f);
 		}
         
-        //Maybe in the future turn them bright pink instead of yellow. Will need a custom debuff though.
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.AddBuff(BuffID.Ichor, 120);
-        }
-		
         public override void Kill(int timeLeft)
 		{
 			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);

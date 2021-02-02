@@ -108,6 +108,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 				(int)explosionLocation.Y - explosionRadius, 
 				2*explosionRadius, 
 				2*explosionRadius);
+			if (Vector2.DistanceSquared(explosionLocation, targetHitbox.Center.ToVector2()) < explosionRadius * explosionRadius)
+			{
+				return true;
+			}
 			return base.Colliding(projHitbox, targetHitbox);
 		}
 

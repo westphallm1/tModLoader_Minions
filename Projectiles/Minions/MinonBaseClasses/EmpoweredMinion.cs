@@ -66,7 +66,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected abstract float ComputeTargetedSpeed();
 		protected abstract float ComputeIdleSpeed();
 
-		protected int frameSpeed = 15;
 		protected int baseDamage = -1;
 		protected int previousEmpowerCount = 0;
 		protected virtual int dustType => DustID.Confetti;

@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			item.knockBack = 6f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 65;
+			item.damage = 70;
 			item.value = Item.sellPrice(0, 4, 0, 0);
 			item.rare = ItemRarityID.Pink;
 		}
@@ -105,7 +105,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 	public class SqueyereMinion : WeaponHoldingSquire
 	{
 		protected override int BuffId => BuffType<SqueyereMinionBuff>();
-		protected override int AttackFrames => 45;
+		protected override int AttackFrames => 60;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => null;
 

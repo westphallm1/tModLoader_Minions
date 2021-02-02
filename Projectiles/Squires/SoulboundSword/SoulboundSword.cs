@@ -124,10 +124,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			base.PostDraw(spriteBatch, translucentColor);
 		}
         
-        //BUUUURN
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(BuffID.ShadowFlame, 120);
+			// nice little dust effect on hit, but not actually shadowflame
+			for(int i = 0; i < 3; i++)
+			{
+				Dust.NewDust(target.position, target.width, target.height, DustID.Shadowflame);
+			}
         }
         
 		protected override float WeaponDistanceFromCenter() => 30;

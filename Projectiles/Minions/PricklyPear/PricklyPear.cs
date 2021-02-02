@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 11;
+			item.damage = 10;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;

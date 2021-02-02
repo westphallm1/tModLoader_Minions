@@ -9,6 +9,7 @@ using AmuletOfManyMinions.Projectiles.Minions.CharredChimera;
 using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
 using AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer;
 using AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush;
+using AmuletOfManyMinions.Projectiles.Minions.Necromancer;
 using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
 using AmuletOfManyMinions.Projectiles.Minions.Slimepire;
 using AmuletOfManyMinions.Projectiles.Minions.StarSurfer;
@@ -116,6 +117,11 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<CharredChimeraMinionItem>(), 1, prefixGiven: -1);
 			}
 
+			if(spawnChance < 0.05f && NPCSets.necromancers.Contains(npc.netID))
+			{
+				Item.NewItem(npc.getRect(), ItemType<NecromancerMinionItem>(), 1, prefixGiven: -1);
+			}
+
 			// drop from any enemy during a blood moon in pre-hardmode
 			if(spawnChance < 0.04f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue &&  Main.bloodMoon && Main.hardMode)
 			{
@@ -166,7 +172,7 @@ namespace AmuletOfManyMinions.NPCs
 				nextSlot++;
 			}
 
-			if(type == NPCID.Stylist && NPC.downedPlantBoss)
+			if(type == NPCID.GoblinTinkerer && NPC.downedMartians)
 			{
 				shop.item[nextSlot].SetDefaults(ItemType<GoblinTechnomancerMinionItem>());
 				nextSlot++;

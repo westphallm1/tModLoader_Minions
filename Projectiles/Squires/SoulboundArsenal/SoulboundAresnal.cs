@@ -145,10 +145,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		{
 			return (float)Math.PI / 2 + projectile.velocity.ToRotation();
 		}
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.AddBuff(BuffID.Ichor, 120);
-        }
 	}
 	public class SoulboundArsenalSwordProjectile : SoulboundArsenalProjectile
 	{
@@ -164,10 +160,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		{
 			return (float)Math.PI / 4 + projectile.velocity.ToRotation();
 		}
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.AddBuff(BuffID.ShadowFlame, 120);
-        }
 	}
 
 	public abstract class SoulboundArsenalBaseMinion : CoordinatedWeaponHoldingSquire

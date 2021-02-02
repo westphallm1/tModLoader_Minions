@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			item.knockBack = 7f;
 			item.width = 28;
 			item.height = 32;
-			item.damage = 5;
+			item.damage = 10;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.Blue;
 		}
@@ -119,6 +119,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.SetDefaults();
 			projectile.width = 30;
 			projectile.height = 32;
+		}
+
+		public override void OnSpawn()
+		{
+			// the spear does half damage, this is re-multiplied by 2 to get the bubble damage
+			// maybe a little bit iffy
+			projectile.damage = projectile.damage/2;
 		}
 
 		protected override float WeaponDistanceFromCenter()

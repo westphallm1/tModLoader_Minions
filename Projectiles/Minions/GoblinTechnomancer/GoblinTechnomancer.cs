@@ -30,19 +30,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Cyberpunk Hair Styling Kit");
+			DisplayName.SetDefault("Shadowflame Probe Controller");
 			Tooltip.SetDefault("Summons a goblin technomancer to fight for you!");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 45;
+			item.damage = 58;
 			item.knockBack = 5.5f;
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
-			item.value = Item.buyPrice(gold: 25);
+			item.value = Item.buyPrice(platinum: 2);
 			item.rare = ItemRarityID.Yellow;
 		}
 	}
@@ -52,7 +52,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 	{
 		protected override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
 		int lastShootFrame = 0;
-		int shotsFired = 0;
 
 		bool isCloseToCenter
 		{
@@ -72,12 +71,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			base.SetDefaults();
 			projectile.width = 16;
 			projectile.height = 16;
-			attackFrames = 60;
+			attackFrames = 30;
 			projectile.timeLeft = 3;
 			maxSpeed = 14;
 			idleInertia = 1;
 			idleCircle = 20;
-			idleCircleHeight = 5;
+			idleCircleHeight = 8;
+			targetSearchDistance = 950;
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override Vector2 CenterOfRotation()
 		{
 			Projectile center = GetMinionsOfType(ProjectileType<GoblinTechnomancerMinion>()).FirstOrDefault();
-			return center == default ? player.Top : center.Bottom;
+			return center == default ? player.Top : center.Bottom + new Vector2(0, 4);
 		}
 
 		public override void AfterMoving()
@@ -120,7 +120,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			int travelSpeed = 14;
-			int rateOfFire = 60;
 			int projectileVelocity = 20;
 			int inertia = 10;
 			projectile.spriteDirection = 1;
@@ -137,7 +136,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				targetDistanceFromFoe += (hitbox.Width + hitbox.Height) / 4;
 			}
 			vectorToTargetPosition += targetDistanceFromFoe * oppositeVector;
-			if(player.whoAmI == Main.myPlayer && animationFrame - lastShootFrame > rateOfFire && vectorToTargetPosition.LengthSquared() < 24 * 24)
+			if(player.whoAmI == Main.myPlayer && IsMyTurn() && 
+				animationFrame - lastShootFrame >= attackFrames && 
+				vectorToTargetPosition.LengthSquared() < 96 * 96)
 			{
 				lineOfFire.SafeNormalize();
 				lineOfFire *= projectileVelocity;
@@ -149,6 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 					projectile.damage,
 					projectile.knockBack,
 					Main.myPlayer);
+				Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
 			}
 			DistanceFromGroup(ref vectorToTargetPosition);
 			if(vectorToTargetPosition.Length() > travelSpeed)
@@ -308,7 +310,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			// stay floating behind the player at all times
 			IdleMovement(vectorToIdle);
 			framesSinceLastHit++;
-			int rateOfFire = Math.Max(50, 90 - 5 * EmpowerCount);
+			int rateOfFire = Math.Max(25, 60 - 5 * EmpowerCount);
 			int projectileVelocity = 40;
 			if (framesSinceLastHit++ > rateOfFire && targetNPCIndex is int npcIdx)
 			{
@@ -362,10 +364,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			return target;
 		}
 
-		protected override float ComputeSearchDistance()
-		{
-			return 800 + 20 * EmpowerCount;
-		}
+		protected override float ComputeSearchDistance() => 800 + 20 * EmpowerCount;
 
 		protected override float ComputeInertia() => 5;
 

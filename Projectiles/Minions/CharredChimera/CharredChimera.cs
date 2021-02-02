@@ -178,7 +178,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 	{
 		protected override int BuffId => BuffType<CharredChimeraMinionBuff>();
 		protected int targetedInertia = 15;
-		protected int targetedSpeed = 12;
+		protected int targetedSpeed = 14;
 		protected int maxDistanceFromPlayer = 850;
 		protected int minDistanceToEnemy = 200;
 		protected int animationFrames = 120;

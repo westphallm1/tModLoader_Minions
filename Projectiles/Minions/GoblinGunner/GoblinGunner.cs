@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			item.width = 32;
 			item.height = 32;
 			item.damage = 28;
-			item.value = Item.buyPrice(0, 15, 0, 0);
+			item.value = Item.sellPrice(0, 3, 0, 0);
 			item.rare = ItemRarityID.LightRed;
 		}
 	}
@@ -89,6 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			DisplayName.SetDefault("Goblin Gunner");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 1;
+			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public sealed override void SetDefaults()
@@ -127,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += 48 * -player.direction;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
 			idlePosition.Y += -32;
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
