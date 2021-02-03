@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.Daybloom, 1);
 			recipe.AddIngredient(ItemID.Mushroom, 2);
-			recipe.AddIngredient(ItemID.Wood, 20);
+			recipe.AddRecipeGroup(RecipeGroupID.Wood, 20);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

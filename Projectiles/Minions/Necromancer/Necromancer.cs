@@ -354,6 +354,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
 			}
 		}
+		public override void CheckActive()
+		{
+			base.CheckActive();
+			if(player.ownedProjectileCounts[CounterType] == 0)
+			{
+				projectile.Kill();
+			}
+		}
 	}
 
 	public class NecromancerSkeletonMinion : SimpleGroundBasedMinion

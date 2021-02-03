@@ -387,5 +387,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			}
 			projectile.rotation = projectile.velocity.X * 0.025f;
 		}
+
+		public override void CheckActive()
+		{
+			base.CheckActive();
+			if(player.ownedProjectileCounts[CounterType] == 0)
+			{
+				projectile.Kill();
+			}
+		}
 	}
 }

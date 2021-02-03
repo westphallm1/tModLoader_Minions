@@ -2,9 +2,13 @@ using AmuletOfManyMinions.Core.Netcode;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.NPCs;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
+using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 using AmuletOfManyMinions.Projectiles.Squires;
 using System.IO;
 using Terraria;
+using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions

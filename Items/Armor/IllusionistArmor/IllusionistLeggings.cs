@@ -25,16 +25,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			player.moveSpeed += 0.1f;
 		}
-
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Moonglow, 1);
-			recipe.AddIngredient(ItemID.Wood, 16);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
 	}
 
 	[AutoloadEquip(EquipType.Legs)]

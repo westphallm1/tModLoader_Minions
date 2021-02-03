@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Wood, 18);
+			recipe.AddRecipeGroup(RecipeGroupID.Wood, 18);
 			recipe.AddIngredient(ItemID.Mushroom, 8);
 			recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);

@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.Acorn, 3);
-			recipe.AddIngredient(ItemID.Wood, 10);
+			recipe.AddRecipeGroup(RecipeGroupID.Wood, 10);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
@@ -89,6 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 	}
 	public class AcornMinion : HeadCirclingGroupAwareMinion
 	{
+		int lastFiredFrame = 0;
 		protected override int BuffId => BuffType<AcornMinionBuff>();
 		public override void SetStaticDefaults()
 		{
@@ -139,8 +140,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 					}
 				}
 			}
-			if (Main.myPlayer == player.whoAmI && IsMyTurn() && Math.Abs(vectorAbove.X) <= 32)
+			if (Main.myPlayer == player.whoAmI && IsMyTurn() && animationFrame - lastFiredFrame >= attackFrames && Math.Abs(vectorAbove.X) <= 32)
 			{
+				lastFiredFrame = animationFrame;
 				Projectile.NewProjectile(
 					projectile.Center,
 					new Vector2(vectorAbove.X / 8 + projectile.velocity.X, 2),
