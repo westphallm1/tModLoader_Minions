@@ -157,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 				// clamp to the player while respawning
 				projectile.position = player.position;
 				projectile.velocity = player.velocity;
-			} else if (vectorToTargetPosition.Length() < explosionRadius/2)
+			} else if (vectorToTargetPosition.Length() < explosionRadius/2 && !usingBeacon)
 			{
 				lastExplosionFrame = animationFrame;
 				explosionLocation = projectile.Center;

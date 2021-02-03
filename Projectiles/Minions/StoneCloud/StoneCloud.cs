@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -186,6 +187,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 				{
 					didHitGround = true;
 					Collision.HitTiles(projectile.BottomLeft, oldVelocity, 40, 8);
+					Main.PlaySound(new LegacySoundStyle(3, 7), projectile.position);
 				}
 			}
 			return false;

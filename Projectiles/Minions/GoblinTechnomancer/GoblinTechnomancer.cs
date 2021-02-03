@@ -150,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 					projectile.damage,
 					projectile.knockBack,
 					Main.myPlayer);
-				Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
+				Main.PlaySound(SoundID.Item10, projectile.position);
 			}
 			DistanceFromGroup(ref vectorToTargetPosition);
 			if(vectorToTargetPosition.Length() > travelSpeed)
@@ -333,6 +333,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 						projectile.damage,
 						projectile.knockBack,
 						Main.myPlayer);
+					Main.PlaySound(SoundID.Item10, projectile.position);
 				}
 			}
 		}

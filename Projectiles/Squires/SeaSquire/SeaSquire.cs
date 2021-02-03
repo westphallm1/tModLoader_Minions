@@ -65,7 +65,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
             projectile.alpha = 240;
             projectile.timeLeft = 180;
 			projectile.penetrate = 1;
-            projectile.damage = 10; //This doesn't work, damage of the projectile is pulled from the item itself, not here.
             projectile.ignoreWater = true;
             projectile.friendly = true;
 			projectile.width = 12;
@@ -123,6 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		public override void OnSpawn()
 		{
+			base.OnSpawn();
 			// the spear does half damage, this is re-multiplied by 2 to get the bubble damage
 			// maybe a little bit iffy
 			projectile.damage = projectile.damage/2;

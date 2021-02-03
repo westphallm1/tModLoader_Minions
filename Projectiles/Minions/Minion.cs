@@ -29,6 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		protected bool useBeacon = true;
 
+		protected bool usingBeacon = false;
+
 		public bool Spawned { get; private set; }
 
 		protected abstract int BuffId { get; }
@@ -46,6 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				Spawned = true;
 				OnSpawn();
 			}
+			usingBeacon = false;
 			Behavior();
 		}
 
@@ -134,6 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else if (useBeacon)
 			{
+				usingBeacon = true;
 				return BeaconPosition(center, maxRange, noLOSRange);
 			}
 			else

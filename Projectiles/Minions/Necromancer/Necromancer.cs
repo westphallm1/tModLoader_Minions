@@ -11,6 +11,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 {
@@ -276,6 +277,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				Vector2 pos = projectile.Center;
 				framesSinceLastHit = 0;
 				projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
+				Main.PlaySound(new LegacySoundStyle(2, 8), projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					projId = Projectile.NewProjectile(
@@ -498,7 +500,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			{
 				return;
 			}
-			else if (vectorToTargetPosition.Length() < explosionRadius / 2)
+			else if (vectorToTargetPosition.Length() < explosionRadius / 2 && !usingBeacon)
 			{
 				lastExplosionFrame = animationFrame;
 				explosionLocation = projectile.Center;

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -123,7 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			projectile.height = 32;
 			projectile.timeLeft = TIME_TO_LIVE;
 			projectile.tileCollide = true;
-			projectile.penetrate = -1;
+			projectile.penetrate = 9;
 			projectile.friendly = true;
 			projectile.usesLocalNPCImmunity = true;
 			// don't instakill an an enemy that falls onto a cactus
@@ -134,6 +135,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void AI()
 		{
 			projectile.velocity.Y += 0.5f;
+			// hack to play the despawn animation after running out of penetrates
+			if(projectile.penetrate == 1 && projectile.friendly)
+			{
+				projectile.friendly = false;
+				projectile.timeLeft = 20;
+			}
 			if(projectile.timeLeft > 20 && projectile.frame < 3 && projectile.frameCounter++ >= 5)
 			{
 				projectile.frameCounter = 0;
@@ -225,6 +232,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			int seedVelocity = 7;
 			lastFiredFrame = animationFrame;
+			Main.PlaySound(new LegacySoundStyle(6, 1), projectile.position);
 			if(player.whoAmI == Main.myPlayer)
 			{
 				foreach(float seedAngle in seedAngles)
