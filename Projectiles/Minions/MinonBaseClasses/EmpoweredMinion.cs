@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
@@ -25,10 +23,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			projectile.friendly = false;
 			projectile.velocity = Vector2.Zero;
 			projectile.position = player.Center;
-			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[MinionType] == 0)
+			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[MinionType] == 0)
 			{
 				// hack to prevent multiple 
-				if(GetMinionsOfType(projectile.type)[0].whoAmI == projectile.whoAmI)
+				if (GetMinionsOfType(projectile.type)[0].whoAmI == projectile.whoAmI)
 				{
 					Projectile.NewProjectile(player.Top, Vector2.Zero, MinionType, projectile.damage, projectile.knockBack, Main.myPlayer);
 				}
@@ -75,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.SetStaticDefaults();
 			// the empowered minion is technically a sub-minion if its counter minion, not a main minion
-			ProjectileID.Sets.MinionShot[projectile.type] = true; 
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
@@ -87,14 +85,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
 
 		protected virtual int CounterType => default;
-		protected int EmpowerCount {
-			get => player == null ? 0: player.ownedProjectileCounts[CounterType];
+		protected int EmpowerCount
+		{
+			get => player == null ? 0 : player.ownedProjectileCounts[CounterType];
 		}
 
 		public virtual void OnEmpower()
 		{
 			// little visual effect on empower
-			for(int i = 0; i < dustCount; i ++)
+			for (int i = 0; i < dustCount; i++)
 			{
 				Dust.NewDust(projectile.Center, 16, 16, dustType);
 			}
@@ -106,7 +105,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				baseDamage = projectile.damage;
 			}
-			if(EmpowerCount > previousEmpowerCount)
+			if (EmpowerCount > previousEmpowerCount)
 			{
 				OnEmpower();
 				previousEmpowerCount = EmpowerCount;

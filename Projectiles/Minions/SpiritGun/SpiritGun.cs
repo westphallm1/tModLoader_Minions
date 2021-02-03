@@ -52,7 +52,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 	}
 
-	public class SpiritGunCounterMinion : CounterMinion {
+	public class SpiritGunCounterMinion : CounterMinion
+	{
 
 		protected override int BuffId => BuffType<SpiritGunMinionBuff>();
 		protected override int MinionType => ProjectileType<SpiritGunMinion>();
@@ -190,12 +191,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 				{
 					isReloading = false;
 					activeTargetVectors.Clear();
-				} else if (unfiredShots < EmpowerCount + 1)
+				}
+				else if (unfiredShots < EmpowerCount + 1)
 				{
 					unfiredShots += 1;
 					// the count can sometimes get desynced in multiplayer since ai is synced and 
 					// the target queue isn't, this is a lazy failsafe against that
-					if(activeTargetVectors.Count > 0)
+					if (activeTargetVectors.Count > 0)
 					{
 						Vector2 returned = activeTargetVectors.Dequeue();
 						Dust.NewDust(returned, 4, 10, 137);

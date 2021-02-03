@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
@@ -10,7 +9,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 	// </summary>
 	class SpiritGunMinionBullet : Minion
 	{
-		bool hitTarget {
+		bool hitTarget
+		{
 			get => projectile.ai[0] != 0;
 			set => projectile.ai[0] = value ? 1 : 0;
 		}
@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			projectile.velocity = velocity;
 			Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3());
 			// MP-safe collision check
-			if(targetNPC != null && targetNPC.active && 
+			if (targetNPC != null && targetNPC.active &&
 				Vector2.DistanceSquared(targetNPC.Center, projectile.Center) < projectile.velocity.LengthSquared())
 			{
 				hitTarget = true;

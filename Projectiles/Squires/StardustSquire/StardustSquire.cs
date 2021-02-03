@@ -122,7 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void Kill(int timeLeft)
 		{
 			Main.PlaySound(SoundID.Item20, projectile.position);
-            for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
 				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 1f);
@@ -304,7 +304,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-            Lighting.AddLight(projectile.Center, Color.DeepSkyBlue.ToVector3());
+			Lighting.AddLight(projectile.Center, Color.DeepSkyBlue.ToVector3());
 			int projType = ProjectileType<StardustGuardianProjectile>();
 			if (player.ownedProjectileCounts[projType] == 0)
 			{

@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	}
 
 	[AutoloadEquip(EquipType.Legs)]
-	public class IllusionistCorruptLeggings: BaseIllusionistLeggings
+	public class IllusionistCorruptLeggings : BaseIllusionistLeggings
 	{
 		public override void AddRecipes()
 		{
@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	}
 
 	[AutoloadEquip(EquipType.Legs)]
-	public class IllusionistCrimsonLeggings: BaseIllusionistLeggings
+	public class IllusionistCrimsonLeggings : BaseIllusionistLeggings
 	{
 		public override void AddRecipes()
 		{

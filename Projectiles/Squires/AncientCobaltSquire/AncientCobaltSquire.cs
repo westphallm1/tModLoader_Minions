@@ -1,4 +1,3 @@
-using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -36,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			item.knockBack = 3f;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 10;
+			item.damage = 10;
 			item.value = Item.sellPrice(0, 0, 1, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -57,14 +56,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		{
 			base.SetDefaults();
 			projectile.CloneDefaults(ProjectileID.WaterStream);
-            projectile.magic = false; //Bandaid fix
+			projectile.magic = false; //Bandaid fix
 		}
 	}
 
 	public class AncientCobaltSquireMinion : WeaponHoldingSquire
 	{
 		protected override int BuffId => BuffType<AncientCobaltSquireMinionBuff>();
-        protected override int AttackFrames => 8;
+		protected override int AttackFrames => 8;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AncientCobaltSquire/AncientCobaltStaff";
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Terraria;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
@@ -51,12 +47,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public static int GetXOffsetInSet(List<Projectile> projectiles, Projectile self, int spacing = 4)
 		{
 			int offset = 0;
-			foreach(Projectile proj in projectiles)
+			foreach (Projectile proj in projectiles)
 			{
 				// minion hitboxes are usually a bit smaller than the texture to fit in 2x2 blocks,
 				// so include extra spacing with each offset
 				offset += spacing + proj.width;
-				if(proj.whoAmI == self.whoAmI)
+				if (proj.whoAmI == self.whoAmI)
 				{
 					return offset;
 				}

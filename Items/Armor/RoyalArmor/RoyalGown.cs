@@ -1,5 +1,4 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
-using AmuletOfManyMinions.Projectiles.Squires;
+﻿using AmuletOfManyMinions.Projectiles.Squires;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -40,7 +39,8 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		}
 		public override void AddRecipes()
 		{
-			foreach(int metalId in new int []{ ItemID.GoldBar, ItemID.PlatinumBar}) {
+			foreach (int metalId in new int[] { ItemID.GoldBar, ItemID.PlatinumBar })
+			{
 				ModRecipe recipe = new ModRecipe(mod);
 				recipe.AddIngredient(ItemID.Gel, 30);
 				recipe.AddIngredient(metalId, 15);

@@ -1,4 +1,3 @@
-using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -62,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		{
 			// don't spawn the arrow
 			Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y);
-            for(int i = 0; i < 6; i++)
+			for (int i = 0; i < 6; i++)
 			{
 				Dust.NewDust(projectile.position, projectile.width, projectile.height, 158);
 			}
@@ -82,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if(Main.rand.Next(3) == 0)
+			if (Main.rand.Next(3) == 0)
 			{
 				target.AddBuff(BuffID.OnFire, 180);
 			}

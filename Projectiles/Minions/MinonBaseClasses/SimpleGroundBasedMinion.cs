@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
@@ -65,20 +60,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual void GetUnstuck(Vector2 destination, int startFrame, ref bool done)
 		{
-			if(vectorToTarget is null || gHelper.stuckInfo.overCliff)
+			if (vectorToTarget is null || gHelper.stuckInfo.overCliff)
 			{
 				Vector2 vectorToUnstuck = destination - projectile.Center;
-				if(vectorToUnstuck.Length() < 16)
+				if (vectorToUnstuck.Length() < 16)
 				{
 					done = true;
-				} else
+				}
+				else
 				{
 					base.IdleMovement(vectorToUnstuck);
 				}
-			} else
+			}
+			else
 			{
 				base.IdleMovement(vectorToIdle);
-				if(vectorToIdle.Length() < 16)
+				if (vectorToIdle.Length() < 16)
 				{
 					done = true;
 				}
@@ -90,14 +87,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (vector.Y < -startFlyingAtTargetHeight && Math.Abs(vector.X) < startFlyingAtTargetDist && vectorToTarget != null)
 			{
 				gHelper.isFlying = true;
-				if(gHelper.isFlying)
+				if (gHelper.isFlying)
 				{
 					IdleFlyingMovement(vector);
 				}
 				return;
 			}
 			gHelper.ApplyGravity();
-			if(vector.Y > 32 && gHelper.DropThroughPlatform())
+			if (vector.Y > 32 && gHelper.DropThroughPlatform())
 			{
 				return;
 			}
@@ -105,10 +102,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				return;
 			}
-			if(CheckForStuckness())
+			if (CheckForStuckness())
 			{
 				StuckInfo info = gHelper.GetStuckInfo(vector);
-				if(info.isStuck)
+				if (info.isStuck)
 				{
 					gHelper.GetUnstuckByTeleporting(info, vector);
 				}
@@ -151,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected virtual bool CrossCliff(Vector2 vector)
 		{
 			// always jump the same height, since we don't get info about how wide the gap is
-			if(Math.Abs(vector.X) < 32)
+			if (Math.Abs(vector.X) < 32)
 			{
 				gHelper.DoJump(new Vector2(0, -maxJumpVelocity * 4), defaultJumpVelocity, maxJumpVelocity);
 			}
@@ -161,15 +158,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			projectile.frameCounter++;
-			if(projectile.velocity.X > 1)
+			if (projectile.velocity.X > 1)
 			{
 				projectile.spriteDirection = 1;
-			} else if (projectile.velocity.X < -1)
+			}
+			else if (projectile.velocity.X < -1)
 			{
 				projectile.spriteDirection = -1;
 			}
 			maxFrame = maxFrame ?? Main.projFrames[projectile.type];
-			if(projectile.frame < minFrame)
+			if (projectile.frame < minFrame)
 			{
 				projectile.frame = minFrame;
 			}
@@ -202,10 +200,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override Vector2? FindTarget()
 		{
-			if(Vector2.Distance(player.Center, projectile.Center) > 1.5f * searchDistance)
+			if (Vector2.Distance(player.Center, projectile.Center) > 1.5f * searchDistance)
 			{
 				return null;
-			} 
+			}
 			else if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
 			{
 				return target - projectile.Center;

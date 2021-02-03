@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
@@ -42,7 +41,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		}
 	}
 
-	public class BoneSerpentCounterMinion : CounterMinion {
+	public class BoneSerpentCounterMinion : CounterMinion
+	{
 		protected override int BuffId => BuffType<BoneSerpentMinionBuff>();
 		protected override int MinionType => ProjectileType<BoneSerpentMinion>();
 	}

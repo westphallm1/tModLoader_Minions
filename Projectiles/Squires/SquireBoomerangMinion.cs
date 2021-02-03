@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
@@ -29,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		}
 		public override Vector2 IdleBehavior()
 		{
-			if(squire != null)
+			if (squire != null)
 			{
 				projectile.damage = Math.Max(1, 5 * squire.damage / 6);
 			}
@@ -50,7 +46,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				vectorToIdlePosition.Normalize();
 				vectorToIdlePosition *= idleVelocity;
 				projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
-			} else
+			}
+			else
 			{
 				returnedToHeadFrame = returnedToHeadFrame ?? animationFrame;
 				projectile.position += vectorToIdlePosition;
@@ -68,9 +65,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override Vector2? FindTarget()
 		{
-			if(SquireAttacking() &&
+			if (SquireAttacking() &&
 				returnedToHeadFrame is int frame &&
-				animationFrame - frame > attackCooldown && 
+				animationFrame - frame > attackCooldown &&
 				!returning &&
 				ClosestEnemyInRange(attackRange, maxRangeFromPlayer: false) is Vector2 target)
 			{
@@ -91,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void OnHitTarget(NPC target)
 		{
-			if(player.whoAmI != Main.myPlayer)
+			if (player.whoAmI != Main.myPlayer)
 			{
 				returnedToHeadFrame = null;
 				returning = true;

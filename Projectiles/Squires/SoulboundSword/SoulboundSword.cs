@@ -123,21 +123,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
 			base.PostDraw(spriteBatch, translucentColor);
 		}
-        
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
 			// nice little dust effect on hit, but not actually shadowflame
-			for(int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				Dust.NewDust(target.position, target.width, target.height, DustID.Shadowflame);
 			}
-        }
-        
+		}
+
 		protected override float WeaponDistanceFromCenter() => 30;
 
 		protected override int WeaponHitboxStart() => 30;
-        
-        protected override int WeaponHitboxEnd() => 50;
+
+		protected override int WeaponHitboxEnd() => 50;
 
 		public override float ComputeIdleSpeed() => 13;
 

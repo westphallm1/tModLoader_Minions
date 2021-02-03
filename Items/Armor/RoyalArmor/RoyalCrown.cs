@@ -1,5 +1,4 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
-using AmuletOfManyMinions.Projectiles.Squires;
+﻿using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -54,7 +53,8 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void AddRecipes()
 		{
-			foreach(int metalId in new int []{ ItemID.GoldBar, ItemID.PlatinumBar}) {
+			foreach (int metalId in new int[] { ItemID.GoldBar, ItemID.PlatinumBar })
+			{
 				ModRecipe recipe = new ModRecipe(mod);
 				recipe.AddIngredient(ItemID.Gel, 25);
 				recipe.AddIngredient(metalId, 10);
@@ -107,21 +107,23 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(squire is null)
+			if (squire is null)
 			{
 				return;
 			}
-			if(vectorToTarget is null || returning)
+			if (vectorToTarget is null || returning)
 			{
 				projectile.rotation = (float)(Math.PI / 12 * Math.Cos(2 * Math.PI * animationFrame / 60f));
-				if(squire.spriteDirection == 1)
+				if (squire.spriteDirection == 1)
 				{
 					projectile.frame = 0;
-				} else
+				}
+				else
 				{
 					projectile.frame = 4;
 				}
-			} else
+			}
+			else
 			{
 				minFrame = 0;
 				maxFrame = 8;

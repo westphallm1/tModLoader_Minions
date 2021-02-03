@@ -1,8 +1,8 @@
-﻿using Terraria;
+﻿using AmuletOfManyMinions.Core.Netcode.Packets;
 using Microsoft.Xna.Framework;
-using Terraria.ModLoader;
+using Terraria;
 using Terraria.ID;
-using AmuletOfManyMinions.Core.Netcode.Packets;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core
 {

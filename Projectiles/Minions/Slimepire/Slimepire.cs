@@ -1,10 +1,8 @@
-﻿using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
@@ -72,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 
 		protected override bool DoPreStuckCheckGroundedMovement()
 		{
-			if(!gHelper.didJustLand)
+			if (!gHelper.didJustLand)
 			{
 				projectile.velocity.X = intendedX;
 				// only path after landing
@@ -88,13 +86,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 			// always jump "long" if we're far away from the enemy
-			if(Math.Abs(vector.X) > startFlyingAtTargetDist && vector.Y < -32)
+			if (Math.Abs(vector.X) > startFlyingAtTargetDist && vector.Y < -32)
 			{
 				vector.Y = -32;
 			}
 			gHelper.DoJump(vector);
 			int maxHorizontalSpeed = vector.Y < -64 ? 4 : 8;
-			projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) /16)) * Math.Sign(vector.X);
+			projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
 			intendedX = projectile.velocity.X;
 		}
 

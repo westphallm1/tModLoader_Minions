@@ -1,11 +1,6 @@
-﻿using System;
-using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
@@ -70,10 +65,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(!isSpinning)
+			if (!isSpinning)
 			{
 				projectile.rotation = projectile.velocity.X * 0.05f;
-			} else
+			}
+			else
 			{
 				projectile.rotation += 0.15f;
 			}
@@ -118,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(!isSpinning && vectorToTargetPosition.Length() < SpinStartDistance)
+			if (!isSpinning && vectorToTargetPosition.Length() < SpinStartDistance)
 			{
 				isSpinning = true;
 				spinAnimationCounter = 0;
@@ -128,20 +124,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				}
 			}
 			vectorToTargetPosition.SafeNormalize();
-			if(isSpinning)
+			if (isSpinning)
 			{
-				if(spinAnimationCounter++ > SpinAnimationLength)
+				if (spinAnimationCounter++ > SpinAnimationLength)
 				{
 					isSpinning = false;
 					StopSpin();
-				} else if(spinAnimationCounter > SpinAnimationLength - SpinTravelLength)
+				}
+				else if (spinAnimationCounter > SpinAnimationLength - SpinTravelLength)
 				{
 					DoSpin(spinVector);
-				} else
+				}
+				else
 				{
 					DoDrift(npcVelocity);
 				}
-			} 
+			}
 			else
 			{
 				vectorToTargetPosition *= 8;
@@ -153,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// always finish the spin
-			if(isSpinning)
+			if (isSpinning)
 			{
 				TargetedMovement(Vector2.Zero);
 				projectile.tileCollide = true; // can phase through walls like this otherwise
@@ -162,12 +160,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
-		protected virtual float GetBackBladeAngle() 
+		protected virtual float GetBackBladeAngle()
 		{
 			return (6 * MathHelper.Pi * animationFrame) / groupAnimationFrames;
 		}
 
-		protected virtual float GetFrontBladeAngle() {
+		protected virtual float GetFrontBladeAngle()
+		{
 			return -GetBackBladeAngle();
 		}
 
@@ -178,11 +177,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if(!isSpinning)
+			if (!isSpinning)
 			{
 				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetBackBladeAngle());
 				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetFrontBladeAngle());
-			} else
+			}
+			else
 			{
 				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetSpinningBladeAngle());
 			}

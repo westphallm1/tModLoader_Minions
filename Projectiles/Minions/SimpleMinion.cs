@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
@@ -90,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 			// This is a simple "loop through all frames from top to bottom" animation
 			projectile.frameCounter++;
-			if(projectile.frame < minFrame)
+			if (projectile.frame < minFrame)
 			{
 				projectile.frame = minFrame;
 			}
@@ -125,7 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			animationFrame++;
 			if (vectorToTarget is Vector2 targetPosition)
 			{
-				if(player.whoAmI == Main.myPlayer && oldVectorToTarget == null)
+				if (player.whoAmI == Main.myPlayer && oldVectorToTarget == null)
 				{
 					projectile.netUpdate = true;
 				}
@@ -138,11 +137,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < noLOSPursuitTime)
 			{
 				projectile.tileCollide = !attackThroughWalls;
-				if(!Main.npc[previousIndex].active)
+				if (!Main.npc[previousIndex].active)
 				{
 					oldTargetNpcIndex = null;
 					oldVectorToTarget = null;
-				} else if (previousIndex < Main.maxNPCs)
+				}
+				else if (previousIndex < Main.maxNPCs)
 				{
 					vectorToTarget = Main.npc[previousIndex].Center - projectile.Center;
 					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
@@ -154,19 +154,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					projectile.tileCollide = false;
 				}
-				if(player.whoAmI == Main.myPlayer && oldVectorToTarget != null)
+				if (player.whoAmI == Main.myPlayer && oldVectorToTarget != null)
 				{
 					projectile.netUpdate = true;
 				}
 				oldVectorToTarget = null;
 				IdleMovement(vectorToIdle);
 			}
-			if(targetNPCIndex is int idx &&
-				targetFrameCounter ++ > projectile.localNPCHitCooldown && 
+			if (targetNPCIndex is int idx &&
+				targetFrameCounter++ > projectile.localNPCHitCooldown &&
 				vectorToTarget is Vector2 target && target.LengthSquared() < proximityForOnHitTarget * proximityForOnHitTarget)
 			{
 				targetFrameCounter = 0;
-				OnHitTarget(Main.npc[idx]);	
+				OnHitTarget(Main.npc[idx]);
 			}
 			AfterMoving();
 			Animate();

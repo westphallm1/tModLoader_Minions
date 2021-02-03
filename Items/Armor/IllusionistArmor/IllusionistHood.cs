@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
-			return (body.type == ItemType<IllusionistCorruptRobe>() || body.type == ItemType<IllusionistCrimsonRobe>()) && 
+			return (body.type == ItemType<IllusionistCorruptRobe>() || body.type == ItemType<IllusionistCrimsonRobe>()) &&
 				(legs.type == ItemType<IllusionistCorruptLeggings>() || legs.type == ItemType<IllusionistCrimsonLeggings>());
 		}
 
@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override void ArmorSetShadows(Player player)
 		{
-			if(player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped)
+			if (player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped)
 			{
 				player.armorEffectDrawOutlines = true;
 			}
@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 
 	[AutoloadEquip(EquipType.Head)]
-	public class IllusionistCorruptHood: BaseIllusionistHood
+	public class IllusionistCorruptHood : BaseIllusionistHood
 	{
 		public override void AddRecipes()
 		{
@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	}
 
 	[AutoloadEquip(EquipType.Head)]
-	public class IllusionistCrimsonHood: BaseIllusionistHood
+	public class IllusionistCrimsonHood : BaseIllusionistHood
 	{
 		public override void AddRecipes()
 		{
@@ -137,24 +137,24 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			List<Projectile> others = GetMinionsOfType(projectile.type);
 			int myIndex = others.FindIndex(p => p.whoAmI == projectile.whoAmI);
-			if(player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped)
+			if (player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped)
 			{
 				projectile.timeLeft = Math.Max(projectile.timeLeft, 2);
 			}
-			
-			if(targetNPC != 0 && !isAttacking)
+
+			if (targetNPC != 0 && !isAttacking)
 			{
 				projectile.netUpdate = true;
 				projectile.friendly = true;
 				isAttacking = true;
 			}
-			if(isAttacking && !Main.npc[targetNPC].active)
+			if (isAttacking && !Main.npc[targetNPC].active)
 			{
 				projectile.Kill();
 			}
 
 			Vector2 offsetVector;
-			switch(myIndex)
+			switch (myIndex)
 			{
 				case 0:
 					offsetVector = new Vector2(24, 0);
@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			}
 			offsetVector.Y += 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 120);
 			Lighting.AddLight(projectile.Center, Color.LimeGreen.ToVector3() * 0.25f);
-			return player.Center - projectile.Center +  offsetVector;
+			return player.Center - projectile.Center + offsetVector;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -185,7 +185,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		public override void Kill(int timeLeft)
 		{
 			int dustType = isCorrupt ? 89 : 87;
-			for(int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				Dust.NewDust(projectile.position, 16, 16, dustType);
 			}
@@ -201,10 +201,11 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override Vector2? FindTarget()
 		{
-			if(!isAttacking)
+			if (!isAttacking)
 			{
 				return null;
-			}  else
+			}
+			else
 			{
 				return Main.npc[targetNPC].Center - projectile.Center;
 			}

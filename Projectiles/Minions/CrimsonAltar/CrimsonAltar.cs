@@ -138,7 +138,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 	{
 	}
 
-	public class CrimsonAltarCounterMinion : CounterMinion {
+	public class CrimsonAltarCounterMinion : CounterMinion
+	{
 		protected override int BuffId => BuffType<CrimsonAltarMinionBuff>();
 		protected override int MinionType => ProjectileType<CrimsonAltarMinion>();
 	}

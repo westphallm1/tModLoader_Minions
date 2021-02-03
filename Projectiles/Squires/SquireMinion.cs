@@ -1,11 +1,9 @@
 ﻿using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
@@ -127,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			idlePosition.X += 24 * -player.direction;
 			idlePosition.Y += -8;
 			// not sure what side effects changing this each frame might have
-			if(attackSpeedCanBeModified)
+			if (attackSpeedCanBeModified)
 			{
 				projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
 			}
@@ -168,7 +166,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				projectile.velocity = player.velocity;
 				projectile.position += vectorToTargetPosition;
 				return;
-			} else if (relativeVelocity.Length() > vectorToTargetPosition.Length()/3)
+			}
+			else if (relativeVelocity.Length() > vectorToTargetPosition.Length() / 3)
 			{
 				relativeVelocity *= 0.9f;
 			}

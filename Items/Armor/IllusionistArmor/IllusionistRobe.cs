@@ -1,4 +1,3 @@
-using AmuletOfManyMinions.Items.Accessories;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

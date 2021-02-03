@@ -1,6 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Projectiles.NonMinionSummons;
-using AmuletOfManyMinions.Projectiles.Squires;
+﻿using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -10,7 +8,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 {
-	class SquireBatBuff: ModBuff
+	class SquireBatBuff : ModBuff
 	{
 		public override void SetDefaults()
 		{
@@ -22,7 +20,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 			SquireGlobalProjectile.squireBuffTypes.Add(Type);
 		}
 	}
-	class SquireBatDebuff: ModBuff
+	class SquireBatDebuff : ModBuff
 	{
 		public override void SetDefaults()
 		{
@@ -54,7 +52,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 			item.accessory = true;
 			item.value = Item.sellPrice(gold: 5);
 			item.rare = ItemRarityID.LightRed;
-			
+
 		}
 
 		public override void UpdateEquip(Player player)
@@ -84,7 +82,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			if(squire == null)
+			if (squire == null)
 			{
 				return Vector2.Zero;
 			}
@@ -100,11 +98,12 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 				if (buffFrame < 30)
 				{
 					radius = 28 - 20 * buffFrame / 30f;
-				} else if (buffFrame < 60)
+				}
+				else if (buffFrame < 60)
 				{
 					radius = 28 - 20 * (60 - buffFrame) / 30f;
 				}
-			} 
+			}
 			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
 			return (squire.Center + angleVector) - projectile.Center;
 		}

@@ -123,7 +123,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void Kill(int timeLeft)
 		{
 			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
-            for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
 				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: LightColor, Scale: 1f);
@@ -136,10 +136,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundArrow";
 
 		protected override Color LightColor => new Color(1f, 0.5f, 1f, 1f);
-        public override void SetDefaults()
+		public override void SetDefaults()
 		{
 			base.SetDefaults();
-            projectile.minion = true; //Bandaid fix?
+			projectile.minion = true; //Bandaid fix?
 		}
 		public override float GetRotation()
 		{

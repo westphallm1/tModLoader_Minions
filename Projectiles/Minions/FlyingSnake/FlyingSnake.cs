@@ -1,11 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.ID;
-using static Terraria.ModLoader.ModContent;
-
-namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSnake
+﻿namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSnake
 {
 	//public class FlyingSnakeMinionBuff : MinionBuff
 	//{

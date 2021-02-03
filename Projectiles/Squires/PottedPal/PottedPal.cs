@@ -1,11 +1,9 @@
 using AmuletOfManyMinions.Projectiles.Minions;
-using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
@@ -114,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			if (vectorToTargetPosition.Length() < 100f && ClosestEnemyInRange(100f, projectile.Center, maxRangeFromPlayer: false) is Vector2 autoTarget)
 			{
 				base.TargetedMovement(autoTarget - projectile.Center);
-            }
+			}
 			else
 			{
 				base.TargetedMovement(vectorToTargetPosition);

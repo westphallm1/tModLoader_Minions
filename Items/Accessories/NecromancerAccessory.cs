@@ -134,11 +134,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 		{
 			// Get unique minion count for player
 			uniqueMinionTypes.Clear();
-			foreach(Projectile proj in Main.projectile)
+			foreach (Projectile proj in Main.projectile)
 			{
 				// only count minions that take up slots (no squires, temporary projectiles that were lazily coded
 				// as minions, etc.)
-				if(proj.active && proj.owner == player.whoAmI && proj.minionSlots > 0)
+				if (proj.active && proj.owner == player.whoAmI && proj.minionSlots > 0)
 				{
 					uniqueMinionTypes.Add(proj.type);
 				}
@@ -169,13 +169,15 @@ namespace AmuletOfManyMinions.Items.Accessories
 			Mod mod = ModLoader.GetMod("AmuletOfManyMinions");
 			Texture2D texture;
 			// this may not be the most efficient
-			if(drawPlayer.armor.Any(item=>item.type == ItemType<IllusionistCorruptRobe>())) 
+			if (drawPlayer.armor.Any(item => item.type == ItemType<IllusionistCorruptRobe>()))
 			{
 				texture = mod.GetTexture("Items/Armor/IllusionistArmor/IllusionistCorruptRobe_Legs");
-			} else if (drawPlayer.armor.Any(item=>item.type == ItemType<IllusionistCrimsonRobe>()))
+			}
+			else if (drawPlayer.armor.Any(item => item.type == ItemType<IllusionistCrimsonRobe>()))
 			{
 				texture = mod.GetTexture("Items/Armor/IllusionistArmor/IllusionistCrimsonRobe_Legs");
-			} else
+			}
+			else
 			{
 				return;
 			}
@@ -190,7 +192,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void ModifyDrawLayers(List<PlayerLayer> layers)
 		{
 			int legLayer = layers.FindIndex(layer => layer.Name.Equals("Legs"));
-			if(legLayer != -1)
+			if (legLayer != -1)
 			{
 				IllusionistRobeLegs.visible = true;
 				layers.Insert(legLayer + 1, IllusionistRobeLegs);
@@ -215,12 +217,12 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void PostUpdate()
 		{
 			idleMinionSyncronizationFrame++;
-			if(player.whoAmI != Main.myPlayer)
+			if (player.whoAmI != Main.myPlayer)
 			{
 				return;
 			}
 			int projectileType = ProjectileType<IllusionistWisp>();
-			if(illusionistArmorSetEquipped && GetMinionsOfType(projectileType).Count < 3)
+			if (illusionistArmorSetEquipped && GetMinionsOfType(projectileType).Count < 3)
 			{
 				int buffType = BuffType<IllusionistWispBuff>();
 				// this is a hacky check
@@ -228,12 +230,13 @@ namespace AmuletOfManyMinions.Items.Accessories
 				if (!player.HasBuff(buffType))
 				{
 					player.AddBuff(buffType, IllusionistWisp.SpawnFrequency);
-				} else if (player.buffTime[player.FindBuffIndex(buffType)] == 1)
+				}
+				else if (player.buffTime[player.FindBuffIndex(buffType)] == 1)
 				{
-					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamageMult), 0.1f, player.whoAmI, ai0: isCorrupt? 0: 1);
+					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamageMult), 0.1f, player.whoAmI, ai0: isCorrupt ? 0 : 1);
 				}
 			}
-			if(minionVarietyBonusCount > 1)
+			if (minionVarietyBonusCount > 1)
 			{
 				int buffType = BuffType<MinionVarietyBuff>();
 				if (!player.HasBuff(buffType))
@@ -244,7 +247,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		}
 	}
 
-	public class MinionVarietyBuff: ModBuff
+	public class MinionVarietyBuff : ModBuff
 	{
 		public override void SetDefaults()
 		{
@@ -292,7 +295,8 @@ namespace AmuletOfManyMinions.Items.Accessories
 			List<Projectile> wisps = modPlayer.GetMinionsOfType(wispType);
 			if (wisps.Count == 3 && wisps.All(p => p.timeLeft <= 10))
 			{
-				foreach(Projectile wisp in wisps) {
+				foreach (Projectile wisp in wisps)
+				{
 					wisp.ai[1] = target.whoAmI;
 				}
 			}
@@ -307,7 +311,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			Player player = Main.player[projectile.owner];
 			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
 			// require multiple minion types for any bonus
-			if(modPlayer.minionVarietyBonusCount > 1)
+			if (modPlayer.minionVarietyBonusCount > 1)
 			{
 				float damageMult = 1 + modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus;
 				damage = (int)(damage * damageMult);

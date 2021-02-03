@@ -1,8 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Items.Accessories;
-using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -77,7 +74,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 		public override void AI()
 		{
-			if (TIME_TO_LIVE - projectile.timeLeft > 6) {
+			if (TIME_TO_LIVE - projectile.timeLeft > 6)
+			{
 				projectile.velocity.Y += 0.5f;
 			}
 			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
@@ -93,14 +91,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			// only spawn 1ish cactus per volley
 			// this can spawn cacti upon hitting walls/ceilings/enemies , but that's ok
-			if(projectile.owner == Main.myPlayer && Main.rand.Next(3) == 0)
+			if (projectile.owner == Main.myPlayer && Main.rand.Next(3) == 0)
 			{
 				Projectile.NewProjectile(
-					projectile.position, 
-					Vector2.Zero, 
-					ProjectileType<PricklyPearCactusProjectile>(), 
-					projectile.damage, 
-					projectile.knockBack, 
+					projectile.position,
+					Vector2.Zero,
+					ProjectileType<PricklyPearCactusProjectile>(),
+					projectile.damage,
+					projectile.knockBack,
 					projectile.owner);
 
 			}
@@ -128,7 +126,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			projectile.friendly = true;
 			projectile.usesLocalNPCImmunity = true;
 			// don't instakill an an enemy that falls onto a cactus
-			projectile.localNPCHitCooldown = 30; 
+			projectile.localNPCHitCooldown = 30;
 			drawOriginOffsetY = 2;
 		}
 
@@ -136,16 +134,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			projectile.velocity.Y += 0.5f;
 			// hack to play the despawn animation after running out of penetrates
-			if(projectile.penetrate == 1 && projectile.friendly)
+			if (projectile.penetrate == 1 && projectile.friendly)
 			{
 				projectile.friendly = false;
 				projectile.timeLeft = 20;
 			}
-			if(projectile.timeLeft > 20 && projectile.frame < 3 && projectile.frameCounter++ >= 5)
+			if (projectile.timeLeft > 20 && projectile.frame < 3 && projectile.frameCounter++ >= 5)
 			{
 				projectile.frameCounter = 0;
 				projectile.frame++;
-			} else if (projectile.timeLeft <= 20 && projectile.frame > 0 && projectile.frameCounter++ >= 5)
+			}
+			else if (projectile.timeLeft <= 20 && projectile.frame > 0 && projectile.frameCounter++ >= 5)
 			{
 				projectile.frameCounter = 0;
 				projectile.frame--;
@@ -205,13 +204,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if(vector.Y < - 3 * projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 7;
-			if(vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
 				projectile.velocity.X = player.velocity.X;
 				return;
@@ -233,9 +232,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			int seedVelocity = 7;
 			lastFiredFrame = animationFrame;
 			Main.PlaySound(new LegacySoundStyle(6, 1), projectile.position);
-			if(player.whoAmI == Main.myPlayer)
+			if (player.whoAmI == Main.myPlayer)
 			{
-				foreach(float seedAngle in seedAngles)
+				foreach (float seedAngle in seedAngles)
 				{
 					Vector2 velocity = seedVelocity * seedAngle.ToRotationVector2();
 					velocity.Y *= -1;
@@ -254,14 +253,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 
-			if(Math.Abs(vectorToTargetPosition.X) < 1.5f * preferredDistanceFromTarget &&
+			if (Math.Abs(vectorToTargetPosition.X) < 1.5f * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget &&
 				animationFrame - lastFiredFrame >= fireRate)
 			{
 				FireSeeds();
 			}
 
-			if(Math.Abs(vectorToTargetPosition.X) < preferredDistanceFromTarget)
+			if (Math.Abs(vectorToTargetPosition.X) < preferredDistanceFromTarget)
 			{
 				vectorToTargetPosition.X -= preferredDistanceFromTarget * Math.Sign(vectorToTargetPosition.X);
 			}

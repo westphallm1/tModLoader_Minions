@@ -91,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D texture = GetTexture(Texture);
-			
+
 			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
 				texture.Bounds, WhackAMoleMinion.shades[(int)projectile.ai[0]], projectile.rotation,
 				texture.Bounds.Center.ToVector2(), 1, 0, 0);
@@ -99,7 +99,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		}
 	}
 
-	public class WhackAMoleCounterMinion : CounterMinion {
+	public class WhackAMoleCounterMinion : CounterMinion
+	{
 
 		protected override int BuffId => BuffType<WhackAMoleMinionBuff>();
 		protected override int MinionType => ProjectileType<WhackAMoleMinion>();
@@ -153,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			new Color(173, 101, 255),
 			new Color(255, 101, 244),
 		};
-		
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -195,23 +196,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		// offset of each individual mole
 
-		private int DrawIndex => Math.Max(0,Math.Min(shades.Length, EmpowerCount)-1);
+		private int DrawIndex => Math.Max(0, Math.Min(shades.Length, EmpowerCount) - 1);
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D texture = GetTexture(Texture);
 			// draw in reverse order for layering purposes
 			float headBobOffset = (float)(2 * Math.PI / Math.Max(DrawIndex, 1));
-			for(int i = DrawIndex; i >= 0; i--)
+			for (int i = DrawIndex; i >= 0; i--)
 			{
 				int offsetPixels;
 				Vector2 pos = projectile.Center;
-				if (gHelper.teleportStartFrame is int teleportStart) 
+				if (gHelper.teleportStartFrame is int teleportStart)
 				{
 					int teleportFrame = animationFrame - teleportStart;
 					int teleportHalf = TeleportFrames / 2;
 					float heightToSink = 24 - positionOffsets[i].Y;
-					if(teleportFrame < teleportHalf)
+					if (teleportFrame < teleportHalf)
 					{
 						offsetPixels = -(int)(heightToSink * teleportFrame / teleportHalf);
 					}
@@ -220,14 +221,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 						offsetPixels = -(int)(heightToSink * (TeleportFrames - teleportFrame) / teleportHalf);
 					}
 					pos.X += positionOffsets[i].X;
-					pos.Y += positionOffsets[i].Y /2;
-				} else 
+					pos.Y += positionOffsets[i].Y / 2;
+				}
+				else
 				{
-					offsetPixels = (int) (3 * Math.Sin(headBobOffset * i + 2 * Math.PI * (animationFrame % AnimationFrames) / AnimationFrames));
+					offsetPixels = (int)(3 * Math.Sin(headBobOffset * i + 2 * Math.PI * (animationFrame % AnimationFrames) / AnimationFrames));
 					pos += positionOffsets[i];
 				}
 				Rectangle bounds = new Rectangle(0, 0, 24, 24 + offsetPixels);
-				pos.Y += 4 - (offsetPixels/2);
+				pos.Y += 4 - (offsetPixels / 2);
 				pos.X += xOffsets[DrawIndex];
 				SpriteEffects effects = projectile.velocity.X < 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 				spriteBatch.Draw(texture, pos - Main.screenPosition,
@@ -263,7 +265,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			gHelper.SetIsOnGround();
-			if(gHelper.offTheGroundFrames == 20 || (gHelper.offTheGroundFrames > 60 && Main.rand.Next(120) == 0) ||(gHelper.isOnGround && gHelper.offTheGroundFrames > 20))
+			if (gHelper.offTheGroundFrames == 20 || (gHelper.offTheGroundFrames > 60 && Main.rand.Next(120) == 0) || (gHelper.isOnGround && gHelper.offTheGroundFrames > 20))
 			{
 				DrawPlatformDust();
 			}
@@ -273,9 +275,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		private void DrawPlatformDust()
 		{
-			for(int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.Bottom - new Vector2(8, 0), 16, 16, 47, -projectile.velocity.X/2, -projectile.velocity.Y/2);
+				Dust.NewDust(projectile.Bottom - new Vector2(8, 0), 16, 16, 47, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
 			}
 		}
 
@@ -296,15 +298,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			projectile.velocity = Vector2.Zero;
 			int teleportFrame = animationFrame - startFrame;
 			int width = widths[DrawIndex];
-			if (teleportFrame == 1 || teleportFrame == 1+ TeleportFrames/2)
+			if (teleportFrame == 1 || teleportFrame == 1 + TeleportFrames / 2)
 			{
 				Collision.HitTiles(projectile.Bottom + new Vector2(-width / 2, 8), new Vector2(0, 8), width, 8);
 			}
-			if(teleportFrame == TeleportFrames / 2)
+			if (teleportFrame == TeleportFrames / 2)
 			{
 				// do the actual teleport
 				projectile.position = destination;
-			} else if(teleportFrame >= TeleportFrames)
+			}
+			else if (teleportFrame >= TeleportFrames)
 			{
 				done = true;
 			}
@@ -318,16 +321,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public void IdleGroundedMovement(Vector2 vectorToIdlePosition)
 		{
 			StuckInfo info = gHelper.GetStuckInfo(vectorToIdlePosition);
-			if(info.isStuck)
+			if (info.isStuck)
 			{
 				gHelper.GetUnstuckByTeleporting(info, vectorToIdlePosition);
 			}
 			gHelper.ApplyGravity();
-			if(vectorToIdlePosition.Y < -projectile.height && Math.Abs(vectorToIdlePosition.X) < 96)
+			if (vectorToIdlePosition.Y < -projectile.height && Math.Abs(vectorToIdlePosition.X) < 96)
 			{
 				gHelper.DoJump(vectorToIdlePosition);
 			}
-			if(animationFrame - lastHitFrame > 10)
+			if (animationFrame - lastHitFrame > 10)
 			{
 				float intendedY = projectile.velocity.Y;
 				base.IdleMovement(vectorToIdlePosition);
@@ -351,25 +354,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			int attackRate = Math.Max(40, 65 - 5 * EmpowerCount);
 			bool isAttackFrame = player.whoAmI == Main.myPlayer && animationFrame % attackRate == 0;
 			bool canHitTarget = isAttackFrame && Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToTargetPosition, 1, 1);
-			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 160  && vectorToTargetPosition.Y < -24;
+			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 160 && vectorToTargetPosition.Y < -24;
 			bool isAttackingFromAir = isAttackFrame && gHelper.isFlying;
-			if(player.whoAmI == Main.myPlayer  && targetNPCIndex is int targetIdx && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
+			if (player.whoAmI == Main.myPlayer && targetNPCIndex is int targetIdx && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
 			{
 				Vector2 velocity = vectorToTargetPosition;
 				velocity.SafeNormalize();
 				velocity *= 12;
 				velocity.X += Main.npc[targetIdx].velocity.X;
 				Projectile.NewProjectile(
-					projectile.Center, 
-					velocity, 
-					ProjectileType<WhackAMoleMinionProjectile>(), 
-					projectile.damage, 
-					projectile.knockBack, 
-					player.whoAmI, 
+					projectile.Center,
+					velocity,
+					ProjectileType<WhackAMoleMinionProjectile>(),
+					projectile.damage,
+					projectile.knockBack,
+					player.whoAmI,
 					projectileIndex);
-				projectileIndex = (projectileIndex + 1) % (DrawIndex + 1);	
+				projectileIndex = (projectileIndex + 1) % (DrawIndex + 1);
 			}
-			if(gHelper.isFlying)
+			if (gHelper.isFlying)
 			{
 				// try to stay below target while flying at it
 				vectorToTargetPosition.Y += 48;
@@ -449,7 +452,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		{
 			projectile.velocity.Y = -4;
 			gHelper.isOnGround = false;
-			if(gHelper.offTheGroundFrames < 20)
+			if (gHelper.offTheGroundFrames < 20)
 			{
 				gHelper.offTheGroundFrames = 20;
 			}

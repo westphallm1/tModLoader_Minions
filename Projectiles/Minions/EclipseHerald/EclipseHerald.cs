@@ -50,7 +50,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		}
 	}
 
-	public class EclipseHeraldCounterMinion : CounterMinion {
+	public class EclipseHeraldCounterMinion : CounterMinion
+	{
 
 		protected override int BuffId => BuffType<EclipseHeraldMinionBuff>();
 		protected override int MinionType => ProjectileType<EclipseHeraldMinion>();

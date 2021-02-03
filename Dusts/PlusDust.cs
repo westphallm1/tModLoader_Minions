@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace AmuletOfManyMinions.Dusts
 {
@@ -28,23 +23,25 @@ namespace AmuletOfManyMinions.Dusts
 			Projectile myProj = Main.projectile[(int)dust.customData];
 			dust.velocity.X = myProj.velocity.X;
 			dust.velocity.Y = myProj.velocity.Y;
-			if(dust.alpha < 128)
+			if (dust.alpha < 128)
 			{
 				dust.velocity.Y -= 0.1f;
-			} else
+			}
+			else
 			{
 				dust.velocity.Y -= 0.5f;
 				dust.velocity.Y -= (dust.dustIndex % 3) / 10f;
 			}
-			if(dust.alpha > 64)
+			if (dust.alpha > 64)
 			{
 				dust.scale += 0.01f;
-			} else
+			}
+			else
 			{
 				dust.scale -= 0.05f;
 			}
 			dust.alpha -= 4;
-			if(dust.alpha <= 0)
+			if (dust.alpha <= 0)
 			{
 				dust.active = false;
 			}
@@ -59,9 +56,9 @@ namespace AmuletOfManyMinions.Dusts
 			return glowMask;
 		}
 	}
-	
 
-	class MinusDust: PlusDust
+
+	class MinusDust : PlusDust
 	{
 
 	}

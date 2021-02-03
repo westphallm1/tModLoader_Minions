@@ -1,13 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Squires;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 {
@@ -18,7 +12,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Spooky Mask");
-			Tooltip.SetDefault("Increases minion damage by 11%" );
+			Tooltip.SetDefault("Increases minion damage by 11%");
 		}
 
 		public override void SetDefaults()
@@ -58,7 +52,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 
 		public override void ArmorSetShadows(Player player)
 		{
-			if(player.GetModPlayer<SquireModPlayer>().spookyArmorSetEquipped)
+			if (player.GetModPlayer<SquireModPlayer>().spookyArmorSetEquipped)
 			{
 				player.armorEffectDrawOutlines = true;
 			}

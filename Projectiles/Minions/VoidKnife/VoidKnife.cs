@@ -2,10 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
@@ -149,7 +147,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 		public override void OnLoseTarget(ref Vector2 vectorToTargetPosition)
 		{
 			framesInAir = Math.Max(framesInAir, maxFramesInAir - 15);
-			float r = projectile.rotation + 3*(float)Math.PI/2;
+			float r = projectile.rotation + 3 * (float)Math.PI / 2;
 			projectile.velocity = new Vector2((float)Math.Cos(r), (float)Math.Sin(r));
 			projectile.velocity *= travelVelocity;
 		}

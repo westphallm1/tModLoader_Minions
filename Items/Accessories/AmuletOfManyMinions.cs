@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void AddRecipes()
 		{
-			foreach(int itemId in new int[] { ItemType<VoidKnifeMinionItem>(), ItemType<NullHatchetMinionItem>()})
+			foreach (int itemId in new int[] { ItemType<VoidKnifeMinionItem>(), ItemType<NullHatchetMinionItem>() })
 			{
 				ModRecipe recipe = new ModRecipe(mod);
 				recipe.AddIngredient(ItemType<CopperSwordMinionItem>(), 1);

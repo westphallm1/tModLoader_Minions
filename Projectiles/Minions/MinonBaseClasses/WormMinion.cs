@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
@@ -93,8 +92,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			// this was silently failing sometimes, don't know why
 			if (minionCount > 0)
 			{
-				int radius = player.velocity.Length() < 4 ? 48 + 2 * EmpowerCount: 48;
-				float yRadius = player.velocity.Length() < 4 ? 8 + 0.5f * EmpowerCount: 8;
+				int radius = player.velocity.Length() < 4 ? 48 + 2 * EmpowerCount : 48;
+				float yRadius = player.velocity.Length() < 4 ? 8 + 0.5f * EmpowerCount : 8;
 				int order = minions.IndexOf(projectile);
 				float idleAngle = (2 * PI * order) / minionCount;
 				idleAngle += 2 * PI * groupAnimationFrame / groupAnimationFrames;

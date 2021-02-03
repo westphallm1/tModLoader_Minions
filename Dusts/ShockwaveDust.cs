@@ -1,7 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
-using AmuletOfManyMinions.Projectiles.Minions.StoneCloud;
-using Microsoft.Xna.Framework;
-using System;
+﻿using AmuletOfManyMinions.Projectiles.Minions.StoneCloud;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -17,14 +14,15 @@ namespace AmuletOfManyMinions.Dusts
 
 		public override bool Update(Dust dust)
 		{
-			if(dust.alpha > StoneCloudMinion.ShockwaveDustAlpha + StoneCloudMinion.ShockwaveMaxSpeedFrames)
+			if (dust.alpha > StoneCloudMinion.ShockwaveDustAlpha + StoneCloudMinion.ShockwaveMaxSpeedFrames)
 			{
 				dust.velocity *= StoneCloudMinion.ShockwaveDecay;
 			}
-			if(dust.alpha < StoneCloudMinion.ShockwaveDustAlpha + StoneCloudMinion.ShockwaveTotalFrames)
+			if (dust.alpha < StoneCloudMinion.ShockwaveDustAlpha + StoneCloudMinion.ShockwaveTotalFrames)
 			{
 				dust.alpha += 1;
-			} else
+			}
+			else
 			{
 				dust.active = false;
 			}

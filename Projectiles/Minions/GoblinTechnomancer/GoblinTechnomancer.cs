@@ -1,6 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Items.Accessories;
-using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
+﻿using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
@@ -128,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Vector2 oppositeVector = -vectorToTargetPosition;
 			oppositeVector.SafeNormalize();
 			float targetDistanceFromFoe = 64f;
-			if(targetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
+			if (targetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
 			{
 				// use the average of the width and height to get an approximate "radius" for the enemy
 				NPC npc = Main.npc[targetIdx];
@@ -136,8 +133,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				targetDistanceFromFoe += (hitbox.Width + hitbox.Height) / 4;
 			}
 			vectorToTargetPosition += targetDistanceFromFoe * oppositeVector;
-			if(player.whoAmI == Main.myPlayer && IsMyTurn() && 
-				animationFrame - lastShootFrame >= attackFrames && 
+			if (player.whoAmI == Main.myPlayer && IsMyTurn() &&
+				animationFrame - lastShootFrame >= attackFrames &&
 				vectorToTargetPosition.LengthSquared() < 96 * 96)
 			{
 				lineOfFire.SafeNormalize();
@@ -153,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				Main.PlaySound(SoundID.Item10, projectile.position);
 			}
 			DistanceFromGroup(ref vectorToTargetPosition);
-			if(vectorToTargetPosition.Length() > travelSpeed)
+			if (vectorToTargetPosition.Length() > travelSpeed)
 			{
 				vectorToTargetPosition.SafeNormalize();
 				vectorToTargetPosition *= travelSpeed;
@@ -196,13 +193,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		private void DrawProbes(SpriteBatch spriteBatch, Color lightColor, int spriteDirectionFilter)
 		{
 			List<Projectile> closeProbes = GetMinionsOfType(CounterType)
-				.Where(p=>p.localAI[0] == 1 && p.spriteDirection == spriteDirectionFilter)
+				.Where(p => p.localAI[0] == 1 && p.spriteDirection == spriteDirectionFilter)
 				.ToList();
 			Texture2D texture = Main.projectileTexture[CounterType];
 			SpriteEffects effects = spriteDirectionFilter == -1 ? SpriteEffects.FlipHorizontally : 0;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = bounds.Center.ToVector2();
-			foreach(Projectile probe in closeProbes)
+			foreach (Projectile probe in closeProbes)
 			{
 				spriteBatch.Draw(texture, probe.Center - Main.screenPosition,
 					bounds, lightColor, probe.rotation,
@@ -223,27 +220,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Texture2D texture = GetTexture(Texture + "_Arms");
 			int frame = 0;
 			float shootSlope = default;
-			if(framesSinceHadTarget < 30 && lastShotVector != default && framesSinceLastHit <= 30)
+			if (framesSinceHadTarget < 30 && lastShotVector != default && framesSinceLastHit <= 30)
 			{
 				float denominator = Math.Max(Math.Abs(lastShotVector.X), 1);
 				shootSlope = lastShotVector.Y / denominator;
 			}
-			if(shootSlope != default)
+			if (shootSlope != default)
 			{
-				if(shootSlope > 0.75f)
+				if (shootSlope > 0.75f)
 				{
 					frame = 1;
-				} else if (shootSlope > -0.75f)
+				}
+				else if (shootSlope > -0.75f)
 				{
 					frame = 2;
-				} else
+				}
+				else
 				{
 					frame = 3;
 				}
 				DrawWeapon(spriteBatch, lightColor);
 			}
-			Rectangle bounds = new Rectangle(0, frame * texture.Height/4, texture.Width, texture.Height/4);
-			Vector2 origin = new Vector2(bounds.Width/2, bounds.Height / 2);
+			Rectangle bounds = new Rectangle(0, frame * texture.Height / 4, texture.Width, texture.Height / 4);
+			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Vector2 pos = projectile.Center;
 			SpriteEffects effects = projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
@@ -278,7 +277,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Vector2 offset = lastShotVector;
 			offset.Y *= -1;
 			offset.SafeNormalize();
-			Texture2D texture = GetTexture(Texture+"_Gun");
+			Texture2D texture = GetTexture(Texture + "_Gun");
 			Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = GetWeaponAngle(offset);
@@ -340,7 +339,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage/2 + (baseDamage / 8) * EmpowerCount; // only scale up damage a little bit
+			return baseDamage / 2 + (baseDamage / 8) * EmpowerCount; // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()

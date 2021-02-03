@@ -159,8 +159,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			}
 		}
 	}
-	public class BeeQueenCounterMinion : CounterMinion {
-		
+	public class BeeQueenCounterMinion : CounterMinion
+	{
+
 		protected override int BuffId => BuffType<BeeQueenMinionBuff>();
 		protected override int MinionType => ProjectileType<BeeQueenMinion>();
 	}

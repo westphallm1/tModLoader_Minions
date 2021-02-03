@@ -1,9 +1,4 @@
 ﻿using AmuletOfManyMinions.Projectiles.Squires;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -33,7 +28,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 		{
 			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 80f;
 			player.minionDamageMult += 0.1f;
-			if(SquireMinionTypes.Contains(player.HeldItem.shoot))
+			if (SquireMinionTypes.Contains(player.HeldItem.shoot))
 			{
 				player.scope = true;
 			}

@@ -1,6 +1,5 @@
 ﻿using AmuletOfManyMinions.Items.Accessories.SquireBat;
 using AmuletOfManyMinions.Items.Accessories.SquireSkull;
-using AmuletOfManyMinions.Items.Armor.RoyalArmor;
 using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy;
 using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
@@ -15,7 +14,6 @@ using AmuletOfManyMinions.Projectiles.Minions.Slimepire;
 using AmuletOfManyMinions.Projectiles.Minions.StarSurfer;
 using AmuletOfManyMinions.Projectiles.Minions.StoneCloud;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
-using AmuletOfManyMinions.Projectiles.Minions.WhackAMole;
 using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
 using AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.BoneSquire;
@@ -23,7 +21,6 @@ using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
 using AmuletOfManyMinions.Projectiles.Squires.PottedPal;
 using AmuletOfManyMinions.Projectiles.Squires.Squeyere;
 using AmuletOfManyMinions.Projectiles.Squires.VikingSquire;
-using System;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
@@ -40,18 +37,19 @@ namespace AmuletOfManyMinions.NPCs
 			// make all spawn chances more likely on expert mode
 			float spawnChance = Main.rand.NextFloat() * (Main.expertMode ? 0.67f : 1);
 
-			if(npc.type == NPCID.Guide)
+			if (npc.type == NPCID.Guide)
 			{
 				if (Main.npc.Any(n => n.active && NPCSets.lunarBosses.Contains(n.type)))
 				{
 					Item.NewItem(npc.getRect(), ItemType<GuideHair>(), 1);
-				} else if (NPC.downedBoss1 || NPC.downedSlimeKing)
+				}
+				else if (NPC.downedBoss1 || NPC.downedSlimeKing)
 				{
 					Item.NewItem(npc.getRect(), ItemType<GuideSquireMinionItem>(), 1, prefixGiven: -1);
 				}
 			}
 
-			if(spawnChance < 0.05f && NPCSets.preHardmodeIceEnemies.Contains(npc.netID))
+			if (spawnChance < 0.05f && NPCSets.preHardmodeIceEnemies.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<VikingSquireMinionItem>(), 1);
 			}
@@ -82,17 +80,17 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<SquireBatAccessory>(), 1, prefixGiven: -1);
 			}
 
-			if(spawnChance < 0.33f && npc.type == NPCID.BigMimicHallow)
+			if (spawnChance < 0.33f && npc.type == NPCID.BigMimicHallow)
 			{
 				Item.NewItem(npc.getRect(), ItemType<StarSurferMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if(spawnChance < 0.33f && npc.type == NPCID.BigMimicCrimson)
+			if (spawnChance < 0.33f && npc.type == NPCID.BigMimicCrimson)
 			{
 				Item.NewItem(npc.getRect(), ItemType<NullHatchetMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if(spawnChance < 0.33f && npc.type == NPCID.BigMimicCorruption)
+			if (spawnChance < 0.33f && npc.type == NPCID.BigMimicCorruption)
 			{
 				Item.NewItem(npc.getRect(), ItemType<VoidKnifeMinionItem>(), 1, prefixGiven: -1);
 			}
@@ -117,18 +115,18 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<CharredChimeraMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if(spawnChance < 0.05f && NPCSets.necromancers.Contains(npc.netID))
+			if (spawnChance < 0.05f && NPCSets.necromancers.Contains(npc.netID))
 			{
 				Item.NewItem(npc.getRect(), ItemType<NecromancerMinionItem>(), 1, prefixGiven: -1);
 			}
 
 			// drop from any enemy during a blood moon in pre-hardmode
-			if(spawnChance < 0.04f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue &&  Main.bloodMoon && Main.hardMode)
+			if (spawnChance < 0.04f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue && Main.bloodMoon && Main.hardMode)
 			{
 				Item.NewItem(npc.getRect(), ItemType<SlimepireMinionItem>(), 1, prefixGiven: -1);
 			}
 
-			if(!Main.expertMode)
+			if (!Main.expertMode)
 			{
 				if (spawnChance < 0.33f && npc.type == NPCID.Plantera)
 				{
@@ -140,7 +138,7 @@ namespace AmuletOfManyMinions.NPCs
 					Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1, prefixGiven: -1);
 				}
 
-				if(spawnChance < 0.5f && npc.type == NPCID.SkeletronHead)
+				if (spawnChance < 0.5f && npc.type == NPCID.SkeletronHead)
 				{
 					Item.NewItem(npc.getRect(), ItemType<SquireSkullAccessory>(), 1, prefixGiven: -1);
 				}
@@ -160,19 +158,19 @@ namespace AmuletOfManyMinions.NPCs
 				nextSlot++;
 			}
 
-			if(type == NPCID.Clothier)
+			if (type == NPCID.Clothier)
 			{
 				shop.item[nextSlot].SetDefaults(ItemID.AncientCloth);
 				nextSlot++;
 			}
-			
-			if(type == NPCID.Painter && NPC.downedBoss1)
+
+			if (type == NPCID.Painter && NPC.downedBoss1)
 			{
 				shop.item[nextSlot].SetDefaults(ItemType<MysticPaintbrushMinionItem>());
 				nextSlot++;
 			}
 
-			if(type == NPCID.GoblinTinkerer && NPC.downedMartians)
+			if (type == NPCID.GoblinTinkerer && NPC.downedMartians)
 			{
 				shop.item[nextSlot].SetDefaults(ItemType<GoblinTechnomancerMinionItem>());
 				nextSlot++;
@@ -180,16 +178,16 @@ namespace AmuletOfManyMinions.NPCs
 		}
 	}
 
-	public class BossBagGlobalItem: GlobalItem
+	public class BossBagGlobalItem : GlobalItem
 	{
 
 		public override void OpenVanillaBag(string context, Player player, int arg)
 		{
 			float spawnChance = Main.rand.NextFloat();
-			switch(arg)
+			switch (arg)
 			{
 				case ItemID.QueenBeeBossBag:
-					if(spawnChance < 0.67f)
+					if (spawnChance < 0.67f)
 					{
 						player.QuickSpawnItem(ItemType<BeeQueenMinionItem>());
 					}

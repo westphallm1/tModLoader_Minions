@@ -1,5 +1,3 @@
-using AmuletOfManyMinions.Items.Accessories;
-using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -65,7 +63,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 			recipe.AddRecipe();
 		}
 	}
-	public class AridTumblerProjectile: SquireBoomerangMinion
+	public class AridTumblerProjectile : SquireBoomerangMinion
 	{
 
 		protected override int idleVelocity => 12;
@@ -116,7 +114,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 				bounds, lightColor, r,
 				origin, 0.75f, 0, 0);
 			// draw the eyes
-			Texture2D eyesTexture = GetTexture(Texture+"_Eyes");
+			Texture2D eyesTexture = GetTexture(Texture + "_Eyes");
 			SpriteEffects effects = animationFrame % AnimationFrames < AnimationFrames / 2 ? 0 : SpriteEffects.FlipHorizontally;
 			spriteBatch.Draw(eyesTexture, pos - Main.screenPosition,
 				bounds, Color.White, 0,
@@ -131,14 +129,15 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(squire == null)
+			if (squire == null)
 			{
 				return;
 			}
-			if(vectorToTarget is null || returning)
+			if (vectorToTarget is null || returning)
 			{
 				projectile.rotation += squire.spriteDirection * 0.2f;
-			} else
+			}
+			else
 			{
 				projectile.rotation += squire.spriteDirection * 0.3f;
 			}

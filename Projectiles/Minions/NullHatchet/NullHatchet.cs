@@ -1,12 +1,9 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
@@ -121,11 +118,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			float swingDistance = 80;
 			if (Main.myPlayer == player.whoAmI && distanceFromFoe == default)
 			{
-				distanceFromFoe = swingDistance + Main.rand.Next(-20, 20);;
+				distanceFromFoe = swingDistance + Main.rand.Next(-20, 20); ;
 				teleportAngle = Main.rand.NextFloat(MathHelper.TwoPi);
 				projectile.netUpdate = true;
 				//Don't change position continuously, bandaid fix until a proper way for it to work in MP is figured out
-			} else if (distanceFromFoe != default)
+			}
+			else if (distanceFromFoe != default)
 			{
 				int swingFrame = phaseFrames - maxPhaseFrames / 2;
 				swingCenter = targetNPC.Center + teleportDirection * distanceFromFoe;
@@ -157,7 +155,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			Vector2 swingAngleVector = swingAngle.ToRotationVector2();
 			projectile.rotation = swingAngle + MathHelper.PiOver2;
 			projectile.Center = swingCenter + swingAngleVector * distanceFromFoe;
-			if(framesInAir % 3 == 0)
+			if (framesInAir % 3 == 0)
 			{
 				Dust.NewDust(projectile.Center, 8, 8, 235);
 			}
@@ -182,7 +180,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if(attackState == AttackState.IDLE || phaseFrames < maxPhaseFrames / 2)
+			if (attackState == AttackState.IDLE || phaseFrames < maxPhaseFrames / 2)
 			{
 				projectile.spriteDirection = projectile.Center.X > player.Center.X ? 1 : -1;
 			}

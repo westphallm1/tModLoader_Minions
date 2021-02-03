@@ -95,8 +95,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		}
 
 		protected int ModifiedAttackFrames => attackSpeedCanBeModified ?
-			(int)(AttackFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier) : 
-			AttackFrames; 
+			(int)(AttackFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier) :
+			AttackFrames;
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
@@ -264,7 +264,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			usingWeapon = true;
 			weaponAngle = GetWeaponAngle();
-			if(attackFrame == 0 && attackSound != null)
+			if (attackFrame == 0 && attackSound != null)
 			{
 				Main.PlaySound(attackSound, projectile.Center);
 			}

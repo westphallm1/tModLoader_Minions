@@ -42,7 +42,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 	}
 
 
-	public class BalloonBuddyCounterMinion : CounterMinion {
+	public class BalloonBuddyCounterMinion : CounterMinion
+	{
 		protected override int BuffId => BuffType<BalloonBuddyMinionBuff>();
 		protected override int MinionType => ProjectileType<BalloonBuddyMinion>();
 	}

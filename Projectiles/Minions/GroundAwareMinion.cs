@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
@@ -36,23 +33,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public override string ToString()
 		{
 			string val = "";
-			if(throughWall)
+			if (throughWall)
 			{
 				val += "Wall, ";
 			}
-			if(throughCeiling)
+			if (throughCeiling)
 			{
 				val += "Ceil, ";
 			}
-			if(throughFloor)
+			if (throughFloor)
 			{
 				val += "Floor, ";
 			}
-			if(overCliff)
+			if (overCliff)
 			{
 				val += "Cliff, ";
 			}
-			if(overLedge)
+			if (overLedge)
 			{
 				val += "Ledge, ";
 			}
@@ -68,10 +65,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal SimpleMinion self;
 		internal bool didHitWall;
 		private bool _isFlying;
-		internal bool isFlying {
+		internal bool isFlying
+		{
 			get => _isFlying;
-			set {
-				if(self.animationFrame - lastTransformedFrame > transformRateLimit)
+			set
+			{
+				if (self.animationFrame - lastTransformedFrame > transformRateLimit)
 				{
 					lastTransformedFrame = self.animationFrame;
 					_isFlying = value;
@@ -142,11 +141,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// GGGGGGGGGGG
 		internal Vector2? NearestGroundLocation(Vector2? searchStart = null, int maxSearchDistance = 320)
 		{
-			for(int i = 8; i < maxSearchDistance; i+= 16)
+			for (int i = 8; i < maxSearchDistance; i += 16)
 			{
 				Vector2 searchPoint = searchStart ?? projectile.Bottom;
 				searchPoint.Y += i;
-				if(InTheGround(searchPoint))
+				if (InTheGround(searchPoint))
 				{
 					return searchPoint;
 				}
@@ -163,17 +162,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// GGGGG
 		internal Vector2? NearestLedgeLocation(Vector2 searchDirection, Vector2? searchStart = null, int maxSearchDistance = 48)
 		{
-			for(int i = 8; i < maxSearchDistance; i+= 16)
+			for (int i = 8; i < maxSearchDistance; i += 16)
 			{
 				Vector2 searchPoint = searchStart ?? projectile.Top;
 				searchPoint.Y -= i;
 				Vector2 nextPointOver = searchPoint;
 				nextPointOver.X += 16 * Math.Sign(searchDirection.X);
 				bool searchPointInGround = InTheGround(searchPoint);
-				if(searchPointInGround)
+				if (searchPointInGround)
 				{
 					return null; // the ledge is obstructed, we can't climb it
-				} else if(!InTheGround(nextPointOver))
+				}
+				else if (!InTheGround(nextPointOver))
 				{
 					return searchPoint;
 				}
@@ -190,16 +190,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// GGGGGGGGGG
 		internal Vector2? NearestCliffLocation(Vector2 searchDirection, int cliffHeight = 48, Vector2? searchStart = null, int maxSearchDistance = 48)
 		{
-			for(int i = 0; i < maxSearchDistance; i+= 16)
+			for (int i = 0; i < maxSearchDistance; i += 16)
 			{
 				Vector2 searchPoint = searchStart ?? projectile.Bottom;
 				searchPoint.Y -= 8; // make sure the block above is also air
 				searchPoint.X += i * Math.Sign(searchDirection.X);
 				bool isAllAir = true;
-				for(int j = 0; j < cliffHeight; j+= 16)
+				for (int j = 0; j < cliffHeight; j += 16)
 				{
 					Vector2 dropPoint = searchPoint + new Vector2(0, j);
-					if(InTheGround(dropPoint))
+					if (InTheGround(dropPoint))
 					{
 						if (j == 0)
 						{
@@ -210,7 +210,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 						break;
 					}
 				}
-				if(isAllAir)
+				if (isAllAir)
 				{
 					return searchPoint;
 				}
@@ -236,12 +236,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			stuckInfo.throughFloor = isOnGround && vectorToIdlePosition.Y > 32 && Math.Abs(vectorToIdlePosition.X) < 32;
 			stuckInfo.throughCeiling = isOnGround && vectorToIdlePosition.Y < -64 &&
 				Math.Abs(vectorToIdlePosition.X) < 32 && !Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToIdlePosition, 1, 1);
-			if(isOnGround && NearestCliffLocation(vectorToIdlePosition, maxSearchDistance: 32, cliffHeight: 128) is Vector2 cliff)
+			if (isOnGround && NearestCliffLocation(vectorToIdlePosition, maxSearchDistance: 32, cliffHeight: 128) is Vector2 cliff)
 			{
 				stuckInfo.overCliff = true;
 				stuckInfo.cliffDestination = cliff;
 			}
-			if(stuckInfo.throughWall && NearestLedgeLocation(vectorToIdlePosition, maxSearchDistance: 128) is Vector2 ledge)
+			if (stuckInfo.throughWall && NearestLedgeLocation(vectorToIdlePosition, maxSearchDistance: 128) is Vector2 ledge)
 			{
 				stuckInfo.overLedge = true;
 				stuckInfo.ledgeDestination = ledge;
@@ -258,21 +258,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			float maxLength = vectorToTarget.Length();
 			Vector2? clearSpace = null;
 			bool hasFoundGround = false;
-			for(int i = increment; i < maxLength; i+= increment)
+			for (int i = increment; i < maxLength; i += increment)
 			{
 				Vector2 position = projectile.Center + incrementVector * i;
 				bool inTheGround = InTheGround(position);
 				hasFoundGround |= inTheGround;
-				if(hasFoundGround && !inTheGround)
+				if (hasFoundGround && !inTheGround)
 				{
 					clearSpace = position;
 					break;
 				}
 			}
-			if(clearSpace == null && !InTheGround(projectile.Center + vectorToTarget)) {
+			if (clearSpace == null && !InTheGround(projectile.Center + vectorToTarget))
+			{
 				clearSpace = projectile.Center + vectorToTarget;
 			}
-			if(clearSpace is Vector2 clear && NearestGroundLocation(searchStart: clear) is Vector2 clearGround)
+			if (clearSpace is Vector2 clear && NearestGroundLocation(searchStart: clear) is Vector2 clearGround)
 			{
 				clearGround.Y -= clearGround.Y % 16; // snap to the nearest block
 				clearGround.Y -= projectile.height;
@@ -295,18 +296,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			float maxLength = vectorToTarget.Length();
 			Vector2? clearSpace = null;
 			bool hasFoundGround = false;
-			for(int i = 16; i < maxLength; i+= increment)
+			for (int i = 16; i < maxLength; i += increment)
 			{
 				Vector2 position = projectile.Center + incrementVector * i;
 				bool inTheGround = InTheGround(position);
 				hasFoundGround |= inTheGround;
-				if(hasFoundGround && !inTheGround)
+				if (hasFoundGround && !inTheGround)
 				{
 					clearSpace = position;
 					break;
 				}
 			}
-			if(clearSpace is Vector2 clear && NearestGroundLocation(searchStart: clear) is Vector2 clearGround)
+			if (clearSpace is Vector2 clear && NearestGroundLocation(searchStart: clear) is Vector2 clearGround)
 			{
 				clearGround.Y -= clearGround.Y % 16; // snap to the nearest block
 				clearGround.Y -= (projectile.height);
@@ -319,24 +320,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal bool GetUnstuckByTeleporting(StuckInfo stuckInfo, Vector2 vectorToIdlePosition)
 		{
-			if(!stuckInfo.isStuck)
+			if (!stuckInfo.isStuck)
 			{
 				return true;
 			}
 			bool ableToNavigate = false;
-			if(stuckInfo.overLedge && ScaleLedge != null)
+			if (stuckInfo.overLedge && ScaleLedge != null)
 			{
 				ableToNavigate = ScaleLedge(stuckInfo.ledgeDestination - projectile.Bottom);
-			} else if(stuckInfo.overCliff && CrossCliff != null)
+			}
+			else if (stuckInfo.overCliff && CrossCliff != null)
 			{
 				ableToNavigate = CrossCliff(stuckInfo.cliffDestination - projectile.Bottom);
-			} else if(stuckInfo.throughCeiling)
+			}
+			else if (stuckInfo.throughCeiling)
 			{
 				ableToNavigate = FindEmptySpaceThroughCeiling(vectorToIdlePosition);
-			} else 
+			}
+			else
 			{
 				ableToNavigate = FindEmptySpaceNearTarget(vectorToIdlePosition);
-			} 
+			}
 			didHitWall = false;
 			isFlying = !ableToNavigate;
 			return ableToNavigate;
@@ -345,11 +349,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal void DoTileCollide(Vector2 oldVelocity)
 		{
-			if(oldVelocity.X != 0 && projectile.velocity.X == 0)
+			if (oldVelocity.X != 0 && projectile.velocity.X == 0)
 			{
 				didHitWall = true;
 			}
-			if(oldVelocity.Y >= 0 && projectile.velocity.Y == 0)
+			if (oldVelocity.Y >= 0 && projectile.velocity.Y == 0)
 			{
 				didJustLand = true;
 			}
@@ -362,19 +366,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal GroundAnimationState GetAnimationState()
 		{
-			if(isFlying)
+			if (isFlying)
 			{
 				return GroundAnimationState.FLYING;
-			} else if (!didJustLand)
+			}
+			else if (!didJustLand)
 			{
 				return GroundAnimationState.JUMPING;
-			} else
+			}
+			else
 			{
-				if(Math.Abs(projectile.velocity.X) < 1)
+				if (Math.Abs(projectile.velocity.X) < 1)
 				{
 					// standing still
 					slowFrameCount++;
-				} else
+				}
+				else
 				{
 					slowFrameCount = 0;
 				}
@@ -382,15 +389,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 
-		internal GroundAnimationState DoGroundAnimation(Dictionary<GroundAnimationState, (int, int?)> frameInfo , Action<int, int?> animate)
+		internal GroundAnimationState DoGroundAnimation(Dictionary<GroundAnimationState, (int, int?)> frameInfo, Action<int, int?> animate)
 		{
 			GroundAnimationState state = GetAnimationState();
 			projectile.rotation = state == GroundAnimationState.FLYING ? 0.05f * projectile.velocity.X : 0;
 			(int, int?) pair = frameInfo[state];
-			if(pair.Item2 is int maxFrame)
+			if (pair.Item2 is int maxFrame)
 			{
 				animate(pair.Item1, maxFrame);
-			} else
+			}
+			else
 			{
 				projectile.frame = pair.Item1;
 			}
@@ -400,7 +408,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal void DoJump(Vector2 vectorToTarget, int defaultJumpVelocity = 4, int maxJumpVelocity = 12)
 		{
-			if(!didJustLand)
+			if (!didJustLand)
 			{
 				return;
 			}
@@ -426,7 +434,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			isOnGround = InTheGround(new Vector2(projectile.Bottom.X, projectile.Bottom.Y + 8)) ||
 				InTheGround(new Vector2(projectile.Bottom.X, projectile.Bottom.Y + 24));
-			if(!didJustLand)
+			if (!didJustLand)
 			{
 				didJustLand |= StandingOnSlope();
 			}
@@ -434,10 +442,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal void SetOffTheGroundFrames()
 		{
-			if(isOnGround)
+			if (isOnGround)
 			{
 				offTheGroundFrames = 0;
-			} else
+			}
+			else
 			{
 				offTheGroundFrames++;
 			}
@@ -447,11 +456,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal void SetFlyingState(Vector2 vectorToIdle, Vector2? vectorToTarget, float targetSearchDistance, float maxDistanceAboveGround)
 		{
 			Vector2? theGround = NearestGroundLocation(maxSearchDistance: (int)maxDistanceAboveGround);
-			if(vectorToIdle.Length() > targetSearchDistance || 
+			if (vectorToIdle.Length() > targetSearchDistance ||
 				(vectorToTarget is null && (vectorToIdle.Y > maxDistanceAboveGround || theGround is null)))
 			{
 				isFlying = true;
-			} else if (!InTheGround(projectile.Bottom) && Math.Abs(vectorToIdle.Y) < maxDistanceAboveGround/2 && theGround != null)
+			}
+			else if (!InTheGround(projectile.Bottom) && Math.Abs(vectorToIdle.Y) < maxDistanceAboveGround / 2 && theGround != null)
 			{
 				isFlying = false;
 			}
@@ -460,8 +470,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal void ApplyGravity(int maxUpwardVelocity = 12)
 		{
 			projectile.tileCollide = true;
-			projectile.velocity.Y += 0.5f ;
-			if(projectile.velocity.Y < -maxUpwardVelocity)
+			projectile.velocity.Y += 0.5f;
+			if (projectile.velocity.Y < -maxUpwardVelocity)
 			{
 				projectile.velocity.Y = -maxUpwardVelocity;
 			}
@@ -474,18 +484,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal void DoIdleMovement(Vector2 vectorToIdle, Vector2? vectorToTarget, float targetSearchDistance, float maxDistanceAboveGround)
 		{
 			SetFlyingState(vectorToIdle, vectorToTarget, vectorToTarget == null ? 400f : targetSearchDistance, maxDistanceAboveGround);
-			if(teleportStartFrame != null && GetUnstuck != null)
+			if (teleportStartFrame != null && GetUnstuck != null)
 			{
 				bool done = false;
 				GetUnstuck(teleportDestination, (int)teleportStartFrame, ref done);
-				if(done)
+				if (done)
 				{
 					teleportStartFrame = null;
 				}
-			} else if(isFlying && IdleFlyingMovement != null)
+			}
+			else if (isFlying && IdleFlyingMovement != null)
 			{
 				IdleFlyingMovement(vectorToIdle);
-			} else
+			}
+			else
 			{
 				IdleGroundedMovement?.Invoke(vectorToIdle);
 			}

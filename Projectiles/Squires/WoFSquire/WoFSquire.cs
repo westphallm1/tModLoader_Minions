@@ -1,7 +1,5 @@
-using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Projectiles.Minions;
-using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
 using AmuletOfManyMinions.Projectiles.Squires.Squeyere;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
@@ -9,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -39,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override void Update(Player player, ref int buffIndex)
 		{
 			// don't keep self active just because minion is alive
-			if(player.ownedProjectileCounts[ProjectileType<WoFSquireMinion>()] == 0)
+			if (player.ownedProjectileCounts[ProjectileType<WoFSquireMinion>()] == 0)
 			{
 				player.DelBuff(buffIndex);
 				buffIndex--;
@@ -70,7 +67,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			if(player.ownedProjectileCounts[wofType] > 0) {
+			if (player.ownedProjectileCounts[wofType] > 0)
+			{
 				return false;
 			}
 			return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
@@ -106,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class WoFEyeLaser : SquireLaser
 	{
-		public override string Texture => "Terraria/Projectile_"+ProjectileID.PurpleLaser;
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.PurpleLaser;
 
 		public override Color lightColor => Color.Purple;
 	}
@@ -117,8 +115,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		int dashDirection = 1;
 		bool isDashing;
 
-		private Vector2?[] laserTargets; 
-		private int[] laserFrames; 
+		private Vector2?[] laserTargets;
+		private int[] laserFrames;
 
 		public WoFSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
@@ -162,16 +160,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			projectile.friendly = true;
 			isDashing = false;
 			Vector2? _nearestNPCVector = AnyEnemyInRange(searchDistance, projectile.Center);
-			if(_nearestNPCVector is Vector2 nearestNPCVector)
+			if (_nearestNPCVector is Vector2 nearestNPCVector)
 			{
 				vectorToTargetPosition = nearestNPCVector - projectile.Center;
 			}
-			if(_nearestNPCVector != null)
+			if (_nearestNPCVector != null)
 			{
-				if(vectorToTargetPosition.Length() < dashCheckDistance)
+				if (vectorToTargetPosition.Length() < dashCheckDistance)
 				{
 					isDashing = true;
-					for(int i = 0; i < maxDashDistance; i+= collisionStep)
+					for (int i = 0; i < maxDashDistance; i += collisionStep)
 					{
 						vectorToTargetPosition.X += collisionStep * dashDirection;
 						if (!Collision.CanHit(projectile.position, projectile.width, projectile.height, projectile.position + vectorToTargetPosition, 1, 1))
@@ -179,22 +177,22 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 							break;
 						}
 					}
-					if(vectorToTargetPosition.Length() < 16f)
+					if (vectorToTargetPosition.Length() < 16f)
 					{
 						dashDirection *= -1;
 					}
-				} 
+				}
 			}
 			base.TargetedMovement(vectorToTargetPosition);
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if(isDashing)
+			if (isDashing)
 			{
 				DrawAferImage(spriteBatch);
 			}
-			if(vectorToTarget != null)
+			if (vectorToTarget != null)
 			{
 				DrawClingers(spriteBatch, lightColor);
 			}
@@ -225,16 +223,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Texture2D texture = GetTexture(Texture + "_Eye");
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			for(int i = 0; i < 2; i++)
+			for (int i = 0; i < 2; i++)
 			{
 				float r;
-				if(laserTargets[i] is Vector2 target && animationFrame - laserFrames[i] < 10)
+				if (laserTargets[i] is Vector2 target && animationFrame - laserFrames[i] < 10)
 				{
 					r = target.ToRotation();
-				} else if (projectile.spriteDirection == 1)
+				}
+				else if (projectile.spriteDirection == 1)
 				{
 					r = MathHelper.Pi;
-				} else
+				}
+				else
 				{
 					r = 0;
 				}
@@ -249,7 +249,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			int nToDraw = 4;
 			float velocityFraction = 0.75f;
 			Vector2 velocity = -projectile.velocity;
-			if(Math.Abs(velocity.Y) > 4)
+			if (Math.Abs(velocity.Y) > 4)
 			{
 				velocity.Y = 4 * Math.Sign(velocity.Y);
 			}
@@ -259,7 +259,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			int frameHeight = texture.Height / Main.projFrames[projectile.type];
 			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			for(int i = 0; i < nToDraw; i++)
+			for (int i = 0; i < nToDraw; i++)
 			{
 				Vector2 pos = projectile.Center + i * velocity * velocityFraction;
 				Color lightColor = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
@@ -274,22 +274,23 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Texture2D texture = GetTexture(Texture + "_Clingers");
 			int nFrames = 2;
 			int frameHeight = texture.Height / nFrames;
-			float r = projectile.spriteDirection == 1 ? MathHelper.PiOver2 : - MathHelper.PiOver2;
-			for(int i = 0; i < 3; i++)
+			float r = projectile.spriteDirection == 1 ? MathHelper.PiOver2 : -MathHelper.PiOver2;
+			for (int i = 0; i < 3; i++)
 			{
 				int frame = animationFrame % 60 < 30 ? 0 : 1;
-				if(i == 1)
+				if (i == 1)
 				{
 					frame = frame == 1 ? 0 : 1; // flip the frame for the middle clinger
 				}
 				Rectangle bounds = new Rectangle(0, frame * frameHeight, texture.Width, frameHeight);
 				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 				Vector2 pos = projectile.Center;
-				float yOffset = 15 + 4 * (float) Math.Sin(2 * Math.PI * animationFrame / 60f);
-				if(i == 0)
+				float yOffset = 15 + 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 60f);
+				if (i == 0)
 				{
 					pos.Y -= yOffset;
-				} else if (i == 2)
+				}
+				else if (i == 2)
 				{
 					pos.Y += yOffset;
 				}
@@ -309,30 +310,33 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			int gore1 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFEyeGore"), 1f);
 			int gore2 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFEyeGore"), 1f);
 			int gore3 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFHammerGore"), 1f);
-			foreach(int gore in new int[]{gore1, gore2, gore3}) {
+			foreach (int gore in new int[] { gore1, gore2, gore3 })
+			{
 				Main.gore[gore].timeLeft = 180; // make it last not as long
 				Main.gore[gore].alpha = 128; // make it transparent
 			}
-			for(int i = 0; i < 8; i++)
+			for (int i = 0; i < 8; i++)
 			{
 				Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y);
 			}
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(vectorToIdle.Length() < 32)
+			if (vectorToIdle.Length() < 32)
 			{
 				projectile.spriteDirection = player.direction;
 			}
 			else if (vectorToTarget is Vector2 target)
 			{
-				if(target.Length() < 64f && !isDashing)
+				if (target.Length() < 64f && !isDashing)
 				{
 					projectile.spriteDirection = player.Center.X - projectile.Center.X > 0 ? -1 : 1;
-				} else if(relativeVelocity.X > 2)
+				}
+				else if (relativeVelocity.X > 2)
 				{
 					projectile.spriteDirection = 1;
-				} else if (relativeVelocity.X  < -2)
+				}
+				else if (relativeVelocity.X < -2)
 				{
 					projectile.spriteDirection = -1;
 				}
@@ -344,9 +348,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override float ComputeIdleSpeed() => 18;
 
 		// needs to slow down a little so dash is visible
-		public override float ComputeTargetedSpeed() => isDashing? 16 / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier : 18;
+		public override float ComputeTargetedSpeed() => isDashing ? 16 / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier : 18;
 
-		public override float ComputeInertia() => isDashing? 4: base.ComputeInertia();
+		public override float ComputeInertia() => isDashing ? 4 : base.ComputeInertia();
 
 		public override float MaxDistanceFromPlayer() => 700f;
 	}
@@ -406,19 +410,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if(knockbackCounter < 0)
+			if (knockbackCounter < 0)
 			{
 				Vector2 kbDirection = target.Center - projectile.Center;
 				kbDirection.Normalize();
 				kbDirection *= -3.5f;
-				projectile.velocity =  target.velocity + kbDirection;
-				if(target.damage > 0)
+				projectile.velocity = target.velocity + kbDirection;
+				if (target.damage > 0)
 				{
 					mockHealth = Math.Max(0, mockHealth - 1);
 				}
 				knockbackCounter = 12;
 			}
-			if(mockHealth == 0)
+			if (mockHealth == 0)
 			{
 				projectile.Kill();
 			}
@@ -430,24 +434,28 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		}
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if(mockHealth != MockMaxHealth)
+			if (mockHealth != MockMaxHealth)
 			{
 				float widthFraction = new Dictionary<int, float>
 				{
-					[0] = 0.05f, [1] = 0.1f, [2] = 0.5f, [3] = 0.9f
+					[0] = 0.05f,
+					[1] = 0.1f,
+					[2] = 0.5f,
+					[3] = 0.9f
 				}[mockHealth];
 
 				Color maxHealthColor = new Color(77, 230, 0);
 				Color halfHealthColor = new Color(230, 230, 0);
 				Color zeroHealthColor = new Color(230, 37, 0);
 				byte r, g, b;
-				if(widthFraction > 0.5f)
+				if (widthFraction > 0.5f)
 				{
 					float weight = 2 * (widthFraction - 0.5f);
 					r = getGradient(maxHealthColor.R, halfHealthColor.R, weight);
 					g = getGradient(maxHealthColor.G, halfHealthColor.G, weight);
 					b = getGradient(maxHealthColor.B, halfHealthColor.B, weight);
-				} else
+				}
+				else
 				{
 					float weight = 2 * (widthFraction);
 					r = getGradient(halfHealthColor.R, zeroHealthColor.R, weight);
@@ -472,10 +480,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(knockbackCounter-- < 0)
+			if (knockbackCounter-- < 0)
 			{
 				base.TargetedMovement(vectorToTargetPosition);
-			} else
+			}
+			else
 			{
 				projectile.velocity *= 0.99f;
 			}
@@ -486,7 +495,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			if (knockbackCounter-- < 0)
 			{
 				base.IdleMovement(vectorToIdlePosition);
-			} else
+			}
+			else
 			{
 				projectile.velocity *= 0.99f;
 			}
@@ -494,7 +504,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override void Kill(int timeLeft)
 		{
-			if(mockHealth == 0)
+			if (mockHealth == 0)
 			{
 				Vector2 goreVelocity = projectile.velocity;
 				goreVelocity.Normalize();
@@ -502,16 +512,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				int gore1 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideGore"), 1f);
 				int gore2 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideBodyGore"), 1f);
 				int gore3 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideLegsGore"), 1f);
-				foreach(int gore in new int[]{gore1, gore2, gore3}) {
+				foreach (int gore in new int[] { gore1, gore2, gore3 })
+				{
 					Main.gore[gore].timeLeft = 180; // make it last not as long
 					Main.gore[gore].alpha = 128; // make it transparent
 				}
-				for(int i = 0; i < 6; i++)
+				for (int i = 0; i < 6; i++)
 				{
 					Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y);
 				}
 
-				if(player.whoAmI == Main.myPlayer)
+				if (player.whoAmI == Main.myPlayer)
 				{
 					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 3 minutes
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);

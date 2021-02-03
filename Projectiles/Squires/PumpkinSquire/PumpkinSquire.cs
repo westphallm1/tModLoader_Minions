@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			projectile.friendly = true;
 			projectile.tileCollide = true;
 			projectile.penetrate = 3;
-            bounces = 3;
+			bounces = 3;
 			startFalling = false;
 		}
 
@@ -89,17 +89,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 				projectile.rotation += 0.2f * Math.Sign(projectile.velocity.X);
 			}
 		}
-        
-        public override bool OnTileCollide(Vector2 oldVelocity)
+
+		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-            if (oldVelocity.Y > 0 && projectile.velocity.Y == 0)
+			if (oldVelocity.Y > 0 && projectile.velocity.Y == 0)
 			{
 				projectile.velocity.Y = -3 * bounces;
 				// make sure not to collide right away again
 				projectile.position.Y -= 8;
 				projectile.velocity.X *= 0.67f;
 				bounces--;
-                Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y, 1, 1f, Main.rand.Next(1));
+				Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y, 1, 1f, Main.rand.Next(1));
 			}
 			if (oldVelocity.Y < 0)
 			{
@@ -116,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		{
 			// don't explode
 			Main.PlaySound(new LegacySoundStyle(4, 1).WithPitchVariance(.5f), projectile.position);
-            Vector2 direction = -projectile.velocity;
+			Vector2 direction = -projectile.velocity;
 			direction.Normalize();
 			for (int i = 0; i < 3; i++)
 			{

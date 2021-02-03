@@ -51,7 +51,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		}
 	}
 
-	public class XCXCopterCounterMinion : CounterMinion {
+	public class XCXCopterCounterMinion : CounterMinion
+	{
 
 		protected override int BuffId => BuffType<XCXCopterMinionBuff>();
 		protected override int MinionType => ProjectileType<XCXCopterMinion>();

@@ -1,19 +1,14 @@
-﻿using AmuletOfManyMinions.Items.Accessories.SquireBat;
+﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Items.Accessories.SquireBat;
 using AmuletOfManyMinions.Items.Accessories.SquireSkull;
+using AmuletOfManyMinions.Items.Accessories.TechnoCharm;
+using AmuletOfManyMinions.Items.Armor.AridArmor;
 using AmuletOfManyMinions.Items.Armor.RoyalArmor;
-using AmuletOfManyMinions.Dusts;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using AmuletOfManyMinions.Items.Armor.AridArmor;
-using AmuletOfManyMinions.Items.Accessories.TechnoCharm;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
@@ -58,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			foreach (int squireType in SquireMinionTypes.squireTypes)
 			{
-				if(player.ownedProjectileCounts[squireType] > 0)
+				if (player.ownedProjectileCounts[squireType] > 0)
 				{
 					return true;
 				}
@@ -68,10 +63,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public Projectile GetSquire()
 		{
-			for(int i = 0; i < Main.maxProjectiles; i++)
+			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type)) {
+				if (p.active && p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
+				{
 					return p;
 				}
 			}
@@ -81,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)
 		{
 			base.ModifyWeaponDamage(item, ref add, ref mult, ref flat);
-			if(!SquireMinionTypes.Contains(item.shoot))
+			if (!SquireMinionTypes.Contains(item.shoot))
 			{
 				return;
 			}
@@ -93,19 +89,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			int tapDirection = Main.ReversedUpDownArmorSetBonuses ? 1 : 0;
 			bool tappedRecently = player.doubleTapCardinalTimer[tapDirection] > 0;
 			bool didReleaseTapThisFrame = tapDirection == 0 ?
-				player.releaseDown:
+				player.releaseDown :
 				player.releaseUp;
 			bool didTapThisFrame = tapDirection == 0 ?
-				player.controlDown:
+				player.controlDown :
 				player.controlUp;
 			didDoubleTap = false;
-			if(!tappedRecently)
+			if (!tappedRecently)
 			{
 				didReleaseTap = false;
-			} else if (didReleaseTapThisFrame && tappedRecently)
+			}
+			else if (didReleaseTapThisFrame && tappedRecently)
 			{
 				didReleaseTap = true;
-			} else if(tappedRecently && didReleaseTap && didTapThisFrame)
+			}
+			else if (tappedRecently && didReleaseTap && didTapThisFrame)
 			{
 				didDoubleTap = true;
 				didReleaseTap = false;
@@ -132,23 +130,23 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			int tumblerType = ProjectileType<AridTumblerProjectile>();
 			bool canSummonAccessory = player.whoAmI == Main.myPlayer && mySquire != null;
 			// summon the appropriate squire orbiter(s)
-			if(canSummonAccessory && squireSkullAccessory && player.ownedProjectileCounts[skullType] == 0)
+			if (canSummonAccessory && squireSkullAccessory && player.ownedProjectileCounts[skullType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, skullType, 0, 0, player.whoAmI);
 			}
-			if(canSummonAccessory && squireTechnoSkullAccessory && player.ownedProjectileCounts[technoSkullType] == 0)
+			if (canSummonAccessory && squireTechnoSkullAccessory && player.ownedProjectileCounts[technoSkullType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, technoSkullType, 0, 0, player.whoAmI);
 			}
-			if(canSummonAccessory && royalArmorSetEquipped && player.ownedProjectileCounts[crownType] == 0)
+			if (canSummonAccessory && royalArmorSetEquipped && player.ownedProjectileCounts[crownType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, crownType, modifiedFixedDamage(12), 0, player.whoAmI);
 			}
-			if(canSummonAccessory && squireBatAccessory && player.ownedProjectileCounts[batType] == 0)
+			if (canSummonAccessory && squireBatAccessory && player.ownedProjectileCounts[batType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, batType, 0, 0, player.whoAmI);
 			}
-			if(canSummonAccessory && aridArmorSetEquipped && player.ownedProjectileCounts[tumblerType] == 0)
+			if (canSummonAccessory && aridArmorSetEquipped && player.ownedProjectileCounts[tumblerType] == 0)
 			{
 				Projectile.NewProjectile(mySquire.Center, mySquire.velocity, tumblerType, modifiedFixedDamage(18), 0, player.whoAmI);
 			}
@@ -162,12 +160,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			// apply bat buff if set bonus active
 			int buffType = BuffType<SquireBatBuff>();
 			int debuffType = BuffType<SquireBatDebuff>();
-			if(squireBatAccessory && didDoubleTap && !player.HasBuff(buffType) && !player.HasBuff(debuffType))
+			if (squireBatAccessory && didDoubleTap && !player.HasBuff(buffType) && !player.HasBuff(debuffType))
 			{
 				player.AddBuff(buffType, SquireBatAccessory.BuffTime);
 			}
 			// undo buff from skill orbiter
-			if(player.ownedProjectileCounts[ProjectileType<SquireSkullProjectile>()] == 0)
+			if (player.ownedProjectileCounts[ProjectileType<SquireSkullProjectile>()] == 0)
 			{
 				squireDebuffOnHit = -1;
 			}
@@ -177,16 +175,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			int buffType = BuffType<SquireBatBuff>();
 			int debuffType = BuffType<SquireBatDebuff>();
-			if(player.HasBuff(buffType))
+			if (player.HasBuff(buffType))
 			{
 				squireAttackSpeedMultiplier *= 0.75f; // 25% attack speed bonus
 				squireTravelSpeedMultiplier += 0.25f; // 25% move speed bonus
-				if(player.buffTime[player.FindBuffIndex(buffType)] == 1)
+				if (player.buffTime[player.FindBuffIndex(buffType)] == 1)
 				{
 					// switch from buff to debuff
 					player.AddBuff(debuffType, SquireBatAccessory.DebuffTime);
 				}
-			} else if (player.HasBuff(debuffType))
+			}
+			else if (player.HasBuff(debuffType))
 			{
 				squireAttackSpeedMultiplier *= 1.1f; // 10% attack speed decrease
 				squireDamageOnHitMultiplier -= 0.1f; // reduce damage 10%
@@ -194,7 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		}
 	}
 
-	class SquireGlobalProjectile: GlobalProjectile
+	class SquireGlobalProjectile : GlobalProjectile
 	{
 		public static HashSet<int> isSquireShot;
 		// buffs that affect your squire
@@ -217,9 +216,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		private void doBuffDust(Projectile projectile, int dustType)
 		{
 			Vector2 dustVelocity = new Vector2(0, -Main.rand.NextFloat() * 0.25f - 0.5f);
-			for(int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 			{
-				Vector2 offset = new Vector2(10 * (i-1), (i == 1 ? -4 : 4) + Main.rand.Next(-2, 2));
+				Vector2 offset = new Vector2(10 * (i - 1), (i == 1 ? -4 : 4) + Main.rand.Next(-2, 2));
 				Dust dust = Dust.NewDustPerfect(projectile.Top + offset, dustType, dustVelocity, Scale: 1f);
 				dust.customData = projectile.whoAmI;
 			}
@@ -228,23 +227,25 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		// add buff/debuff dusts if we've got a squire affecting buff or debuff
 		public override void PostAI(Projectile projectile)
 		{
-			if(!SquireMinionTypes.Contains(projectile.type))
+			if (!SquireMinionTypes.Contains(projectile.type))
 			{
 				return;
 			}
 			Player player = Main.player[projectile.owner];
-			foreach(int buffType in player.buffType) {
+			foreach (int buffType in player.buffType)
+			{
 				bool debuff = false;
-				
+
 				if (squireDebuffTypes.Contains(buffType))
 				{
 					debuff = true;
-				} else if(!squireBuffTypes.Contains(buffType))
+				}
+				else if (!squireBuffTypes.Contains(buffType))
 				{
 					continue;
 				}
 				int timeLeft = player.buffTime[player.FindBuffIndex(buffType)];
-				if(timeLeft % 60 == 0)
+				if (timeLeft % 60 == 0)
 				{
 					doBuffDust(projectile, debuff ? DustType<MinusDust>() : DustType<PlusDust>());
 				}
@@ -254,12 +255,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			if(!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
+			if (!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
 			{
 				return;
 			}
 			float multiplier = Main.player[projectile.owner].GetModPlayer<SquireModPlayer>().squireDamageOnHitMultiplier;
-			if(multiplier == 1)
+			if (multiplier == 1)
 			{
 				return;
 			}
@@ -269,14 +270,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
 		{
-			if(!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
+			if (!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
 			{
 				return;
 			}
 			SquireModPlayer player = Main.player[projectile.owner].GetModPlayer<SquireModPlayer>();
 			int debuffType = player.squireDebuffOnHit;
 			int duration = player.squireDebuffTime;
-			if(debuffType == -1 || Main.rand.NextFloat() > 0.25f)
+			if (debuffType == -1 || Main.rand.NextFloat() > 0.25f)
 			{
 				return;
 			}

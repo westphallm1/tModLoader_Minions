@@ -1,15 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
-	public abstract class HeadCirclingGroupAwareMinion: GroupAwareMinion
+	public abstract class HeadCirclingGroupAwareMinion : GroupAwareMinion
 	{
 		protected float idleAngle;
 		protected int targetSearchDistance = 800;
@@ -17,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected int idleCircleHeight = 10;
 		protected int idleInertia = 15;
 		protected int maxSpeed = 12;
-		
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

@@ -1,5 +1,5 @@
-﻿using Terraria.ID;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Terraria.ID;
 
 namespace AmuletOfManyMinions.NPCs
 {

@@ -1,4 +1,3 @@
-using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -36,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			item.knockBack = 4.0f;
 			item.width = 24;
 			item.height = 38;
-            item.damage = 24;
+			item.damage = 24;
 			item.value = Item.buyPrice(0, 2, 0, 0);
 			item.rare = ItemRarityID.Orange;
 		}
@@ -61,8 +60,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			base.SetDefaults();
 			projectile.penetrate = 1;
-            projectile.width = 12;
-            projectile.height = 12;
+			projectile.width = 12;
+			projectile.height = 12;
 			projectile.timeLeft = TimeToLive;
 			projectile.friendly = true;
 			projectile.tileCollide = true;
@@ -77,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			Vector2 origin = texture.Bounds.Center.ToVector2();
 			Color color = Color.White;
 			float scale = 1;
-			if(projectile.timeLeft < TimeLeftToStartFalling)
+			if (projectile.timeLeft < TimeLeftToStartFalling)
 			{
 				color.A = 64;
 				scale = projectile.timeLeft / (float)TimeLeftToStartFalling;
@@ -89,23 +88,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		}
 		public override void AI()
 		{
-            Projectile parent = Main.projectile[(int)projectile.ai[0]];
-			if(baseVelocity == default)
+			Projectile parent = Main.projectile[(int)projectile.ai[0]];
+			if (baseVelocity == default)
 			{
 				baseVelocity = projectile.velocity;
 				projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			}
-			if(parent.active && projectile.timeLeft > TimeLeftToStartFalling)
+			if (parent.active && projectile.timeLeft > TimeLeftToStartFalling)
 			{
 				projectile.velocity = parent.velocity + baseVelocity;
-			} else
+			}
+			else
 			{
 				projectile.velocity.Y = Math.Min(projectile.velocity.Y + 0.5f, 16);
 				projectile.rotation += 0.15f;
 				projectile.velocity.X *= 0.99f;
 			}
 		}
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 			// manually bypass defense
 			// this may not be wholly correct
@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	public class GoldenRogueSquireMinion : WeaponHoldingSquire
 	{
 		protected override int BuffId => BuffType<GoldenRogueSquireMinionBuff>();
-        protected override int AttackFrames => 15;
+		protected override int AttackFrames => 15;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/GoldenWings";
 
@@ -161,12 +161,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-            base.TargetedMovement(vectorToTargetPosition);
+			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				if (Main.myPlayer == player.whoAmI)
 				{
-                    Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
+					Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 					vector2Mouse *= daggerSpeed;
 					Vector2 tangent = new Vector2(vector2Mouse.Y, -vector2Mouse.X);
 					tangent.Normalize();
@@ -177,7 +177,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 						vector2Mouse,
 						vector2Mouse + tangent
 					};
-					foreach(Vector2 velocity in velocities)
+					foreach (Vector2 velocity in velocities)
 					{
 
 						Projectile.NewProjectile(projectile.Center,
@@ -203,7 +203,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			spriteBatch.Draw(glow, pos - Main.screenPosition,
 				bounds, Color.White, r,
 				origin, 1, effects, 0);
-			if(attackFrame < 10)
+			if (attackFrame < 10)
 			{
 				// only draw arm at start of attack
 				base.PostDraw(spriteBatch, lightColor);

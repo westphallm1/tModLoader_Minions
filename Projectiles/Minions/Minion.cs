@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 	}
-	public abstract class Minion : ModProjectile 
+	public abstract class Minion : ModProjectile
 	{
 		public readonly float PI = (float)Math.PI;
 

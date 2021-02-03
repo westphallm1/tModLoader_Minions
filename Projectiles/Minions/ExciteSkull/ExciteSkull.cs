@@ -1,13 +1,10 @@
-﻿using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Items.Accessories;
+﻿using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
@@ -85,11 +82,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			//spriteBatch.Draw(texture, pos - Main.screenPosition,
 			//	texture.Bounds, flairColor, projectile.rotation,
 			//	texture.Bounds.Center.ToVector2(), 1, effects, 0);
-			texture = GetTexture(Texture+"_Rider");
+			texture = GetTexture(Texture + "_Rider");
 			spriteBatch.Draw(texture, pos + new Vector2(0, -8) - Main.screenPosition,
 				texture.Bounds, lightColor, 0,
 				texture.Bounds.Center.ToVector2(), 1, effects, 0);
-			texture = GetTexture(Texture+"_RiderGlow");
+			texture = GetTexture(Texture + "_RiderGlow");
 			spriteBatch.Draw(texture, pos + new Vector2(0, -8) - Main.screenPosition,
 				texture.Bounds, flairColor, 0,
 				texture.Bounds.Center.ToVector2(), 1, effects, 0);
@@ -99,22 +96,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 		{
 			flairColor = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColor();
 		}
-		
+
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
-			if(vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 7;
 			int xMaxSpeed = 9;
-			if(vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
 				projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if(animationFrame - lastHitFrame > 10)
+			if (animationFrame - lastHitFrame > 10)
 			{
 				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -126,19 +123,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(gHelper.didJustLand)
+			if (gHelper.didJustLand)
 			{
 				projectile.rotation = 0;
-			} else
+			}
+			else
 			{
 				projectile.rotation = -projectile.spriteDirection * MathHelper.Pi / 8;
 			}
-			if(Math.Abs(projectile.velocity.X) < 1)
+			if (Math.Abs(projectile.velocity.X) < 1)
 			{
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if(((gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4) || gHelper.isFlying) && animationFrame % 3 == 0)
+			if (((gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4) || gHelper.isFlying) && animationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;

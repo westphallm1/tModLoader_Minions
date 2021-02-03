@@ -1,16 +1,9 @@
-﻿using Terraria.ID;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AmuletOfManyMinions.Projectiles.Minions.ExciteSkull;
+using AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using AmuletOfManyMinions.Projectiles.Squires.VikingSquire;
-using AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire;
-using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
-using AmuletOfManyMinions.Projectiles.Minions.ExciteSkull;
 
 namespace AmuletOfManyMinions
 {
@@ -22,9 +15,9 @@ namespace AmuletOfManyMinions
 		private bool didPlaceExciteSkull;
 		private void placeItemInChest(Chest chest, int itemType)
 		{
-			for(int i = 0; i < 40; i++)
+			for (int i = 0; i < 40; i++)
 			{
-				if(chest.item[i].type == ItemID.None)
+				if (chest.item[i].type == ItemID.None)
 				{
 					chest.item[i].SetDefaults(itemType);
 					break;
@@ -40,24 +33,27 @@ namespace AmuletOfManyMinions
 			int waterFrame = 17;
 			int? itemType = null;
 			Tile chestTile = Main.tile[chest.x, chest.y];
-			if(chestTile.type == TileID.Containers)
+			if (chestTile.type == TileID.Containers)
 			{
 				int tileFrame = chestTile.frameX / 36;
-				if(tileFrame == frozenFrame && (!didPlaceVikingSquire || Main.rand.Next(3) == 0))
+				if (tileFrame == frozenFrame && (!didPlaceVikingSquire || Main.rand.Next(3) == 0))
 				{
 					// ice chests are rarer than I thought, make an npc drop instead
 					//didPlaceVikingSquire = true;
 					//itemType = ItemType<VikingSquireMinionItem>();
-				} else if(tileFrame == shadowFrame && (!didPlaceShadowSquire || Main.rand.Next(4) == 0))
+				}
+				else if (tileFrame == shadowFrame && (!didPlaceShadowSquire || Main.rand.Next(4) == 0))
 				{
 					didPlaceShadowSquire = true;
 					itemType = ItemType<GoldenRogueSquireMinionItem>();
-				} else if(tileFrame == waterFrame && (!didPlaceSeaSquire || Main.rand.Next(6) == 0))
+				}
+				else if (tileFrame == waterFrame && (!didPlaceSeaSquire || Main.rand.Next(6) == 0))
 				{
 					// don't care for chest-only items
 					//didPlaceSeaSquire = true;
 					//itemType = ItemType<SeaSquireMinionItem>();
-				} else if (tileFrame == lockedGoldFrame && (!didPlaceExciteSkull || Main.rand.Next(6) == 0))
+				}
+				else if (tileFrame == lockedGoldFrame && (!didPlaceExciteSkull || Main.rand.Next(6) == 0))
 				{
 					didPlaceExciteSkull = true;
 					itemType = ItemType<ExciteSkullMinionItem>();
@@ -72,10 +68,10 @@ namespace AmuletOfManyMinions
 			didPlaceShadowSquire = false;
 			didPlaceVikingSquire = false;
 			didPlaceSeaSquire = false;
-			for(int chestIdx = 0; chestIdx < Main.chest.Length; chestIdx++)
+			for (int chestIdx = 0; chestIdx < Main.chest.Length; chestIdx++)
 			{
 				Chest chest = Main.chest[chestIdx];
-				if(chest != null && getItemForChest(chest) is int chestItem)
+				if (chest != null && getItemForChest(chest) is int chestItem)
 				{
 					placeItemInChest(chest, chestItem);
 				}

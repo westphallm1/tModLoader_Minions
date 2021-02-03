@@ -1,5 +1,4 @@
 ﻿using AmuletOfManyMinions.Items.Accessories.SquireSkull;
-using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using System;
@@ -49,7 +48,7 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 		{
 			// don't allow side by side with squire skull, so their debuffs don't overwrite each other
 			int skullType = ItemType<SquireSkullAccessory>();
-			return slot > 9 || !player.armor.Skip(3).Take(5 + player.extraAccessorySlots).Any(a=>!a.IsAir && a.type == skullType);
+			return slot > 9 || !player.armor.Skip(3).Take(5 + player.extraAccessorySlots).Any(a => !a.IsAir && a.type == skullType);
 		}
 	}
 
@@ -77,17 +76,19 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 idleVector = base.IdleBehavior();
-			if(debuffCycle == 0)
+			if (debuffCycle == 0)
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Frostburn;
 				squirePlayer.squireDebuffTime = 180;
 				Lighting.AddLight(projectile.position, Color.Cyan.ToVector3() * 0.33f);
-			} else if (debuffCycle == 1)
+			}
+			else if (debuffCycle == 1)
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Ichor;
 				squirePlayer.squireDebuffTime = 60;
 				Lighting.AddLight(projectile.position, Color.Gold.ToVector3() * 0.33f);
-			} else
+			}
+			else
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.CursedInferno;
 				squirePlayer.squireDebuffTime = 180;

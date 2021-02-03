@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		}
 	}
 
-	public abstract class SquireLaser: ModProjectile
+	public abstract class SquireLaser : ModProjectile
 	{
 		public override void SetStaticDefaults()
 		{
@@ -56,8 +56,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			projectile.friendly = true;
 			projectile.penetrate = 1;
 			projectile.timeLeft = 60;
-            projectile.minion = true; //Bandaid fix?
-            projectile.width = 12;
+			projectile.minion = true; //Bandaid fix?
+			projectile.width = 12;
 			projectile.height = 12;
 		}
 
@@ -66,12 +66,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override void AI()
 		{
 			//This caused the projectile to render at a wrong rotation for a single frame, leaving it here 'cause i don't know if this was important, i just moved it to the predraw override.
-            //projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			//projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Lighting.AddLight(projectile.position, this.lightColor.ToVector3());
 			base.AI();
 		}
-        
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			// manually draw at 2x scale with transparency
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 128);
@@ -91,15 +91,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
 			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
-            Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, 16, 16);
+			Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, 16, 16);
 			return true;
 		}
 
 	}
 
-	public class SqueyereLaser: SquireLaser
+	public class SqueyereLaser : SquireLaser
 	{
-		public override string Texture => "Terraria/Projectile_"+ProjectileID.GreenLaser;
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.GreenLaser;
 	}
 
 	public class SqueyereMinion : WeaponHoldingSquire

@@ -1,9 +1,7 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
@@ -75,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public bool IsMyTurn()
 		{
-			if(player.ownedProjectileCounts[projectile.type] == 1)
+			if (player.ownedProjectileCounts[projectile.type] == 1)
 			{
 				// don't obey cycle if only one minion
 				return true;

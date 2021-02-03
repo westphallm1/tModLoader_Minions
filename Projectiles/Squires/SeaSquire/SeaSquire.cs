@@ -1,7 +1,6 @@
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -54,42 +53,42 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		}
 	}
 
-    public class SeaSquireBubble : ModProjectile
+	public class SeaSquireBubble : ModProjectile
 	{
-        public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SeaSquire/SeaSquireBubble";
-        public override void SetDefaults()
+		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SeaSquire/SeaSquireBubble";
+		public override void SetDefaults()
 		{
 			base.SetDefaults();
-            SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
 			projectile.CloneDefaults(ProjectileID.Bubble);
-            projectile.alpha = 240;
-            projectile.timeLeft = 180;
+			projectile.alpha = 240;
+			projectile.timeLeft = 180;
 			projectile.penetrate = 1;
-            projectile.ignoreWater = true;
-            projectile.friendly = true;
+			projectile.ignoreWater = true;
+			projectile.friendly = true;
 			projectile.width = 12;
 			projectile.height = 12;
-            projectile.magic = false; //Bandaid fix
-            projectile.minion = true;
+			projectile.magic = false; //Bandaid fix
+			projectile.minion = true;
 		}
-        
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.AddBuff(BuffID.Wet, 300);
-        }
-		
-        public override void Kill(int timeLeft)
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-            Main.PlaySound(new LegacySoundStyle(2, 54), projectile.position);
-            for (int i = 0; i < 8; i++)
+			target.AddBuff(BuffID.Wet, 300);
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			Main.PlaySound(new LegacySoundStyle(2, 54), projectile.position);
+			for (int i = 0; i < 8; i++)
 			{
 				int dustCreated = Dust.NewDust(projectile.Center, 1, 1, 137, projectile.velocity.X, projectile.velocity.Y, 0, Scale: 1.4f);
-                Main.dust[dustCreated].noGravity = true;
+				Main.dust[dustCreated].noGravity = true;
 			}
 		}
 	}
-    
-    public class SeaSquireMinion : WeaponHoldingSquire
+
+	public class SeaSquireMinion : WeaponHoldingSquire
 	{
 		protected override int BuffId => BuffType<SeaSquireMinionBuff>();
 		protected override int AttackFrames => 35;
@@ -102,7 +101,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		protected override float knockbackSelf => 5;
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 6);
-        protected override float projectileVelocity => 8;
+		protected override float projectileVelocity => 8;
 		public SeaSquireMinion() : base(ItemType<SeaSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -125,17 +124,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.OnSpawn();
 			// the spear does half damage, this is re-multiplied by 2 to get the bubble damage
 			// maybe a little bit iffy
-			projectile.damage = projectile.damage/2;
+			projectile.damage = projectile.damage / 2;
 		}
 
 		protected override float WeaponDistanceFromCenter()
 		{
 			//All of this is based on the weapon sprite and AttackFrames above.
-            int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
-            int spearLength = GetTexture(WeaponTexturePath).Width; //A decent aproximation of how long the spear is.
-            int spearStart = (spearLength / 3 - 10); //Two thirds of the spear starts behind by default. Subtract to start it further out since this one is puny.
-            float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
-            if (attackFrame <= reachFrames)
+			int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
+			int spearLength = GetTexture(WeaponTexturePath).Width; //A decent aproximation of how long the spear is.
+			int spearStart = (spearLength / 3 - 10); //Two thirds of the spear starts behind by default. Subtract to start it further out since this one is puny.
+			float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
+			if (attackFrame <= reachFrames)
 			{
 				return spearSpeed * attackFrame - spearStart;
 			}
@@ -144,16 +143,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 				return (spearSpeed * reachFrames - spearStart) - spearSpeed * (attackFrame - reachFrames);
 			}
 		}
-        
-        public override Vector2 IdleBehavior()
+
+		public override Vector2 IdleBehavior()
 		{
-            return base.IdleBehavior();
+			return base.IdleBehavior();
 		}
-        
-        public override void TargetedMovement(Vector2 vectorToTargetPosition)
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-            float bubbleVelOffset = Main.rand.NextFloat() * 2;
-            base.TargetedMovement(vectorToTargetPosition);
+			float bubbleVelOffset = Main.rand.NextFloat() * 2;
+			base.TargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				Main.PlaySound(new LegacySoundStyle(2, 85), projectile.position);
@@ -162,7 +161,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity() + bubbleVelOffset;
 					Projectile.NewProjectile(
-                        projectile.Center,
+						projectile.Center,
 						angleVector,
 						ProjectileType<SeaSquireBubble>(),
 						projectile.damage * 2,
@@ -171,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 				}
 			}
 		}
-        
+
 		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() + 15;
 
 		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 25;

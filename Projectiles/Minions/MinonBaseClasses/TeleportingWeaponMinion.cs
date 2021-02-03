@@ -1,11 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
@@ -46,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			base.IdleBehavior();
 			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingBody, player.whoAmI);
 			Vector2 idlePosition = player.Center;
-			if(minions.Count > 0)
+			if (minions.Count > 0)
 			{
 				int minionCount = minions.Count;
 				int order = minions.IndexOf(projectile);
@@ -81,14 +77,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				OnAcquireTarget(vectorToTargetPosition);
 				targetNPC = Main.npc[index];
-				
+
 				distanceFromFoe = default;
 				phaseFrames = 0;
 				framesInAir = 0;
 				lastHitFrame = -10;
 				targetIsDead = false;
 				lastActive = true;
-			} else if(!targetIsDead && targetNPC != null && lastActive && !targetNPC.active)
+			}
+			else if (!targetIsDead && targetNPC != null && lastActive && !targetNPC.active)
 			{
 				phaseFrames = maxPhaseFrames;
 				targetIsDead = true;
@@ -105,7 +102,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				WindUpBehavior(ref vectorToTargetPosition);
 				projectile.friendly = false;
-			} else
+			}
+			else
 			{
 				SwingBehavior(ref vectorToTargetPosition);
 				projectile.friendly = true;

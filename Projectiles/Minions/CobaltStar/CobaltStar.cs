@@ -1,14 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
-
-namespace AmuletOfManyMinions.Projectiles.Minions.CobaltStar
+﻿namespace AmuletOfManyMinions.Projectiles.Minions.CobaltStar
 {
 	//public class CobaltStarMinionBuff : MinionBuff
 	//{

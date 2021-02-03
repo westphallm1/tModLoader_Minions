@@ -1,13 +1,12 @@
-﻿using AmuletOfManyMinions.Projectiles.NonMinionSummons;
+﻿using AmuletOfManyMinions.Items.Accessories.TechnoCharm;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using System;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using System.Linq;
-using AmuletOfManyMinions.Items.Accessories.TechnoCharm;
 
 namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 {
@@ -39,7 +38,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 		{
 			// don't allow side by side with squire skull, so their debuffs don't overwrite each other
 			int skullType = ItemType<TechnoCharmAccessory>();
-			return slot > 9 || !player.armor.Skip(3).Take(5 + player.extraAccessorySlots).Any(a=>!a.IsAir && a.type == skullType);
+			return slot > 9 || !player.armor.Skip(3).Take(5 + player.extraAccessorySlots).Any(a => !a.IsAir && a.type == skullType);
 		}
 	}
 
@@ -67,17 +66,19 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 idleVector = base.IdleBehavior();
-			if(debuffCycle == 0)
+			if (debuffCycle == 0)
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Bleeding;
 				squirePlayer.squireDebuffTime = 180;
 				Lighting.AddLight(projectile.position, Color.Red.ToVector3() * 0.25f);
-			} else if (debuffCycle == 1)
+			}
+			else if (debuffCycle == 1)
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.OnFire;
 				squirePlayer.squireDebuffTime = 180;
 				Lighting.AddLight(projectile.position, Color.Orange.ToVector3() * 0.25f);
-			} else
+			}
+			else
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Poisoned;
 				squirePlayer.squireDebuffTime = 180;
@@ -91,16 +92,18 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(debuffCycle == 0)
+			if (debuffCycle == 0)
 			{
 
 				minFrame = 0;
 				maxFrame = 8;
-			} else if (debuffCycle == 1)
+			}
+			else if (debuffCycle == 1)
 			{
 				minFrame = 8;
 				maxFrame = 16;
-			} else
+			}
+			else
 			{
 				minFrame = 16;
 				maxFrame = 24;

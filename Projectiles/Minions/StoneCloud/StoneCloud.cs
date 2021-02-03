@@ -5,7 +5,6 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
@@ -76,10 +75,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			if(animationFrame - shockwaveStartFrame < ShockwaveTotalFrames && SemiCircleColliding(targetHitbox))
+			if (animationFrame - shockwaveStartFrame < ShockwaveTotalFrames && SemiCircleColliding(targetHitbox))
 			{
 				return true;
-			} else
+			}
+			else
 			{
 				return base.Colliding(projHitbox, targetHitbox);
 			}
@@ -90,8 +90,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			// just check the rectangle
 			Rectangle approxRectangle = new Rectangle(
 				(int)(shockwaveStartPosition.X - shockwaveHitboxRadius),
-				(int)(shockwaveStartPosition.Y - shockwaveHitboxRadius), 
-				2 * (int)shockwaveHitboxRadius, 
+				(int)(shockwaveStartPosition.Y - shockwaveHitboxRadius),
+				2 * (int)shockwaveHitboxRadius,
 				2 * (int)shockwaveHitboxRadius);
 			return approxRectangle.Intersects(targetHitbox) && Collision.CanHitLine(shockwaveStartPosition, 1, 1, targetHitbox.Center.ToVector2(), 1, 1);
 		}
@@ -114,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		{
 			minFrame = isStone ? 3 : 0;
 			maxFrame = isStone ? 6 : 3;
-			if(!isStone && Math.Abs(projectile.velocity.X) > 1)
+			if (!isStone && Math.Abs(projectile.velocity.X) > 1)
 			{
 				projectile.spriteDirection = -Math.Sign(projectile.velocity.X);
 			}
@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			Vector2 vectorToIdle = base.IdleBehavior();
 			int framesAsStone = animationFrame - stoneStartFrame;
 			doShockwaveCalculations();
-			if(isStone && (framesAsStone > 60 || (!didHitGround && framesAsStone > 40)))
+			if (isStone && (framesAsStone > 60 || (!didHitGround && framesAsStone > 40)))
 			{
 				// un-stone if the projectile gets too far below the player
 				isStone = false;
@@ -146,19 +146,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		{
 			int shockwaveFramesElapsed = animationFrame - shockwaveStartFrame;
 			projectile.knockBack = shockwaveFramesElapsed < ShockwaveTotalFrames ? defaultKnockback + 2 : defaultKnockback;
-			if(shockwaveFramesElapsed > ShockwaveMaxSpeedFrames)
+			if (shockwaveFramesElapsed > ShockwaveMaxSpeedFrames)
 			{
 				shockwaveHitboxSpeed *= ShockwaveDecay;
 			}
 			shockwaveHitboxRadius += shockwaveHitboxSpeed;
 
-			if(didHitGround && shockwaveStartFrame <= stoneStartFrame)
+			if (didHitGround && shockwaveStartFrame <= stoneStartFrame)
 			{
 				shockwaveStartFrame = animationFrame;
 				shockwaveHitboxRadius = 0;
 				shockwaveHitboxSpeed = 0;
 			}
-			if(isStone && animationFrame - shockwaveStartFrame == 3)
+			if (isStone && animationFrame - shockwaveStartFrame == 3)
 			{
 				shockwaveStartPosition = projectile.Bottom;
 				SpawnShockwaveDust(projectile.Bottom + new Vector2(0, -2));
@@ -169,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override void OnHitTarget(NPC target)
 		{
-			if(isStone && shockwaveStartFrame <= stoneStartFrame)
+			if (isStone && shockwaveStartFrame <= stoneStartFrame)
 			{
 				shockwaveStartFrame = animationFrame;
 				shockwaveHitboxRadius = 0;
@@ -180,10 +180,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if(isStone && Math.Abs(projectile.velocity.Y) < 1 && oldVelocity.Y > 0)
+			if (isStone && Math.Abs(projectile.velocity.Y) < 1 && oldVelocity.Y > 0)
 			{
 				projectile.velocity.X = 0;
-				if(!didHitGround)
+				if (!didHitGround)
 				{
 					didHitGround = true;
 					Collision.HitTiles(projectile.BottomLeft, oldVelocity, 40, 8);
@@ -199,7 +199,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			int effectsIdx = 0;
 			int smokeStep = Main.rand.Next(10, 14);
 			int smokeStart = Main.rand.Next(4);
-			for(float i = -0; i < MathHelper.TwoPi; i += MathHelper.Pi/32)
+			for (float i = -0; i < MathHelper.TwoPi; i += MathHelper.Pi / 32)
 			{
 				effectsIdx++;
 				Vector2 angle = i.ToRotationVector2();
@@ -209,7 +209,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 				Main.dust[dustIdx].velocity = angle * ShockwaveSpeed;
 				Main.dust[dustIdx].scale = 0.9f + Main.rand.NextFloat(0.2f);
 				Main.dust[dustIdx].alpha = ShockwaveDustAlpha;
-				if(effectsIdx % smokeStep == smokeStart)
+				if (effectsIdx % smokeStep == smokeStart)
 				{
 					int goreIdx = Gore.NewGore(pos, angle, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].scale = 0.5f;
@@ -220,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if(isStone)
+			if (isStone)
 			{
 				DoStoneMovement();
 				return;
@@ -231,7 +231,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		private void DoStoneDust()
 		{
 			// cleverly hide the lack of a transformation animation with some well placed dust
-			for(int i = 0; i < 10; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				int dustIdx = Dust.NewDust(projectile.Center, 8, 8, 192, newColor: Color.LightGray, Scale: 1.2f);
 				Main.dust[dustIdx].noLight = false;
@@ -253,7 +253,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(isStone)
+			if (isStone)
 			{
 				if (vectorToTargetPosition.Y > 16)
 				{
@@ -284,22 +284,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 				isStone = true;
 				myTurnToDrop = false;
 				stoneStartFrame = animationFrame;
-				if(targetNPCIndex is int idx && Main.npc[idx].active)
+				if (targetNPCIndex is int idx && Main.npc[idx].active)
 				{
 					//// approximately home in
-					if(vectorToTargetPosition.Y > 16)
+					if (vectorToTargetPosition.Y > 16)
 					{
 						float xSpeed = FallSpeed * vectorToTargetPosition.X / vectorToTargetPosition.Y;
 						projectile.velocity.X = Math.Min(xSpeed, 8);
 
-					} else
+					}
+					else
 					{
 						projectile.velocity.X = 0;
 					}
 				}
 				return;
 			}
-			if(vectorAbove.Y > 16)
+			if (vectorAbove.Y > 16)
 			{
 				gHelper.DropThroughPlatform();
 			}

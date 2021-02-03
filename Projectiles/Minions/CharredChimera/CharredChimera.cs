@@ -170,7 +170,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			// no op
 		}
 	}
-	public class CharredChimeraCounterMinion : CounterMinion {
+	public class CharredChimeraCounterMinion : CounterMinion
+	{
 		protected override int BuffId => BuffType<CharredChimeraMinionBuff>();
 		protected override int MinionType => ProjectileType<CharredChimeraMinion>();
 	}
@@ -232,8 +233,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 				{
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, headType, projectile.damage, projectile.knockBack, player.whoAmI);
 				}
-				
-				if(currentHeadCount > EmpowerCount + 1)
+
+				if (currentHeadCount > EmpowerCount + 1)
 				{
 					allHeads = GetMinionsOfType(ProjectileType<CharredChimeraMinionHead>());
 					allHeads[0].Kill(); // get rid of a head if there's too many
@@ -411,9 +412,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			Vector2 origin = bounds.Center.ToVector2();
 			float r = 0;
 			int beatFrame = animationFrame % (animationFrames / 2);
-			float scale = beatFrame < animationFrames / 8? 
-				1 + (float)(0.25 * Math.Sin(8 * Math.PI * beatFrame / animationFrames)) : 
-				1 + (float)(0.125 * Math.Sin(Math.PI/2 + 4 * Math.PI * beatFrame / animationFrames));
+			float scale = beatFrame < animationFrames / 8 ?
+				1 + (float)(0.25 * Math.Sin(8 * Math.PI * beatFrame / animationFrames)) :
+				1 + (float)(0.125 * Math.Sin(Math.PI / 2 + 4 * Math.PI * beatFrame / animationFrames));
 			spriteBatch.Draw(heartTexture, heartCenter - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, scale, effects, 0);

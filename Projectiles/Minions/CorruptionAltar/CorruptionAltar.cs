@@ -94,7 +94,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 	public class CorruptionAltarEater : CorruptionAltarBaseEater
 	{
 	}
-	public class CorruptionAltarCounterMinion : CounterMinion {
+	public class CorruptionAltarCounterMinion : CounterMinion
+	{
 		protected override int BuffId => BuffType<CorruptionAltarMinionBuff>();
 		protected override int MinionType => ProjectileType<CorruptionAltarMinion>();
 	}

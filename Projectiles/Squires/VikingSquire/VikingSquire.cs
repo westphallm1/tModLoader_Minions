@@ -2,7 +2,6 @@ using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
@@ -61,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			bool doPreDraw = base.PreDraw(spriteBatch, lightColor);
-			if(usingWeapon)
+			if (usingWeapon)
 			{
 				float oppositeWeaponAngle = SwingAngle1 - weaponAngle + SwingAngle0;
 				float myWeaponAngle = weaponAngle;
@@ -90,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 
 		public override Vector2 IdleBehavior()
 		{
-			if(attackFrame == AttackFrames - 1)
+			if (attackFrame == AttackFrames - 1)
 			{
 				swingDirection *= -1;
 			}

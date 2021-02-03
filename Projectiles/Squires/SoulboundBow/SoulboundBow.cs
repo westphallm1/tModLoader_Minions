@@ -1,4 +1,3 @@
-using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -68,8 +67,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 	public class SoulboundArrow : ModProjectile
 	{
 
-        protected virtual Color LightColor => new Color(1f, 0f, 0.8f, 1f);
-        public override void SetStaticDefaults()
+		protected virtual Color LightColor => new Color(1f, 0f, 0.8f, 1f);
+		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
@@ -79,26 +78,26 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		{
 			base.SetDefaults();
 			projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
-            projectile.ranged = false; //Bandaid fix
-            projectile.minion = true;
+			projectile.ranged = false; //Bandaid fix
+			projectile.minion = true;
 		}
-        
+
 		public override void AI()
 		{
 			base.AI();
-            Lighting.AddLight(projectile.Center, Color.LightPink.ToVector3() * 0.5f);
+			Lighting.AddLight(projectile.Center, Color.LightPink.ToVector3() * 0.5f);
 		}
-        
-        public override void Kill(int timeLeft)
+
+		public override void Kill(int timeLeft)
 		{
 			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
-            // don't spawn an arrow on kill
-            for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+			// don't spawn an arrow on kill
+			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
-                int dustCreated = Dust.NewDust(projectile.position, 1, 1, 255, velocity.X, velocity.Y, 50, default(Color), Scale: 1.4f);
-                Main.dust[dustCreated].noGravity = true;
-                Main.dust[dustCreated].velocity *= 0.8f;
+				int dustCreated = Dust.NewDust(projectile.position, 1, 1, 255, velocity.X, velocity.Y, 50, default(Color), Scale: 1.4f);
+				Main.dust[dustCreated].noGravity = true;
+				Main.dust[dustCreated].velocity *= 0.8f;
 			}
 		}
 	}

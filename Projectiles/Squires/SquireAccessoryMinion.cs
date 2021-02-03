@@ -1,17 +1,14 @@
 ﻿using AmuletOfManyMinions.Projectiles.NonMinionSummons;
-using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
 	// Uses localAi[1] for animation frame
 	public abstract class SquireAccessoryMinion : TransientMinion
 	{
-		new protected int animationFrame {
+		new protected int animationFrame
+		{
 			get => (int)projectile.localAI[1];
 			set => projectile.localAI[1] = value;
 		}
@@ -35,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			animationFrame++;
 			squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squire = squirePlayer.GetSquire();
-			if(squire == null || !IsEquipped(squirePlayer))
+			if (squire == null || !IsEquipped(squirePlayer))
 			{
 				return projectile.velocity;
 			}

@@ -1,10 +1,8 @@
-﻿using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Items.Accessories;
+﻿using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -45,7 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		}
 		public override void AddRecipes()
 		{
-			foreach(int itemId in new int[] { ItemID.SilverBar, ItemID.TungstenBar})
+			foreach (int itemId in new int[] { ItemID.SilverBar, ItemID.TungstenBar })
 			{
 				ModRecipe recipe = new ModRecipe(mod);
 				recipe.AddIngredient(ItemID.Minecart, 1);
@@ -93,22 +91,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			slimeColor.R = (byte)(slimeColor.R * brightness);
 			slimeColor.G = (byte)(slimeColor.G * brightness);
 			slimeColor.B = (byte)(slimeColor.B * brightness);
-			if(gHelper.isFlying)
+			if (gHelper.isFlying)
 			{
-				texture = GetTexture(Texture+"_Umbrella");
+				texture = GetTexture(Texture + "_Umbrella");
 				spriteBatch.Draw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
 					texture.Bounds, lightColor, 0,
 					texture.Bounds.Center.ToVector2(), 1, effects, 0);
-				texture = GetTexture(Texture+"_UmbrellaGlow");
+				texture = GetTexture(Texture + "_UmbrellaGlow");
 				spriteBatch.Draw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
 					texture.Bounds, slimeColor, 0,
 					texture.Bounds.Center.ToVector2(), 1, effects, 0);
 			}
-			texture = GetTexture(Texture+"_Slime");
+			texture = GetTexture(Texture + "_Slime");
 			spriteBatch.Draw(texture, pos + new Vector2(0, -14) - Main.screenPosition,
 				texture.Bounds, slimeColor, 0,
 				texture.Bounds.Center.ToVector2(), 1, effects, 0);
-			texture = GetTexture(Texture+"_Hat");
+			texture = GetTexture(Texture + "_Hat");
 			spriteBatch.Draw(texture, pos + new Vector2(0, -23) - Main.screenPosition,
 				texture.Bounds, lightColor, 0,
 				texture.Bounds.Center.ToVector2(), 1, effects, 0);
@@ -122,19 +120,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
-			if(vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 8;
-			if(vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
 				projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if(animationFrame - lastHitFrame > 15)
+			if (animationFrame - lastHitFrame > 15)
 			{
 				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -146,19 +144,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(gHelper.didJustLand)
+			if (gHelper.didJustLand)
 			{
 				projectile.rotation = 0;
-			} else
+			}
+			else
 			{
 				projectile.rotation = -projectile.spriteDirection * MathHelper.Pi / 8;
 			}
-			if(Math.Abs(projectile.velocity.X) < 1)
+			if (Math.Abs(projectile.velocity.X) < 1)
 			{
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if(gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4 && animationFrame % 5 == 0)
+			if (gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4 && animationFrame % 5 == 0)
 			{
 				Vector2 pos = projectile.Bottom;
 				pos.Y -= 4;

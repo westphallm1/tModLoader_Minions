@@ -1,4 +1,3 @@
-using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Terraria;
 using Terraria.ID;

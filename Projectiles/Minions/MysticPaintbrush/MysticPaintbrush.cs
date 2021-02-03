@@ -1,14 +1,10 @@
-﻿using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Items.Accessories;
+﻿using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
@@ -160,17 +156,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			float swingDistance = 80;
 			if (Main.myPlayer == player.whoAmI && distanceFromFoe == default)
 			{
-				distanceFromFoe = swingDistance + Main.rand.Next(-20, 20);;
+				distanceFromFoe = swingDistance + Main.rand.Next(-20, 20); ;
 				teleportAngle = Main.rand.NextFloat(MathHelper.TwoPi);
 				projectile.netUpdate = true;
 				//Don't change position continuously, bandaid fix until a proper way for it to work in MP is figured out
-			} else if (distanceFromFoe != default)
+			}
+			else if (distanceFromFoe != default)
 			{
 				int swingFrame = phaseFrames - maxPhaseFrames / 2;
 				// move to fixed position relative to NPC, preDraw will do phase in animation
 				teleportDirection = teleportAngle.ToRotationVector2();
 				swingCenter = targetNPC.Center + teleportDirection * distanceFromFoe;
-				if(projectile.minionPos % 2 == 0)
+				if (projectile.minionPos % 2 == 0)
 				{
 					float swingAngle = (teleportAngle + MathHelper.Pi + initialWindUp + windUpPerFrame * swingFrame);
 					Vector2 swingAngleVector = swingAngle.ToRotationVector2();
@@ -199,7 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 				swingCenter = targetNPC.Center + teleportDirection * distanceFromFoe;
 			}
 			teleportDirection = teleportAngle.ToRotationVector2();
-			if(projectile.minionPos %2 == 0)
+			if (projectile.minionPos % 2 == 0)
 			{
 				// move to fixed position relative to NPC, preDraw will do phase in animation
 				float swingAngle = (teleportAngle + MathHelper.Pi + initialWindUp + windUpPerFrame * maxPhaseFrames / 2 - swingPerFrame * framesInAir);
@@ -211,7 +208,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			{
 				vectorToTargetPosition.Normalize();
 				projectile.position = swingCenter + teleportDirection * (-12 * framesInAir + maxPhaseFrames);
-				projectile.rotation = teleportAngle  + 3 * MathHelper.PiOver2;
+				projectile.rotation = teleportAngle + 3 * MathHelper.PiOver2;
 			}
 			Color dustColor = brushColor;
 			dustColor.A = 200;
