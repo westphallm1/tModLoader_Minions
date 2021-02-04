@@ -47,22 +47,22 @@ namespace AmuletOfManyMinions
 		public override void AddRecipeGroups()
 		{
 			RecipeGroup silverGroup = new RecipeGroup(
-				() => Language.GetTextValue("LegacyMisc.37") + " Silver Bar",
+				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.SilverBar"),
 				new int[] { ItemID.SilverBar, ItemID.TungstenBar });
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:Silvers", silverGroup);
 
 			RecipeGroup goldGroup = new RecipeGroup(
-				() => Language.GetTextValue("LegacyMisc.37") + " Gold Bar",
+				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.GoldBar"),
 				new int[] { ItemID.GoldBar, ItemID.PlatinumBar});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:Golds", goldGroup);
 
 			RecipeGroup evilBarGroup = new RecipeGroup(
-				() => "Demonite Bar/Crimtane Bar",
+				() => Language.GetTextValue("ItemName.DemoniteBar") + "/" + Language.GetTextValue("ItemName.CrimtaneBar") ,
 				new int[] { ItemID.DemoniteBar, ItemID.CrimtaneBar});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:EvilBars", evilBarGroup);
 
 			RecipeGroup evilWoodSwordGroup = new RecipeGroup(
-				() => "Ebonwood Sword/Shadewood Sword",
+				() => Language.GetTextValue("ItemName.EbonwoodSword") + "/" + Language.GetTextValue("ItemName.ShadewoodSword") ,
 				new int[] { ItemID.EbonwoodSword, ItemID.ShadewoodSword});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:EvilWoodSwords", evilWoodSwordGroup);
 
