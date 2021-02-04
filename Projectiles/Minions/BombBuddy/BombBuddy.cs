@@ -43,15 +43,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		}
 		public override void AddRecipes()
 		{
-			foreach (int itemId in new int[] { ItemID.CrimtaneBar, ItemID.DemoniteBar })
-			{
-				ModRecipe recipe = new ModRecipe(mod);
-				recipe.AddIngredient(itemId, 12);
-				recipe.AddIngredient(ItemID.Bomb, 20);
-				recipe.AddTile(TileID.Anvils);
-				recipe.SetResult(this);
-				recipe.AddRecipe();
-			}
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddRecipeGroup("AmuletOfManyMinions:EvilBars", 12);
+			recipe.AddIngredient(ItemID.Bomb, 20);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 

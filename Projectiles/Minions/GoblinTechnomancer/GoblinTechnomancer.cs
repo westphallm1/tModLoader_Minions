@@ -391,7 +391,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void CheckActive()
 		{
 			base.CheckActive();
-			if(player.ownedProjectileCounts[CounterType] == 0)
+			if(player.ownedProjectileCounts[CounterType] == 0 && animationFrame > 2)
 			{
 				projectile.Kill();
 			}

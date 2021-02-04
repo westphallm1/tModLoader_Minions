@@ -38,19 +38,16 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void AddRecipes()
 		{
-			foreach (int itemId in new int[] { ItemType<VoidKnifeMinionItem>(), ItemType<NullHatchetMinionItem>() })
-			{
-				ModRecipe recipe = new ModRecipe(mod);
-				recipe.AddIngredient(ItemType<CopperSwordMinionItem>(), 1);
-				recipe.AddIngredient(ItemType<SpiritGunMinionItem>(), 1);
-				recipe.AddIngredient(ItemType<FlyingSwordMinionItem>(), 1);
-				recipe.AddIngredient(itemId, 1);
-				recipe.AddIngredient(ItemType<CharmOfManyMinions>(), 1);
-				recipe.AddIngredient(ItemType<CharmOfMightyMinions>(), 1);
-				recipe.AddTile(TileID.MythrilAnvil);
-				recipe.SetResult(this);
-				recipe.AddRecipe();
-			}
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemType<CopperSwordMinionItem>(), 1);
+			recipe.AddIngredient(ItemType<SpiritGunMinionItem>(), 1);
+			recipe.AddIngredient(ItemType<FlyingSwordMinionItem>(), 1);
+			recipe.AddRecipeGroup("AmuletOfManyMinions:VoidDaggers");
+			recipe.AddIngredient(ItemType<CharmOfManyMinions>(), 1);
+			recipe.AddIngredient(ItemType<CharmOfMightyMinions>(), 1);
+			recipe.AddTile(TileID.MythrilAnvil);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 
 	}

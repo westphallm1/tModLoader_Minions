@@ -39,15 +39,12 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		}
 		public override void AddRecipes()
 		{
-			foreach (int metalId in new int[] { ItemID.GoldBar, ItemID.PlatinumBar })
-			{
-				ModRecipe recipe = new ModRecipe(mod);
-				recipe.AddIngredient(ItemID.Gel, 30);
-				recipe.AddIngredient(metalId, 15);
-				recipe.AddTile(TileID.Solidifier);
-				recipe.SetResult(this);
-				recipe.AddRecipe();
-			}
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.Gel, 30);
+			recipe.AddRecipeGroup("AmuletOfManyMinions:Golds", 15);
+			recipe.AddTile(TileID.Solidifier);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 }

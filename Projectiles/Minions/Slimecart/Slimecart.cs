@@ -43,16 +43,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		}
 		public override void AddRecipes()
 		{
-			foreach (int itemId in new int[] { ItemID.SilverBar, ItemID.TungstenBar })
-			{
-				ModRecipe recipe = new ModRecipe(mod);
-				recipe.AddIngredient(ItemID.Minecart, 1);
-				recipe.AddIngredient(ItemID.MiningHelmet, 1);
-				recipe.AddIngredient(itemId, 12);
-				recipe.AddTile(TileID.Anvils);
-				recipe.SetResult(this);
-				recipe.AddRecipe();
-			}
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.Minecart, 1);
+			recipe.AddIngredient(ItemID.MiningHelmet, 1);
+			recipe.AddRecipeGroup("AmuletOfManyMinions:Silvers", 12);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 

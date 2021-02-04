@@ -44,6 +44,34 @@ namespace AmuletOfManyMinions
 			IdleLocationSets.Unload();
 		}
 
+		public override void AddRecipeGroups()
+		{
+			RecipeGroup silverGroup = new RecipeGroup(
+				() => Language.GetTextValue("LegacyMisc.37") + " Silver Bar",
+				new int[] { ItemID.SilverBar, ItemID.TungstenBar });
+			RecipeGroup.RegisterGroup("AmuletOfManyMinions:Silvers", silverGroup);
+
+			RecipeGroup goldGroup = new RecipeGroup(
+				() => Language.GetTextValue("LegacyMisc.37") + " Gold Bar",
+				new int[] { ItemID.GoldBar, ItemID.PlatinumBar});
+			RecipeGroup.RegisterGroup("AmuletOfManyMinions:Golds", goldGroup);
+
+			RecipeGroup evilBarGroup = new RecipeGroup(
+				() => "Demonite Bar/Crimtane Bar",
+				new int[] { ItemID.DemoniteBar, ItemID.CrimtaneBar});
+			RecipeGroup.RegisterGroup("AmuletOfManyMinions:EvilBars", evilBarGroup);
+
+			RecipeGroup evilWoodSwordGroup = new RecipeGroup(
+				() => "Ebonwood Sword/Shadewood Sword",
+				new int[] { ItemID.EbonwoodSword, ItemID.ShadewoodSword});
+			RecipeGroup.RegisterGroup("AmuletOfManyMinions:EvilWoodSwords", evilWoodSwordGroup);
+
+			RecipeGroup voidDaggerGroup = new RecipeGroup(
+				() => "Void Dagger/Null Hatchet",
+				new int[] { ModContent.ItemType<VoidKnifeMinionItem>(), ModContent.ItemType<NullHatchetMinionItem>()});
+			RecipeGroup.RegisterGroup("AmuletOfManyMinions:VoidDaggers", voidDaggerGroup);
+		}
+
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
 			//This should be the only thing in here

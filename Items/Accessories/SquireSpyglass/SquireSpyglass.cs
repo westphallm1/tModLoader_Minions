@@ -29,17 +29,11 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSpyglass
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.GoldBar, 6);
+			recipe.AddRecipeGroup("AmuletOfManyMinions:Golds", 6);
 			recipe.AddIngredient(ItemID.Lens, 4);
 			recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
-			ModRecipe recipe2 = new ModRecipe(mod);
-			recipe2.AddIngredient(ItemID.PlatinumBar, 6);
-			recipe2.AddIngredient(ItemID.Lens, 4);
-			recipe2.AddTile(TileID.Anvils);
-			recipe2.SetResult(this);
-			recipe2.AddRecipe();
 		}
 	}
 }

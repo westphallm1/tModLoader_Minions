@@ -47,17 +47,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.ShadewoodSword, 1);
+			recipe.AddRecipeGroup("AmuletOfManyMinions:EvilWoodSwords");
 			recipe.AddIngredient(ItemID.SoulofNight, 10);
 			recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
-			ModRecipe recipe2 = new ModRecipe(mod);
-			recipe2.AddIngredient(ItemID.EbonwoodSword, 1);
-			recipe2.AddIngredient(ItemID.SoulofNight, 10);
-			recipe2.AddTile(TileID.Anvils);
-			recipe2.SetResult(this);
-			recipe2.AddRecipe();
 		}
 		public override bool CanUseItem(Player player)
 		{
