@@ -7,6 +7,7 @@ using AmuletOfManyMinions.Items.Armor.RoyalArmor;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -86,6 +87,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		private void MyDidDoubleTap()
 		{
+			if (Main.myPlayer != player.whoAmI && Main.netMode != NetmodeID.Server)
+			{
+				//Only do control related stuff on the local player
+				return;
+			}
+
 			int tapDirection = Main.ReversedUpDownArmorSetBonuses ? 1 : 0;
 			bool tappedRecently = player.doubleTapCardinalTimer[tapDirection] > 0;
 			bool didReleaseTapThisFrame = tapDirection == 0 ?
@@ -162,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			int debuffType = BuffType<SquireBatDebuff>();
 			if (squireBatAccessory && didDoubleTap && !player.HasBuff(buffType) && !player.HasBuff(debuffType))
 			{
-				player.AddBuff(buffType, SquireBatAccessory.BuffTime);
+				player.AddBuff(buffType, SquireBatAccessory.BuffTime, false);
 			}
 			// undo buff from skill orbiter
 			if (player.ownedProjectileCounts[ProjectileType<SquireSkullProjectile>()] == 0)
