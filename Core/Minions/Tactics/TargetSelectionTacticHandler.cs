@@ -96,11 +96,6 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			}
 		}
 
-		public static TargetSelectionTactic GetTactic<T>() where T : TargetSelectionTactic
-		{
-			return GetTactic(TypeToID[typeof(T)]);
-		}
-
 		public static string GetDisplayName(byte id)
 		{
 			return DisplayNames[id];
@@ -122,10 +117,19 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		}
 
 		/// <summary>
+		/// Fetches a tactic given its type.
+		/// </summary>
+		/// <returns>The tactic</returns>
+		public static TargetSelectionTactic GetTactic<T>() where T : TargetSelectionTactic
+		{
+			return GetTactic(TypeToID[typeof(T)]);
+		}
+
+		/// <summary>
 		/// Fetches a tactic given its id. Defaults to the default tactic if id is not matching
 		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
+		/// <param name="id">Tactic ID</param>
+		/// <returns>The tactic</returns>
 		public static TargetSelectionTactic GetTactic(byte id)
 		{
 			if (id == DefaultTacticID || id >= TacticDatas.Count)
@@ -138,8 +142,8 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		/// <summary>
 		/// Fetches a tactic given its name. Defaults to the default tactic if name is not matching
 		/// </summary>
-		/// <param name="name"></param>
-		/// <returns></returns>
+		/// <param name="name">Tactic name</param>
+		/// <returns>The tactic</returns>
 		public static TargetSelectionTactic GetTactic(string name)
 		{
 			byte id = DefaultTacticID;
