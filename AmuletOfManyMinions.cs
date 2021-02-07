@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Netcode;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.NPCs;
@@ -5,11 +6,15 @@ using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 using AmuletOfManyMinions.Projectiles.Squires;
+using AmuletOfManyMinions.UI;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace AmuletOfManyMinions
 {
@@ -23,6 +28,8 @@ namespace AmuletOfManyMinions
 			NecromancerAccessory.Load();
 			SquireGlobalProjectile.Load();
 			IdleLocationSets.Load();
+			TargetSelectionTacticHandler.Load();
+			UserInterfaces.Load();
 			if (!Main.dedServ)
 			{
 				AddEquipTexture(null, EquipType.Legs, "RoyalGown_Legs", "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
@@ -42,6 +49,8 @@ namespace AmuletOfManyMinions
 			NecromancerAccessory.Unload();
 			SquireGlobalProjectile.Unload();
 			IdleLocationSets.Unload();
+			TargetSelectionTacticHandler.Unload();
+			UserInterfaces.Unload();
 		}
 
 		public override void AddRecipeGroups()
@@ -70,6 +79,16 @@ namespace AmuletOfManyMinions
 				() => "Void Dagger/Null Hatchet",
 				new int[] { ModContent.ItemType<VoidKnifeMinionItem>(), ModContent.ItemType<NullHatchetMinionItem>()});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:VoidDaggers", voidDaggerGroup);
+		}
+
+		public override void UpdateUI(GameTime gameTime)
+		{
+			UserInterfaces.UpdateUI(gameTime);
+		}
+
+		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+		{
+			UserInterfaces.ModifyInterfaceLayers(layers);
 		}
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
