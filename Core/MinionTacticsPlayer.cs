@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Tactics;
+using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.UI;
@@ -22,6 +23,8 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public TargetSelectionTactic SelectedTactic => TargetSelectionTacticHandler.GetTactic(TacticID);
 
+		public PlayerTargetSelectionTactic PlayerTactic;
+
 		/// <summary>
 		/// Timer used for syncing TacticID when it is changed on the client, only registers the last change done within SyncTimerMax ticks
 		/// </summary>
@@ -41,6 +44,7 @@ namespace AmuletOfManyMinions.Core.Minions
 				SyncTimer = 1;
 			}
 			TacticID = id;
+			PlayerTactic = SelectedTactic.CreatePlayerTactic();
 		}
 
 		public override void Initialize()
@@ -83,6 +87,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			if (Main.netMode == NetmodeID.Server) return; //Safety check, this hook shouldn't run serverside anyway
 			UserInterfaces.tacticsUI.SetSelected(TacticID);
+			PlayerTactic = SelectedTactic.CreatePlayerTactic();
 		}
 
 		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
@@ -110,6 +115,18 @@ namespace AmuletOfManyMinions.Core.Minions
 						new TacticPacket(player, TacticID).Send();
 					}
 				}
+			}
+			if(PlayerTactic != default)
+			{
+				PlayerTactic.PreUpdate();
+			}
+		}
+
+		public override void PostUpdate()
+		{
+			if(PlayerTactic != default)
+			{
+				PlayerTactic.PostUpdate();
 			}
 		}
 	}

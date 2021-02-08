@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			{
 				return null;
 			}
-			if (ClosestEnemyInRange(300f, projectile.Center, 0f, false) is Vector2 target)
+			if (SelectedEnemyInRange(300f, projectile.Center, 0f, false) is Vector2 target)
 			{
 				projectile.friendly = true;
 				return target - projectile.Center;

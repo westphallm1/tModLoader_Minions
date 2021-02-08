@@ -123,7 +123,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				attackState = AttackState.ATTACKING;
 				return target - projectile.Center;
 			}
-			else if (ClosestEnemyInRange(searchDistance, center, noLOSDistance) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, center, noLOSDistance) is Vector2 target2)
 			{
 				attackState = AttackState.ATTACKING;
 				return target2 - projectile.Center;

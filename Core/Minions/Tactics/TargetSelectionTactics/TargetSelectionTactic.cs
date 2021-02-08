@@ -1,4 +1,6 @@
-﻿namespace AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics
+﻿using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
+
+namespace AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics
 {
 	/// <summary>
 	/// Represents the tactic minions will use to attack enemies
@@ -18,5 +20,11 @@
 
 		//Cached
 		public abstract string Description { get; }
+
+		public virtual PlayerTargetSelectionTactic CreatePlayerTactic()
+		{
+			// todo override per subclass
+			return new ClosestEnemyToMinionPlayerTactic();
+		}
 	}
 }

@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		private void LookForTarget()
 		{
-			if ((PlayerTargetPosition(600) ?? ClosestEnemyInRange(600)) is Vector2 target && targetNPCIndex is int targetIdx)
+			if ((PlayerTargetPosition(600) ?? SelectedEnemyInRange(600)) is Vector2 target && targetNPCIndex is int targetIdx)
 			{
 				velocity = target - projectile.Center;
 				vectorToTarget = velocity;

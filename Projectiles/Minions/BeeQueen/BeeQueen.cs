@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 
 		public override Vector2? FindTarget()
 		{
-			if (ClosestEnemyInRange(300f, projectile.Center, 0, false) is Vector2 target)
+			if (SelectedEnemyInRange(300f, projectile.Center, 0, false) is Vector2 target)
 			{
 				rememberedEnemyAngle = target;
 				rememberedEnemyAngle.Normalize();

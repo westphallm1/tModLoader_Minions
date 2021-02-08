@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				returnedToHeadFrame is int frame &&
 				animationFrame - frame > attackCooldown &&
 				!returning &&
-				ClosestEnemyInRange(attackRange, maxRangeFromPlayer: false) is Vector2 target)
+				SelectedEnemyInRange(attackRange, maxRangeFromPlayer: false) is Vector2 target)
 			{
 				projectile.friendly = true;
 				projectile.tileCollide = true;

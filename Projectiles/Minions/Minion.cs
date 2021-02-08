@@ -1,6 +1,10 @@
+using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
 using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -25,6 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public Player player;
 
 		protected int? targetNPCIndex;
+		protected int targetNPCCacheFrames;
 
 
 		protected bool useBeacon = true;
@@ -105,37 +110,41 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return null;
 		}
 
-		public Vector2? ClosestEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
+		public Vector2? SelectedEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
 		{
 			Vector2 center = centeredOn ?? projectile.Center;
-			Vector2 targetCenter = projectile.position;
 			Vector2 losCenterVector = losCenter ?? projectile.Center;
-			bool foundTarget = false;
+			PlayerTargetSelectionTactic tactic = player.GetModPlayer<MinionTacticsPlayer>().PlayerTactic;
+			// to cut back on Line-of-Sight computations, always chase the same NPC for some number of frames once one has been found
+			if(targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < tactic.TargetCacheFrames)
+			{
+				return Main.npc[idx].Center;
+			}
+			List<NPC> possibleTargets = new List<NPC>();
+			bool anyInRange = false;
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
-				if (!npc.CanBeChasedBy())
+				if (!npc.CanBeChasedBy() || !npc.active)
 				{
 					continue;
 				}
-				float between = Vector2.Distance(npc.Center, center);
-				bool closest = Vector2.Distance(center, targetCenter) > between;
-				// don't let a minion infinitely chain attacks off progressively further enemies
-				bool inRange = Vector2.Distance(npc.Center, maxRangeFromPlayer ? player.Center : projectile.Center) < maxRange;
-				bool inNoLOSRange = Vector2.Distance(npc.Center, player.Center) < noLOSRange;
-				bool lineOfSight = inNoLOSRange || Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height);
-				if ((inNoLOSRange || (lineOfSight && inRange)) && (closest || !foundTarget))
+				bool inRange = Vector2.DistanceSquared(npc.Center, maxRangeFromPlayer ? player.Center : projectile.Center) < maxRange * maxRange;
+				bool inNoLOSRange = Vector2.DistanceSquared(npc.Center, player.Center) < noLOSRange * noLOSRange;
+				bool lineOfSight = inNoLOSRange || (inRange && Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height));
+				if (inNoLOSRange || (lineOfSight && inRange))
 				{
-					targetNPCIndex = i;
-					targetCenter = npc.Center;
-					foundTarget = true;
+					possibleTargets.Add(npc);
 				}
+				anyInRange |= inRange;
 			}
-			if (foundTarget)
+			NPC chosen = tactic.ChooseTargetFromList(projectile, possibleTargets);
+			if(chosen != default)
 			{
-				return targetCenter;
-			}
-			else if (useBeacon)
+				targetNPCIndex = chosen.whoAmI;
+				targetNPCCacheFrames = 0;
+				return chosen.Center;
+			} else if (useBeacon && anyInRange)
 			{
 				usingBeacon = true;
 				return BeaconPosition(center, maxRange, noLOSRange);
@@ -185,10 +194,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		private int directionFrame = 0;
 		protected void DrawDirectionDust(Vector2 waypointCenter, Vector2 anyTarget)
 		{
-			if ((directionFrame++) % 30 != 0)
+			if ((directionFrame++) % 30 != 0 || player.GetModPlayer<MinionSpawningItemPlayer>().didDrawDustThisFrame)
 			{
 				return;
 			}
+			player.GetModPlayer<MinionSpawningItemPlayer>().didDrawDustThisFrame = true;
 			int lineLength = 64;
 			Vector2 fromVector = projectile.Center - waypointCenter;
 			Vector2 toVector = anyTarget - waypointCenter;

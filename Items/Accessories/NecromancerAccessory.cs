@@ -94,6 +94,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		internal int minionVarietyBonusCount = 0;
 		internal float minionVarietyDamageBonus = 0;
 		internal int minionVarietyDamageFlatBonus = 0;
+		internal bool didDrawDustThisFrame = false;
 		private HashSet<int> uniqueMinionTypes = new HashSet<int>();
 
 		static Color[] MinionColors = new Color[]
@@ -129,7 +130,9 @@ namespace AmuletOfManyMinions.Items.Accessories
 			illusionistArmorSetEquipped = false;
 			summonFlatDamage = 0;
 			minionVarietyDamageBonus = 0.03f;
+		    didDrawDustThisFrame = false;
 		}
+
 		public override void PreUpdate()
 		{
 			// Get unique minion count for player

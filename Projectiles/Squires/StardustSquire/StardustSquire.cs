@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override Vector2? FindTarget()
 		{
-			if (ClosestEnemyInRange(300f, projectile.position, maxRangeFromPlayer: false) is Vector2 closest)
+			if (SelectedEnemyInRange(300f, projectile.position, maxRangeFromPlayer: false) is Vector2 closest)
 			{
 				return closest - projectile.position;
 			}
@@ -247,7 +247,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override Vector2? FindTarget()
 		{
-			if (ClosestEnemyInRange(450f, projectile.position, maxRangeFromPlayer: false) is Vector2 closest)
+			if (SelectedEnemyInRange(450f, projectile.position, maxRangeFromPlayer: false) is Vector2 closest)
 			{
 				if (!hasFoundTarget)
 				{

@@ -208,7 +208,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				return target - projectile.Center;
 			}
-			else if (ClosestEnemyInRange(searchDistance, player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, player.Center) is Vector2 target2)
 			{
 				return target2 - projectile.Center;
 			}

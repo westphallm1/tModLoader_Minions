@@ -1,4 +1,6 @@
-﻿namespace AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics
+﻿using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
+
+namespace AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics
 {
 	/// <summary>
 	/// Enemy with the highest *max* health
@@ -8,5 +10,9 @@
 		public override string DisplayName => "Strongest Enemy";
 
 		public override string Description => "Attack enemy with the [c/FF0000:highest maximum] health";
+		public override PlayerTargetSelectionTactic CreatePlayerTactic()
+		{
+			return new StrongestEnemyPlayerTactic();
+		}
 	}
 }
