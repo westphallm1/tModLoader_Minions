@@ -130,6 +130,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		}
 		public override void Update(GameTime gameTime)
 		{
+			base.Update(gameTime);
 			//Align main UI here instead of in OnInitialize, so it updates on resolution changes etc.
 
 			float openedY = 0;
