@@ -124,10 +124,7 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public override void PostUpdate()
 		{
-			if(PlayerTactic != default)
-			{
-				PlayerTactic.PostUpdate();
-			}
+			PlayerTactic?.PostUpdate();
 		}
 	}
 }
