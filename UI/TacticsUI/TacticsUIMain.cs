@@ -52,15 +52,15 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			{
 				//First row
 				TargetSelectionTacticHandler.GetTactic<ClosestEnemyToMinion>().ID,
-				TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID,
+				TargetSelectionTacticHandler.GetTactic<StrongestEnemy>().ID,
+				TargetSelectionTacticHandler.GetTactic<LeastDamagedEnemy>().ID,
 				TargetSelectionTacticHandler.GetTactic<SpreadOut>().ID,
-				TargetSelectionTacticHandler.GetTactic<AttackGroups>().ID,
 
 				//Second row
-				TargetSelectionTacticHandler.GetTactic<StrongestEnemy>().ID,
+				TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID,
 				TargetSelectionTacticHandler.GetTactic<WeakestEnemy>().ID,
-				TargetSelectionTacticHandler.GetTactic<LeastDamagedEnemy>().ID,
-				TargetSelectionTacticHandler.GetTactic<MostDamagedEnemy>().ID
+				TargetSelectionTacticHandler.GetTactic<MostDamagedEnemy>().ID,
+				TargetSelectionTacticHandler.GetTactic<AttackGroups>().ID,
 			};
 
 			int assignedCount = orderedIDs.Count;
