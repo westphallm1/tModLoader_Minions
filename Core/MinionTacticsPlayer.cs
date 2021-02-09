@@ -116,10 +116,7 @@ namespace AmuletOfManyMinions.Core.Minions
 					}
 				}
 			}
-			if(PlayerTactic != default)
-			{
-				PlayerTactic.PreUpdate();
-			}
+			PlayerTactic?.PreUpdate();
 		}
 
 		public override void PostUpdate()
