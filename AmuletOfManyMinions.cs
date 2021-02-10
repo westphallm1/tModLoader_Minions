@@ -20,6 +20,8 @@ namespace AmuletOfManyMinions
 {
 	public class AmuletOfManyMinions : Mod
 	{
+		internal static ModHotKey CycleTacticHotKey;
+		internal static ModHotKey QuickDefendHotKey;
 		public override void Load()
 		{
 			NetHandler.Load();
@@ -30,6 +32,9 @@ namespace AmuletOfManyMinions
 			IdleLocationSets.Load();
 			TargetSelectionTacticHandler.Load();
 			UserInterfaces.Load();
+
+			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
+			QuickDefendHotKey = RegisterHotKey("Minion Quick Defend", "V");
 			if (!Main.dedServ)
 			{
 				AddEquipTexture(null, EquipType.Legs, "RoyalGown_Legs", "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
@@ -51,6 +56,9 @@ namespace AmuletOfManyMinions
 			IdleLocationSets.Unload();
 			TargetSelectionTacticHandler.Unload();
 			UserInterfaces.Unload();
+
+			CycleTacticHotKey = null;
+			QuickDefendHotKey = null;
 		}
 
 		public override void AddRecipeGroups()

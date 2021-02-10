@@ -239,7 +239,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamageMult), 0.1f, player.whoAmI, ai0: isCorrupt ? 0 : 1);
 				}
 			}
-			if (minionVarietyBonusCount > 1)
+			if (minionVarietyBonusCount > 1 && ClientConfig.Instance.ShowMinionVarietyBonus)
 			{
 				int buffType = BuffType<MinionVarietyBuff>();
 				if (!player.HasBuff(buffType))

@@ -4,7 +4,9 @@ using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.UI;
 using AmuletOfManyMinions.UI.TacticsUI;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -24,6 +26,11 @@ namespace AmuletOfManyMinions.Core.Minions
 		public TargetSelectionTactic SelectedTactic => TargetSelectionTacticHandler.GetTactic(TacticID);
 
 		public PlayerTargetSelectionTactic PlayerTactic;
+
+		private List<byte> TacticIDCycle;
+
+		private byte PreviousTacticID = TargetSelectionTacticHandler.DefaultTacticID;
+		private bool isQuickDefending = false;
 
 		/// <summary>
 		/// Timer used for syncing TacticID when it is changed on the client, only registers the last change done within SyncTimerMax ticks
@@ -51,6 +58,17 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			TacticID = TargetSelectionTacticHandler.GetTactic(TacticID).ID; //Safe conversion of default tactic
 			SyncTimer = 0;
+			TacticIDCycle = new List<byte>
+			{
+				TargetSelectionTacticHandler.GetTactic<ClosestEnemyToMinion>().ID,
+				TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID,
+				TargetSelectionTacticHandler.GetTactic<StrongestEnemy>().ID,
+				TargetSelectionTacticHandler.GetTactic<WeakestEnemy>().ID,
+				TargetSelectionTacticHandler.GetTactic<LeastDamagedEnemy>().ID,
+				TargetSelectionTacticHandler.GetTactic<MostDamagedEnemy>().ID,
+				TargetSelectionTacticHandler.GetTactic<SpreadOut>().ID,
+				TargetSelectionTacticHandler.GetTactic<AttackGroups>().ID,
+			};
 		}
 
 		public override TagCompound Save()
@@ -122,6 +140,61 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void PostUpdate()
 		{
 			PlayerTactic?.PostUpdate();
+		}
+
+		private void CycleTactic()
+		{
+			int nextTacticIndex = (TacticIDCycle.IndexOf(TacticID) + 1) % TacticIDCycle.Count;
+			SetTactic(TacticIDCycle[nextTacticIndex]);
+		}
+
+		private void StartQuickDefending()
+		{
+			isQuickDefending = true;
+			PreviousTacticID = TacticID;
+			SetTactic(TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID);
+			UserInterfaces.tacticsUI.SetSelected(TacticID);
+		}
+
+		private void StopQuickDefending()
+		{
+			isQuickDefending = false;
+			SetTactic(PreviousTacticID);
+			UserInterfaces.tacticsUI.SetSelected(TacticID);
+		}
+
+		public override void ProcessTriggers(TriggersSet triggersSet)
+		{
+			// this is probably only run client side, but to be safe
+			if(player.whoAmI != Main.myPlayer)
+			{
+				return;
+			}
+			if(AmuletOfManyMinions.CycleTacticHotKey.JustPressed)
+			{
+				CycleTactic();
+				UserInterfaces.tacticsUI.SetSelected(TacticID);
+			}
+			if(AmuletOfManyMinions.QuickDefendHotKey.JustPressed )
+			{
+				if(ClientConfig.Instance.QuickDefendHotkeyStyle == ClientConfig.QuickDefendToggle)
+				{
+					if(isQuickDefending)
+					{
+						StopQuickDefending();
+					} else
+					{
+						StartQuickDefending();
+					}
+				} else
+				{
+					StartQuickDefending();
+				}
+			} else if (AmuletOfManyMinions.QuickDefendHotKey.JustReleased && ClientConfig.Instance.QuickDefendHotkeyStyle == ClientConfig.QuickDefendHold)
+			{
+				StopQuickDefending();
+			}
+			
 		}
 	}
 }

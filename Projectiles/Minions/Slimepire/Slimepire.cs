@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			projectile.width = 20;
 			projectile.height = 20;
 			drawOffsetX = (projectile.width - 44) / 2;
-			drawOriginOffsetY = (projectile.height - 32) / 2;
+			drawOriginOffsetY = 0;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -92,7 +92,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			}
 			gHelper.DoJump(vector);
 			int maxHorizontalSpeed = vector.Y < -64 ? 4 : 8;
-			projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
+			if(targetNPCIndex is int idx && vector.Length() < 64)
+			{
+				// go fast enough to hit the enemy while chasing them
+				Vector2 targetVelocity = Main.npc[idx].velocity;
+				projectile.velocity.X = Math.Max(4, Math.Min(maxHorizontalSpeed, Math.Abs(targetVelocity.X) * 1.25f)) * Math.Sign(vector.X);
+			} else
+			{
+				// try to match the player's speed while not chasing an enemy
+				projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
+			}
 			intendedX = projectile.velocity.X;
 		}
 

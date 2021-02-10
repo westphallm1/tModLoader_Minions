@@ -30,26 +30,19 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics
 		private List<NPC> npcsInGroups;
 		private List<NPCProximityCount> proximityCounts;
 
+		private bool hasBuiltList;
+
 		public AttackGroupsPlayerTactic()
 		{
 			proximityCounts = new List<NPCProximityCount>();
 		}
-		public override NPC ChooseTargetFromList(Projectile projectile, List<NPC> possibleTargets)
-		{
-			// also O(n^2), not a particularly clever implementation
-			return possibleTargets
-				.OrderBy(npc => -npcsInGroups.IndexOf(npc))
-				.ThenBy(npc => Vector2.DistanceSquared(npc.Center, projectile.Center))
-				.FirstOrDefault();
-		}
 
-		public override void PreUpdate()
+		private void BuildProximityList(Player player)
 		{
-			proximityCounts.Clear();
 			foreach (NPC npc in Main.npc)
 			{
 				if(npc.CanBeChasedBy() && proximityCounts.Count < maxSampleSize &&
-				   Vector2.DistanceSquared(npc.Center, Main.player[Main.myPlayer].Center) < distanceThreshold * distanceThreshold)
+				   Vector2.DistanceSquared(npc.Center, player.Center) < distanceThreshold * distanceThreshold)
 				{
 					proximityCounts.Add(new NPCProximityCount(npc));
 				}
@@ -75,6 +68,26 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics
 				.ThenBy(pair=>pair.npc.whoAmI)
 				.Select(pair => pair.npc)
 				.ToList();
+		}
+
+		public override NPC ChooseTargetFromList(Projectile projectile, List<NPC> possibleTargets)
+		{
+			if(!hasBuiltList)
+			{
+				BuildProximityList(Main.player[projectile.owner]);
+				hasBuiltList = true;
+			}
+			// also O(n^2), not a particularly clever implementation
+			return possibleTargets
+				.OrderBy(npc => -npcsInGroups.IndexOf(npc))
+				.ThenBy(npc => Vector2.DistanceSquared(npc.Center, projectile.Center))
+				.FirstOrDefault();
+		}
+
+		public override void PreUpdate()
+		{
+			proximityCounts.Clear();
+			hasBuiltList = false;
 		}
 	}
 }

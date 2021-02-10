@@ -71,6 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			projectile.width = 32;
 			projectile.height = 28;
 			drawOffsetX = -2;
+			drawOriginOffsetY = 2;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
