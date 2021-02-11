@@ -32,6 +32,11 @@ namespace AmuletOfManyMinions.Core.Minions
 		private byte PreviousTacticID = TargetSelectionTacticHandler.DefaultTacticID;
 		private bool isQuickDefending = false;
 
+		internal bool TacticsUnlocked = false;
+
+		// TODO localize
+		private static string TacticsUnlockedText = "Minions from the Amulet of Many Minions can now use Advanced Tactics!";
+
 		/// <summary>
 		/// Timer used for syncing TacticID when it is changed on the client, only registers the last change done within SyncTimerMax ticks
 		/// </summary>
@@ -78,7 +83,8 @@ namespace AmuletOfManyMinions.Core.Minions
 			TagCompound tacticsTag = new TagCompound
 			{
 				{ "v", (byte)LatestVersion },
-				{ "name", SelectedTactic.Name } //Important to save the name and not the ID as its dynamic. Names are the actual "identifiers"
+				{ "name", SelectedTactic.Name }, //Important to save the name and not the ID as its dynamic. Names are the actual "identifiers"
+				{ "unlocked", TacticsUnlocked }
 			};
 
 			tag.Add("tactic", tacticsTag);
@@ -98,6 +104,13 @@ namespace AmuletOfManyMinions.Core.Minions
 				string tacticName = tacticsTag.GetString("name");
 
 				TacticID = TargetSelectionTacticHandler.GetTactic(tacticName).ID;
+				if(tacticsTag.ContainsKey("unlocked"))
+				{
+					TacticsUnlocked = tacticsTag.GetBool("unlocked");
+				} else
+				{
+					TacticsUnlocked = false;
+				}
 			}
 		}
 
@@ -105,6 +118,13 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			if (Main.netMode == NetmodeID.Server) return; //Safety check, this hook shouldn't run serverside anyway
 			UserInterfaces.tacticsUI.SetSelected(TacticID);
+			if(!TacticsUnlocked)
+			{
+				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.HIDDEN);
+			} else if (UserInterfaces.tacticsUI.opened == OpenedTriState.HIDDEN) 
+			{
+				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.FALSE);
+			}
 			PlayerTactic = SelectedTactic.CreatePlayerTactic();
 		}
 
@@ -139,9 +159,36 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public override void PostUpdate()
 		{
+			CheckForAoMMItem();
 			PlayerTactic?.PostUpdate();
 		}
 
+		private void CheckForAoMMItem()
+		{
+			// only check once per second on the client player
+			if(player.whoAmI != Main.myPlayer || TacticsUnlocked || Main.GameUpdateCount % 60 != 0)
+			{
+				return;
+			}
+			foreach(Item item in player.inventory)
+			{
+				if(item.type == ItemID.None || item.modItem == null)
+				{
+					continue;
+				}
+				if(item.modItem.mod.Name == mod.Name && item.summon)
+				{
+					TacticsUnlocked = true;
+					break;
+				}
+			}
+			if(TacticsUnlocked)
+			{
+				Main.NewText(TacticsUnlockedText);
+				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.TRUE);
+			}
+
+		}
 		private void CycleTactic()
 		{
 			int nextTacticIndex = (TacticIDCycle.IndexOf(TacticID) + 1) % TacticIDCycle.Count;
@@ -166,7 +213,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void ProcessTriggers(TriggersSet triggersSet)
 		{
 			// this is probably only run client side, but to be safe
-			if(player.whoAmI != Main.myPlayer)
+			if(player.whoAmI != Main.myPlayer || !TacticsUnlocked)
 			{
 				return;
 			}

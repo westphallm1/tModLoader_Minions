@@ -10,6 +10,13 @@ using Terraria.UI;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
+
+	internal enum OpenedTriState
+	{
+		FALSE,
+		TRUE,
+		HIDDEN
+	}
 	/// <summary>
 	/// This is the actual UI used for aligning and most of the logic, it is invisible by itself. The reason it exists is so the button is within bounds of "being clickable"
 	/// </summary>
@@ -28,7 +35,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		private TacticsPanel tacticsPanel;
 		private OpenCloseButton openCloseButton;
 
-		internal bool opened = false;
+		internal OpenedTriState opened = OpenedTriState.HIDDEN;
 
 		public override void OnInitialize()
 		{
@@ -138,17 +145,33 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			//If closed, hide it so only the button is visible
 			float closedY = openedY - this.Height.Pixels + openCloseButton.Height.Pixels;
 
-			HandleFadeIn();
+			// If not yet unlocked, draw off the top of the screen
+			float hiddenY = openedY - this.Height.Pixels - openCloseButton.Height.Pixels;
 
-			this.Top.Pixels = MathHelper.Lerp(closedY, openedY, openAmount - 1f);
+			if(opened == OpenedTriState.HIDDEN)
+			{
+				this.Top.Pixels = hiddenY;
+			} else
+			{
+				HandleFadeIn();
+				this.Top.Pixels = MathHelper.Lerp(closedY, openedY, openAmount - 1f);
+			}
 			this.Left.Pixels = GetAnchorLeft();
 		}
 
 		private void OpenCloseButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
 		{
-			opened = !opened;
-			openCloseButton.SetImage(opened ? openTexture : closeTexture);
-			openCloseButton.SetHoverText(!opened ? Open : Close);
+			SetOpenClosedState(opened == OpenedTriState.TRUE ? OpenedTriState.FALSE : OpenedTriState.TRUE);
+		}
+
+		internal void SetOpenClosedState(OpenedTriState newState)
+		{
+			opened = newState;
+			if(newState != OpenedTriState.HIDDEN)
+			{
+				openCloseButton.SetImage(opened == OpenedTriState.TRUE ? openTexture : closeTexture);
+				openCloseButton.SetHoverText(opened  == OpenedTriState.TRUE ? Close : Open);
+			}
 		}
 
 		private float GetAnchorLeft()
@@ -203,7 +226,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		private void HandleFadeIn()
 		{
-			if (opened)
+			if (opened == OpenedTriState.TRUE)
 			{
 				if (openAmount <= 1f)
 				{
@@ -217,7 +240,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 					openAmount = 2f;
 				}
 			}
-			else
+			else if (opened == OpenedTriState.FALSE)
 			{
 				if (openAmount >= 2f)
 				{
@@ -241,5 +264,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		{
 			tacticsPanel.SetSelected(id);
 		}
+
 	}
 }

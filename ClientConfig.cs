@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions
 			// Correct invalid names
 			if (Array.IndexOf(QuickDefendOptions, QuickDefendHotkeyStyle) <= -1)
 			{
-				TacticsUIAnchorPos = QuickDefendToggle;
+				QuickDefendHotkeyStyle = QuickDefendToggle;
 			}
 		}
 	}
