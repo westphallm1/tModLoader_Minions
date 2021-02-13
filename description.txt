@@ -5,9 +5,10 @@ over 20 new minions, and several armor sets and accessories for both Squires and
 === Version History ==
 v0.7.0 - Minion Tactics
        - Add new UI for fine-tuning minion AI (only works for mod minions)
-       - Unlocked as soon as you pick up a summoner weapon from this mod
-       - Choose from 8 different styles of target prioritization!
-       - Add several hotkeys to quickly toggle selected tactics, and several mod config options
+         - Unlocked as soon as you pick up a summoner weapon from this mod
+         - Choose from 8 different styles of target prioritization!
+         - Add several hotkeys to quickly toggle selected tactics, and several mod config options
+       - Resprite several existing minons & items
 v0.6.0 - Minion Mix 'n' Match
        - Minions of different types now properly space out while idling by the player
        - Minion Variety Bonus: damage bonus based on number of unique minions!

@@ -74,8 +74,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			texture = GetTexture(Texture + "_Rider");
 			int frameHeight = texture.Height / 8;
-			Rectangle bounds = new Rectangle(0, projectile.minionPos * frameHeight, texture.Width, frameHeight);
-			spriteBatch.Draw(texture, pos + new Vector2(0, -8) - Main.screenPosition,
+			Rectangle bounds = new Rectangle(0, (projectile.minionPos % 8) * frameHeight, texture.Width, frameHeight);
+			spriteBatch.Draw(texture, pos + new Vector2(0, -10) - Main.screenPosition,
 				bounds, lightColor, 0,
 				new Vector2(bounds.Width/2, bounds.Height/2), 1, effects, 0);
 		}

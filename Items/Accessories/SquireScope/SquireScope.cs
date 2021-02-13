@@ -11,8 +11,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 		public override void SetStaticDefaults()
 		{
 			Tooltip.SetDefault("Increases view range for squires (Right Click to zoom out)" +
-							"\n10% increased minion damage" +
-							"\nIncreases squire travel range by 5 blocks");
+							"\nIncreases squire travel range by 8 blocks");
 		}
 
 		public override void SetDefaults()
@@ -26,8 +25,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 80f;
-			player.minionDamageMult += 0.1f;
+			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 128;
 			if (SquireMinionTypes.Contains(player.HeldItem.shoot))
 			{
 				player.scope = true;
