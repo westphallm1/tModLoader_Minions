@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.UI;
 using AmuletOfManyMinions.UI.TacticsUI;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameInput;
@@ -44,6 +45,9 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		private const int SyncTimerMax = 15;
 
+		private bool syncTactic = false;
+		private bool syncConfig = false;
+
 		/// <summary>
 		/// Whether or not to choose the target selected by the current minion tactic over
 		/// the target selected by the player target reticle.
@@ -61,6 +65,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			if (!fromSync && TacticID != id && Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				SyncTimer = 1;
+				syncTactic = true;
 			}
 			TacticID = id;
 			PlayerTactic = SelectedTactic.CreatePlayerTactic();
@@ -150,7 +155,13 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			if(Main.myPlayer == player.whoAmI)
 			{
-				IgnoreVanillaMinionTarget = (byte)(ClientConfig.Instance.IgnoreVanillaTargetReticle ? 1 : 0);
+				byte newIgnoreTargetStatus =(byte)(ClientConfig.Instance.IgnoreVanillaTargetReticle ? 1 : 0);
+				if(IgnoreVanillaMinionTarget != newIgnoreTargetStatus)
+				{
+					syncConfig = true;
+					SyncTimer = Math.Max(SyncTimer, 1);
+				}
+				IgnoreVanillaMinionTarget = newIgnoreTargetStatus;
 			}
 			//Client sends his newly selected tactic after a small delay
 			if (Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
@@ -161,7 +172,15 @@ namespace AmuletOfManyMinions.Core.Minions
 					if (SyncTimer > SyncTimerMax)
 					{
 						SyncTimer = 0; //Stop timer from incrementing
-						new TacticPacket(player, TacticID, IgnoreVanillaMinionTarget).Send();
+						if(syncTactic)
+						{
+							new TacticPacket(player, TacticID).Send();
+							syncTactic = false;
+						}
+						if(syncConfig)
+						{
+							syncConfig = false;
+						}
 					}
 				}
 			}

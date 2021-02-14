@@ -17,6 +17,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected Color lightColor;
 		protected virtual int cooldownAfterHitFrames => 16;
 
+		// stopgap to prevent the inexplicable odd behavior when too many segments are created
+		// TODO investigate actual causes
+		internal static int MAX_SEGMENT_COUNT = 15;
+
 		protected virtual float baseDamageRatio => 0.67f;
 		protected virtual float damageGrowthRatio => 0.33f;
 		public override void SetStaticDefaults()
@@ -80,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected int GetSegmentCount()
 		{
-			return EmpowerCount;
+			return Math.Min(EmpowerCount, MAX_SEGMENT_COUNT);
 		}
 
 		public override Vector2 IdleBehavior()
