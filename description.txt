@@ -3,6 +3,11 @@ in line with vanilla balance. It adds a new, directly controllable minion type c
 over 20 new minions, and several armor sets and accessories for both Squires and minions. 
 
 === Version History ==
+v0.7.0 - Minion Tactics
+       - Add new UI for fine-tuning minion AI (only works for mod minions)
+       - Unlocked as soon as you pick up a summoner weapon from this mod
+       - Choose from 8 different styles of target prioritization!
+       - Add several hotkeys to quickly toggle selected tactics, and several mod config options
 v0.6.0 - Minion Mix 'n' Match
        - Minions of different types now properly space out while idling by the player
        - Minion Variety Bonus: damage bonus based on number of unique minions!
@@ -14,15 +19,6 @@ v0.5.0 - Minion Progression Update
        - Add 1 late pre-hardmode minion
        - Add 3 early hardmode minions
        - Move several existing minions to Big Mimic drops
-v0.4.0 - Aquire the Squire!
-       - Squire attack speed, travel range, and travel speed can now be buffed by armor and accessories
-       - Add 4 Squire-centric accessories
-       - Add 1 pre-hardmode Summoner armor set
-       - Add 2 pre-hardmode Squire-centric armor sets
-       - Add 3 hardmode helmets with variant Squire-centric set bonuses 
-       - Add 3 early pre-hardmode Squires
-       - Add 1 late pre-hardmode Squire
-       - Add 1 post-Plantera Squire
 ~~ See the Wiki for older changelogs ~~
 
 A cheat sheet for getting started is given below. A complete list mod content can be found from the homepage.

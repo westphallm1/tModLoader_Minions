@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 
@@ -147,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 					projectile.damage,
 					projectile.knockBack,
 					Main.myPlayer);
-				Main.PlaySound(SoundID.Item10, projectile.position);
+				Main.PlaySound(new LegacySoundStyle(2, 11), projectile.position);
 			}
 			DistanceFromGroup(ref vectorToTargetPosition);
 			if (vectorToTargetPosition.Length() > travelSpeed)
@@ -332,7 +333,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 						projectile.damage,
 						projectile.knockBack,
 						Main.myPlayer);
-					Main.PlaySound(SoundID.Item10, projectile.position);
+					Main.PlaySound(new LegacySoundStyle(2, 11), projectile.position);
 				}
 			}
 		}

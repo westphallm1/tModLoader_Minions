@@ -42,6 +42,11 @@ namespace AmuletOfManyMinions
 		[DefaultValue(true)]
 		public bool ShowMinionVarietyBonus;
 
+		[Label("Tactics Ignore Vanilla Minion Target Reticle")]
+		[Tooltip("If true, minions will ignore the vanilla minion target reticle in favor of the npc selected by the current tactic")]
+		[DefaultValue(false)]
+		public bool IgnoreVanillaTargetReticle;
+
 		[JsonIgnore] //Hides it in UI and file
 		public bool AnchorToInventory => TacticsUIAnchorPos == AnchorInventory;
 

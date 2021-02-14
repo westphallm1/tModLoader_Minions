@@ -121,6 +121,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 			return MinionColors[colorIdx++ % MinionColors.Length];
 		}
 
+		public int GetNextColorIndex()
+		{
+			return colorIdx++;
+		}
+
 		public override void ResetEffects()
 		{
 			wormOnAStringEquipped = false;

@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SniperScope, 1);
+			recipe.AddIngredient(ItemID.RifleScope, 1);
 			recipe.AddIngredient(ItemType<SquireSpyglass.SquireSpyglass>(), 1);
 			recipe.AddTile(TileID.TinkerersWorkbench);
 			recipe.SetResult(this);

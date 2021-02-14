@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics
 
 		static float distanceThreshold = 1000f;
 		static int maxSampleSize = 30;
-		static int npcProximityThreshold = 160;
+		static int npcProximityThreshold = 64;
 		static int minCountForGroup = 1;
 		// ordered by "group count"
 		private List<NPC> npcsInGroups;

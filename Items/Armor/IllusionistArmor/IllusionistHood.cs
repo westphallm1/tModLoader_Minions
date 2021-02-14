@@ -114,10 +114,12 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public static int SpawnFrequency = 60;
 		private bool isCorrupt => projectile.ai[0] == 0;
-
-		private int targetNPC => (int)projectile.ai[1];
+		internal override bool tileCollide => false;
+		private int targetNPCIdx => (int)projectile.ai[1];
+		private NPC targetNPC;
 
 		bool isAttacking = false;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -142,13 +144,14 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 				projectile.timeLeft = Math.Max(projectile.timeLeft, 2);
 			}
 
-			if (targetNPC != 0 && !isAttacking)
+			if (targetNPCIdx != 0 && !isAttacking)
 			{
 				projectile.netUpdate = true;
 				projectile.friendly = true;
+				targetNPC = Main.npc[targetNPCIdx];
 				isAttacking = true;
 			}
-			if (isAttacking && !Main.npc[targetNPC].active)
+			if (isAttacking && targetNPC != null && !targetNPC.active)
 			{
 				projectile.Kill();
 			}
@@ -207,7 +210,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			}
 			else
 			{
-				return Main.npc[targetNPC].Center - projectile.Center;
+				return Main.npc[targetNPCIdx].Center - projectile.Center;
 			}
 		}
 

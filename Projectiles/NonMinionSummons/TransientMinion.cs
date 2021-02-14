@@ -8,6 +8,8 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 	public abstract class TransientMinion : SimpleMinion
 	{
 		protected override int BuffId => -1;
+
+		internal virtual bool tileCollide => true;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -45,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 		public override void Behavior()
 		{
 			base.Behavior();
-			projectile.tileCollide = true;
+			projectile.tileCollide = tileCollide;
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)

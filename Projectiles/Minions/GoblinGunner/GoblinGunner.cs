@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -173,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 						projectile.knockBack,
 						Main.myPlayer);
 				}
-				Main.PlaySound(SoundID.Item97, pos);
+				Main.PlaySound(new LegacySoundStyle(2, 11), pos);
 			}
 		}
 

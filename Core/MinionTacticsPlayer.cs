@@ -45,6 +45,13 @@ namespace AmuletOfManyMinions.Core.Minions
 		private const int SyncTimerMax = 15;
 
 		/// <summary>
+		/// Whether or not to choose the target selected by the current minion tactic over
+		/// the target selected by the player target reticle.
+		/// Set by the mod config on each player. Needs to be synced in multiplayer
+		/// </summary>
+		internal byte IgnoreVanillaMinionTarget = 0;
+
+		/// <summary>
 		/// Use this method to set TacticID during gameplay (through the UI, in netcode)
 		/// </summary>
 		/// <param name="id">The TacticID to switch to</param>
@@ -136,11 +143,15 @@ namespace AmuletOfManyMinions.Core.Minions
 			//2. this player joins, having to send its info to everyone
 			//    * The client sends his info to the server
 			//    * Server sends that info to all other players (note that the method is called again, the packet itself doesn't broadcast)
-			new SyncMinionTacticsPlayerPacket(player, TacticID).Send(toWho, fromWho);
+			new SyncMinionTacticsPlayerPacket(player, TacticID, IgnoreVanillaMinionTarget).Send(toWho, fromWho);
 		}
 
 		public override void PreUpdate()
 		{
+			if(Main.myPlayer == player.whoAmI)
+			{
+				IgnoreVanillaMinionTarget = (byte)(ClientConfig.Instance.IgnoreVanillaTargetReticle ? 1 : 0);
+			}
 			//Client sends his newly selected tactic after a small delay
 			if (Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
 			{
@@ -150,7 +161,7 @@ namespace AmuletOfManyMinions.Core.Minions
 					if (SyncTimer > SyncTimerMax)
 					{
 						SyncTimer = 0; //Stop timer from incrementing
-						new TacticPacket(player, TacticID).Send();
+						new TacticPacket(player, TacticID, IgnoreVanillaMinionTarget).Send();
 					}
 				}
 			}

@@ -45,7 +45,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 	public class ExciteSkullMinion : SimpleGroundBasedMinion
 	{
 		protected override int BuffId => BuffType<ExciteSkullMinionBuff>();
-		private Color flairColor;
 
 		public override void SetStaticDefaults()
 		{
@@ -73,28 +72,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			Texture2D texture;
 			Vector2 pos = projectile.Center;
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			float brightness = (lightColor.R + lightColor.G + lightColor.B) / (3f * 255f);
-			Color flairColor = this.flairColor;
-			flairColor.R = (byte)(flairColor.R * brightness);
-			flairColor.G = (byte)(flairColor.G * brightness);
-			flairColor.B = (byte)(flairColor.B * brightness);
-			//texture = GetTexture(Texture+"_Glow");
-			//spriteBatch.Draw(texture, pos - Main.screenPosition,
-			//	texture.Bounds, flairColor, projectile.rotation,
-			//	texture.Bounds.Center.ToVector2(), 1, effects, 0);
 			texture = GetTexture(Texture + "_Rider");
+			int frameHeight = texture.Height / 8;
+			Rectangle bounds = new Rectangle(0, projectile.minionPos * frameHeight, texture.Width, frameHeight);
 			spriteBatch.Draw(texture, pos + new Vector2(0, -8) - Main.screenPosition,
-				texture.Bounds, lightColor, 0,
-				texture.Bounds.Center.ToVector2(), 1, effects, 0);
-			texture = GetTexture(Texture + "_RiderGlow");
-			spriteBatch.Draw(texture, pos + new Vector2(0, -8) - Main.screenPosition,
-				texture.Bounds, flairColor, 0,
-				texture.Bounds.Center.ToVector2(), 1, effects, 0);
-		}
-
-		public override void OnSpawn()
-		{
-			flairColor = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColor();
+				bounds, lightColor, 0,
+				new Vector2(bounds.Width/2, bounds.Height/2), 1, effects, 0);
 		}
 
 		protected override void DoGroundedMovement(Vector2 vector)

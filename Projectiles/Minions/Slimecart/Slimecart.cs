@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 	public class SlimecartMinion : SimpleGroundBasedMinion
 	{
 		protected override int BuffId => BuffType<SlimecartMinionBuff>();
-		private Color slimeColor;
+		private int slimeIndex;
 
 		public override void SetStaticDefaults()
 		{
@@ -85,25 +85,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			Vector2 pos = projectile.Center;
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			float brightness = (lightColor.R + lightColor.G + lightColor.B) / (3f * 255f);
-			Color slimeColor = this.slimeColor;
-			slimeColor.R = (byte)(slimeColor.R * brightness);
-			slimeColor.G = (byte)(slimeColor.G * brightness);
-			slimeColor.B = (byte)(slimeColor.B * brightness);
 			if (gHelper.isFlying)
 			{
 				texture = GetTexture(Texture + "_Umbrella");
 				spriteBatch.Draw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
 					texture.Bounds, lightColor, 0,
 					texture.Bounds.Center.ToVector2(), 1, effects, 0);
-				texture = GetTexture(Texture + "_UmbrellaGlow");
-				spriteBatch.Draw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
-					texture.Bounds, slimeColor, 0,
-					texture.Bounds.Center.ToVector2(), 1, effects, 0);
 			}
 			texture = GetTexture(Texture + "_Slime");
+			int frameHeight = texture.Height / 7;
+			Rectangle bounds = new Rectangle(0, slimeIndex * frameHeight, texture.Width, frameHeight);
 			spriteBatch.Draw(texture, pos + new Vector2(0, -14) - Main.screenPosition,
-				texture.Bounds, slimeColor, 0,
-				texture.Bounds.Center.ToVector2(), 1, effects, 0);
+				bounds, lightColor, 0,
+				new Vector2(bounds.Width/2, bounds.Height/2), 1, effects, 0);
 			texture = GetTexture(Texture + "_Hat");
 			spriteBatch.Draw(texture, pos + new Vector2(0, -23) - Main.screenPosition,
 				texture.Bounds, lightColor, 0,
@@ -113,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 		public override void OnSpawn()
 		{
-			slimeColor = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColor();
+			slimeIndex = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColorIndex() % 7;
 		}
 
 		protected override void DoGroundedMovement(Vector2 vector)

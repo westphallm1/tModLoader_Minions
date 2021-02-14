@@ -1,5 +1,7 @@
 using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
+using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
@@ -77,6 +79,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, Vector2? losCenter = null)
 		{
+			MinionTacticsPlayer tacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
+			if(tacticsPlayer.IgnoreVanillaMinionTarget > 0 && tacticsPlayer.SelectedTactic != TargetSelectionTacticHandler.GetTactic<ClosestEnemyToMinion>())
+			{
+				return null;
+			}
 			Vector2 center = centeredOn ?? projectile.Center;
 			Vector2 losCenterVector = losCenter ?? projectile.Center;
 			if (player.HasMinionAttackTargetNPC)
