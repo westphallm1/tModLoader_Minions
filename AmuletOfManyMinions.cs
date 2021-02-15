@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Netcode;
 using AmuletOfManyMinions.Items.Accessories;
@@ -32,6 +33,8 @@ namespace AmuletOfManyMinions
 			IdleLocationSets.Load();
 			TargetSelectionTacticHandler.Load();
 			UserInterfaces.Load();
+
+			PathfindingHelper.Initialize();
 
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
 			QuickDefendHotKey = RegisterHotKey("Minion Quick Defend", "V");

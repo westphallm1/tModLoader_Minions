@@ -1,4 +1,5 @@
 using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
@@ -41,6 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public bool Spawned { get; private set; }
 
 		protected abstract int BuffId { get; }
+
 
 		public override void SetStaticDefaults()
 		{
@@ -151,11 +153,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				targetNPCIndex = chosen.whoAmI;
 				targetNPCCacheFrames = 0;
 				return chosen.Center;
-			} else if (useBeacon && anyInRange)
-			{
-				usingBeacon = true;
-				return BeaconPosition(center, maxRange, noLOSRange);
-			}
+			} 
+			//else if (useBeacon && anyInRange)
+			//{
+			//	usingBeacon = true;
+			//	return BeaconPosition(center, maxRange, noLOSRange);
+			//}
 			else
 			{
 				return null;
