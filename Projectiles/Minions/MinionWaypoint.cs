@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+using AmuletOfManyMinions.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -36,11 +37,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			rotationFrame = (rotationFrame + 1) % rotationFrames;
 			float startAngle = -2f * (float)Math.PI * rotationFrame / rotationFrames;
-			for (int i = 0; i < 3; i++)
+			MinionPathfindingPlayer player = Main.player[projectile.owner].GetModPlayer<MinionPathfindingPlayer>();
+			if(player.pHelper.searchSucceeded || !player.pHelper.searchFailed)
 			{
-				float angle = startAngle + i * 2 * (float)Math.PI / 3;
-				Vector2 pos = projectile.Center + 12 * new Vector2((float)Math.Sin(angle), (float)Math.Cos(angle));
-				Dust.NewDust(pos, 1, 1, DustType<MinionWaypointDust>(), newColor: new Color(0.5f, 1, 0.5f), Scale: 1.2f);
+
+				int radius = player.pHelper.searchSucceeded ? 12 : 6;
+				Color color = player.pHelper.searchSucceeded ? Color.LimeGreen : Color.LightBlue;
+				float scale = player.pHelper.searchSucceeded ? 1.2f : 0.8f; 
+				for (int i = 0; i < 3; i++)
+				{
+					float angle = startAngle + i * 2 * (float)Math.PI / 3;
+					Vector2 pos = projectile.Center + radius * angle.ToRotationVector2();
+					Dust.NewDust(pos, 1, 1, DustType<MinionWaypointDust>(), newColor: color, Scale: scale);
+				}
+			} else if (player.pHelper.searchFailed)
+			{
+				for(int i = 0; i < 2; i++)
+				{
+					float offset = 12 * (i == 0 ? (float)Math.Sin(startAngle) : (float)Math.Cos(startAngle));
+					Vector2 pos = projectile.Center + new Vector2(i == 1 ? offset : -offset, offset);
+					Dust.NewDust(pos, 1, 1, DustType<MinionWaypointDust>(), newColor: Color.Red, Scale: 1.2f);
+				}
 			}
 		}
 
