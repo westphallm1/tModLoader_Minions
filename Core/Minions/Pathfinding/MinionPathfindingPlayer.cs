@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public override void PostUpdate()
 		{
-			pHelper?.NextBeaconPosition();
+			pHelper?.Update();
 		}
 	}
 }
