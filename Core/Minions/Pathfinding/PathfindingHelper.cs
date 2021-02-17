@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal Vector2 position;
 		internal float distanceHeuristic;
 		internal WaypointSearchNode parent;
-		internal static int BACKTRACK_DISTANCE_THRESHOLD = 48 * 48;
+		internal static int BACKTRACK_DISTANCE_THRESHOLD = 4;
 		internal static int positionGridSize = 4;
 		internal bool hasLOS;
 
@@ -64,32 +64,28 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal SortedSet<WaypointSearchNode> searchNodes = new SortedSet<WaypointSearchNode>();
 		internal SortedSet<WaypointSearchNode> visited = new SortedSet<WaypointSearchNode>();
 
-		internal Vector2 waypointPosition;
+		internal SortedSet<WaypointSearchNode> reverseSearchNodes = new SortedSet<WaypointSearchNode>();
+		internal SortedSet<WaypointSearchNode> reverseVisited = new SortedSet<WaypointSearchNode>();
+
+		internal Vector2 waypointPosition = default;
 		internal Vector2 lastWaypointPosition = default;
 		internal Vector2 startingPosition = default;
 		internal float maxDistance = 0;
 
 		// Parameters for the algorithm
 
-		// Try to detect 'bad convergences' that don't decrease but also don't lead to the target
-		internal Vector2 stuckPosition = default; // the location of the bad convergence
-		internal int unstuckStartFrame = default; // the frame we started trying to get unstuck on
-		internal int FRAMES_TO_GET_UNSTUCK = 10; // the max number of frames to get unstuck
-
-		internal static int DISTANCE_STEP = 32; // 2 blocks
-		internal static int ANGLE_STEP = 16; // 16 rotations per
-		internal static float EVALUATIONS_PER_FRAME = ANGLE_STEP * 3; // evaluate 3 cycles total per frame
+		internal static int DISTANCE_STEP = 16; // 1 block
+		internal static int ANGLE_STEP = 4; // 16 rotations per
+		internal static float EVALUATIONS_PER_FRAME = ANGLE_STEP * 32; // evaluate 4 cycles total per frame
 		internal static int MAX_PENDING_QUEUE_SIZE = 32; // discard any nodes that fall below the current best
 		internal static int WAYPOINT_PROXIMITY_THRESHOLD = 32;
 		internal static int LOS_CHECK_THRESHOLD = 64;
-		internal static int MAX_ITERATIONS = 60;
-		internal static int MAX_NO_IMPROVEMENT_FRAMES = 10;
-		internal static int PLAYER_DISTANCE_THRESHOLD = 64; // re-calculate if the player moves this much
-		internal static int RECALCULATE_RATE_LIMIT = 90; // only re-calculate once per X frames
+		internal static int MAX_ITERATIONS = 180;
+		internal static int MAX_NO_IMPROVEMENT_FRAMES = 180;
 		internal int evaluationsThisFrame = 0;
 		internal bool searchFailed = false;
 		internal bool searchSucceeded = false;
-		internal bool pathFinalized = false;
+		internal bool pathPruned = false;
 		internal int iterations = 0;
 		internal int noImprovementFrames = 0;
 		internal float pathLength;
@@ -112,26 +108,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 		}
 
-		private float GetHeuristic(Vector2 newPosition, ref bool hasLOS)
-		{
-			float distanceHeuristic = Vector2.DistanceSquared(waypointPosition, newPosition);
-			if(stuckPosition != default && iterations - unstuckStartFrame < FRAMES_TO_GET_UNSTUCK)
-			{
-				distanceHeuristic = Vector2.DistanceSquared(stuckPosition, newPosition);
-				return distanceHeuristic;
-			} 
-			if(stuckPosition == default && distanceHeuristic < LOS_CHECK_THRESHOLD * LOS_CHECK_THRESHOLD
-				&& Collision.CanHitLine(waypointPosition, 1, 1, newPosition, 1, 1))
-			{
-				hasLOS = true;
-			} else 
-			{
-				// while we're not close to the waypoint, try to get away from the starting point
-				distanceHeuristic -= Math.Min(maxDistance, Vector2.DistanceSquared(startingPosition, newPosition));
-			}
-			return distanceHeuristic;
-		}
-
 		private WaypointSearchNode AddNode(WaypointSearchNode parent, int angleIdx)
 		{
 			Vector2 newPosition;
@@ -147,8 +123,19 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 					return null;
 				}
 			}
+			Vector2 minPos = reverseSearchNodes.Min?.position ?? waypointPosition;
+			float distanceHeuristic = Math.Min(Vector2.DistanceSquared(minPos, newPosition), Vector2.DistanceSquared(waypointPosition, newPosition));
 			bool hasLOS = false;
-			float distanceHeuristic = GetHeuristic(newPosition, ref hasLOS);
+			if(distanceHeuristic < LOS_CHECK_THRESHOLD * LOS_CHECK_THRESHOLD
+				&& Collision.CanHitLine(minPos, 1, 1, newPosition, 1, 1))
+			{
+				hasLOS = true;
+			} else 
+			{
+				// while we're not close to the waypoint, try to get away from the starting point
+				distanceHeuristic -= Math.Min(maxDistance, Vector2.DistanceSquared(startingPosition, newPosition));
+
+			}
 			WaypointSearchNode newNode = new WaypointSearchNode(newPosition, distanceHeuristic, parent)
 			{
 				hasLOS = hasLOS
@@ -158,39 +145,88 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				return newNode;
 			} else
 			{
-#if DEBUG
-				if(stuckPosition != default)
+				return null;
+			}
+		}
+		private WaypointSearchNode AddReverseNode(WaypointSearchNode parent, int angleIdx)
+		{
+			Vector2 newPosition;
+			if(parent == null)
+			{
+				newPosition = waypointPosition;
+			} else
+			{
+				Vector2 center = parent.position;
+				newPosition = center + OffsetVectors[angleIdx];
+				if(!Collision.CanHitLine(center, 1, 1, newPosition, 1, 1))
 				{
-					Main.NewText("Not adding node because " + parent.IsBacktracking(newNode) + " " + visited.Contains(newNode));
+					return null;
 				}
-#endif
+			}
+			Vector2 minPos = searchNodes.Min?.position ?? startingPosition;
+			float distanceHeuristic = Math.Min(Vector2.DistanceSquared(minPos, newPosition), Vector2.DistanceSquared(startingPosition, newPosition));
+			bool hasLOS = false;
+			if(distanceHeuristic < LOS_CHECK_THRESHOLD * LOS_CHECK_THRESHOLD
+				&& Collision.CanHitLine(minPos, 1, 1, newPosition, 1, 1))
+			{
+				hasLOS = true;
+			} else 
+			{
+				// while we're not close to the waypoint, try to get away from the starting point
+				distanceHeuristic -= Math.Min(maxDistance, Vector2.DistanceSquared(waypointPosition, newPosition));
+
+			}
+			WaypointSearchNode newNode = new WaypointSearchNode(newPosition, distanceHeuristic, parent)
+			{
+				hasLOS = hasLOS
+			};
+			if (parent == null || (!parent.IsBacktracking(newNode) && !reverseVisited.Contains(newNode)))
+			{
+				return newNode;
+			} else
+			{
 				return null;
 			}
 		}
 
-		public Vector2? Update()
+		private Vector2? Evaluate(SortedSet<WaypointSearchNode> currentSearchNodes, Func<WaypointSearchNode, int, WaypointSearchNode> AddFunc)
 		{
-#if DEBUG
-			if(Main.GameUpdateCount % 15 != 0)
+			evaluationsThisFrame = 0;
+			while(evaluationsThisFrame < EVALUATIONS_PER_FRAME)
 			{
-				return null;
+				WaypointSearchNode currentBest = currentSearchNodes.Min;
+				for(int angleIdx = 0; angleIdx < ANGLE_STEP; angleIdx++)
+				{
+					if (AddFunc(currentBest, angleIdx) is WaypointSearchNode newNode)
+					{
+						if (newNode.hasLOS)
+						{
+							// terminate the algorithm here, we've found a direct path
+							currentSearchNodes.Clear();
+							currentSearchNodes.Add(newNode);
+							return newNode.position;
+						}
+						else
+						{
+							currentSearchNodes.Add(newNode);
+						}
+					};
+					evaluationsThisFrame++;
+					if(currentSearchNodes.Count > MAX_PENDING_QUEUE_SIZE)
+					{
+						currentSearchNodes.Remove(currentSearchNodes.Max);
+					}
+				}
 			}
-#endif
-			//
-			// Reset the state if necessary
-			//
+			return null;
+		}
+
+		public Vector2? NextBeaconPosition()
+		{
 			int type = MinionWaypoint.Type;
 			if(player.ownedProjectileCounts[type] == 0)
 			{
-				ResetState();
 				return null;
-			}
-			iterations++;
-			if(orderedPath.Count > 0 && 
-				Vector2.DistanceSquared(orderedPath[0], player.Center) > PLAYER_DISTANCE_THRESHOLD * PLAYER_DISTANCE_THRESHOLD &&
-				iterations > RECALCULATE_RATE_LIMIT)
-			{
-				ResetState();
 			}
 			waypointPosition = WaypointPos();
 			if(waypointPosition != lastWaypointPosition || searchNodes.Count == 0)
@@ -200,139 +236,92 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				lastWaypointPosition = waypointPosition;
 			}
 
-			//
-			// If the algorithm has terminated, return the result
-			//
-			maxDistance = Vector2.DistanceSquared(startingPosition, waypointPosition);
-			WaypointSearchNode currentBest = searchNodes.Min;
+#if DEBUG
+			DebugDust();
+#endif
+			WaypointSearchNode currentBest = iterations % 2 == 0 ? searchNodes.Min : reverseSearchNodes.Min;
+			if(currentBest is null)
+			{
+				return null;
+			}
 			if(!currentBest.hasLOS)
 			{
 				// do one full LOS check per iteration, since this can eliminate some cases
 				// where the path converges along a weird axis
-				currentBest.hasLOS = Collision.CanHitLine(currentBest.position, 1, 1, waypointPosition, 1, 1);
+				currentBest.hasLOS = Collision.CanHitLine(searchNodes.Min.position, 1, 1, reverseSearchNodes.Min.position, 1, 1);
 			}
 			searchSucceeded |= currentBest.hasLOS;
 			if(searchSucceeded || searchFailed)
 			{
-				FinalizePath();
+				CleanupPath();
 				DrawPath();
 				return currentBest.position;
 			}
-
-#if DEBUG
-			DebugDust();
-#endif
-			//
-			// Evaluate nodes
-			//
-			evaluationsThisFrame = 0;
-			while(evaluationsThisFrame < EVALUATIONS_PER_FRAME)
+			Vector2? result;
+			if(iterations % 2 == 0)
 			{
-				currentBest = searchNodes.Min;
-				for(int angleIdx = 0; angleIdx < ANGLE_STEP; angleIdx++)
-				{
-					if (AddNode(currentBest, angleIdx) is WaypointSearchNode newNode)
-					{
-						if (newNode.hasLOS)
-						{
-							// terminate the algorithm here, we've found a direct path
-							searchNodes.Clear();
-							searchNodes.Add(newNode);
-							return newNode.position;
-						}
-						else
-						{
-							searchNodes.Add(newNode);
-						}
-					};
-					evaluationsThisFrame++;
-					if(searchNodes.Count > MAX_PENDING_QUEUE_SIZE)
-					{
-						searchNodes.Remove(searchNodes.Max);
-					}
-				}
+				result = Evaluate(searchNodes, AddNode);
+			} else
+			{
+				result = Evaluate(reverseSearchNodes, AddReverseNode);
 			}
-#if DEBUG
-			Main.NewText("Current pending nodes " + searchNodes.Count);
-#endif
-			//
-			// Check if the algoritm has terminated
-			//
-			if(visited.Min != null && currentBest.distanceHeuristic > visited.Min.distanceHeuristic &&
-				(stuckPosition == default || iterations - unstuckStartFrame > FRAMES_TO_GET_UNSTUCK))
+			if(result != null)
+			{
+				return result;
+			}
+			if(visited.Min != null && currentBest.distanceHeuristic > visited.Min.distanceHeuristic)
 			{
 				noImprovementFrames++;
 			} else
 			{
 				noImprovementFrames = 0;
 			}
-			// if we're about to fail, give a second chance by moving away from the stuck point
-			if(noImprovementFrames == MAX_NO_IMPROVEMENT_FRAMES - 1 && stuckPosition == default)
-			{
-				searchNodes.Clear();
-				searchNodes.Add(visited.Min);
-				searchNodes.Min.parent = null;
-				stuckPosition = visited.Min.position;
-				unstuckStartFrame = iterations;
-				noImprovementFrames = 0;
-				visited.Clear();
-#if DEBUG
-				Main.NewText("Attempting to get unstuck from "+stuckPosition);
-#endif
-				return null;
-			} else if (stuckPosition != default && iterations - unstuckStartFrame == FRAMES_TO_GET_UNSTUCK)
-			{
-#if DEBUG
-				Main.NewText("Done attempting to get unstuck "+stuckPosition);
-#endif
-				bool hasLOS = false;
-				WaypointSearchNode newBest = searchNodes.Min;
-				newBest.distanceHeuristic = GetHeuristic(newBest.position, ref hasLOS);
-				newBest.parent = null;
-				searchNodes.Clear();
-				visited.Clear();
-				searchNodes.Add(newBest);
-				return null;
-			}
-			if(iterations > MAX_ITERATIONS || noImprovementFrames > MAX_NO_IMPROVEMENT_FRAMES)
+			if(iterations++ > MAX_ITERATIONS || noImprovementFrames > MAX_NO_IMPROVEMENT_FRAMES)
 			{
 				searchFailed = true;
 				searchNodes.Clear();
 				// take the closest guess we got
 				searchNodes.Add(visited.Min);
 			}
-			searchNodes.Remove(currentBest);
-			visited.Add(currentBest);
+			if(iterations % 2 == 1)
+			{
+				searchNodes.Remove(currentBest);
+				visited.Add(currentBest);
+			} else
+			{
+				reverseSearchNodes.Remove(currentBest);
+				reverseVisited.Add(currentBest);
+			}
 			return null;
 		}
 
 		public void ResetState()
 		{
-#if DEBUG
-			Main.NewText("Resetting state!" + searchNodes.Count);
-#endif
 			lastWaypointPosition = default;
 			startingPosition = player.Center;
 			searchNodes = new SortedSet<WaypointSearchNode>();
 			visited = new SortedSet<WaypointSearchNode>();
+			reverseSearchNodes = new SortedSet<WaypointSearchNode>();
+			reverseVisited = new SortedSet<WaypointSearchNode>();
 			searchFailed = false;
 			searchSucceeded = false;
-			pathFinalized = false;
-			stuckPosition = default;
+			pathPruned = false;
 			iterations = 0;
 			noImprovementFrames = 0;
+			maxDistance = Vector2.DistanceSquared(startingPosition, waypointPosition);
 			orderedPath = new List<Vector2>();
 			searchNodes.Add(AddNode(null, 0));
+			reverseSearchNodes.Add(AddReverseNode(null, 0));
 		}
 
 		// reduce the path to the minimum number of nodes with LOS to each other
-		public void FinalizePath()
+		public void CleanupPath()
 		{
-			if(pathFinalized)
+			if(pathPruned)
 			{
 				return;
 			}
-			pathFinalized = true;
+			pathPruned = true;
 			WaypointSearchNode currNode = searchNodes.Min;
 			pathLength = 0;
 			while(currNode != null)
@@ -391,7 +380,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			// this should never get hit
 			return default;
 		}
-
 		private void DebugDust()
 		{
 			bool isFirst = true;
@@ -401,10 +389,12 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 					newColor: isFirst ? Color.Red : Color.MediumPurple, Scale: 1.0f);
 				isFirst = false;
 			}
-			if(stuckPosition != default)
+			isFirst = true;
+			foreach(WaypointSearchNode node in reverseSearchNodes)
 			{
-				Dust.NewDust(stuckPosition, 1, 1, DustType<MinionWaypointDust>(), 
-					newColor: Color.LimeGreen, Scale: 1.5f);
+				Dust.NewDust(node.position, 1, 1, DustType<MinionWaypointDust>(), 
+					newColor: isFirst ? Color.Red : Color.MediumPurple, Scale: 1.0f);
+				isFirst = false;
 			}
 		}
 	}
