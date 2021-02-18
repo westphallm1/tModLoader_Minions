@@ -1,5 +1,4 @@
-﻿#define DEBUG
-using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System;
@@ -12,18 +11,43 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 {
+	static class Vector2Extension
+	{
+		public static Vector2 rotate90CW(this Vector2 vec)
+		{
+			return new Vector2(-vec.Y, vec.X);
+		}
+
+		public static Vector2 rotate90CCW(this Vector2 vec)
+		{
+			return new Vector2(vec.Y, -vec.X);
+		}
+	}
 	internal class WaypointSearchNode: IComparable<WaypointSearchNode>
 	{
 		internal Vector2 position;
 		internal float distanceHeuristic;
 		internal WaypointSearchNode parent;
-		internal static int BACKTRACK_DISTANCE_THRESHOLD = 48 * 48;
-		internal static int positionGridSize = 4;
+		internal static int BACKTRACK_DISTANCE_THRESHOLD = 4 * 4;
+		internal static int positionGridSize = 16;
 		internal bool hasLOS;
+		internal bool inGround;
+
+		// Used only for the ground probes, might make more sense as subclass
+		internal bool isGroundProbe = false;
+		internal bool isClockwise;
+		internal Vector2 parentPos;
+		internal Vector2 targetDirection;
+		internal Vector2 velocity;
+
+		private int SnapToGrid(float pos)
+		{
+			return (int)(pos - pos % positionGridSize) + positionGridSize / 2;
+		}
 
 		public WaypointSearchNode(Vector2 position, float distanceHeuristic, WaypointSearchNode parent)
 		{
-			this.position = new Vector2(position.X - position.X % positionGridSize, position.Y - position.Y % positionGridSize);
+			this.position = new Vector2(SnapToGrid(position.X), SnapToGrid(position.Y));
 			this.distanceHeuristic = distanceHeuristic;
 			this.parent = parent;
 		}
@@ -53,6 +77,68 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 			return Vector2.DistanceSquared(parent.position, other.position) < BACKTRACK_DISTANCE_THRESHOLD;
 		}
+
+		// Lifted from GroundAwareMinion
+		internal static bool TileAtLocation(Vector2 position)
+		{
+			int x = (int)position.X / 16;
+			int y = (int)position.Y / 16;
+			//null-safe
+			Tile tile = Framing.GetTileSafely(x, y);
+			return tile.active() && !tile.actuator() && tile.collisionType == 1;
+		}
+		public void UpdateGroundProbe()
+		{
+			// check that there's still a tile blocking progress in the direction of the original goal
+			Vector2 clingTarget = isClockwise ? velocity.rotate90CW() : velocity.rotate90CCW();
+			bool clingToPresent = TileAtLocation(position + clingTarget);
+			bool travelDirectionBlocked = TileAtLocation(position + velocity);
+			bool nextTravelDirectionBlocked = TileAtLocation(position + -clingTarget);
+			if(!clingToPresent)
+			{
+				//able to round the corner! Yay!
+				velocity = clingTarget;
+			} else if (travelDirectionBlocked && nextTravelDirectionBlocked)
+			{
+				// rotate in the other direction
+				velocity = -velocity;
+			} else if (travelDirectionBlocked)
+			{
+				velocity = -clingTarget;
+			}
+			if(clingToPresent || travelDirectionBlocked)
+			{
+				WaypointSearchNode cornerNode = new WaypointSearchNode(position , 0, parent);
+				parent = cornerNode;
+			}
+			position += velocity;
+		}
+
+		public bool GotAroundBarrier(Vector2 waypointPosition)
+		{
+			bool gotAroundBarrier;
+			Vector2 target = targetDirection;
+			Vector2 currentWaypointOffset = waypointPosition - position;
+			if(target.X == 0 && target.Y > 0)
+			{
+				gotAroundBarrier = position.X == parentPos.X &&
+					position.Y > parentPos.Y && Math.Sign(currentWaypointOffset.Y) == Math.Sign(target.Y);
+			} else if (target.X == 0 && target.Y < 0)
+			{
+				gotAroundBarrier = position.X == parentPos.X &&
+					position.Y < parentPos.Y && Math.Sign(currentWaypointOffset.Y) == Math.Sign(target.Y);
+			} else if (target.Y == 0 && target.X > 0)
+			{
+				gotAroundBarrier = position.Y == parentPos.Y &&
+					position.X > parentPos.X && Math.Sign(currentWaypointOffset.X) == Math.Sign(target.X);
+			} else
+			{
+				gotAroundBarrier = position.Y == parentPos.Y &&
+					position.X < parentPos.X && Math.Sign(currentWaypointOffset.X) == Math.Sign(target.X);
+			}
+			return gotAroundBarrier;
+		}
+
 	}
 
 	public class PathfindingHelper
@@ -67,18 +153,18 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal Vector2 waypointPosition;
 		internal Vector2 lastWaypointPosition = default;
 		internal Vector2 startingPosition = default;
-		internal float maxDistance = 0;
 
 		// Parameters for the algorithm
 
-		internal static int DISTANCE_STEP = 32; // 2 blocks
-		internal static int ANGLE_STEP = 16; // 16 rotations per
-		internal static float EVALUATIONS_PER_FRAME = ANGLE_STEP * 3; // evaluate 4 cycles total per frame
+		internal static int DISTANCE_STEP = 16; // 2 blocks
+		internal static int ANGLE_STEP = 4; // 16 rotations per
+		internal static float EVALUATIONS_PER_FRAME = ANGLE_STEP * 12; // evaluate 4 cycles total per frame
 		internal static int MAX_PENDING_QUEUE_SIZE = 32; // discard any nodes that fall below the current best
 		internal static int WAYPOINT_PROXIMITY_THRESHOLD = 32;
-		internal static int LOS_CHECK_THRESHOLD = 64;
+		internal static int LOS_CHECK_THRESHOLD = 256;
 		internal static int MAX_ITERATIONS = 60;
 		internal static int MAX_NO_IMPROVEMENT_FRAMES = 10;
+		internal static int MAX_GROUND_SEARCH = 8;
 		internal int evaluationsThisFrame = 0;
 		internal bool searchFailed = false;
 		internal bool searchSucceeded = false;
@@ -105,19 +191,29 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 		}
 
-		private WaypointSearchNode AddNode(WaypointSearchNode parent, int angleIdx)
+		private WaypointSearchNode AddNode(WaypointSearchNode parent)
 		{
 			Vector2 newPosition;
+			bool inGround = false;
 			if(parent == null)
 			{
 				newPosition = player.Center;
 			} else
 			{
-				Vector2 center = parent.position;
-				newPosition = center + OffsetVectors[angleIdx];
-				if(!Collision.CanHitLine(center, 1, 1, newPosition, 1, 1))
+				newPosition = parent.position;
+				Vector2 distance = waypointPosition - newPosition;
+				Vector2 angleOffset;
+				if(Math.Abs(distance.X) > Math.Abs(distance.Y))
 				{
-					return null;
+					angleOffset = new Vector2(16 * Math.Sign(distance.X), 0);
+				} else
+				{
+					angleOffset = new Vector2(0, 16 * Math.Sign(distance.Y));
+				}
+				newPosition += angleOffset;
+				if(WaypointSearchNode.TileAtLocation(newPosition))
+				{
+					inGround = true;
 				}
 			}
 			float distanceHeuristic = Vector2.DistanceSquared(waypointPosition, newPosition);
@@ -126,15 +222,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				&& Collision.CanHitLine(waypointPosition, 1, 1, newPosition, 1, 1))
 			{
 				hasLOS = true;
-			} else 
-			{
-				// while we're not close to the waypoint, try to get away from the starting point
-				distanceHeuristic -= Math.Min(maxDistance, Vector2.DistanceSquared(startingPosition, newPosition));
-
-			}
+			} 
 			WaypointSearchNode newNode = new WaypointSearchNode(newPosition, distanceHeuristic, parent)
 			{
-				hasLOS = hasLOS
+				hasLOS = hasLOS,
+				inGround = inGround
 			};
 			if (parent == null || (!parent.IsBacktracking(newNode) && !visited.Contains(newNode)))
 			{
@@ -144,24 +236,125 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				return null;
 			}
 		}
+		
 
-		public Vector2? NextBeaconPosition()
+		private void AddGroundProbeNodes(WaypointSearchNode parent)
+		{
+			visited.Clear();
+			searchNodes.Clear();
+			Vector2 targetDirection =  parent.position - parent.parent.position;
+			WaypointSearchNode probeNodeCW = new WaypointSearchNode(parent.parent.position, 0, parent)
+			{
+				parentPos = parent.position,
+				isGroundProbe = true,
+				targetDirection = targetDirection,
+				isClockwise = true,
+				velocity = targetDirection.rotate90CCW()
+			};
+
+			WaypointSearchNode probeNodeCCW = new WaypointSearchNode(parent.parent.position, 1, parent)
+			{
+				parentPos = parent.position,
+				isGroundProbe = true,
+				targetDirection = targetDirection,
+				isClockwise = false,
+				velocity = targetDirection.rotate90CW()
+			};
+			searchNodes.Add(probeNodeCW);
+			searchNodes.Add(probeNodeCCW);
+		}
+
+		private void HandleGroundProbe()
+		{
+			for(int i = 0; i < MAX_GROUND_SEARCH; i++)
+			{
+				foreach(WaypointSearchNode groundProbe in searchNodes)
+				{
+					groundProbe.UpdateGroundProbe();
+					// DebugDust();
+					if(groundProbe.GotAroundBarrier(waypointPosition))
+					{
+						searchNodes.Clear();
+						searchNodes.Add(AddNode(groundProbe));
+						return;
+					}
+					float distanceToWaypoint = Vector2.DistanceSquared(groundProbe.position, waypointPosition);
+					bool isClose = distanceToWaypoint < LOS_CHECK_THRESHOLD * LOS_CHECK_THRESHOLD;
+					bool isReallyClose = distanceToWaypoint < LOS_CHECK_THRESHOLD * LOS_CHECK_THRESHOLD / 4;
+					if((isReallyClose || (isClose && i%4 == 0) || i%8 == 0)
+						&& Collision.CanHitLine(waypointPosition, 1, 1, groundProbe.position, 1, 1))
+					{
+						searchNodes.Clear();
+						searchNodes.Add(groundProbe);
+						groundProbe.hasLOS = true;
+						return;
+					} 
+				}
+			}
+		}
+
+		private void HandleAirWaypoints()
+		{
+			WaypointSearchNode currentBest = searchNodes.Min;
+			while(evaluationsThisFrame < EVALUATIONS_PER_FRAME)
+			{
+				currentBest = searchNodes.Min;
+				if(currentBest.inGround)
+				{
+					return;
+				} 
+				if (AddNode(currentBest) is WaypointSearchNode newNode)
+				{
+					if (newNode.hasLOS)
+					{
+						// terminate the algorithm here, we've found a direct path
+						searchNodes.Clear();
+						searchNodes.Add(newNode);
+						return;
+					}
+					else
+					{
+						searchNodes.Add(newNode);
+					}
+				};
+				evaluationsThisFrame++;
+				if(searchNodes.Count > MAX_PENDING_QUEUE_SIZE)
+				{
+					searchNodes.Remove(searchNodes.Max);
+				}
+			}
+			if(visited.Min != null && currentBest.distanceHeuristic > visited.Min.distanceHeuristic)
+			{
+				noImprovementFrames++;
+			} else
+			{
+				noImprovementFrames = 0;
+			}
+			searchNodes.Remove(currentBest);
+			visited.Add(currentBest);
+
+		}
+
+		public void NextBeaconPosition()
 		{
 			int type = MinionWaypoint.Type;
 			if(player.ownedProjectileCounts[type] == 0)
 			{
-				ResetState();
-				return null;
+				return;
 			}
 			waypointPosition = WaypointPos();
-			if(waypointPosition != lastWaypointPosition || searchNodes.Count == 0)
+			if(waypointPosition != lastWaypointPosition)
 			{
 				// reset state if the waypoint moved
 				ResetState();
 				lastWaypointPosition = waypointPosition;
 			}
-			DebugDust();
-			maxDistance = Vector2.DistanceSquared(startingPosition, waypointPosition);
+			if(searchNodes.Count == 0 || searchNodes.Min is null)
+			{
+				// this shouldn't happen, error out;
+				searchFailed = true;
+				return;
+			}
 			WaypointSearchNode currentBest = searchNodes.Min;
 			if(!currentBest.hasLOS)
 			{
@@ -174,62 +367,29 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				CleanupPath();
 				DrawPath();
-				return currentBest.position;
+				return;
 			}
 			evaluationsThisFrame = 0;
-			while(evaluationsThisFrame < EVALUATIONS_PER_FRAME)
+			if(currentBest.inGround)
 			{
-				currentBest = searchNodes.Min;
-				for(int angleIdx = 0; angleIdx < ANGLE_STEP; angleIdx++)
-				{
-					if (AddNode(currentBest, angleIdx) is WaypointSearchNode newNode)
-					{
-						if (newNode.hasLOS)
-						{
-							// terminate the algorithm here, we've found a direct path
-							searchNodes.Clear();
-							searchNodes.Add(newNode);
-							return newNode.position;
-						}
-						else
-						{
-							searchNodes.Add(newNode);
-						}
-					};
-					evaluationsThisFrame++;
-					if(searchNodes.Count > MAX_PENDING_QUEUE_SIZE)
-					{
-						searchNodes.Remove(searchNodes.Max);
-					}
-				}
-			}
-			if(visited.Min != null && currentBest.distanceHeuristic > visited.Min.distanceHeuristic)
+				AddGroundProbeNodes(currentBest);
+			} else if (currentBest.isGroundProbe)
 			{
-				noImprovementFrames++;
+				HandleGroundProbe();
 			} else
 			{
-				noImprovementFrames = 0;
-			}
-			if(noImprovementFrames == MAX_NO_IMPROVEMENT_FRAMES - 1)
-			{
-				// take the node that got the farthest away and restart from there
-				searchNodes.UnionWith(visited);
-				WaypointSearchNode farthest = searchNodes.OrderBy(v => -Vector2.DistanceSquared(v.position, startingPosition)).First();
-				searchNodes.Clear();
-				searchNodes.Add(farthest);
-				noImprovementFrames = 0;
-				return null;
+				HandleAirWaypoints();
 			}
 			if(iterations++ > MAX_ITERATIONS || noImprovementFrames > MAX_NO_IMPROVEMENT_FRAMES)
 			{
 				searchFailed = true;
-				searchNodes.Clear();
-				// take the closest guess we got
-				searchNodes.Add(visited.Min);
+				if(!searchNodes.Min.isGroundProbe)
+				{
+					searchNodes.Clear();
+					// take the closest guess we got
+					searchNodes.Add(visited.Min);
+				}
 			}
-			searchNodes.Remove(currentBest);
-			visited.Add(currentBest);
-			return null;
 		}
 
 		public void ResetState()
@@ -244,7 +404,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			iterations = 0;
 			noImprovementFrames = 0;
 			orderedPath = new List<Vector2>();
-			searchNodes.Add(AddNode(null, 0));
+			searchNodes.Add(AddNode(null));
 		}
 
 		// reduce the path to the minimum number of nodes with LOS to each other
@@ -257,31 +417,42 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			pathPruned = true;
 			WaypointSearchNode currNode = searchNodes.Min;
 			pathLength = 0;
+			List<Vector2> allNodes = new List<Vector2>();
 			while(currNode != null)
 			{
-				while(currNode.parent?.parent is WaypointSearchNode nextParent &&  Collision.CanHitLine(currNode.position, 1, 1, nextParent.position, 1, 1))
-				{
-					currNode.parent = nextParent;
-				} 
-				if(currNode.parent != null)
-				{
-					pathLength += Vector2.Distance(currNode.position, currNode.parent.position);
-				}
-				orderedPath.Add(currNode.position);
+				allNodes.Add(currNode.position);
 				currNode = currNode.parent;
 			}
-			orderedPath.Reverse();
+			allNodes.Reverse();
 			if(searchSucceeded)
 			{
-				pathLength += Vector2.Distance(orderedPath.Last(), waypointPosition);
-				orderedPath.Add(waypointPosition);
+				allNodes.Add(waypointPosition);
+			}
+			// O(n ^ 2) LOS checks, maybe not great
+			for(int i = 0; i < allNodes.Count -1; i++)
+			{
+				orderedPath.Add(allNodes[i]);
+				int lastJ = i;
+				for(int j = i+1; j < allNodes.Count; j++)
+				{
+					if(Collision.CanHitLine(allNodes[i], 1, 1, allNodes[j], 1, 1))
+					{
+						lastJ = j;
+					}
+				}
+				i = lastJ;
+			}
+			orderedPath.Add(waypointPosition);
+			for(int i = 0; i < orderedPath.Count - 1; i++)
+			{
+				pathLength += Vector2.Distance(orderedPath[i], orderedPath[i+1]);
 			}
 		}
 
 		public void DrawPath()
 		{
-			int pathAnimationLength = 60;
-			float desiredDistance = (Main.GameUpdateCount % pathAnimationLength) * pathLength / pathAnimationLength;
+			int pathAnimationLength = Math.Max(30, (int)pathLength / 10);
+			float desiredDistance = (Main.GameUpdateCount % pathAnimationLength) * 10;
 			float traversedDistance = 0;
 			for(int i = 0; i < orderedPath.Count -1; i++)
 			{
@@ -313,7 +484,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			// this should never get hit
 			return default;
 		}
-
 		private void DebugDust()
 		{
 			bool isFirst = true;
@@ -321,6 +491,14 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				Dust.NewDust(node.position, 1, 1, DustType<MinionWaypointDust>(),
 						newColor: isFirst ? Color.Red : Color.MediumPurple, Scale: 1.0f);
+				if(node.isGroundProbe)
+				{
+					Dust.NewDust(node.parentPos, 1, 1, DustType<MinionWaypointDust>(),
+							newColor: Color.Orange, Scale: 1.0f);
+
+					Dust.NewDust(node.parentPos + node.targetDirection, 1, 1, DustType<MinionWaypointDust>(),
+							newColor: Color.Orange, Scale: 1.2f);
+				}
 				isFirst = false;
 			}
 		}
