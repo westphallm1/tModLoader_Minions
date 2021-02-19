@@ -245,8 +245,9 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		{
 			visited.Clear();
 			searchNodes.Clear();
-			Vector2 targetDirection =  parent.position - parent.parent.position;
-			WaypointSearchNode probeNodeCW = new WaypointSearchNode(parent.parent.position, 0, parent)
+			WaypointSearchNode grandparent = parent.parent;
+			Vector2 targetDirection =  parent.position - grandparent.position;
+			WaypointSearchNode probeNodeCW = new WaypointSearchNode(grandparent.position, 0, grandparent)
 			{
 				parentPos = parent.position,
 				isGroundProbe = true,
@@ -255,7 +256,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				velocity = targetDirection.rotate90CCW()
 			};
 
-			WaypointSearchNode probeNodeCCW = new WaypointSearchNode(parent.parent.position, 1, parent)
+			WaypointSearchNode probeNodeCCW = new WaypointSearchNode(grandparent.position, 1, grandparent)
 			{
 				parentPos = parent.position,
 				isGroundProbe = true,
@@ -263,6 +264,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				isClockwise = false,
 				velocity = targetDirection.rotate90CW()
 			};
+			// back up the node before the ground by one block
+			grandparent.position -= targetDirection;
 			searchNodes.Add(probeNodeCW);
 			searchNodes.Add(probeNodeCCW);
 		}
@@ -422,25 +425,25 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			pathFinalized = true;
 			WaypointSearchNode currNode = searchNodes.Min;
 			pathLength = 0;
-			List<Vector2> allNodes = new List<Vector2>();
+			List<WaypointSearchNode> allNodes = new List<WaypointSearchNode>();
 			while(currNode != null)
 			{
-				allNodes.Add(currNode.position);
+				allNodes.Add(currNode);
 				currNode = currNode.parent;
 			}
 			allNodes.Reverse();
 			if(searchSucceeded)
 			{
-				allNodes.Add(waypointPosition);
+				allNodes.Add(new WaypointSearchNode(waypointPosition, 0, null));
 			}
 			// O(n ^ 2) LOS checks, maybe not great
 			for(int i = 0; i < allNodes.Count -1; i++)
 			{
-				orderedPath.Add(allNodes[i]);
+				orderedPath.Add(allNodes[i].position);
 				int lastJ = i + 1;
 				for(int j = i+1; j < allNodes.Count; j++)
 				{
-					if(Collision.CanHitLine(allNodes[i], 1, 1, allNodes[j], 1, 1))
+					if (Collision.CanHitLine(allNodes[i].position, 1, 1, allNodes[j].position, 1, 1))
 					{
 						lastJ = j;
 					}

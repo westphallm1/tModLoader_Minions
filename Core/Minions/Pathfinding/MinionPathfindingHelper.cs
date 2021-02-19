@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		private Projectile projectile;
 		internal PathfindingHelper pathfinder;
 		// how close to a node we have to be before progressing to the next node
-		static int NODE_PROXIMITY = 32;
+		static int NODE_PROXIMITY = 24;
 		static int NODE_PROXIMITY_SQUARED = NODE_PROXIMITY * NODE_PROXIMITY;
 		// number of nodes to check against before starting from the beginning
 		static int HOMING_LOS_CHECKS = 4;
@@ -115,13 +115,15 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			if(noProgressFrames > 5)
 			{
 				isStuck = true;
-				return projectile.position;
 			}
 			// make sure the target exceeds a certain lenght threshold,
 			// so the AI will speed up the minions
 			Vector2 target = path[nodeIndex] - projectile.position;
-			target.SafeNormalize();
-			target *= 12;
+			if(target.Length() < 16)
+			{
+				target.SafeNormalize();
+				target *= 16;
+			}
 			return target;
 		}
 	}

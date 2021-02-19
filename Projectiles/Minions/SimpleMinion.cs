@@ -7,6 +7,14 @@ using Terraria.ID;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
+
+	internal enum WaypointMovementStyle
+	{
+		IDLE,
+		TARGET,
+		CUSTOM
+	}
+
 	public abstract class SimpleMinion : Minion
 	{
 		protected Vector2 vectorToIdle;
@@ -21,6 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int targetFrameCounter = 0;
 		protected int noLOSPursuitTime = 15; // time to chase the NPC after losing sight
 		protected MinionPathfindingHelper pathfinder;
+
+		internal virtual WaypointMovementStyle waypointMovementStyle => WaypointMovementStyle.IDLE;
 
 		public int animationFrame { get; set; }
 
@@ -156,15 +166,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else if (useBeacon &&  pathfinder.NextPathfindingTarget() is Vector2 pathNode)
 			{
-				if(pathfinder.isStuck)
-				{
-					// auto-control the AI to get through whatever barrier
-					pathfinder.MoveAlongPath();
-				} else
+				if(waypointMovementStyle == WaypointMovementStyle.IDLE)
 				{
 					IdleMovement(pathNode);
-					projectile.tileCollide = !attackThroughWalls;
+				} else
+				{
+					TargetedMovement(pathNode);
 				}
+				projectile.tileCollide = !attackThroughWalls;
 			} 
 			else
 			{
