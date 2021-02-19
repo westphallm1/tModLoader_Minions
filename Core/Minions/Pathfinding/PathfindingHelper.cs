@@ -94,9 +94,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			bool clingToPresent = TileAtLocation(position + clingTarget);
 			bool travelDirectionBlocked = TileAtLocation(position + velocity);
 			bool nextTravelDirectionBlocked = TileAtLocation(position + -clingTarget);
+			Vector2 cornerOffset = Vector2.Zero;
 			if(!clingToPresent)
 			{
 				//able to round the corner! Yay!
+				cornerOffset = velocity - clingTarget;
 				velocity = clingTarget;
 			} else if (travelDirectionBlocked && nextTravelDirectionBlocked)
 			{
@@ -104,11 +106,20 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				velocity = -velocity;
 			} else if (travelDirectionBlocked)
 			{
+				cornerOffset = -velocity - clingTarget;
 				velocity = -clingTarget;
 			}
-			if(clingToPresent || travelDirectionBlocked)
+			if(travelDirectionBlocked || !clingToPresent)
 			{
-				WaypointSearchNode cornerNode = new WaypointSearchNode(position , 0, parent);
+				Vector2 intendedNode = position + cornerOffset;
+				if(TileAtLocation(intendedNode))
+				{
+					intendedNode = position;
+				}
+				WaypointSearchNode cornerNode = new WaypointSearchNode(intendedNode, 0, parent)
+				{
+					isGroundProbe = true
+				};
 				parent = cornerNode;
 			}
 			position += velocity;
@@ -155,26 +166,24 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal Vector2 startingPosition = default;
 
 		// Parameters for the algorithm
-
-		internal static int DISTANCE_STEP = 16; // 2 blocks
-		internal static int ANGLE_STEP = 4; // 16 rotations per
-		internal static float EVALUATIONS_PER_FRAME = ANGLE_STEP * 12; // evaluate 4 cycles total per frame
+		internal static int DISTANCE_STEP = 16; // 1 block
+		internal static float EVALUATIONS_PER_FRAME = 32; // In the air evaluations per frame
+		internal static int MAX_GROUND_SEARCH = 16; // ground probe evaluations per frame
 		internal static int MAX_PENDING_QUEUE_SIZE = 32; // discard any nodes that fall below the current best
-		internal static int WAYPOINT_PROXIMITY_THRESHOLD = 32;
 		internal static int LOS_CHECK_THRESHOLD = 256;
 		internal static int MAX_ITERATIONS = 60;
 		internal static int MAX_NO_IMPROVEMENT_FRAMES = 10;
-		internal static int MAX_GROUND_SEARCH = 8;
+
+		// internal algorithm state
 		internal int evaluationsThisFrame = 0;
-		internal bool searchFailed = false;
-		internal bool searchSucceeded = false;
-		internal bool pathPruned = false;
+		internal bool searchActive = false; // if the algorithm is running
+		internal bool searchFailed = false; // if the algorithm terminated unsuccessfully
+		internal bool searchSucceeded = false; // if the algorithm terminated successfully
+		internal bool pathFinalized = false; // if the path has been cleaned up
 		internal int iterations = 0;
 		internal int noImprovementFrames = 0;
 		internal float pathLength;
 		internal List<Vector2> orderedPath;
-
-		private static Vector2[] OffsetVectors;
 
 		public PathfindingHelper(Player player)
 		{
@@ -183,12 +192,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public static void Initialize()
 		{
-			OffsetVectors = new Vector2[ANGLE_STEP];
-			for(int i = 0; i < ANGLE_STEP; i++)
-			{
-				float angle = i * MathHelper.TwoPi / ANGLE_STEP;
-				OffsetVectors[i] = angle.ToRotationVector2() * DISTANCE_STEP;
-			}
 		}
 
 		private WaypointSearchNode AddNode(WaypointSearchNode parent)
@@ -205,10 +208,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				Vector2 angleOffset;
 				if(Math.Abs(distance.X) > Math.Abs(distance.Y))
 				{
-					angleOffset = new Vector2(16 * Math.Sign(distance.X), 0);
+					angleOffset = new Vector2(DISTANCE_STEP * Math.Sign(distance.X), 0);
 				} else
 				{
-					angleOffset = new Vector2(0, 16 * Math.Sign(distance.Y));
+					angleOffset = new Vector2(0, DISTANCE_STEP * Math.Sign(distance.Y));
 				}
 				newPosition += angleOffset;
 				if(WaypointSearchNode.TileAtLocation(newPosition))
@@ -335,13 +338,15 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		}
 
-		public void NextBeaconPosition()
+		public void Update()
 		{
 			int type = MinionWaypoint.Type;
 			if(player.ownedProjectileCounts[type] == 0)
 			{
+				searchActive = false;
 				return;
 			}
+			searchActive = true;
 			waypointPosition = WaypointPos();
 			if(waypointPosition != lastWaypointPosition)
 			{
@@ -400,7 +405,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			visited = new SortedSet<WaypointSearchNode>();
 			searchFailed = false;
 			searchSucceeded = false;
-			pathPruned = false;
+			pathFinalized = false;
 			iterations = 0;
 			noImprovementFrames = 0;
 			orderedPath = new List<Vector2>();
@@ -410,11 +415,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		// reduce the path to the minimum number of nodes with LOS to each other
 		public void CleanupPath()
 		{
-			if(pathPruned)
+			if(pathFinalized)
 			{
 				return;
 			}
-			pathPruned = true;
+			pathFinalized = true;
 			WaypointSearchNode currNode = searchNodes.Min;
 			pathLength = 0;
 			List<Vector2> allNodes = new List<Vector2>();
@@ -432,7 +437,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			for(int i = 0; i < allNodes.Count -1; i++)
 			{
 				orderedPath.Add(allNodes[i]);
-				int lastJ = i;
+				int lastJ = i + 1;
 				for(int j = i+1; j < allNodes.Count; j++)
 				{
 					if(Collision.CanHitLine(allNodes[i], 1, 1, allNodes[j], 1, 1))
@@ -440,7 +445,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 						lastJ = j;
 					}
 				}
-				i = lastJ;
+				i = lastJ - 1;
 			}
 			orderedPath.Add(waypointPosition);
 			for(int i = 0; i < orderedPath.Count - 1; i++)
@@ -491,14 +496,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				Dust.NewDust(node.position, 1, 1, DustType<MinionWaypointDust>(),
 						newColor: isFirst ? Color.Red : Color.MediumPurple, Scale: 1.0f);
-				if(node.isGroundProbe)
-				{
-					Dust.NewDust(node.parentPos, 1, 1, DustType<MinionWaypointDust>(),
-							newColor: Color.Orange, Scale: 1.0f);
-
-					Dust.NewDust(node.parentPos + node.targetDirection, 1, 1, DustType<MinionWaypointDust>(),
-							newColor: Color.Orange, Scale: 1.2f);
-				}
 				isFirst = false;
 			}
 		}

@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
+﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
@@ -19,6 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int proximityForOnHitTarget = 24;
 		protected int targetFrameCounter = 0;
 		protected int noLOSPursuitTime = 15; // time to chase the NPC after losing sight
+		protected MinionPathfindingHelper pathfinder;
 
 		public int animationFrame { get; set; }
 
@@ -63,6 +65,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			projectile.localNPCHitCooldown = 10;
 			// Makes sure this projectile is synced to other newly joined players 
 			projectile.netImportant = true;
+
+			pathfinder = new MinionPathfindingHelper(projectile);
 		}
 
 
@@ -128,6 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					projectile.netUpdate = true;
 				}
+				pathfinder.DetachFromPath();
 				projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
 				TargetedMovement(targetPosition);
@@ -136,6 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < noLOSPursuitTime)
 			{
+				pathfinder.DetachFromPath();
 				projectile.tileCollide = !attackThroughWalls;
 				if (!Main.npc[previousIndex].active)
 				{
@@ -148,6 +154,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
 				}
 			}
+			else if (useBeacon &&  pathfinder.NextPathfindingTarget() is Vector2 pathNode)
+			{
+				if(pathfinder.isStuck)
+				{
+					// auto-control the AI to get through whatever barrier
+					pathfinder.MoveAlongPath();
+				} else
+				{
+					IdleMovement(pathNode);
+					projectile.tileCollide = !attackThroughWalls;
+				}
+			} 
 			else
 			{
 				if (framesSinceHadTarget > 30)
