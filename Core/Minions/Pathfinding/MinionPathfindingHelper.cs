@@ -27,6 +27,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal ModifyPath modifyPath;
 		internal Action afterMovingAlongPath;
 
+		internal int realWidth;
+		internal int realHeight;
+		internal float realDrawOffsetX;
+		internal int realDrawOffsetY;
+
 		// how close to a node we have to be before progressing to the next node
 		internal int nodeProximity = 24;
 
@@ -56,10 +61,40 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				}
 			}
 		}
+		internal void AttachToPath()
+		{
+			// shrink the projectile's hitbox to one tile
+			int xShrink = projectile.width - 16;
+			int yShrink = projectile.height - 16;
+			Vector2 oldCenter = projectile.Center;
+			projectile.width = 16;
+			projectile.height = 16;
+			projectile.modProjectile.drawOriginOffsetX -= xShrink / 2;
+			projectile.modProjectile.drawOriginOffsetY -= yShrink / 2;
+			projectile.Center = oldCenter;
+			SetPathStartingPoint();
+
+		}
+		internal void Setup()
+		{
+			pathfinder = Main.player[projectile.owner]?.GetModPlayer<MinionPathfindingPlayer>()?.pHelper;
+			realWidth = projectile.width;
+			realHeight = projectile.height;
+			realDrawOffsetX = projectile.modProjectile.drawOriginOffsetX;
+			realDrawOffsetY = projectile.modProjectile.drawOriginOffsetY;
+
+		}
 
 		// in case we need to leave the path for eg. attacking an enemy
 		internal void DetachFromPath()
 		{
+			// restore the original hitbox
+			Vector2 oldCenter = projectile.Center;
+			projectile.width = realWidth;
+			projectile.height= realHeight;
+			projectile.modProjectile.drawOriginOffsetX = realDrawOffsetX;
+			projectile.modProjectile.drawOriginOffsetY = realDrawOffsetY;
+			projectile.Center = oldCenter;
 			nodeIndex = -1;
 			noProgressFrames = 0;
 			unstuckFrames = 0;
@@ -132,8 +167,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			// initialize late to avoid any lifecycle issues
 			if(pathfinder is null)
 			{
+				Setup();
 				DetachFromPath();
-				pathfinder = Main.player[projectile.owner]?.GetModPlayer<MinionPathfindingPlayer>()?.pHelper;
 			}
 			if(pathfinder.searchFailed || !pathfinder.searchActive)
 			{
@@ -149,7 +184,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			List<Vector2> path = pathfinder.orderedPath;
 			if(path.Count <= nodeIndex || nodeIndex < 0)
 			{
-				SetPathStartingPoint();
+				AttachToPath();
 			}
 			if(Vector2.DistanceSquared(projectile.Center, path[nodeIndex]) < nodeProximity * nodeProximity)
 			{

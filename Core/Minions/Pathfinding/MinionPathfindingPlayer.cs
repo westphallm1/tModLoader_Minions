@@ -25,6 +25,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		public override void PostUpdate()
 		{
 			pHelper?.Update();
+			if(player.ownedProjectileCounts[MinionWaypoint.Type] > 0)
+			{
+				player.MinionAttackTargetNPC = -1;
+			}
 		}
 		internal void ToggleWaypoint(bool remove = false)
 		{

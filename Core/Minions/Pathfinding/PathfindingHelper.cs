@@ -363,7 +363,9 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				{
 					// if we're able to 'patch' the path by just moving the endpoint
 					orderedPath.Add(waypointPosition);
+					// lazy copy
 					PrunePath(orderedPath);
+					lastWaypointPosition = waypointPosition;
 					return true;
 				} else
 				{
@@ -414,11 +416,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			return false;
 		}
 
-		public void Update()
+		public bool Update()
 		{
 			if(InEndState())
 			{
-				return;
+				return false;
 			}
 			WaypointSearchNode currentBest = searchNodes.Min;
 			evaluationsThisFrame = 0;
@@ -442,6 +444,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 					searchNodes.Add(visited.Min);
 				}
 			}
+			return true;
 		}
 
 		public void ResetState()
