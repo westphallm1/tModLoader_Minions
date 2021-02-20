@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -42,40 +43,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return true;
 		}
 
-		private void ToggleWaypoint(Player player)
-		{
-			int type = MinionWaypoint.Type;
-			if (player.ownedProjectileCounts[type] == 0)
-			{
-				Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, type, 0, 0, player.whoAmI);
-			}
-			else
-			{
-				bool respawn = true;
-				for (int i = 0; i < Main.maxProjectiles; i++)
-				{
-					Projectile p = Main.projectile[i];
-					if (p.active && p.owner == player.whoAmI && p.type == type)
-					{
-						if(Vector2.DistanceSquared(p.position, Main.MouseWorld) < 48* 48)
-						{
-							respawn = false;
-						}
-						p.Kill();
-					}
-				}
-				if(respawn)
-				{
-					// kill and respawn the projectile rather than moving it, easier for multiplayer support
-					Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, type, 0, 0, player.whoAmI);
-				}
-			}
-		}
 		public override bool CanUseItem(Player player)
 		{
 			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
-				ToggleWaypoint(player);
+				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint();
 			}
 			return base.CanUseItem(player);
 		}

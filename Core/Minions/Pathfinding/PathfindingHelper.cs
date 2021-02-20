@@ -173,6 +173,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal static int LOS_CHECK_THRESHOLD = 256;
 		internal static int MAX_ITERATIONS = 60;
 		internal static int MAX_NO_IMPROVEMENT_FRAMES = 10;
+		internal static int PLAYER_MOVEMENT_THRESHOLD = 64;
 
 		// internal algorithm state
 		internal int evaluationsThisFrame = 0;
@@ -341,14 +342,17 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		}
 
-		public void Update()
+		// return whether the algorithm needs to be run
+		// and do a bunch of side effects
+		private bool InEndState()
 		{
+			// if the waypoint isn't active
 			int type = MinionWaypoint.Type;
 			if(player.ownedProjectileCounts[type] == 0)
 			{
 				lastWaypointPosition = default;
 				searchActive = false;
-				return;
+				return true;
 			}
 			searchActive = true;
 			waypointPosition = WaypointPos();
@@ -357,20 +361,41 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				if (searchSucceeded && lastWaypointPosition != default && 
 					Collision.CanHitLine(waypointPosition,1, 1, lastWaypointPosition, 1, 1))
 				{
+					// if we're able to 'patch' the path by just moving the endpoint
 					orderedPath.Add(waypointPosition);
 					PrunePath(orderedPath);
+					return true;
 				} else
 				{
 					// reset state if the waypoint moved to a point where we can't see it
 					ResetState();
 					lastWaypointPosition = waypointPosition;
 				}
+			} else if (searchSucceeded && Vector2.DistanceSquared(player.Center, orderedPath[0]) > 
+				PLAYER_MOVEMENT_THRESHOLD * PLAYER_MOVEMENT_THRESHOLD)
+			{
+				// check if we can 'patch' the path by replacing the current few starting nodes
+				// with the player's new position
+				for(int i = 1; i < Math.Min(3, orderedPath.Count); i++)
+				{
+					if (Collision.CanHitLine(player.Center, 1, 1, orderedPath[1], 1, 1))
+					{
+						// can just patch the current path
+						orderedPath[i-1] = player.Center;
+						PrunePath(orderedPath.Skip(i-1).ToList());
+						return true;
+					}
+
+				}
+				// fall through, need to fully recalculate
+				ResetState();
 			}
+
 			if(searchNodes.Count == 0 || searchNodes.Min is null)
 			{
-				// this shouldn't happen, error out;
+				// this shouldn't happen, error out
 				searchFailed = true;
-				return;
+				return true;
 			}
 			WaypointSearchNode currentBest = searchNodes.Min;
 			if(!currentBest.hasLOS)
@@ -384,8 +409,18 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				CleanupPath();
 				DrawPath();
+				return true;
+			}
+			return false;
+		}
+
+		public void Update()
+		{
+			if(InEndState())
+			{
 				return;
 			}
+			WaypointSearchNode currentBest = searchNodes.Min;
 			evaluationsThisFrame = 0;
 			if(currentBest.inGround)
 			{

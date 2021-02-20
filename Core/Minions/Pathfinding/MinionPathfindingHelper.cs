@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		private Projectile projectile;
 		internal PathfindingHelper pathfinder;
 		// number of nodes to check against before starting from the beginning
-		static int HOMING_LOS_CHECKS = 4;
+		static int HOMING_LOS_CHECKS = 8;
 		// minimum travel speed before we start thinking we're stuck
 		static float NO_PROGRESS_THRESHOLD = 1.25f;
 		internal int nodeIndex = -1;
@@ -25,6 +25,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal bool isStuck = false;
 		internal bool atStart => nodeIndex == 0;
 		internal ModifyPath modifyPath;
+		internal Action afterMovingAlongPath;
 
 		// how close to a node we have to be before progressing to the next node
 		internal int nodeProximity = 24;
@@ -37,6 +38,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		internal void SetPathStartingPoint()
 		{
+			// priorotize the endpoint
+			if (Collision.CanHitLine(projectile.Center, 1, 1, pathfinder.orderedPath.Last(), 1, 1)) {
+				nodeIndex = pathfinder.orderedPath.Count - 1;
+				return;
+			}
 			// find the current node closest to the projectile
 			List<Vector2> orderedNodes = pathfinder.orderedPath.OrderBy(node => Vector2.DistanceSquared(projectile.Center, node)).ToList();
 			nodeIndex = 0;
