@@ -166,14 +166,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else if (useBeacon &&  pathfinder.NextPathfindingTarget() is Vector2 pathNode)
 			{
-				if(waypointMovementStyle == WaypointMovementStyle.IDLE)
+				if(pathfinder.isStuck)
 				{
-					IdleMovement(pathNode);
+					pathfinder.GetUnstuck();
 				} else
 				{
-					TargetedMovement(pathNode);
+					if(waypointMovementStyle == WaypointMovementStyle.IDLE)
+					{
+						IdleMovement(pathNode);
+					} else
+					{
+						TargetedMovement(pathNode);
+					}
+					projectile.tileCollide = !pathfinder.atStart && !attackThroughWalls;
 				}
-				projectile.tileCollide = !attackThroughWalls;
 			} 
 			else
 			{

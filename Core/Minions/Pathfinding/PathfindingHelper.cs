@@ -346,6 +346,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			int type = MinionWaypoint.Type;
 			if(player.ownedProjectileCounts[type] == 0)
 			{
+				lastWaypointPosition = default;
 				searchActive = false;
 				return;
 			}
@@ -353,9 +354,17 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			waypointPosition = WaypointPos();
 			if(waypointPosition != lastWaypointPosition)
 			{
-				// reset state if the waypoint moved
-				ResetState();
-				lastWaypointPosition = waypointPosition;
+				if (searchSucceeded && lastWaypointPosition != default && 
+					Collision.CanHitLine(waypointPosition,1, 1, lastWaypointPosition, 1, 1))
+				{
+					orderedPath.Add(waypointPosition);
+					PrunePath(orderedPath);
+				} else
+				{
+					// reset state if the waypoint moved to a point where we can't see it
+					ResetState();
+					lastWaypointPosition = waypointPosition;
+				}
 			}
 			if(searchNodes.Count == 0 || searchNodes.Min is null)
 			{
@@ -425,25 +434,31 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			pathFinalized = true;
 			WaypointSearchNode currNode = searchNodes.Min;
 			pathLength = 0;
-			List<WaypointSearchNode> allNodes = new List<WaypointSearchNode>();
+			List<Vector2> allNodes = new List<Vector2>();
 			while(currNode != null)
 			{
-				allNodes.Add(currNode);
+				allNodes.Add(currNode.position);
 				currNode = currNode.parent;
 			}
 			allNodes.Reverse();
 			if(searchSucceeded)
 			{
-				allNodes.Add(new WaypointSearchNode(waypointPosition, 0, null));
+				allNodes.Add(waypointPosition);
+				PrunePath(allNodes);
 			}
+		}
+		private void PrunePath(List<Vector2> allNodes)
+		{
+			pathLength = 0;
+			orderedPath = new List<Vector2>();
 			// O(n ^ 2) LOS checks, maybe not great
 			for(int i = 0; i < allNodes.Count -1; i++)
 			{
-				orderedPath.Add(allNodes[i].position);
+				orderedPath.Add(allNodes[i]);
 				int lastJ = i + 1;
 				for(int j = i+1; j < allNodes.Count; j++)
 				{
-					if (Collision.CanHitLine(allNodes[i].position, 1, 1, allNodes[j].position, 1, 1))
+					if (Collision.CanHitLine(allNodes[i], 1, 1, allNodes[j], 1, 1))
 					{
 						lastJ = j;
 					}
@@ -456,6 +471,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				pathLength += Vector2.Distance(orderedPath[i], orderedPath[i+1]);
 			}
 		}
+
+
 
 		public void DrawPath()
 		{

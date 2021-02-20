@@ -9,21 +9,25 @@ using Terraria;
 
 namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 {
+	delegate void ModifyPath(ref Vector2 target);
 	public class MinionPathfindingHelper
 	{
 		private Projectile projectile;
 		internal PathfindingHelper pathfinder;
-		// how close to a node we have to be before progressing to the next node
-		static int NODE_PROXIMITY = 24;
-		static int NODE_PROXIMITY_SQUARED = NODE_PROXIMITY * NODE_PROXIMITY;
 		// number of nodes to check against before starting from the beginning
 		static int HOMING_LOS_CHECKS = 4;
+		// minimum travel speed before we start thinking we're stuck
 		static float NO_PROGRESS_THRESHOLD = 1.25f;
 		internal int nodeIndex = -1;
 
 		internal int noProgressFrames = 0;
 		internal int unstuckFrames = 0;
 		internal bool isStuck = false;
+		internal bool atStart => nodeIndex == 0;
+		internal ModifyPath modifyPath;
+
+		// how close to a node we have to be before progressing to the next node
+		internal int nodeProximity = 24;
 
 		internal MinionPathfindingHelper(Projectile projectile)
 		{
@@ -55,22 +59,59 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			unstuckFrames = 0;
 		}
 
-		internal void MoveAlongPath()
+		internal void GetUnstuck()
 		{
 			// sometimes it needs a bit of help
 			if(nodeIndex <0 || nodeIndex > pathfinder.orderedPath.Count)
 			{
-				// bail out and reset state
+				// weird state bail out and reset state
 				noProgressFrames = 0;
 				unstuckFrames = 0;
 				isStuck = false;
 				return;
 			}
 			Vector2 target = pathfinder.orderedPath[nodeIndex] - projectile.position;
-			target.SafeNormalize();
-			target *= 4;
-			projectile.velocity = target;
-			projectile.tileCollide = false;
+			Vector2 gridTarget;
+			Vector2[] checkPositions;
+			if(Math.Abs(target.X) > Math.Abs(target.Y))
+			{
+				gridTarget = new Vector2(16 * Math.Sign(target.X), 0);
+				if(target.X > 0)
+				{
+					checkPositions = new Vector2[] { projectile.TopRight, projectile.BottomRight};
+				} else
+				{
+					checkPositions = new Vector2[] { projectile.TopLeft, projectile.BottomLeft};
+				}
+			} else
+			{
+				gridTarget = new Vector2(0, 16 * Math.Sign(target.Y));
+				if(target.Y > 0)
+				{
+					checkPositions = new Vector2[] { projectile.BottomLeft, projectile.BottomRight};
+				} else
+				{
+					checkPositions = new Vector2[] { projectile.TopLeft, projectile.TopRight};
+				}
+			}
+			bool canHitNegative = Collision.CanHitLine(checkPositions[0], 1, 1, checkPositions[0] + gridTarget, 1, 1);
+			bool canHitPositive = Collision.CanHitLine(checkPositions[1], 1, 1, checkPositions[1] + gridTarget, 1, 1);
+
+			Vector2 unstuckDirection = default; 
+			if(canHitNegative && !canHitPositive)
+			{
+				unstuckDirection = checkPositions[0] - projectile.Center;
+			} else if (canHitPositive && !canHitNegative)
+			{
+				unstuckDirection = checkPositions[1] - projectile.Center;
+			}
+			if(unstuckDirection != default)
+			{
+				unstuckDirection.SafeNormalize();
+				unstuckDirection *= 4;
+				projectile.velocity = unstuckDirection;
+			}
+
 			unstuckFrames++;
 			if(unstuckFrames > 5)
 			{
@@ -96,15 +137,15 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				DetachFromPath();
 				// idle while the algorithm is still running
-				return projectile.position;
-			}
-			if(nodeIndex == -1)
-			{
-				SetPathStartingPoint();
+				return Vector2.Zero;
 			}
 			// simple approach: Go towards a node until you get close enough, then go to the next node
 			List<Vector2> path = pathfinder.orderedPath;
-			if(Vector2.DistanceSquared(projectile.Center, path[nodeIndex]) < NODE_PROXIMITY_SQUARED)
+			if(path.Count <= nodeIndex || nodeIndex < 0)
+			{
+				SetPathStartingPoint();
+			}
+			if(Vector2.DistanceSquared(projectile.Center, path[nodeIndex]) < nodeProximity * nodeProximity)
 			{
 				nodeIndex = Math.Min(path.Count-1, nodeIndex + 1);
 			} 
@@ -124,6 +165,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				target.SafeNormalize();
 				target *= 16;
 			}
+			modifyPath?.Invoke(ref target);
 			return target;
 		}
 	}

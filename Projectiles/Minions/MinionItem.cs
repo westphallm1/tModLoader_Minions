@@ -51,13 +51,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else
 			{
+				bool respawn = true;
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
 					if (p.active && p.owner == player.whoAmI && p.type == type)
 					{
+						if(Vector2.DistanceSquared(p.position, Main.MouseWorld) < 48* 48)
+						{
+							respawn = false;
+						}
 						p.Kill();
 					}
+				}
+				if(respawn)
+				{
+					// kill and respawn the projectile rather than moving it, easier for multiplayer support
+					Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, type, 0, 0, player.whoAmI);
 				}
 			}
 		}
