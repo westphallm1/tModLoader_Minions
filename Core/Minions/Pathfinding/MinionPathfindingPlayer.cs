@@ -13,13 +13,14 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 {
 	internal class MinionPathfindingPlayer : ModPlayer
 	{
-		internal PathfindingHelper pHelper;
+		internal BlockAwarePathfinder pHelper;
 		internal uint lastClickFrame = 0;
 		internal bool lastMouseRight = false;
+		internal Vector2 waypointPosition => pHelper.WaypointPos();
 		public override void OnEnterWorld(Player player)
 		{
 			base.OnEnterWorld(player);
-			pHelper = new PathfindingHelper(this.player);
+			pHelper = new BlockAwarePathfinder(this.player);
 		}
 
 		public override void PostUpdate()

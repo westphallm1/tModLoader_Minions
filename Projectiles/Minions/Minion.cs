@@ -121,13 +121,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public Vector2? SelectedEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
 		{
-			Vector2 center = centeredOn ?? projectile.Center;
 			Vector2 losCenterVector = losCenter ?? projectile.Center;
 			PlayerTargetSelectionTactic tactic = player.GetModPlayer<MinionTacticsPlayer>().PlayerTactic;
+			MinionPathfindingPlayer pathfindingPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
 			// to cut back on Line-of-Sight computations, always chase the same NPC for some number of frames once one has been found
 			if(targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < tactic.TargetCacheFrames)
 			{
 				return Main.npc[idx].Center;
+			}
+			Vector2 rangeCheckCenter;
+			if(!maxRangeFromPlayer)
+			{
+				rangeCheckCenter = projectile.Center;
+			} else if (!pathfindingPlayer.pHelper.InProgress() &&
+				pathfindingPlayer.pHelper.searchSucceeded &&
+				pathfindingPlayer.waypointPosition != default)
+			{
+				rangeCheckCenter = pathfindingPlayer.waypointPosition;
+			} else
+			{
+				rangeCheckCenter = player.Center;
 			}
 			List<NPC> possibleTargets = new List<NPC>();
 			bool anyInRange = false;
@@ -138,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					continue;
 				}
-				bool inRange = Vector2.DistanceSquared(npc.Center, maxRangeFromPlayer ? player.Center : projectile.Center) < maxRange * maxRange;
+				bool inRange = Vector2.DistanceSquared(npc.Center, rangeCheckCenter) < maxRange * maxRange;
 				bool inNoLOSRange = Vector2.DistanceSquared(npc.Center, player.Center) < noLOSRange * noLOSRange;
 				bool lineOfSight = inNoLOSRange || (inRange && Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height));
 				if (inNoLOSRange || (lineOfSight && inRange))

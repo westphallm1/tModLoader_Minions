@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	public class MinionPathfindingHelper
 	{
 		private Projectile projectile;
-		internal PathfindingHelper pathfinder;
+		internal BlockAwarePathfinder pathfinder;
 		// number of nodes to check against before starting from the beginning
 		static int HOMING_LOS_CHECKS = 8;
 		// minimum travel speed before we start thinking we're stuck
@@ -43,20 +43,25 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		internal void SetPathStartingPoint()
 		{
-			// priorotize the endpoint
-			if (Collision.CanHitLine(projectile.Center, 1, 1, pathfinder.orderedPath.Last(), 1, 1)) {
-				nodeIndex = pathfinder.orderedPath.Count - 1;
+			// Extra bounds checking
+			if(pathfinder.pathSnapshot.Count == 0)
+			{
+				DetachFromPath();
+				return;
+			}
+			if (Collision.CanHitLine(projectile.Center, 1, 1, pathfinder.pathSnapshot.Last(), 1, 1)) {
+				nodeIndex = pathfinder.pathSnapshot.Count - 1;
 				return;
 			}
 			// find the current node closest to the projectile
-			List<Vector2> orderedNodes = pathfinder.orderedPath.OrderBy(node => Vector2.DistanceSquared(projectile.Center, node)).ToList();
+			List<Vector2> orderedNodes = pathfinder.pathSnapshot.OrderBy(node => Vector2.DistanceSquared(projectile.Center, node)).ToList();
 			nodeIndex = 0;
 			for(int i = 0; i < Math.Min(orderedNodes.Count, HOMING_LOS_CHECKS); i++)
 			{
 				if(Collision.CanHitLine(projectile.Center, 1, 1, orderedNodes[i], 1, 1))
 				{
 					// probably a better way to find the permuted index
-					nodeIndex = pathfinder.orderedPath.IndexOf(orderedNodes[i]);
+					nodeIndex = pathfinder.pathSnapshot.IndexOf(orderedNodes[i]);
 					break;
 				}
 			}
@@ -103,7 +108,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal void GetUnstuck()
 		{
 			// sometimes it needs a bit of help
-			if(nodeIndex <0 || nodeIndex > pathfinder.orderedPath.Count)
+			List<Vector2> path = pathfinder.pathSnapshot;
+			if(nodeIndex <0 || nodeIndex > path.Count)
 			{
 				// weird state bail out and reset state
 				noProgressFrames = 0;
@@ -111,7 +117,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				isStuck = false;
 				return;
 			}
-			Vector2 target = pathfinder.orderedPath[nodeIndex] - projectile.position;
+			Vector2 target = path[nodeIndex] - projectile.position;
 			Vector2 gridTarget;
 			Vector2[] checkPositions;
 			if(Math.Abs(target.X) > Math.Abs(target.Y))
@@ -170,19 +176,19 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				Setup();
 				DetachFromPath();
 			}
-			if(pathfinder.searchFailed || !pathfinder.searchActive)
+			if(pathfinder.searchFailed || Main.player[projectile.owner].ownedProjectileCounts[MinionWaypoint.Type] == 0)
 			{
 				DetachFromPath();
 				return null;
-			} else if (!pathfinder.pathFinalized)
+			} else if (pathfinder.InProgress())
 			{
 				DetachFromPath();
 				// idle while the algorithm is still running
 				return Vector2.Zero;
 			}
 			// simple approach: Go towards a node until you get close enough, then go to the next node
-			List<Vector2> path = pathfinder.orderedPath;
-			if(path.Count <= nodeIndex || nodeIndex < 0)
+			List<Vector2> path = pathfinder.pathSnapshot;
+			if(nodeIndex > path.Count -1 || nodeIndex < 0)
 			{
 				AttachToPath();
 			}
