@@ -176,11 +176,17 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal static int LOS_CHECK_THRESHOLD = 256;
 		internal static int MAX_ITERATIONS = 60;
 		internal static int MAX_NO_IMPROVEMENT_FRAMES = 10;
-		internal static int PLAYER_MOVEMENT_THRESHOLD = 32;
 
-		// throttle the rate at which the path is recalculated while the player moves
-		// this is more for the visual than for performance
+		// parameters for tweaking the start of the path as the player moves
+		internal static int PLAYER_MOVEMENT_THRESHOLD = 32;
 		internal static int PLAYER_MOVEMENT_RATE_LIMIT = 60;
+
+		// parameters for using an NPC's location as the waypoint
+		internal static int NPC_MAX_DISTANCE = 800;
+		// avoid situations where an overly convoluted path leads to the nearest enemy
+		internal static int MAX_AUTOMATIC_PATH_DISTANCE = 1200;
+		internal static int NPC_MOVEMENT_THRESHOLD = 32;
+
 
 		// internal algorithm state
 		internal int evaluationsThisFrame = 0;
@@ -193,6 +199,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal float pathLength;
 		internal int lastPlayerMovementFrame = 0;
 		internal List<Vector2> orderedPath;
+		internal bool playerPlacedWaypoint = false;
 		// get around synchronization issues
 		internal List<Vector2> pathSnapshot => new List<Vector2>(orderedPath);
 
@@ -362,14 +369,13 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		// and do a bunch of side effects
 		internal bool InEndState()
 		{
-			// if the waypoint isn't active
-			int type = MinionWaypoint.Type;
-			if(player.ownedProjectileCounts[type] == 0)
+			waypointPosition = WaypointPos();
+			// if the waypoint isn't active, return
+			if(waypointPosition == default)
 			{
 				lastWaypointPosition = default;
 				return true;
 			}
-			waypointPosition = WaypointPos();
 			if(waypointPosition != lastWaypointPosition)
 			{
 				if (searchSucceeded && lastWaypointPosition != default && 
@@ -536,6 +542,14 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				pathLength += Vector2.Distance(orderedPath[i], orderedPath[i+1]);
 			}
+
+			// if this path was generated automatically, don't allow it to exceed a certain length
+			if(!playerPlacedWaypoint && pathLength > MAX_AUTOMATIC_PATH_DISTANCE)
+			{
+				// un-succeed the search
+				searchSucceeded = false;
+				searchFailed = true;
+			}
 		}
 
 
@@ -564,15 +578,33 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public Vector2 WaypointPos()
 		{
+			// first pass: look for the player-placed waypoint
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
 				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type)
 				{
+					playerPlacedWaypoint = true;
 					return p.Center;
 				}
 			}
-			// this should never get hit
+			// second pass: look for any enemy
+			NPC closestNPC = Main.npc.Where(npc => npc.active && npc.CanBeChasedBy() &&
+				Vector2.DistanceSquared(player.Center, npc.Center) < NPC_MAX_DISTANCE * NPC_MAX_DISTANCE).OrderBy(npc =>
+				Vector2.DistanceSquared(player.Center, npc.Center)).FirstOrDefault();
+			if(closestNPC != default)
+			{
+				playerPlacedWaypoint = false;
+				if(Vector2.DistanceSquared(lastWaypointPosition, closestNPC.Center) < NPC_MOVEMENT_THRESHOLD * NPC_MOVEMENT_THRESHOLD)
+				{
+					// if the NPC hasn't moved that much, don't recalculate the path
+					return lastWaypointPosition;
+				} else
+				{
+					return closestNPC.Center;
+				}
+			}
+			// otherwise
 			return default;
 		}
 		private void DebugDust()

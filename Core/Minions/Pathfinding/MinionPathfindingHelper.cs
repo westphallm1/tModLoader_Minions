@@ -35,6 +35,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		// how close to a node we have to be before progressing to the next node
 		internal int nodeProximity = 24;
 
+
 		internal MinionPathfindingHelper(Projectile projectile)
 		{
 			this.projectile = projectile;
@@ -44,24 +45,25 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal void SetPathStartingPoint()
 		{
 			// Extra bounds checking
-			if(pathfinder.pathSnapshot.Count == 0)
+			List<Vector2> path = pathfinder.pathSnapshot;
+			if(path.Count == 0)
 			{
 				DetachFromPath();
 				return;
 			}
-			if (Collision.CanHitLine(projectile.Center, 1, 1, pathfinder.pathSnapshot.Last(), 1, 1)) {
+			if (Collision.CanHitLine(projectile.Center, 1, 1, path.Last(), 1, 1)) {
 				nodeIndex = pathfinder.pathSnapshot.Count - 1;
 				return;
 			}
 			// find the current node closest to the projectile
-			List<Vector2> orderedNodes = pathfinder.pathSnapshot.OrderBy(node => Vector2.DistanceSquared(projectile.Center, node)).ToList();
+			List<Vector2> orderedNodes = path.OrderBy(node => Vector2.DistanceSquared(projectile.Center, node)).ToList();
 			nodeIndex = 0;
 			for(int i = 0; i < Math.Min(orderedNodes.Count, HOMING_LOS_CHECKS); i++)
 			{
 				if(Collision.CanHitLine(projectile.Center, 1, 1, orderedNodes[i], 1, 1))
 				{
 					// probably a better way to find the permuted index
-					nodeIndex = pathfinder.pathSnapshot.IndexOf(orderedNodes[i]);
+					nodeIndex = Math.Max(0, path.IndexOf(orderedNodes[i]));
 					break;
 				}
 			}
@@ -176,7 +178,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				Setup();
 				DetachFromPath();
 			}
-			if(pathfinder.searchFailed || Main.player[projectile.owner].ownedProjectileCounts[MinionWaypoint.Type] == 0)
+			if(pathfinder.searchFailed || pathfinder.waypointPosition == default)
 			{
 				DetachFromPath();
 				return null;
@@ -192,7 +194,13 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				AttachToPath();
 			}
-			if(Vector2.DistanceSquared(projectile.Center, path[nodeIndex]) < nodeProximity * nodeProximity)
+			Vector2 currentNode = path.ElementAtOrDefault(nodeIndex);
+			if(currentNode == default)
+			{
+				DetachFromPath();
+				return null;
+			}
+			if(Vector2.DistanceSquared(projectile.Center, currentNode) < nodeProximity * nodeProximity)
 			{
 				nodeIndex = Math.Min(path.Count-1, nodeIndex + 1);
 			} 
@@ -206,7 +214,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 			// make sure the target exceeds a certain lenght threshold,
 			// so the AI will speed up the minions
-			Vector2 target = path[nodeIndex] - projectile.position;
+			Vector2 target = currentNode - projectile.position;
 			if(target.Length() < 16)
 			{
 				target.SafeNormalize();
