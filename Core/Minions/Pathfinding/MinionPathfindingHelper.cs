@@ -45,14 +45,14 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal void SetPathStartingPoint()
 		{
 			// Extra bounds checking
-			List<Vector2> path = pathfinder.pathSnapshot;
+			List<Vector2> path = pathfinder.orderedPath;
 			if(path.Count == 0)
 			{
 				DetachFromPath();
 				return;
 			}
 			if (Collision.CanHitLine(projectile.Center, 1, 1, path.Last(), 1, 1)) {
-				nodeIndex = pathfinder.pathSnapshot.Count - 1;
+				nodeIndex = pathfinder.orderedPath.Count - 1;
 				return;
 			}
 			// find the current node closest to the projectile
@@ -110,7 +110,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal void GetUnstuck()
 		{
 			// sometimes it needs a bit of help
-			List<Vector2> path = pathfinder.pathSnapshot;
+			List<Vector2> path = pathfinder.orderedPath;
 			if(nodeIndex <0 || nodeIndex > path.Count)
 			{
 				// weird state bail out and reset state
@@ -189,7 +189,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				return Vector2.Zero;
 			}
 			// simple approach: Go towards a node until you get close enough, then go to the next node
-			List<Vector2> path = pathfinder.pathSnapshot;
+			List<Vector2> path = pathfinder.orderedPath;
 			if(nodeIndex > path.Count -1 || nodeIndex < 0)
 			{
 				AttachToPath();

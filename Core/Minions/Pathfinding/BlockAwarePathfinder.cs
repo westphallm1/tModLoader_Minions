@@ -170,8 +170,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		// Parameters for the algorithm
 		internal static int DISTANCE_STEP = 16; // 1 block
-		internal static float EVALUATIONS_PER_FRAME = 32; // In the air evaluations per frame
-		internal static int MAX_GROUND_SEARCH = 16; // ground probe evaluations per frame
+		internal static float EVALUATIONS_PER_FRAME = 120; // In the air evaluations per frame
+		internal static int MAX_GROUND_SEARCH = 300; // ground probe evaluations per frame
 		internal static int MAX_PENDING_QUEUE_SIZE = 32; // discard any nodes that fall below the current best
 		internal static int LOS_CHECK_THRESHOLD = 256;
 		internal static int MAX_ITERATIONS = 60;
@@ -200,8 +200,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal int lastPlayerMovementFrame = 0;
 		internal List<Vector2> orderedPath;
 		internal bool playerPlacedWaypoint = false;
-		// get around synchronization issues
-		internal List<Vector2> pathSnapshot => new List<Vector2>(orderedPath);
 
 		public BlockAwarePathfinder(Player player)
 		{
@@ -437,48 +435,44 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			return false;
 		}
 
-		private void RunUntilFinished(Object state)
+		private void RunIteration()
 		{
 			// this places a lot of trust in the algorithm always finishing
-			searchActive = true;
-			do
+			WaypointSearchNode currentBest = searchNodes.Min;
+			evaluationsThisFrame = 0;
+			if (currentBest.inGround)
 			{
-				WaypointSearchNode currentBest = searchNodes.Min;
-				evaluationsThisFrame = 0;
-				if (currentBest.inGround)
+				AddGroundProbeNodes(currentBest);
+			}
+			else if (currentBest.isGroundProbe)
+			{
+				HandleGroundProbe();
+			}
+			else
+			{
+				HandleAirWaypoints();
+			}
+			if (iterations++ > MAX_ITERATIONS || noImprovementFrames > MAX_NO_IMPROVEMENT_FRAMES)
+			{
+				searchFailed = true;
+				if (!searchNodes.Min.isGroundProbe)
 				{
-					AddGroundProbeNodes(currentBest);
+					searchNodes.Clear();
+					// take the closest guess we got
+					searchNodes.Add(visited.Min);
 				}
-				else if (currentBest.isGroundProbe)
-				{
-					HandleGroundProbe();
-				}
-				else
-				{
-					HandleAirWaypoints();
-				}
-				if (iterations++ > MAX_ITERATIONS || noImprovementFrames > MAX_NO_IMPROVEMENT_FRAMES)
-				{
-					searchFailed = true;
-					if (!searchNodes.Min.isGroundProbe)
-					{
-						searchNodes.Clear();
-						// take the closest guess we got
-						searchNodes.Add(visited.Min);
-					}
-				}
-			} while (!InEndState());
-			searchActive = false;
+			}
 		}
 
 		public void Update()
 		{
-			if(InProgress() || InEndState())
+			if(InEndState())
 			{
+				searchActive = false;
 				return;
 			}
-			// run in a separate thread just for funsies
-			ThreadPool.QueueUserWorkItem(RunUntilFinished);
+			searchActive = true;
+			RunIteration();
 		}
 
 		public void ResetState()
