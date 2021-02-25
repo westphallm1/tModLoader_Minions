@@ -14,13 +14,18 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	internal class MinionPathfindingPlayer : ModPlayer
 	{
 		internal BlockAwarePathfinder pHelper;
-		internal uint lastClickFrame = 0;
-		internal bool lastMouseRight = false;
+		internal int waypointPlacementRange = 0;
+		internal int passivePathfindingRange = 0;
 		internal Vector2 waypointPosition => pHelper.WaypointPos();
 		public override void OnEnterWorld(Player player)
 		{
 			base.OnEnterWorld(player);
-			pHelper = new BlockAwarePathfinder(this.player);
+			pHelper = new BlockAwarePathfinder(this);
+		}
+
+		public override void ResetEffects()
+		{
+			passivePathfindingRange = 0;
 		}
 
 		public override void PostUpdate()
@@ -31,12 +36,31 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				player.MinionAttackTargetNPC = -1;
 			}
 		}
+
+		internal bool InWaypointRange(Vector2 position)
+		{
+			return Vector2.Distance(position, player.Center) < 1.25f * waypointPlacementRange;
+		}
+
+		private Vector2 GetNewWaypointPosition()
+		{
+			Vector2 offset = Main.MouseWorld - player.Center;
+			if(offset.Length() < waypointPlacementRange)
+			{
+				return Main.MouseWorld;
+			}
+			offset.Normalize();
+			offset *= waypointPlacementRange;
+			return player.Center + offset;
+		}
+
 		internal void ToggleWaypoint(bool remove = false)
 		{
 			int type = MinionWaypoint.Type;
-			if (player.ownedProjectileCounts[type] == 0)
+			Vector2 waypointPosition = GetNewWaypointPosition();
+			if (player.ownedProjectileCounts[type] == 0 && !remove)
 			{
-				Projectile.NewProjectile(Main.MouseWorld, Vector2.Zero, type, 0, 0, player.whoAmI);
+				Projectile.NewProjectile(waypointPosition, Vector2.Zero, type, 0, 0, player.whoAmI);
 			}
 			else
 			{
@@ -51,29 +75,23 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 						} else
 						{
 							// todo multiplayer sync
-							p.position = Main.MouseWorld;
+							p.position = waypointPosition;
 						}
 					}
 				}
 			}
 		}
+	}
 
-		public override void ProcessTriggers(TriggersSet triggersSet)
+	internal class WaypointDispellingModItem: GlobalItem
+	{
+		public override bool UseItem(Item item, Player player)
 		{
-			// detect double clicks
-			if(!triggersSet.MouseRight)
+			if(item.damage > 0 && !item.summon && item.pick == 0 && item.axe == 0 && item.hammer == 0)
 			{
-				lastMouseRight = false;
+				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
 			}
-			if(!lastMouseRight && triggersSet.MouseRight)
-			{
-				if(Main.GameUpdateCount - lastClickFrame < 15)
-				{
-					ToggleWaypoint(true);
-				}
-				lastMouseRight = true;
-				lastClickFrame = Main.GameUpdateCount;
-			}
+			return base.UseItem(item, player);
 		}
 	}
 }

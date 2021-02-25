@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 
 				int radius = player.pHelper.searchSucceeded ? 12 : 6;
-				Color color = player.pHelper.searchSucceeded ? Color.LimeGreen : Color.LightBlue;
+				Color color = player.pHelper.searchSucceeded  && player.InWaypointRange(projectile.Center) ? Color.LimeGreen : Color.Gray;
 				float scale = player.pHelper.searchSucceeded ? 1.2f : 0.8f; 
 				for (int i = 0; i < 3; i++)
 				{

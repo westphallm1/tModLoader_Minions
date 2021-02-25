@@ -157,7 +157,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 	public class BlockAwarePathfinder
 	{
-		private Player player;
+		private MinionPathfindingPlayer modPlayer;
+		private Player player => modPlayer.player;
 
 		internal static List<NPC> npcsInBeaconRange;
 
@@ -201,9 +202,9 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal List<Vector2> orderedPath;
 		internal bool playerPlacedWaypoint = false;
 
-		public BlockAwarePathfinder(Player player)
+		internal BlockAwarePathfinder(MinionPathfindingPlayer player)
 		{
-			this.player = player;
+			this.modPlayer = player;
 		}
 
 		public static void Initialize()
@@ -538,7 +539,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 
 			// if this path was generated automatically, don't allow it to exceed a certain length
-			if(!playerPlacedWaypoint && pathLength > MAX_AUTOMATIC_PATH_DISTANCE)
+			if(!playerPlacedWaypoint && pathLength > 2 * modPlayer.passivePathfindingRange)
 			{
 				// un-succeed the search
 				searchSucceeded = false;
@@ -550,6 +551,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public void DrawPath()
 		{
+			if(searchFailed)
+			{
+				return;
+			}
 			int pathAnimationLength = Math.Max(30, (int)pathLength / 10);
 			float desiredDistance = (Main.GameUpdateCount % pathAnimationLength) * 10;
 			float traversedDistance = 0;
@@ -563,7 +568,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 					nextPathSegment.Normalize();
 					nextPathSegment *= remainingDistance;
 					Dust.NewDust(orderedPath[i] + nextPathSegment, 1, 1, DustType<MinionWaypointDust>(), 
-						newColor: searchSucceeded ? Color.LimeGreen : Color.Red, Scale: 1.2f);
+						newColor: playerPlacedWaypoint ? Color.LimeGreen : Color.MediumPurple, Scale: 1.2f);
 					break;
 				}
 				traversedDistance += nextDistance;
@@ -576,15 +581,21 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type)
+				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type
+					&& modPlayer.InWaypointRange(p.Center))
 				{
 					playerPlacedWaypoint = true;
 					return p.Center;
 				}
 			}
+			int searchRange = modPlayer.passivePathfindingRange * modPlayer.passivePathfindingRange;
+			if(searchRange == 0)
+			{
+				return default;
+			}
 			// second pass: look for any enemy
 			NPC closestNPC = Main.npc.Where(npc => npc.active && npc.CanBeChasedBy() &&
-				Vector2.DistanceSquared(player.Center, npc.Center) < NPC_MAX_DISTANCE * NPC_MAX_DISTANCE).OrderBy(npc =>
+				Vector2.DistanceSquared(player.Center, npc.Center) < searchRange).OrderBy(npc =>
 				Vector2.DistanceSquared(player.Center, npc.Center)).FirstOrDefault();
 			if(closestNPC != default)
 			{

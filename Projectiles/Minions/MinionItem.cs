@@ -37,19 +37,5 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			position = Main.MouseWorld;
 			return true;
 		}
-
-		public override bool AltFunctionUse(Player player)
-		{
-			return true;
-		}
-
-		public override bool CanUseItem(Player player)
-		{
-			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
-			{
-				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint();
-			}
-			return base.CanUseItem(player);
-		}
 	}
 }
