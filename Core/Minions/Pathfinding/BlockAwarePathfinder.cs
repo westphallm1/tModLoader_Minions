@@ -204,11 +204,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		internal BlockAwarePathfinder(MinionPathfindingPlayer player)
 		{
-			this.modPlayer = player;
-		}
-
-		public static void Initialize()
-		{
+			modPlayer = player;
 		}
 
 		private WaypointSearchNode AddNode(WaypointSearchNode parent)
@@ -551,7 +547,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public void DrawPath()
 		{
-			if(searchFailed)
+			if(searchFailed || Main.myPlayer != player.whoAmI)
 			{
 				return;
 			}

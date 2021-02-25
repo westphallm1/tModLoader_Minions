@@ -96,12 +96,15 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal void DetachFromPath()
 		{
 			// restore the original hitbox
-			Vector2 oldCenter = projectile.Center;
-			projectile.width = realWidth;
-			projectile.height= realHeight;
-			projectile.modProjectile.drawOriginOffsetX = realDrawOffsetX;
-			projectile.modProjectile.drawOriginOffsetY = realDrawOffsetY;
-			projectile.Center = oldCenter;
+			if(nodeIndex != -1)
+			{
+				Vector2 oldCenter = projectile.Center;
+				projectile.width = realWidth;
+				projectile.height= realHeight;
+				projectile.modProjectile.drawOriginOffsetX = realDrawOffsetX;
+				projectile.modProjectile.drawOriginOffsetY = realDrawOffsetY;
+				projectile.Center = oldCenter;
+			}
 			nodeIndex = -1;
 			noProgressFrames = 0;
 			unstuckFrames = 0;

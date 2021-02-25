@@ -142,7 +142,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					projectile.netUpdate = true;
 				}
-				pathfinder.DetachFromPath();
+				if (useBeacon)
+				{
+					pathfinder.DetachFromPath();
+				}
 				projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
 				TargetedMovement(targetPosition);
@@ -151,7 +154,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < noLOSPursuitTime)
 			{
-				pathfinder.DetachFromPath();
+				if (useBeacon)
+				{
+					pathfinder.DetachFromPath();
+				}
 				projectile.tileCollide = !attackThroughWalls;
 				if (!Main.npc[previousIndex].active)
 				{

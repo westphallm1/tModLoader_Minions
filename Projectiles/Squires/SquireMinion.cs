@@ -75,6 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			useBeacon = false;
 			projectile.minionSlots = 0;
 		}
 

@@ -24,6 +24,8 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			item.useTime = 60;
+			item.useAnimation = 60;
 			placementRange = 16 * 30;
 		}
 	}

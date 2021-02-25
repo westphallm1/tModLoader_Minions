@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Core.Netcode.Packets;
+using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -13,21 +14,24 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 {
 	internal class MinionPathfindingPlayer : ModPlayer
 	{
-		internal BlockAwarePathfinder pHelper;
+		internal BlockAwarePathfinder pHelper = default;
 		internal int waypointPlacementRange = 0;
 		internal int passivePathfindingRange = 0;
 		internal Vector2 waypointPosition => pHelper.WaypointPos();
-		public override void OnEnterWorld(Player player)
-		{
-			base.OnEnterWorld(player);
-			pHelper = new BlockAwarePathfinder(this);
-		}
 
 		public override void ResetEffects()
 		{
 			passivePathfindingRange = 0;
 		}
 
+		public override void PreUpdate()
+		{
+			// can't find a better hook to initialize the pathfinding helper
+			if(pHelper == default)
+			{
+				pHelper = new BlockAwarePathfinder(this);
+			}
+		}
 		public override void PostUpdate()
 		{
 			pHelper?.Update();
@@ -40,6 +44,19 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal bool InWaypointRange(Vector2 position)
 		{
 			return Vector2.Distance(position, player.Center) < 1.25f * waypointPlacementRange;
+		}
+
+		internal void UpdateWaypointFromPacket(short xOffset, short yOffset)
+		{
+			Vector2 newPos = player.Center + new Vector2(xOffset, yOffset);
+			for (int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type)
+				{
+					p.position = newPos;
+				}
+			}
 		}
 
 		private Vector2 GetNewWaypointPosition()
@@ -74,8 +91,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 							p.Kill();
 						} else
 						{
-							// todo multiplayer sync
 							p.position = waypointPosition;
+							if(player.whoAmI == Main.myPlayer)
+							{
+								new WaypointMovementPacket(player, waypointPosition).Send();
+							}
 						}
 					}
 				}
