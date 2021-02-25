@@ -121,7 +121,7 @@ namespace AmuletOfManyMinions.NPCs
 			}
 
 			// drop from any enemy during a blood moon in pre-hardmode
-			if (spawnChance < 0.04f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue && Main.bloodMoon && Main.hardMode)
+			if (spawnChance < 0.01f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue && Main.bloodMoon && Main.hardMode)
 			{
 				Item.NewItem(npc.getRect(), ItemType<SlimepireMinionItem>(), 1, prefixGiven: -1);
 			}
