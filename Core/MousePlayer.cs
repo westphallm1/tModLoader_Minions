@@ -89,11 +89,20 @@ namespace AmuletOfManyMinions.Core
 				{
 					//If hasn't sent a mouse position recently, or when an update is required
 
+					//Send packet
+					if (NextMousePosition != Main.MouseWorld)
+					{
+						new MousePacket(player, Main.MouseWorld).Send();
+					}
+					else
+					{
+						//If mouse position didn't change, reset timeout and send a packet that does the same
+						ResetTimeout();
+						new MouseResetTimeoutPacket(player).Send();
+					}
+
 					//Required so client also updates this variable even though its not used directly
 					NextMousePosition = Main.MouseWorld;
-
-					//Send packet
-					new MousePacket(player, Main.MouseWorld).Send();
 				}
 			}
 		}
@@ -107,6 +116,14 @@ namespace AmuletOfManyMinions.Core
 			{
 				NextMousePosition = position;
 			}
+		}
+
+		/// <summary>
+		/// Called on receiving latest keepalive packet by server or other clients
+		/// </summary>
+		public void ResetTimeout()
+		{
+			timeoutTimer = 0;
 		}
 
 		/// <summary>

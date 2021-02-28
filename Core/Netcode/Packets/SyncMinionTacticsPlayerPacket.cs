@@ -29,8 +29,9 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 			byte id = reader.ReadByte();
 			byte ignoreTargetReticle = reader.ReadByte();
 
-			player.GetModPlayer<MinionTacticsPlayer>().SetTactic(id, fromSync: true);
-			player.GetModPlayer<MinionTacticsPlayer>().IgnoreVanillaMinionTarget = ignoreTargetReticle;
+			MinionTacticsPlayer minionTacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
+			minionTacticsPlayer.SetTactic(id, fromSync: true);
+			minionTacticsPlayer.IgnoreVanillaMinionTarget = ignoreTargetReticle;
 		}
 	}
 }
