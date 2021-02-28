@@ -135,9 +135,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				rangeCheckCenter = projectile.Center;
 			} else if (!pathfindingPlayer.pHelper.InProgress() &&
 				pathfindingPlayer.pHelper.searchSucceeded &&
-				pathfindingPlayer.waypointPosition != default)
+				pathfindingPlayer.WaypointPosition != default)
 			{
-				rangeCheckCenter = pathfindingPlayer.waypointPosition;
+				rangeCheckCenter = pathfindingPlayer.WaypointPosition;
 			} else
 			{
 				rangeCheckCenter = player.Center;

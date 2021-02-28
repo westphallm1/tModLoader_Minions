@@ -16,6 +16,21 @@ namespace AmuletOfManyMinions.Items.Materials
 			item.value = Item.sellPrice(gold: 5);
 			item.rare = ItemRarityID.Lime;
 		}
+	}
+	public class GraniteSpark : ModItem
+	{
+		public override void SetStaticDefaults()
+		{
+			base.SetDefaults();
+			DisplayName.SetDefault("Granite Spark");
+			Tooltip.SetDefault(
+				"A fragment of energy from a granite elemental.\n" +
+				"Used to craft tools that enhance your minions' AI.");
+			item.width = 30;
+			item.height = 32;
+			item.value = Item.sellPrice(copper: 50);
+			item.rare = ItemRarityID.White;
+		}
 
 	}
 }

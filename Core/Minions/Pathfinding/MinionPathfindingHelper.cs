@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 
 namespace AmuletOfManyMinions.Core.Minions.Pathfinding
@@ -41,6 +39,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			this.projectile = projectile;
 			
 		}
+
+		internal bool InTransit => nodeIndex > -1 && nodeIndex < pathfinder.orderedPath.Count - 1;
 
 		internal void SetPathStartingPoint()
 		{
@@ -218,7 +218,19 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			// make sure the target exceeds a certain lenght threshold,
 			// so the AI will speed up the minions
 			Vector2 target = currentNode - projectile.position;
-			if(target.Length() < 16)
+
+			// we're at the waypoint, rotate around it
+			if(nodeIndex == path.Count - 1 && Vector2.Distance(projectile.Center, currentNode) < 
+				MinionPathfindingPlayer.WAYPOINT_PROXIMITY_THRESHOLD)
+			{
+				MinionPathfindingPlayer owner = Main.player[projectile.owner].GetModPlayer<MinionPathfindingPlayer>();
+				if(owner.MinionsAtWaypoint.Count > 0)
+				{
+					float animationAngle = MathHelper.TwoPi * (Main.GameUpdateCount % 120) / 120f;
+					animationAngle += MathHelper.TwoPi * owner.MinionsAtWaypoint.IndexOf(projectile) / (float)owner.MinionsAtWaypoint.Count;
+					target += Math.Min(48, 24 + 2 * owner.MinionsAtWaypoint.Count) * animationAngle.ToRotationVector2();
+				}
+			} else if(target.Length() < 16)
 			{
 				target.SafeNormalize();
 				target *= 16;

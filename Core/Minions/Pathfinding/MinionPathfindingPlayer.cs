@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameInput;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core.Minions.Pathfinding
@@ -17,7 +18,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal BlockAwarePathfinder pHelper = default;
 		internal int waypointPlacementRange = 0;
 		internal int passivePathfindingRange = 0;
-		internal Vector2 waypointPosition => pHelper.WaypointPos();
+		internal Vector2 WaypointPosition = default;
+		internal List<Projectile> MinionsAtWaypoint = new List<Projectile>();
+		// distance for minions to count as "at the waypoint"
+		internal static int WAYPOINT_PROXIMITY_THRESHOLD = 64;
+
 
 		public override void ResetEffects()
 		{
@@ -31,7 +36,29 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				pHelper = new BlockAwarePathfinder(this);
 			}
+			FindWaypointPos();
+			BuildMinionsAtWaypointList();
 		}
+
+		private void BuildMinionsAtWaypointList()
+		{
+			MinionsAtWaypoint.Clear();
+			if(WaypointPosition == default)
+			{
+				return;
+			}
+			for (int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if (p.active && p.owner == player.whoAmI && (p.minion || ProjectileID.Sets.MinionShot[p.type])
+					&& Vector2.DistanceSquared(WaypointPosition, p.Center) < WAYPOINT_PROXIMITY_THRESHOLD * WAYPOINT_PROXIMITY_THRESHOLD)
+				{
+					MinionsAtWaypoint.Add(p);
+				}
+			}
+
+		}
+
 		public override void PostUpdate()
 		{
 			pHelper?.Update();
@@ -41,6 +68,20 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 		}
 
+		private void FindWaypointPos()
+		{
+			// get waypoint position
+			WaypointPosition = default;
+			for (int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type
+					&& InWaypointRange(p.Center))
+				{
+					WaypointPosition = p.Center;
+				}
+			}
+		}
 		internal bool InWaypointRange(Vector2 position)
 		{
 			return Vector2.Distance(position, player.Center) < 1.25f * waypointPlacementRange;

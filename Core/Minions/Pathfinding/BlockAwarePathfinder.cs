@@ -573,21 +573,16 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public Vector2 WaypointPos()
 		{
-			// first pass: look for the player-placed waypoint
-			for (int i = 0; i < Main.maxProjectiles; i++)
-			{
-				Projectile p = Main.projectile[i];
-				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type
-					&& modPlayer.InWaypointRange(p.Center))
-				{
-					playerPlacedWaypoint = true;
-					return p.Center;
-				}
-			}
+			// first: check for the player-placed waypoint
 			int searchRange = modPlayer.passivePathfindingRange * modPlayer.passivePathfindingRange;
 			if(searchRange == 0)
 			{
 				return default;
+			}
+			if(modPlayer.WaypointPosition != default)
+			{
+				playerPlacedWaypoint = true;
+				return modPlayer.WaypointPosition;
 			}
 			// second pass: look for any enemy
 			NPC closestNPC = Main.npc.Where(npc => npc.active && npc.CanBeChasedBy() &&
