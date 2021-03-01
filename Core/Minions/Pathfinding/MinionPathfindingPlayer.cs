@@ -16,8 +16,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	internal class MinionPathfindingPlayer : ModPlayer
 	{
 		internal BlockAwarePathfinder pHelper = default;
-		internal int waypointPlacementRange = 0;
-		internal int passivePathfindingRange = 0;
+		internal int WaypointPlacementRange = 0;
+		internal int PassivePathfindingRange = 0;
+		// deal a default of 35% less damage while a minion is the maximum waypoint distance away from the player
+		internal float WaypointDamageFalloff = 0.35f;
 		internal Vector2 WaypointPosition = default;
 		internal List<Projectile> MinionsAtWaypoint = new List<Projectile>();
 		// distance for minions to count as "at the waypoint"
@@ -26,7 +28,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public override void ResetEffects()
 		{
-			passivePathfindingRange = 0;
+			PassivePathfindingRange = 0;
 		}
 
 		public override void PreUpdate()
@@ -84,7 +86,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		}
 		internal bool InWaypointRange(Vector2 position)
 		{
-			return Vector2.Distance(position, player.Center) < 1.25f * waypointPlacementRange;
+			return Vector2.Distance(position, player.Center) < 1.25f * WaypointPlacementRange;
 		}
 
 		internal void UpdateWaypointFromPacket(short xOffset, short yOffset)
@@ -103,12 +105,12 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		private Vector2 GetNewWaypointPosition()
 		{
 			Vector2 offset = Main.MouseWorld - player.Center;
-			if(offset.Length() < waypointPlacementRange)
+			if(offset.Length() < WaypointPlacementRange)
 			{
 				return Main.MouseWorld;
 			}
 			offset.Normalize();
-			offset *= waypointPlacementRange;
+			offset *= WaypointPlacementRange;
 			return player.Center + offset;
 		}
 
@@ -144,6 +146,34 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		}
 	}
 
+	/// <summary>
+	/// GlobalProjectile that reduces a projectile's damage based on how far away the pathfinding reticle is from the player
+	/// </summary>
+	internal class WaypointDamageFalloffProjectile: GlobalProjectile
+	{
+		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			// nerf all minion damage, even if they're not following the waypoint. Maybe a bit iffy
+			if(!(projectile.minion ||
+				ProjectileID.Sets.MinionShot[projectile.type]))
+			{
+				return;
+			}
+			MinionPathfindingPlayer player = Main.player[projectile.owner].GetModPlayer<MinionPathfindingPlayer>();
+			// no falloff if waypoint not placed
+			if(player.WaypointPosition == default)
+			{
+				return;
+			}
+			float maxDist = player.WaypointPlacementRange;
+			float damageReduction = player.WaypointDamageFalloff * Math.Min(maxDist, Vector2.Distance(projectile.Center, player.player.Center)) / maxDist;
+			damage = (int)((1 - damageReduction) * damage);
+		}
+	}
+
+	/// <summary>
+	/// GlobalItem that dispells a player's waypoint when they attack with a non-summon weapon
+	/// </summary>
 	internal class WaypointDispellingModItem: GlobalItem
 	{
 		public override bool UseItem(Item item, Player player)

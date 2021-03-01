@@ -82,21 +82,27 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		}
 
 		// Lifted from GroundAwareMinion
-		internal static bool TileAtLocation(Vector2 position)
+		internal static bool TileAtLocation(Vector2 position, ref bool outOfBounds)
 		{
 			int x = (int)position.X / 16;
 			int y = (int)position.Y / 16;
 			//null-safe
+			if(x < 0 || y < 0 || x >= Main.tile.GetUpperBound(0) || y >= Main.tile.GetUpperBound(1))
+			{
+				outOfBounds = true;
+				return true;
+			}
 			Tile tile = Framing.GetTileSafely(x, y);
 			return tile.active() && !tile.actuator() && tile.collisionType == 1;
 		}
-		public void UpdateGroundProbe()
+		public bool UpdateGroundProbe()
 		{
 			// check that there's still a tile blocking progress in the direction of the original goal
 			Vector2 clingTarget = isClockwise ? velocity.rotate90CW() : velocity.rotate90CCW();
-			bool clingToPresent = TileAtLocation(position + clingTarget);
-			bool travelDirectionBlocked = TileAtLocation(position + velocity);
-			bool nextTravelDirectionBlocked = TileAtLocation(position + -clingTarget);
+			bool outOfBounds = false;
+			bool clingToPresent = TileAtLocation(position + clingTarget, ref outOfBounds);
+			bool travelDirectionBlocked = TileAtLocation(position + velocity, ref outOfBounds);
+			bool nextTravelDirectionBlocked = TileAtLocation(position + -clingTarget, ref outOfBounds);
 			Vector2 cornerOffset = Vector2.Zero;
 			if(!clingToPresent)
 			{
@@ -115,7 +121,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			if(travelDirectionBlocked || !clingToPresent)
 			{
 				Vector2 intendedNode = position + cornerOffset;
-				if(TileAtLocation(intendedNode))
+				if(TileAtLocation(intendedNode, ref outOfBounds))
 				{
 					intendedNode = position;
 				}
@@ -126,6 +132,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				parent = cornerNode;
 			}
 			position += velocity;
+			return !outOfBounds;
 		}
 
 		public bool GotAroundBarrier(Vector2 waypointPosition)
@@ -211,6 +218,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		{
 			Vector2 newPosition;
 			bool inGround = false;
+			bool outOfBounds = false;
 			if(parent == null)
 			{
 				newPosition = player.Center;
@@ -227,10 +235,14 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 					angleOffset = new Vector2(0, DISTANCE_STEP * Math.Sign(distance.Y));
 				}
 				newPosition += angleOffset;
-				if(WaypointSearchNode.TileAtLocation(newPosition))
+				if(WaypointSearchNode.TileAtLocation(newPosition, ref outOfBounds))
 				{
 					inGround = true;
 				}
+			}
+			if(outOfBounds)
+			{
+				return null;
 			}
 			float distanceHeuristic = Vector2.DistanceSquared(waypointPosition, newPosition);
 			bool hasLOS = false;
@@ -289,7 +301,12 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				foreach(WaypointSearchNode groundProbe in searchNodes)
 				{
-					groundProbe.UpdateGroundProbe();
+					if(!groundProbe.UpdateGroundProbe())
+					{
+						// a ground node went out of bounds, give up
+						searchFailed = true;
+						return;
+					}
 					// DebugDust();
 					if(groundProbe.GotAroundBarrier(waypointPosition))
 					{
@@ -535,7 +552,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 
 			// if this path was generated automatically, don't allow it to exceed a certain length
-			if(!playerPlacedWaypoint && pathLength > 2 * modPlayer.passivePathfindingRange)
+			if(!playerPlacedWaypoint && pathLength > 2 * modPlayer.PassivePathfindingRange)
 			{
 				// un-succeed the search
 				searchSucceeded = false;
@@ -574,15 +591,15 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		public Vector2 WaypointPos()
 		{
 			// first: check for the player-placed waypoint
-			int searchRange = modPlayer.passivePathfindingRange * modPlayer.passivePathfindingRange;
-			if(searchRange == 0)
-			{
-				return default;
-			}
-			if(modPlayer.WaypointPosition != default)
+			if(modPlayer.WaypointPosition != default && modPlayer.InWaypointRange(modPlayer.WaypointPosition))
 			{
 				playerPlacedWaypoint = true;
 				return modPlayer.WaypointPosition;
+			}
+			int searchRange = modPlayer.PassivePathfindingRange * modPlayer.PassivePathfindingRange;
+			if(searchRange == 0)
+			{
+				return default;
 			}
 			// second pass: look for any enemy
 			NPC closestNPC = Main.npc.Where(npc => npc.active && npc.CanBeChasedBy() &&

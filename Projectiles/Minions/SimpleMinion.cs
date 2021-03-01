@@ -134,8 +134,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			targetNPCIndex = null;
 			vectorToIdle = IdleBehavior();
 			// don't allow finding the target while travelling along path
-			vectorToTarget = useBeacon && pathfinder.InTransit? null : FindTarget();
-			framesSinceHadTarget++;
+			if(useBeacon && pathfinder.InTransit)
+			{
+				vectorToTarget = null;
+				framesSinceHadTarget = noLOSPursuitTime;
+			} else
+			{
+				vectorToTarget = FindTarget();
+				framesSinceHadTarget++;
+			}
 			animationFrame++;
 			if (vectorToTarget is Vector2 targetPosition)
 			{

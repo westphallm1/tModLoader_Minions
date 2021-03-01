@@ -189,7 +189,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				DetachFromPath();
 				// idle while the algorithm is still running
-				return Vector2.Zero;
+				return pathfinder.playerPlacedWaypoint ? (Vector2?)Vector2.Zero : null;
 			}
 			// simple approach: Go towards a node until you get close enough, then go to the next node
 			List<Vector2> path = pathfinder.orderedPath;
@@ -232,6 +232,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				}
 			} else if(target.Length() < 16)
 			{
+				// bump the minimum target distance up to 16, some idle AIs move too slowly otherwise
 				target.SafeNormalize();
 				target *= 16;
 			}
