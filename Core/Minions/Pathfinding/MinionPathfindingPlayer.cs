@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal int WaypointPlacementRange = 0;
 		internal int PassivePathfindingRange = 0;
 		// deal a default of 35% less damage while a minion is the maximum waypoint distance away from the player
-		internal float WaypointDamageFalloff = 0.35f;
+		internal float WaypointDamageFalloff = 0.25f;
 		internal Vector2 WaypointPosition = default;
 		internal List<Projectile> MinionsAtWaypoint = new List<Projectile>();
 		// distance for minions to count as "at the waypoint"

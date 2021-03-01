@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<VikingSquireMinionItem>(), 1);
 			}
 
-			if(npc.type == NPCID.GraniteFlyer)
+			if(npc.type == NPCID.GraniteFlyer || npc.type == NPCID.GraniteGolem)
 			{
 				int amount = Main.rand.Next(1, Main.expertMode ? 4 : 3);
 				Item.NewItem(npc.getRect(), ItemType<GraniteSpark>(), amount);

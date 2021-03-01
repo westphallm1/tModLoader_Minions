@@ -127,7 +127,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<GraniteSpark>(), 15);
+			recipe.AddIngredient(ItemType<GraniteSpark>(), 12);
 			recipe.AddIngredient(ItemID.Granite, 30);
 			// crafted by hand
 			recipe.SetResult(this);

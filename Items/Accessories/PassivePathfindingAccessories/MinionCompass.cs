@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.SetResult(this);
-			recipe.AddIngredient(ItemType<GraniteSpark>(), 15);
+			recipe.AddIngredient(ItemType<GraniteSpark>(), 12);
 			recipe.AddIngredient(ItemID.Granite, 10);
 			recipe.AddIngredient(ItemID.Compass, 1);
 			recipe.AddTile(TileID.Anvils);
