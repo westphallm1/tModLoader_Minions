@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		internal int realWidth;
 		internal int realHeight;
-		internal float realDrawOffsetX;
+		internal int realDrawOffsetX;
 		internal int realDrawOffsetY;
 
 		// how close to a node we have to be before progressing to the next node
@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			Vector2 oldCenter = projectile.Center;
 			projectile.width = 16;
 			projectile.height = 16;
-			projectile.modProjectile.drawOriginOffsetX -= xShrink / 2;
+			projectile.modProjectile.drawOffsetX -= xShrink / 2;
 			projectile.modProjectile.drawOriginOffsetY -= yShrink / 2;
 			projectile.Center = oldCenter;
 			SetPathStartingPoint();
@@ -87,7 +87,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			pathfinder = Main.player[projectile.owner]?.GetModPlayer<MinionPathfindingPlayer>()?.pHelper;
 			realWidth = projectile.width;
 			realHeight = projectile.height;
-			realDrawOffsetX = projectile.modProjectile.drawOriginOffsetX;
+			realDrawOffsetX = projectile.modProjectile.drawOffsetX;
 			realDrawOffsetY = projectile.modProjectile.drawOriginOffsetY;
 
 		}
@@ -101,7 +101,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				Vector2 oldCenter = projectile.Center;
 				projectile.width = realWidth;
 				projectile.height= realHeight;
-				projectile.modProjectile.drawOriginOffsetX = realDrawOffsetX;
+				projectile.modProjectile.drawOffsetX = realDrawOffsetX;
 				projectile.modProjectile.drawOriginOffsetY = realDrawOffsetY;
 				projectile.Center = oldCenter;
 			}
