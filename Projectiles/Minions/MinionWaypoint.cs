@@ -38,12 +38,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			rotationFrame = (rotationFrame + 1) % rotationFrames;
 			float startAngle = -2f * (float)Math.PI * rotationFrame / rotationFrames;
 			MinionPathfindingPlayer player = Main.player[projectile.owner].GetModPlayer<MinionPathfindingPlayer>();
+			bool isMyPlayer = Main.myPlayer == player.player.whoAmI;
 			if(player.pHelper.searchSucceeded || !player.pHelper.searchFailed)
 			{
 
-				int radius = player.pHelper.searchSucceeded ? 12 : 6;
-				Color color = player.pHelper.searchSucceeded ? Color.LimeGreen : Color.LightBlue;
-				float scale = player.pHelper.searchSucceeded ? 1.2f : 0.8f; 
+				int radius = isMyPlayer ? player.pHelper.searchSucceeded ? 12 : 6 : 8;
+				Color color =  isMyPlayer ? 
+					player.pHelper.searchSucceeded && player.InWaypointRange(projectile.Center) ? Color.LimeGreen : Color.Gray
+					: Color.Aquamarine;
+				float scale = isMyPlayer ?  player.pHelper.searchSucceeded ? 1.2f : 0.8f : 1f; 
 				for (int i = 0; i < 3; i++)
 				{
 					float angle = startAngle + i * 2 * (float)Math.PI / 3;

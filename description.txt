@@ -3,6 +3,12 @@ in line with vanilla balance. It adds a new, directly controllable minion type c
 over 20 new minions, and several armor sets and accessories for both Squires and minions. 
 
 === Version History ==
+v0.7.0.1 - Bugfixes
+       - Fix bug where tactics waypoint preference wasn't properly synced in multiplayer
+       - Fix bug where squires dealt no damage during the old one's army
+       - Fix bug where the True Guide Squire couldn't "die" against the moon lord's hands
+       - Fix bug where worm minions' AI would break if too many segments were summoned
+       - Nerf Slimepire's drop rate from 3% to 1%
 v0.7.0 - Minion Tactics
        - Add new UI for fine-tuning minion AI (only works for mod minions)
          - Unlocked as soon as you pick up a summoner weapon from this mod
@@ -14,12 +20,6 @@ v0.6.0 - Minion Mix 'n' Match
        - Minion Variety Bonus: damage bonus based on number of unique minions!
        - 5 new minons: 2 early pre-hardmode, 1 early hardmode, 2 late hardmode
        - New attack patterns and general polish for several squires, courtesy of Metallumere
-v0.5.0 - Minion Progression Update
-       - Add new ground-based minion AI style
-       - Add 2 new early pre-hardmode minions
-       - Add 1 late pre-hardmode minion
-       - Add 3 early hardmode minions
-       - Move several existing minions to Big Mimic drops
 ~~ See the Wiki for older changelogs ~~
 
 A cheat sheet for getting started is given below. A complete list mod content can be found from the homepage.

@@ -174,7 +174,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			projectile.friendly = true;
 			projectile.localNPCHitCooldown = 30;
 			attackThroughWalls = false;
-			useBeacon = false;
 			frameSpeed = 5;
 			animationFrame = 0;
 			projectile.hide = true;
@@ -186,6 +185,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				IdleFlyingMovement = IdleFlyingMovement,
 				IdleGroundedMovement = IdleGroundedMovement
 			};
+			pathfinder.modifyPath = gHelper.ModifyPathfinding;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)

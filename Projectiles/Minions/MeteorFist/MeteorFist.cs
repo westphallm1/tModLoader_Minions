@@ -83,6 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			attackState = AttackState.IDLE;
 			projectile.minionSlots = 0.5f;
 			attackFrames = 30;
+			useBeacon = false;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)

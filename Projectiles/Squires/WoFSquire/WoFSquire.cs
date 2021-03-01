@@ -416,7 +416,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				kbDirection.Normalize();
 				kbDirection *= -3.5f;
 				projectile.velocity = target.velocity + kbDirection;
-				if (target.damage > 0)
+				if (target.CanBeChasedBy())
 				{
 					mockHealth = Math.Max(0, mockHealth - 1);
 				}

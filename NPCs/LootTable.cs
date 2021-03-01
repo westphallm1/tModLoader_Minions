@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Items.Accessories.SquireBat;
 using AmuletOfManyMinions.Items.Accessories.SquireSkull;
 using AmuletOfManyMinions.Items.Materials;
+using AmuletOfManyMinions.Items.WaypointRods;
 using AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy;
 using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
@@ -54,6 +55,11 @@ namespace AmuletOfManyMinions.NPCs
 				Item.NewItem(npc.getRect(), ItemType<VikingSquireMinionItem>(), 1);
 			}
 
+			if(npc.type == NPCID.GraniteFlyer)
+			{
+				int amount = Main.rand.Next(1, Main.expertMode ? 4 : 3);
+				Item.NewItem(npc.getRect(), ItemType<GraniteSpark>(), amount);
+			}
 
 			if (spawnChance < 0.12f && npc.type == NPCID.ManEater)
 			{
@@ -121,7 +127,7 @@ namespace AmuletOfManyMinions.NPCs
 			}
 
 			// drop from any enemy during a blood moon in pre-hardmode
-			if (spawnChance < 0.04f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue && Main.bloodMoon && Main.hardMode)
+			if (spawnChance < 0.01f && npc.CanBeChasedBy() && !npc.SpawnedFromStatue && Main.bloodMoon && Main.hardMode)
 			{
 				Item.NewItem(npc.getRect(), ItemType<SlimepireMinionItem>(), 1, prefixGiven: -1);
 			}
@@ -136,6 +142,11 @@ namespace AmuletOfManyMinions.NPCs
 				if (spawnChance < 0.33f && npc.type == NPCID.QueenBee)
 				{
 					Item.NewItem(npc.getRect(), ItemType<BeeQueenMinionItem>(), 1, prefixGiven: -1);
+				}
+
+				if (npc.type == NPCID.SkeletronHead)
+				{
+					Item.NewItem(npc.getRect(), ItemType<BoneWaypointRod>(), 1);
 				}
 
 				if (spawnChance < 0.5f && npc.type == NPCID.SkeletronHead)
@@ -194,6 +205,7 @@ namespace AmuletOfManyMinions.NPCs
 					break;
 				case ItemID.SkeletronBossBag:
 					player.QuickSpawnItem(ItemType<SquireSkullAccessory>());
+					player.QuickSpawnItem(ItemType<BoneWaypointRod>());
 					break;
 				case ItemID.WallOfFleshBossBag:
 					if (spawnChance < 0.67f)
@@ -206,6 +218,9 @@ namespace AmuletOfManyMinions.NPCs
 					{
 						player.QuickSpawnItem(ItemType<PottedPalMinionItem>());
 					}
+					break;
+				case ItemID.MoonLordBossBag:
+					player.QuickSpawnItem(ItemType<TrueEyeWaypointRod>());
 					break;
 				default:
 					break;

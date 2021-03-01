@@ -34,8 +34,6 @@ namespace AmuletOfManyMinions
 			TargetSelectionTacticHandler.Load();
 			UserInterfaces.Load();
 
-			PathfindingHelper.Initialize();
-
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
 			QuickDefendHotKey = RegisterHotKey("Minion Quick Defend", "V");
 			if (!Main.dedServ)

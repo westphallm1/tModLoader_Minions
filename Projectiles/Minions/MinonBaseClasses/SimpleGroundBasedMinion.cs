@@ -35,6 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				GetUnstuck = GetUnstuck,
 				transformRateLimit = 60
 			};
+			pathfinder.modifyPath = gHelper.ModifyPathfinding;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -217,5 +218,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				return null;
 			}
 		}
+
 	}
 }

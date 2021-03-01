@@ -502,5 +502,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				IdleGroundedMovement?.Invoke(vectorToIdle);
 			}
 		}
+
+		internal void ModifyPathfinding(ref Vector2 target)
+		{
+			isFlying = true;
+			if(target.Y > 16)
+			{
+				DropThroughPlatform();
+			}
+		}
 	}
 }

@@ -121,13 +121,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public Vector2? SelectedEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
 		{
-			Vector2 center = centeredOn ?? projectile.Center;
 			Vector2 losCenterVector = losCenter ?? projectile.Center;
 			PlayerTargetSelectionTactic tactic = player.GetModPlayer<MinionTacticsPlayer>().PlayerTactic;
+			MinionPathfindingPlayer pathfindingPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
 			// to cut back on Line-of-Sight computations, always chase the same NPC for some number of frames once one has been found
 			if(targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < tactic.TargetCacheFrames)
 			{
 				return Main.npc[idx].Center;
+			}
+			Vector2 rangeCheckCenter;
+			if(!maxRangeFromPlayer)
+			{
+				rangeCheckCenter = projectile.Center;
+			} else if (!pathfindingPlayer.pHelper.InProgress() &&
+				pathfindingPlayer.pHelper.searchSucceeded &&
+				pathfindingPlayer.WaypointPosition != default)
+			{
+				rangeCheckCenter = pathfindingPlayer.WaypointPosition;
+			} else
+			{
+				rangeCheckCenter = player.Center;
 			}
 			List<NPC> possibleTargets = new List<NPC>();
 			bool anyInRange = false;
@@ -138,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					continue;
 				}
-				bool inRange = Vector2.DistanceSquared(npc.Center, maxRangeFromPlayer ? player.Center : projectile.Center) < maxRange * maxRange;
+				bool inRange = Vector2.DistanceSquared(npc.Center, rangeCheckCenter) < maxRange * maxRange;
 				bool inNoLOSRange = Vector2.DistanceSquared(npc.Center, player.Center) < noLOSRange * noLOSRange;
 				bool lineOfSight = inNoLOSRange || (inRange && Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height));
 				if (inNoLOSRange || (lineOfSight && inRange))
@@ -154,74 +167,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				targetNPCCacheFrames = 0;
 				return chosen.Center;
 			} 
-			//else if (useBeacon && anyInRange)
-			//{
-			//	usingBeacon = true;
-			//	return BeaconPosition(center, maxRange, noLOSRange);
-			//}
 			else
 			{
 				return null;
 			}
-		}
-
-		public Vector2? BeaconPosition(Vector2 center, float maxRange, float noLOSRange = 0)
-		{
-			int type = MinionWaypoint.Type;
-			// should automatically fall through to here if can't hit target
-			if (player.ownedProjectileCounts[type] == 0)
-			{
-				return null;
-			}
-			Vector2? waypointCenter = null;
-			for (int i = 0; i < Main.maxProjectiles; i++)
-			{
-				Projectile p = Main.projectile[i];
-				if (p.active && p.owner == Main.myPlayer && p.type == type)
-				{
-					Vector2 target = p.position;
-					float distance = Vector2.Distance(target, center);
-					if (distance < noLOSRange || (distance < maxRange &&
-						Collision.CanHitLine(projectile.Center, 1, 1, target, 1, 1)))
-					{
-						waypointCenter = target;
-						break;
-					}
-				}
-			}
-			// try again with the beacon position as the central search point
-			if (waypointCenter is Vector2 wCenter && AnyEnemyInRange(maxRange, wCenter) is Vector2 anyTarget)
-			{
-				DrawDirectionDust(wCenter, anyTarget);
-				return wCenter;
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		private int directionFrame = 0;
-		protected void DrawDirectionDust(Vector2 waypointCenter, Vector2 anyTarget)
-		{
-			if ((directionFrame++) % 30 != 0 || player.GetModPlayer<MinionSpawningItemPlayer>().didDrawDustThisFrame)
-			{
-				return;
-			}
-			player.GetModPlayer<MinionSpawningItemPlayer>().didDrawDustThisFrame = true;
-			int lineLength = 64;
-			Vector2 fromVector = projectile.Center - waypointCenter;
-			Vector2 toVector = anyTarget - waypointCenter;
-			fromVector.SafeNormalize();
-			toVector.SafeNormalize();
-			for (int i = 12; i < lineLength; i += 2)
-			{
-				float scale = 1.5f - 0.015f * i;
-				Dust.NewDust(waypointCenter + fromVector * i, 1, 1, DustType<MinionWaypointDust>(), newColor: new Color(0.5f, 1, 0.5f), Scale: scale);
-				Dust.NewDust(waypointCenter + toVector * i, 1, 1, DustType<MinionWaypointDust>(), newColor: new Color(0.5f, 1, 0.5f), Scale: scale);
-
-			}
-
 		}
 
 		public Vector2? AnyEnemyInRange(float maxRange, Vector2? centeredOn = null, bool noLOS = false)

@@ -108,6 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			frameSpeed = 5;
 			projectile.localNPCHitCooldown = 10;
 			gHelper = new GroundAwarenessHelper(this);
+			pathfinder.modifyPath = gHelper.ModifyPathfinding;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

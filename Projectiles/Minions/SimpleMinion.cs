@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
+﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
@@ -6,6 +7,14 @@ using Terraria.ID;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
+
+	internal enum WaypointMovementStyle
+	{
+		IDLE,
+		TARGET,
+		CUSTOM
+	}
+
 	public abstract class SimpleMinion : Minion
 	{
 		protected Vector2 vectorToIdle;
@@ -19,6 +28,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int proximityForOnHitTarget = 24;
 		protected int targetFrameCounter = 0;
 		protected int noLOSPursuitTime = 15; // time to chase the NPC after losing sight
+		protected MinionPathfindingHelper pathfinder;
+
+		internal virtual WaypointMovementStyle waypointMovementStyle => WaypointMovementStyle.IDLE;
 
 		public int animationFrame { get; set; }
 
@@ -63,6 +75,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			projectile.localNPCHitCooldown = 10;
 			// Makes sure this projectile is synced to other newly joined players 
 			projectile.netImportant = true;
+
+			pathfinder = new MinionPathfindingHelper(projectile);
 		}
 
 
@@ -119,14 +133,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			targetNPCIndex = null;
 			vectorToIdle = IdleBehavior();
-			vectorToTarget = FindTarget();
-			framesSinceHadTarget++;
+			// don't allow finding the target while travelling along path
+			if(useBeacon && pathfinder.InTransit)
+			{
+				vectorToTarget = null;
+				framesSinceHadTarget = noLOSPursuitTime;
+			} else
+			{
+				vectorToTarget = FindTarget();
+				framesSinceHadTarget++;
+			}
 			animationFrame++;
 			if (vectorToTarget is Vector2 targetPosition)
 			{
 				if (player.whoAmI == Main.myPlayer && oldVectorToTarget == null)
 				{
 					projectile.netUpdate = true;
+				}
+				if (useBeacon)
+				{
+					pathfinder.DetachFromPath();
 				}
 				projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
@@ -136,6 +162,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < noLOSPursuitTime)
 			{
+				if (useBeacon)
+				{
+					pathfinder.DetachFromPath();
+				}
 				projectile.tileCollide = !attackThroughWalls;
 				if (!Main.npc[previousIndex].active)
 				{
@@ -148,6 +178,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
 				}
 			}
+			else if (useBeacon &&  pathfinder.NextPathfindingTarget() is Vector2 pathNode)
+			{
+				if(pathfinder.isStuck)
+				{
+					pathfinder.GetUnstuck();
+				} else
+				{
+					if(waypointMovementStyle == WaypointMovementStyle.IDLE)
+					{
+						IdleMovement(pathNode);
+					} else
+					{
+						TargetedMovement(pathNode);
+					}
+					projectile.tileCollide = !pathfinder.atStart && !attackThroughWalls;
+				}
+			} 
 			else
 			{
 				if (framesSinceHadTarget > 30)

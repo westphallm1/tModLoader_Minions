@@ -179,6 +179,7 @@ namespace AmuletOfManyMinions.Core.Minions
 						}
 						if(syncConfig)
 						{
+							new ConfigPacket(player, IgnoreVanillaMinionTarget).Send();
 							syncConfig = false;
 						}
 					}

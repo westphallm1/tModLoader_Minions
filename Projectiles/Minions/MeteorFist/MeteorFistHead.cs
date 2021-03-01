@@ -79,7 +79,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 				speedChange.SafeNormalize();
 				speedChange *= maxSpeed;
 			}
-			projectile.spriteDirection = -player.direction;
+			if(projectile.velocity.X > 1)
+			{
+				projectile.spriteDirection = -1;
+			} else if (projectile.velocity.X < -1)
+			{
+				projectile.spriteDirection = 1;
+			}
 			projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;
 		}
 
