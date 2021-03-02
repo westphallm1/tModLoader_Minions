@@ -87,7 +87,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			int x = (int)position.X / 16;
 			int y = (int)position.Y / 16;
 			//null-safe
-			if(x < 0 || y < 0 || x >= Main.tile.GetUpperBound(0) || y >= Main.tile.GetUpperBound(1))
+			if(!WorldGen.InWorld(x, y))
 			{
 				outOfBounds = true;
 				return true;
