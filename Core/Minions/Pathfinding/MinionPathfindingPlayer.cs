@@ -63,7 +63,15 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public override void PostUpdate()
 		{
-			pHelper?.Update();
+
+			//Only send to other player if he's in visible range
+			Rectangle bounds = Utils.CenteredRectangle(Main.player[Main.myPlayer].Center, new Vector2(1920, 1080) * 1.5f);
+			Point myCenter = player.Center.ToPoint();
+			bool doUpdate = bounds.Contains(myCenter);
+			if(doUpdate)
+			{
+				pHelper?.Update();
+			}
 			if(player.ownedProjectileCounts[MinionWaypoint.Type] > 0)
 			{
 				player.MinionAttackTargetNPC = -1;
