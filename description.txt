@@ -4,12 +4,11 @@ over 20 new minions, and several armor sets and accessories for both Squires and
 
 === Version History ==
 v0.8.0 - Pathfinding 2.0
-       - Complete Overhaul of the minion targeting system to allow 
-       - minions from this mod can automatically navigate most obstacles in order to reach the target
-       - Only works with minions from this mod
-       - Target placed using new class of tool called Pathfinding Rod
-          - Target placement functionality removed from other Summon Weapons
+       - Complete overhaul of the minion targeting system!
+       - Minions can now automatically navigate most obstacles in order to reach the target
+       - Target now placed using new class of tool called Pathfinding Rod
        - Pathfinding Rod has 6 tiers, each increasing target placement range and decreasing use time
+       - Only works with minions from this mod
 v0.7.0 - Minion Tactics
        - Add new UI for fine-tuning minion AI (only works for mod minions)
          - Unlocked as soon as you pick up a summoner weapon from this mod
