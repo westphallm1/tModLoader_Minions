@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -75,14 +76,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class ImpMinion : HeadCirclingGroupAwareMinion
+	public class ImpMinion : HoverShooterMinion
 	{
-		int lastShootFrame = 0;
-		// used to gently bob back and forth between 2 set points from the enemy
-		int distanceCyle = 1;
 		protected override int BuffId => BuffType<ImpMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.FlyingImp;
+
+		internal override int? FiredProjectileId => ProjectileType<ImpFireball>();
+
+		internal override LegacySoundStyle ShootSound => SoundID.Item20;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -96,6 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			base.SetDefaults();
 			projectile.width = 32;
 			projectile.height = 26;
+			targetSearchDistance = 700;
 			drawOffsetX = (projectile.width - 44) / 2;
 			attackFrames = 80;
 		}
@@ -136,57 +139,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				Main.dust[dustId].noLight = true;
 			}
 
-		}
-
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
-			int travelSpeed = 10;
-			int projectileVelocity = 14;
-			int inertia = 10;
-			Vector2 lineOfFire = vectorToTargetPosition;
-			Vector2 oppositeVector = -vectorToTargetPosition;
-			oppositeVector.SafeNormalize();
-			float targetDistanceFromFoe = distanceCyle == 1 ? 170 : 230;
-			if (targetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
-			{
-				// use the average of the width and height to get an approximate "radius" for the enemy
-				NPC npc = Main.npc[targetIdx];
-				Rectangle hitbox = npc.Hitbox;
-				targetDistanceFromFoe += (hitbox.Width + hitbox.Height) / 4;
-			}
-			vectorToTargetPosition += targetDistanceFromFoe * oppositeVector;
-			// slowly bob back and forth between two radii from the target
-			if(vectorToTargetPosition.LengthSquared() < 16 * 16)
-			{
-				distanceCyle *= -1;
-			}
-			if(vectorToTargetPosition.LengthSquared() < 64 * 64)
-			{
-				travelSpeed = 3;
-			} 
-			if (player.whoAmI == Main.myPlayer && IsMyTurn() &&
-				animationFrame - lastShootFrame >= attackFrames &&
-				vectorToTargetPosition.LengthSquared() < 96 * 96)
-			{
-				lineOfFire.SafeNormalize();
-				lineOfFire *= projectileVelocity;
-				lastShootFrame = animationFrame;
-				Projectile.NewProjectile(
-					projectile.Center,
-					lineOfFire,
-					ProjectileType<ImpFireball>(),
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer);
-				Main.PlaySound(SoundID.Item20, projectile.Center);
-			}
-			DistanceFromGroup(ref vectorToTargetPosition);
-			if (vectorToTargetPosition.Length() > travelSpeed)
-			{
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= travelSpeed;
-			}
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 		}
 	}
 }

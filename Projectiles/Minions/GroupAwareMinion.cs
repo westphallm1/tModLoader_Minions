@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ID;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
@@ -41,6 +42,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				others = GetMinionsOfType(projectile.type);
 			}
 			return others;
+		}
+
+		public List<Projectile> GetAllMinionsOwnedByPlayer()
+		{
+			return Main.projectile
+				.Where(p => p.active && p.owner == projectile.owner && (p.minion || ProjectileID.Sets.MinionShot[p.type]))
+				.ToList();
 		}
 
 		public Projectile GetHead(int headType)
@@ -91,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// if multiple minions are gathered on a target, space them out a little bit
 			if (distanceToTarget.Length() < closeDistance)
 			{
-				foreach (Projectile otherMinion in GetActiveMinions())
+				foreach (Projectile otherMinion in GetAllMinionsOwnedByPlayer())
 				{
 					if (otherMinion.whoAmI == projectile.whoAmI)
 					{

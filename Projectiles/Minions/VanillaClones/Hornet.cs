@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -68,14 +69,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class HornetMinion : HeadCirclingGroupAwareMinion
+	public class HornetMinion : HoverShooterMinion
 	{
-		int lastShootFrame = 0;
-		// used to gently bob back and forth between 2 set points from the enemy
-		int distanceCyle = 1;
 		protected override int BuffId => BuffType<HornetMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.Hornet;
+		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();
+		internal override LegacySoundStyle ShootSound => SoundID.Item17;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -90,7 +90,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 16;
 			projectile.height = 16;
 			drawOffsetX = (projectile.width - 44) / 2;
+			targetSearchDistance = 600;
 			attackFrames = 60;
+			travelSpeed = 9;
+			projectileVelocity = 12;
+			targetInnerRadius = 128;
+			targetOuterRadius = 176;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -115,57 +120,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				projectile.spriteDirection = 1;
 			}
 			projectile.rotation = projectile.velocity.X * 0.05f;
-		}
-
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
-			int travelSpeed = 9;
-			int projectileVelocity = 12;
-			int inertia = 10;
-			Vector2 lineOfFire = vectorToTargetPosition;
-			Vector2 oppositeVector = -vectorToTargetPosition;
-			oppositeVector.SafeNormalize();
-			float targetDistanceFromFoe = distanceCyle == 1 ? 128 : 180;
-			if (targetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
-			{
-				// use the average of the width and height to get an approximate "radius" for the enemy
-				NPC npc = Main.npc[targetIdx];
-				Rectangle hitbox = npc.Hitbox;
-				targetDistanceFromFoe += (hitbox.Width + hitbox.Height) / 4;
-			}
-			vectorToTargetPosition += targetDistanceFromFoe * oppositeVector;
-			// slowly bob back and forth between two radii from the target
-			if(vectorToTargetPosition.LengthSquared() < 16 * 16)
-			{
-				distanceCyle *= -1;
-			}
-			if(vectorToTargetPosition.LengthSquared() < 64 * 64)
-			{
-				travelSpeed = 3;
-			} 
-			if (player.whoAmI == Main.myPlayer && IsMyTurn() &&
-				animationFrame - lastShootFrame >= attackFrames &&
-				vectorToTargetPosition.LengthSquared() < 256 * 256)
-			{
-				lineOfFire.SafeNormalize();
-				lineOfFire *= projectileVelocity;
-				lastShootFrame = animationFrame;
-				Projectile.NewProjectile(
-					projectile.Center,
-					lineOfFire,
-					ProjectileType<HornetStinger>(),
-					projectile.damage,
-					projectile.knockBack,
-					Main.myPlayer);
-				Main.PlaySound(SoundID.Item17, projectile.Center);
-			}
-			DistanceFromGroup(ref vectorToTargetPosition);
-			if (vectorToTargetPosition.Length() > travelSpeed)
-			{
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= travelSpeed;
-			}
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 		}
 	}
 }
