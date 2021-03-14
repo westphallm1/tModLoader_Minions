@@ -163,7 +163,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			}
 			else
 			{
-				return 25 - GetSegmentCount();
+				return Math.Max(16, 25 - GetSegmentCount());
 			}
 		}
 

@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 
 		protected override float ComputeInertia()
 		{
-			return 22 - GetSegmentCount();
+			return Math.Max(18, 22 - GetSegmentCount());
 		}
 
 		protected override float ComputeTargetedSpeed()

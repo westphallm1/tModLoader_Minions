@@ -12,8 +12,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		private float[] backingArray;
 		public CircularLengthQueue PositionLog = null;
 		public int framesSinceLastHit = 0;
-		private SpriteBatch spriteBatch;
-		private Texture2D texture;
+		protected SpriteBatch spriteBatch;
+		protected Texture2D texture;
 		protected Color lightColor;
 		protected virtual int cooldownAfterHitFrames => 16;
 
@@ -52,8 +52,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				effects |= SpriteEffects.FlipVertically;
 			}
 			return effects;
-
 		}
+
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			texture = Main.projectileTexture[projectile.type];
@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected abstract void DrawTail();
 		protected abstract void DrawBody();
 		protected abstract void DrawHead();
-		protected void AddSprite(float dist, Rectangle bounds, Color c = default)
+		protected virtual void AddSprite(float dist, Rectangle bounds, Color c = default)
 		{
 			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
 			Vector2 angle = new Vector2();

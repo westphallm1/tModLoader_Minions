@@ -119,7 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 
 		protected override float ComputeInertia()
 		{
-			return 22 - GetSegmentCount();
+			return Math.Max(12, 22 - GetSegmentCount());
 		}
 
 		protected override float ComputeTargetedSpeed()
