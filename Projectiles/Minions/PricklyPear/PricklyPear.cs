@@ -163,6 +163,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		}
 	}
 
+
 	public class PricklyPearMinion : SimpleGroundBasedMinion
 	{
 		protected override int BuffId => BuffType<PricklyPearMinionBuff>();

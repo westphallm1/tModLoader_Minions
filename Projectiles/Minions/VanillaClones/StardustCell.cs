@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.NPCs;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -112,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		private void attachToTarget()
 		{
-			StardustCellDamageTickNPC globalTarget = clingTarget.GetGlobalNPC<StardustCellDamageTickNPC>();
+			DebuffGlobalNPC globalTarget = clingTarget.GetGlobalNPC<DebuffGlobalNPC>();
 			if(globalTarget.cellStack < 10)
 			{
 				hasHitTarget = true;
@@ -136,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			if(clingTarget.active)
 			{
-				clingTarget.GetGlobalNPC<StardustCellDamageTickNPC>().cellStack --;
+				clingTarget.GetGlobalNPC<DebuffGlobalNPC>().cellStack --;
 			}
 			for (int i = 0; i < 10; i++)
 			{
@@ -305,25 +306,4 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	internal class StardustCellDamageTickNPC: GlobalNPC
-	{
-		public short cellStack;
-
-		public override bool InstancePerEntity => true;
-		public override void UpdateLifeRegen(NPC npc, ref int damage)
-		{
-			if(cellStack > 0)
-			{
-				if(npc.lifeRegen > 0)
-				{
-					npc.lifeRegen = 0;
-				}
-				npc.lifeRegen -= 20 * cellStack;
-				if(damage < 10 * cellStack)
-				{
-					damage = 10 * cellStack;
-				}
-			}
-		}
-	}
 }
