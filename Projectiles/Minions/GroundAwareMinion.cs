@@ -366,7 +366,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal GroundAnimationState GetAnimationState()
 		{
-			if (isFlying)
+			if (isFlying || teleportStartFrame != null)
 			{
 				return GroundAnimationState.FLYING;
 			}
