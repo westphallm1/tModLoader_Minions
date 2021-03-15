@@ -67,6 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
+			searchDistance = 850;
 			maxJumpVelocity = 12;
 		}
 
