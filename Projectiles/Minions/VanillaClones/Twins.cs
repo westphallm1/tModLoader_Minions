@@ -306,11 +306,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			// motion blur
 			if(isDashing)
 			{
-				for(int i = 0; i < 4; i ++)
+				// lifted from ExampleMod's ExampleBullet
+				for (int k = 0; k < projectile.oldPos.Length; k++)
 				{
-					Vector2 blurPos = pos - projectile.velocity * 0.75f * i;
-					spriteBatch.Draw(texture, blurPos - Main.screenPosition,
-						bounds, translucentColor, r,
+					Vector2 blurPos = projectile.oldPos[k] - Main.screenPosition + origin + new Vector2(0f, projectile.gfxOffY);
+					Color color = projectile.GetAlpha(lightColor) * ((projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
+					spriteBatch.Draw(texture, blurPos,
+						bounds, color, r,
 						origin, 1, effects, 0);
 				}
 			}
