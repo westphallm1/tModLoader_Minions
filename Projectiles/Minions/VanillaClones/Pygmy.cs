@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			projectile.CloneDefaults(ProjectileID.PygmySpear);
 			base.SetDefaults();
-			projectile.timeLeft = 240;
+			projectile.timeLeft = 540;
 			projectile.tileCollide = true;
 			projectile.penetrate = -1;
 			projectile.usesLocalNPCImmunity = true;
@@ -188,6 +188,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			maxJumpVelocity = 12;
 		}
 
+		protected override void IdleFlyingMovement(Vector2 vector)
+		{
+			if(animationFrame - lastFiredFrame < 10)
+			{
+				// don't fly while throwing the spear
+				gHelper.didJustLand = false;
+				gHelper.isFlying = false;
+				gHelper.ApplyGravity();
+			} else
+			{
+				base.IdleFlyingMovement(vector);
+			}
+		}
+
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
@@ -224,6 +238,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				Vector2 angleToTarget = (Vector2)vectorToTarget;
 				angleToTarget.SafeNormalize();
 				angleToTarget *= spearVelocity;
+				if(targetNPCIndex is int idx)
+				{
+					Vector2 targetVelocity = Main.npc[idx].velocity;
+					if(targetVelocity.Length() > 32)
+					{
+						targetVelocity.Normalize();
+						targetVelocity *= 32;
+					}
+					angleToTarget += targetVelocity / 4;
+				}
 				Projectile.NewProjectile(
 					projectile.Center,
 					angleToTarget,

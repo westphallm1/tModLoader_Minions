@@ -101,11 +101,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			projectile.CloneDefaults(ProjectileID.MiniRetinaLaser);
 			base.SetDefaults();
+			projectile.penetrate = 1;
 		}
 
 		public override void AI()
 		{
-			base.AI();
 			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 		}
 
@@ -152,6 +152,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectileVelocity = 24;
 			targetInnerRadius = 208;
 			targetOuterRadius = 264;
+			targetShootProximityRadius = 128;
 		}
 		public override void OnSpawn()
 		{
@@ -229,6 +230,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectileVelocity = 6;
 			targetInnerRadius = 96;
 			targetOuterRadius = 160;
+			targetShootProximityRadius = 112;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -278,6 +280,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				Vector2 lineOfFire = vectorToTargetPosition;
 				lineOfFire.SafeNormalize();
 				lineOfFire *= projectileVelocity;
+				lineOfFire += projectile.velocity / 3;
 				if(player.whoAmI == Main.myPlayer)
 				{
 					FireProjectile(lineOfFire, (int)FiredProjectileId);
@@ -295,7 +298,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			// need to draw sprites manually for some reason
-			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 128);
 			float r = projectile.rotation;
 			Vector2 pos = projectile.Center;
 			SpriteEffects effects = projectile.velocity.X < 0 ? SpriteEffects.FlipVertically : 0;

@@ -81,6 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			travelSpeed = 14;
 			targetInnerRadius = 200;
 			targetOuterRadius = 240;
+			targetShootProximityRadius = 196;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

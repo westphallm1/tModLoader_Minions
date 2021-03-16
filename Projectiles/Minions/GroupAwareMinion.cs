@@ -87,8 +87,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				return true;
 			}
 			var minions = GetActiveMinions();
+			if(minions.Count == 0)
+			{
+				return false;
+			}
 			var leader = GetFirstMinion(minions);
-			int order = projectile.minionPos - leader.minionPos;
+			int order = minions.IndexOf(projectile);
 			int attackFrame = order * (attackFrames / minions.Count);
 			int currentFrame = (int)leader.ai[0];
 			return currentFrame == attackFrame;

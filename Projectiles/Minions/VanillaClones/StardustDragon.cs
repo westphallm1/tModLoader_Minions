@@ -49,8 +49,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		protected override int BuffId => BuffType<StardustDragonMinionBuff>();
 		protected override int CounterType => ProjectileType<StardustDragonCounterMinion>();
 		protected override int dustType => 135;
-		protected override float baseDamageRatio => 1.4f;
-		protected override float damageGrowthRatio => 0.4f;
+		protected override float baseDamageRatio => 1.6f;
+		protected override float damageGrowthRatio => 0.45f;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

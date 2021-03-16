@@ -199,11 +199,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.height = 16;
 			drawOffsetX = (projectile.width - 44) / 2;
 			targetSearchDistance = 1100;
-			attackFrames = 45;
+			attackFrames = 40;
 			travelSpeed = 14;
-			projectileVelocity = 12;
+			projectileVelocity = 16;
 			targetInnerRadius = 128;
 			targetOuterRadius = 176;
+			targetShootProximityRadius = 256;
 		}
 
 		public override Vector2 IdleBehavior()
