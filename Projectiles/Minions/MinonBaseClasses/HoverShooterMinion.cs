@@ -100,5 +100,4 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 		}
 	}
-
 }

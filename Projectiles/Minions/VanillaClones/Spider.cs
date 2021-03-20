@@ -12,7 +12,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class SpiderMinionBuff : MinionBuff
 	{
-		public SpiderMinionBuff() : base(ProjectileType<SpiderMinion>()) { }
+		public SpiderMinionBuff() : base(
+			ProjectileType<JumperSpiderMinion>(),
+			ProjectileType<VenomSpiderMinion>(),
+			ProjectileType<DangerousSpiderMinion>()
+			) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -20,9 +24,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	}
 
-	public class SpiderMinionItem : MinionItem<SpiderMinionBuff, SpiderMinion>
+	public class SpiderMinionItem : MinionItem<SpiderMinionBuff, VenomSpiderMinion>
 	{
 		public override string Texture => "Terraria/Item_" + ItemID.SpiderStaff;
+		public int[] projTypes = new int[]
+		{
+			ProjectileType<JumperSpiderMinion>(),
+			ProjectileType<VenomSpiderMinion>(),
+			ProjectileType<DangerousSpiderMinion>(),
+		};
+		int spawnCycle = 0;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -35,10 +46,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			item.CloneDefaults(ItemID.SpiderStaff);
 			base.SetDefaults();
 		}
+		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		{
+			item.shoot = projTypes[spawnCycle % 3];
+			spawnCycle++;
+			return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+		}
 	}
-	public class SpiderMinion : SimpleGroundBasedMinion
+	public abstract class BaseSpiderMinion : SimpleGroundBasedMinion
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.VenomSpider;
 		protected override int BuffId => BuffType<SpiderMinionBuff>();
 
 		bool isClinging = false;
@@ -76,6 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			maxJumpVelocity = 12;
 		}
 
+		// Use flying movement if we're on a wall
 		protected override void IdleGroundedMovement(Vector2 vector)
 		{
 			if(onWall)
@@ -84,6 +101,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			} else
 			{
 				base.IdleGroundedMovement(vector);
+			}
+		}
+
+		// tweak idle flying movement a bit so the spider doesn't bounce back and forth so much
+		// while idling on a wall
+		protected override void IdleFlyingMovement(Vector2 vector)
+		{
+			if(onWall && vectorToTarget is null && vector.Length() < 4)
+			{
+				projectile.velocity = Vector2.Zero;
+			} else
+			{
+				base.IdleFlyingMovement(vector);
 			}
 		}
 
@@ -162,6 +192,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
+
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			if(onWall)
@@ -176,8 +207,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					{
 						projectile.rotation = MathHelper.PiOver2 - MathHelper.Pi / 8 + (MathHelper.PiOver4 * (animationFrame % 60) / 60f);
 					}
-				} else
+				} else if (projectile.velocity.Length() > 2)
 				{
+					projectile.frame = 4;
 					projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 				}
 			} else
@@ -194,5 +226,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 
 		}
+	}
+
+	public class VenomSpiderMinion: BaseSpiderMinion
+	{
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.VenomSpider;
+	}
+
+	public class JumperSpiderMinion: BaseSpiderMinion
+	{
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.JumperSpider;
+	}
+
+	public class DangerousSpiderMinion: BaseSpiderMinion
+	{
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.DangerousSpider;
 	}
 }
