@@ -203,7 +203,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		private bool isDashing;
 		private Vector2 dashVector;
-		private Vector2[] myOldPos = new Vector2[10];
+		// something in the ai overrides seems to prevent projectile.oldPos from populating properly,
+		// so just replicate it manually
+		private Vector2[] myOldPos = new Vector2[5];
 
 		protected override int BuffId => BuffType<TwinsMinionBuff>();
 
@@ -310,13 +312,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(isDashing)
 			{
 				// lifted from ExampleMod's ExampleBullet
-				for (int k = 0; k < projectile.oldPos.Length; k++)
+				for (int k = 0; k < myOldPos.Length; k++)
 				{
-					Vector2 blurPos = projectile.oldPos[k] - Main.screenPosition + origin;
-					Color color = projectile.GetAlpha(lightColor) * ((projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
-					spriteBatch.Draw(texture, blurPos,
-						bounds, color, r,
-						origin, 1, effects, 0);
+					Vector2 blurPos = myOldPos[k] - Main.screenPosition + origin;
+					Color color = projectile.GetAlpha(lightColor) * ((myOldPos.Length - k) / (float)myOldPos.Length);
+					spriteBatch.Draw(texture, blurPos, bounds, color, r, origin, 1, effects, 0);
 				}
 			}
 			// regular version
@@ -336,7 +336,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				myOldPos[0] = projectile.position;
 			} else
 			{
-				myOldPos = new Vector2[10];
+				myOldPos = new Vector2[5];
 			}
 
 		}

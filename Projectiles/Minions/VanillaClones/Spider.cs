@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -20,6 +21,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+		}
+
+		public override void Update(Player player, ref int buffIndex)
+		{
+			projectileTypes = new int[]
+			{
+				ProjectileType<JumperSpiderMinion>(),
+				ProjectileType<VenomSpiderMinion>(),
+				ProjectileType<DangerousSpiderMinion>()
+			};
+			if (projectileTypes.Select(p => player.ownedProjectileCounts[p]).Sum() > 0)
+			{
+				player.buffTime[buffIndex] = 18000;
+			}
+			else
+			{
+				player.DelBuff(buffIndex);
+				buffIndex--;
+			}
 		}
 
 	}
@@ -209,8 +229,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					}
 				} else if (projectile.velocity.Length() > 2)
 				{
-					projectile.frame = 4;
 					projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+				} else
+				{
+					projectile.frame = 4;
 				}
 			} else
 			{

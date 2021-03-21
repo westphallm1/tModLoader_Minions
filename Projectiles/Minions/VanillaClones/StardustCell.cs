@@ -236,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 			projectile.rotation = projectile.velocity.X * 0.05f;
 		}
-		internal override void FireProjectile(Vector2 lineOfFire, int projId)
+		internal override void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
 		{
 			if(targetNPCIndex is int idx)
 			{
