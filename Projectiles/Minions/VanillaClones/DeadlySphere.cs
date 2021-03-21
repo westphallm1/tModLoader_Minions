@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using Terraria.ID;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class DeadlySphereMinionBuff : MinionBuff
 	{
-		public DeadlySphereMinionBuff() : base(ProjectileType<DeadlySphereMinion>(), ProjectileType<DeadlySphereFireMinion>()) { }
+		public DeadlySphereMinionBuff() : base(
+			ProjectileType<DeadlySphereMinion>(), 
+			ProjectileType<DeadlySphereClingerMinion>(),
+			ProjectileType<DeadlySphereFireMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -30,6 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public int[] projTypes = new int[]
 		{
 			ProjectileType<DeadlySphereFireMinion>(),
+			ProjectileType<DeadlySphereClingerMinion>(),
 			ProjectileType<DeadlySphereMinion>(),
 		};
 		int spawnCycle = 0;
@@ -49,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			item.shoot = projTypes[spawnCycle % 2];
+			item.shoot = projTypes[spawnCycle % 3];
 			spawnCycle++;
 			return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
 		}
@@ -221,6 +223,122 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		}
 	}
+	public class DeadlySphereClingerMinion : HoverShooterMinion
+	{
+		bool isClinging = false;
+		float clingDistanceTolerance = 24f;
+		Vector2 targetOffset = default;
+
+		protected override int BuffId => BuffType<DeadlySphereMinionBuff>();
+
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.DeadlySphere;
+
+		internal override int? FiredProjectileId => null;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Flying DeadlySphere");
+			Main.projFrames[projectile.type] = 21;
+			IdleLocationSets.circlingHead.Add(projectile.type);
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 24;
+			projectile.height = 24;
+			attackFrames = 90;
+			travelSpeed = 15;
+			targetSearchDistance = 950;
+			// this should probably use a different base class instead of 
+			// very small parameters for target radius, but...
+			targetInnerRadius = 0;
+			targetOuterRadius = 0;
+			travelSpeedAtTarget = 15;
+		}
+
+		public override void OnSpawn()
+		{
+			// cut down damage since it's got such a high rate of fire
+			projectile.damage = (int)(projectile.damage * 0.67f);
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			base.Animate(14, 17);
+			if(isClinging)
+			{
+				projectile.rotation += MathHelper.TwoPi / 15;
+			} else
+			{
+				projectile.rotation += MathHelper.TwoPi / 60;
+			}
+			Lighting.AddLight(projectile.Center, Color.Red.ToVector3() * 0.5f);
+		}
+
+		public override Vector2? FindTarget()
+		{
+			Vector2? target = base.FindTarget();
+			if (targetNPCIndex is int idx && oldTargetNpcIndex != idx)
+			{
+				// choose a new preferred location on the enemy to cling to
+				targetOffset = new Vector2(
+					Main.rand.Next(Main.npc[idx].width) - Main.npc[idx].width / 2,
+					Main.rand.Next(Main.npc[idx].height) - Main.npc[idx].height / 2);
+			}
+			if(target is Vector2 tgt)
+			{
+				return tgt + targetOffset;
+			} else
+			{
+				return null;
+			}
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if(vectorToTargetPosition.Length() < clingDistanceTolerance)
+			{
+				// slowly decrease the distance that we're allowed to cling
+				if(clingDistanceTolerance > 8f)
+				{
+					clingDistanceTolerance *= 0.995f;
+				}
+				isClinging = true;
+				// move in a small circle around the cling location
+				Vector2 clingRotation = (animationFrame * MathHelper.TwoPi / 60f).ToRotationVector2() * 8;
+				projectile.Center += vectorToTargetPosition + clingRotation;
+				projectile.velocity = Vector2.Zero;
+			} else
+			{
+				isClinging = false;
+				clingDistanceTolerance = 24;
+				base.TargetedMovement(vectorToTargetPosition);
+			}
+		}
+
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			float oldRotation = projectile.rotation;
+			base.IdleMovement(vectorToIdlePosition);
+			projectile.rotation = oldRotation;
+			isClinging = false;
+		}
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			// need to draw sprites manually to get spinning animation centered
+			float r = projectile.rotation;
+			Vector2 pos = projectile.Center;
+			SpriteEffects effects = projectile.velocity.X < 0 ? SpriteEffects.FlipVertically : 0;
+			Texture2D texture = GetTexture(Texture);
+			int frameHeight = texture.Height / Main.projFrames[projectile.type];
+			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			spriteBatch.Draw(texture, pos - Main.screenPosition, bounds, lightColor, r, origin, 1, effects, 0);
+			return false;
+		}
+	}
 	public class DeadlySphereFireMinion : HoverShooterMinion
 	{
 
@@ -327,22 +445,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			float oldRotation = projectile.rotation;
 			base.IdleMovement(vectorToIdlePosition);
 			projectile.rotation = oldRotation;
-		}
-
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
-		{
-			// need to draw sprites manually for some reason
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.velocity.X < 0 ? SpriteEffects.FlipVertically : 0;
-			Texture2D texture = GetTexture(Texture);
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			// regular version
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r, origin, 1, effects, 0);
-			return false;
 		}
 	}
 }

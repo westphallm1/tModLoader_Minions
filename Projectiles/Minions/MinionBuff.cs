@@ -6,7 +6,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 {
 	public abstract class MinionBuff : ModBuff
 	{
-		private int[] projectileTypes;
+		internal int[] projectileTypes;
 		public MinionBuff(params int[] projectileTypes)
 		{
 			this.projectileTypes = projectileTypes;

@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 		}
 
-		internal virtual void FireProjectile(Vector2 lineOfFire, int projId)
+		internal virtual void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
 		{
 			Projectile.NewProjectile(
 				projectile.Center,
@@ -89,7 +89,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				projId,
 				projectile.damage,
 				projectile.knockBack,
-				Main.myPlayer);
+				Main.myPlayer,
+				ai0: ai0);
 		}
 
 		internal virtual void AfterFiringProjectile()
