@@ -137,11 +137,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
-		{
-			base.PostDraw(spriteBatch, lightColor);
-		}
-
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			// need to draw sprites manually for some reason
