@@ -130,12 +130,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
-			travelSpeed = 15;
 			targetSearchDistance = 950;
-			projectileVelocity = 6;
-			targetInnerRadius = 96;
-			targetOuterRadius = 160;
-			targetShootProximityRadius = 112;
+			hsHelper.travelSpeed = 15;
+			hsHelper.projectileVelocity = 6;
+			hsHelper.targetInnerRadius = 96;
+			hsHelper.targetOuterRadius = 160;
+			hsHelper.targetShootProximityRadius = 112;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -147,7 +147,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			int framesSinceShoot = animationFrame - lastShootFrame;
+			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
 			if(framesSinceShoot > 20 && framesSinceShoot % 15 < 10)
 			{
 				// dash at the target
@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				{
 					dashVector = vectorToTargetPosition;
 					dashVector.SafeNormalize();
-					dashVector *= (travelSpeed + 2);
+					dashVector *= (hsHelper.travelSpeed + 2);
 					if(targetNPCIndex is int idx)
 					{
 						dashVector += Main.npc[idx].velocity / 8;
@@ -249,13 +249,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
-			travelSpeed = 15;
+			hsHelper.travelSpeed = 15;
 			targetSearchDistance = 950;
 			// this should probably use a different base class instead of 
 			// very small parameters for target radius, but...
-			targetInnerRadius = 0;
-			targetOuterRadius = 0;
-			travelSpeedAtTarget = 15;
+			hsHelper.targetInnerRadius = 0;
+			hsHelper.targetOuterRadius = 0;
+			hsHelper.travelSpeedAtTarget = 15;
 		}
 
 		public override void OnSpawn()
@@ -362,12 +362,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
-			travelSpeed = 15;
+			hsHelper.travelSpeed = 15;
 			targetSearchDistance = 950;
-			projectileVelocity = 6;
-			targetInnerRadius = 96;
-			targetOuterRadius = 160;
-			targetShootProximityRadius = 112;
+			hsHelper.projectileVelocity = 6;
+			hsHelper.targetInnerRadius = 96;
+			hsHelper.targetOuterRadius = 160;
+			hsHelper.targetShootProximityRadius = 112;
 		}
 		public override void OnSpawn()
 		{
@@ -378,7 +378,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(17, 21);
-			if(vectorToTarget == null || animationFrame - lastShootFrame > 60)
+			if(vectorToTarget == null || animationFrame - hsHelper.lastShootFrame > 60)
 			{
 				projectile.rotation += MathHelper.TwoPi/60;
 				if (Main.rand.Next(2) == 0)
@@ -417,7 +417,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			int framesSinceShoot = animationFrame - lastShootFrame;
+			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
 			if (framesSinceShoot < 60 && framesSinceShoot % 6 == 0)
 			{
 				if(targetNPCIndex is int idx) 
@@ -427,13 +427,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.Pi/4;
 				Vector2 lineOfFire = vectorToTargetPosition;
 				lineOfFire.Normalize();
-				lineOfFire *= projectileVelocity;
+				lineOfFire *= hsHelper.projectileVelocity;
 				lineOfFire += projectile.velocity / 3;
 				for(int i = 0; i < 3; i++)
 				{
 					if(player.whoAmI == Main.myPlayer)
 					{
-						FireProjectile(lineOfFire, ProjectileType<DeadlySphereFire>(), ai0: i);
+						hsHelper.FireProjectile(lineOfFire, ProjectileType<DeadlySphereFire>(), i);
 					}
 				}
 				AfterFiringProjectile();

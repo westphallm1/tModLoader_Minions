@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -140,5 +141,68 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 
 		}
+	}
+
+	public class ImpPortalMinion : EmpoweredMinion
+	{
+		protected override int BuffId => BuffType<ImpMinionBuff>();
+		protected override int CounterType => ProjectileType<ImpMinion>();
+		protected override int dustType => 6;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Copter-X");
+			Main.projFrames[projectile.type] = 6;
+		}
+
+		public sealed override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.tileCollide = false;
+			attackThroughWalls = true;
+			projectile.width = 64;
+			projectile.height = 128;
+			frameSpeed = 5;
+			// can hit many npcs at once, so give it a relatively high on hit cooldown
+			projectile.localNPCHitCooldown = 20;
+		}
+
+		protected override int ComputeDamage()
+		{
+			return baseDamage * ( 2 + EmpowerCount) / 4;
+		}
+
+		protected override float ComputeSearchDistance()
+		{
+			return 800;
+		}
+
+		protected override float ComputeInertia()
+		{
+			return 12;
+		}
+
+		protected override float ComputeTargetedSpeed()
+		{
+			return 9 + EmpowerCount;
+		}
+
+		protected override float ComputeIdleSpeed()
+		{
+			return ComputeTargetedSpeed() + 3;
+		}
+
+		protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)
+		{
+			// no op
+		}
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			return false;
+		}
+
+
 	}
 }

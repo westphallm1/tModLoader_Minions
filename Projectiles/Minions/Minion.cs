@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public Player player;
 
-		protected int? targetNPCIndex;
+		internal int? targetNPCIndex;
 		protected int targetNPCCacheFrames;
 
 

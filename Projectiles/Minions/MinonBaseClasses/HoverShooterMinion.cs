@@ -13,6 +13,49 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
 	public abstract class HoverShooterMinion : HeadCirclingGroupAwareMinion
 	{
+		internal virtual LegacySoundStyle ShootSound => null;
+
+		internal virtual int? FiredProjectileId => null;
+
+		internal HoverShooterHelper hsHelper;
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.friendly = false;
+			hsHelper = new HoverShooterHelper(this, FiredProjectileId)
+			{
+				AfterFiringProjectile = AfterFiringProjectile,
+				ExtraAttackConditionsMet = IsMyTurn,
+				ModifyTargetVector = ModifyTargetVector
+			};
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			hsHelper.TargetedMovement(vectorToTargetPosition);
+		}
+
+
+		internal virtual void AfterFiringProjectile()
+		{
+			if(ShootSound != null)
+			{
+				Main.PlaySound(ShootSound, projectile.Center);
+			}
+		}
+
+		internal void ModifyTargetVector(ref Vector2 target)
+		{
+			DistanceFromGroup(ref target);
+		}
+	}
+
+	delegate void ModifyMovementVector(ref Vector2 target);
+
+	public class HoverShooterHelper
+	{
+		// internal state + config
 		internal int lastShootFrame = 0;
 		// used to gently bob back and forth between 2 set points from the enemy
 		internal int distanceCyle = 1;
@@ -24,25 +67,47 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal int targetShootProximityRadius = 64;
 		internal int targetInnerRadius = 170;
 		internal int targetOuterRadius = 230;
+		internal int attackFrames;
 
-		internal virtual LegacySoundStyle ShootSound => null;
+		private SimpleMinion minion;
+		private Projectile projectile => minion.projectile;
+		internal int? firedProjectileId;
 
-		internal virtual int? FiredProjectileId => null;
+		// delegate methods
+		internal Action AfterFiringProjectile;
 
-		public override void SetDefaults()
+		internal Func<bool> ExtraAttackConditionsMet;
+		internal ModifyMovementVector ModifyTargetVector;
+		internal Action<Vector2, int, float> FireProjectile;
+
+
+
+		public HoverShooterHelper(SimpleMinion minion, int? firedProjectileType)
 		{
-			base.SetDefaults();
-			projectile.friendly = false;
+			this.minion = minion;
+			this.firedProjectileId = firedProjectileType;
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		internal void BaseFireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
+		{
+			Projectile.NewProjectile(
+				projectile.Center,
+				lineOfFire,
+				projId,
+				projectile.damage,
+				projectile.knockBack,
+				Main.myPlayer,
+				ai0: ai0);
+		}
+
+		public void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			int travelSpeed = this.travelSpeed;
 			Vector2 lineOfFire = vectorToTargetPosition;
 			Vector2 oppositeVector = -vectorToTargetPosition;
 			oppositeVector.SafeNormalize();
 			float targetDistanceFromFoe = distanceCyle == 1 ? targetInnerRadius : targetOuterRadius;
-			if (targetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
+			if (minion.targetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
 			{
 				// use the average of the width and height to get an approximate "radius" for the enemy
 				NPC npc = Main.npc[targetIdx];
@@ -58,47 +123,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if(vectorToTargetPosition.LengthSquared() < targetMovementProximityRadius * targetMovementProximityRadius)
 			{
 				travelSpeed = travelSpeedAtTarget;
-			} 
-			if (IsMyTurn() &&
-				animationFrame - lastShootFrame >= attackFrames &&
-				vectorToTargetPosition.LengthSquared() < targetShootProximityRadius * targetShootProximityRadius)
+			}
+			bool? doAttack = ExtraAttackConditionsMet?.Invoke();
+			if ((doAttack is null || doAttack == true) && minion.animationFrame - lastShootFrame >= attackFrames 
+				&& vectorToTargetPosition.LengthSquared() < targetShootProximityRadius * targetShootProximityRadius)
 			{
 				lineOfFire.SafeNormalize();
 				lineOfFire *= projectileVelocity;
-				lastShootFrame = animationFrame;
-				if(Main.myPlayer == player.whoAmI && FiredProjectileId is int projId)
+				lastShootFrame = minion.animationFrame;
+				if(Main.myPlayer == minion.player.whoAmI && firedProjectileId is int projId)
 				{
-					FireProjectile(lineOfFire, projId);
+					(FireProjectile ?? BaseFireProjectile).Invoke(lineOfFire, projId, 0);
 				}
-				AfterFiringProjectile();
+				AfterFiringProjectile?.Invoke();
 			}
-			DistanceFromGroup(ref vectorToTargetPosition);
-			if (vectorToTargetPosition.Length() > travelSpeed)
+			ModifyTargetVector?.Invoke(ref vectorToTargetPosition);
+			if(vectorToTargetPosition.Length() > travelSpeed)
 			{
 				vectorToTargetPosition.SafeNormalize();
 				vectorToTargetPosition *= travelSpeed;
 			}
 			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
-		}
-
-		internal virtual void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
-		{
-			Projectile.NewProjectile(
-				projectile.Center,
-				lineOfFire,
-				projId,
-				projectile.damage,
-				projectile.knockBack,
-				Main.myPlayer,
-				ai0: ai0);
-		}
-
-		internal virtual void AfterFiringProjectile()
-		{
-			if(ShootSound != null)
-			{
-				Main.PlaySound(ShootSound, projectile.Center);
-			}
 		}
 	}
 }

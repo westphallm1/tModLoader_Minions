@@ -200,11 +200,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			drawOffsetX = (projectile.width - 44) / 2;
 			targetSearchDistance = 1100;
 			attackFrames = 40;
-			travelSpeed = 14;
-			projectileVelocity = 16;
-			targetInnerRadius = 128;
-			targetOuterRadius = 176;
-			targetShootProximityRadius = 256;
+			hsHelper.travelSpeed = 14;
+			hsHelper.projectileVelocity = 16;
+			hsHelper.targetInnerRadius = 128;
+			hsHelper.targetOuterRadius = 176;
+			hsHelper.targetShootProximityRadius = 256;
+			hsHelper.FireProjectile = FireProjectile;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -236,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 			projectile.rotation = projectile.velocity.X * 0.05f;
 		}
-		internal override void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
+		internal void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
 		{
 			if(targetNPCIndex is int idx)
 			{
@@ -253,7 +254,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(animationFrame - lastShootFrame > 6)
+			if(animationFrame - hsHelper.lastShootFrame > 6)
 			{
 				base.TargetedMovement(vectorToTargetPosition);
 			}

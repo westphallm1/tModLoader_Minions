@@ -92,10 +92,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			drawOffsetX = (projectile.width - 44) / 2;
 			targetSearchDistance = 600;
 			attackFrames = 60;
-			travelSpeed = 9;
-			projectileVelocity = 12;
-			targetInnerRadius = 128;
-			targetOuterRadius = 176;
+			hsHelper.travelSpeed = 9;
+			hsHelper.projectileVelocity = 12;
+			hsHelper.targetInnerRadius = 128;
+			hsHelper.targetOuterRadius = 176;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{

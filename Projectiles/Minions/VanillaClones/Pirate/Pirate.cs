@@ -127,20 +127,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			Vector2 position = projectile.Center;
 			int width = 22;
 			int height = 22;
-			for (int i = 0; i < 30; i++)
-			{
-				int dustIdx = Dust.NewDust(position, width, height, 31, 0f, 0f, 100, default, 1.5f);
-				Main.dust[dustIdx].velocity *= 1.4f;
-			}
 			for (int i = 0; i < 20; i++)
 			{
-				int dustIdx = Dust.NewDust(position, width, height, 6, 0f, 0f, 100, default, 3.5f);
-				Main.dust[dustIdx].noGravity = true;
-				Main.dust[dustIdx].velocity *= 7f;
-				dustIdx = Dust.NewDust(position, width, height, 6, 0f, 0f, 100, default, 1.5f);
-				Main.dust[dustIdx].velocity *= 3f;
+				Dust.NewDust(position, width, height, 31, 0f, 0f, 100, default, 1.5f);
 			}
-			for (float goreVel = 0.4f; goreVel < 0.8f; goreVel += 0.4f)
+			for (int i = 0; i < 10; i++)
+			{
+				int dustIdx = Dust.NewDust(position, width, height, 6, 0f, 0f, 100, default, 2f);
+				Main.dust[dustIdx].noGravity = true;
+				Main.dust[dustIdx].velocity *= 3f;
+				dustIdx = Dust.NewDust(position, width, height, 6, 0f, 0f, 100, default, 1.5f);
+				Main.dust[dustIdx].velocity *= 1.5f;
+			}
+			for (float goreVel = 0.25f; goreVel < 0.5f; goreVel += 0.25f)
 			{
 				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 				{
@@ -152,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			if(projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					projectile.Center - new Vector2(24, 24),
+					projectile.Center,
 					Vector2.Zero,
 					ProjectileType<PirateCannonballExplosion>(),
 					projectile.damage,
@@ -176,8 +175,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 48;
-			projectile.height = 48;
+			projectile.width = 1;
+			projectile.height = 1;
 			projectile.friendly = true;
 			projectile.penetrate = -1;
 			projectile.usesLocalNPCImmunity = true;
@@ -189,6 +188,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			return false;
+		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			projHitbox = new Rectangle((int)projectile.Center.X - 32, (int)projectile.Center.Y - 32, 64, 64);
+			return projHitbox.Intersects(targetHitbox);
 		}
 	}
 
@@ -228,7 +233,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			projectile.damage = (int)(projectile.damage * 0.75f);
+			projectile.damage = (int)(projectile.damage * 0.8f);
 		}
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
@@ -514,28 +519,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Flying Hornet");
-			Main.projFrames[projectile.type] = 1;
+			Main.projFrames[projectile.type] = 4;
 			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}
 
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			projectile.damage = (int)(projectile.damage * 0.8f);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			frameSpeed = 15;
 			projectile.width = 32;
 			projectile.height = 32;
+			drawOriginOffsetY = (32 - 46) / 2;
+			drawOffsetX = (32 - 54) / 2;
 			attackFrames = 75;
 			targetSearchDistance = 850;
-			travelSpeed = 12;
-			projectileVelocity = 14;
-			targetInnerRadius = 160;
-			targetOuterRadius = 200;
-			targetShootProximityRadius = 256;
+			hsHelper.travelSpeed = 12;
+			hsHelper.projectileVelocity = 14;
+			hsHelper.targetInnerRadius = 160;
+			hsHelper.targetOuterRadius = 200;
+			hsHelper.targetShootProximityRadius = 256;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -554,7 +561,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
+			idlePosition.X += -player.direction * (16 + IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile));
 			idlePosition.Y += -16 + 6 * (float)Math.Sin(MathHelper.TwoPi * animationFrame / 120);
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
@@ -564,6 +571,36 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
+		}
+		internal override void AfterFiringProjectile()
+		{
+			base.AfterFiringProjectile();
+			for (int i = 0; i < 10; i++)
+			{
+				int dustIdx = Dust.NewDust(projectile.Center - new Vector2(8, 8), 16, 16, 31, 0f, 0f, 100, default, 1.5f);
+				Main.dust[dustIdx].velocity *= 0.25f;
+			}
+			for (float goreVel = 0.2f; goreVel < 0.4f; goreVel += 0.2f)
+			{
+				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+				{
+					int goreIdx = Gore.NewGore(projectile.Center, default, Main.rand.Next(61, 64));
+					Main.gore[goreIdx].velocity *= goreVel;
+					Main.gore[goreIdx].velocity += offset;
+					Main.gore[goreIdx].scale *= Main.rand.NextFloat(0.25f, 0.4f);
+				}
+			}
+			Vector2 target = (Vector2)vectorToTarget;
+			target.Normalize();
+			target *= -4;
+			projectile.velocity = target;
+		}
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if(animationFrame - hsHelper.lastShootFrame > 6)
+			{
+				base.TargetedMovement(vectorToTargetPosition);
+			}
 		}
 	}
 }
