@@ -538,6 +538,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			drawOffsetX = (32 - 54) / 2;
 			attackFrames = 75;
 			targetSearchDistance = 850;
+			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 12;
 			hsHelper.projectileVelocity = 14;
 			hsHelper.targetInnerRadius = 160;

@@ -200,12 +200,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			drawOffsetX = (projectile.width - 44) / 2;
 			targetSearchDistance = 1100;
 			attackFrames = 40;
+			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 14;
 			hsHelper.projectileVelocity = 16;
 			hsHelper.targetInnerRadius = 128;
 			hsHelper.targetOuterRadius = 176;
 			hsHelper.targetShootProximityRadius = 256;
-			hsHelper.FireProjectile = FireProjectile;
+			hsHelper.CustomFireProjectile = FireProjectile;
 		}
 
 		public override Vector2 IdleBehavior()

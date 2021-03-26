@@ -131,6 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.height = 24;
 			attackFrames = 90;
 			targetSearchDistance = 950;
+			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 15;
 			hsHelper.projectileVelocity = 6;
 			hsHelper.targetInnerRadius = 96;
@@ -249,8 +250,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
-			hsHelper.travelSpeed = 15;
 			targetSearchDistance = 950;
+			hsHelper.attackFrames = attackFrames;
+			hsHelper.travelSpeed = 15;
 			// this should probably use a different base class instead of 
 			// very small parameters for target radius, but...
 			hsHelper.targetInnerRadius = 0;
@@ -362,8 +364,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
-			hsHelper.travelSpeed = 15;
 			targetSearchDistance = 950;
+			hsHelper.attackFrames = attackFrames;
+			hsHelper.travelSpeed = 15;
 			hsHelper.projectileVelocity = 6;
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
@@ -433,7 +436,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				{
 					if(player.whoAmI == Main.myPlayer)
 					{
-						hsHelper.FireProjectile(lineOfFire, ProjectileType<DeadlySphereFire>(), i);
+						hsHelper.FireProjectile(lineOfFire, ProjectileType<DeadlySphereFire>(), (framesSinceShoot % 12) + i);
 					}
 				}
 				AfterFiringProjectile();

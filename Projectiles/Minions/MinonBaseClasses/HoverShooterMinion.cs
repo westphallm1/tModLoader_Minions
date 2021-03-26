@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal int targetShootProximityRadius = 64;
 		internal int targetInnerRadius = 170;
 		internal int targetOuterRadius = 230;
-		internal int attackFrames;
+		internal int attackFrames = 60;
 
 		private SimpleMinion minion;
 		private Projectile projectile => minion.projectile;
@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal Func<bool> ExtraAttackConditionsMet;
 		internal ModifyMovementVector ModifyTargetVector;
-		internal Action<Vector2, int, float> FireProjectile;
+		internal Action<Vector2, int, float> CustomFireProjectile;
 
 
 
@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			this.firedProjectileId = firedProjectileType;
 		}
 
-		internal void BaseFireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
+		internal void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
 		{
 			Projectile.NewProjectile(
 				projectile.Center,
@@ -133,7 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				lastShootFrame = minion.animationFrame;
 				if(Main.myPlayer == minion.player.whoAmI && firedProjectileId is int projId)
 				{
-					(FireProjectile ?? BaseFireProjectile).Invoke(lineOfFire, projId, 0);
+					(CustomFireProjectile ?? FireProjectile).Invoke(lineOfFire, projId, 0);
 				}
 				AfterFiringProjectile?.Invoke();
 			}

@@ -92,6 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			drawOffsetX = (projectile.width - 44) / 2;
 			targetSearchDistance = 600;
 			attackFrames = 60;
+			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 9;
 			hsHelper.projectileVelocity = 12;
 			hsHelper.targetInnerRadius = 128;

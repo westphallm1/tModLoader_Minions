@@ -102,6 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			targetSearchDistance = 700;
 			drawOffsetX = (projectile.width - 44) / 2;
 			attackFrames = 80;
+			hsHelper.attackFrames = attackFrames;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -148,6 +149,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		protected override int BuffId => BuffType<ImpMinionBuff>();
 		protected override int CounterType => ProjectileType<ImpMinion>();
 		protected override int dustType => 6;
+
+		public override string Texture => "Terraria/Item_0";
 
 		public override void SetStaticDefaults()
 		{

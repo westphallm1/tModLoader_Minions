@@ -61,6 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void AI()
 		{
 			base.AI();
+			projectile.friendly = projectile.ai[0] == 0;
 			projectile.localAI[0]++;
 			if(projectile.localAI[0] < 8 || Main.rand.Next(2) != 0)
 			{
@@ -148,6 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.height = 24;
 			attackFrames = 90;
 			targetSearchDistance = 850;
+			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 12;
 			hsHelper.projectileVelocity = 24;
 			hsHelper.targetInnerRadius = 208;
@@ -158,22 +160,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			// cut down damage since it's got such a high rate of fire
 			projectile.damage = (int)(projectile.damage * 0.75f);
-		}
-		public override void Animate(int minFrame = 0, int? maxFrame = null)
-		{
-
-			int frameSpeed = 5;
-			projectile.frameCounter++;
-			if (projectile.frameCounter >= frameSpeed)
-			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= Main.projFrames[projectile.type])
-				{
-					projectile.frame = 0;
-				}
-			}
-			projectile.spriteDirection = 0;
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -193,6 +179,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			projectile.spriteDirection = 0;
+		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			base.IdleMovement(vectorToIdlePosition);
@@ -229,27 +219,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.height = 24;
 			attackFrames = 90;
 			targetSearchDistance = 850;
+			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 14;
 			hsHelper.projectileVelocity = 6;
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
-		}
-		public override void Animate(int minFrame = 0, int? maxFrame = null)
-		{
-
-			int frameSpeed = 5;
-			projectile.frameCounter++;
-			if (projectile.frameCounter >= frameSpeed)
-			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= Main.projFrames[projectile.type])
-				{
-					projectile.frame = 0;
-				}
-			}
-			projectile.spriteDirection = 0;
 		}
 
 		public override void OnSpawn()
@@ -286,7 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				lineOfFire += projectile.velocity / 3;
 				if(player.whoAmI == Main.myPlayer)
 				{
-					hsHelper.FireProjectile(lineOfFire, (int)FiredProjectileId, 0);
+					hsHelper.FireProjectile(lineOfFire, (int)FiredProjectileId, framesSinceShoot % 12);
 				}
 				AfterFiringProjectile();
 			}
@@ -323,6 +298,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r, origin, 1, effects, 0);
 			return false;
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			projectile.spriteDirection = 0;
 		}
 		public override void AfterMoving()
 		{
