@@ -68,6 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal int targetInnerRadius = 170;
 		internal int targetOuterRadius = 230;
 		internal int attackFrames = 60;
+		internal bool inAttackRange;
 
 		private SimpleMinion minion;
 		private Projectile projectile => minion.projectile;
@@ -122,7 +123,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 			if(vectorToTargetPosition.LengthSquared() < targetMovementProximityRadius * targetMovementProximityRadius)
 			{
+				inAttackRange = true;
 				travelSpeed = travelSpeedAtTarget;
+			} else
+			{
+				inAttackRange = false;
 			}
 			bool? doAttack = ExtraAttackConditionsMet?.Invoke();
 			if ((doAttack is null || doAttack == true) && minion.animationFrame - lastShootFrame >= attackFrames 
