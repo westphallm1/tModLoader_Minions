@@ -443,6 +443,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			attackFrames = 60;
 			targetSearchDistance = 850;
 			frameSpeed = 5;
+			idleBumble = true;
 		}
 
 		public override void OnSpawn()

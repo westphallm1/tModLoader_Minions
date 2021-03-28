@@ -19,6 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal HoverShooterHelper hsHelper;
 
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

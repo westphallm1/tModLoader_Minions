@@ -43,7 +43,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.localNPCHitCooldown = 30;
 			projectile.penetrate = 5;
 			projectile.timeLeft = 120;
-
 		}
 
 		public override void AI()
@@ -81,6 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		bool isDashing = false;
 		private Vector2[] myOldPos = new Vector2[5];
 		protected override int BuffId => BuffType<RavenMinionBuff>();
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -96,6 +96,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.height = 24;
 			attackFrames = 60;
 			targetSearchDistance = 900;
+			idleBumble = true;
+			idleFrames = 60;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -188,7 +190,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			else
 			{
 				projectile.velocity.SafeNormalize();
-				projectile.velocity *= 13; // kick it away from enemies that it's just hit
+				projectile.velocity *= 10; // kick it away from enemies that it's just hit
 			}
 		}
 

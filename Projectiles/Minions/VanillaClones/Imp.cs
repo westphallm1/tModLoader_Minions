@@ -165,6 +165,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			drawOffsetX = (projectile.width - 44) / 2;
 			attackFrames = 80;
 			hsHelper.attackFrames = attackFrames;
+			idleBumble = true;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{

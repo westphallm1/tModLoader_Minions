@@ -4,6 +4,8 @@ using AmuletOfManyMinions.Core.Netcode;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.NPCs;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 using AmuletOfManyMinions.Projectiles.Squires;
@@ -88,6 +90,40 @@ namespace AmuletOfManyMinions
 				() => "Void Dagger/Null Hatchet",
 				new int[] { ModContent.ItemType<VoidKnifeMinionItem>(), ModContent.ItemType<NullHatchetMinionItem>()});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:VoidDaggers", voidDaggerGroup);
+		}
+
+		public override void AddRecipes()
+		{
+			// make vanilla minion items craftable from AoMM version and vice versa
+			// there is probably a more elegant approach to this
+			(int, int)[] pairs = new (int, int)[]
+			{
+				(ItemID.SlimeStaff,          ModContent.ItemType<BabySlimeMinionItem>()),
+				(ItemID.HornetStaff,         ModContent.ItemType<HornetMinionItem>()),
+				(ItemID.ImpStaff,            ModContent.ItemType<ImpMinionItem>()),
+				(ItemID.SpiderStaff,         ModContent.ItemType<SpiderMinionItem>()),
+				(ItemID.PirateStaff,         ModContent.ItemType<PirateMinionItem>()),
+				(ItemID.OpticStaff,          ModContent.ItemType<TwinsMinionItem>()),
+				(ItemID.PygmyStaff,          ModContent.ItemType<PygmyMinionItem>()),
+				(ItemID.RavenStaff,          ModContent.ItemType<RavenMinionItem>()),
+				(ItemID.DeadlySphereStaff,   ModContent.ItemType<DeadlySphereMinionItem>()),
+				(ItemID.TempestStaff,        ModContent.ItemType<SharknadoMinionItem>()),
+				(ItemID.XenoStaff,           ModContent.ItemType<UFOMinionItem>()),
+				(ItemID.StardustDragonStaff, ModContent.ItemType<StardustDragonMinionItem>()),
+				(ItemID.StardustCellStaff,   ModContent.ItemType<StardustCellMinionItem>()),
+			};
+			foreach((int,int) itemPair in pairs) {
+				for(int i = 0; i < 2; i++)
+				{
+					int src = i == 0 ? itemPair.Item1 : itemPair.Item2;
+					int dst = i == 0 ? itemPair.Item2 : itemPair.Item1;
+					ModRecipe recipe = new ModRecipe(this);
+					recipe.AddIngredient(src, 1);
+					recipe.AddTile(TileID.DemonAltar);
+					recipe.SetResult(dst);
+					recipe.AddRecipe();
+				}
+			}
 		}
 
 		public override void UpdateUI(GameTime gameTime)

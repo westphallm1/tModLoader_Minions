@@ -139,6 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
+			frameSpeed = 5;
 			targetSearchDistance = 850;
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 12;
@@ -146,6 +147,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 208;
 			hsHelper.targetOuterRadius = 264;
 			hsHelper.targetShootProximityRadius = 128;
+			idleBumble = true;
 		}
 		public override void OnSpawn()
 		{
@@ -172,6 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
+			base.Animate(minFrame, maxFrame);
 			projectile.spriteDirection = 0;
 		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -209,6 +212,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
+			frameSpeed = 5;
 			targetSearchDistance = 850;
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 14;
@@ -216,6 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
+			idleBumble = true;
 		}
 
 		public override void OnSpawn()
@@ -293,6 +298,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
+			base.Animate(minFrame, maxFrame);
 			projectile.spriteDirection = 0;
 		}
 		public override void AfterMoving()
