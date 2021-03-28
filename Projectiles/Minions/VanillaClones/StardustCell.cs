@@ -8,6 +8,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -21,6 +22,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			base.SetDefaults();
 			DisplayName.SetDefault("StardustCell");
 			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.StardustMinion") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.StardustMinion"));
 		}
 	}
 
@@ -30,8 +33,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("StardustCell Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.StardustCellStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.StardustCellStaff"));
 		}
 
 		public override void SetDefaults()
@@ -188,6 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Flying StardustCell");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.StardustCellMinion") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 4;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -20,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("DeadlySphere");
-			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.DeadlySphere") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.DeadlySphere"));
 		}
 	}
 
@@ -39,8 +40,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("DeadlySphere Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.DeadlySphereStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemName.DeadlySphereStaff"));
 		}
 
 		public override void SetDefaults()
@@ -119,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying DeadlySphere");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.DeadlySphere") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 21;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
@@ -239,7 +240,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying DeadlySphere");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.DeadlySphere") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 21;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
@@ -353,7 +354,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying DeadlySphere");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.DeadlySphere") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 21;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}

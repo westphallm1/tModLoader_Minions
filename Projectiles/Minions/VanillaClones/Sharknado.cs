@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -18,8 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Sharknado");
-			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.SharknadoMinion") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.SharknadoMinion"));
 		}
 	}
 
@@ -29,8 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Sharknado Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.TempestStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.TempestStaff"));
 		}
 
 		public override void SetDefaults()
@@ -133,7 +134,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Sharknado");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
 			Main.projFrames[projectile.type] = 6;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
@@ -233,7 +234,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
 			Main.projFrames[projectile.type] = 6;
 		}
 

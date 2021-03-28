@@ -5,6 +5,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -16,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Hornet");
-			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.HornetMinion") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.HornetMinion"));
 		}
 	}
 
@@ -27,8 +28,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Hornet Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.HornetStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.HornetStaff"));
 		}
 
 		public override void SetDefaults()
@@ -79,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Hornet");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Hornet"));
 			Main.projFrames[projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}

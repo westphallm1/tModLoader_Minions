@@ -8,6 +8,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -19,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Imp");
-			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.ImpMinion") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.ImpMinion"));
 		}
 	}
 
@@ -30,8 +31,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Imp Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.ImpStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.ImpStaff"));
 		}
 
 		public override void SetDefaults()

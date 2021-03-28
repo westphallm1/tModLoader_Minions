@@ -23,6 +23,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.Pygmies") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.Pygmies"));
 		}
 
 	}
@@ -42,8 +44,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.SlimeStaff"));
-			Tooltip.SetDefault("Summons a vampire slime to fight for you!\nIgnores 10 enemy defense");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.PygmyStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.PygmyStaff"));
 		}
 
 		public override void SetDefaults()
@@ -168,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("PricklyPear");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Pygmy"));
 			Main.projFrames[projectile.type] = 18;
 		}
 

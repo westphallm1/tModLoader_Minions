@@ -16,6 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.StardustDragonMinion") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.StardustDragonMinion"));
 		}
 
 	}
@@ -26,8 +28,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.StardustDragonStaff"));
-			Tooltip.SetDefault("Summons a vampire slime to fight for you!\nIgnores 10 enemy defense");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.StardustDragonStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.StardustDragonStaff"));
 		}
 
 		public override void SetDefaults()
@@ -54,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.StardustDragon") + " (AoMM Version)");
 		}
 
 		public sealed override void SetDefaults()

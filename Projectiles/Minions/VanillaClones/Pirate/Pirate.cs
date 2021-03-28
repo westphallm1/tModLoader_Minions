@@ -19,6 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.PirateMinion") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.PirateMinion"));
 		}
 
 	}
@@ -37,8 +39,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.PirateStaff"));
-			Tooltip.SetDefault("Summons a vampire slime to fight for you!\nIgnores 10 enemy defense");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.PirateStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.PirateStaff"));
 		}
 
 		public override void SetDefaults()
@@ -268,7 +270,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("PricklyPear");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SoulscourgePirate") + " (AoMM Version)");
 		}
 
 		public override void SetDefaults()
@@ -306,7 +308,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("PricklyPear");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.OneEyedPirate") + " (AoMM Version)");
 		}
 
 		public override void SetDefaults()
@@ -438,7 +440,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Acorn");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Parrot") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
@@ -518,7 +520,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Hornet");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.PirateCaptain") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 4;
 			IdleLocationSets.trailingInAir.Add(projectile.type);
 		}

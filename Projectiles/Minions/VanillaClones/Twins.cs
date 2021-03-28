@@ -6,6 +6,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -17,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Twins");
-			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.TwinEyesMinion") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.TwinEyesMinion"));
 		}
 	}
 
@@ -28,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Twins Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.OpticStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.OpticStaff"));
 		}
 
 		public override void SetDefaults()
@@ -136,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Twins");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Retanimini") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
@@ -206,7 +207,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Twins");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spazmamini") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}

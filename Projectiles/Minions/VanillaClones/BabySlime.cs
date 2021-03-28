@@ -15,6 +15,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.BabySlime") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.BabySlime"));
 		}
 
 	}
@@ -25,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.SlimeStaff"));
-			Tooltip.SetDefault("Summons a vampire slime to fight for you!\nIgnores 10 enemy defense");
+			DisplayName.SetDefault(Language.GetTextValue("ItemName.SlimeStaff") + " (AoMM Version)");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.SlimeStaff"));
 		}
 
 		public override void SetDefaults()
@@ -45,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Baby Slime");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BabySlime") + " (AoMM Version)");
 			Main.projFrames[projectile.type] = 6;
 		}
 
