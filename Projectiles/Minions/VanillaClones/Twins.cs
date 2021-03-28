@@ -23,21 +23,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class TwinsMinionItem : MinionItem<TwinsMinionBuff, MiniRetinazerMinion>
+	public class TwinsMinionItem : VanillaCloneMinionItem<TwinsMinionBuff, MiniRetinazerMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.OpticStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.OpticStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.OpticStaff"));
-		}
+		internal override int VanillaItemID => ItemID.OpticStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.OpticStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "OpticStaff";
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{

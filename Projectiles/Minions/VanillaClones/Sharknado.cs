@@ -24,21 +24,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class SharknadoMinionItem : MinionItem<SharknadoMinionBuff, SharknadoMinion>
+	public class SharknadoMinionItem : VanillaCloneMinionItem<SharknadoMinionBuff, SharknadoMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.TempestStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.TempestStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.TempestStaff"));
-		}
+		internal override int VanillaItemID => ItemID.TempestStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.TempestStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "TempestStaff";
 	}
 
 	public class MiniSharknado : ModProjectile

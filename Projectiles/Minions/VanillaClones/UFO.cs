@@ -22,21 +22,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class UFOMinionItem : MinionItem<UFOMinionBuff, UFOMinion>
+	public class UFOMinionItem : VanillaCloneMinionItem<UFOMinionBuff, UFOMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.XenoStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.XenoStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.XenoStaff"));
-		}
+		internal override int VanillaItemID => ItemID.XenoStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.XenoStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "XenoStaff";
 	}
 
 	public class UfoDamageHitbox : ModProjectile

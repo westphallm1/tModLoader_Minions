@@ -20,28 +20,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("StardustCell");
-			Description.SetDefault("A winged acorn will fight for you!");
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.StardustMinion") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.StardustMinion"));
 		}
 	}
 
-	public class StardustCellMinionItem : MinionItem<StardustCellMinionBuff, StardustCellMinion>
+	public class StardustCellMinionItem : VanillaCloneMinionItem<StardustCellMinionBuff, StardustCellMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.StardustCellStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.StardustCellStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.StardustCellStaff"));
-		}
+		internal override int VanillaItemID => ItemID.StardustCellStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.StardustCellStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "StardustCellStaff";
 	}
 
 	/// <summary>

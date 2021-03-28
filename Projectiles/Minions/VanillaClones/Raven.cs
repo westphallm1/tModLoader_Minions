@@ -22,21 +22,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	}
 
-	public class RavenMinionItem : MinionItem<RavenMinionBuff, RavenMinion>
+	public class RavenMinionItem : VanillaCloneMinionItem<RavenMinionBuff, RavenMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.RavenStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.RavenStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.RavenStaff"));
-		}
+		internal override int VanillaItemID => ItemID.RavenStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.RavenStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "RavenStaff";
 	}
 
 	public class RavenGreekFire: ModProjectile

@@ -22,21 +22,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	}
 
-	public class StardustDragonMinionItem : MinionItem<StardustDragonMinionBuff, StardustDragonCounterMinion>
+	public class StardustDragonMinionItem : VanillaCloneMinionItem<StardustDragonMinionBuff, StardustDragonCounterMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.StardustDragonStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.StardustDragonStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.StardustDragonStaff"));
-		}
+		internal override int VanillaItemID => ItemID.StardustDragonStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.StardustDragonStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "StardustDragonStaff";
 	}
 	public class StardustDragonCounterMinion : CounterMinion
 	{

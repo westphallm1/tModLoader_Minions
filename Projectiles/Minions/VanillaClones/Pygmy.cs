@@ -29,9 +29,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	}
 
-	public class PygmyMinionItem : MinionItem<PygmyMinionBuff, Pygmy1Minion>
+	public class PygmyMinionItem : VanillaCloneMinionItem<PygmyMinionBuff, Pygmy1Minion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.PygmyStaff;
+		internal override int VanillaItemID => ItemID.PygmyStaff;
+
+		internal override string VanillaItemName => "PygmyStaff";
 		public int[] projTypes = new int[]
 		{
 			ProjectileType<Pygmy1Minion>(),
@@ -40,19 +42,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			ProjectileType<Pygmy4Minion>()
 		};
 		int spawnCycle = 0;
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.PygmyStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.PygmyStaff"));
-		}
-
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.PygmyStaff);
-			base.SetDefaults();
-		}
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{

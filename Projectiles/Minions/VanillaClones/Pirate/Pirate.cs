@@ -25,9 +25,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	}
 
-	public class PirateMinionItem : MinionItem<PirateMinionBuff, PirateMinion>
+	public class PirateMinionItem : VanillaCloneMinionItem<PirateMinionBuff, PirateMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.PirateStaff;
 		public int[] projTypes = new int[]
 		{
 			ProjectileType<PirateDeadeyeMinion>(),
@@ -36,18 +35,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			ProjectileType<PirateMinion>(),
 		};
 		int spawnCycle = 0;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.PirateStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.PirateStaff"));
-		}
+		internal override int VanillaItemID => ItemID.PirateStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.PirateStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "PirateStaff";
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{

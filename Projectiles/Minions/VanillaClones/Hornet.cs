@@ -22,22 +22,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class HornetMinionItem : MinionItem<HornetMinionBuff, HornetMinion>
+	public class HornetMinionItem : VanillaCloneMinionItem<HornetMinionBuff, HornetMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.HornetStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.HornetStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.HornetStaff"));
-		}
+		internal override int VanillaItemID => ItemID.HornetStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.HornetStaff);
-			base.SetDefaults();
-			item.damage = 11;
-		}
+		internal override string VanillaItemName => "HornetStaff";
 	}
 
 	public class HornetStinger : ModProjectile
@@ -85,6 +74,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			IdleLocationSets.circlingHead.Add(projectile.type);
 		}
 
+		public override void OnSpawn()
+		{
+			// vanilla version is a bit weak, so buff it
+			projectile.damage = (int)(projectile.damage * 1.25f);
+		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

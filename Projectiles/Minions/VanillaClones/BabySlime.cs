@@ -21,21 +21,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	}
 
-	public class BabySlimeMinionItem : MinionItem<BabySlimeMinionBuff, BabySlimeMinion>
+	public class BabySlimeMinionItem : VanillaCloneMinionItem<BabySlimeMinionBuff, BabySlimeMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.SlimeStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.SlimeStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.SlimeStaff"));
-		}
+		internal override int VanillaItemID => ItemID.SlimeStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.SlimeStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "SlimeStaff";
 	}
 
 	public class BabySlimeMinion : SimpleGroundBasedMinion

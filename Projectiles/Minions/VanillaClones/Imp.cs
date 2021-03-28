@@ -25,21 +25,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class ImpMinionItem : MinionItem<ImpMinionBuff, ImpMinion>
+	public class ImpMinionItem : VanillaCloneMinionItem<ImpMinionBuff, ImpMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.ImpStaff;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.ImpStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.ImpStaff"));
-		}
+		internal override int VanillaItemID => ItemID.ImpStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.ImpStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "ImpStaff";
 	}
 
 	public class ImpFireball : ModProjectile

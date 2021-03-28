@@ -46,9 +46,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	}
 
-	public class SpiderMinionItem : MinionItem<SpiderMinionBuff, VenomSpiderMinion>
+	public class SpiderMinionItem : VanillaCloneMinionItem<SpiderMinionBuff, VenomSpiderMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.SpiderStaff;
 		public int[] projTypes = new int[]
 		{
 			ProjectileType<JumperSpiderMinion>(),
@@ -56,18 +55,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			ProjectileType<DangerousSpiderMinion>(),
 		};
 		int spawnCycle = 0;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.SpiderStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.SpiderStaff"));
-		}
+		internal override int VanillaItemID => ItemID.SpiderStaff;
 
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.SpiderStaff);
-			base.SetDefaults();
-		}
+		internal override string VanillaItemName => "SpiderStaff";
+
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			item.shoot = projTypes[spawnCycle % 3];

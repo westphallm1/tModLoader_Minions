@@ -26,9 +26,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class DeadlySphereMinionItem : MinionItem<DeadlySphereMinionBuff, DeadlySphereMinion>
+	public class DeadlySphereMinionItem : VanillaCloneMinionItem<DeadlySphereMinionBuff, DeadlySphereMinion>
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.DeadlySphereStaff;
+		internal override int VanillaItemID => ItemID.DeadlySphereStaff;
+
+		internal override string VanillaItemName => "DeadlySphereStaff";
+
 		public int[] projTypes = new int[]
 		{
 			ProjectileType<DeadlySphereFireMinion>(),
@@ -36,19 +39,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			ProjectileType<DeadlySphereMinion>(),
 		};
 		int spawnCycle = 0;
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName.DeadlySphereStaff") + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemName.DeadlySphereStaff"));
-		}
-
-		public override void SetDefaults()
-		{
-			item.CloneDefaults(ItemID.DeadlySphereStaff);
-			base.SetDefaults();
-		}
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
