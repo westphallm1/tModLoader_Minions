@@ -139,6 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
+			idleBumbleFrames = 90;
 			frameSpeed = 5;
 			targetSearchDistance = 850;
 			hsHelper.attackFrames = attackFrames;
@@ -212,6 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
+			idleBumbleFrames = 90;
 			frameSpeed = 5;
 			targetSearchDistance = 850;
 			hsHelper.attackFrames = attackFrames;

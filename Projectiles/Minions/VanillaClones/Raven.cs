@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			attackFrames = 60;
 			targetSearchDistance = 900;
 			idleBumble = true;
-			idleFrames = 60;
+			idleBumbleFrames = 60;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
