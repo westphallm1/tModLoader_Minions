@@ -27,13 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public class PirateMinionItem : VanillaCloneMinionItem<PirateMinionBuff, PirateMinion>
 	{
-		public int[] projTypes = new int[]
-		{
-			ProjectileType<PirateDeadeyeMinion>(),
-			ProjectileType<ParrotMinion>(),
-			ProjectileType<FlyingDutchmanMinion>(),
-			ProjectileType<PirateMinion>(),
-		};
+		public int[] projTypes;
+
 		int spawnCycle = 0;
 		internal override int VanillaItemID => ItemID.PirateStaff;
 
@@ -41,8 +36,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			item.shoot = projTypes[spawnCycle++ % 4];
-			return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			if(projTypes == null)
+			{
+				projTypes = new int[]
+				{
+					ProjectileType<PirateDeadeyeMinion>(),
+					ProjectileType<ParrotMinion>(),
+					ProjectileType<FlyingDutchmanMinion>(),
+					ProjectileType<PirateMinion>(),
+				};
+			}
+			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle%4], damage, knockBack, player.whoAmI);
+			spawnCycle++;
+			return false;
 		}
 	}
 	public class PirateDeadeyeBullet : ModProjectile
@@ -150,6 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					projectile.knockBack,
 					projectile.owner);
 			}
+			Main.PlaySound(new LegacySoundStyle(2, 14).WithVolume(0.5f), projectile.position);
 		}
 	}
 
@@ -326,7 +334,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		{
 			int bulletVelocity = 24;
 			lastFiredFrame = animationFrame;
-			Main.PlaySound(new LegacySoundStyle(6, 1), projectile.position);
+			Main.PlaySound(new LegacySoundStyle(2, 11), projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;
@@ -507,7 +515,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		protected override int BuffId => BuffType<PirateMinionBuff>();
 
 		internal override int? FiredProjectileId => ProjectileType<PirateCannonball>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 14).WithVolume(0.5f);
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

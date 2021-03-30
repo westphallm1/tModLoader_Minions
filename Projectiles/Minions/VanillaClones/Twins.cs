@@ -123,7 +123,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		internal override int? FiredProjectileId => ProjectileType<MiniTwinsLaser>();
 
-		internal override LegacySoundStyle ShootSound => SoundID.Item33.WithVolume(.5f);
+		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 10).WithVolume(.5f);
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -197,6 +197,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.Spazmamini;
 
 		internal override int? FiredProjectileId => ProjectileType<MiniEyeFire>();
+		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
 
 		public override void SetStaticDefaults()
 		{

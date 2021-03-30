@@ -34,19 +34,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override int VanillaItemID => ItemID.PygmyStaff;
 
 		internal override string VanillaItemName => "PygmyStaff";
-		public int[] projTypes = new int[]
-		{
-			ProjectileType<Pygmy1Minion>(),
-			ProjectileType<Pygmy2Minion>(),
-			ProjectileType<Pygmy3Minion>(),
-			ProjectileType<Pygmy4Minion>()
-		};
+		public int[] projTypes;	
 		int spawnCycle = 0;
 
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+		}
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			item.shoot = projTypes[spawnCycle++ % 4];
-			return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			if(projTypes == null)
+			{
+				projTypes = new int[]
+				{
+					ProjectileType<Pygmy1Minion>(),
+					ProjectileType<Pygmy2Minion>(),
+					ProjectileType<Pygmy3Minion>(),
+					ProjectileType<Pygmy4Minion>()
+				};
+			}
+			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle % 4], damage, knockBack, player.whoAmI);
+			spawnCycle++;
+			return false;
 		}
 	}
 
@@ -223,7 +233,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			int spearVelocity = 16;
 			lastFiredFrame = animationFrame;
-			Main.PlaySound(new LegacySoundStyle(6, 1), projectile.position);
+			Main.PlaySound(new LegacySoundStyle(2, 17), projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;

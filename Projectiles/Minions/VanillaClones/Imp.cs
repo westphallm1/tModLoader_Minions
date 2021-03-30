@@ -30,6 +30,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override int VanillaItemID => ItemID.ImpStaff;
 
 		internal override string VanillaItemName => "ImpStaff";
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			item.UseSound = new LegacySoundStyle(2, 77);
+		}
 	}
 
 	public class ImpFireball : ModProjectile
@@ -340,6 +346,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				targetShootProximityRadius = 256,
 				CustomFireProjectile = FireTridents,
 				ModifyTargetVector = HandleTargetProximity,
+				AfterFiringProjectile = () => Main.PlaySound(new LegacySoundStyle(2, 8).WithVolume(0.5f), projectile.position)
 			};
 		}
 

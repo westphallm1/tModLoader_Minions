@@ -32,19 +32,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		internal override string VanillaItemName => "DeadlySphereStaff";
 
-		public int[] projTypes = new int[]
-		{
-			ProjectileType<DeadlySphereFireMinion>(),
-			ProjectileType<DeadlySphereClingerMinion>(),
-			ProjectileType<DeadlySphereMinion>(),
-		};
+		public int[] projTypes;
 		int spawnCycle = 0;
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			item.shoot = projTypes[spawnCycle % 3];
+			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			if(projTypes == null)
+			{
+				projTypes = new int[]
+				{
+					ProjectileType<DeadlySphereFireMinion>(),
+					ProjectileType<DeadlySphereClingerMinion>(),
+					ProjectileType<DeadlySphereMinion>(),
+				};
+			}
+			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockBack, player.whoAmI);
 			spawnCycle++;
-			return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			return false;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			item.UseSound = new LegacySoundStyle(2, 113);
 		}
 	}
 
@@ -340,6 +351,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		protected override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.DeadlySphere;
+		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
 
 		internal override int? FiredProjectileId => null;
 

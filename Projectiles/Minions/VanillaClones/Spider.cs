@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using static Terraria.ModLoader.ModContent;
@@ -48,12 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class SpiderMinionItem : VanillaCloneMinionItem<SpiderMinionBuff, VenomSpiderMinion>
 	{
-		public int[] projTypes = new int[]
-		{
-			ProjectileType<JumperSpiderMinion>(),
-			ProjectileType<VenomSpiderMinion>(),
-			ProjectileType<DangerousSpiderMinion>(),
-		};
+		public int[] projTypes;
 		int spawnCycle = 0;
 		internal override int VanillaItemID => ItemID.SpiderStaff;
 
@@ -61,9 +57,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			item.shoot = projTypes[spawnCycle % 3];
+			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			if(projTypes == null)
+			{
+				projTypes = new int[]
+				{
+					ProjectileType<JumperSpiderMinion>(),
+					ProjectileType<VenomSpiderMinion>(),
+					ProjectileType<DangerousSpiderMinion>(),
+				};
+			}
+			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockBack, player.whoAmI);
 			spawnCycle++;
-			return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			return false;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			item.UseSound = new LegacySoundStyle(2, 83);
 		}
 	}
 	public abstract class BaseSpiderMinion : SimpleGroundBasedMinion

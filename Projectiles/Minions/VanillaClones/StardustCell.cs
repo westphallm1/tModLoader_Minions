@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.StardustCellMinion;
 		public override string GlowTexture => "Terraria/Glow_189";
 		internal override int? FiredProjectileId => ProjectileType<StardustCellClinger>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(4, 7).WithVolume(0.5f);
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

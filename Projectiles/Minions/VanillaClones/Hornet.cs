@@ -27,6 +27,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override int VanillaItemID => ItemID.HornetStaff;
 
 		internal override string VanillaItemName => "HornetStaff";
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			item.UseSound = new LegacySoundStyle(2, 76);
+		}
 	}
 
 	public class HornetStinger : ModProjectile
