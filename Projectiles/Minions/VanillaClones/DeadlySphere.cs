@@ -42,9 +42,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				projTypes = new int[]
 				{
+					ProjectileType<DeadlySphereMinion>(),
 					ProjectileType<DeadlySphereFireMinion>(),
 					ProjectileType<DeadlySphereClingerMinion>(),
-					ProjectileType<DeadlySphereMinion>(),
 				};
 			}
 			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockBack, player.whoAmI);

@@ -117,6 +117,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			maxJumpVelocity = 12;
 		}
 
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			// AI is much more consistent than vanilla, so drop base damage down a bit
+			projectile.damage = (int)(0.9f * projectile.damage);
+		}
+
 		// Use flying movement if we're on a wall
 		protected override void IdleGroundedMovement(Vector2 vector)
 		{
@@ -170,7 +177,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override Vector2 IdleBehavior()
 		{
 			Tile tile = Framing.GetTileSafely((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16);
-			onWall = tile.wall > 0;
+			onWall = (tile.active() && tile.collisionType == 1) || tile.wall > 0;
 			return base.IdleBehavior();
 		}
 
@@ -217,6 +224,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			target.AddBuff(BuffID.Venom, 300);
+		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -232,7 +243,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					{
 						projectile.rotation = MathHelper.PiOver2 - MathHelper.Pi / 8 + (MathHelper.PiOver4 * (animationFrame % 60) / 60f);
 					}
-				} else if (projectile.velocity.Length() > 2)
+				} else if (projectile.velocity.Length() > 0)
 				{
 					projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 				} else
@@ -268,5 +279,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class DangerousSpiderMinion: BaseSpiderMinion
 	{
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.DangerousSpider;
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			drawOriginOffsetY = -2;
+		}
 	}
 }

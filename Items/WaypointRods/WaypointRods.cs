@@ -221,7 +221,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.rare = ItemRarityID.Red;
+			item.rare = ItemRarityID.Expert;
 			item.useTime = 18;
 			item.useAnimation = 18;
 		}

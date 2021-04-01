@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<MinionPathfindingPlayer>().PassivePathfindingRange = 20 * 16;
+			player.GetModPlayer<MinionPathfindingPlayer>().PassivePathfindingRange = 18 * 16;
 		}
 		public override void AddRecipes()
 		{

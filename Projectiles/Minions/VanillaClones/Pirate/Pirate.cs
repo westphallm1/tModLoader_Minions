@@ -41,10 +41,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			{
 				projTypes = new int[]
 				{
+					ProjectileType<PirateMinion>(),
 					ProjectileType<PirateDeadeyeMinion>(),
 					ProjectileType<ParrotMinion>(),
 					ProjectileType<FlyingDutchmanMinion>(),
-					ProjectileType<PirateMinion>(),
 				};
 			}
 			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle%4], damage, knockBack, player.whoAmI);

@@ -169,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.height = 26;
 			targetSearchDistance = 700;
 			drawOffsetX = (projectile.width - 44) / 2;
-			attackFrames = 80;
+			attackFrames = 65;
 			hsHelper.attackFrames = attackFrames;
 			idleBumble = true;
 		}

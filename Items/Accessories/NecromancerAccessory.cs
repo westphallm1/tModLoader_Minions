@@ -177,11 +177,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 			Mod mod = ModLoader.GetMod("AmuletOfManyMinions");
 			Texture2D texture;
 			// this may not be the most efficient
-			if (drawPlayer.armor.Any(item => item.type == ItemType<IllusionistCorruptRobe>()))
+			if (drawPlayer.armor[11].type == ItemType<IllusionistCorruptRobe>() || drawPlayer.armor[11].IsAir && drawPlayer.armor[1].type == ItemType<IllusionistCorruptRobe>())
 			{
 				texture = mod.GetTexture("Items/Armor/IllusionistArmor/IllusionistCorruptRobe_Legs");
 			}
-			else if (drawPlayer.armor.Any(item => item.type == ItemType<IllusionistCrimsonRobe>()))
+			else if (drawPlayer.armor[11].type == ItemType<IllusionistCrimsonRobe>() || drawPlayer.armor[11].IsAir && drawPlayer.armor[1].type == ItemType<IllusionistCrimsonRobe>())
 			{
 				texture = mod.GetTexture("Items/Armor/IllusionistArmor/IllusionistCrimsonRobe_Legs");
 			}
@@ -194,6 +194,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			Color color = Lighting.GetColor((int)(drawPlayer.Center.X / 16), (int)(drawPlayer.Center.Y / 16));
 			Vector2 pos = new Vector2((float)((int)(Position.X - Main.screenPosition.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(Position.Y - Main.screenPosition.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2));
 			DrawData value = new DrawData(texture, pos, new Microsoft.Xna.Framework.Rectangle?(drawPlayer.legFrame), color, drawPlayer.legRotation, drawInfo.legOrigin, 1f, drawInfo.spriteEffects, 0);
+			value.shader = drawPlayer.cBody;
 			Main.playerDrawData.Add(value);
 		});
 

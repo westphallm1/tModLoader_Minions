@@ -76,6 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			idleCircle = 20;
 			idleCircleHeight = 8;
 			targetSearchDistance = 950;
+			idleBumble = false;
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)

@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 		{
 			DisplayName.SetDefault("GPS of Minion Guidance");
 			Tooltip.SetDefault(
-				"Allows your minions to automatically attack around corners in a 24 tile radius.");
+				"Allows your minions to automatically attack around corners in a 30 tile radius.");
 		}
 
 		public override void SetDefaults()
@@ -28,13 +28,13 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<MinionPathfindingPlayer>().PassivePathfindingRange = 30 * 24;
+			player.GetModPlayer<MinionPathfindingPlayer>().PassivePathfindingRange = 30 * 16;
 		}
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.SetResult(this);
-			recipe.AddIngredient(ItemType<MinionCompass>(), 11);
+			recipe.AddIngredient(ItemType<MinionCompass>(), 1);
 			recipe.AddIngredient(ItemID.CrystalShard, 10);
 			recipe.AddIngredient(ItemID.SoulofLight, 8);
 			recipe.AddTile(TileID.TinkerersWorkbench);
