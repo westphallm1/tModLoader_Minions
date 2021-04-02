@@ -91,14 +91,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 16;
 			projectile.height = 16;
 			drawOffsetX = (projectile.width - 44) / 2;
-			targetSearchDistance = 600;
-			attackFrames = 60;
+			targetSearchDistance = 700;
+			attackFrames = 50;
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 9;
 			hsHelper.projectileVelocity = 12;
 			hsHelper.targetInnerRadius = 128;
 			hsHelper.targetOuterRadius = 176;
-			idleBumble = true;
+			hsHelper.targetShootProximityRadius = 96;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -114,7 +114,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					projectile.frame = 0;
 				}
 			}
-			if(projectile.velocity.X > 1)
+			if(vectorToTarget is Vector2 target)
+			{
+				projectile.spriteDirection = -Math.Sign(target.X);
+			}
+			else if(projectile.velocity.X > 1)
 			{
 				projectile.spriteDirection = -1;
 			}

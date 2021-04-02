@@ -18,6 +18,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal bool idleBumble = true;
 		internal int idleBumbleRadius = 128;
 		internal int idleBumbleFrames = 60;
+		internal float travelFraction;
+		internal short bumbleSpriteDirection = 1;
+		internal Vector2 bumbleTarget = default;
 
 		public override void SetDefaults()
 		{
@@ -59,22 +62,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			int idleRotationIdx = ((idleSyncFrame + idleSyncOffset) / idleBumbleFrames);
 			float groupIdleAngle = idleRotationIdx * MathHelper.Pi * rotationMult;
 			Vector2 targetDirection = (myIdleAngle + groupIdleAngle).ToRotationVector2();
-			Vector2 target = player.Top;
+			bumbleTarget = player.Top;
 			for(int i = 0; i < idleBumbleRadius + 16; i += 16)
 			{
-				target = i * targetDirection;
+				bumbleTarget = i * targetDirection;
 				// require some leeway between the nearest block and the turnaround point
-				Vector2 nextTarget = target + 32 * targetDirection;
-				if(!Collision.CanHit(player.Top + target, 1, 1, player.Top + nextTarget, 1, 1))
+				Vector2 nextTarget = bumbleTarget + 32 * targetDirection;
+				if(!Collision.CanHit(player.Top + bumbleTarget, 1, 1, player.Top + nextTarget, 1, 1))
 				{
 					break;
 				}
 			}
-			float travelFraction = ((idleSyncFrame + idleSyncOffset) % idleBumbleFrames) / (float)idleBumbleFrames;
-			Vector2 vectorToIdlePosition = player.Top + target * travelFraction - projectile.Center;
+			travelFraction = ((idleSyncFrame + idleSyncOffset) % idleBumbleFrames) / (float)idleBumbleFrames;
+			Vector2 vectorToIdlePosition = player.Top + bumbleTarget * travelFraction - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			float maxIdleTravelSpeed = player.velocity.Length() + (idleBumbleRadius * 2) / (float)idleBumbleFrames;
-			if(vectorToIdlePosition.LengthSquared() > maxIdleTravelSpeed && Vector2.Distance(projectile.Center, player.Top) < idleBumbleRadius)
+			if(vectorToIdlePosition.LengthSquared() > maxIdleTravelSpeed && Vector2.Distance(projectile.Center, player.Top) < 1.25f * idleBumbleRadius)
 			{
 				vectorToIdlePosition.Normalize();
 				vectorToIdlePosition *= maxIdleTravelSpeed;
@@ -110,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			if(idleBumble && player.velocity.Length() < 8)
+			if(idleBumble && player.velocity.Length() < 4)
 			{
 				return BumblingHeadCircle();
 			} else
@@ -136,18 +139,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			projectile.tileCollide = false;
-			if(idleBumble && vectorToIdlePosition.Length() < 4)
-			{
-				projectile.velocity = vectorToIdlePosition;
-				projectile.spriteDirection = Math.Sign(vectorToIdlePosition.X);
-				return;
-			}
 			if (vectorToIdlePosition.Length() < maxSpeed)
 			{
 				projectile.rotation = 0;
 				if(idleBumble)
 				{
-					projectile.spriteDirection = Math.Sign(projectile.position.X - player.position.X);
+					projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(bumbleTarget.X);
 				} else
 				{
 					projectile.spriteDirection = (idleAngle % (2 * PI)) > PI ? -1 : 1;

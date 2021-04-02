@@ -167,11 +167,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			base.SetDefaults();
 			projectile.width = 32;
 			projectile.height = 26;
-			targetSearchDistance = 700;
+			targetSearchDistance = 750;
 			drawOffsetX = (projectile.width - 44) / 2;
-			attackFrames = 65;
+			attackFrames = 60;
 			hsHelper.attackFrames = attackFrames;
-			idleBumble = true;
+			hsHelper.targetShootProximityRadius = 128;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -190,7 +190,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(vectorToTarget is Vector2 target)
 			{
 				projectile.spriteDirection = -Math.Sign(target.X);
-
 			} else if(projectile.velocity.X > 1)
 			{
 				projectile.spriteDirection = -1;
@@ -355,10 +354,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			int fireCount = 1 + Main.rand.Next(3);
 			int fireRadius = Main.rand.Next(8, 24);
-			if(targetNPCIndex is int idx && Main.npc[idx].active)
-			{
-				lineOfFire += Main.npc[idx].velocity / 6;
-			}
 			for(int i = 0; i < fireCount; i ++)
 			{
 				float startAngle = -2f * (float)Math.PI * animationFrame / 120;

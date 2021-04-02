@@ -62,6 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 			approachSpeed = 8;
 			approachInertia = 40;
 			targetSearchDistance = 800;
+			bumbleSpriteDirection = -1;
 			projectile.width = 28;
 			projectile.height = 32;
 		}

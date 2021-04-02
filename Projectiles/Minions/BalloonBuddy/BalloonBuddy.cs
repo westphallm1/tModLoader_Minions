@@ -64,6 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		{
 			base.SetDefaults();
 			projectile.tileCollide = false;
+			projectile.localNPCHitCooldown = 20;
 		}
 
 

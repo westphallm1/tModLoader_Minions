@@ -72,6 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			base.SetDefaults();
 			projectile.width = 32;
 			projectile.height = 28;
+			projectile.localNPCHitCooldown = 20;
 			drawOffsetX = -2;
 			drawOriginOffsetY = 2;
 			attackFrames = 60;

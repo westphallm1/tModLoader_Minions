@@ -104,6 +104,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		private void attachToTarget()
 		{
+			if(clingTarget == null || !clingTarget.active)
+			{
+				projectile.Kill();
+				return;
+			}
 			DebuffGlobalNPC globalTarget = clingTarget.GetGlobalNPC<DebuffGlobalNPC>();
 			if(globalTarget.cellStack < 10)
 			{
@@ -126,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void Kill(int timeLeft)
 		{
-			if(clingTarget.active)
+			if(clingTarget != null && clingTarget.active)
 			{
 				clingTarget.GetGlobalNPC<DebuffGlobalNPC>().cellStack --;
 			}

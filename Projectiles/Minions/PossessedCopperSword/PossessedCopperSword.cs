@@ -72,6 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			projectile.width = 16;
 			projectile.height = 16;
 			projectile.tileCollide = false;
+			projectile.localNPCHitCooldown = 20;
 			attackState = AttackState.IDLE;
 			attackFrames = 60;
 		}

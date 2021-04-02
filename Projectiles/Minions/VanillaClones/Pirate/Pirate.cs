@@ -450,8 +450,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			projectile.height = 24;
 			attackFrames = 60;
 			targetSearchDistance = 850;
+			bumbleSpriteDirection = -1;
 			frameSpeed = 5;
-			idleBumble = true;
+			idleBumbleFrames = 40;
+			idleBumbleRadius = 96;
 		}
 
 		public override void OnSpawn()
@@ -550,7 +552,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if(projectile.velocity.X > 1)
+			if(vectorToTarget is Vector2 target)
+			{
+				projectile.spriteDirection = -Math.Sign(target.X);
+			} 
+			else if(projectile.velocity.X > 1)
 			{
 				projectile.spriteDirection = -1;
 			} else if (projectile.velocity.X < -1)

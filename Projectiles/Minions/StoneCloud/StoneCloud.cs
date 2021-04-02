@@ -102,6 +102,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			projectile.width = 24;
 			projectile.height = 32;
 			drawOffsetX = (projectile.width - 40) / 2;
+			idleBumbleFrames = 90;
+			idleBumbleRadius = 96;
 			attackFrames = 45;
 			animationFrame = 0;
 			idleInertia = 8;

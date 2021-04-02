@@ -69,6 +69,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal int targetInnerRadius = 170;
 		internal int targetOuterRadius = 230;
 		internal int attackFrames = 60;
+
+		// assume it takes ~ 6 frames for the projectile to hit the target
+		internal float leadShotsFraction = 0.167f;
 		internal bool inAttackRange;
 
 		private SimpleMinion minion;
@@ -136,6 +139,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				lineOfFire.SafeNormalize();
 				lineOfFire *= projectileVelocity;
+				if(minion.targetNPCIndex is int idx && Main.npc[idx].active)
+				{
+					lineOfFire += Main.npc[idx].velocity * leadShotsFraction;
+				}
 				lastShootFrame = minion.animationFrame;
 				if(Main.myPlayer == minion.player.whoAmI && firedProjectileId is int projId)
 				{

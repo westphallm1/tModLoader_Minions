@@ -58,6 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			base.SetDefaults();
 			projectile.width = 32;
 			projectile.height = 28;
+			projectile.localNPCHitCooldown = 20;
 			drawOffsetX = -2;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
