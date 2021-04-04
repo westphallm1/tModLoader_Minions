@@ -143,7 +143,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 108;
 			hsHelper.targetOuterRadius = 164;
 			hsHelper.targetShootProximityRadius = 196;
-			idleBumble = true;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{

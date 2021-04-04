@@ -139,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
-			idleBumbleFrames = 90;
+			circleHelper.idleBumbleFrames = 90;
 			frameSpeed = 5;
 			targetSearchDistance = 850;
 			hsHelper.attackFrames = attackFrames;
@@ -148,7 +148,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 208;
 			hsHelper.targetOuterRadius = 264;
 			hsHelper.targetShootProximityRadius = 128;
-			idleBumble = true;
 		}
 		public override void OnSpawn()
 		{
@@ -214,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.width = 24;
 			projectile.height = 24;
 			attackFrames = 90;
-			idleBumbleFrames = 90;
+			circleHelper.idleBumbleFrames = 90;
 			frameSpeed = 5;
 			targetSearchDistance = 850;
 			hsHelper.attackFrames = attackFrames;
@@ -223,7 +222,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
-			idleBumble = true;
 		}
 
 		public override void OnSpawn()

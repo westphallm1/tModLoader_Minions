@@ -73,10 +73,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			projectile.timeLeft = 3;
 			maxSpeed = 14;
 			idleInertia = 1;
-			idleCircle = 20;
-			idleCircleHeight = 8;
 			targetSearchDistance = 950;
-			idleBumble = false;
+			circleHelper.idleCircle = 20;
+			circleHelper.idleCircleHeight = 8;
+			circleHelper.idleBumble = false;
+			circleHelper.MyGetIdleSpaceSharingMinions = GetIdleSpaceSharingMinions;
+			circleHelper.GetCenterOfRotation = CenterOfRotation;
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -84,12 +86,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			return !isCloseToCenter;
 		}
 
-		public override List<Projectile> GetIdleSpaceSharingMinions()
+		public List<Projectile> GetIdleSpaceSharingMinions()
 		{
 			return GetMinionsOfType(projectile.type);
 		}
 
-		public override Vector2 CenterOfRotation()
+		public Vector2 CenterOfRotation()
 		{
 			Projectile center = GetMinionsOfType(ProjectileType<GoblinTechnomancerMinion>()).FirstOrDefault();
 			return center == default ? player.Top : center.Bottom + new Vector2(0, 4);

@@ -452,8 +452,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			targetSearchDistance = 850;
 			bumbleSpriteDirection = -1;
 			frameSpeed = 5;
-			idleBumbleFrames = 40;
-			idleBumbleRadius = 96;
+			circleHelper.idleBumbleFrames = 40;
+			circleHelper.idleBumbleRadius = 96;
 		}
 
 		public override void OnSpawn()

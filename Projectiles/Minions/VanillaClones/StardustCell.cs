@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		private void attachToTarget()
 		{
-			if(clingTarget == null || !clingTarget.active)
+			if(clingTarget == null)
 			{
 				projectile.Kill();
 				return;

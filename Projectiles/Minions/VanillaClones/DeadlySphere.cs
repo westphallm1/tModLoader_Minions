@@ -139,7 +139,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
-			idleBumble = true;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -261,7 +260,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 0;
 			hsHelper.targetOuterRadius = 0;
 			hsHelper.travelSpeedAtTarget = 15;
-			idleBumble = true;
 		}
 
 		public override void OnSpawn()
@@ -376,7 +374,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
-			idleBumble = true;
 		}
 		public override void OnSpawn()
 		{
