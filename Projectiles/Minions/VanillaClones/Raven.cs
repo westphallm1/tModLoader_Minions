@@ -97,6 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			attackFrames = 60;
 			targetSearchDistance = 900;
 			circleHelper.idleBumbleFrames = 60;
+			bumbleSpriteDirection = -1;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -121,12 +122,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					projectile.frame = minFrame;
 				}
 			}
-			if(projectile.velocity.X > 1)
+			if(vectorToTarget != null)
 			{
-				projectile.spriteDirection = -1;
-			} else if (projectile.velocity.X < -1)
-			{
-				projectile.spriteDirection = 1;
+				if(projectile.velocity.X > 1)
+				{
+					projectile.spriteDirection = -1;
+				} else if (projectile.velocity.X < -1)
+				{
+					projectile.spriteDirection = 1;
+				}
 			}
 		}
 

@@ -104,6 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			drawOffsetX = (projectile.width - 40) / 2;
 			circleHelper.idleBumbleFrames = 90;
 			circleHelper.idleBumbleRadius = 96;
+			bumbleSpriteDirection = -1;
 			attackFrames = 45;
 			animationFrame = 0;
 			idleInertia = 8;
@@ -117,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		{
 			minFrame = isStone ? 3 : 0;
 			maxFrame = isStone ? 6 : 3;
-			if (!isStone && Math.Abs(projectile.velocity.X) > 1)
+			if (!isStone && Math.Abs(projectile.velocity.X) > 1 && vectorToTarget != null)
 			{
 				projectile.spriteDirection = -Math.Sign(projectile.velocity.X);
 			}

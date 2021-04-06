@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (vectorToIdlePosition.Length() < maxSpeed)
 			{
 				projectile.rotation = 0;
-				if(circleHelper.idleBumble)
+				if(circleHelper.idleBumble && player.velocity.Length() < 4)
 				{
 					projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(circleHelper.bumbleTarget.X);
 				} else
@@ -73,6 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				vectorToIdlePosition.SafeNormalize();
 				vectorToIdlePosition *= maxSpeed;
+				projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(vectorToIdlePosition.X);
 			}
 			projectile.velocity = (projectile.velocity * (idleInertia - 1) + vectorToIdlePosition) / idleInertia;
 		}

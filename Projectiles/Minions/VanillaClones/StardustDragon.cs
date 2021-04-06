@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class StardustDragonMinionBuff : MinionBuff
 	{
-		public StardustDragonMinionBuff() : base(ProjectileType<StardustDragonMinion>()) { }
+		public StardustDragonMinionBuff() : base(ProjectileType<StardustDragonCounterMinion>()) { }
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
