@@ -2,6 +2,7 @@
 using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Core.Netcode.Packets;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.UI;
 using AmuletOfManyMinions.UI.TacticsUI;
 using System;
@@ -251,6 +252,17 @@ namespace AmuletOfManyMinions.Core.Minions
 			if(AmuletOfManyMinions.CycleTacticHotKey.JustPressed)
 			{
 				CycleTactic();
+				// for testing, also toggle grid snapping
+				if(SpriteCompositionHelper.posResolution == 2)
+				{
+					SpriteCompositionHelper.posResolution = 1; 
+					SpriteCompositionHelper.frameResolution = 1;
+				}  else
+				{
+					SpriteCompositionHelper.posResolution = 2;
+					SpriteCompositionHelper.frameResolution = 5;
+				}
+				
 				UserInterfaces.tacticsUI.SetSelected(TacticID);
 			}
 			if(AmuletOfManyMinions.QuickDefendHotKey.JustPressed )

@@ -21,13 +21,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal int idleCycleFrames = 90;
 		internal int walkCycleFrame = 0;
 		internal int walkVelocityThreshold = 1;
+		// update angles every X frames
+		internal static int frameResolution = 5;
+		// use the Xth frame of each block for the angle
+		internal static int frameShift = 0;
+		// snap all offset vectors to a Y x Y grid
+		internal static int posResolution = 2;
 
 		internal SpriteBatch spriteBatch;
 		internal Color lightColor;
 
-		internal float WalkCycleAngle => Math.Sign(projectile.velocity.X) * MathHelper.TwoPi * (walkCycleFrame % walkCycleFrames) / walkCycleFrames;
-		internal float IdleCycleAngle => MathHelper.TwoPi * (minion.animationFrame % idleCycleFrames) / idleCycleFrames;
+		internal int idleFrame => frameShift + minion.animationFrame - (minion.animationFrame % frameResolution);
+
+		internal int walkFrame => frameShift + walkCycleFrame - (walkCycleFrame % frameResolution);
+
+		internal float WalkCycleAngle => Math.Sign(projectile.velocity.X) * MathHelper.TwoPi * walkFrame / walkCycleFrames;
+		internal float IdleCycleAngle => MathHelper.TwoPi * idleFrame / idleCycleFrames;
 		internal bool IsWalking => Math.Abs(projectile.velocity.X) > walkVelocityThreshold;
+
+		internal int snapToGrid(float val) => Math.Sign(val) * (int)(Math.Abs(val) / posResolution) *  posResolution;
 
 		public SpriteCompositionHelper(SimpleMinion minion)
 		{
@@ -57,27 +69,39 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			this.spriteBatch = null;
 		}
 
-		public void AddSpriteToBatch(Texture2D texture, Rectangle bounds, Vector2 offsetFromCenter, float r, float scale)
+		public Rectangle BoundsForFrame(Texture2D texture, int frame, int frames)
 		{
+			int frameHeight = texture.Height / frames;
+			return new Rectangle(0, frame * frameHeight, texture.Width, frameHeight);
+		}
+
+		public void AddSpriteToBatch(Texture2D texture, (int, int) boundsInfo, Vector2 offsetFromCenter, float r, float scale)
+		{
+
+			offsetFromCenter = new Vector2(snapToGrid(offsetFromCenter.X), snapToGrid(offsetFromCenter.Y));
+			// don't rotate if snapping to grid
+			r = posResolution > 1 ? 0 : r;
 			float frameOfReferenceR = projectile.rotation + r;
 			Vector2 pos = projectile.Center + offsetFromCenter.RotatedBy(frameOfReferenceR);
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			int frameHeight = texture.Height / boundsInfo.Item2;
+			Rectangle bounds = new Rectangle(0, boundsInfo.Item1 * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			spriteBatch.Draw(texture, pos - Main.screenPosition, bounds, lightColor, frameOfReferenceR, origin, scale, effects, 0);
 		}
 
 		public void AddSpriteToBatch(Texture2D texture, Vector2 offsetFromCenter, float r, float scale)
 		{
-			AddSpriteToBatch(texture, texture.Bounds, offsetFromCenter, r, scale);
+			AddSpriteToBatch(texture, (0, 1), offsetFromCenter, r, scale);
 		}
 
-		public void AddSpriteToBatch(Texture2D texture, Rectangle bounds, Vector2 offsetFromCenter)
+		public void AddSpriteToBatch(Texture2D texture, (int, int) boundsInfo, Vector2 offsetFromCenter)
 		{
-			AddSpriteToBatch(texture, bounds, offsetFromCenter, 0, 1);
+			AddSpriteToBatch(texture, boundsInfo, offsetFromCenter, 0, 1);
 		}
 		public void AddSpriteToBatch(Texture2D texture, Vector2 offsetFromCenter)
 		{
-			AddSpriteToBatch(texture, texture.Bounds, offsetFromCenter, 0, 1);
+			AddSpriteToBatch(texture, (0, 1), offsetFromCenter, 0, 1);
 		}
 
 		internal void Process(SpriteBatch spriteBatch, Color lightColor, bool isWalking, params SpriteCycleDrawer[] drawers)
@@ -87,13 +111,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				for(int i = 0; i < drawers.Length; i++)
 				{
-					drawers[i].Invoke(this, walkCycleFrame, WalkCycleAngle);
+					drawers[i].Invoke(this, walkFrame, WalkCycleAngle);
 				}
 			} else
 			{
 				for(int i = 0; i < drawers.Length; i++)
 				{
-					drawers[i].Invoke(this, minion.animationFrame, IdleCycleAngle);
+					drawers[i].Invoke(this, idleFrame, IdleCycleAngle);
 				}
 			}
 			ClearDrawInfo();

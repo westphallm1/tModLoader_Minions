@@ -220,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 				Vector2 legRotationAngle = (cycleAngle + i * MathHelper.Pi).ToRotationVector2();
 				legRotationAngle.X *= 4;
 				legRotationAngle.Y *= 1.5f;
-				helper.AddSpriteToBatch(GetTexture(Texture + "_Legs" + (i+1)), legRotationAngle + new Vector2(0, 12));
+				helper.AddSpriteToBatch(GetTexture(Texture + "_Legs" + (i+1)), legRotationAngle + new Vector2(0, 14));
 			}
 		}
 
@@ -237,30 +237,32 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 				float r = -MathHelper.Pi / 64 + MathHelper.Pi / 32 * (float)mySin;
 				byte oldAlpha = helper.lightColor.A;
 				helper.lightColor.A = 128;
-				helper.AddSpriteToBatch(GetTexture(Texture), offsetVector, r, 0.5f);
+				helper.AddSpriteToBatch(GetTexture(Texture), (i,3), offsetVector, r, 0.5f + 0.1f * mySin);
 				helper.lightColor.A = oldAlpha;
 			}
 		}
 
 		private void DrawBodyWalking(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
+			frame %= helper.walkCycleFrames;
+			int textureFrame = frame < 15 ? 0 : frame < 30 ? 1 : frame < 45 ? 2 : 1;
 			float r = -MathHelper.Pi / 64 + MathHelper.Pi / 32 * (float)Math.Sin(cycleAngle);
 			// body
-			Vector2 offsetVector = (-2 + 2 * (float)Math.Sin(2 * cycleAngle)) * Vector2.UnitY;
-			helper.AddSpriteToBatch(GetTexture(Texture), offsetVector, r, 1);
+			Vector2 offsetVector = (-1 + 2f * (float)Math.Sin(2 * cycleAngle)) * Vector2.UnitY;
+			helper.AddSpriteToBatch(GetTexture(Texture), (textureFrame, 3), offsetVector, r, 1);
 			// head
-			offsetVector = new Vector2(projectile.spriteDirection * 10, 2 * (float)Math.Sin(cycleAngle));
+			offsetVector = new Vector2(projectile.spriteDirection * 10, -2 + 1.5f * (float)Math.Sin(2 * cycleAngle));
 			helper.AddSpriteToBatch(GetTexture(Texture + "_Head"), offsetVector);
 		}
 
 		private void DrawBodyIdle(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
 			// body
-			Vector2 offsetVector = (-2 + (float)Math.Sin(cycleAngle + MathHelper.Pi / 2)) * Vector2.UnitY;
-			helper.AddSpriteToBatch(GetTexture(Texture), offsetVector);
+			Vector2 offsetVector = (-1 + 2f * (float)Math.Sin(cycleAngle + MathHelper.Pi / 2)) * Vector2.UnitY;
+			helper.AddSpriteToBatch(GetTexture(Texture), (1, 3),  offsetVector);
 			
 			// head
-			offsetVector = new Vector2(projectile.spriteDirection * 10, (float)Math.Sin(cycleAngle));
+			offsetVector = new Vector2(projectile.spriteDirection * 10, -2 + 1.5f * (float)Math.Sin(cycleAngle));
 			scHelper.AddSpriteToBatch(GetTexture(Texture + "_Head"), offsetVector);
 		}
 
