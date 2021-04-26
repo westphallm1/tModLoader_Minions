@@ -119,6 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 	public class FishBowlMinion : HeadCirclingGroupAwareMinion
 	{
 		int lastFiredFrame = 0;
+		int side = -1;
 		protected override int BuffId => BuffType<FishBowlMinionBuff>();
 
 		Projectile launchedFish = default;
@@ -142,10 +143,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
+			projectile.rotation = 0.05f * projectile.velocity.X;
 			if(launchedFish != default)
 			{
 				projectile.frame = 0;
-				projectile.rotation = 0.05f * projectile.velocity.X;
 			} else
 			{
 				base.Animate(4, maxFrame);
@@ -198,16 +199,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		{
 			// prefer a different side based on minion index
 			List<Projectile> minions = GetActiveMinions();
-			int side = 0;
-			if (minions.Count > 0)
+			if (side == -1 && minions.Count > 0)
 			{
 				side = minions.IndexOf(projectile) % 2;
+			} else if (side == -1)
+			{
+				side = 0;
 			}
 
 			Vector2 targetTop = default;
 			if(targetNPCIndex is int idx && Main.npc[idx].active)
 			{
 				targetTop = Main.npc[idx].Top - projectile.Center;
+				targetTop += 2 * Main.npc[idx].velocity;
 				Vector2 newTarget = side == 0 ? Main.npc[idx].BottomRight : Main.npc[idx].BottomLeft; 
 				vectorToTargetPosition = newTarget - projectile.Center;
 			}
@@ -256,9 +260,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 					projectile.knockBack,
 					player.whoAmI,
 					ai0: projectile.whoAmI);
-				for(int i = 0; i < 15; i++)
+				for(int i = 0; i < 5; i++)
 				{
-					Dust.NewDust(projectile.Top, projectile.width, 16, 33, -targetTop.X / 4, -targetTop.Y / 4);
+					Dust.NewDust(projectile.Top, projectile.width, 16, 13, -projectile.velocity.X / 4, -projectile.velocity.Y / 4, newColor: Color.LightBlue);
 				}
 			}
 			vectorBelow.SafeNormalize();
@@ -290,15 +294,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			}
 			if(animationFrame - lastFiredFrame > 8 && Vector2.DistanceSquared(projectile.Center, launchedFish.Center) < 16 * 16)
 			{
+				projectile.tileCollide = true;
 				// (hopefully) get out of any blocks we were stuck in
+				Vector2 catchVelocity = -launchedFish.velocity;
+				catchVelocity.SafeNormalize();
+				catchVelocity.X *= 3;
+				catchVelocity.Y *= 6;
 				if(Framing.GetTileSafely((int)projectile.Center.X/16, (int)projectile.Center.Y/16).active())
 				{
 					projectile.Bottom = launchedFish.Bottom;
-				}
-				for(int i = 0; i < 15; i++)
+				} else
 				{
-					Dust.NewDust(projectile.Top, projectile.width, 16, 33, -launchedFish.velocity.X / 4, -launchedFish.velocity.Y / 4);
+					// otherwise, get "kicked back" by the catch
+					projectile.velocity -= catchVelocity;
 				}
+				for(int i = 0; i < 5; i++)
+				{
+					Dust.NewDust(projectile.Top, projectile.width, 16, 13, catchVelocity.X / 4, catchVelocity.Y / 4, newColor: Color.LightBlue);
+				}
+				side = side == 0 ? 1 : 0;
 				Main.PlaySound(new LegacySoundStyle(19, 1), projectile.Center);
 				launchedFish.Kill();
 			}
