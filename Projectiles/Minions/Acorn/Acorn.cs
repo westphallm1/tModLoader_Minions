@@ -90,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 	public class AcornMinion : HeadCirclingGroupAwareMinion
 	{
 		int lastFiredFrame = 0;
-		protected override int BuffId => BuffType<AcornMinionBuff>();
+		internal override int BuffId => BuffType<AcornMinionBuff>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

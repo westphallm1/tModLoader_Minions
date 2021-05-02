@@ -24,6 +24,7 @@ namespace AmuletOfManyMinions
 	public class AmuletOfManyMinions : Mod
 	{
 		internal static ModHotKey CycleTacticHotKey;
+		internal static ModHotKey CycleTacticsGroupHotKey;
 		internal static ModHotKey QuickDefendHotKey;
 		public override void Load()
 		{
@@ -37,6 +38,7 @@ namespace AmuletOfManyMinions
 			UserInterfaces.Load();
 
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
+			CycleTacticsGroupHotKey = RegisterHotKey("Cycle Tactics Group", "L");
 			QuickDefendHotKey = RegisterHotKey("Minion Quick Defend", "V");
 			if (!Main.dedServ)
 			{
@@ -61,6 +63,7 @@ namespace AmuletOfManyMinions
 			UserInterfaces.Unload();
 
 			CycleTacticHotKey = null;
+			CycleTacticsGroupHotKey = null;
 			QuickDefendHotKey = null;
 		}
 

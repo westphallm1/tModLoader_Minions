@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 	public class BombBuddyMinion : SimpleGroundBasedMinion
 	{
 
-		protected override int BuffId => BuffType<BombBuddyMinionBuff>();
+		internal override int BuffId => BuffType<BombBuddyMinionBuff>();
 		private int slowFrameCount = 0;
 		const int explosionRespawnTime = 90;
 		const int explosionRadius = 64;

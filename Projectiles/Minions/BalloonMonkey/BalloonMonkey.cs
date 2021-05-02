@@ -191,7 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 
 	public class BalloonMonkeyMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<BalloonMonkeyMinionBuff>();
+		internal override int BuffId => BuffType<BalloonMonkeyMinionBuff>();
 		int lastFiredFrame = 0;
 		// don't get too close
 		int preferredDistanceFromTarget = 128;

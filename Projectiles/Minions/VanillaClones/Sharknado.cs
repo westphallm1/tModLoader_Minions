@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class SharknadoMinion : HoverShooterMinion
 	{
-		protected override int BuffId => BuffType<SharknadoMinionBuff>();
+		internal override int BuffId => BuffType<SharknadoMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.Tempest;
 
@@ -216,7 +216,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class BigSharknadoMinion : EmpoweredMinion
 	{
-		protected override int BuffId => BuffType<SharknadoMinionBuff>();
+		internal override int BuffId => BuffType<SharknadoMinionBuff>();
 		protected override int CounterType => ProjectileType<SharknadoMinion>();
 		protected override int dustType => 135;
 

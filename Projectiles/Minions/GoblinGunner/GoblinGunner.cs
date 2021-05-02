@@ -75,12 +75,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 	public class GoblinGunnerCounterMinion : CounterMinion
 	{
 
-		protected override int BuffId => BuffType<GoblinGunnerMinionBuff>();
+		internal override int BuffId => BuffType<GoblinGunnerMinionBuff>();
 		protected override int MinionType => ProjectileType<GoblinGunnerMinion>();
 	}
 	public class GoblinGunnerMinion : EmpoweredMinion
 	{
-		protected override int BuffId => BuffType<GoblinGunnerMinionBuff>();
+		internal override int BuffId => BuffType<GoblinGunnerMinionBuff>();
 		protected override int CounterType => ProjectileType<GoblinGunnerCounterMinion>();
 
 		private int framesSinceLastHit;

@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 	public class StoneCloudMinion : HeadCirclingGroupAwareMinion
 	{
-		protected override int BuffId => BuffType<StoneCloudMinionBuff>();
+		internal override int BuffId => BuffType<StoneCloudMinionBuff>();
 
 		private static int ShockwaveSpeed = 8;
 		private static int ShockwaveInitialRadius = 16;

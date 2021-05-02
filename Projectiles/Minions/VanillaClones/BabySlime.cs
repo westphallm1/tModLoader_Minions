@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class BabySlimeMinion : SimpleGroundBasedMinion
 	{
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.BabySlime;
-		protected override int BuffId => BuffType<BabySlimeMinionBuff>();
+		internal override int BuffId => BuffType<BabySlimeMinionBuff>();
 		private float intendedX = 0;
 
 		public override void SetStaticDefaults()

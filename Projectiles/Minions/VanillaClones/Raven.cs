@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		private int cooldownAfterHitFrames = 16;
 		bool isDashing = false;
 		private Vector2[] myOldPos = new Vector2[5];
-		protected override int BuffId => BuffType<RavenMinionBuff>();
+		internal override int BuffId => BuffType<RavenMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{

@@ -96,13 +96,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 	}
 	public class CorruptionAltarCounterMinion : CounterMinion
 	{
-		protected override int BuffId => BuffType<CorruptionAltarMinionBuff>();
+		internal override int BuffId => BuffType<CorruptionAltarMinionBuff>();
 		protected override int MinionType => ProjectileType<CorruptionAltarMinion>();
 	}
 
 	public class CorruptionAltarMinion : EmpoweredMinion
 	{
-		protected override int BuffId => BuffType<CorruptionAltarMinionBuff>();
+		internal override int BuffId => BuffType<CorruptionAltarMinionBuff>();
 
 		private int framesSinceLastHit;
 		protected override int dustType => DustID.Blood;

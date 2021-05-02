@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 	}
 	public class PaperSurferMinion : SurferMinion
 	{
-		protected override int BuffId => BuffType<PaperSurferMinionBuff>();
+		internal override int BuffId => BuffType<PaperSurferMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

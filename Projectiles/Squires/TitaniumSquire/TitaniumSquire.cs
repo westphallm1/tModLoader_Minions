@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 	public class TitaniumSquireMinion : WeaponHoldingSquire
 	{
-		protected override int BuffId => BuffType<TitaniumSquireMinionBuff>();
+		internal override int BuffId => BuffType<TitaniumSquireMinionBuff>();
 		protected override int AttackFrames => 38;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";

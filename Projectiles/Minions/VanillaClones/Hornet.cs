@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class HornetMinion : HoverShooterMinion
 	{
-		protected override int BuffId => BuffType<HornetMinionBuff>();
+		internal override int BuffId => BuffType<HornetMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.Hornet;
 		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();

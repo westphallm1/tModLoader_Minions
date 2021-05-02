@@ -59,7 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 	public class TumbleSheepMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<TumbleSheepMinionBuff>();
+		internal override int BuffId => BuffType<TumbleSheepMinionBuff>();
 		static int bounceCycleLength = 60;
 		int lastFiredFrame = -bounceCycleLength;
 		// don't get too close

@@ -41,7 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public bool Spawned { get; private set; }
 
-		protected abstract int BuffId { get; }
+		internal abstract int BuffId { get; }
 
 
 		public override void SetStaticDefaults()
@@ -122,7 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public Vector2? SelectedEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
 		{
 			Vector2 losCenterVector = losCenter ?? projectile.Center;
-			PlayerTargetSelectionTactic tactic = player.GetModPlayer<MinionTacticsPlayer>().PlayerTactic;
+			PlayerTargetSelectionTactic tactic = player.GetModPlayer<MinionTacticsPlayer>().GetTacticForMinion(this);
 			MinionPathfindingPlayer pathfindingPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
 			// to cut back on Line-of-Sight computations, always chase the same NPC for some number of frames once one has been found
 			if(targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < tactic.TargetCacheFrames)
@@ -130,14 +130,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				return Main.npc[idx].Center;
 			}
 			Vector2 rangeCheckCenter;
+			BlockAwarePathfinder pathfinder = pathfindingPlayer.GetPathfinder(this);
+			Vector2 waypointPos = pathfindingPlayer.GetWaypointPosition(this);
 			if(!maxRangeFromPlayer)
 			{
 				rangeCheckCenter = projectile.Center;
-			} else if (!pathfindingPlayer.pHelper.InProgress() &&
-				pathfindingPlayer.pHelper.searchSucceeded &&
-				pathfindingPlayer.WaypointPosition != default)
+			} else if (!pathfinder.InProgress() && pathfinder.searchSucceeded && waypointPos != default)
 			{
-				rangeCheckCenter = pathfindingPlayer.WaypointPosition;
+				rangeCheckCenter = waypointPos;
 			} else
 			{
 				rangeCheckCenter = player.Center;

@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 	public class VoidKnifeMinion : TeleportingWeaponMinion
 	{
 
-		protected override int BuffId => BuffType<VoidKnifeMinionBuff>();
+		internal override int BuffId => BuffType<VoidKnifeMinionBuff>();
 		protected override Vector3 lightColor => Color.Purple.ToVector3() * 0.75f;
 		public override void SetStaticDefaults()
 		{

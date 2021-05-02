@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 	}
 	public class FlyingSwordMinion : GroupAwareMinion
 	{
-		protected override int BuffId => BuffType<FlyingSwordMinionBuff>();
+		internal override int BuffId => BuffType<FlyingSwordMinionBuff>();
 
 		int hitCount = 0;
 		int maxHitCount = 8;

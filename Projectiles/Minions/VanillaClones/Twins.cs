@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class MiniRetinazerMinion : HoverShooterMinion
 	{
-		protected override int BuffId => BuffType<TwinsMinionBuff>();
+		internal override int BuffId => BuffType<TwinsMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.Retanimini;
 
@@ -191,7 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		// so just replicate it manually
 		private Vector2[] myOldPos = new Vector2[5];
 
-		protected override int BuffId => BuffType<TwinsMinionBuff>();
+		internal override int BuffId => BuffType<TwinsMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.Spazmamini;
 

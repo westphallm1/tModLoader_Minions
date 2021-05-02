@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 
 	public class BoneSphereProjectile : SimpleMinion
 	{
-		protected override int BuffId => -1;
+		internal override int BuffId => -1;
 		static int TimeToLive = 240;
 		private Vector2 velocity = default;
 		private int lastShotFrame = 0;
@@ -205,7 +205,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 
 	public class NecromancerMinion : EmpoweredMinion
 	{
-		protected override int BuffId => BuffType<NecromancerMinionBuff>();
+		internal override int BuffId => BuffType<NecromancerMinionBuff>();
 		protected override int CounterType => ProjectileType<NecromancerSkeletonMinion>();
 
 		private int framesSinceLastHit;
@@ -366,7 +366,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 
 	public class NecromancerSkeletonMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<NecromancerMinionBuff>();
+		internal override int BuffId => BuffType<NecromancerMinionBuff>();
 		const int explosionRespawnTime = 60;
 		const int explosionRadius = 96;
 		const int explosionAttackRechargeTime = 96;

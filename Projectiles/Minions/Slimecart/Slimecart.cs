@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 	public class SlimecartMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<SlimecartMinionBuff>();
+		internal override int BuffId => BuffType<SlimecartMinionBuff>();
 
 		internal override WaypointMovementStyle waypointMovementStyle => WaypointMovementStyle.TARGET;
 		private int slimeIndex;

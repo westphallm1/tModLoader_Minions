@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 	public class CrystalFistMinion : GroupAwareMinion
 	{
 
-		protected override int BuffId => BuffType<CrystalFistMinionBuff>();
+		internal override int BuffId => BuffType<CrystalFistMinionBuff>();
 		private int framesInAir;
 		private float idleAngle;
 

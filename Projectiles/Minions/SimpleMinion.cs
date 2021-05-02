@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// Makes sure this projectile is synced to other newly joined players 
 			projectile.netImportant = true;
 
-			pathfinder = new MinionPathfindingHelper(projectile);
+			pathfinder = new MinionPathfindingHelper(this);
 		}
 
 

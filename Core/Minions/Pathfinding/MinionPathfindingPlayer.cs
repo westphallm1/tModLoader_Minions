@@ -13,18 +13,43 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 {
-	internal class MinionPathfindingPlayer : ModPlayer
+	internal class PathfinderMetadata
 	{
 		internal BlockAwarePathfinder pHelper = default;
+		internal Vector2 WaypointPosition = default;
+		internal List<Projectile> MinionsAtWaypoint = new List<Projectile>();
+
+		internal PathfinderMetadata(MinionPathfindingPlayer player, int tacticsGroup)
+		{
+			pHelper = new BlockAwarePathfinder(player, tacticsGroup);
+		}
+	}
+	internal class MinionPathfindingPlayer : ModPlayer
+	{
+		public static Color[] WaypointColors = new Color[] { Color.Lime, Color.RoyalBlue, Color.Crimson };
+
+		// dependency on Tactics player is unfortunate
+		internal MinionTacticsPlayer myTacticsPlayer;
+		internal int CurrentTacticsGroup => myTacticsPlayer.CurrentTacticGroup;
+
+
+		internal PathfinderMetadata[] pathfinderMetas = new PathfinderMetadata[MinionTacticsPlayer.TACTICS_GROUPS_COUNT];
 		internal int WaypointPlacementRange = 0;
 		internal int PassivePathfindingRange = 0;
 		// deal a default of 35% less damage while a minion is the maximum waypoint distance away from the player
 		internal float WaypointDamageFalloff = 0.25f;
-		internal Vector2 WaypointPosition = default;
-		internal List<Projectile> MinionsAtWaypoint = new List<Projectile>();
 		// distance for minions to count as "at the waypoint"
 		internal static int WAYPOINT_PROXIMITY_THRESHOLD = 64;
 
+		internal BlockAwarePathfinder GetPathfinder(int idx) => pathfinderMetas[idx].pHelper;
+
+		internal BlockAwarePathfinder GetPathfinder(Minion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].pHelper;
+
+		internal List<Projectile> GetMinionsAtWaypoint(Minion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].MinionsAtWaypoint;
+
+		internal Vector2 GetWaypointPosition(int tacticsGroup) => pathfinderMetas[tacticsGroup].WaypointPosition;
+
+		internal Vector2 GetWaypointPosition(Minion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].WaypointPosition;
 
 		public override void ResetEffects()
 		{
@@ -34,9 +59,16 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		public override void PreUpdate()
 		{
 			// can't find a better hook to initialize the pathfinding helper
-			if(pHelper == default)
+			if(myTacticsPlayer is null)
 			{
-				pHelper = new BlockAwarePathfinder(this);
+				myTacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
+			}
+			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			{
+				if(pathfinderMetas[i] == null)
+				{
+					pathfinderMetas[i] = new PathfinderMetadata(this, i);
+				}
 			}
 			FindWaypointPos();
 			BuildMinionsAtWaypointList();
@@ -44,21 +76,24 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		private void BuildMinionsAtWaypointList()
 		{
-			MinionsAtWaypoint.Clear();
-			if(WaypointPosition == default)
+			for(int j = 0; j < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; j++)
 			{
-				return;
-			}
-			for (int i = 0; i < Main.maxProjectiles; i++)
-			{
-				Projectile p = Main.projectile[i];
-				if (p.active && p.owner == player.whoAmI && (p.minion || ProjectileID.Sets.MinionShot[p.type])
-					&& Vector2.DistanceSquared(WaypointPosition, p.Center) < WAYPOINT_PROXIMITY_THRESHOLD * WAYPOINT_PROXIMITY_THRESHOLD)
+				PathfinderMetadata meta = pathfinderMetas[j];
+				meta.MinionsAtWaypoint.Clear();
+				if(meta.WaypointPosition == default)
 				{
-					MinionsAtWaypoint.Add(p);
+					return;
+				}
+				for (int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if (p.active && p.owner == player.whoAmI && (p.minion || ProjectileID.Sets.MinionShot[p.type])
+						&& Vector2.DistanceSquared(meta.WaypointPosition, p.Center) < WAYPOINT_PROXIMITY_THRESHOLD * WAYPOINT_PROXIMITY_THRESHOLD)
+					{
+						meta.MinionsAtWaypoint.Add(p);
+					}
 				}
 			}
-
 		}
 
 		public override void PostUpdate()
@@ -70,7 +105,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			bool doUpdate = bounds.Contains(myCenter);
 			if(doUpdate)
 			{
-				pHelper?.Update();
+				for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+				{
+					pathfinderMetas[i].pHelper?.Update();
+				}
 			}
 			if(player.ownedProjectileCounts[MinionWaypoint.Type] > 0)
 			{
@@ -80,30 +118,33 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		private void FindWaypointPos()
 		{
-			// get waypoint position
-			WaypointPosition = default;
+			for(int i= 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			{
+				pathfinderMetas[i].WaypointPosition = default;
+			}
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
 				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type
 					&& InWaypointRange(p.Center))
 				{
-					WaypointPosition = p.Center;
+					pathfinderMetas[(int)p.ai[0]].WaypointPosition = p.Center;
 				}
 			}
 		}
+
 		internal bool InWaypointRange(Vector2 position)
 		{
 			return Vector2.Distance(position, player.Center) < 1.25f * WaypointPlacementRange;
 		}
 
-		internal void UpdateWaypointFromPacket(short xOffset, short yOffset)
+		internal void UpdateWaypointFromPacket(short xOffset, short yOffset, int tacticsGroup)
 		{
 			Vector2 newPos = player.Center + new Vector2(xOffset, yOffset);
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type)
+				if (p.active && p.owner == player.whoAmI && p.type == MinionWaypoint.Type && (int)p.ai[0] == tacticsGroup)
 				{
 					p.position = newPos;
 				}
@@ -126,30 +167,32 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		{
 			int type = MinionWaypoint.Type;
 			Vector2 waypointPosition = GetNewWaypointPosition();
-			if (player.ownedProjectileCounts[type] == 0 && !remove)
+			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
-				Projectile.NewProjectile(waypointPosition, Vector2.Zero, type, 0, 0, player.whoAmI);
-			}
-			else
-			{
-				for (int i = 0; i < Main.maxProjectiles; i++)
+				Projectile p = Main.projectile[i];
+				if (p.active && p.owner == player.whoAmI && p.type == type && (int)p.ai[0] == CurrentTacticsGroup)
 				{
-					Projectile p = Main.projectile[i];
-					if (p.active && p.owner == player.whoAmI && p.type == type)
+					if(remove)
 					{
-						if(remove)
+						Main.NewText("Kill! " + remove);
+						p.Kill();
+					} else
+					{
+						p.position = waypointPosition;
+						if(player.whoAmI == Main.myPlayer)
 						{
-							p.Kill();
-						} else
-						{
-							p.position = waypointPosition;
-							if(player.whoAmI == Main.myPlayer)
-							{
-								new WaypointMovementPacket(player, waypointPosition).Send();
-							}
+							new WaypointMovementPacket(player, waypointPosition, (byte)CurrentTacticsGroup).Send();
 						}
 					}
+					return;
 				}
+			}
+			// short circuited if existing waypoint is found
+			if (!remove)
+			{
+				Main.NewText("Create! " + remove);
+				// uses AI[0] to indicate tactic group
+				Projectile.NewProjectile(waypointPosition, Vector2.Zero, type, 0, 0, player.whoAmI, ai0: CurrentTacticsGroup);
 			}
 		}
 	}
@@ -169,7 +212,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 			MinionPathfindingPlayer player = Main.player[projectile.owner].GetModPlayer<MinionPathfindingPlayer>();
 			// no falloff if waypoint not placed
-			if(player.WaypointPosition == default)
+			if(player.pathfinderMetas.All(m=>m.WaypointPosition == default))
 			{
 				return;
 			}

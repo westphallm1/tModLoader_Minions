@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 	public class EclipseHeraldCounterMinion : CounterMinion
 	{
 
-		protected override int BuffId => BuffType<EclipseHeraldMinionBuff>();
+		internal override int BuffId => BuffType<EclipseHeraldMinionBuff>();
 		protected override int MinionType => ProjectileType<EclipseHeraldMinion>();
 	}
 	/// <summary>
@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 	/// </summary>
 	public class EclipseHeraldMinion : EmpoweredMinion
 	{
-		protected override int BuffId => BuffType<EclipseHeraldMinionBuff>();
+		internal override int BuffId => BuffType<EclipseHeraldMinionBuff>();
 
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;

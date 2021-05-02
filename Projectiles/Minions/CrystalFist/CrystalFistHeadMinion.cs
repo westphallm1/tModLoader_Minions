@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		protected int minDistanceToEnemy = 200;
 		protected int animationFrames = 120;
 
-		protected override int BuffId => BuffType<CrystalFistMinionBuff>();
+		internal override int BuffId => BuffType<CrystalFistMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{

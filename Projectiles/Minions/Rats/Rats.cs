@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 
 	public class RatsMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<RatsMinionBuff>();
+		internal override int BuffId => BuffType<RatsMinionBuff>();
 
 		// which of the 3 rats this is, affects some cosmetic behavior
 		private int clusterIdx;

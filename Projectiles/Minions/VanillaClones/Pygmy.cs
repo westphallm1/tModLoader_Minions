@@ -154,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public abstract class BasePygmyMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<PygmyMinionBuff>();
+		internal override int BuffId => BuffType<PygmyMinionBuff>();
 		int lastFiredFrame = 0;
 		// don't get too close
 		int preferredDistanceFromTarget = 128;

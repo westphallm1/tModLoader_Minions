@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 	public class MysticPaintbrushMinion : TeleportingWeaponMinion
 	{
 
-		protected override int BuffId => BuffType<MysticPaintbrushMinionBuff>();
+		internal override int BuffId => BuffType<MysticPaintbrushMinionBuff>();
 		float windUpPerFrame = MathHelper.Pi / 60;
 		float swingPerFrame = MathHelper.Pi / 20;
 		float initialWindUp = MathHelper.PiOver4;

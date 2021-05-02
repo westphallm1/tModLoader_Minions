@@ -83,7 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 	public class StarSurferMinion : SurferMinion
 	{
 
-		protected override int BuffId => BuffType<StarSurferMinionBuff>();
+		internal override int BuffId => BuffType<StarSurferMinionBuff>();
 
 		protected int projectileFireRate = 120;
 		protected int projectileDamage = 30;

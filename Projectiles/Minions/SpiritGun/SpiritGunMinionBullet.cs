@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			set => projectile.ai[0] = value ? 1 : 0;
 		}
 
-		protected override int BuffId => -1;
+		internal override int BuffId => -1;
 
 		bool lookingForTarget;
 		const int speed = 26;

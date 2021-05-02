@@ -2,6 +2,7 @@
 using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Core.Netcode.Packets;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.UI;
 using AmuletOfManyMinions.UI.TacticsUI;
@@ -22,15 +23,29 @@ namespace AmuletOfManyMinions.Core.Minions
 	{
 		//tag version, increment this if you do breaking changes to the way data is saved/loaded so backwards compat can be done. Write proper code in Load/Save to accomodate
 		private const byte LatestVersion = 0;
+		public static int TACTICS_GROUPS_COUNT = 3;
 
-		public byte TacticID { get; private set; } = TargetSelectionTacticHandler.DefaultTacticID;
+		// The list of tactics "teams" belonging to the player
+		public PlayerTargetSelectionTactic[] PlayerTacticsGroups = new PlayerTargetSelectionTactic[TACTICS_GROUPS_COUNT];
+		public byte[] TacticsIDs = new byte[TACTICS_GROUPS_COUNT];
+
+		// The active tactics group
+		public int CurrentTacticGroup = 0;
+
+		// map from minion buff to tactics group
+		public Dictionary<int, int> MinionTacticsMap = new Dictionary<int, int>();
+
+		public byte TacticID { get => TacticsIDs[CurrentTacticGroup]; private set => TacticsIDs[CurrentTacticGroup] = value; }
 
 		public TargetSelectionTactic SelectedTactic => TargetSelectionTacticHandler.GetTactic(TacticID);
 
-		public PlayerTargetSelectionTactic PlayerTactic;
+
+		public PlayerTargetSelectionTactic PlayerTactic { get => PlayerTacticsGroups[CurrentTacticGroup]; set => PlayerTacticsGroups[CurrentTacticGroup] = value; }
+
 
 		private List<byte> TacticIDCycle;
 
+		private int PreviousTacticGroup = 0;
 		private byte PreviousTacticID = TargetSelectionTacticHandler.DefaultTacticID;
 		private bool isQuickDefending = false;
 
@@ -74,7 +89,15 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public override void Initialize()
 		{
-			TacticID = TargetSelectionTacticHandler.GetTactic(TacticID).ID; //Safe conversion of default tactic
+			// set every tactic group to the default
+			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+			{
+				CurrentTacticGroup = i;
+				TacticID = TargetSelectionTacticHandler.DefaultTacticID;
+				TacticID = TargetSelectionTacticHandler.GetTactic(TacticID).ID; //Safe conversion of default tactic
+			}
+			CurrentTacticGroup = 0;
+
 			SyncTimer = 0;
 			TacticIDCycle = new List<byte>
 			{
@@ -138,7 +161,12 @@ namespace AmuletOfManyMinions.Core.Minions
 			{
 				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.FALSE);
 			}
-			PlayerTactic = SelectedTactic.CreatePlayerTactic();
+			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+			{
+				CurrentTacticGroup = i;
+				PlayerTactic = SelectedTactic.CreatePlayerTactic();
+			}
+			CurrentTacticGroup = 0;
 		}
 
 		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
@@ -186,13 +214,44 @@ namespace AmuletOfManyMinions.Core.Minions
 					}
 				}
 			}
-			PlayerTactic?.PreUpdate();
+			// should do some pruning here
+			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+			{
+				PlayerTacticsGroups[i]?.PreUpdate();
+			}
 		}
 
 		public override void PostUpdate()
 		{
 			CheckForAoMMItem();
-			PlayerTactic?.PostUpdate();
+			// should do some pruning here
+			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+			{
+				PlayerTacticsGroups[i]?.PostUpdate();
+			}
+		}
+
+		internal int GetGroupForMinion(Minion minion)
+		{
+			int groupForMinion;
+			if(!MinionTacticsMap.ContainsKey(minion.BuffId))
+			{
+				MinionTacticsMap[minion.BuffId] = CurrentTacticGroup;
+				groupForMinion = CurrentTacticGroup;
+			} else
+			{
+				groupForMinion = MinionTacticsMap[minion.BuffId];
+			}
+			return groupForMinion;
+		}
+
+		public PlayerTargetSelectionTactic GetTacticForMinion(Minion minion)
+		{
+			if(isQuickDefending)
+			{
+				return PlayerTacticsGroups[0];
+			}
+			return PlayerTacticsGroups[GetGroupForMinion(minion)];
 		}
 
 		private void CheckForAoMMItem()
@@ -227,9 +286,19 @@ namespace AmuletOfManyMinions.Core.Minions
 			SetTactic(TacticIDCycle[nextTacticIndex]);
 		}
 
+		private void CycleTacticsGroup()
+		{
+			CurrentTacticGroup = (CurrentTacticGroup + 1) % TACTICS_GROUPS_COUNT;
+			Main.NewText("Now using tactics group " + (CurrentTacticGroup + 1));
+		}
+
 		private void StartQuickDefending()
 		{
 			isQuickDefending = true;
+			PreviousTacticGroup = CurrentTacticGroup;
+			// switch to a consistent tactics group so that we don't get into any weird states
+			// while cycling through tactics groups during quick tactics
+			CurrentTacticGroup = 0;
 			PreviousTacticID = TacticID;
 			SetTactic(TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID);
 			UserInterfaces.tacticsUI.SetSelected(TacticID);
@@ -239,6 +308,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			isQuickDefending = false;
 			SetTactic(PreviousTacticID);
+			CurrentTacticGroup = PreviousTacticGroup;
 			UserInterfaces.tacticsUI.SetSelected(TacticID);
 		}
 
@@ -252,19 +322,15 @@ namespace AmuletOfManyMinions.Core.Minions
 			if(AmuletOfManyMinions.CycleTacticHotKey.JustPressed)
 			{
 				CycleTactic();
-				// for testing, also toggle grid snapping
-				if(SpriteCompositionHelper.posResolution == 2)
-				{
-					SpriteCompositionHelper.posResolution = 1; 
-					SpriteCompositionHelper.frameResolution = 1;
-				}  else
-				{
-					SpriteCompositionHelper.posResolution = 2;
-					SpriteCompositionHelper.frameResolution = 5;
-				}
-				
 				UserInterfaces.tacticsUI.SetSelected(TacticID);
 			}
+			
+			if(AmuletOfManyMinions.CycleTacticsGroupHotKey.JustPressed)
+			{
+				CycleTacticsGroup();
+				UserInterfaces.tacticsUI.SetSelected(TacticID);
+			}
+
 			if(AmuletOfManyMinions.QuickDefendHotKey.JustPressed )
 			{
 				if(ClientConfig.Instance.QuickDefendHotkeyStyle == ClientConfig.QuickDefendToggle)

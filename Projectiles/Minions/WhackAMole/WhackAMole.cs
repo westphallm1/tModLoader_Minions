@@ -102,13 +102,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 	public class WhackAMoleCounterMinion : CounterMinion
 	{
 
-		protected override int BuffId => BuffType<WhackAMoleMinionBuff>();
+		internal override int BuffId => BuffType<WhackAMoleMinionBuff>();
 		protected override int MinionType => ProjectileType<WhackAMoleMinion>();
 	}
 	public class WhackAMoleMinion : EmpoweredMinion
 	{
 
-		protected override int BuffId => BuffType<WhackAMoleMinionBuff>();
+		internal override int BuffId => BuffType<WhackAMoleMinionBuff>();
 		protected override int CounterType => ProjectileType<WhackAMoleCounterMinion>();
 
 		protected override int dustType => DustID.Dirt;

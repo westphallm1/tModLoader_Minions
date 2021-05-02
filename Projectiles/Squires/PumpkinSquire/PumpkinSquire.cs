@@ -127,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 	public class PumpkinSquireMinion : WeaponHoldingSquire
 	{
-		protected override int BuffId => BuffType<PumpkinSquireMinionBuff>();
+		internal override int BuffId => BuffType<PumpkinSquireMinionBuff>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/SpookyWings";
 		protected override string WeaponTexturePath => null;

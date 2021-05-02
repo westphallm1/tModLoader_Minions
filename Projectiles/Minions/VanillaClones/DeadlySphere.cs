@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		// so just replicate it manually
 		private Vector2[] myOldPos = new Vector2[5];
 
-		protected override int BuffId => BuffType<DeadlySphereMinionBuff>();
+		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.DeadlySphere;
 
@@ -232,7 +232,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		float clingDistanceTolerance = 24f;
 		Vector2 targetOffset = default;
 
-		protected override int BuffId => BuffType<DeadlySphereMinionBuff>();
+		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.DeadlySphere;
 
@@ -346,7 +346,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class DeadlySphereFireMinion : HoverShooterMinion
 	{
 
-		protected override int BuffId => BuffType<DeadlySphereMinionBuff>();
+		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.DeadlySphere;
 		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);

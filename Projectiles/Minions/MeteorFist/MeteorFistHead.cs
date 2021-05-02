@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		protected int maxDistanceFromPlayer = 600;
 		protected int minDistanceToEnemy = 200;
 
-		protected override int BuffId => BuffType<MeteorFistMinionBuff>();
+		internal override int BuffId => BuffType<MeteorFistMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{

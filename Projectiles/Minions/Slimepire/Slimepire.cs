@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 
 	public class SlimepireMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<SlimepireMinionBuff>();
+		internal override int BuffId => BuffType<SlimepireMinionBuff>();
 		private float intendedX = 0;
 
 		public override void SetStaticDefaults()

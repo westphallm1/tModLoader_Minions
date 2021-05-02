@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
 	public class AdamantiteSquireMinion : WeaponHoldingSquire
 	{
-		protected override int BuffId => BuffType<AdamantiteSquireMinionBuff>();
+		internal override int BuffId => BuffType<AdamantiteSquireMinionBuff>();
 		protected override int AttackFrames => 25;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";

@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
 	public class MushroomSquireMinion : WeaponHoldingSquire
 	{
-		protected override int BuffId => BuffType<MushroomSquireMinionBuff>();
+		internal override int BuffId => BuffType<MushroomSquireMinionBuff>();
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/LeafWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/MushroomSquire/MushroomSquireSword";

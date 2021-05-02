@@ -10,7 +10,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	delegate void ModifyPath(ref Vector2 target);
 	public class MinionPathfindingHelper
 	{
-		private Projectile projectile;
+		private Minion minion;
+		private Projectile projectile => minion.projectile;
 		internal BlockAwarePathfinder pathfinder;
 		// number of nodes to check against before starting from the beginning
 		static int HOMING_LOS_CHECKS = 8;
@@ -34,10 +35,9 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal int nodeProximity = 24;
 
 
-		internal MinionPathfindingHelper(Projectile projectile)
+		internal MinionPathfindingHelper(Minion minion)
 		{
-			this.projectile = projectile;
-			
+			this.minion = minion;
 		}
 
 		internal bool InTransit => nodeIndex > -1 && nodeIndex < pathfinder.orderedPath.Count - 1;
@@ -84,12 +84,24 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		}
 		internal void Setup()
 		{
-			pathfinder = Main.player[projectile.owner]?.GetModPlayer<MinionPathfindingPlayer>()?.pHelper;
 			realWidth = projectile.width;
 			realHeight = projectile.height;
 			realDrawOffsetX = projectile.modProjectile.drawOffsetX;
 			realDrawOffsetY = projectile.modProjectile.drawOriginOffsetY;
 
+		}
+		
+		// the pathfinder may now change, so we have to re-poll it every turn
+		internal void SetPathfinder()
+		{
+			// this is a little hacky
+			Player player = Main.player[projectile.owner];
+			BlockAwarePathfinder nextPathfinder = player?.GetModPlayer<MinionPathfindingPlayer>().GetPathfinder(minion);
+			if(pathfinder != nextPathfinder)
+			{
+				DetachFromPath();
+				pathfinder = nextPathfinder;
+			}
 		}
 
 		// in case we need to leave the path for eg. attacking an enemy
@@ -181,6 +193,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				Setup();
 				DetachFromPath();
 			}
+			// need to re-check that we haven't been assigned to a different pathfinder
+			SetPathfinder();
 			if(pathfinder.searchFailed || pathfinder.waypointPosition == default)
 			{
 				DetachFromPath();
@@ -224,11 +238,12 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				MinionPathfindingPlayer.WAYPOINT_PROXIMITY_THRESHOLD)
 			{
 				MinionPathfindingPlayer owner = Main.player[projectile.owner].GetModPlayer<MinionPathfindingPlayer>();
-				if(owner.MinionsAtWaypoint.Count > 0)
+				List<Projectile> minionsAtWaypoint = owner.GetMinionsAtWaypoint(minion);
+				if(minionsAtWaypoint.Count > 0)
 				{
 					float animationAngle = MathHelper.TwoPi * (Main.GameUpdateCount % 120) / 120f;
-					animationAngle += MathHelper.TwoPi * owner.MinionsAtWaypoint.IndexOf(projectile) / (float)owner.MinionsAtWaypoint.Count;
-					target += Math.Min(48, 24 + 2 * owner.MinionsAtWaypoint.Count) * animationAngle.ToRotationVector2();
+					animationAngle += MathHelper.TwoPi * minionsAtWaypoint.IndexOf(projectile) / (float)minionsAtWaypoint.Count;
+					target += Math.Min(48, 24 + 2 * minionsAtWaypoint.Count) * animationAngle.ToRotationVector2();
 				}
 			} else if(target.Length() < 16)
 			{

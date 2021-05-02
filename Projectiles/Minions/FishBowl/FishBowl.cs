@@ -120,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 	{
 		int lastFiredFrame = 0;
 		int side = -1;
-		protected override int BuffId => BuffType<FishBowlMinionBuff>();
+		internal override int BuffId => BuffType<FishBowlMinionBuff>();
 
 		Projectile launchedFish = default;
 		public override void SetStaticDefaults()

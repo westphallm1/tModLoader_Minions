@@ -142,7 +142,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class ImpMinion : HoverShooterMinion
 	{
-		protected override int BuffId => BuffType<ImpMinionBuff>();
+		internal override int BuffId => BuffType<ImpMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.FlyingImp;
 
@@ -304,7 +304,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	/// </summary>
 	public class ImpPortalMinion : EmpoweredMinion
 	{
-		protected override int BuffId => BuffType<ImpMinionBuff>();
+		internal override int BuffId => BuffType<ImpMinionBuff>();
 		protected override int CounterType => ProjectileType<ImpMinion>();
 		protected override int dustType => 6;
 

@@ -199,7 +199,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public abstract class BasePirateMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<PirateMinionBuff>();
+		internal override int BuffId => BuffType<PirateMinionBuff>();
 
 		protected Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
 		{
@@ -434,7 +434,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 	{
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 16;
-		protected override int BuffId => BuffType<PirateMinionBuff>();
+		internal override int BuffId => BuffType<PirateMinionBuff>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -514,7 +514,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public class FlyingDutchmanMinion : HoverShooterMinion
 	{
-		protected override int BuffId => BuffType<PirateMinionBuff>();
+		internal override int BuffId => BuffType<PirateMinionBuff>();
 
 		internal override int? FiredProjectileId => ProjectileType<PirateCannonball>();
 		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 14).WithVolume(0.5f);

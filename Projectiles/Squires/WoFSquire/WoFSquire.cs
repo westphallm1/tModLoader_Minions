@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class WoFSquireMinion : SquireMinion
 	{
-		protected override int BuffId => BuffType<WoFSquireMinionBuff>();
+		internal override int BuffId => BuffType<WoFSquireMinionBuff>();
 		int dashDirection = 1;
 		bool isDashing;
 
@@ -357,7 +357,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class GuideVoodooSquireMinion : WeaponHoldingSquire
 	{
-		protected override int BuffId => BuffType<GuideVoodooSquireMinionBuff>();
+		internal override int BuffId => BuffType<GuideVoodooSquireMinionBuff>();
 		protected override int AttackFrames => 40;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => null;

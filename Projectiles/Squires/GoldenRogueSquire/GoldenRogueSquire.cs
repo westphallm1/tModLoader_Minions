@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 	public class GoldenRogueSquireMinion : WeaponHoldingSquire
 	{
-		protected override int BuffId => BuffType<GoldenRogueSquireMinionBuff>();
+		internal override int BuffId => BuffType<GoldenRogueSquireMinionBuff>();
 		protected override int AttackFrames => 15;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/GoldenWings";

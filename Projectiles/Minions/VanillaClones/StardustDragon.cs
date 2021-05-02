@@ -31,14 +31,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class StardustDragonCounterMinion : CounterMinion
 	{
 
-		protected override int BuffId => BuffType<StardustDragonMinionBuff>();
+		internal override int BuffId => BuffType<StardustDragonMinionBuff>();
 		protected override int MinionType => ProjectileType<StardustDragonMinion>();
 	}
 
 	public class StardustDragonMinion : WormMinion
 	{
 		public override string Texture => "Terraria/Item_0";
-		protected override int BuffId => BuffType<StardustDragonMinionBuff>();
+		internal override int BuffId => BuffType<StardustDragonMinionBuff>();
 		protected override int CounterType => ProjectileType<StardustDragonCounterMinion>();
 		protected override int dustType => 135;
 		protected override float baseDamageRatio => 1.6f;

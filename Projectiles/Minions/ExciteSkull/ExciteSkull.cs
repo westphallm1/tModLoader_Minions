@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 
 	public class ExciteSkullMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<ExciteSkullMinionBuff>();
+		internal override int BuffId => BuffType<ExciteSkullMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{

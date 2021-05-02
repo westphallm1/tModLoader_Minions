@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 	// Uses LocalAI[0] to indicate whether the projectile is close to its orbit position
 	public class GoblinTechnomancerProbeMinion : HeadCirclingGroupAwareMinion
 	{
-		protected override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
+		internal override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
 		int lastShootFrame = 0;
 
 		bool isCloseToCenter
@@ -165,7 +165,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 	public class GoblinTechnomancerMinion : EmpoweredMinion
 	{
-		protected override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
+		internal override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
 		protected override int CounterType => ProjectileType<GoblinTechnomancerProbeMinion>();
 
 		private int framesSinceLastHit;

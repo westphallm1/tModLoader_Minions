@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class UFOMinion : HoverShooterMinion
 	{
-		protected override int BuffId => BuffType<UFOMinionBuff>();
+		internal override int BuffId => BuffType<UFOMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.UFOMinion;
 		public override void SetStaticDefaults()

@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class StardustCellMinion : HoverShooterMinion
 	{
-		protected override int BuffId => BuffType<StardustCellMinionBuff>();
+		internal override int BuffId => BuffType<StardustCellMinionBuff>();
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.StardustCellMinion;
 		public override string GlowTexture => "Terraria/Glow_189";

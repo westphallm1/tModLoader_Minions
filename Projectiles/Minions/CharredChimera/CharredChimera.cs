@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
 		public override string Texture => "Terraria/Item_0";
 
-		protected override int BuffId => BuffType<CharredChimeraMinionBuff>();
+		internal override int BuffId => BuffType<CharredChimeraMinionBuff>();
 
 		int speed = 8;
 		int inertia = 16;
@@ -172,12 +172,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 	}
 	public class CharredChimeraCounterMinion : CounterMinion
 	{
-		protected override int BuffId => BuffType<CharredChimeraMinionBuff>();
+		internal override int BuffId => BuffType<CharredChimeraMinionBuff>();
 		protected override int MinionType => ProjectileType<CharredChimeraMinion>();
 	}
 	public class CharredChimeraMinion : EmpoweredMinion
 	{
-		protected override int BuffId => BuffType<CharredChimeraMinionBuff>();
+		internal override int BuffId => BuffType<CharredChimeraMinionBuff>();
 		protected int targetedInertia = 15;
 		protected int targetedSpeed = 14;
 		protected int maxDistanceFromPlayer = 850;

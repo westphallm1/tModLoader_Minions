@@ -165,6 +165,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	public class BlockAwarePathfinder
 	{
 		private MinionPathfindingPlayer modPlayer;
+
+		private int tacticsGroup;
 		private Player player => modPlayer.player;
 
 		internal static List<NPC> npcsInBeaconRange;
@@ -209,9 +211,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal List<Vector2> orderedPath;
 		internal bool playerPlacedWaypoint = false;
 
-		internal BlockAwarePathfinder(MinionPathfindingPlayer player)
+		internal BlockAwarePathfinder(MinionPathfindingPlayer player, int tacticsGroup)
 		{
 			modPlayer = player;
+			this.tacticsGroup = tacticsGroup;
 		}
 
 		private WaypointSearchNode AddNode(WaypointSearchNode parent)
@@ -571,6 +574,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			int pathAnimationLength = Math.Max(30, (int)pathLength / 10);
 			float desiredDistance = (Main.GameUpdateCount % pathAnimationLength) * 10;
 			float traversedDistance = 0;
+			Color dustColor = MinionPathfindingPlayer.WaypointColors[tacticsGroup];
+			if(modPlayer.CurrentTacticsGroup != tacticsGroup)
+			{
+				dustColor = Color.Multiply(dustColor, 0.5f);
+			}
 			for(int i = 0; i < orderedPath.Count -1; i++)
 			{
 				Vector2 nextPathSegment = orderedPath[i + 1] - orderedPath[i];
@@ -581,7 +589,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 					nextPathSegment.Normalize();
 					nextPathSegment *= remainingDistance;
 					Dust.NewDust(orderedPath[i] + nextPathSegment, 1, 1, DustType<MinionWaypointDust>(), 
-						newColor: playerPlacedWaypoint ? Color.LimeGreen : Color.MediumPurple, Scale: 1.2f);
+						newColor: playerPlacedWaypoint ?  dustColor : Color.MediumPurple, Scale: 1.2f);
 					break;
 				}
 				traversedDistance += nextDistance;
@@ -591,10 +599,11 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		public Vector2 WaypointPos()
 		{
 			// first: check for the player-placed waypoint
-			if(modPlayer.WaypointPosition != default && modPlayer.InWaypointRange(modPlayer.WaypointPosition))
+			Vector2 waypointPos = modPlayer.GetWaypointPosition(tacticsGroup);
+			if(waypointPos != default && modPlayer.InWaypointRange(waypointPos))
 			{
 				playerPlacedWaypoint = true;
-				return modPlayer.WaypointPosition;
+				return waypointPos;
 			}
 			int searchRange = modPlayer.PassivePathfindingRange * modPlayer.PassivePathfindingRange;
 			if(searchRange == 0)

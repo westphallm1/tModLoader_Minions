@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	}
 	public abstract class BaseSpiderMinion : SimpleGroundBasedMinion
 	{
-		protected override int BuffId => BuffType<SpiderMinionBuff>();
+		internal override int BuffId => BuffType<SpiderMinionBuff>();
 
 		bool isClinging = false;
 		bool onWall = false;
