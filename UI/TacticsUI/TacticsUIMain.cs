@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Tactics;
+﻿using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.UI.Common;
 using Microsoft.Xna.Framework;
@@ -33,6 +34,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		//We keep references of the children for easier access later
 		private TacticsPanel tacticsPanel;
+		private TacticsGroupPanel tacticsGroupPanel;
 		private OpenCloseButton openCloseButton;
 
 		internal OpenedTriState opened = OpenedTriState.HIDDEN;
@@ -52,6 +54,86 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			Left.Pixels = -int.MaxValue / 2;
 			Top.Pixels = -int.MaxValue / 2;
 
+			// first, set up the tactics group panel
+			SetupTacticsGroupPanel();
+
+			// then, set up the tactics panel
+			SetupTacticsPanel();
+
+			// group panel is drawn on top of the tactics panel, so append in reverse order of creation
+			Append(tacticsPanel); //Append links the two UIs together in a children/parent relation
+			Append(tacticsGroupPanel);
+
+			//Finally adjust the open/close button
+			openCloseButton = new OpenCloseButton(closeTexture);
+			openCloseButton.Top.Pixels = tacticsPanel.Top.Pixels + tacticsPanel.Height.Pixels; //Attach at the bottom of the panel
+			openCloseButton.HAlign = 0.65f; //Center aligns with center-ish of parent
+			openCloseButton.OnClick += OpenCloseButton_OnClick;
+			Append(openCloseButton);
+
+			//After all childrens widths and heights are determined, adjust the element one so it covers everything that got appended to
+			this.Width.Pixels = tacticsPanel.Left.Pixels + tacticsPanel.Width.Pixels;
+			this.Height.Pixels = tacticsPanel.Top.Pixels + tacticsPanel.Height.Pixels + openCloseButton.Height.Pixels;
+		}
+
+		/// <summary>
+		/// Setup the panel that allows the user to set the active tactics group
+		/// </summary>
+		private void SetupTacticsGroupPanel()
+		{
+			List<TacticsGroupButton> groupButtons = new List<TacticsGroupButton>();
+			int rows = 2;
+			int columns = 2;
+
+			int width = 24;
+			int height = 24;
+
+			//Keep them even numbers, they are divided by 2 later
+			int xMargin = 4;
+			int yMargin = 4;
+
+			int widthWithMargin = width + xMargin;
+			int heightWithMargin = height + yMargin;
+
+			for(int i = 0; i< MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			{
+				TacticsGroupButton button = new TacticsGroupButton(i);
+				// todo space these out radially
+
+				int row = i / columns;
+				int column = i % columns;
+
+				//Top left of the position it should insert in
+				int yPos = yMargin / 2 + heightWithMargin * row;
+				// offset the X position of the icon in the second row
+				int xPos = xMargin / 2 + widthWithMargin * column + (row * widthWithMargin / 2);
+
+				//Calculation so its centered around the center of both calculated pos and button (dynamic!)
+				float yOffsetForSize = (heightWithMargin - button.Height.Pixels) / 2;
+				float xOffsetForSize = (widthWithMargin - button.Width.Pixels) / 2;
+
+				button.Top.Pixels = yPos + yOffsetForSize;
+				button.Left.Pixels = xPos + xOffsetForSize;
+
+				groupButtons.Add(button);
+			}
+
+			tacticsGroupPanel = new TacticsGroupPanel(groupButtons);
+			//Make it so the panel aligns with the top left corner of the main element
+			tacticsGroupPanel.Top.Precent = 0f;
+			tacticsGroupPanel.Left.Precent = 0f;
+
+			//Adjust the panels dimensions after populating it
+			tacticsGroupPanel.Width.Pixels = xMargin + widthWithMargin * columns;
+			tacticsGroupPanel.Height.Pixels = yMargin + heightWithMargin * rows;
+		}
+
+		/// <summary>
+		/// Set up the tactics panel which allows choosing a tactic for the currently selected tactic.
+		/// Must be called after SetupTacticsGroupPanel, for alignment reasons
+		/// </summary>
+		private void SetupTacticsPanel()
+		{
 			//These get appended to tacticsPanel later
 			List<TacticButton> tacticsButtons = new List<TacticButton>();
 
@@ -71,24 +153,17 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			};
 
 			int assignedCount = orderedIDs.Count;
-			//int count = TargetSelectionTacticHandler.Count;
-
-			//if (count != assignedCount)
-			//{
-			//	throw new Exception($"Tactic count does not match the buttons added to the tactics UI (loaded: {count}, assigned: {assignedCount})");
-			//}
 
 			//Keep them even numbers, they are divided by 2 later
-			int xMargin = 6;
+			int xMargin = 4;
 			int yMargin = 4;
 
 			int rows = 2;
 			int columns = assignedCount / rows;
 
 			//Assume same size for all icons
-			//TODO change these when icons are done
-			int width = 32;
-			int height = 32;
+			int width = 30;
+			int height = 30;
 			int widthWithMargin = width + xMargin;
 			int heightWithMargin = height + yMargin;
 
@@ -115,26 +190,17 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 			tacticsPanel = new TacticsPanel(tacticsButtons);
 
-			//Make it so the panel aligns with the top left corner of the main element
-			tacticsPanel.Top.Precent = 0f;
-			tacticsPanel.Left.Precent = 0f;
+			// Make it so the panel aligns with the right edge of the tactics group panel, slightly offset downwards
+			tacticsPanel.Top.Pixels = 8;
+			tacticsPanel.Left.Pixels = tacticsGroupPanel.Width.Pixels - 2;
+			//tacticsPanel.Left.Precent = 0f; // tacticsGroupPanel.Left.Pixels + tacticsGroupPanel.Width.Pixels;
 
 			//Adjust the panels dimensions after populating it
 			tacticsPanel.Width.Pixels = xMargin + widthWithMargin * columns;
 			tacticsPanel.Height.Pixels = yMargin + heightWithMargin * rows;
-			Append(tacticsPanel); //Append links the two UIs together in a children/parent relation
 
-			//Finally adjust the button
-			openCloseButton = new OpenCloseButton(closeTexture);
-			openCloseButton.Top.Pixels = tacticsPanel.Height.Pixels; //Attach at the bottom of the panel
-			openCloseButton.HAlign = 0.5f; //Center aligns with center of parent
-			openCloseButton.OnClick += OpenCloseButton_OnClick;
-			Append(openCloseButton);
-
-			//After all childrens widths and heights are determined, adjust the element one so it covers everything that got appended to
-			this.Width.Pixels = tacticsPanel.Width.Pixels;
-			this.Height.Pixels = tacticsPanel.Height.Pixels + openCloseButton.Height.Pixels;
 		}
+
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
@@ -259,10 +325,11 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		/// <summary>
 		/// This gets called once when the player enters the world to initialize the UI with values
 		/// </summary>
-		/// <param name="id">Tactic ID</param>
-		internal void SetSelected(int id)
+		/// <param name="tacticId">Tactic ID</param>
+		internal void SetSelected(int tacticId, int groupId)
 		{
-			tacticsPanel.SetSelected(id);
+			tacticsPanel.SetSelected(tacticId);
+			tacticsGroupPanel.SetSelected(groupId);
 		}
 
 	}

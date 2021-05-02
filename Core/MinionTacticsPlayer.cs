@@ -87,6 +87,13 @@ namespace AmuletOfManyMinions.Core.Minions
 			PlayerTactic = SelectedTactic.CreatePlayerTactic();
 		}
 
+		public void SetTacticsGroup(int index)
+		{
+			CurrentTacticGroup = index;
+			// also update the tactics panel, this is a bit of a hacky way to go about
+			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
+		}
+
 		public override void Initialize()
 		{
 			// set every tactic group to the default
@@ -153,7 +160,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void OnEnterWorld(Player player)
 		{
 			if (Main.netMode == NetmodeID.Server) return; //Safety check, this hook shouldn't run serverside anyway
-			UserInterfaces.tacticsUI.SetSelected(TacticID);
+			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 			if(!TacticsUnlocked)
 			{
 				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.HIDDEN);
@@ -289,7 +296,6 @@ namespace AmuletOfManyMinions.Core.Minions
 		private void CycleTacticsGroup()
 		{
 			CurrentTacticGroup = (CurrentTacticGroup + 1) % TACTICS_GROUPS_COUNT;
-			Main.NewText("Now using tactics group " + (CurrentTacticGroup + 1));
 		}
 
 		private void StartQuickDefending()
@@ -301,7 +307,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			CurrentTacticGroup = 0;
 			PreviousTacticID = TacticID;
 			SetTactic(TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID);
-			UserInterfaces.tacticsUI.SetSelected(TacticID);
+			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 		}
 
 		private void StopQuickDefending()
@@ -309,7 +315,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			isQuickDefending = false;
 			SetTactic(PreviousTacticID);
 			CurrentTacticGroup = PreviousTacticGroup;
-			UserInterfaces.tacticsUI.SetSelected(TacticID);
+			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 		}
 
 		public override void ProcessTriggers(TriggersSet triggersSet)
@@ -322,13 +328,13 @@ namespace AmuletOfManyMinions.Core.Minions
 			if(AmuletOfManyMinions.CycleTacticHotKey.JustPressed)
 			{
 				CycleTactic();
-				UserInterfaces.tacticsUI.SetSelected(TacticID);
+				UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 			}
 			
 			if(AmuletOfManyMinions.CycleTacticsGroupHotKey.JustPressed)
 			{
 				CycleTacticsGroup();
-				UserInterfaces.tacticsUI.SetSelected(TacticID);
+				UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 			}
 
 			if(AmuletOfManyMinions.QuickDefendHotKey.JustPressed )

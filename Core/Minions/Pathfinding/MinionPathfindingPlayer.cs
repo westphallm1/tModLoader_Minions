@@ -4,10 +4,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -174,7 +171,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				{
 					if(remove)
 					{
-						Main.NewText("Kill! " + remove);
 						p.Kill();
 					} else
 					{
@@ -190,7 +186,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			// short circuited if existing waypoint is found
 			if (!remove)
 			{
-				Main.NewText("Create! " + remove);
 				// uses AI[0] to indicate tactic group
 				Projectile.NewProjectile(waypointPosition, Vector2.Zero, type, 0, 0, player.whoAmI, ai0: CurrentTacticsGroup);
 			}

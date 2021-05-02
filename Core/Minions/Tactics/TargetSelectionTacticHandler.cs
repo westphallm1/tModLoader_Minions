@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
+﻿using AmuletOfManyMinions.Core.Minions.Tactics.TacticsGroups;
+using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		public static Type DefaultTacticType => typeof(ClosestEnemyToMinion);
 
 		private static List<TargetSelectionTactic> TacticDatas { get; set; }
+
+		internal static List<TacticsGroup> TacticsGroups { get; set; }
 		public static Dictionary<Type, byte> TypeToID { get; private set; }
 		public static Dictionary<string, byte> NameToID { get; private set; }
 
@@ -32,31 +35,41 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		public static List<Texture2D> Textures { get; private set; }
 		public static List<Texture2D> OutlineTextures { get; private set; }
 
+		public static List<Texture2D> GroupTextures { get; private set; }
+		public static List<Texture2D> GroupOutlineTextures { get; private set; }
+
 		public static Mod Mod { get; private set; }
 
 		public static void Load()
 		{
 			TacticDatas = new List<TargetSelectionTactic>();
+			TacticsGroups = new List<TacticsGroup>();
 			TypeToID = new Dictionary<Type, byte>();
 			NameToID = new Dictionary<string, byte>();
 			DisplayNames = new List<string>();
 			Descriptions = new List<string>();
 			Textures = new List<Texture2D>();
 			OutlineTextures = new List<Texture2D>();
+			GroupTextures = new List<Texture2D>();
+			GroupOutlineTextures = new List<Texture2D>();
 
 			RegisterTacticDatas();
+			RegisterTacticsGroups();
 		}
 
 		public static void Unload()
 		{
 			Count = 0;
 			TacticDatas = null;
+			TacticsGroups = null;
 			TypeToID = null;
 			NameToID = null;
 			DisplayNames = null;
 			Descriptions = null;
 			Textures = null;
 			OutlineTextures = null;
+			GroupTextures = null;
+			GroupOutlineTextures = null;
 		}
 
 		private static void RegisterTacticDatas()
@@ -93,6 +106,17 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 				TypeToID[type] = id;
 				NameToID[name] = id;
 				tactic.ID = id;
+			}
+		}
+
+		private static void RegisterTacticsGroups()
+		{
+			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			{
+				TacticsGroup group = new TacticsGroup(i);
+				TacticsGroups.Add(group);
+				GroupTextures.Add(ModContent.GetTexture(group.Texture));
+				GroupOutlineTextures.Add(ModContent.GetTexture(group.Texture + "_Outline"));
 			}
 		}
 
