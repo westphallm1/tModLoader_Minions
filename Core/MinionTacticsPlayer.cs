@@ -236,6 +236,12 @@ namespace AmuletOfManyMinions.Core.Minions
 			{
 				PlayerTacticsGroups[i]?.PostUpdate();
 			}
+			// cant run in postupdate since the buff itself eats triggers
+			//int clickedBuff = BuffClickDetector.GetClickedBuffId();
+			//if(clickedBuff > -1)
+			//{
+			//	Main.NewText("Clicked on buff " + clickedBuff + " " + Main.MouseScreen);
+			//}
 		}
 
 		internal int GetGroupForMinion(Minion minion)
@@ -252,6 +258,15 @@ namespace AmuletOfManyMinions.Core.Minions
 			return groupForMinion;
 		}
 
+		internal void SetGroupForMinion(int groupId, int minionBuffId)
+		{
+			MinionTacticsMap[minionBuffId] = groupId;
+		}
+
+		internal bool GroupIsSetForMinion(int minionBuffId)
+		{
+			return MinionTacticsMap.ContainsKey(minionBuffId);
+		}
 		public PlayerTargetSelectionTactic GetTacticForMinion(Minion minion)
 		{
 			if(isQuickDefending)

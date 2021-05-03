@@ -20,6 +20,7 @@ namespace AmuletOfManyMinions.UI
 	{
 		internal static UserInterface tacticsInterface;
 		internal static TacticsUIMain tacticsUI;
+		internal static BuffRowClickCapture buffClickCapture;
 
 		private static GameTime _lastUpdateUiGameTime;
 
@@ -30,9 +31,12 @@ namespace AmuletOfManyMinions.UI
 				tacticsInterface = new UserInterface();
 
 				tacticsUI = new TacticsUIMain();
+				buffClickCapture = new BuffRowClickCapture();
 				tacticsUI.Activate();
+				buffClickCapture.Activate();
 				UIState state = new UIState();
 				state.Append(tacticsUI);
+				state.Append(buffClickCapture);
 
 				tacticsInterface.SetState(state);
 			}
@@ -42,6 +46,7 @@ namespace AmuletOfManyMinions.UI
 		{
 			tacticsInterface = null;
 			tacticsUI = null;
+			buffClickCapture = null;
 		}
 
 		public static void UpdateUI(GameTime gameTime)
