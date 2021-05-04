@@ -16,6 +16,8 @@ namespace AmuletOfManyMinions.UI.Common
 
 		private string hoverText = "";
 
+		// need to override in TacticsGroupButton
+		public virtual bool InHoverState => IsMouseHovering;
 		public UIImageButtonExtended(Texture2D texture)
 		{
 			SetImage(texture);
@@ -40,7 +42,7 @@ namespace AmuletOfManyMinions.UI.Common
 		{
 			if (color == default) color = Color.White;
 
-			spriteBatch.Draw(position: GetDimensions().Position() + off, texture: texture, color: color * (IsMouseHovering ? alphaOver : alphaOut));
+			spriteBatch.Draw(position: GetDimensions().Position() + off, texture: texture, color: color * (InHoverState ? alphaOver : alphaOut));
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)

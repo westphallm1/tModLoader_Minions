@@ -64,6 +64,8 @@ namespace AmuletOfManyMinions.Core.Minions
 		private bool syncTactic = false;
 		private bool syncConfig = false;
 
+		private bool lastLeftClick = false;
+
 		/// <summary>
 		/// Whether or not to choose the target selected by the current minion tactic over
 		/// the target selected by the player target reticle.
@@ -236,26 +238,25 @@ namespace AmuletOfManyMinions.Core.Minions
 			{
 				PlayerTacticsGroups[i]?.PostUpdate();
 			}
-			// cant run in postupdate since the buff itself eats triggers
-			//int clickedBuff = BuffClickDetector.GetClickedBuffId();
-			//if(clickedBuff > -1)
-			//{
-			//	Main.NewText("Clicked on buff " + clickedBuff + " " + Main.MouseScreen);
-			//}
 		}
 
-		internal int GetGroupForMinion(Minion minion)
+		internal int GetGroupForBuff(int buffId)
 		{
 			int groupForMinion;
-			if(!MinionTacticsMap.ContainsKey(minion.BuffId))
+			if(!MinionTacticsMap.ContainsKey(buffId))
 			{
-				MinionTacticsMap[minion.BuffId] = CurrentTacticGroup;
+				MinionTacticsMap[buffId] = CurrentTacticGroup;
 				groupForMinion = CurrentTacticGroup;
 			} else
 			{
-				groupForMinion = MinionTacticsMap[minion.BuffId];
+				groupForMinion = MinionTacticsMap[buffId];
 			}
 			return groupForMinion;
+
+		}
+		internal int GetGroupForMinion(Minion minion)
+		{
+			return GetGroupForBuff(minion.BuffId);
 		}
 
 		internal void SetGroupForMinion(int groupId, int minionBuffId)
@@ -371,7 +372,6 @@ namespace AmuletOfManyMinions.Core.Minions
 			{
 				StopQuickDefending();
 			}
-			
 		}
 	}
 }

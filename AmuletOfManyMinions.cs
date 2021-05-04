@@ -18,6 +18,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace AmuletOfManyMinions
 {

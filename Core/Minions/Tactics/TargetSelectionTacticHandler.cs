@@ -37,6 +37,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 
 		public static List<Texture2D> GroupTextures { get; private set; }
 		public static List<Texture2D> GroupOutlineTextures { get; private set; }
+		public static List<Texture2D> GroupOverlayTextures { get; private set; }
 
 		public static Mod Mod { get; private set; }
 
@@ -52,6 +53,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			OutlineTextures = new List<Texture2D>();
 			GroupTextures = new List<Texture2D>();
 			GroupOutlineTextures = new List<Texture2D>();
+			GroupOverlayTextures = new List<Texture2D>();
 
 			RegisterTacticDatas();
 			RegisterTacticsGroups();
@@ -70,6 +72,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			OutlineTextures = null;
 			GroupTextures = null;
 			GroupOutlineTextures = null;
+			GroupOverlayTextures = null;
 		}
 
 		private static void RegisterTacticDatas()
@@ -117,6 +120,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 				TacticsGroups.Add(group);
 				GroupTextures.Add(ModContent.GetTexture(group.Texture));
 				GroupOutlineTextures.Add(ModContent.GetTexture(group.Texture + "_Outline"));
+				GroupOverlayTextures.Add(ModContent.GetTexture(group.Texture + "_Overlay"));
 			}
 		}
 

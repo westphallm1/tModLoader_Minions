@@ -1,29 +1,28 @@
 ﻿using AmuletOfManyMinions.Core.Minions;
-using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TacticsGroups;
-using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
-using AmuletOfManyMinions.UI.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ModLoader.Default;
 using Terraria.UI;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
-	//Because it's a UIPanel, it automatically draws the default blue background
-	internal class TacticsGroupPanel : UIPanel
+	// largely lifted from TacticsGroupPanel, a decent bit of cruft left over
+	class TacticsGroupBuffDropdown : UIPanel
 	{
-		private readonly List<TacticsGroupButton> buttons;
+		// maybe not the best to expose this
+		internal readonly List<TacticsGroupButton> buttons;
 
-		private int selectedIndex = 0; //From the buttons list
+		private int selectedIndex; //From the buttons list
+		private int currentBuffId = -1;
 
-		internal TacticsGroupPanel(List<TacticsGroupButton> buttons)
+		internal int framesUntilHide = 0; // auto-hide if not clicked in a couple seconds
+
+		internal TacticsGroupBuffDropdown(List<TacticsGroupButton> buttons)
 		{
 			this.buttons = buttons;
 		}
@@ -42,6 +41,10 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		private void Button_OnClick(UIMouseEvent evt, UIElement listeningElement)
 		{
+			if(currentBuffId == -1)
+			{
+				return;
+			}
 			if (listeningElement is TacticsGroupButton clickedButton)
 			{
 				if (selectedIndex != clickedButton.index)
@@ -58,14 +61,19 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 					if (selected)
 					{
-						Main.LocalPlayer.GetModPlayer<MinionTacticsPlayer>().SetTacticsGroup(button.index);
+						Main.LocalPlayer.GetModPlayer<MinionTacticsPlayer>().SetGroupForMinion(button.index, currentBuffId);
 					}
 				}
+				UnsetSelected();
 			}
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
+			if(currentBuffId == -1)
+			{
+				return;
+			}
 			if (ContainsPoint(Main.MouseScreen))
 			{
 				//Prevents drawing item textures on mouseover (bed, selected tool etc.)
@@ -76,17 +84,44 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			base.DrawSelf(spriteBatch);
 		}
 
+		protected override void DrawChildren(SpriteBatch spriteBatch)
+		{
+			if(currentBuffId == -1)
+			{
+				return;
+			}
+			base.DrawChildren(spriteBatch);
+		}
+		public override void Update(GameTime gameTime)
+		{
+			base.Update(gameTime);
+			if(framesUntilHide -- <= 0 || Main.ingameOptionsWindow || Main.playerInventory)
+			{
+				currentBuffId = -1;
+			}
+		}
+
 		/// <summary>
-		/// This gets called once when the player enters the world to initialize the UI with values
+		/// This gets called each time the dropdown moves to a new minion buff
 		/// </summary>
 		/// <param name="id">Tactic ID</param>
-		internal void SetSelected(int id)
+		internal void SetSelected(int buffId)
 		{
+			currentBuffId = buffId;
+			MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
+			int tacticIdx = tacticsPlayer.GetGroupForBuff(buffId);
+			framesUntilHide = 180;
 			foreach (var button in buttons)
 			{
-				bool selected = button.index == id;
+				bool selected = button.index == tacticIdx;
 				button.SetSelected(selected);
 			}
 		}
+
+		internal void UnsetSelected()
+		{
+			framesUntilHide = Math.Min(framesUntilHide, 5);
+		}
+
 	}
 }
