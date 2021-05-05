@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.UI;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -69,7 +70,8 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		{
 			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
-				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
+				//player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
+				UserInterfaces.buffClickCapture.PlaceTacticQuickSelect(Main.MouseScreen);
 				return false;
 			}
 			return base.CanUseItem(player);

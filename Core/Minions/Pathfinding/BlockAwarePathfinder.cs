@@ -575,7 +575,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			float desiredDistance = (Main.GameUpdateCount % pathAnimationLength) * 10;
 			float traversedDistance = 0;
 			Color dustColor = MinionPathfindingPlayer.WaypointColors[tacticsGroup];
-			if(modPlayer.CurrentTacticsGroup != tacticsGroup)
+			if(modPlayer.CurrentTacticsGroup != tacticsGroup && modPlayer.CurrentTacticsGroup != 2)
 			{
 				dustColor = Color.Multiply(dustColor, 0.5f);
 			}

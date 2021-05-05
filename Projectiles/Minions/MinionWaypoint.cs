@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					return Color.Gray;
 				}
-				bool isActive = player.CurrentTacticsGroup == projectile.ai[0];
+				bool isActive = player.CurrentTacticsGroup == projectile.ai[0] || player.CurrentTacticsGroup == 2;
 				Color color = MinionPathfindingPlayer.WaypointColors[(int)projectile.ai[0]];
 				if(isActive)
 				{

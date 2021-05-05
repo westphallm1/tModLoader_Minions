@@ -12,10 +12,9 @@ using Terraria.UI;
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
 	// largely lifted from TacticsGroupPanel, a decent bit of cruft left over
-	class TacticsGroupBuffDropdown : UIPanel
+	class TacticsGroupBuffDropdown : UIElement
 	{
-		// maybe not the best to expose this
-		internal readonly List<TacticsGroupButton> buttons;
+		private readonly List<TacticsGroupButton> buttons;
 
 		private int selectedIndex; //From the buttons list
 		private int currentBuffId = -1;
@@ -82,6 +81,18 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				Main.ItemIconCacheUpdate(0);
 			}
 			base.DrawSelf(spriteBatch);
+			// Draw panels
+			Texture2D bgTexture = Main.wireUITexture[0];
+			Vector2 top = new Vector2(GetDimensions().X, GetDimensions().Y);
+			float scale = 1;
+			for(int i = 0; i < buttons.Count; i++)
+			{
+				bool shouldHover = buttons[i].selected || buttons[i].InHoverState;
+				// extremely hardcoded
+				Vector2 drawPos = top + i * new Vector2(40, 0);
+				Color color = shouldHover ? Color.White : Color.Gray;
+				spriteBatch.Draw(bgTexture, drawPos, null, color, 0f, Vector2.Zero, scale, 0f, 0f);
+			}
 		}
 
 		protected override void DrawChildren(SpriteBatch spriteBatch)

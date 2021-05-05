@@ -26,6 +26,8 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		/// </summary>
 		internal readonly int index;
 		private readonly bool quiet;
+		private readonly bool horizontalHover;
+		private readonly bool radialHover;
 
 		internal TacticsGroup TacticsGroup => TargetSelectionTacticHandler.TacticsGroups[index];
 
@@ -37,26 +39,28 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			TacticsGroup.Name + "\n" +
 			TacticsGroup.Description;
 
-		internal override Texture2D OutlineTexture => TargetSelectionTacticHandler.GroupOutlineTextures[index];
+		internal override Texture2D OutlineTexture => radialHover? null : TargetSelectionTacticHandler.GroupOutlineTextures[index];
 
-		internal TacticsGroupButton(int index, bool quiet = false) : base(TargetSelectionTacticHandler.GroupTextures[index])
+		internal TacticsGroupButton(int index, bool quiet = false, bool horizontalHover = false, bool radialHover = false) : base(TargetSelectionTacticHandler.GroupTextures[index])
 		{
 			this.index = index;
 			this.quiet = quiet;
+			this.horizontalHover = horizontalHover;
+			this.radialHover = radialHover;
 		}
 
 		// used to check if the tactic is in the right 'region' 
 		public override bool InHoverState { get
 			{
-				if(!quiet)
+				if(horizontalHover)
 				{
-					return base.InHoverState;
+					float top = GetDimensions().Y;
+					float bottom = GetDimensions().Y + GetDimensions().Height;
+					// this number was obtained via trial and error
+					float padding = 6;
+					return Main.mouseY >= top - padding && Main.mouseY <= bottom + padding;
 				}
-				float top = GetDimensions().Y;
-				float bottom = GetDimensions().Y + GetDimensions().Height;
-				// this number was obtained via trial and error
-				float padding = 6;
-				return Main.mouseY >= top - padding && Main.mouseY <= bottom + padding;
+				return base.InHoverState;
 			}
 		}
 	}

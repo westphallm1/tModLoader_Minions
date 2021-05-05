@@ -51,6 +51,8 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		internal bool TacticsUnlocked = false;
 
+		internal bool UsingGlobalTactics => CurrentTacticGroup == TACTICS_GROUPS_COUNT - 1;
+
 		// TODO localize
 		private static string TacticsUnlockedText = "Minions from the Amulet of Many Minions can now use Advanced Tactics!";
 
@@ -245,8 +247,9 @@ namespace AmuletOfManyMinions.Core.Minions
 			int groupForMinion;
 			if(!MinionTacticsMap.ContainsKey(buffId))
 			{
-				MinionTacticsMap[buffId] = CurrentTacticGroup;
-				groupForMinion = CurrentTacticGroup;
+				int defaultTactic = UsingGlobalTactics ? 0 : CurrentTacticGroup;
+				MinionTacticsMap[buffId] = defaultTactic;
+				groupForMinion = defaultTactic;
 			} else
 			{
 				groupForMinion = MinionTacticsMap[buffId];
@@ -270,9 +273,9 @@ namespace AmuletOfManyMinions.Core.Minions
 		}
 		public PlayerTargetSelectionTactic GetTacticForMinion(Minion minion)
 		{
-			if(isQuickDefending)
+			if(isQuickDefending || UsingGlobalTactics)
 			{
-				return PlayerTacticsGroups[0];
+				return PlayerTacticsGroups[TACTICS_GROUPS_COUNT - 1];
 			}
 			return PlayerTacticsGroups[GetGroupForMinion(minion)];
 		}
@@ -320,7 +323,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			PreviousTacticGroup = CurrentTacticGroup;
 			// switch to a consistent tactics group so that we don't get into any weird states
 			// while cycling through tactics groups during quick tactics
-			CurrentTacticGroup = 0;
+			CurrentTacticGroup = TACTICS_GROUPS_COUNT - 1;
 			PreviousTacticID = TacticID;
 			SetTactic(TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID);
 			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);

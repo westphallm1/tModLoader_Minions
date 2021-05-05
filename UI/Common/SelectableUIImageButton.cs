@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.UI.Common
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
 			//Draw the outline when selected. Relies on alpha being 1f when selected otherwise it will look bad
-			if (selected)
+			if (selected && OutlineTexture != null)
 			{
 				for (int i = 0; i < 4; i++)
 				{

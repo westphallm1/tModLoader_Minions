@@ -160,14 +160,14 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			return player.Center + offset;
 		}
 
-		internal void ToggleWaypoint(bool remove = false)
+		private void ToggleWaypoint(int tacticsGroupIdx, bool remove = false)
 		{
 			int type = MinionWaypoint.Type;
 			Vector2 waypointPosition = GetNewWaypointPosition();
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if (p.active && p.owner == player.whoAmI && p.type == type && (int)p.ai[0] == CurrentTacticsGroup)
+				if (p.active && p.owner == player.whoAmI && p.type == type && (int)p.ai[0] == tacticsGroupIdx)
 				{
 					if(remove)
 					{
@@ -177,7 +177,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 						p.position = waypointPosition;
 						if(player.whoAmI == Main.myPlayer)
 						{
-							new WaypointMovementPacket(player, waypointPosition, (byte)CurrentTacticsGroup).Send();
+							new WaypointMovementPacket(player, waypointPosition, (byte)tacticsGroupIdx).Send();
 						}
 					}
 					return;
@@ -187,7 +187,21 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			if (!remove)
 			{
 				// uses AI[0] to indicate tactic group
-				Projectile.NewProjectile(waypointPosition, Vector2.Zero, type, 0, 0, player.whoAmI, ai0: CurrentTacticsGroup);
+				Projectile.NewProjectile(waypointPosition, Vector2.Zero, type, 0, 0, player.whoAmI, ai0: tacticsGroupIdx);
+			}
+
+		}
+		internal void ToggleWaypoint(bool remove = false)
+		{
+			if(myTacticsPlayer.UsingGlobalTactics)
+			{
+				for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT -1; i++)
+				{
+					ToggleWaypoint(i, remove);
+				}
+			} else
+			{
+				ToggleWaypoint(CurrentTacticsGroup, remove);
 			}
 		}
 	}

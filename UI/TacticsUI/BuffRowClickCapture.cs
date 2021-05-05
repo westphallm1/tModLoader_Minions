@@ -12,15 +12,14 @@ using AmuletOfManyMinions.Core.Minions.Tactics;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
-	// invisible element drawn right behind the buffs, used
-	// to capture clicks on buffs
+	// giant invisible element drawn across the entire screen,
+	// used to capture left clicks on buffs and right clicks with waypoint rods
 	internal class BuffRowClickCapture : UIElement
 	{
 		static int buffsPerLine = 11;
 		static int buffWidth = 38;
 		static int buffHeight = 50;
-		// max 2 rows of buffs assuming vanilla buff limit, add more as a courtesy
-		static int buffLines = 6;
+
 		// max bounds to be clicking inside buffs
 		static int xMin = 32;
 		static int yMin = 76;
@@ -28,41 +27,52 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		// used to capture 'click + drag' action on minion tactic group dropdown
 		int clickedBuffIdx = -1;
 
+		// hardcoded list of position offsets for buttons in the radial quick select
+		internal Vector2[] radialOffsets = new Vector2[]
+		{
+			new Vector2(22, 0),
+			new Vector2(0, 38),
+			new Vector2(44, 38)
+		};
+
 		internal static TacticsGroupBuffDropdown dropDown;
+		internal static TacticQuickSelectRadialMenu radialMenu;
 		public override void OnInitialize()
 		{
 			base.OnInitialize();
 			SetupDropdown();
 			Append(dropDown);
-			Left.Pixels = xMin;
-			Width.Pixels = buffWidth * buffsPerLine;
-			Top.Pixels = yMin;
-			Height.Pixels = buffLines * buffHeight + dropDown.Height.Pixels;
+			SetupRadialMenu();
+			Append(radialMenu);
+			Left.Pixels = 0f;
+			Width.Pixels = Main.screenWidth;
+			Top.Pixels = 0f;
+			Height.Pixels = Main.screenHeight;
 		}
 
 		private void SetupDropdown()
 		{
 			List<TacticsGroupButton> groupButtons = new List<TacticsGroupButton>();
-			int rows = MinionTacticsPlayer.TACTICS_GROUPS_COUNT;
-			int columns = 1;
+			int rows = 1;  
+			int columns = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;;
 
-			int width = 24;
-			int height = 24;
+			int width = 40;
+			int height = 40;
 
 			//Keep them even numbers, they are divided by 2 later
-			int xMargin = 4;
-			int yMargin = 4;
+			int xMargin = 0;
+			int yMargin = 0;
 
 			int widthWithMargin = width + xMargin;
 			int heightWithMargin = height + yMargin;
 
-			for(int i = 0; i< MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			for(int i = 0; i< MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1; i++)
 			{
-				TacticsGroupButton button = new TacticsGroupButton(i, quiet: true);
+				TacticsGroupButton button = new TacticsGroupButton(i, quiet: true, radialHover: true);
 
 				//Top left of the position it should insert in
-				int yPos = yMargin / 2 + heightWithMargin * i;
-				int xPos = xMargin / 2;
+				int yPos = yMargin / 2;
+				int xPos = xMargin / 2 + widthWithMargin * i;
 
 				//Calculation so its centered around the center of both calculated pos and button (dynamic!)
 				float yOffsetForSize = (heightWithMargin - button.Height.Pixels) / 2;
@@ -84,7 +94,38 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			dropDown.Height.Pixels = yMargin + heightWithMargin * rows;
 			dropDown.PaddingLeft = xMargin;
 			dropDown.PaddingRight = xMargin;
+		}
 
+		private void SetupRadialMenu()
+		{
+			List<TacticsGroupButton> groupButtons = new List<TacticsGroupButton>();
+
+			int xMargin = 8;
+			int yMargin = 8;
+
+			for(int i = 0; i< MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			{
+				TacticsGroupButton button = new TacticsGroupButton(i, quiet: true, radialHover: true);
+				Vector2 offset = radialOffsets[i] + new Vector2(xMargin, yMargin);
+
+				button.Top.Pixels = offset.Y;
+				button.Left.Pixels = offset.X;
+
+				groupButtons.Add(button);
+			}
+
+			radialMenu = new TacticQuickSelectRadialMenu(groupButtons, radialOffsets);
+			radialMenu.Width.Pixels = 84;
+			radialMenu.Height.Pixels = 78;
+
+		}
+
+		internal void PlaceTacticQuickSelect(Vector2 mouseScreen)
+		{
+			// place centered about the position
+			radialMenu.Top.Pixels = mouseScreen.Y - radialMenu.Height.Pixels / 2;
+			radialMenu.Left.Pixels = mouseScreen.X - radialMenu.Width.Pixels / 2;
+			radialMenu.StartShowing();
 		}
 
 		public override void MouseDown(UIMouseEvent evt)
@@ -104,10 +145,16 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			if(myPlayer.GroupIsSetForMinion(buffType))
 			{
 				Vector2 buffTop = GetBuffTopLeft(clickedBuffIdx);
-				dropDown.Left.Pixels = buffTop.X;
-				dropDown.Top.Pixels = buffTop.Y + 38;
+				dropDown.Left.Pixels = xMin + buffTop.X - dropDown.Width.Pixels/2 + Main.buffTexture[buffType].Width/2;
+				dropDown.Top.Pixels = yMin + buffTop.Y + 38;
 				dropDown.SetSelected(buffType);
 			}
+		}
+		public override void Update(GameTime gameTime)
+		{
+			base.Update(gameTime);
+			Width.Pixels = Main.screenWidth;
+			Height.Pixels = Main.screenHeight;
 		}
 
 		public override void MouseUp(UIMouseEvent evt)
@@ -130,7 +177,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			{
 				return;
 			}
-			float regionHeight = dropDown.Height.Pixels / MinionTacticsPlayer.TACTICS_GROUPS_COUNT;
+			float regionHeight = dropDown.Height.Pixels / (MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1);
 			int region = (int)((mouseY - startY) / regionHeight);
 			myPlayer.SetGroupForMinion(region, buffType);
 			UnsetSelected();
