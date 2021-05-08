@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.UI.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,59 +15,35 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 {
 	class TacticQuickSelectRadialMenu : UIElement
 	{
-		private readonly List<TacticsGroupButton> buttons;
+		private readonly List<RadialMenuButton> buttons;
 
-		private int selectedIndex; //From the buttons list
 		private bool doDisplay = false;
 
 		internal int framesUntilHide = 0; // auto-hide if not clicked in a couple seconds
 
-		internal Vector2[] buttonOffsets;
-
-		internal TacticQuickSelectRadialMenu(List<TacticsGroupButton> buttons, Vector2[] buttonOffsets)
+		internal TacticQuickSelectRadialMenu(List<RadialMenuButton> buttons, Vector2[] buttonOffsets)
 		{
 			this.buttons = buttons;
-			this.buttonOffsets = buttonOffsets;
 		}
 
-		public override void OnInitialize()
+		public override void Update(GameTime gameTime)
 		{
-			foreach (var button in buttons)
+			base.Update(gameTime);
+			if(framesUntilHide -- <= 0 || Main.ingameOptionsWindow || Main.playerInventory)
 			{
-				button.OnClick += Button_OnClick;
-				//Padding of the panel screws up alignment for the buttons, so revert it
-				button.Top.Pixels -= this.PaddingTop;
-				button.Left.Pixels -= this.PaddingLeft;
-				Append(button);
+				doDisplay = false;
 			}
-		}
-
-		private void Button_OnClick(UIMouseEvent evt, UIElement listeningElement)
-		{
-			if(!doDisplay)
+			Vector2 top = new Vector2(GetDimensions().X, GetDimensions().Y);
+			for(int i = 0; i < buttons.Count; i++)
 			{
-				return;
-			}
-			if (listeningElement is TacticsGroupButton clickedButton)
-			{
-				if (selectedIndex != clickedButton.index)
+				RadialMenuButton button = buttons[i];
+				button.Update(top);
+				if(button.LeftClicked || button.RightClicked)
 				{
-					selectedIndex = clickedButton.index;
-					Main.PlaySound(SoundID.MenuTick);
+					Main.LocalPlayer.GetModPlayer<MinionTacticsPlayer>().SetTacticsGroup(i);
+					UnsetSelected();
+					break;
 				}
-
-				//Recalculate selected status for each button, and set players tactic
-				foreach (var button in buttons)
-				{
-					bool selected = selectedIndex == button.index;
-					button.SetSelected(selected);
-
-					if (selected)
-					{
-						Main.LocalPlayer.GetModPlayer<MinionTacticsPlayer>().SetTacticsGroup(button.index);
-					}
-				}
-				UnsetSelected();
 			}
 		}
 
@@ -85,32 +62,10 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			}
 			base.DrawSelf(spriteBatch);
 			// draw background buttons
-			Texture2D bgTexture = Main.wireUITexture[0];
 			Vector2 top = new Vector2(GetDimensions().X, GetDimensions().Y);
-			float scale = 1;
-			for(int i = 0; i < buttonOffsets.Length; i++)
+			for(int i = 0; i < buttons.Count; i++)
 			{
-				bool shouldHover = buttons[i].selected || buttons[i].InHoverState;
-				Vector2 drawPos = top + buttonOffsets[i];
-				Color color = shouldHover ? Color.White : Color.Gray;
-				spriteBatch.Draw(bgTexture, drawPos, null, color, 0f, Vector2.Zero, scale, 0f, 0f);
-			}
-		}
-
-		protected override void DrawChildren(SpriteBatch spriteBatch)
-		{
-			if(!doDisplay)
-			{
-				return;
-			}
-			base.DrawChildren(spriteBatch);
-		}
-		public override void Update(GameTime gameTime)
-		{
-			base.Update(gameTime);
-			if(framesUntilHide -- <= 0 || Main.ingameOptionsWindow || Main.playerInventory)
-			{
-				doDisplay = false;
+				buttons[i].DrawSelf(spriteBatch, top);
 			}
 		}
 
@@ -123,16 +78,15 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
 			framesUntilHide = 180;
 			doDisplay = true;
-			foreach (var button in buttons)
+			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
-				bool selected = button.index == tacticsPlayer.CurrentTacticGroup;
-				button.SetSelected(selected);
+				buttons[i].Highlighted = tacticsPlayer.CurrentTacticGroup == i;
 			}
 		}
 
 		internal void UnsetSelected()
 		{
-			framesUntilHide = Math.Min(framesUntilHide, 5);
+			framesUntilHide = Math.Min(framesUntilHide, 2);
 		}
 	}
 }

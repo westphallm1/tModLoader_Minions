@@ -103,6 +103,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			}
 			base.DrawChildren(spriteBatch);
 		}
+
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
