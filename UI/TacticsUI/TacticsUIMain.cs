@@ -137,22 +137,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			//These get appended to tacticsPanel later
 			List<TacticButton> tacticsButtons = new List<TacticButton>();
 
-			List<byte> orderedIDs = new List<byte>
-			{
-				//First row
-				TargetSelectionTacticHandler.GetTactic<ClosestEnemyToMinion>().ID,
-				TargetSelectionTacticHandler.GetTactic<StrongestEnemy>().ID,
-				TargetSelectionTacticHandler.GetTactic<LeastDamagedEnemy>().ID,
-				TargetSelectionTacticHandler.GetTactic<SpreadOut>().ID,
-
-				//Second row
-				TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID,
-				TargetSelectionTacticHandler.GetTactic<WeakestEnemy>().ID,
-				TargetSelectionTacticHandler.GetTactic<MostDamagedEnemy>().ID,
-				TargetSelectionTacticHandler.GetTactic<AttackGroups>().ID,
-			};
-
-			int assignedCount = orderedIDs.Count;
+			int assignedCount = TargetSelectionTacticHandler.OrderedIds.Count;
 
 			//Keep them even numbers, they are divided by 2 later
 			int xMargin = 4;
@@ -172,7 +157,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				int row = i / columns;
 				int column = i % columns;
 
-				TacticButton button = new TacticButton(i, orderedIDs[i]);
+				TacticButton button = new TacticButton(i, TargetSelectionTacticHandler.OrderedIds[i]);
 
 				//Top left of the position it should insert in
 				int yPos = yMargin / 2 + heightWithMargin * row;

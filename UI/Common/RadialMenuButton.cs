@@ -23,11 +23,13 @@ namespace AmuletOfManyMinions.UI.Common
 		internal bool MouseHover { get; private set; }
 		internal bool LeftClicked { get; private set; }
 		internal bool RightClicked { get; private set; }
+		internal Action OnLeftClick;
+		internal Action OnRightClick;
 
 		internal bool Highlighted;
 
-		internal bool lastMouseLeft;
-		internal bool lastMouseRight;
+		private bool lastMouseLeft;
+		private bool lastMouseRight;
 
 		public RadialMenuButton(Texture2D bgTexture, Texture2D fgTexture, Vector2 relativeTopLeft)
 		{
@@ -47,6 +49,14 @@ namespace AmuletOfManyMinions.UI.Common
 			MouseHover = (Main.MouseScreen - absoluteCenter).LengthSquared() < radius * radius;
 			LeftClicked = MouseHover && lastMouseLeft && Main.mouseLeftRelease;
 			RightClicked = MouseHover && lastMouseRight && Main.mouseRightRelease;
+			if(LeftClicked)
+			{
+				OnLeftClick?.Invoke();
+			}
+			if(RightClicked)
+			{
+				OnRightClick?.Invoke();
+			}
 			lastMouseLeft = Main.mouseLeft;
 			lastMouseRight = Main.mouseRight;
 

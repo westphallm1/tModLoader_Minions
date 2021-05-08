@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.UI.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,59 +14,57 @@ using Terraria.UI;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
-	class TacticQuickSelectRadialMenu : UIElement
+	/// <summary>
+	/// A radial menu that allows quickly toggling the active tactic group, and dispelling the minion waypoint
+	/// </summary>
+	class TacticQuickSelectRadialMenu : RadialMenu
 	{
-		private readonly List<RadialMenuButton> buttons;
-
-		private bool doDisplay = false;
-
-		internal int framesUntilHide = 0; // auto-hide if not clicked in a couple seconds
-
-		internal TacticQuickSelectRadialMenu(List<RadialMenuButton> buttons, Vector2[] buttonOffsets)
+		internal TacticQuickSelectRadialMenu(List<RadialMenuButton> buttons) : base(buttons)
 		{
-			this.buttons = buttons;
+
 		}
 
-		public override void Update(GameTime gameTime)
+
+		public override void OnInitialize()
 		{
-			base.Update(gameTime);
-			if(framesUntilHide -- <= 0 || Main.ingameOptionsWindow || Main.playerInventory)
+			base.OnInitialize();
+			// depending on the order of children for setup like this is iffy, but relatively efficient
+			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
-				doDisplay = false;
-			}
-			Vector2 top = new Vector2(GetDimensions().X, GetDimensions().Y);
-			for(int i = 0; i < buttons.Count; i++)
-			{
-				RadialMenuButton button = buttons[i];
-				button.Update(top);
-				if(button.LeftClicked || button.RightClicked)
+				int localI = i;
+				buttons[i].OnLeftClick = () =>
 				{
-					Main.LocalPlayer.GetModPlayer<MinionTacticsPlayer>().SetTacticsGroup(i);
-					UnsetSelected();
-					break;
-				}
+					if(!doDisplay) { return }
+					MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
+					tacticsPlayer.CurrentTacticGroup = localI;
+					StopShowing();
+				};
 			}
-		}
+			buttons[MinionTacticsPlayer.TACTICS_GROUPS_COUNT].OnLeftClick = () =>
+			{
+				// transition from this menu to the next one
+				if(!doDisplay) { return }
+				UserInterfaces.buffClickCapture.PlaceTacticFullSelect();
+				StopShowing();
+			};
+			buttons[MinionTacticsPlayer.TACTICS_GROUPS_COUNT + 1].OnLeftClick = () =>
+			{
+				if(!doDisplay) { return }
+				// remove every waypoint, lack of ability to remove individual ones is a bit annoying
+				// but less annoying than having to click multiple times to remove a single waypoint
+				MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
+				MinionPathfindingPlayer waypointPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionPathfindingPlayer>();
+				int oldGroup = tacticsPlayer.CurrentTacticGroup;
+				tacticsPlayer.CurrentTacticGroup = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;
+				waypointPlayer.ToggleWaypoint(true);
+				tacticsPlayer.CurrentTacticGroup = oldGroup;
+				StopShowing();
+			};
 
-		protected override void DrawSelf(SpriteBatch spriteBatch)
-		{
-			if(!doDisplay)
-			{
-				return;
-			}
-			if (ContainsPoint(Main.MouseScreen))
-			{
-				//Prevents drawing item textures on mouseover (bed, selected tool etc.)
-				Main.LocalPlayer.mouseInterface = true;
-				Main.LocalPlayer.showItemIcon = false;
-				Main.ItemIconCacheUpdate(0);
-			}
-			base.DrawSelf(spriteBatch);
-			// draw background buttons
-			Vector2 top = new Vector2(GetDimensions().X, GetDimensions().Y);
+			// all buttons have the same left and right click 
 			for(int i = 0; i < buttons.Count; i++)
 			{
-				buttons[i].DrawSelf(spriteBatch, top);
+				buttons[i].OnRightClick = buttons[i].OnLeftClick;
 			}
 		}
 
@@ -73,20 +72,14 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		/// This gets called each time the dropdown moves to a new minion buff
 		/// </summary>
 		/// <param name="id">Tactic ID</param>
-		internal void StartShowing()
+		internal override void StartShowing()
 		{
+			base.StartShowing();
 			MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
-			framesUntilHide = 180;
-			doDisplay = true;
 			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
 				buttons[i].Highlighted = tacticsPlayer.CurrentTacticGroup == i;
 			}
-		}
-
-		internal void UnsetSelected()
-		{
-			framesUntilHide = Math.Min(framesUntilHide, 2);
 		}
 	}
 }

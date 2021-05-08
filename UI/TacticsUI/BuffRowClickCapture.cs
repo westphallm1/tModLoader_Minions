@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.UI.Common;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
@@ -34,20 +35,36 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		// hardcoded list of position offsets for buttons in the radial quick select
 		internal Vector2[] radialOffsets = new Vector2[]
 		{
-			new Vector2(22, 0),
-			new Vector2(0, 38),
-			new Vector2(44, 38)
+			new Vector2(0, 26),
+			new Vector2(30, 0),
+			new Vector2(10, 64),
+			new Vector2(60, 26),
+			new Vector2(50, 64)
 		};
 
 		internal static TacticsGroupBuffDropdown dropDown;
 		internal static TacticQuickSelectRadialMenu radialMenu;
+		internal static TacticFullSelectRadialMenu fullRadialMenu;
+
+		internal Texture2D moreTexture;
+		internal Texture2D cancelTexture;
 		public override void OnInitialize()
 		{
+			if (moreTexture == null)
+			{
+				moreTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/MoreIcon");
+			}
+			if (cancelTexture == null)
+			{
+				cancelTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/CancelIcon");
+			}
 			base.OnInitialize();
 			SetupDropdown();
 			Append(dropDown);
 			SetupRadialMenu();
 			Append(radialMenu);
+			SetupFullRadialMenu();
+			Append(fullRadialMenu);
 			Left.Pixels = 0f;
 			// go from left edge of screen to a bit past the edge of buffs
 			Width.Pixels = xMin + (buffsPerLine * buffWidth) + 32;
@@ -101,13 +118,9 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			dropDown.PaddingRight = xMargin;
 		}
 
-		private void SetupRadialMenu()
+		private List<RadialMenuButton> GetSharedTacticsButtons()
 		{
 			List<RadialMenuButton> groupButtons = new List<RadialMenuButton>();
-
-			int xMargin = 8;
-			int yMargin = 8;
-
 			for(int i = 0; i< MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
 				RadialMenuButton button = new RadialMenuButton(
@@ -116,11 +129,46 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 					radialOffsets[i]);
 				groupButtons.Add(button);
 			}
+			return groupButtons;
+		}
+		private void SetupRadialMenu()
+		{
+			List<RadialMenuButton> groupButtons = new List<RadialMenuButton>();
+			groupButtons.AddRange(GetSharedTacticsButtons());
+			for(int i = MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i < radialOffsets.Length; i++)
+			{
+				RadialMenuButton button = new RadialMenuButton(
+					Main.wireUITexture[0], 
+					i == MinionTacticsPlayer.TACTICS_GROUPS_COUNT ? moreTexture : cancelTexture, 
+					radialOffsets[i]);
+				groupButtons.Add(button);
+			}
+			radialMenu = new TacticQuickSelectRadialMenu(groupButtons);
+			radialMenu.Width.Pixels = 100;
+			radialMenu.Height.Pixels = 104;
+		}
 
-			radialMenu = new TacticQuickSelectRadialMenu(groupButtons, radialOffsets);
-			radialMenu.Width.Pixels = 84;
-			radialMenu.Height.Pixels = 78;
-
+		private void SetupFullRadialMenu()
+		{
+			List<RadialMenuButton> groupButtons = new List<RadialMenuButton>();
+			groupButtons.AddRange(GetSharedTacticsButtons());
+			Vector2 tacticsRow1Base = new Vector2(40, 38);
+			Vector2 tacticsRow2Base = new Vector2(58, 72);
+			Vector2 closeButtonBase = new Vector2(70, 0);
+			for(int i = 0; i < TargetSelectionTacticHandler.OrderedIds.Count; i++)
+			{
+				Vector2 baseOffset = i >= TargetSelectionTacticHandler.OrderedIds.Count / 2 ? tacticsRow2Base : tacticsRow1Base;
+				Vector2 offset = baseOffset + new Vector2(40 * (i % 4), 0);
+				TacticsRadialMenuButton button = new TacticsRadialMenuButton(
+					Main.wireUITexture[0], 
+					TargetSelectionTacticHandler.OrderedIds[i],
+					offset);
+				groupButtons.Add(button);
+			}
+			groupButtons.Add(new RadialMenuButton(Main.wireUITexture[0], cancelTexture, closeButtonBase));
+			fullRadialMenu = new TacticFullSelectRadialMenu(groupButtons);
+			fullRadialMenu.Width.Pixels = 200;
+			fullRadialMenu.Height.Pixels = 112;
 		}
 
 		internal void PlaceTacticQuickSelect(Vector2 mouseScreen)
@@ -129,7 +177,18 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			// this is technically outside of the parent, so we'll see what happens
 			radialMenu.Top.Pixels = mouseScreen.Y - Top.Pixels - radialMenu.Height.Pixels / 2 - 4;
 			radialMenu.Left.Pixels = mouseScreen.X - radialMenu.Width.Pixels / 2;
+			fullRadialMenu.StopShowing();
 			radialMenu.StartShowing();
+		}
+
+		internal void PlaceTacticFullSelect()
+		{
+			// place centered about the position
+			// this is technically outside of the parent, so we'll see what happens
+			fullRadialMenu.Top.Pixels = radialMenu.Top.Pixels;
+			fullRadialMenu.Left.Pixels = radialMenu.Left.Pixels;
+			radialMenu.StopShowing();
+			fullRadialMenu.StartShowing();
 		}
 
 		public override void MouseDown(UIMouseEvent evt)
