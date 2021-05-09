@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.UI.Common
 	{
 		protected readonly List<RadialMenuButton> buttons;
 
-		protected bool doDisplay = false;
+		internal bool doDisplay = false;
 
 		internal int framesUntilHide = 0; // auto-hide if not clicked in a couple seconds
 

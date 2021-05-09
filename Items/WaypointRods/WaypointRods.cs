@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
 				//player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
-				UserInterfaces.buffClickCapture.PlaceTacticQuickSelect(Main.MouseScreen);
+				UserInterfaces.buffClickCapture.PlaceTacticSelectRadial(Main.MouseScreen);
 				return false;
 			}
 			return base.CanUseItem(player);

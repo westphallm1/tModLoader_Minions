@@ -23,6 +23,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 
 		public static Type DefaultTacticType => typeof(ClosestEnemyToMinion);
 
+		public static List<byte> OrderedIds { get; private set; }
 		private static List<TargetSelectionTactic> TacticDatas { get; set; }
 
 		internal static List<TacticsGroup> TacticsGroups { get; set; }
@@ -54,6 +55,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			GroupTextures = new List<Texture2D>();
 			GroupOutlineTextures = new List<Texture2D>();
 			GroupOverlayTextures = new List<Texture2D>();
+			OrderedIds = new List<byte>();
 
 			RegisterTacticDatas();
 			RegisterTacticsGroups();
@@ -73,6 +75,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			GroupTextures = null;
 			GroupOutlineTextures = null;
 			GroupOverlayTextures = null;
+			OrderedIds = null;
 		}
 
 		private static void RegisterTacticDatas()
@@ -110,6 +113,21 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 				NameToID[name] = id;
 				tactic.ID = id;
 			}
+
+			OrderedIds = new List<byte>
+			{
+				//First row
+				GetTactic<ClosestEnemyToMinion>().ID,
+				GetTactic<StrongestEnemy>().ID,
+				GetTactic<LeastDamagedEnemy>().ID,
+				GetTactic<SpreadOut>().ID,
+
+				//Second row
+				GetTactic<ClosestEnemyToPlayer>().ID,
+				GetTactic<WeakestEnemy>().ID,
+				GetTactic<MostDamagedEnemy>().ID,
+				GetTactic<AttackGroups>().ID,
+			};
 		}
 
 		private static void RegisterTacticsGroups()
