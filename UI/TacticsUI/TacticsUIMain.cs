@@ -39,6 +39,12 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		internal OpenedTriState opened = OpenedTriState.HIDDEN;
 
+		internal bool detached = false;
+
+		private Vector2 lastMousePos;
+		private Vector2 clickAndDragOffset;
+		private bool clickAndDragging;
+
 		public override void OnInitialize()
 		{
 			if (openTexture == null)
@@ -199,20 +205,63 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			// If not yet unlocked, draw off the top of the screen
 			float hiddenY = openedY - this.Height.Pixels - openCloseButton.Height.Pixels;
 
-			if(opened == OpenedTriState.HIDDEN)
+			// if we're click-and-dragging
+			if(clickAndDragging)
 			{
-				this.Top.Pixels = hiddenY;
-			} else
-			{
-				HandleFadeIn();
-				this.Top.Pixels = MathHelper.Lerp(closedY, openedY, openAmount - 1f);
+				Vector2 newMousePos = Main.MouseScreen;
+				if(!detached && Vector2.DistanceSquared(newMousePos, lastMousePos) > 32 * 32)
+				{
+					detached = true;
+				}
+				if(detached)
+				{
+					Vector2 shift = newMousePos - lastMousePos;
+					Top.Pixels += shift.Y;
+					Left.Pixels += shift.X;
+					lastMousePos = newMousePos;
+				}
 			}
-			this.Left.Pixels = GetAnchorLeft();
+			// if we're not click-and-dragging
+			if(!detached)
+			{
+				if(opened == OpenedTriState.HIDDEN)
+				{
+					this.Top.Pixels = hiddenY;
+				} else
+				{
+					HandleFadeIn();
+					this.Top.Pixels = MathHelper.Lerp(closedY, openedY, openAmount - 1f);
+				}
+				this.Left.Pixels = GetAnchorLeft();
+			}
+		}
+
+		public override void MouseDown(UIMouseEvent evt)
+		{
+			base.MouseDown(evt);
+			lastMousePos = evt.MousePosition;
+			clickAndDragging = true;
+			clickAndDragOffset = evt.MousePosition - new Vector2(GetDimensions().X, GetDimensions().Y);
+		}
+
+		public override void MouseUp(UIMouseEvent evt)
+		{
+			base.MouseUp(evt);
+			clickAndDragging = false;
+		}
+
+		public void MoveToMouse()
+		{
+			detached = true;
+			Left.Pixels = Main.MouseScreen.X;
+			Top.Pixels = Main.MouseScreen.Y;
 		}
 
 		private void OpenCloseButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
 		{
 			SetOpenClosedState(opened == OpenedTriState.TRUE ? OpenedTriState.FALSE : OpenedTriState.TRUE);
+			// re-snap to the home position
+			detached = false;
 		}
 
 		internal void SetOpenClosedState(OpenedTriState newState)

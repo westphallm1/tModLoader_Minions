@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+using AmuletOfManyMinions.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -36,6 +37,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// Here you can change where the minion is spawned. Most vanilla minions spawn at the cursor position.
 			position = Main.MouseWorld;
 			return true;
+		}
+
+		public override bool AltFunctionUse(Player player)
+		{
+			return true;
+		}
+
+		public override bool CanUseItem(Player player)
+		{
+			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
+			{
+				//player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
+				UserInterfaces.tacticsUI.MoveToMouse();
+				return false;
+			}
+			return base.CanUseItem(player);
 		}
 	}
 }

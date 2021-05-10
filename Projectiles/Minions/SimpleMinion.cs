@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+﻿using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -133,8 +134,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			targetNPCIndex = null;
 			vectorToIdle = IdleBehavior();
+			currentTactic = player.GetModPlayer<MinionTacticsPlayer>().GetTacticForMinion(this);
+			bool useBeaconThisFrame = useBeacon && !currentTactic.IgnoreWaypoint;
 			// don't allow finding the target while travelling along path
-			if(useBeacon && pathfinder.InTransit)
+			if(useBeaconThisFrame && pathfinder.InTransit)
 			{
 				vectorToTarget = null;
 				framesSinceHadTarget = noLOSPursuitTime;
@@ -178,7 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
 				}
 			}
-			else if (useBeacon &&  pathfinder.NextPathfindingTarget() is Vector2 pathNode)
+			else if (useBeaconThisFrame && pathfinder.NextPathfindingTarget() is Vector2 pathNode)
 			{
 				if(pathfinder.isStuck)
 				{

@@ -39,6 +39,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		protected bool usingBeacon = false;
 
+		protected PlayerTargetSelectionTactic currentTactic;
+
 		public bool Spawned { get; private set; }
 
 		internal abstract int BuffId { get; }
@@ -122,10 +124,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public Vector2? SelectedEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
 		{
 			Vector2 losCenterVector = losCenter ?? projectile.Center;
-			PlayerTargetSelectionTactic tactic = player.GetModPlayer<MinionTacticsPlayer>().GetTacticForMinion(this);
+			currentTactic = player.GetModPlayer<MinionTacticsPlayer>().GetTacticForMinion(this);
 			MinionPathfindingPlayer pathfindingPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
 			// to cut back on Line-of-Sight computations, always chase the same NPC for some number of frames once one has been found
-			if(targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < tactic.TargetCacheFrames)
+			if(targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < currentTactic.TargetCacheFrames)
 			{
 				return Main.npc[idx].Center;
 			}
@@ -143,7 +145,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				rangeCheckCenter = player.Center;
 			}
 			List<NPC> possibleTargets = new List<NPC>();
-			bool anyInRange = false;
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
@@ -158,9 +159,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					possibleTargets.Add(npc);
 				}
-				anyInRange |= inRange;
 			}
-			NPC chosen = tactic.ChooseTargetFromList(projectile, possibleTargets);
+			NPC chosen = currentTactic.ChooseTargetFromList(projectile, possibleTargets);
 			if(chosen != default)
 			{
 				targetNPCIndex = chosen.whoAmI;

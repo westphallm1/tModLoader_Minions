@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 
 namespace AmuletOfManyMinions.UI.Common
 {
@@ -51,10 +52,14 @@ namespace AmuletOfManyMinions.UI.Common
 			RightClicked = MouseHover && lastMouseRight && Main.mouseRightRelease;
 			if(LeftClicked)
 			{
+				// this fixes so many issues...
+				Main.isMouseLeftConsumedByUI = true;
+				Main.PlaySound(SoundID.MenuTick);
 				OnLeftClick?.Invoke();
 			}
 			if(RightClicked)
 			{
+				Main.PlaySound(SoundID.MenuTick);
 				OnRightClick?.Invoke();
 			}
 			lastMouseLeft = Main.mouseLeft;
@@ -62,11 +67,15 @@ namespace AmuletOfManyMinions.UI.Common
 
 		}
 
-		public void DrawSelf(SpriteBatch spriteBatch, Vector2 absoluteTopLeft)
+		public void DrawSelf(SpriteBatch spriteBatch, Vector2 absoluteTopLeft, Color color = default)
 		{
 			Vector2 bgDrawPos = absoluteTopLeft + bgRelativeTopLeft;
 			Vector2 fgDrawPos = absoluteTopLeft + fgRelativeTopLeft;
-			Color color = (MouseHover || Highlighted) ? Color.White : Color.Gray;
+			color = color == default ? Color.White : color;
+			if(!(Highlighted || MouseHover))
+			{
+				color = Color.Multiply(color, 0.6f);
+			}
 			spriteBatch.Draw(bgTexture, bgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0f);
 			spriteBatch.Draw(fgTexture, fgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0f);
 		}

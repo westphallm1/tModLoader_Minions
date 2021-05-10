@@ -35,11 +35,10 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		// hardcoded list of position offsets for buttons in the radial quick select
 		internal Vector2[] radialOffsets = new Vector2[]
 		{
-			new Vector2(0, 26),
+			new Vector2(0, 30),
 			new Vector2(30, 0),
-			new Vector2(10, 64),
-			new Vector2(60, 26),
-			new Vector2(50, 64)
+			new Vector2(30, 60),
+			new Vector2(60, 30)
 		};
 
 		internal static TacticsGroupBuffDropdown dropDown;
@@ -140,17 +139,14 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		{
 			List<RadialMenuButton> groupButtons = new List<RadialMenuButton>();
 			groupButtons.AddRange(GetSharedTacticsButtons());
-			for(int i = MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i < radialOffsets.Length; i++)
-			{
-				RadialMenuButton button = new RadialMenuButton(
-					Main.wireUITexture[0], 
-					i == MinionTacticsPlayer.TACTICS_GROUPS_COUNT ? moreTexture : cancelTexture, 
-					radialOffsets[i]);
-				groupButtons.Add(button);
-			}
+			RadialMenuButton button = new RadialMenuButton(
+				Main.wireUITexture[0], 
+				cancelTexture, 
+				radialOffsets[MinionTacticsPlayer.TACTICS_GROUPS_COUNT]);
+			groupButtons.Add(button);
 			radialMenu = new TacticQuickSelectRadialMenu(groupButtons);
 			radialMenu.Width.Pixels = 100;
-			radialMenu.Height.Pixels = 104;
+			radialMenu.Height.Pixels = 100;
 		}
 
 		private void SetupFullRadialMenu()

@@ -35,6 +35,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				int localI = i;
 				buttons[i].OnLeftClick = () =>
 				{
+					if(!doDisplay) { return; }
 					MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
 					tacticsPlayer.CurrentTacticGroup = localI;
 					SetButtonHighlights();
@@ -45,13 +46,18 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				int buttonIdx = i + MinionTacticsPlayer.TACTICS_GROUPS_COUNT;
 				buttons[buttonIdx].OnLeftClick = () =>
 				{
+					if(!doDisplay) { return; }
 					MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
 					TacticsRadialMenuButton tacticButton = (TacticsRadialMenuButton)buttons[buttonIdx];
 					tacticsPlayer.SetTactic(tacticButton.tacticId);
 					SetButtonHighlights();
 				};
 			}
-			buttons.Last().OnLeftClick = () => StopShowing();
+			buttons.Last().OnLeftClick = () =>
+			{
+				if (!doDisplay) { return; }
+				StopShowing();
+			};
 
 			// all buttons have the same left and right click 
 			for(int i = 0; i < buttons.Count; i++)

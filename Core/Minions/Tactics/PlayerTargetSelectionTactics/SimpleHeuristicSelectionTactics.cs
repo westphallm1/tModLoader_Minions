@@ -30,8 +30,37 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics
 	 */
 	public class ClosestEnemyToPlayerPlayerTactic : SimpleHeuristicSelectionTactic
 	{
+		private NPC closestToPlayer;
 		public override float Heuristic(Projectile projectile, NPC npc) => 
 			(int)Vector2.DistanceSquared(Main.player[projectile.owner].Center, npc.Center);
+
+		public override bool IgnoreWaypoint => playerAdjacentNPCs.Count > 0;
+
+		internal override bool UsesPlayerAdjacentNPCs => true;
+
+		public override void UpdatePlayerAdjacentNPCs(Player player)
+		{
+			// find the closest NPC to the player
+			base.UpdatePlayerAdjacentNPCs(player);
+			if(playerAdjacentNPCs.Count > 0)
+			{
+				closestToPlayer = playerAdjacentNPCs.ArgMin(npc => Vector2.DistanceSquared(player.Center, npc.Center));
+			} else
+			{
+				closestToPlayer = default;
+			}
+		}
+
+		public override NPC ChooseTargetFromList(Projectile projectile, List<NPC> possibleTargets)
+		{
+			NPC target = base.ChooseTargetFromList(projectile, possibleTargets);
+			// if there's an enemy directly threatening the player, recall any minions
+			if(closestToPlayer != default && closestToPlayer?.whoAmI != target?.whoAmI)
+			{
+				return default;
+			}
+			return target;
+		}
 	}
 
 	/**

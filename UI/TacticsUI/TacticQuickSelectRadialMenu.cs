@@ -37,17 +37,14 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 					if(!doDisplay) { return; }
 					MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
 					tacticsPlayer.CurrentTacticGroup = localI;
+					for(int j = 0; j < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; j++)
+					{
+						buttons[j].Highlighted = tacticsPlayer.CurrentTacticGroup == j;
+					}
 					StopShowing();
 				};
 			}
 			buttons[MinionTacticsPlayer.TACTICS_GROUPS_COUNT].OnLeftClick = () =>
-			{
-				// transition from this menu to the next one
-				if(!doDisplay) { return; }
-				UserInterfaces.buffClickCapture.PlaceTacticFullSelect();
-				StopShowing();
-			};
-			buttons[MinionTacticsPlayer.TACTICS_GROUPS_COUNT + 1].OnLeftClick = () =>
 			{
 				if(!doDisplay) { return; }
 				// remove every waypoint, lack of ability to remove individual ones is a bit annoying
@@ -58,6 +55,11 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				tacticsPlayer.CurrentTacticGroup = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;
 				waypointPlayer.ToggleWaypoint(true);
 				tacticsPlayer.CurrentTacticGroup = oldGroup;
+				for(int j = 0; j < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; j++)
+				{
+					buttons[j].Highlighted = false;
+				}
+				buttons.Last().Highlighted = true;
 				StopShowing();
 			};
 
@@ -76,7 +78,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		{
 			base.StartShowing();
 			MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
-			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			for(int i = 0; i < buttons.Count; i++)
 			{
 				buttons[i].Highlighted = tacticsPlayer.CurrentTacticGroup == i;
 			}

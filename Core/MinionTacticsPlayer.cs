@@ -229,6 +229,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{
 				PlayerTacticsGroups[i]?.PreUpdate();
+				PlayerTacticsGroups[i]?.UpdatePlayerAdjacentNPCs(player);
 			}
 		}
 

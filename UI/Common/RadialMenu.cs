@@ -54,7 +54,15 @@ namespace AmuletOfManyMinions.UI.Common
 			Vector2 top = new Vector2(GetDimensions().X, GetDimensions().Y);
 			for(int i = 0; i < buttons.Count; i++)
 			{
-				buttons[i].DrawSelf(spriteBatch, top);
+				Color drawColor = Color.White;
+				if(framesUntilHide > 10 || (buttons[i].Highlighted && framesUntilHide > 0))
+				{
+					if(framesUntilHide < 10)
+					{
+						drawColor = Color.Multiply(drawColor, framesUntilHide / 10f);
+					}
+					buttons[i].DrawSelf(spriteBatch, top, drawColor);
+				}
 			}
 		}
 
@@ -66,7 +74,7 @@ namespace AmuletOfManyMinions.UI.Common
 
 		internal virtual void StopShowing()
 		{
-			doDisplay = false;
+			framesUntilHide = 10;
 		}
 	}
 }
