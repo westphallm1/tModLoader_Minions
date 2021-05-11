@@ -198,7 +198,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 			// Make it so the panel aligns with the right edge of the tactics group panel, slightly offset downwards
 			tacticsPanel.Top.Pixels = 8;
-			tacticsPanel.Left.Pixels = tacticsGroupPanel.Width.Pixels - 6;
+			tacticsPanel.Left.Pixels = tacticsGroupPanel.Width.Pixels - 2;
 			//tacticsPanel.Left.Precent = 0f; // tacticsGroupPanel.Left.Pixels + tacticsGroupPanel.Width.Pixels;
 
 			//Adjust the panels dimensions after populating it

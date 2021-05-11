@@ -35,6 +35,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		public static List<string> Descriptions { get; private set; }
 		public static List<Texture2D> Textures { get; private set; }
 		public static List<Texture2D> OutlineTextures { get; private set; }
+		public static List<Texture2D> SmallTextures { get; private set; }
 
 		public static List<Texture2D> GroupTextures { get; private set; }
 		public static List<Texture2D> GroupOutlineTextures { get; private set; }
@@ -52,6 +53,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			Descriptions = new List<string>();
 			Textures = new List<Texture2D>();
 			OutlineTextures = new List<Texture2D>();
+			SmallTextures = new List<Texture2D>();
 			GroupTextures = new List<Texture2D>();
 			GroupOutlineTextures = new List<Texture2D>();
 			GroupOverlayTextures = new List<Texture2D>();
@@ -72,6 +74,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			Descriptions = null;
 			Textures = null;
 			OutlineTextures = null;
+			SmallTextures = null;
 			GroupTextures = null;
 			GroupOutlineTextures = null;
 			GroupOverlayTextures = null;
@@ -106,6 +109,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 				string texture = tactic.Texture;
 				Textures.Add(ModContent.GetTexture(texture));
 				OutlineTextures.Add(ModContent.GetTexture(texture + "_Outline"));
+				SmallTextures.Add(ModContent.GetTexture(texture + "_Small"));
 
 				byte id = (byte)count;
 				Count++;

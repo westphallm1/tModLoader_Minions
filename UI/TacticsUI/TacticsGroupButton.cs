@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Tactics;
+﻿using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TacticsGroups;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.UI.Common;
@@ -49,19 +50,19 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			this.radialHover = radialHover;
 		}
 
-		// used to check if the tactic is in the right 'region' 
-		public override bool InHoverState { get
-			{
-				if(horizontalHover)
-				{
-					float top = GetDimensions().Y;
-					float bottom = GetDimensions().Y + GetDimensions().Height;
-					// this number was obtained via trial and error
-					float padding = 6;
-					return Main.mouseY >= top - padding && Main.mouseY <= bottom + padding;
-				}
-				return base.InHoverState;
-			}
+		protected override void DrawSelf(SpriteBatch spriteBatch)
+		{
+			base.DrawSelf(spriteBatch);
+			// draw a little icon in the bottem left corner the current tactic for the given group
+			MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
+			byte tacticsId = tacticsPlayer.TacticsIDs[index];
+			Texture2D tacticSmallTexture = TargetSelectionTacticHandler.SmallTextures[tacticsId];
+			CalculatedStyle dimensions = GetDimensions();
+			float scale = 0.75f;
+			Vector2 bottomLeft = new Vector2(dimensions.X, dimensions.Y + dimensions.Height);
+			Vector2 tacticPosition = bottomLeft - new Vector2(0, tacticSmallTexture.Height * scale);
+			Color color = Color.White * (InHoverState || selected ? 1 : 0.7f);
+			spriteBatch.Draw(tacticSmallTexture, tacticPosition, null, color, 0f, Vector2.Zero, scale, 0f, 0f);
 		}
 	}
 }
