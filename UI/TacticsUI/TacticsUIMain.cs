@@ -29,6 +29,8 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		internal Texture2D openTexture;
 		internal Texture2D closeTexture;
+		internal Texture2D bgSmallTexture;
+		internal Texture2D bgLargeTexture;
 
 		private float openAmount = 1f; //1f closed, 2f opened
 
@@ -42,7 +44,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		internal bool detached = false;
 
 		private Vector2 lastMousePos;
-		private Vector2 clickAndDragOffset;
 		private bool clickAndDragging;
 
 		public override void OnInitialize()
@@ -54,6 +55,14 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			if (closeTexture == null)
 			{
 				closeTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/CloseButton");
+			}
+			if (bgLargeTexture == null)
+			{
+				bgLargeTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/BgRectangle_Large");
+			}
+			if (bgSmallTexture == null)
+			{
+				bgSmallTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/BgRectangle_Small");
 			}
 
 			//Move outside of screen initially, we update the location manually each tick in Update
@@ -91,8 +100,8 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			int rows = 2;
 			int columns = 2;
 
-			int width = 24;
-			int height = 24;
+			int width = 26;
+			int height = 26;
 
 			//Keep them even numbers, they are divided by 2 later
 			int xMargin = 4;
@@ -100,6 +109,10 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 			int widthWithMargin = width + xMargin;
 			int heightWithMargin = height + yMargin;
+
+
+			Vector2 baseOffset = Vector2.One * 4;
+
 
 			for(int i = 0; i< MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
@@ -110,9 +123,9 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				int column = i % columns;
 
 				//Top left of the position it should insert in
-				int yPos = yMargin / 2 + heightWithMargin * row;
+				int yPos = (int)baseOffset.Y + yMargin / 2 + heightWithMargin * row;
 				// offset the X position of the icon in the second row
-				int xPos = xMargin / 2 + widthWithMargin * column + (row * widthWithMargin / 2);
+				int xPos = (int)baseOffset.X + xMargin / 2 + widthWithMargin * column + (row * widthWithMargin / 2);
 
 				//Calculation so its centered around the center of both calculated pos and button (dynamic!)
 				float yOffsetForSize = (heightWithMargin - button.Height.Pixels) / 2;
@@ -130,8 +143,8 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			tacticsGroupPanel.Left.Precent = 0f;
 
 			//Adjust the panels dimensions after populating it
-			tacticsGroupPanel.Width.Pixels = xMargin + widthWithMargin * columns;
-			tacticsGroupPanel.Height.Pixels = yMargin + heightWithMargin * rows;
+			tacticsGroupPanel.Width.Pixels = xMargin + widthWithMargin * columns + 2 * baseOffset.X;
+			tacticsGroupPanel.Height.Pixels = yMargin + heightWithMargin * rows + 2 * baseOffset.Y;
 		}
 
 		/// <summary>
@@ -158,6 +171,8 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			int widthWithMargin = width + xMargin;
 			int heightWithMargin = height + yMargin;
 
+			Vector2 baseOffset = Vector2.One * 4;
+
 			for (int i = 0; i < assignedCount; i++)
 			{
 				int row = i / columns;
@@ -166,8 +181,8 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				TacticButton button = new TacticButton(i, TargetSelectionTacticHandler.OrderedIds[i]);
 
 				//Top left of the position it should insert in
-				int yPos = yMargin / 2 + heightWithMargin * row;
-				int xPos = xMargin / 2 + widthWithMargin * column;
+				int yPos = (int)baseOffset.Y + yMargin / 2 + heightWithMargin * row;
+				int xPos = (int)baseOffset.X + xMargin / 2 + widthWithMargin * column;
 
 				//Calculation so its centered around the center of both calculated pos and button (dynamic!)
 				float yOffsetForSize = (heightWithMargin - button.Height.Pixels) / 2;
@@ -183,12 +198,12 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 			// Make it so the panel aligns with the right edge of the tactics group panel, slightly offset downwards
 			tacticsPanel.Top.Pixels = 8;
-			tacticsPanel.Left.Pixels = tacticsGroupPanel.Width.Pixels - 2;
+			tacticsPanel.Left.Pixels = tacticsGroupPanel.Width.Pixels - 6;
 			//tacticsPanel.Left.Precent = 0f; // tacticsGroupPanel.Left.Pixels + tacticsGroupPanel.Width.Pixels;
 
 			//Adjust the panels dimensions after populating it
-			tacticsPanel.Width.Pixels = xMargin + widthWithMargin * columns;
-			tacticsPanel.Height.Pixels = yMargin + heightWithMargin * rows;
+			tacticsPanel.Width.Pixels = xMargin + widthWithMargin * columns + 2 * baseOffset.X;
+			tacticsPanel.Height.Pixels = yMargin + heightWithMargin * rows + 2 * baseOffset.Y;
 
 		}
 
@@ -241,7 +256,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			base.MouseDown(evt);
 			lastMousePos = evt.MousePosition;
 			clickAndDragging = true;
-			clickAndDragOffset = evt.MousePosition - new Vector2(GetDimensions().X, GetDimensions().Y);
 		}
 
 		public override void MouseUp(UIMouseEvent evt)

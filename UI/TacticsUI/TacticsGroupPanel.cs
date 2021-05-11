@@ -17,7 +17,7 @@ using Terraria.UI;
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
 	//Because it's a UIPanel, it automatically draws the default blue background
-	internal class TacticsGroupPanel : UIPanel
+	internal class TacticsGroupPanel : UIElement
 	{
 		private readonly List<TacticsGroupButton> buttons;
 
@@ -74,6 +74,9 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				Main.ItemIconCacheUpdate(0);
 			}
 			base.DrawSelf(spriteBatch);
+			Color color = Color.White * 0.85f;
+			Vector2 bgDrawPos = new Vector2(GetDimensions().X, GetDimensions().Y);
+			spriteBatch.Draw(UserInterfaces.tacticsUI.bgSmallTexture, bgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0f);
 		}
 
 		/// <summary>

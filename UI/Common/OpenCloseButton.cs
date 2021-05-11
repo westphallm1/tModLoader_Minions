@@ -6,7 +6,7 @@ namespace AmuletOfManyMinions.UI.Common
 	{
 		internal OpenCloseButton(Texture2D texture) : base(texture)
 		{
-			SetAlpha(0.7f, 0.7f); //0.7f is the alpha used for panel background
+			SetAlpha(0.85f, 0.85f); //0.7f is the alpha used for panel background
 		}
 	}
 }
