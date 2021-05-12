@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
+﻿using AmuletOfManyMinions.Core.Netcode.Packets;
+using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
@@ -253,6 +254,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 					player.AddBuff(buffType, 2);
 				}
 			}
+		}
+
+		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+		{
+			new SyncIdleAnimationFramePacket(player, idleMinionSyncronizationFrame).Send(toWho, fromWho);
 		}
 	}
 
