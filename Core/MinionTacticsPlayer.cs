@@ -76,12 +76,6 @@ namespace AmuletOfManyMinions.Core.Minions
 		private bool syncConfig = false;
 
 		/// <summary>
-		/// Guard against a weird class of glitch where loaded tactics would be 
-		/// re-initialized after loading from disk
-		/// </summary>
-		private bool tacticsLoaded = false;
-
-		/// <summary>
 		/// Whether or not to choose the target selected by the current minion tactic over
 		/// the target selected by the player target reticle.
 		/// Set by the mod config on each player. Needs to be synced in multiplayer
@@ -114,16 +108,13 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void Initialize()
 		{
 			// set every tactic group to the default
-			if(!tacticsLoaded)
+			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{
-				for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
-				{
-					CurrentTacticGroup = i;
-					TacticID = TargetSelectionTacticHandler.DefaultTacticID;
-					TacticID = TargetSelectionTacticHandler.GetTactic(TacticID).ID; //Safe conversion of default tactic
-				}
-				CurrentTacticGroup = 0;
+				CurrentTacticGroup = i;
+				TacticID = TargetSelectionTacticHandler.DefaultTacticID;
+				TacticID = TargetSelectionTacticHandler.GetTactic(TacticID).ID; //Safe conversion of default tactic
 			}
+			CurrentTacticGroup = 0;
 
 			SyncTimer = 0;
 			TacticIDCycle = new List<byte>
