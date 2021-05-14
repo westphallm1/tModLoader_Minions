@@ -8,6 +8,7 @@ using AmuletOfManyMinions.UI;
 using AmuletOfManyMinions.UI.TacticsUI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -22,7 +23,7 @@ namespace AmuletOfManyMinions.Core.Minions
 	public class MinionTacticsPlayer : ModPlayer
 	{
 		//tag version, increment this if you do breaking changes to the way data is saved/loaded so backwards compat can be done. Write proper code in Load/Save to accomodate
-		private const byte LatestVersion = 0;
+		private const byte LatestVersion = 1;
 		public static int TACTICS_GROUPS_COUNT = 3;
 
 		// The list of tactics "teams" belonging to the player
@@ -45,6 +46,14 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		private List<byte> TacticIDCycle;
 
+		/// <summary>
+		/// String array used to hold on to saved tactic names until OnEnterWorld is called
+		/// There seems to be a very strange interplay between Initialize and Load that causes
+		/// tactics to be overwritten back and forth between them, this is the simplest way 
+		/// to resolve.
+		/// </summary>
+		private string[] savedTacticsNames;
+
 		private int PreviousTacticGroup = 0;
 		private byte PreviousTacticID = TargetSelectionTacticHandler.DefaultTacticID;
 		private bool isQuickDefending = false;
@@ -66,7 +75,11 @@ namespace AmuletOfManyMinions.Core.Minions
 		private bool syncTactic = false;
 		private bool syncConfig = false;
 
-		private bool lastLeftClick = false;
+		/// <summary>
+		/// Guard against a weird class of glitch where loaded tactics would be 
+		/// re-initialized after loading from disk
+		/// </summary>
+		private bool tacticsLoaded = false;
 
 		/// <summary>
 		/// Whether or not to choose the target selected by the current minion tactic over
@@ -101,13 +114,16 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void Initialize()
 		{
 			// set every tactic group to the default
-			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+			if(!tacticsLoaded)
 			{
-				CurrentTacticGroup = i;
-				TacticID = TargetSelectionTacticHandler.DefaultTacticID;
-				TacticID = TargetSelectionTacticHandler.GetTactic(TacticID).ID; //Safe conversion of default tactic
+				for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+				{
+					CurrentTacticGroup = i;
+					TacticID = TargetSelectionTacticHandler.DefaultTacticID;
+					TacticID = TargetSelectionTacticHandler.GetTactic(TacticID).ID; //Safe conversion of default tactic
+				}
+				CurrentTacticGroup = 0;
 			}
-			CurrentTacticGroup = 0;
 
 			SyncTimer = 0;
 			TacticIDCycle = new List<byte>
@@ -127,10 +143,11 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			TagCompound tag = new TagCompound();
 
+			string tacticsNameList = string.Join(",", TacticsIDs.Select(id => TargetSelectionTacticHandler.GetTactic(id).Name));
 			TagCompound tacticsTag = new TagCompound
 			{
 				{ "v", (byte)LatestVersion },
-				{ "name", SelectedTactic.Name }, //Important to save the name and not the ID as its dynamic. Names are the actual "identifiers"
+				{ "names", tacticsNameList },
 				{ "unlocked", TacticsUnlocked }
 			};
 
@@ -145,18 +162,22 @@ namespace AmuletOfManyMinions.Core.Minions
 
 			byte tacticVersion = tacticsTag.GetByte("v");
 			//Do special logic here if the system changes drastically (used for backwards compat)
-
+			if(tacticsTag.ContainsKey("unlocked"))
+			{
+				TacticsUnlocked = tacticsTag.GetBool("unlocked");
+			} else
+			{
+				TacticsUnlocked = false;
+			}
 			if (tacticVersion == 0)
 			{
 				string tacticName = tacticsTag.GetString("name");
-
 				TacticID = TargetSelectionTacticHandler.GetTactic(tacticName).ID;
-				if(tacticsTag.ContainsKey("unlocked"))
+			} else
+			{
+				if(tacticsTag.ContainsKey("names"))
 				{
-					TacticsUnlocked = tacticsTag.GetBool("unlocked");
-				} else
-				{
-					TacticsUnlocked = false;
+					savedTacticsNames = tacticsTag.GetString("names").Split(',');
 				}
 			}
 		}
@@ -164,7 +185,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void OnEnterWorld(Player player)
 		{
 			if (Main.netMode == NetmodeID.Server) return; //Safety check, this hook shouldn't run serverside anyway
-			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
+			UserInterfaces.tacticsUI.detached = false;
 			if(!TacticsUnlocked)
 			{
 				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.HIDDEN);
@@ -172,12 +193,21 @@ namespace AmuletOfManyMinions.Core.Minions
 			{
 				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.FALSE);
 			}
+			// this needs to be late-initialized for some reason
+			if(savedTacticsNames != null)
+			{
+				for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+				{
+					TacticsIDs[i] = TargetSelectionTacticHandler.GetTactic(savedTacticsNames[i]).ID;
+				}
+			}
 			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{
 				CurrentTacticGroup = i;
 				PlayerTactic = SelectedTactic.CreatePlayerTactic();
 			}
 			CurrentTacticGroup = 0;
+			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 		}
 
 		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
