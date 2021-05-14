@@ -8,6 +8,7 @@ using AmuletOfManyMinions.UI;
 using AmuletOfManyMinions.UI.TacticsUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.GameInput;
@@ -130,16 +131,22 @@ namespace AmuletOfManyMinions.Core.Minions
 			};
 		}
 
+
 		public override TagCompound Save()
 		{
 			TagCompound tag = new TagCompound();
 
 			string tacticsNameList = string.Join(",", TacticsIDs.Select(id => TargetSelectionTacticHandler.GetTactic(id).Name));
+			// 256 is probably generous enough to not require any resizing in most cases
+			MemoryStream stream = new MemoryStream(256);
+			MinionTacticsGroupMapper.WriteBuffMap(new BinaryWriter(stream), MinionTacticsMap);
+
 			TagCompound tacticsTag = new TagCompound
 			{
 				{ "v", (byte)LatestVersion },
 				{ "names", tacticsNameList },
-				{ "unlocked", TacticsUnlocked }
+				{ "unlocked", TacticsUnlocked },
+				{ "minionGroups", stream.ToArray() }
 			};
 
 			tag.Add("tactic", tacticsTag);
@@ -169,6 +176,11 @@ namespace AmuletOfManyMinions.Core.Minions
 				if(tacticsTag.ContainsKey("names"))
 				{
 					savedTacticsNames = tacticsTag.GetString("names").Split(',');
+				}
+				if(tacticsTag.ContainsKey("minionGroups"))
+				{
+					MemoryStream savedMinionsStream = new MemoryStream(tacticsTag.GetByteArray("minionGroups"));
+					MinionTacticsGroupMapper.ReadBuffMap(new BinaryReader(savedMinionsStream), MinionTacticsMap);
 				}
 			}
 		}

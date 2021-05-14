@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions
 			IdleLocationSets.Load();
 			TargetSelectionTacticHandler.Load();
 			UserInterfaces.Load();
-			MinionBuff.Load();
+			MinionTacticsGroupMapper.Load();
 
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
 			CycleTacticsGroupHotKey = RegisterHotKey("Cycle Tactics Group", "L");
@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions
 			IdleLocationSets.Unload();
 			TargetSelectionTacticHandler.Unload();
 			UserInterfaces.Unload();
-			MinionBuff.Unload();
+			MinionTacticsGroupMapper.Unload();
 
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;
