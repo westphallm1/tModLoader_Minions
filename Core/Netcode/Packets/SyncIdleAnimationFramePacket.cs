@@ -24,13 +24,11 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 		{
 			int idleFrame = reader.ReadInt32();
 			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
-			Main.NewText("receiving: " + idleFrame + " " + player.whoAmI);
 			modPlayer.idleMinionSyncronizationFrame = idleFrame;
 		}
 
 		protected override void PostSend(BinaryWriter writer, Player player)
 		{
-			Main.NewText("Sending: " + idleFrame + " " + player.whoAmI);
 			writer.Write(idleFrame);
 		}
 	}

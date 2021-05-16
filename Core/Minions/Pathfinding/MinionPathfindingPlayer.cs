@@ -71,6 +71,17 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			BuildMinionsAtWaypointList();
 		}
 
+		public override void Initialize()
+		{
+			// reset tactics player and pathfinder metas on load
+			// these are rather hacky lifetimes for variables
+			myTacticsPlayer = null;
+			for(int i = 0; i < pathfinderMetas.Length; i++)
+			{
+				pathfinderMetas[i] = null;
+			}
+		}
+
 		private void BuildMinionsAtWaypointList()
 		{
 			for(int j = 0; j < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; j++)

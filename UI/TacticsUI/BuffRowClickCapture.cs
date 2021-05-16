@@ -240,7 +240,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			int nextBuffRows = (int)Math.Ceiling(buffCount / buffsPerLine);
 			if(buffRows != nextBuffRows)
 			{
-				Height.Pixels = buffRows * buffHeight + 40;
+				Height.Pixels = buffRows * buffHeight + 120;
 				buffRows = nextBuffRows;
 			}
 		}

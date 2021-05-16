@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				{
 					if(!doDisplay) { return; }
 					MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
-					tacticsPlayer.CurrentTacticGroup = localI;
+					tacticsPlayer.SetTacticsGroup(localI);
 					SetButtonHighlights();
 				};
 			}

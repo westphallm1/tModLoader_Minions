@@ -39,6 +39,7 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public byte TacticID { get => TacticsIDs[CurrentTacticGroup]; private set => TacticsIDs[CurrentTacticGroup] = value; }
 
+
 		public TargetSelectionTactic SelectedTactic => TargetSelectionTacticHandler.GetTactic(TacticID);
 
 
@@ -83,6 +84,24 @@ namespace AmuletOfManyMinions.Core.Minions
 		/// </summary>
 		internal byte IgnoreVanillaMinionTarget = 0;
 
+		/// <summary>
+		/// Update every tactic for the modplayer, and also their selected tactic.
+		/// Only used to update non-Main.myPlayer ModPlayers via netcode.
+		/// </summary>
+		/// <param name="tacticsIds"></param>
+		/// <param name="selectedTactic"></param>
+		internal void SetAllTactics(byte[] tacticsIds, byte? selectedTactic = null)
+		{
+			// don't reallocate, not sure it really matters though
+			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+			{
+				TacticsIDs[i] = tacticsIds[i];
+			}
+			if(selectedTactic is byte selected)
+			{
+				CurrentTacticGroup = selected;
+			}
+		}
 		/// <summary>
 		/// Use this method to set TacticID during gameplay (through the UI, in netcode)
 		/// </summary>
@@ -140,13 +159,16 @@ namespace AmuletOfManyMinions.Core.Minions
 			// 256 is probably generous enough to not require any resizing in most cases
 			MemoryStream stream = new MemoryStream(256);
 			MinionTacticsGroupMapper.WriteBuffMap(new BinaryWriter(stream), MinionTacticsMap);
+			byte[] buffsToWrite = stream.ToArray();
+			mod.Logger.Info("Binary Write: " + BitConverter.ToString(buffsToWrite));
+			mod.Logger.Info("Saved Keys: " + string.Join(", ",MinionTacticsMap.Select(e=>e.Key + ": " + e.Value)));
 
 			TagCompound tacticsTag = new TagCompound
 			{
 				{ "v", (byte)LatestVersion },
 				{ "names", tacticsNameList },
 				{ "unlocked", TacticsUnlocked },
-				{ "minionGroups", stream.ToArray() }
+				{ "minionGroups", buffsToWrite }
 			};
 
 			tag.Add("tactic", tacticsTag);
@@ -173,14 +195,19 @@ namespace AmuletOfManyMinions.Core.Minions
 				TacticID = TargetSelectionTacticHandler.GetTactic(tacticName).ID;
 			} else
 			{
+				// extremely odd class of bug here where load is called multiple times, try to 
+				// make things as idempotent as possible
 				if(tacticsTag.ContainsKey("names"))
 				{
 					savedTacticsNames = tacticsTag.GetString("names").Split(',');
 				}
-				if(tacticsTag.ContainsKey("minionGroups"))
+				if(tacticsTag.ContainsKey("minionGroups") && MinionTacticsMap.Count == 0)
 				{
-					MemoryStream savedMinionsStream = new MemoryStream(tacticsTag.GetByteArray("minionGroups"));
+					byte[] buffsToRead = tacticsTag.GetByteArray("minionGroups");
+					mod.Logger.Info("Binary Read: " + BitConverter.ToString(buffsToRead));
+					MemoryStream savedMinionsStream = new MemoryStream(buffsToRead);
 					MinionTacticsGroupMapper.ReadBuffMap(new BinaryReader(savedMinionsStream), MinionTacticsMap);
+					mod.Logger.Info("Loaded Keys: " + string.Join(", ",MinionTacticsMap.Select(e=>e.Key + ": " + e.Value)));
 				}
 			}
 		}
@@ -221,7 +248,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			//2. this player joins, having to send its info to everyone
 			//    * The client sends his info to the server
 			//    * Server sends that info to all other players (note that the method is called again, the packet itself doesn't broadcast)
-			new SyncMinionTacticsPlayerPacket(player, TacticID, IgnoreVanillaMinionTarget).Send(toWho, fromWho);
+			new SyncMinionTacticsPlayerPacket(this).Send(toWho, fromWho);
 		}
 
 		public override void PreUpdate()
@@ -247,7 +274,7 @@ namespace AmuletOfManyMinions.Core.Minions
 						SyncTimer = 0; //Stop timer from incrementing
 						if(syncTactic)
 						{
-							new TacticPacket(player, TacticID).Send();
+							new TacticPacket(player, TacticsIDs).Send();
 							syncTactic = false;
 						}
 						if(syncConfig)
@@ -348,7 +375,7 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		private void CycleTacticsGroup()
 		{
-			CurrentTacticGroup = (CurrentTacticGroup + 1) % TACTICS_GROUPS_COUNT;
+			SetTacticsGroup((CurrentTacticGroup + 1) % TACTICS_GROUPS_COUNT);
 		}
 
 		private void StartQuickDefending()
@@ -357,8 +384,8 @@ namespace AmuletOfManyMinions.Core.Minions
 			PreviousTacticGroup = CurrentTacticGroup;
 			// switch to a consistent tactics group so that we don't get into any weird states
 			// while cycling through tactics groups during quick tactics
-			CurrentTacticGroup = TACTICS_GROUPS_COUNT - 1;
 			PreviousTacticID = TacticID;
+			SetTacticsGroup(TACTICS_GROUPS_COUNT - 1);
 			SetTactic(TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID);
 			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 		}
@@ -367,7 +394,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			isQuickDefending = false;
 			SetTactic(PreviousTacticID);
-			CurrentTacticGroup = PreviousTacticGroup;
+			SetTacticsGroup(PreviousTacticGroup);
 			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 		}
 
