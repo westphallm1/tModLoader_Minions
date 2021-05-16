@@ -55,31 +55,37 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public override void PreUpdate()
 		{
-			// can't find a better hook to initialize the pathfinding helper
-			if(myTacticsPlayer is null)
+			if(myTacticsPlayer == null)
 			{
-				myTacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
-			}
-			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
-			{
-				if(pathfinderMetas[i] == null)
+				// can't find a good MP hook to run this on
+				if(player.whoAmI != Main.myPlayer)
 				{
-					pathfinderMetas[i] = new PathfinderMetadata(this, i);
+					SetupPathfinderMetas();
 				}
+				return;
 			}
 			FindWaypointPos();
 			BuildMinionsAtWaypointList();
 		}
 
-		public override void Initialize()
+
+		internal void SetupPathfinderMetas()
 		{
-			// reset tactics player and pathfinder metas on load
-			// these are rather hacky lifetimes for variables
-			myTacticsPlayer = null;
-			for(int i = 0; i < pathfinderMetas.Length; i++)
+			// needs to be initialized on every ModPlayer in multiplayer
+			Main.NewText("Setting up pathfinders for player #" + player.whoAmI);
+
+
+			// these values don't like being initialized in Initialize() for some reason
+			myTacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
+			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
-				pathfinderMetas[i] = null;
+				pathfinderMetas[i] = new PathfinderMetadata(this, i);
 			}
+		}
+		public override void OnEnterWorld(Player player)
+		{
+			// doesn't seem to like getting run in Initialize()
+			SetupPathfinderMetas();
 		}
 
 		private void BuildMinionsAtWaypointList()
@@ -106,7 +112,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		public override void PostUpdate()
 		{
-
+			if(myTacticsPlayer == null)
+			{
+				return;
+			}
 			//Only send to other player if he's in visible range
 			Rectangle bounds = Utils.CenteredRectangle(Main.player[Main.myPlayer].Center, new Vector2(1920, 1080) * 1.5f);
 			Point myCenter = player.Center.ToPoint();

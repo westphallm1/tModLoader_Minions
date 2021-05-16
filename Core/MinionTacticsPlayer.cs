@@ -160,8 +160,6 @@ namespace AmuletOfManyMinions.Core.Minions
 			MemoryStream stream = new MemoryStream(256);
 			MinionTacticsGroupMapper.WriteBuffMap(new BinaryWriter(stream), MinionTacticsMap);
 			byte[] buffsToWrite = stream.ToArray();
-			mod.Logger.Info("Binary Write: " + BitConverter.ToString(buffsToWrite));
-			mod.Logger.Info("Saved Keys: " + string.Join(", ",MinionTacticsMap.Select(e=>e.Key + ": " + e.Value)));
 
 			TagCompound tacticsTag = new TagCompound
 			{
@@ -204,10 +202,8 @@ namespace AmuletOfManyMinions.Core.Minions
 				if(tacticsTag.ContainsKey("minionGroups") && MinionTacticsMap.Count == 0)
 				{
 					byte[] buffsToRead = tacticsTag.GetByteArray("minionGroups");
-					mod.Logger.Info("Binary Read: " + BitConverter.ToString(buffsToRead));
 					MemoryStream savedMinionsStream = new MemoryStream(buffsToRead);
 					MinionTacticsGroupMapper.ReadBuffMap(new BinaryReader(savedMinionsStream), MinionTacticsMap);
-					mod.Logger.Info("Loaded Keys: " + string.Join(", ",MinionTacticsMap.Select(e=>e.Key + ": " + e.Value)));
 				}
 			}
 		}
