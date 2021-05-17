@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal int CurrentTacticsGroup => myTacticsPlayer.CurrentTacticGroup;
 
 
-		internal PathfinderMetadata[] pathfinderMetas = new PathfinderMetadata[MinionTacticsPlayer.TACTICS_GROUPS_COUNT];
+		internal PathfinderMetadata[] pathfinderMetas;
 		internal int WaypointPlacementRange = 0;
 		internal int PassivePathfindingRange = 0;
 		// deal a default of 35% less damage while a minion is the maximum waypoint distance away from the player
@@ -77,15 +77,28 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 			// these values don't like being initialized in Initialize() for some reason
 			myTacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
+			pathfinderMetas = new PathfinderMetadata[MinionTacticsPlayer.TACTICS_GROUPS_COUNT];
 			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
 				pathfinderMetas[i] = new PathfinderMetadata(this, i);
+			}
+			for(int i = 0; i < Main.maxPlayers; i++)
+			{
+				Player p = Main.player[i];
+				if(p.active)
+				{
+					MinionPathfindingPlayer pathPlayer = p.GetModPlayer<MinionPathfindingPlayer>();
+					Main.NewText(string.Join(" ", pathPlayer.pathfinderMetas.Select(pm => pm.pHelper.GetHashCode())));
+				}
 			}
 		}
 		public override void OnEnterWorld(Player player)
 		{
 			// doesn't seem to like getting run in Initialize()
-			SetupPathfinderMetas();
+			if(player.whoAmI == Main.myPlayer)
+			{
+				SetupPathfinderMetas();
+			}
 		}
 
 		private void BuildMinionsAtWaypointList()
@@ -207,7 +220,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			if (!remove)
 			{
 				// uses AI[0] to indicate tactic group
-				Projectile.NewProjectile(waypointPosition, Vector2.Zero, type, 0, 0, player.whoAmI, ai0: tacticsGroupIdx);
+				Projectile.NewProjectile(waypointPosition, Vector2.Zero, type, 0, 0, Owner: player.whoAmI, ai0: tacticsGroupIdx);
 			}
 
 		}
