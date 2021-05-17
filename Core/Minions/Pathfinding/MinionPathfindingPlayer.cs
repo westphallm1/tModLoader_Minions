@@ -72,7 +72,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal void SetupPathfinderMetas()
 		{
 			// needs to be initialized on every ModPlayer in multiplayer
-			Main.NewText("Setting up pathfinders for player #" + player.whoAmI);
 
 
 			// these values don't like being initialized in Initialize() for some reason
@@ -88,7 +87,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				if(p.active)
 				{
 					MinionPathfindingPlayer pathPlayer = p.GetModPlayer<MinionPathfindingPlayer>();
-					Main.NewText(string.Join(" ", pathPlayer.pathfinderMetas.Select(pm => pm.pHelper.GetHashCode())));
 				}
 			}
 		}

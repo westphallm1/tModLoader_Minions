@@ -28,14 +28,14 @@ namespace AmuletOfManyMinions.Core.Minions
 		public static int TACTICS_GROUPS_COUNT = 3;
 
 		// The list of tactics "teams" belonging to the player
-		public PlayerTargetSelectionTactic[] PlayerTacticsGroups = new PlayerTargetSelectionTactic[TACTICS_GROUPS_COUNT];
-		public byte[] TacticsIDs = new byte[TACTICS_GROUPS_COUNT];
+		public PlayerTargetSelectionTactic[] PlayerTacticsGroups;
+		public byte[] TacticsIDs;
 
 		// The active tactics group
 		public int CurrentTacticGroup = 0;
 
 		// map from minion buff to tactics group
-		public Dictionary<int, int> MinionTacticsMap = new Dictionary<int, int>();
+		public Dictionary<int, int> MinionTacticsMap;
 
 		public byte TacticID { get => TacticsIDs[CurrentTacticGroup]; private set => TacticsIDs[CurrentTacticGroup] = value; }
 
@@ -128,6 +128,9 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void Initialize()
 		{
 			// set every tactic group to the default
+			PlayerTacticsGroups = new PlayerTargetSelectionTactic[TACTICS_GROUPS_COUNT];
+			TacticsIDs = new byte[TACTICS_GROUPS_COUNT];
+			MinionTacticsMap = new Dictionary<int, int>();
 			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{
 				CurrentTacticGroup = i;
