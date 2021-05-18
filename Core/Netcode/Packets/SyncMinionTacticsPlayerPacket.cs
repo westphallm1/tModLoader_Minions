@@ -30,7 +30,6 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 			writer.Write(selectedTactic);
 			writer.Write(ignoreTargetReticle);
 			MinionTacticsGroupMapper.WriteBuffMap(writer, tacticsMap);
-			Main.NewText("Sending sync of " + player.whoAmI);
 		}
 
 		protected override void PostReceive(BinaryReader reader, int sender, Player player)
@@ -44,7 +43,6 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 
 			minionTacticsPlayer.SetAllTactics(tacticsIds, selectedTactic);
 			minionTacticsPlayer.IgnoreVanillaMinionTarget = ignoreTargetReticle;
-			Main.NewText("Receiving sync from " + player.whoAmI);
 
 		}
 	}

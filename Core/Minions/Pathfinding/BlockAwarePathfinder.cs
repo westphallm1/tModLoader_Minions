@@ -213,7 +213,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		internal BlockAwarePathfinder(MinionPathfindingPlayer player, int tacticsGroup)
 		{
-			Main.NewText("New BlockAwarePathfinder! owner: " + player.player.whoAmI + " group: " + tacticsGroup);
 			modPlayer = player;
 			this.tacticsGroup = tacticsGroup;
 		}

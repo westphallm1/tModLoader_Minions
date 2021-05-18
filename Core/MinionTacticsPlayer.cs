@@ -36,6 +36,7 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		// map from minion buff to tactics group
 		public Dictionary<int, int> MinionTacticsMap = new Dictionary<int, int>();
+		private bool setInstancedCollections;
 
 		public byte TacticID { get => TacticsIDs[CurrentTacticGroup]; private set => TacticsIDs[CurrentTacticGroup] = value; }
 
@@ -48,6 +49,11 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		private List<byte> TacticIDCycle;
 
+		/// <summary>
+		/// The list of buffs that have been altered for this modplayer since the last 
+		/// sync.
+		/// </summary>
+		private List<int> BuffIdsToSync = new List<int>();
 		/// <summary>
 		/// String array used to hold on to saved tactic names until OnEnterWorld is called
 		/// There seems to be a very strange interplay between Initialize and Load that causes
@@ -127,15 +133,7 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public override void Initialize()
 		{
-			// set every tactic group to the default
-			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
-			{
-				CurrentTacticGroup = i;
-				TacticID = TargetSelectionTacticHandler.DefaultTacticID;
-				TacticID = TargetSelectionTacticHandler.GetTactic(TacticID).ID; //Safe conversion of default tactic
-			}
 			CurrentTacticGroup = 0;
-
 			SyncTimer = 0;
 			TacticIDCycle = new List<byte>
 			{
@@ -208,17 +206,14 @@ namespace AmuletOfManyMinions.Core.Minions
 			}
 		}
 
-		public override void OnEnterWorld(Player player)
+		// set collections per-mod player
+		private void SetInstancedCollections()
 		{
-			if (Main.netMode == NetmodeID.Server) return; //Safety check, this hook shouldn't run serverside anyway
-			UserInterfaces.tacticsUI.detached = false;
-			if(!TacticsUnlocked)
-			{
-				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.HIDDEN);
-			} else if (UserInterfaces.tacticsUI.opened == OpenedTriState.HIDDEN) 
-			{
-				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.FALSE);
-			}
+			PlayerTacticsGroups = new PlayerTargetSelectionTactic[TACTICS_GROUPS_COUNT];
+			TacticsIDs = new byte[TACTICS_GROUPS_COUNT];
+			CurrentTacticGroup = 0;
+			MinionTacticsMap = new Dictionary<int, int>();
+
 			// this needs to be late-initialized for some reason
 			if(savedTacticsNames != null)
 			{
@@ -233,6 +228,21 @@ namespace AmuletOfManyMinions.Core.Minions
 				PlayerTactic = SelectedTactic.CreatePlayerTactic();
 			}
 			CurrentTacticGroup = 0;
+			setInstancedCollections = true;
+
+		}
+		public override void OnEnterWorld(Player player)
+		{
+			if (Main.netMode == NetmodeID.Server) return; //Safety check, this hook shouldn't run serverside anyway
+			UserInterfaces.tacticsUI.detached = false;
+			if(!TacticsUnlocked)
+			{
+				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.HIDDEN);
+			} else if (UserInterfaces.tacticsUI.opened == OpenedTriState.HIDDEN) 
+			{
+				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.FALSE);
+			}
+			SetInstancedCollections();
 			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 		}
 
@@ -258,6 +268,9 @@ namespace AmuletOfManyMinions.Core.Minions
 					SyncTimer = Math.Max(SyncTimer, 1);
 				}
 				IgnoreVanillaMinionTarget = newIgnoreTargetStatus;
+			} else if (!setInstancedCollections)
+			{
+				SetInstancedCollections();
 			}
 			//Client sends his newly selected tactic after a small delay
 			if (Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
@@ -277,6 +290,12 @@ namespace AmuletOfManyMinions.Core.Minions
 						{
 							new ConfigPacket(player, IgnoreVanillaMinionTarget).Send();
 							syncConfig = false;
+						}
+						if(BuffIdsToSync.Count > 0)
+						{
+							Dictionary<int, int> buffsToSend = BuffIdsToSync.ToDictionary(k => k, k => MinionTacticsMap[k]);
+							new MinionGroupsPacket(player, buffsToSend).Send();
+							BuffIdsToSync.Clear();
 						}
 					}
 				}
@@ -306,6 +325,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			{
 				int defaultTactic = UsingGlobalTactics ? 0 : CurrentTacticGroup;
 				MinionTacticsMap[buffId] = defaultTactic;
+				SetGroupForMinion(defaultTactic, buffId);
 				groupForMinion = defaultTactic;
 			} else
 			{
@@ -321,6 +341,11 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		internal void SetGroupForMinion(int groupId, int minionBuffId)
 		{
+			if (Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
+			{
+				SyncTimer = 1;
+				BuffIdsToSync.Add(minionBuffId);
+			}
 			MinionTacticsMap[minionBuffId] = groupId;
 		}
 
@@ -358,8 +383,8 @@ namespace AmuletOfManyMinions.Core.Minions
 			}
 			if(TacticsUnlocked)
 			{
-				Main.NewText(TacticsUnlockedText);
 				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.TRUE);
+				Main.NewText(TacticsUnlockedText);
 			}
 
 		}

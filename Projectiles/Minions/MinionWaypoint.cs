@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 			} else
 			{
-				return Color.Aquamarine;
+				return (projectile.ai[0] == 0 ? Color.Aquamarine : Color.Lavender) * 0.5f;
 			}
 		}
 

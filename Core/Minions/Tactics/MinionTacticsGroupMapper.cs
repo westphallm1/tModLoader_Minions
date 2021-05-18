@@ -86,6 +86,12 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			}
 		}
 
+		public static void ReadBuffMap(BinaryReader reader, out Dictionary<int, int> outputMap)
+		{
+			outputMap = new Dictionary<int, int>();
+			ReadBuffMap(reader, outputMap);
+		}
+
 		public static void ReadBuffMap(BinaryReader reader, Dictionary<int, int> outputMap)
 		{
 			byte[] buffCounts = new byte[TACTICS_GROUPS_COUNT - 1];
