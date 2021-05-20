@@ -69,7 +69,9 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			}
 			foreach(var tactic in tacticsMap)
 			{
-				hashes[tactic.Value].Add(TypeToHashDict[tactic.Key]);
+				if(TypeToHashDict.TryGetValue(tactic.Key, out uint hash)) {
+					hashes[tactic.Value].Add(hash);
+				}
 			}
 			// <tactics-group-count> byte header with lengths of each hash array
 			for(int i = 0; i < hashes.Length; i++)
@@ -104,7 +106,10 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 				for(int j = 0; j < buffCounts[i]; j++)
 				{
 					uint hash = reader.ReadUInt32();
-					outputMap[HashToTypeDict[hash]] = i;
+					if(HashToTypeDict.TryGetValue(hash, out int type))
+					{
+						outputMap[type] = i;
+					}
 				}
 			}
 		}

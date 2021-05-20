@@ -41,6 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			get => player.GetModPlayer<MinionSpawningItemPlayer>().idleMinionSyncronizationFrame % groupAnimationFrames;
 		}
 		public AttackState attackState = AttackState.IDLE;
+		public bool usesTactics = true;
 
 		public override void SetStaticDefaults()
 		{
@@ -134,8 +135,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			targetNPCIndex = null;
 			vectorToIdle = IdleBehavior();
-			currentTactic = player.GetModPlayer<MinionTacticsPlayer>().GetTacticForMinion(this);
-			bool useBeaconThisFrame = useBeacon && !currentTactic.IgnoreWaypoint;
+			bool useBeaconThisFrame = useBeacon;
+			if(useBeacon && usesTactics)
+			{
+				currentTactic = player.GetModPlayer<MinionTacticsPlayer>().GetTacticForMinion(this);
+				useBeaconThisFrame &= !currentTactic.IgnoreWaypoint;
+			}
 			// don't allow finding the target while travelling along path
 			if(useBeaconThisFrame && pathfinder.InTransit)
 			{
