@@ -34,7 +34,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				int localI = i;
 				buttons[i].OnLeftClick = () =>
 				{
-					if(!doDisplay) { return; }
 					MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
 					tacticsPlayer.SetTacticsGroup(localI);
 					for(int j = 0; j < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; j++)
@@ -46,7 +45,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			}
 			buttons[MinionTacticsPlayer.TACTICS_GROUPS_COUNT].OnLeftClick = () =>
 			{
-				if(!doDisplay) { return; }
 				// remove every waypoint, lack of ability to remove individual ones is a bit annoying
 				// but less annoying than having to click multiple times to remove a single waypoint
 				MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();

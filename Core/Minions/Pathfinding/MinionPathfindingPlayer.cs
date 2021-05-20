@@ -266,11 +266,20 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	{
 		public override bool UseItem(Item item, Player player)
 		{
-			if(item.damage > 0 && !item.summon && item.pick == 0 && item.axe == 0 && item.hammer == 0)
+			if(player.whoAmI == Main.myPlayer && item.damage > 0 && !item.summon && item.pick == 0 && item.axe == 0 && item.hammer == 0)
 			{
 				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
 			}
 			return base.UseItem(item, player);
+		}
+
+		public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		{
+			if(player.whoAmI == Main.myPlayer && item.damage > 0 && !item.summon && item.pick == 0 && item.axe == 0 && item.hammer == 0)
+			{
+				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
+			}
+			return base.Shoot(item, player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
 		}
 	}
 }

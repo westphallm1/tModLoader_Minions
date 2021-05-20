@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.UI;
+using AmuletOfManyMinions.UI.TacticsUI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -49,7 +50,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
 				//player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
-				UserInterfaces.tacticsUI.MoveToMouse();
+				if(UserInterfaces.tacticsUI.opened == OpenedTriState.TRUE)
+				{
+					UserInterfaces.tacticsUI.MoveToMouse();
+				}
 				return false;
 			}
 			return base.CanUseItem(player);

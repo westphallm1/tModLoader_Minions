@@ -30,6 +30,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				{
 					Projectile.NewProjectile(player.Top, Vector2.Zero, MinionType, projectile.damage, projectile.knockBack, Main.myPlayer);
 				}
+			} else
+			{
+				// do this to prevent NPC projectile reflections from insta-killing the player
+				projectile.damage = 0;
+				projectile.hostile = false;
 			}
 		}
 		public override Vector2? FindTarget()

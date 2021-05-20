@@ -50,7 +50,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class SpiderMinionItem : VanillaCloneMinionItem<SpiderMinionBuff, VenomSpiderMinion>
 	{
 		public int[] projTypes;
-		int spawnCycle = 0;
 		internal override int VanillaItemID => ItemID.SpiderStaff;
 
 		internal override string VanillaItemName => "SpiderStaff";
@@ -67,8 +66,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					ProjectileType<DangerousSpiderMinion>(),
 				};
 			}
+			int spawnCycle = projTypes.Select(v => player.ownedProjectileCounts[v]).Sum();
 			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockBack, player.whoAmI);
-			spawnCycle++;
 			return false;
 		}
 

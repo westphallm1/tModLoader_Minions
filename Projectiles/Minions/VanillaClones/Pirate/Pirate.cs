@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -29,7 +30,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 	{
 		public int[] projTypes;
 
-		int spawnCycle = 0;
 		internal override int VanillaItemID => ItemID.PirateStaff;
 
 		internal override string VanillaItemName => "PirateStaff";
@@ -47,8 +47,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					ProjectileType<FlyingDutchmanMinion>(),
 				};
 			}
+			int spawnCycle = projTypes.Select(v => player.ownedProjectileCounts[v]).Sum();
 			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle%4], damage, knockBack, player.whoAmI);
-			spawnCycle++;
 			return false;
 		}
 	}

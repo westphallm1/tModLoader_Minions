@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -33,7 +34,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override string VanillaItemName => "DeadlySphereStaff";
 
 		public int[] projTypes;
-		int spawnCycle = 0;
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
@@ -47,8 +47,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					ProjectileType<DeadlySphereClingerMinion>(),
 				};
 			}
+			int spawnCycle = projTypes.Select(v => player.ownedProjectileCounts[v]).Sum();
 			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockBack, player.whoAmI);
-			spawnCycle++;
 			return false;
 		}
 

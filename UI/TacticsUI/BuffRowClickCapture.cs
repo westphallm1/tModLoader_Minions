@@ -43,7 +43,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		internal static TacticsGroupBuffDropdown dropDown;
 		internal static TacticQuickSelectRadialMenu radialMenu;
-		internal static TacticFullSelectRadialMenu fullRadialMenu;
 
 		internal Texture2D moreTexture;
 		internal Texture2D cancelTexture;
@@ -67,8 +66,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			Append(dropDown);
 			SetupRadialMenu();
 			Append(radialMenu);
-			SetupFullRadialMenu();
-			Append(fullRadialMenu);
 			Left.Pixels = 0f;
 			// go from left edge of screen to a bit past the edge of buffs
 			Width.Pixels = xMin + (buffsPerLine * buffWidth) + 32;
@@ -149,72 +146,20 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			radialMenu.Height.Pixels = 100;
 		}
 
-		private void SetupFullRadialMenu()
-		{
-			List<RadialMenuButton> groupButtons = new List<RadialMenuButton>();
-			groupButtons.AddRange(GetSharedTacticsButtons());
-			Vector2 tacticsRow1Base = new Vector2(40, 38);
-			Vector2 tacticsRow2Base = new Vector2(58, 72);
-			Vector2 closeButtonBase = new Vector2(68, 0);
-			for(int i = 0; i < TargetSelectionTacticHandler.OrderedIds.Count; i++)
-			{
-				Vector2 baseOffset = i >= TargetSelectionTacticHandler.OrderedIds.Count / 2 ? tacticsRow2Base : tacticsRow1Base;
-				Vector2 offset = baseOffset + new Vector2(38 * (i % 4), 0);
-				TacticsRadialMenuButton button = new TacticsRadialMenuButton(
-					smallBgTexture, 
-					TargetSelectionTacticHandler.OrderedIds[i],
-					offset);
-				groupButtons.Add(button);
-			}
-			groupButtons.Add(new RadialMenuButton(smallBgTexture, cancelTexture, closeButtonBase));
-			fullRadialMenu = new TacticFullSelectRadialMenu(groupButtons);
-			fullRadialMenu.Width.Pixels = 200;
-			fullRadialMenu.Height.Pixels = 112;
-		}
-
 		internal void PlaceTacticSelectRadial(Vector2 mouseScreen)
-		{
-			// place centered about the position
-			// this is technically outside of the parent, so we'll see what happens
-			if(fullRadialMenu.doDisplay)
-			{
-				MoveTacticFullSelect(mouseScreen);
-			} else
-			{
-				PlaceTacticQuickSelect(mouseScreen);
-			}
-		}
-
-		private void MoveTacticFullSelect(Vector2 mouseScreen)
-		{
-			fullRadialMenu.Top.Pixels = mouseScreen.Y - fullRadialMenu.Height.Pixels / 2;
-			fullRadialMenu.Left.Pixels = mouseScreen.X - radialMenu.Width.Pixels / 2;
-		}
-
-		internal void PlaceTacticQuickSelect(Vector2 mouseScreen)
 		{
 			// place centered about the position
 			// this is technically outside of the parent, so we'll see what happens
 			radialMenu.Top.Pixels = mouseScreen.Y - Top.Pixels - radialMenu.Height.Pixels / 2 - 4;
 			radialMenu.Left.Pixels = mouseScreen.X - radialMenu.Width.Pixels / 2;
-			fullRadialMenu.StopShowing();
 			radialMenu.StartShowing();
-		}
-
-		internal void PlaceTacticFullSelect()
-		{
-			// place centered about the position
-			// this is technically outside of the parent, so we'll see what happens
-			fullRadialMenu.Top.Pixels = radialMenu.Top.Pixels;
-			fullRadialMenu.Left.Pixels = radialMenu.Left.Pixels;
-			radialMenu.StopShowing();
-			fullRadialMenu.StartShowing();
 		}
 
 		public override void MouseDown(UIMouseEvent evt)
 		{
 			// another menu is open, so don't check
-			if(Main.ingameOptionsWindow || Main.playerInventory)
+			if(Main.ingameOptionsWindow || Main.playerInventory || 
+			  (dropDown.framesUntilHide > 0 && dropDown.ContainsPoint(evt.MousePosition)))
 			{
 				return; 
 			}

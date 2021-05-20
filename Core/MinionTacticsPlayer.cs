@@ -62,6 +62,12 @@ namespace AmuletOfManyMinions.Core.Minions
 		/// </summary>
 		private string[] savedTacticsNames;
 
+		/// <summary>
+		/// byte array used to hold saved minion buff groups, for a similar workaround as 
+		/// savedTacticsNames
+		/// </summary>
+		private byte[] buffsToLoad;
+
 		private int PreviousTacticGroup = 0;
 		private byte PreviousTacticID = TargetSelectionTacticHandler.DefaultTacticID;
 		private bool isQuickDefending = false;
@@ -199,9 +205,7 @@ namespace AmuletOfManyMinions.Core.Minions
 				}
 				if(tacticsTag.ContainsKey("minionGroups") && MinionTacticsMap.Count == 0)
 				{
-					byte[] buffsToRead = tacticsTag.GetByteArray("minionGroups");
-					MemoryStream savedMinionsStream = new MemoryStream(buffsToRead);
-					MinionTacticsGroupMapper.ReadBuffMap(new BinaryReader(savedMinionsStream), MinionTacticsMap);
+					buffsToLoad = tacticsTag.GetByteArray("minionGroups");
 				}
 			}
 		}
@@ -221,6 +225,11 @@ namespace AmuletOfManyMinions.Core.Minions
 				{
 					TacticsIDs[i] = TargetSelectionTacticHandler.GetTactic(savedTacticsNames[i]).ID;
 				}
+			}
+			if(buffsToLoad != null)
+			{
+				MemoryStream savedMinionsStream = new MemoryStream(buffsToLoad);
+				MinionTacticsGroupMapper.ReadBuffMap(new BinaryReader(savedMinionsStream), MinionTacticsMap);
 			}
 			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{

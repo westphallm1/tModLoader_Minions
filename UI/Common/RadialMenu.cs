@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.UI.Common
 			{
 				doDisplay = false;
 			}
+			if(!doDisplay)
+			{
+				return;
+			}
 			Vector2 top = new Vector2(GetDimensions().X, GetDimensions().Y);
 			for(int i = 0; i < buttons.Count; i++)
 			{

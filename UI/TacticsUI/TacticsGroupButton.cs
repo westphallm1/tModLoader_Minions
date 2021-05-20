@@ -26,9 +26,14 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		/// Using the same variable for both may present issues in the future
 		/// </summary>
 		internal readonly int index;
+		/// <summary>
+		/// Whether to display the full name and detail text while mousing over the button
+		/// </summary>
 		private readonly bool quiet;
-		private readonly bool horizontalHover;
-		private readonly bool radialHover;
+		/// <summary>
+		/// Whether to show the button's outline while it's selected
+		/// </summary>
+		private readonly bool showOutline;
 
 		internal TacticsGroup TacticsGroup => TargetSelectionTacticHandler.TacticsGroups[index];
 
@@ -40,14 +45,13 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			TacticsGroup.Name + "\n" +
 			TacticsGroup.Description;
 
-		internal override Texture2D OutlineTexture => radialHover? null : TargetSelectionTacticHandler.GroupOutlineTextures[index];
+		internal override Texture2D OutlineTexture => showOutline? null : TargetSelectionTacticHandler.GroupOutlineTextures[index];
 
-		internal TacticsGroupButton(int index, bool quiet = false, bool horizontalHover = false, bool radialHover = false) : base(TargetSelectionTacticHandler.GroupTextures[index])
+		internal TacticsGroupButton(int index, bool quiet = false, bool radialHover = false) : base(TargetSelectionTacticHandler.GroupTextures[index])
 		{
 			this.index = index;
 			this.quiet = quiet;
-			this.horizontalHover = horizontalHover;
-			this.radialHover = radialHover;
+			this.showOutline = radialHover;
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
