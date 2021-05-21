@@ -42,18 +42,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public override bool AltFunctionUse(Player player)
 		{
-			return true;
+			return false;
 		}
 
 		public override bool CanUseItem(Player player)
 		{
 			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
-				//player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
-				if(UserInterfaces.tacticsUI.opened == OpenedTriState.TRUE)
-				{
-					UserInterfaces.tacticsUI.MoveToMouse();
-				}
 				return false;
 			}
 			return base.CanUseItem(player);
