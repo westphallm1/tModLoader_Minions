@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("FishBowl");
-			Description.SetDefault("A winged acorn will fight for you!");
+			DisplayName.SetDefault("Flying Fishbowl");
+			Description.SetDefault("A flying fishbowl will fight for you!");
 		}
 	}
 
@@ -28,8 +28,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("FishBowl Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			DisplayName.SetDefault("Fishbowl Staff");
+			Tooltip.SetDefault("Summons a flying fishbowl to fight for you!");
 		}
 
 		public override void SetDefaults()

@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("TumbleSheep");
-			Description.SetDefault("A slime miner will fight for you!");
+			DisplayName.SetDefault("Tumble Sheep");
+			Description.SetDefault("A tumbling sheep will fight for you!");
 		}
 	}
 
@@ -30,8 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("TumbleSheep Staff");
-			Tooltip.SetDefault("Summons slime miner to fight for you!");
+			DisplayName.SetDefault("Shepherd's Staff");
+			Tooltip.SetDefault("Summons a tumbling sheep to fight for you!");
 		}
 
 		public override void SetDefaults()
@@ -251,7 +251,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			Vector2 offsetVector = (-1 + 2f * (float)Math.Sin(2 * cycleAngle)) * Vector2.UnitY;
 			helper.AddSpriteToBatch(GetTexture(Texture), (textureFrame, 3), offsetVector, r, 1);
 			// head
-			offsetVector = new Vector2(projectile.spriteDirection * 10, -2 + 1.5f * (float)Math.Sin(2 * cycleAngle));
+			int headDirection = projectile.spriteDirection == 0 ? -1 : projectile.spriteDirection;
+			offsetVector = new Vector2(headDirection * 10, -2 + 1.5f * (float)Math.Sin(2 * cycleAngle));
 			helper.AddSpriteToBatch(GetTexture(Texture + "_Head"), offsetVector);
 		}
 
@@ -262,7 +263,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			helper.AddSpriteToBatch(GetTexture(Texture), (1, 3),  offsetVector);
 			
 			// head
-			offsetVector = new Vector2(projectile.spriteDirection * 10, -2 + 1.5f * (float)Math.Sin(cycleAngle));
+			int headDirection = projectile.spriteDirection == 0 ? -1 : projectile.spriteDirection;
+			offsetVector = new Vector2(headDirection * 10, -2 + 1.5f * (float)Math.Sin(cycleAngle));
 			scHelper.AddSpriteToBatch(GetTexture(Texture + "_Head"), offsetVector);
 		}
 

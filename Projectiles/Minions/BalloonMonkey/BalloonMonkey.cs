@@ -19,8 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("BalloonMonkey");
-			Description.SetDefault("A slime miner will fight for you!");
+			DisplayName.SetDefault("Dart Monkeys");
+			Description.SetDefault("Dart-throwing Monkeys will fight for you!");
 		}
 	}
 
@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("BalloonMonkey Staff");
-			Tooltip.SetDefault("Summons slime miner to fight for you!");
+			DisplayName.SetDefault("Lighter-than-air Blowgun");
+			Tooltip.SetDefault("Summons a dart-throwing monkey to fight for you!");
 		}
 
 		public override void SetDefaults()
@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			item.width = 28;
 			item.height = 28;
 			item.value = Item.buyPrice(0, 0, 5, 0);
-			item.rare = ItemRarityID.White;
+			item.rare = ItemRarityID.Green;
 		}
 		public override void AddRecipes()
 		{

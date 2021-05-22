@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Rats");
+			DisplayName.SetDefault("Aww, Rats!");
 			Description.SetDefault("A group of rats will fight for you!");
 		}
 	}
@@ -28,20 +28,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Rats Staff");
-			Tooltip.SetDefault("Summons a hoarde of rats to fight for you!\nIgnores 10 enemy defense");
+			DisplayName.SetDefault("Rod of the Ratkeeper");
+			Tooltip.SetDefault("Summons a hoarde of rats to fight for you!\nEach rat deals 1/3 of base damage,\nand ignores 10 enemy defense");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 2;
+			item.damage = 6;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
 			item.height = 28;
 			item.value = Item.buyPrice(0, 0, 5, 0);
-			item.rare = ItemRarityID.White;
+			item.rare = ItemRarityID.Blue;
 		}
 		public override void AddRecipes()
 		{
@@ -85,6 +85,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Rat (Friendly)");
 			Main.projFrames[projectile.type] = 9;
+		}
+
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			projectile.damage = (int)Math.Ceiling(projectile.damage / 3f);
 		}
 
 		public override void SetDefaults()
