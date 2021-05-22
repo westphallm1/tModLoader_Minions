@@ -45,13 +45,9 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 			player.GetModPlayer<MinionPathfindingPlayer>().UpdateWaypointFromPacket(xOffset, yOffset, tacticsGroup);
 			if (Main.netMode == NetmodeID.Server)
 			{
-				new WaypointMovementPacket(player, xOffset, yOffset, tacticsGroup).Send(from: sender, bcCondition: delegate (Player otherPlayer)
-				{
-					//Only send to other player if the mouse would be in visible range
-					Rectangle otherPlayerBounds = Utils.CenteredRectangle(otherPlayer.Center, new Vector2(1920, 1080) * 2f);
-					Point mousePoint = (player.Center + new Vector2(xOffset, yOffset)).ToPoint();
-					return otherPlayerBounds.Contains(mousePoint);
-				});
+				Vector2 newWaypointPosition = player.Center + new Vector2(xOffset, yOffset);
+				new WaypointMovementPacket(player, xOffset, yOffset, tacticsGroup)
+					.Send(from: sender, bcCondition: NetUtils.EventProximityDelegate(newWaypointPosition));
 			}
 		}
 	}

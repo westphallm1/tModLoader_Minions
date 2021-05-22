@@ -28,6 +28,11 @@ namespace AmuletOfManyMinions.Core
 		 */
 
 		/// <summary>
+		/// Guard variable to prevent multiple packets being sent per frame
+		/// </summary>
+		private bool sentThisTick;
+
+		/// <summary>
 		/// Primarily used clientside to send regular updates to the server
 		/// </summary>
 		private int updateRate;
@@ -59,6 +64,7 @@ namespace AmuletOfManyMinions.Core
 			Reset();
 			timeout = 30;
 			updateRate = 5;
+			sentThisTick = false;
 		}
 
 		public override void PostUpdate()
@@ -85,9 +91,10 @@ namespace AmuletOfManyMinions.Core
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
 			{
-				if (NextMousePosition == null || Main.GameUpdateCount % updateRate == 0)
+				if (!sentThisTick && (NextMousePosition == null || Main.GameUpdateCount % updateRate == 0))
 				{
 					//If hasn't sent a mouse position recently, or when an update is required
+					sentThisTick = true;
 
 					//Send packet
 					if (NextMousePosition != Main.MouseWorld)
@@ -147,6 +154,8 @@ namespace AmuletOfManyMinions.Core
 
 		private void UpdateMousePosition()
 		{
+			sentThisTick = false;
+
 			if (NextMousePosition == null)
 			{
 				//No pending position to sync
@@ -163,7 +172,7 @@ namespace AmuletOfManyMinions.Core
 			//If here:
 			// -Non-mouse-owner client (or server)
 			// -Mouse needs updating
-			// All related things aren't null
+			// -All related things aren't null
 
 			if (timeoutTimer++ < timeout)
 			{
