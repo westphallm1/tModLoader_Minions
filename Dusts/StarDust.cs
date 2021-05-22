@@ -19,10 +19,11 @@ namespace AmuletOfManyMinions.Dusts
 
 		public override bool Update(Dust dust)
 		{
-			dust.alpha -= 1;
+			dust.alpha -= 2;
 			dust.position += dust.velocity;
-			dust.rotation += 0.3f;
-			if (dust.alpha < 96)
+			dust.scale *= 0.95f;
+			//dust.rotation += 0.3f;
+			if (dust.alpha < 96 || dust.scale < 0.25f)
 			{
 				dust.active = false;
 			}
