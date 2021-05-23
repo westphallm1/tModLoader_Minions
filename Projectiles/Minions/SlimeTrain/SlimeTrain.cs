@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -69,8 +70,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private int SlimeFrameTop(int i) => 40 * (i % nSlimes) + 4;
 		private int YFrameTop => 40 * projectile.frame + 4;
 		private int FrameHeight => 34;
+		
+		// radius to circle while summoning a sub projectile
+		private int spawnRadius = 120;
+
+		private int SubProjectileType; 
+		private Projectile currentMarker = null;
 
 		private Texture2D SlimeTexture;
+
+		// 0 or Pi depending on approach direction
+		private float startAngle = 0;
+		// 1 for CW, -1 for CCW, depending on approach direction
+		private int rotationDir = 1;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -89,6 +101,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			{
 				SlimeTexture = GetTexture(Texture + "_Slimes");
 			}
+			SubProjectileType = ProjectileType<SlimeTrainMarkerProjectile>();
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -101,7 +114,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.75f);
+			// find the SlimeTrainMarker that's still in its spawn animation, if any
+			currentMarker = null;
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == SubProjectileType && 
+					(int)p.localAI[0] < SlimeTrainMarkerProjectile.SetupTime)
+				{
+					currentMarker = p;
+					break;
+				}
+			}
 			return vectorToIdlePosition;
+		}
+
+		public override bool ShouldIgnoreNPC(NPC npc)
+		{
+			// ignore any npc with a marker actively placed on it
+			return base.ShouldIgnoreNPC(npc) || Main.projectile.Any(p =>
+				p.active && p.owner == player.whoAmI &&
+				p.type == SubProjectileType && (int)p.ai[0] == npc.whoAmI);
 		}
 
 		protected override void DrawHead()
@@ -168,6 +201,62 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			maxFrame = 4;
 		}
 
+		private void DoMarkerSpawnMovement()
+		{
+			int markerFrame = (int)currentMarker.localAI[0];
+			int npcIdx = (int)currentMarker.ai[0];
+			int targetSize = (int)(Main.npc[npcIdx].Size.X + Main.npc[npcIdx].Size.Y) / 2;
+			float idleAngle = startAngle + rotationDir * 2 * PI * markerFrame / SlimeTrainMarkerProjectile.SetupTime;
+			Vector2 targetPosition = currentMarker.Center;
+			targetPosition.X += (targetSize + spawnRadius) * (float)Math.Cos(idleAngle);
+			targetPosition.Y += (targetSize + spawnRadius) * (float)Math.Sin(idleAngle);
+			projectile.velocity = targetPosition - projectile.position;
+		}
+
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			if(currentMarker != null)
+			{
+				DoMarkerSpawnMovement();
+			} else
+			{
+				base.IdleMovement(vectorToIdlePosition);
+			}
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if(currentMarker != null)
+			{
+				DoMarkerSpawnMovement();
+			} else
+			{
+				Vector2 startOffset = vectorToTargetPosition;
+				if(targetNPCIndex is int idx)
+				{
+					int TargetSize = (int)(Main.npc[idx].Size.X + Main.npc[idx].Size.Y) / 2;
+					int approachDir = -Math.Sign(vectorToTargetPosition.X);
+					startOffset += new Vector2(approachDir * (TargetSize + spawnRadius), 0);
+					if(player.whoAmI == Main.myPlayer && startOffset.LengthSquared() < 16 * 16)
+					{
+						startAngle = approachDir == 1 ?  0 : MathHelper.Pi;
+						rotationDir = vectorToTargetPosition.Y > 0 ? 1 : -1;
+
+						Projectile.NewProjectile(
+							projectile.Center,
+							Vector2.Zero,
+							SubProjectileType,
+							projectile.damage,
+							projectile.knockBack,
+							Main.myPlayer,
+							ai0: idx,
+							ai1: EmpowerCount);
+					}
+				}
+				base.TargetedMovement(startOffset);
+			}
+		}
+
 		public override Vector2? FindTarget()
 		{
 			float searchDistance = ComputeSearchDistance();
@@ -183,6 +272,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			{
 				return null;
 			}
+		}
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			projectile.friendly = false;
 		}
 		protected override void AddSprite(float dist, Rectangle bounds, Color c = default)
 		{

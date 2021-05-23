@@ -81,6 +81,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 
+		/// <summary>
+		/// Whether or not a specific NPC is a viable attack target for this minion.
+		/// By default, ignore target dummies and critters
+		/// </summary>
+		/// <param name="npc"></param>
+		/// <returns></returns>
+		public virtual bool ShouldIgnoreNPC(NPC npc)
+		{
+			return !npc.CanBeChasedBy() || !npc.active;
+		}
+
 		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, Vector2? losCenter = null)
 		{
 			MinionTacticsPlayer tacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
@@ -148,7 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
-				if (!npc.CanBeChasedBy() || !npc.active)
+				if (ShouldIgnoreNPC(npc))
 				{
 					continue;
 				}
