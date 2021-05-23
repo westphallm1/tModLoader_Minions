@@ -240,7 +240,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 					if(player.whoAmI == Main.myPlayer && startOffset.LengthSquared() < 16 * 16)
 					{
 						startAngle = approachDir == 1 ?  0 : MathHelper.Pi;
-						rotationDir = vectorToTargetPosition.Y > 0 ? 1 : -1;
+						rotationDir = approachDir * Math.Sign(projectile.velocity.Y);
 
 						Projectile.NewProjectile(
 							projectile.Center,
