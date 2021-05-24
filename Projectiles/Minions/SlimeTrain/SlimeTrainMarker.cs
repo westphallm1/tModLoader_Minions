@@ -46,11 +46,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public void SetRotationInfo(NPC target, Projectile rotator)
 		{
 			this.target = target;
-			Vector2 targetOffset = target.Center - rotator.Center;
-			int approachDir = -Math.Sign(targetOffset.X);
+			int approachDir = -Math.Sign(target.Center.X - rotator.Center.X);
 			// use generic values for testing
-			startAngle = 0; //  approachDir == 1 ?  0 : MathHelper.Pi;
-			rotationDir = 1; // approachDir * Math.Sign(velocity.Y);
+			startAngle = approachDir == 1 ?  0 : MathHelper.Pi;
+			rotationDir = approachDir * Math.Sign(rotator.velocity.Y);
 		}
 
 		public Vector2 GetNPCTargetRadius(int frame)
@@ -62,6 +61,42 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			targetPosition.X += targetRadius * (float)Math.Cos(idleAngle);
 			targetPosition.Y += targetRadius * (float)Math.Sin(idleAngle);
 			return targetPosition;
+		}
+
+		public Vector2 GetDirection(int baseQuadrant)
+		{
+			int quadrant = GetQuadrantForReferenceFrame(baseQuadrant);
+			float angle = quadrant * MathHelper.PiOver4;
+			return -angle.ToRotationVector2();
+		}
+
+		public int GetQuadrantForReferenceFrame(int baseQuadrant)
+		{
+			// values computed by trial and error
+			if(rotationDir == 1 && startAngle == 0)
+			{
+				return baseQuadrant;
+			} else if (rotationDir == 1 && startAngle == MathHelper.Pi)
+			{
+				return (baseQuadrant + 4) % 8;
+			} else if(rotationDir == -1 && startAngle == MathHelper.Pi)
+			{
+				return (12 - baseQuadrant) % 8;
+			} else
+			{
+				return 8 - baseQuadrant;
+			}
+		}
+		public SpriteEffects GetSpriteEffects(int baseQuadrant)
+		{
+			int quadrant = GetQuadrantForReferenceFrame(baseQuadrant);
+			if(quadrant == 3 || quadrant == 4 || quadrant == 7)
+			{
+				return SpriteEffects.FlipHorizontally;
+			} else
+			{
+				return SpriteEffects.None;
+			}
 		}
 	}
 
@@ -80,18 +115,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public static float GrowthRate = 8;
 
 		public int startFrame;
-		// direction the track grows in, assuming CW starting from zero
-		// appropriate transformations applied in Draw
-		public Vector2 direction;
 
 		public int quadrant;
+
+		public readonly Color color;
 		
-		internal SlimeTrainRails(int quadrant)
+		internal SlimeTrainRails(int quadrant, Color color)
 		{
 			this.quadrant = quadrant;
+			this.color = color;
 			float angle = quadrant * MathHelper.PiOver4;
-			startFrame = (int)((angle / MathHelper.TwoPi) * SlimeTrainMarkerProjectile.SetupTime);
-			direction = -angle.ToRotationVector2();
+			startFrame = (int)(angle / MathHelper.TwoPi * SlimeTrainMarkerProjectile.SetupTime);
 		}
 
 
@@ -104,7 +138,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			int startDrawFrame = GetStartFrame(tracker);
 			int middleDrawFrame = GetMiddleFrame(tracker);
 			int endDrawFrame = GetEndFrame(tracker);
-			SpriteEffects effects = GetSpriteEffects(tracker);
+			SpriteEffects effects = tracker.GetSpriteEffects(quadrant);
+			Vector2 direction = tracker.GetDirection(quadrant);
 			int endFrame = Math.Min(frame - startFrame, DrawFrames);
 			float endLength = endFrame * GrowthRate;
 			for(int i = 0; i < endLength + PlacementInterval; i+= PlacementInterval)
@@ -119,19 +154,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			// TODO draw the end cap
 		}
 
-		private SpriteEffects GetSpriteEffects(SlimeTrainRotationTracker tracker)
-		{
-			if(quadrant == 3 || quadrant == 4 || quadrant == 7)
-			{
-				return SpriteEffects.FlipHorizontally;
-			} else
-			{
-				return SpriteEffects.None;
-			}
-		}
-
 		private int GetEndFrame(SlimeTrainRotationTracker tracker)
 		{
+			int quadrant = tracker.GetQuadrantForReferenceFrame(this.quadrant);
 			if(quadrant % 4 == 0)
 			{
 				return 3;
@@ -146,6 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		private int GetMiddleFrame(SlimeTrainRotationTracker tracker)
 		{
+			int quadrant = tracker.GetQuadrantForReferenceFrame(this.quadrant);
 			if(quadrant % 4 == 0)
 			{
 				return 4;
@@ -157,6 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		private int GetStartFrame(SlimeTrainRotationTracker tracker)
 		{
+			int quadrant = tracker.GetQuadrantForReferenceFrame(this.quadrant);
 			if(quadrant % 4 == 0)
 			{
 				return 5;
@@ -189,12 +216,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private SlimeTrainRotationTracker rotationTracker;
 
 		private readonly SlimeTrainRails[] spawnFrames = new SlimeTrainRails[] {
-			new SlimeTrainRails(0), 
-			new SlimeTrainRails(1), 
-			new SlimeTrainRails(3), 
-			new SlimeTrainRails(4), 
-			new SlimeTrainRails(5), 
-			new SlimeTrainRails(7), 
+			new SlimeTrainRails(0, Color.LightCoral), 
+			new SlimeTrainRails(1, Color.LightSalmon), 
+			new SlimeTrainRails(3, Color.LemonChiffon), 
+			new SlimeTrainRails(4, Color.LightGreen), 
+			new SlimeTrainRails(5, Color.LightSkyBlue), 
+			new SlimeTrainRails(7, Color.Lavender), 
 		};
 
 		public override void SetStaticDefaults()
@@ -250,9 +277,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D texture = ModContent.GetTexture(Texture);
+			int currentFrame = (int)projectile.localAI[0];
 			lightColor = Color.White * 0.85f;
 			lightColor.A = 128;
-			int currentFrame = (int)projectile.localAI[0];
 			for(int i = 0; i < spawnFrames.Length; i++)
 			{
 				SlimeTrainRails rails = spawnFrames[i];
@@ -265,18 +292,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			// for starters, just draw a track at the rotation 
 			int currentFrame = (int)projectile.localAI[0];
-			int dustType = ModContent.DustType<StarDust>();
 			for(int i = 0; i < spawnFrames.Length; i++)
 			{
 				SlimeTrainRails rails = spawnFrames[i];
 				if(rails.startFrame == currentFrame)
 				{
-					Vector2 pos = rotationTracker.GetNPCTargetRadius(currentFrame);
-					for(int j = 0; j < 3; j++)
+					Vector2 pos = rotationTracker.GetNPCTargetRadius(currentFrame) - Vector2.One * 12;
+					for(int j = 0; j < 5; j++)
 					{
-						int dustId = Dust.NewDust(pos, 32, 32, dustType, 0f, 0f, 0, default, 2f);
-						Main.dust[dustId].noLight = true;
-						Main.dust[dustId].velocity = Vector2.Zero;
+						// smoke puff
+						int idx = Dust.NewDust(pos, 24, 24, 16, 0, 0);
+						Main.dust[idx].velocity *= 0.5f;
+						Main.dust[idx].alpha = 112;
+						Main.dust[idx].scale = 1.25f;
 					}
 				}
 			}
