@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.Projectiles.Minions.SlimeTrain.SlimeTrainMarkerProjectile;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 {
@@ -71,18 +72,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private int YFrameTop => 40 * projectile.frame + 4;
 		private int FrameHeight => 34;
 		
-		// radius to circle while summoning a sub projectile
-		private int spawnRadius = 120;
 
 		private int SubProjectileType; 
 		private Projectile currentMarker = null;
 
 		private Texture2D SlimeTexture;
 
-		// 0 or Pi depending on approach direction
-		private float startAngle = 0;
-		// 1 for CW, -1 for CCW, depending on approach direction
-		private int rotationDir = 1;
+		private SlimeTrainRotationTracker rotationTracker;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -102,6 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				SlimeTexture = GetTexture(Texture + "_Slimes");
 			}
 			SubProjectileType = ProjectileType<SlimeTrainMarkerProjectile>();
+			rotationTracker = new SlimeTrainRotationTracker();
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -120,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			{
 				Projectile p = Main.projectile[i];
 				if(p.active && p.owner == player.whoAmI && p.type == SubProjectileType && 
-					(int)p.localAI[0] < SlimeTrainMarkerProjectile.SetupTime)
+					(int)p.localAI[0] < SetupTime)
 				{
 					currentMarker = p;
 					break;
@@ -171,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		protected override void DrawTail()
 		{
 			// no tail, maybe should add a caboose? 
-			lightColor = Color.White;
+			lightColor = Color.White * 0.85f;
 			lightColor.A = 128;
 		}
 
@@ -203,14 +201,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		private void DoMarkerSpawnMovement()
 		{
-			int markerFrame = (int)currentMarker.localAI[0];
-			int npcIdx = (int)currentMarker.ai[0];
-			int targetSize = (int)(Main.npc[npcIdx].Size.X + Main.npc[npcIdx].Size.Y) / 2;
-			float idleAngle = startAngle + rotationDir * 2 * PI * markerFrame / SlimeTrainMarkerProjectile.SetupTime;
-			Vector2 targetPosition = currentMarker.Center;
-			targetPosition.X += (targetSize + spawnRadius) * (float)Math.Cos(idleAngle);
-			targetPosition.Y += (targetSize + spawnRadius) * (float)Math.Sin(idleAngle);
-			projectile.velocity = targetPosition - projectile.position;
+			int frame = (int)currentMarker.localAI[0];
+			projectile.velocity = rotationTracker.GetNPCTargetRadius(frame) - projectile.position;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -229,31 +221,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			if(currentMarker != null)
 			{
 				DoMarkerSpawnMovement();
-			} else
+			} else if(targetNPCIndex is int idx)
 			{
-				Vector2 startOffset = vectorToTargetPosition;
-				if(targetNPCIndex is int idx)
+				rotationTracker.SetRotationInfo(Main.npc[idx], projectile);
+				Vector2 startOffset = rotationTracker.GetStartOffset(vectorToTargetPosition);
+				if(startOffset.LengthSquared() < 16 * 16 && player.whoAmI == Main.myPlayer)
 				{
-					int TargetSize = (int)(Main.npc[idx].Size.X + Main.npc[idx].Size.Y) / 2;
-					int approachDir = -Math.Sign(vectorToTargetPosition.X);
-					startOffset += new Vector2(approachDir * (TargetSize + spawnRadius), 0);
-					if(player.whoAmI == Main.myPlayer && startOffset.LengthSquared() < 16 * 16)
-					{
-						startAngle = approachDir == 1 ?  0 : MathHelper.Pi;
-						rotationDir = approachDir * Math.Sign(projectile.velocity.Y);
-
-						Projectile.NewProjectile(
-							projectile.Center,
-							Vector2.Zero,
-							SubProjectileType,
-							projectile.damage,
-							projectile.knockBack,
-							Main.myPlayer,
-							ai0: idx,
-							ai1: EmpowerCount);
-					}
+					Projectile.NewProjectile(
+						projectile.Center,
+						projectile.velocity,
+						SubProjectileType,
+						projectile.damage,
+						projectile.knockBack,
+						Main.myPlayer,
+						ai0: idx,
+						ai1: EmpowerCount);
 				}
 				base.TargetedMovement(startOffset);
+			} else
+			{
+				base.TargetedMovement(vectorToTargetPosition);
 			}
 		}
 
@@ -288,12 +275,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			spriteBatch.Draw(texture, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r,
 				origin, 1, GetEffects(r), 0);
-			if (Main.rand.Next(30) == 0)
+			if (Main.rand.Next(20) == 0)
 			{
 				int dustId = Dust.NewDust(pos, bounds.Width, bounds.Height, dustType, 0f, 0f, 0, default, 2f);
 				Main.dust[dustId].noGravity = true;
 				Main.dust[dustId].noLight = true;
-				Main.dust[dustId].velocity *= 0.25f;
+				Main.dust[dustId].velocity = Vector2.Zero;
 			}
 		}
 	}

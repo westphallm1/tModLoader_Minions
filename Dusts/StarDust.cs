@@ -9,7 +9,6 @@ namespace AmuletOfManyMinions.Dusts
 	{
 		public override void OnSpawn(Dust dust)
 		{
-			dust.noGravity = true;
 			dust.noLight = true;
 			dust.alpha = 128;
 			dust.scale = Main.rand.NextFloat() / 2f + 0.25f;
@@ -22,6 +21,10 @@ namespace AmuletOfManyMinions.Dusts
 			dust.alpha -= 2;
 			dust.position += dust.velocity;
 			dust.scale *= 0.95f;
+			if(!dust.noGravity && dust.velocity.Y < 16)
+			{
+				dust.velocity.Y += 0.5f;
+			}
 			//dust.rotation += 0.3f;
 			if (dust.alpha < 96 || dust.scale < 0.25f)
 			{
