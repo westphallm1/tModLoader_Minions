@@ -101,6 +101,126 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 	}
 
 	/// <summary>
+	/// Individual SlimeCart projectile summoned by SlimeTrain
+	/// SlimeTrain's attack
+	/// Uses ai[0] for the NPC to attack, localAi[0] for animation frame
+	/// </summary>
+	class SlimeTrainCartProjectile: ModProjectile
+	{
+		public static int TravelVelocity = 6;
+		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/Slimecart/SlimecartMinion";
+		// npc to stay on top of
+		NPC clingTarget;
+		Vector2 startOffset;
+		Vector2 travelOffset;
+		static int slimeIndex = 0;
+		int mySlimeIndex;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[projectile.type] = 4;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 16;
+			projectile.height = 16;
+			projectile.penetrate = 1;
+			projectile.friendly = true;
+			projectile.timeLeft = 30;
+		}
+
+		public override bool OnTileCollide(Vector2 oldVelocity)
+		{
+			return false;
+		}
+
+		public override void AI()
+		{
+			base.AI();
+			projectile.localAI[0]++;
+			// failsafe in case we got a bad NPC index
+			if (projectile.ai[0] == 0)
+			{
+				projectile.Kill();
+				return; 
+			}
+			// "on spawn" code
+			if (clingTarget == null)
+			{
+				clingTarget = Main.npc[(int)projectile.ai[0]];
+				startOffset = projectile.Center - clingTarget.Center;
+				travelOffset = projectile.velocity;
+				travelOffset.SafeNormalize();
+				travelOffset *= TravelVelocity;
+				projectile.rotation = projectile.velocity.ToRotation() + (projectile.velocity.X > 0 ? 0 : MathHelper.Pi);
+				projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
+				projectile.velocity = Vector2.Zero;
+				mySlimeIndex = slimeIndex % 7;
+				slimeIndex++;
+				// SpawnDust();
+			}
+			if (!clingTarget.active)
+			{
+				projectile.Kill();
+				return;
+			}
+			// slide towards enemy on a fixed path
+			projectile.Center = clingTarget.Center + startOffset + travelOffset * projectile.localAI[0];
+		}
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			lightColor = Color.White * 0.85f;
+			lightColor.A = 128;
+			float r = projectile.rotation;
+			Vector2 pos = projectile.Center;
+			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+
+			// slime
+			Texture2D texture = ModContent.GetTexture(Texture + "_Slime");
+			int frameHeight = texture.Height / 7;
+			Rectangle bounds = new Rectangle(0, mySlimeIndex * frameHeight, texture.Width, frameHeight);
+			Vector2 tangent = travelOffset.X > 0 ? new Vector2(travelOffset.Y, -travelOffset.X) : new Vector2(-travelOffset.Y, travelOffset.X);
+			tangent.SafeNormalize();
+			tangent *= 14;
+			spriteBatch.Draw(texture, pos + tangent - Main.screenPosition,
+				bounds, lightColor, r,
+				new Vector2(bounds.Width/2, bounds.Height/2), 1, effects, 0);
+
+			// cart
+			texture = ModContent.GetTexture(Texture);
+			frameHeight = texture.Height / Main.projFrames[projectile.type];
+			bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			spriteBatch.Draw(texture, pos - Main.screenPosition,
+				bounds, lightColor, r,
+				origin, 1, effects, 0);
+			return false;
+		}
+
+
+		public override void Kill(int timeLeft)
+		{
+			float goreVel = 0.25f;
+			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+			{
+				if(Main.rand.Next(3) > 0)
+				{
+					continue;
+				}
+				int goreIdx = Gore.NewGore(projectile.position, default, Main.rand.Next(61, 64));
+				Main.gore[goreIdx].velocity *= goreVel;
+				Main.gore[goreIdx].velocity += offset;
+			}
+			base.Kill(timeLeft);
+		}
+	}
+
+	/// <summary>
 	/// not a distinct projectile, but attached to SlimeTrainMarkerProjectile
 	/// Used for keeping track of the rail spawn animation 
 	/// </summary>
@@ -141,6 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			SpriteEffects effects = tracker.GetSpriteEffects(quadrant);
 			Vector2 direction = tracker.GetDirection(quadrant);
 			int endFrame = Math.Min(frame - startFrame, DrawFrames);
+			lightColor *= Math.Max(endFrame, 1) / (float)DrawFrames;
 			float endLength = endFrame * GrowthRate;
 			for(int i = 0; i < endLength + PlacementInterval; i+= PlacementInterval)
 			{
@@ -151,7 +272,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				spriteBatch.Draw(texture, drawPos - Main.screenPosition,
 					bounds, lightColor, 0, origin, 1, effects, 0);
 			}
-			// TODO draw the end cap
 		}
 
 		private int GetEndFrame(SlimeTrainRotationTracker tracker)
@@ -195,9 +315,52 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				return 0;
 			}
 		}
+
+		internal void DoneDust(SlimeTrainRotationTracker tracker)
+		{
+			Vector2 direction = tracker.GetDirection(quadrant);
+			float endLength = DrawFrames * GrowthRate;
+			for(int i = 0; i < endLength + PlacementInterval; i+= PlacementInterval)
+			{
+				Vector2 dustPos = tracker.GetNPCTargetRadius(startFrame) + direction * i;
+				int idx = Dust.NewDust(dustPos, 16, 16, DustID.Iron, 0, 0);
+				Main.dust[idx].velocity *= 0.25f;
+				Main.dust[idx].alpha = 128;
+				Main.dust[idx].scale *= 0.85f;
+
+			}
+		}
+
+		internal void SpawnCart(SlimeTrainRotationTracker tracker, int frame, Projectile baseProj)
+		{
+			int waitTime = 15;
+			int activeFrame = frame - startFrame - DrawFrames - waitTime;
+			// ai[1] contains empower count
+			int spawnRate = Math.Max(20, 60 - 4 * (int)baseProj.ai[1]);
+			if(activeFrame < 0 || activeFrame % spawnRate != 0)
+			{
+				return;
+			}
+			Vector2 direction = tracker.GetDirection(quadrant);
+			Vector2 spawnPos = tracker.GetNPCTargetRadius(startFrame);
+			Vector2 tangent = direction.X > 0 ? new Vector2(direction.Y, -direction.X) : new Vector2(-direction.Y, direction.X);
+			Vector2 spawnOffset = 14 * tangent;
+			Projectile.NewProjectile(
+				spawnPos + spawnOffset,
+				direction,
+				ModContent.ProjectileType<SlimeTrainCartProjectile>(),
+				baseProj.damage,
+				baseProj.knockBack,
+				baseProj.owner,
+				baseProj.ai[0],
+				baseProj.ai[1]);
+		}
 	}
+	
 
 	/// <summary>
+	/// Invisible, non-damaging projectile that acts as the "brain" of the 
+	/// SlimeTrain's attack
 	/// Uses ai[0] for the NPC to attack, ai[1] for empower count,
 	/// localAi[0] to count up animation frames
 	/// </summary>
@@ -247,6 +410,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			return false;
 		}
+
 		public override void AI()
 		{
 			base.AI();
@@ -271,6 +435,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				return;
 			}
 			projectile.Center = clingTarget.Center;
+			Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.5f);
 			UpdateTracks();
 		}
 
@@ -295,17 +460,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			for(int i = 0; i < spawnFrames.Length; i++)
 			{
 				SlimeTrainRails rails = spawnFrames[i];
-				if(rails.startFrame == currentFrame)
+				if(projectile.owner == Main.myPlayer)
 				{
-					Vector2 pos = rotationTracker.GetNPCTargetRadius(currentFrame) - Vector2.One * 12;
-					for(int j = 0; j < 5; j++)
-					{
-						// smoke puff
-						int idx = Dust.NewDust(pos, 24, 24, 16, 0, 0);
-						Main.dust[idx].velocity *= 0.5f;
-						Main.dust[idx].alpha = 112;
-						Main.dust[idx].scale = 1.25f;
-					}
+					rails.SpawnCart(rotationTracker, currentFrame, projectile);
+				}
+				 if (rails.startFrame + SlimeTrainRails.DrawFrames == currentFrame)
+				{
+					rails.DoneDust(rotationTracker);
 				}
 			}
 		}

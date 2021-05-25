@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
-			item.damage = 43;
+			item.damage = 80;
 			item.height = 34;
 			item.value = Item.buyPrice(0, 15, 0, 0);
 			item.rare = ItemRarityID.LightRed;
