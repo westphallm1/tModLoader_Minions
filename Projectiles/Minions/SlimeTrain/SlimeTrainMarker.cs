@@ -176,6 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			lightColor = Color.White * 0.85f;
 			lightColor.A = 128;
+			lightColor *= Math.Min(8, projectile.localAI[0]) / 8;
 			float r = projectile.rotation;
 			Vector2 pos = projectile.Center;
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
