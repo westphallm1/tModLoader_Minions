@@ -22,11 +22,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal int walkCycleFrame = 0;
 		internal int walkVelocityThreshold = 1;
 		// update angles every X frames
-		internal static int frameResolution = 5;
+		internal int frameResolution = 5;
 		// use the Xth frame of each block for the angle
 		internal static int frameShift = 0;
 		// snap all offset vectors to a Y x Y grid
-		internal static int posResolution = 2;
+		internal int posResolution = 2;
 
 		internal SpriteBatch spriteBatch;
 		internal Color lightColor;
