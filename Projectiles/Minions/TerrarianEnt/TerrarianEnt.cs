@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -49,6 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
 		protected override int MinionType => ProjectileType<TerrarianEntMinion>();
 	}
+
 	public class TerrarianEntMinion : EmpoweredMinion
 	{
 		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
@@ -150,6 +152,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				idlePosition.Y = player.Top.Y - 16;
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			int subProjType = ProjectileType<LandChunkProjectile>();
+			if(Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[subProjType] < 2 && animationFrame % 30 == 0)
+			{
+				Projectile.NewProjectile(
+					player.Center,
+					Vector2.Zero,
+					subProjType,
+					projectile.damage,
+					0,
+					player.whoAmI,
+					ai0: animationFrame % 60);
+			}
 			return vectorToIdlePosition;
 		}
 
