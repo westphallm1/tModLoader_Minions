@@ -1,5 +1,4 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
-using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -8,92 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 {
-	public class LandChunkProjectile : TransientMinion
-	{
-		public override string Texture => "Terraria/Item_0";
-		internal SpriteCompositionHelper scHelper;
-
-		internal CompositeSpriteBatchDrawer[] drawers;
-
-
-		internal int spawnFrames = 30;
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
-			Main.projFrames[projectile.type] = 2;
-		}
-
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 24;
-			projectile.timeLeft = 240;
-			projectile.localNPCHitCooldown = 30;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.penetrate = -1;
-			projectile.tileCollide = false;
-			projectile.rotation = 0;
-			scHelper = new SpriteCompositionHelper(this)
-			{
-				idleCycleFrames = 160,
-				frameResolution = 1,
-				posResolution = 1
-			};
-		}
-
-		public override void OnSpawn()
-		{
-			base.OnSpawn();
-			drawers = LandChunkConfigs.templates[1]();
-		}
-
-		public override void AI()
-		{
-			if(animationFrame == 0)
-			{
-				OnSpawn();
-			}
-			animationFrame++;
-			Player player = Main.player[projectile.owner];
-
-			// TODO replace with real behavior
-			if (animationFrame < 90)
-			{
-				int xOffset = projectile.ai[0] == 0 ? 64 : -96;
-				projectile.position = player.Center + new Vector2(xOffset, 8 * (float)Math.Sin(MathHelper.TwoPi * projectile.timeLeft / 60));
-				projectile.velocity = Vector2.Zero;
-			} else
-			{
-				// "pretend" to fly away for now
-				int maxSpeed = 8;
-				int currentSpeed = Math.Min(maxSpeed, animationFrame - 90);
-				projectile.velocity = new Vector2(currentSpeed, 0);
-				projectile.rotation += (currentSpeed / (float)maxSpeed) * MathHelper.Pi / 8;
-			}
-			Array.ForEach(drawers, d => d.Update(projectile, animationFrame, spawnFrames));
-		}
-
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
-		{
-			lightColor = Color.White * 0.75f;
-			scHelper.Process(spriteBatch, lightColor, false, drawers.Select<CompositeSpriteBatchDrawer, SpriteCycleDrawer>(d=>d.Draw).ToArray());
-			return false;
-		}
-
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
-		{
-			// No-op
-		}
-	}
-
 	public abstract class CompositeSpriteBatchDrawer
 	{
 		// these need to be injected internally each frame, a bit annoying
@@ -211,12 +127,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		internal Rectangle monumentBounds;
 		internal Texture2D monumentTexture;
 		internal int growthRate = 4;
+		internal (byte, byte)?[,,] tiles;
 
 		public MonumentDrawer(Texture2D texture, Rectangle bounds, int growthRate = 4)
 		{
 			monumentTexture = texture;
 			monumentBounds = bounds;
 			this.growthRate = growthRate;
+			tiles = new (byte, byte)?[1, monumentBounds.Height, monumentBounds.Width];
 		}
 		internal override void Draw(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
@@ -224,58 +142,79 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			{
 				return;
 			}
-			(byte, byte)?[,,] tiles = new (byte, byte)?[1, monumentBounds.Height, monumentBounds.Width];
-			int heightToDraw = Math.Min(monumentBounds.Height, (animationFrame - spawnFrames - growthRate) / growthRate);
+			
+			int heightToDraw = (int)Math.Min(monumentBounds.Height - 1, (animationFrame - spawnFrames - growthRate) * growthRate / 16f);
 			int heightOffset = Math.Min(16 + 8 * monumentBounds.Height, growthRate * (animationFrame - spawnFrames) - 32);
 			// programmatic build here feels a bit iffy
-			for (int i = 0; i < heightToDraw; i++)
+			for(int j = 0; j < monumentBounds.Width; j++)
 			{
-				for(int j = 0; j < monumentBounds.Width; j++)
-				{
-					tiles[0, i, j] = ((byte)(monumentBounds.X + j), (byte)(monumentBounds.Y + i));
-				}
+				tiles[0, heightToDraw, j] = ((byte)(monumentBounds.X + j), (byte)(monumentBounds.Y + heightToDraw));
 			}
 			helper.AddTileSpritesToBatch(monumentTexture, 0, tiles, Vector2.UnitY * -heightOffset, 0);
 		}
 	}
 
-
-	public class LandChunkConfigs
+	public class TreeDrawer : CompositeSpriteBatchDrawer
 	{
+		internal Rectangle folliageBounds;
+		internal Texture2D folliageTexture;
+		internal Texture2D woodTexture;
+		// in tiles, not pixels
+		internal int trunkHeight = 5;
+		internal int folliageSpawnFrames = 20;
+		int treeTileSize = 20;
+		internal (byte, byte)?[,,] tiles;
 
-		public static Func<CompositeSpriteBatchDrawer[]>[] templates;
-		public static void Load()
+		public TreeDrawer(Texture2D folliageTexture, Texture2D woodTexture, Rectangle folliageBounds, int trunkHeight = 5)
 		{
-			// TODO some assembly stuff to autoload these
-			templates = new Func<CompositeSpriteBatchDrawer[]>[] { Sunflowers, Statue };
+			this.folliageTexture = folliageTexture;
+			this.woodTexture = woodTexture;
+			this.folliageBounds = folliageBounds;
+			this.trunkHeight = trunkHeight;
+			tiles = new (byte, byte)?[1, trunkHeight, 3];
 		}
 
-		public static void Unload()
+		internal void DrawTreeTop(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
-			templates = null;
+			int heightPerFrame = folliageBounds.Height / folliageSpawnFrames;
+			int animFrame = animationFrame - spawnFrames;
+			int heightToDraw = Math.Min(folliageBounds.Height, animFrame * 2 * heightPerFrame);
+
+			float scale = Math.Max(0.5f, heightToDraw / (float)folliageBounds.Height);
+			int maxHeight = treeTileSize * trunkHeight + folliageBounds.Height/2;
+			int heightOffset = Math.Min(maxHeight, heightPerFrame * animFrame);
+			Rectangle bounds = new Rectangle(folliageBounds.X, folliageBounds.Y, folliageBounds.Width, heightToDraw);
+			helper.AddSpriteToBatch(folliageTexture, bounds, new Vector2(1, 2 - heightOffset) * scale, 0, scale);
 		}
 
-		public static CompositeSpriteBatchDrawer[] Sunflowers()
+		internal void DrawTrunk(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
-			return new CompositeSpriteBatchDrawer[]
+			if (animationFrame < spawnFrames + folliageSpawnFrames)
 			{
-				new MonumentDrawer(ModContent.GetTexture("Terraria/Tiles_27"), new Rectangle(2 * Main.rand.Next(3), 0, 2, 4)),
-				new ClutterDrawer(
-					ModContent.GetTexture("Terraria/Tiles_3"), 
-					Enumerable.Repeat(0, 4).Select(_ => Main.rand.Next(10)).ToArray(), 
-					height: 20),
-				new TileDrawer(ModContent.GetTexture("Terraria/Tiles_2"),  2)
-			};
+				return;
+			}
+			int animFrame = animationFrame - spawnFrames - folliageSpawnFrames;
+			int heightPerFrame = folliageBounds.Height / folliageSpawnFrames;
+			int heightToDraw = (int)Math.Min(trunkHeight-1, animFrame * heightPerFrame / (float)treeTileSize);
+			int heightOffset = Math.Min(treeTileSize/2 * trunkHeight, heightPerFrame * animFrame);
+			tiles[0, heightToDraw, 1] = (0, (byte)(heightToDraw%3));
+			helper.AddTileSpritesToBatch(woodTexture, 0, tiles, Vector2.UnitY * -heightOffset, tileSize: treeTileSize);
 		}
-		public static CompositeSpriteBatchDrawer[] Statue()
+
+		internal override void Draw(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
-			int tileTexture = Main.rand.NextBool() ? 179 : 1;
-			return new CompositeSpriteBatchDrawer[]
+			if (animationFrame < spawnFrames)
 			{
-				new MonumentDrawer(ModContent.GetTexture("Terraria/Tiles_105"), new Rectangle(2* Main.rand.Next(20), 0, 2, 3)),
-				// no clutter
-				new TileDrawer(ModContent.GetTexture("Terraria/Tiles_" + tileTexture), 1)
-			};
+				return;
+			}
+
+			// first, draw folliage
+			DrawTreeTop(helper, frame, cycleAngle);
+			// then, draw trunk
+			DrawTrunk(helper, frame, cycleAngle);
+			// TODO
 		}
+
 	}
+
 }

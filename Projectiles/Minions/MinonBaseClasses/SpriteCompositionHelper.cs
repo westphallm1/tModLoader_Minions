@@ -111,11 +111,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			AddSpriteToBatch(texture, (0, 1), offsetFromCenter, 0, 1);
 		}
 
-		public void AddTileSpritesToBatch(Texture2D texture, int drawIdx, (byte, byte)?[,,] tilesInfo, Vector2 offsetFromCenter, float r)
+		public void AddTileSpritesToBatch(Texture2D texture, int drawIdx, (byte, byte)?[,,] tilesInfo, Vector2 offsetFromCenter, float r = 0, int tileSize = 16)
 		{
 
-			int tileSize = 16;
-			int tileSpacing = 18;
+			int tileSpacing = tileSize+2;
 			// don't rotate if snapping to grid
 			r = posResolution > 1 ? 0 : r;
 			float frameOfReferenceR = projectile.rotation + r;
