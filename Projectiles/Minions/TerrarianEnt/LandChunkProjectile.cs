@@ -20,6 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		internal SpriteCompositionHelper scHelper;
 
 		internal CompositeSpriteBatchDrawer[] drawers;
+		internal SpriteCycleDrawer[] drawFuncs;
 
 
 		internal int spawnFrames = 30;
@@ -54,6 +55,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			base.OnSpawn();
 			drawers = LandChunkConfigs.templates[2]();
+			drawFuncs = new SpriteCycleDrawer[drawers.Length];
+			for(int i = 0; i < drawers.Length; i++)
+			{
+				drawFuncs[i] = drawers[i].Draw;
+			}
 		}
 
 		public override void AI()
@@ -85,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			lightColor = Color.White * 0.75f;
-			scHelper.Process(spriteBatch, lightColor, false, drawers.Select<CompositeSpriteBatchDrawer, SpriteCycleDrawer>(d=>d.Draw).ToArray());
+			scHelper.Process(spriteBatch, lightColor, false, drawFuncs);
 			return false;
 		}
 
@@ -136,9 +142,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			return new CompositeSpriteBatchDrawer[]
 			{
-				new TreeDrawer(GetTexture("Terraria/Tree_Tops_0"), GetTexture("Terraria/Tiles_5"), new Rectangle(0, 0, 82, 82)),
-				new ClutterDrawer(GetTexture("Terraria/Tiles_3"), 
-					Enumerable.Repeat(0, 4).Select(_ => Main.rand.Next(10)).ToArray(), 
+				new TreeDrawer(
+					GetTexture("Terraria/Tree_Tops_0"),
+					GetTexture("Terraria/Tiles_5"),
+					GetTexture("Terraria/Tree_Branches_0"),
+					new Rectangle(82 * Main.rand.Next(3), 0, 82, 82),
+					trunkHeight: Main.rand.Next(3, 5)),
+				new ClutterDrawer(GetTexture("Terraria/Tiles_3"),
+					new int[] { Main.rand.Next(10), -1, -1, Main.rand.Next(10)},
 					height: 20),
 				new TileDrawer(GetTexture("Terraria/Tiles_2"),  2)
 			};
