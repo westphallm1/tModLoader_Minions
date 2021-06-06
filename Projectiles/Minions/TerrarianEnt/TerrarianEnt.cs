@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			int subProjType = ProjectileType<LandChunkProjectile>();
-			if(Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[subProjType] < 2 && animationFrame % 30 == 0)
+			if(Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[subProjType] < 8 && animationFrame % 30 == 0)
 			{
 				Projectile.NewProjectile(
 					player.Center,
@@ -162,7 +162,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					projectile.damage,
 					0,
 					player.whoAmI,
-					ai0: animationFrame % 60);
+					ai0: player.ownedProjectileCounts[subProjType]);
 			}
 			return vectorToIdlePosition;
 		}
@@ -187,17 +187,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				vectorToTargetPosition *= projectileVelocity;
 				Vector2 pos = projectile.Center;
 				framesSinceLastHit = 0;
-				if (Main.myPlayer == player.whoAmI)
-				{
-					//Projectile.NewProjectile(
-					//	pos,
-					//	vectorToTargetPosition,
-					//	ProjectileType<TerrarianEntBullet>(),
-					//	projectile.damage,
-					//	projectile.knockBack,
-					//	Main.myPlayer);
-				}
-				// Main.PlaySound(new LegacySoundStyle(2, 11), pos);
 			}
 		}
 

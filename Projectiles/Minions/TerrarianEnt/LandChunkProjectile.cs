@@ -14,9 +14,12 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 {
-	public class LandChunkProjectile : TransientMinion
+	public class LandChunkProjectile : SimpleMinion
 	{
 		public override string Texture => "Terraria/Item_0";
+
+		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
+
 		internal SpriteCompositionHelper scHelper;
 
 		internal CompositeSpriteBatchDrawer[] drawers;
@@ -42,7 +45,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			projectile.usesLocalNPCImmunity = true;
 			projectile.penetrate = -1;
 			projectile.tileCollide = false;
+			projectile.minionSlots = 0;
 			projectile.rotation = 0;
+			attackThroughWalls = true;
+			usesTactics = false;
+			useBeacon = false;
 			scHelper = new SpriteCompositionHelper(this)
 			{
 				idleCycleFrames = 160,
@@ -54,7 +61,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			drawers = LandChunkConfigs.templates[3]();
+			int treeIdx = Math.Max(0,(int)projectile.ai[0] - 1);
+			drawers = LandChunkConfigs.templates[treeIdx % LandChunkConfigs.templates.Length]();
 			drawFuncs = new SpriteCycleDrawer[drawers.Length];
 			for(int i = 0; i < drawers.Length; i++)
 			{
@@ -62,31 +70,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			}
 		}
 
-		public override void AI()
-		{
-			if(animationFrame == 0)
-			{
-				OnSpawn();
-			}
-			animationFrame++;
-			Player player = Main.player[projectile.owner];
-
-			// TODO replace with real behavior
-			if (animationFrame < 90)
-			{
-				int xOffset = projectile.ai[0] == 0 ? 64 : -96;
-				projectile.position = player.Center + new Vector2(xOffset, 8 * (float)Math.Sin(MathHelper.TwoPi * projectile.timeLeft / 60));
-				projectile.velocity = Vector2.Zero;
-			} else
-			{
-				// "pretend" to fly away for now
-				int maxSpeed = 8;
-				int currentSpeed = Math.Min(maxSpeed, animationFrame - 90);
-				projectile.velocity = new Vector2(currentSpeed, 0);
-				projectile.rotation += (currentSpeed / (float)maxSpeed) * MathHelper.Pi / 8;
-			}
-			Array.ForEach(drawers, d => d.Update(projectile, animationFrame, spawnFrames));
-		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
@@ -96,6 +79,33 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			// TODO real behavior
+			int ai0 = (int)projectile.ai[0];
+			int baseXoffset = ai0 % 2 == 0 ? 64 : -96;
+			int xOffset = Math.Sign(baseXoffset) * 48 * (ai0 / 2) + baseXoffset;
+			int yOffset = 48 - 64 * (ai0 / 2);
+			projectile.position = player.Center + new Vector2(xOffset, yOffset + 8 * (float)Math.Sin(MathHelper.TwoPi * animationFrame / 60));
+			projectile.velocity = Vector2.Zero;
+		}
+
+		public override Vector2 IdleBehavior()
+		{
+			Array.ForEach(drawers, d => d.Update(projectile, animationFrame, spawnFrames));
+			return Vector2.Zero;
+		}
+
+		public override Vector2? FindTarget()
+		{
+			// No-op
+			if(animationFrame < 90)
+			{
+				return null;
+			}
+			return null;
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// No-op
 		}
@@ -108,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public static void Load()
 		{
 			// TODO some assembly stuff to autoload these
-			templates = new Func<CompositeSpriteBatchDrawer[]>[] { Sunflowers, Statue, ForestTree, PalmTree, HallowedTree, JungleTree, SnowyTree };
+			templates = new Func<CompositeSpriteBatchDrawer[]>[] { ForestTree, PalmTree, SnowyTree, JungleTree, HallowedTree, CorruptTree, CrimsonTree };
 		}
 
 		public static void Unload()
@@ -164,6 +174,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					new int[] { Main.rand.Next(10), -1, -1, Main.rand.Next(10)},
 					height: 20),
 				new TileDrawer(GetTexture("Terraria/Tiles_2"),  2)
+			};
+		}
+
+		public static CompositeSpriteBatchDrawer[] CorruptTree()
+		{
+			int[] tileSets = { 1 };
+			return new CompositeSpriteBatchDrawer[]
+			{
+				MakeTreeDrawer(tileSets, "5_0"),
+				new ClutterDrawer(GetTexture("Terraria/Tiles_24"),
+					new int[] { Main.rand.Next(10), -1, -1, Main.rand.Next(20)},
+					height: 20),
+				new TileDrawer(GetTexture("Terraria/Tiles_23"),  14)
+			};
+		}
+
+		public static CompositeSpriteBatchDrawer[] CrimsonTree()
+		{
+			int[] tileSets = { 5 };
+			return new CompositeSpriteBatchDrawer[]
+			{
+				MakeTreeDrawer(tileSets, "5_4"),
+				new TileDrawer(GetTexture("Terraria/Tiles_199"),  125)
 			};
 		}
 
