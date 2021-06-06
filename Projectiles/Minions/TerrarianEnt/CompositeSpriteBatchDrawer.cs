@@ -172,22 +172,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		internal int trunkHeight = 5;
 		internal int folliageSpawnFrames = 20;
 		// config for roots and branches orientations
-		int rootsConfig = 0;
-		int branchesConfig = 0;
+		internal int rootsConfig = 0;
+		internal int branchesConfig = 0;
 		int treeTileSize = 20;
+		int branchFrames = 3;
 		internal (byte, byte)?[,,] tiles;
 
 		// Used to draw trunk itself, branches, and roots
 		private int trunkAnimFrame = -1;
 		private int trunkTileRowToDraw;
 		private int trunkHeightOffset;
+		internal int trunkHeadstartFrames;
+
+		internal virtual (byte, byte) TrunkTileForLocation(int row) => (0, (byte)(row % 3));
 
 		internal override void Update(Projectile proj, int animationFrame, int spawnFrames)
 		{
 			base.Update(proj, animationFrame, spawnFrames);
 			// the positioning info for the tree roots is shared across multiple methods, so only
 			// compute it once
-			int startFrame = spawnFrames + folliageSpawnFrames;
+			int startFrame = spawnFrames + folliageSpawnFrames - trunkHeadstartFrames;
 			// extremely hacky, smaller trunks lag behind a bit
 			if(trunkHeight < 4)
 			{
@@ -204,13 +208,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			trunkHeightOffset = Math.Min(maxHeight, heightPerFrame * trunkAnimFrame - treeTileSize);
 		}
 
-		public TreeDrawer(Texture2D folliageTexture, Texture2D woodTexture, Texture2D branchesTexture, Rectangle folliageBounds, int trunkHeight = 4, int decorationConfig = -1)
+		public TreeDrawer(
+			Texture2D folliageTexture, 
+			Texture2D woodTexture, 
+			Texture2D branchesTexture, 
+			Rectangle folliageBounds, 
+			int trunkHeight = 4, 
+			int decorationConfig = -1,
+			int branchFrames = 3,
+			int trunkHeadstartFrames = 0)
 		{
 			this.folliageTexture = folliageTexture;
 			this.woodTexture = woodTexture;
 			this.branchesTexture = branchesTexture;
 			this.folliageBounds = folliageBounds;
 			this.trunkHeight = trunkHeight;
+			this.trunkHeadstartFrames = trunkHeadstartFrames;
+			this.branchFrames = branchFrames;
 			decorationConfig = decorationConfig > -1 ? decorationConfig : Main.rand.Next(12);
 			rootsConfig = decorationConfig % 3;
 			branchesConfig = decorationConfig % 4;
@@ -224,7 +238,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			int animFrame = animationFrame - spawnFrames;
 			int heightToDraw = Math.Min(folliageBounds.Height, animFrame * 2 * heightPerFrame);
 
-			float scale = Math.Max(0.5f, heightToDraw / (float)folliageBounds.Height);
+			float scale = Math.Max(0.1f, Math.Min(1, animFrame / (float) folliageSpawnFrames));
 			int maxHeight = TileTop + treeTileSize * trunkHeight + folliageBounds.Height/2;
 			int heightOffset = Math.Min(maxHeight, heightPerFrame * animFrame - treeTileSize);
 			Rectangle bounds = new Rectangle(folliageBounds.X, folliageBounds.Y, folliageBounds.Width, heightToDraw);
@@ -245,7 +259,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			} else
 			{
 				// rest of trunk
-				tiles[0, trunkTileRowToDraw, 1] = (0, (byte)(trunkTileRowToDraw%3));
+				tiles[0, trunkTileRowToDraw, 1] = TrunkTileForLocation(trunkTileRowToDraw);
 			}
 			helper.AddTileSpritesToBatch(woodTexture, 0, tiles, Vector2.UnitY * -trunkHeightOffset, tileSize: treeTileSize);
 		}
@@ -268,12 +282,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			if (trunkTileRowToDraw >= branchesTile && branchesConfig < 2)
 			{
 				int branchWidth = branchesTexture.Width / 2;
-				int branchHeight = branchesTexture.Height / 3;
+				int branchHeight = branchesTexture.Height / branchFrames;
 				int branchPadding = branchesConfig == 0 ? -2 : 4;
 				int xOffset = branchPadding + (xMinusPadding + branchWidth) / 2 * (branchesConfig == 0 ? 1 : -1);
 				float yOffset = treeTileSize * (branchesTile) / 2f - branchHeight/2f;
 				Vector2 branchOffset = new Vector2(xOffset, yOffset);
-				Rectangle bounds = new Rectangle((1-branchesConfig) * branchWidth, branchHeight * (branchesTile % 3), branchWidth, branchHeight);
+				Rectangle bounds = new Rectangle((1-branchesConfig) * branchWidth, branchHeight * (branchesTile % branchFrames), branchWidth, branchHeight);
 				helper.AddSpriteToBatch(branchesTexture, bounds, trunkOffset + branchOffset, 0, 1);
 			}
 
@@ -294,5 +308,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			DrawDecorations(helper, frame, cycleAngle);
 		}
 	}
+
+	public class PalmTreeDrawer : TreeDrawer
+	{
+		public PalmTreeDrawer(
+			Texture2D folliageTexture, 
+			Texture2D woodTexture, 
+			Texture2D branchesTexture, 
+			Rectangle folliageBounds, 
+			int trunkHeight = 4, 
+			int decorationConfig = -1, 
+			int branchFrames = 3, 
+			int trunkHeadstartFrames = 0) : 
+			base(folliageTexture, woodTexture, branchesTexture, folliageBounds, trunkHeight, decorationConfig, branchFrames, trunkHeadstartFrames)
+		{
+			// no roots or branches
+			rootsConfig = 1;
+			branchesConfig = 2;
+		}
+
+		internal override (byte, byte) TrunkTileForLocation(int row)
+		{
+			return ((byte)(row % 3), 0);
+		}
+	}
+
 
 }
