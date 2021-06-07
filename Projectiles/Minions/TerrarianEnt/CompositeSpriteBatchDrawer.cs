@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		internal override void Update(Projectile proj, int animationFrame, int spawnFrames)
 		{
 			base.Update(proj, animationFrame, spawnFrames);
-			if (dustId > - 1 && animationFrame <= spawnFrames && animationFrame % (spawnFrames / 4) == 0)
+			if (dustId > - 1 && animationFrame <= spawnFrames && animationFrame > 0 && animationFrame % (spawnFrames / 4) == 0)
 			{
 				for (int i = 0; i < 3; i++)
 				{

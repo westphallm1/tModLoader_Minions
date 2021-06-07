@@ -128,7 +128,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				for(int j = 0; j < yLength; j++)
 				{
-					
 					if(tilesInfo[drawIdx, i, j] == null)
 					{
 						continue;

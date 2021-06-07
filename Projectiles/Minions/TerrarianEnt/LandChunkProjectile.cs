@@ -14,7 +14,10 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 {
-	public class LandChunkProjectile : SimpleMinion
+	/// <summary>
+	/// Uses ai[1] for positioning/sprite selection purposes
+	/// </summary>
+	public class LandChunkProjectile : GroupAwareMinion
 	{
 		public override string Texture => "Terraria/Item_0";
 
@@ -24,9 +27,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		internal CompositeSpriteBatchDrawer[] drawers;
 		internal SpriteCycleDrawer[] drawFuncs;
+		internal Vector2 travelDir;
+		internal int travelStartFrame;
 
 
 		internal int spawnFrames = 30;
+		internal int attackDelayFrames = 20;
+		internal int framesToLiveAfterAttack = 120;
 
 		public override void SetStaticDefaults()
 		{
@@ -40,16 +47,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			base.SetDefaults();
 			projectile.width = 24;
 			projectile.height = 24;
-			projectile.timeLeft = 240;
-			projectile.localNPCHitCooldown = 30;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.penetrate = -1;
-			projectile.tileCollide = false;
+			projectile.localNPCHitCooldown = 6;
 			projectile.minionSlots = 0;
-			projectile.rotation = 0;
 			attackThroughWalls = true;
-			usesTactics = false;
 			useBeacon = false;
+			attackFrames = 60;
 			scHelper = new SpriteCompositionHelper(this)
 			{
 				idleCycleFrames = 160,
@@ -61,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			int treeIdx = Math.Max(0,(int)projectile.ai[0] - 1);
+			int treeIdx = Math.Max(0,(int)projectile.ai[1] - 1);
 			drawers = LandChunkConfigs.templates[treeIdx % LandChunkConfigs.templates.Length]();
 			drawFuncs = new SpriteCycleDrawer[drawers.Length];
 			for(int i = 0; i < drawers.Length; i++)
@@ -70,37 +72,71 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			}
 		}
 
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			if(travelDir == default)
+			{
+				return false;
+			}
+			projHitbox.Inflate(64, 64);
+			return projHitbox.Intersects(targetHitbox);
+		}
+
+		// for layering purposes, this needs to be done manually
+		// Called from TerrarianEnt.PreDraw
+		public void SubPreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			scHelper.Process(spriteBatch, lightColor, false, drawFuncs);
+		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			lightColor = Color.White * 0.75f;
-			scHelper.Process(spriteBatch, lightColor, false, drawFuncs);
 			return false;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			// TODO real behavior
-			int ai0 = (int)projectile.ai[0];
-			int baseXoffset = ai0 % 2 == 0 ? 64 : -96;
-			int xOffset = Math.Sign(baseXoffset) * 48 * (ai0 / 2) + baseXoffset;
-			int yOffset = 48 - 64 * (ai0 / 2);
-			projectile.position = player.Center + new Vector2(xOffset, yOffset + 8 * (float)Math.Sin(MathHelper.TwoPi * animationFrame / 60));
+			float[] angleOffsets = { 0, MathHelper.PiOver4, -MathHelper.PiOver4 };
+			int ai1 = (int)projectile.ai[1];
+			bool isEven = ai1 % 2 == 0;
+			int sideOffset = ai1 / 2;
+			Vector2 center = new Vector2(-16, -64);
+			float baseAngle = isEven ? angleOffsets[sideOffset] : MathHelper.Pi + angleOffsets[sideOffset];
+			baseAngle += MathHelper.Pi / 16 * (float) Math.Sin(MathHelper.TwoPi * groupAnimationFrame / groupAnimationFrames);
+			Vector2 offset = 164 * baseAngle.ToRotationVector2();
+			offset.Y *= 0.5f;
+			projectile.rotation = MathHelper.Pi/48 * (float) Math.Sin(MathHelper.TwoPi * animationFrame / 120);
+			projectile.position = player.Center + center + offset;
 			projectile.velocity = Vector2.Zero;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
+			base.IdleBehavior();
 			Array.ForEach(drawers, d => d.Update(projectile, animationFrame, spawnFrames));
 			return Vector2.Zero;
 		}
 
 		public override Vector2? FindTarget()
 		{
-			// No-op
-			if(animationFrame < 90)
+			// TODO lift some EmpoweredMinion stuff from here
+			if(animationFrame < attackDelayFrames)
 			{
 				return null;
+			} else if (travelDir != default)
+			{
+				return travelDir;
+			} else if (IsMyTurn() && SelectedEnemyInRange(1000, player.Center, 1000) is Vector2 target)
+			{
+				travelDir = target - projectile.Center;
+				travelDir.SafeNormalize();
+				travelDir *= 14;
+				if(targetNPCIndex is int idx)
+				{
+					travelDir += Main.npc[idx].velocity;
+				}
+				travelStartFrame = animationFrame;
+				return travelDir;
 			}
 			return null;
 		}
@@ -108,6 +144,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// No-op
+			projectile.rotation += MathHelper.Pi / 8;
+			// just
+			float travelFraction = Math.Max(1, (animationFrame - travelStartFrame) / 14f);
+			projectile.velocity = travelFraction * vectorToTargetPosition;
+		}
+
+		public override void AfterMoving()
+		{
+			if(travelStartFrame != default && (animationFrame - travelStartFrame > framesToLiveAfterAttack 
+				|| Vector2.DistanceSquared(player.Center, projectile.Center) > 1300f * 1300f))
+			{
+				projectile.Kill();
+			}
 		}
 	}
 

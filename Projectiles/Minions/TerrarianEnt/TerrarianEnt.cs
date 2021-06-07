@@ -3,6 +3,8 @@ using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -65,6 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		private Texture2D foliageTexture;
 		private Texture2D vinesTexture;
+		private List<LandChunkProjectile> subProjectiles;
 
 		public override void SetStaticDefaults()
 		{
@@ -99,6 +102,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				foliageTexture = GetTexture(Texture + "_Foliage");
 				vinesTexture = GetTexture(Texture + "_Vines");
 			}
+
+			subProjectiles = new List<LandChunkProjectile>();
 		}
 
 
@@ -135,7 +140,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			lightColor = Color.White * 0.75f;
+			int i;
+			for(i = 0; i < subProjectiles.Count; i++)
+			{
+				if(subProjectiles[i].projectile.position.Y > projectile.position.Y + 96)
+				{
+					break;
+				}
+				subProjectiles[i].SubPreDraw(spriteBatch, lightColor);
+			}
 			scHelper.Process(spriteBatch, lightColor, false, DrawVines, DrawBody, DrawFoliage);
+			for(; i < subProjectiles.Count; i++)
+			{
+				subProjectiles[i].SubPreDraw(spriteBatch, lightColor);
+			}
 			return false;
 		}
 
@@ -153,8 +171,31 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			int subProjType = ProjectileType<LandChunkProjectile>();
-			if(Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[subProjType] < 8 && animationFrame % 30 == 0)
+			
+			// get the list of currently active sub-projectiles
+			subProjectiles.Clear();
+			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == subProjType)
+				{
+					subProjectiles.Add((LandChunkProjectile)p.modProjectile);
+				}
+			}
+			subProjectiles.Sort((s1, s2) => (int)(s1.projectile.position.Y - s2.projectile.position.Y));
+
+
+			if(Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[subProjType] < 6 && animationFrame % 30 == 0)
+			{
+				int lowestUnspawnedTree;
+				int firstMissingIdx = subProjectiles.Select(s => (int)s.projectile.ai[1]).OrderBy(v=>v).Where((v, idx) => v != idx).FirstOrDefault();
+				if(firstMissingIdx == default)
+				{
+					lowestUnspawnedTree = player.ownedProjectileCounts[subProjType];
+				} else
+				{
+					lowestUnspawnedTree = firstMissingIdx - 1;
+				}
 				Projectile.NewProjectile(
 					player.Center,
 					Vector2.Zero,
@@ -162,7 +203,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					projectile.damage,
 					0,
 					player.whoAmI,
-					ai0: player.ownedProjectileCounts[subProjType]);
+					ai1: lowestUnspawnedTree);
 			}
 			return vectorToIdlePosition;
 		}
@@ -175,24 +216,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			// stay floating behind the player at all times
 			IdleMovement(vectorToIdle);
-			framesSinceLastHit++;
-			int rateOfFire = Math.Max(8, 35 - 3 * (int)EmpowerCount);
-			int projectileVelocity = 40;
-			if (framesSinceLastHit++ > rateOfFire && targetNPCIndex is int npcIdx)
-			{
-				NPC target = Main.npc[npcIdx];
-				// try to predict the position at the time of impact a bit
-				vectorToTargetPosition += (vectorToTargetPosition.Length() / projectileVelocity) * target.velocity;
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= projectileVelocity;
-				Vector2 pos = projectile.Center;
-				framesSinceLastHit = 0;
-			}
 		}
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 12) * (int)EmpowerCount; // only scale up damage a little bit
+			return baseDamage + (baseDamage / 6) * EmpowerCount; // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()
