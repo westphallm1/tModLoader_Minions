@@ -24,16 +24,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
 
 		internal SpriteCompositionHelper scHelper;
-
+		private int attackStyle;
 		internal CompositeSpriteBatchDrawer[] drawers;
 		internal SpriteCycleDrawer[] drawFuncs;
 		internal Vector2 travelDir;
-		internal int travelStartFrame;
+		internal int targetStartFrame;
+
+		// projectile needs to remain at a fixed position relative to the player
+		// during the 'wind up' animation
+		internal Vector2 attackStartPlayerOffset;
+		internal float attackStartRotation;
+
+		internal NPC targetNPC;
 
 
 		internal int spawnFrames = 30;
-		internal int attackDelayFrames = 20;
+		internal int attackDelayFrames = 40;
 		internal int framesToLiveAfterAttack = 120;
+
+		int windupFrames = 20;
+
+		private Vector2[] myOldPos = new Vector2[4];
 
 		public override void SetStaticDefaults()
 		{
@@ -64,21 +75,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			base.OnSpawn();
 			int treeIdx = Math.Max(0,(int)projectile.ai[1] - 1);
+			attackStyle = (int)projectile.ai[1] / 2;
 			drawers = LandChunkConfigs.templates[treeIdx % LandChunkConfigs.templates.Length]();
 			drawFuncs = new SpriteCycleDrawer[drawers.Length];
 			for(int i = 0; i < drawers.Length; i++)
 			{
 				drawFuncs[i] = drawers[i].Draw;
 			}
+			if(attackStyle == 2)
+			{
+				windupFrames = 30;
+			}
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			if(travelDir == default)
+			if(travelDir == default || animationFrame - targetStartFrame < windupFrames)
 			{
 				return false;
 			}
-			projHitbox.Inflate(64, 64);
+			projHitbox.Inflate(96, 96);
+			projHitbox.Offset(scHelper.CenterOfRotation.ToPoint());
 			return projHitbox.Intersects(targetHitbox);
 		}
 
@@ -86,6 +103,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		// Called from TerrarianEnt.PreDraw
 		public void SubPreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
+			// this is a lot of sprite drawing
+			// lifted from ExampleMod's ExampleBullet
+			int attackFrame = animationFrame - targetStartFrame;
+			if(targetStartFrame != default && attackFrame > windupFrames)
+			{
+				for (int k = 1; k < myOldPos.Length; k++)
+				{
+					if(myOldPos[k] == default)
+					{
+						break;
+					}
+					Color color = projectile.GetAlpha(lightColor) * 0.5f * ((myOldPos.Length - k) / (float)myOldPos.Length);
+					scHelper.positionOverride = myOldPos[k];
+					scHelper.Process(spriteBatch, color, false, drawFuncs);
+				}
+			}
+			scHelper.positionOverride = null;
 			scHelper.Process(spriteBatch, lightColor, false, drawFuncs);
 		}
 
@@ -99,9 +133,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			float[] angleOffsets = { 0, MathHelper.PiOver4, -MathHelper.PiOver4 };
 			int ai1 = (int)projectile.ai[1];
 			bool isEven = ai1 % 2 == 0;
-			int sideOffset = ai1 / 2;
 			Vector2 center = new Vector2(-16, -64);
-			float baseAngle = isEven ? angleOffsets[sideOffset] : MathHelper.Pi + angleOffsets[sideOffset];
+			float baseAngle = isEven ? angleOffsets[attackStyle] : MathHelper.Pi - angleOffsets[attackStyle];
 			baseAngle += MathHelper.Pi / 16 * (float) Math.Sin(MathHelper.TwoPi * groupAnimationFrame / groupAnimationFrames);
 			Vector2 offset = 164 * baseAngle.ToRotationVector2();
 			offset.Y *= 0.5f;
@@ -128,14 +161,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				return travelDir;
 			} else if (IsMyTurn() && SelectedEnemyInRange(1000, player.Center, 1000) is Vector2 target)
 			{
+				attackStartPlayerOffset = projectile.position - player.Center;
+				attackStartRotation = projectile.rotation;
 				travelDir = target - projectile.Center;
 				travelDir.SafeNormalize();
 				travelDir *= 14;
 				if(targetNPCIndex is int idx)
 				{
-					travelDir += Main.npc[idx].velocity;
+					targetNPC = Main.npc[idx];
+					travelDir += targetNPC.velocity;
 				}
-				travelStartFrame = animationFrame;
+				targetStartFrame = animationFrame;
 				return travelDir;
 			}
 			return null;
@@ -143,16 +179,129 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			// No-op
-			projectile.rotation += MathHelper.Pi / 8;
-			// just
-			float travelFraction = Math.Max(1, (animationFrame - travelStartFrame) / 14f);
-			projectile.velocity = travelFraction * vectorToTargetPosition;
+			if(attackStyle == 0)
+			{
+				BoomerangTargetedMovement(vectorToTargetPosition);
+			}
+			else if (attackStyle == 1)
+			{
+				MissileTargetedMovement(vectorToTargetPosition);
+			}
+			else
+			{
+				HammerTargetedMovement(vectorToTargetPosition);
+			}
+		}
+
+		internal void HammerTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			int attackFrame = animationFrame - targetStartFrame;
+			int offsetDir = -Math.Sign(vectorToTargetPosition.X);
+			Vector2 targetBase = player.Center - new Vector2(0, 96);
+			int windupRadius = 256;
+			if (attackFrame > windupFrames)
+			{
+				float angle0 = -MathHelper.PiOver2 + MathHelper.Pi / 16;
+				if(attackFrame == windupFrames +1)
+				{
+					int leadFrames = 5;
+					int genericSwingRadius = 30;
+					travelDir = targetNPC.active ?
+						(targetNPC.position + leadFrames * targetNPC.velocity) - targetBase : travelDir * genericSwingRadius;
+				}
+				float travelLength = travelDir.Length();
+				int downSwingFrames = (int)Math.Max(10, travelLength / 50);
+				if(attackFrame - windupFrames > downSwingFrames)
+				{
+					// continue travelling along velocity just for funsies
+					return;
+				}
+				// "swing" towards the target
+				float swingFraction = (attackFrame - windupFrames) / (float)downSwingFrames;
+				float radius = MathHelper.Lerp(windupRadius, travelDir.Length(), swingFraction);
+				float angle = MathHelper.Lerp(angle0, travelDir.ToRotation(), swingFraction);
+				projectile.velocity = targetBase + radius * angle.ToRotationVector2() - projectile.position;
+				projectile.rotation = angle + MathHelper.PiOver2;
+			}
+			else
+			{
+				float windupRatio = 0.5f;
+				int swingFrame = (int)(attackFrame - windupFrames * windupRatio);
+				float swingFraction = attackFrame / (float) windupFrames;
+				float windupFraction = swingFrame < 0 ? 0 : (float)Math.Sin(MathHelper.PiOver2 * swingFrame / ((1-windupRatio) * windupFrames));
+				float targetRotation = -MathHelper.PiOver2 * windupFraction + MathHelper.Pi/16;
+				Vector2 targetOffset = windupRadius * targetRotation.ToRotationVector2();
+				targetOffset.X *= 0.5f;
+				Vector2 target = targetBase + targetOffset;
+
+				// asymptotically approach the correct location
+				projectile.rotation = MathHelper.Lerp(projectile.rotation, targetRotation + MathHelper.PiOver2, swingFraction);
+				projectile.position.X = MathHelper.Lerp(projectile.position.X, target.X, swingFraction);
+				projectile.position.Y = MathHelper.Lerp(projectile.position.Y, target.Y, swingFraction);
+			}
+		}
+
+		internal void MissileTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			int attackFrame = animationFrame - targetStartFrame;
+			int offsetDir = -Math.Sign(vectorToTargetPosition.X);
+			if (attackFrame > windupFrames)
+			{
+				// simply spin towards the target
+				projectile.rotation = vectorToTargetPosition.ToRotation() -MathHelper.PiOver2;
+				projectile.velocity = vectorToTargetPosition * 1.5f * attackFrame / (float) windupFrames;
+			}
+			else
+			{
+				int windupRadius = 64;
+				float targetRotation = vectorToTargetPosition.ToRotation() - MathHelper.PiOver2;
+				if(vectorToTargetPosition.X < 0 && vectorToTargetPosition.Y < 0)
+				{
+					targetRotation += MathHelper.TwoPi;
+				}
+				float rotation = MathHelper.Lerp(attackStartRotation, targetRotation, attackFrame / (float)windupFrames);
+				// swing backwards a little bit before swinging forwards a little bit
+				Vector2 centerOfRotation = attackStartPlayerOffset + offsetDir * windupRadius * attackStartRotation.ToRotationVector2();
+				projectile.rotation = rotation;
+				projectile.position = player.Center + centerOfRotation + -offsetDir * windupRadius * projectile.rotation.ToRotationVector2();
+			}
+		}
+
+		internal void BoomerangTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			int attackFrame = animationFrame - targetStartFrame;
+			int offsetDir = -Math.Sign(vectorToTargetPosition.X);
+			if(attackFrame > windupFrames)
+			{
+				// spinning from the center looks nicer
+				scHelper.CenterOfRotation = new Vector2(0, -48);
+				// simply spin towards the target
+				projectile.rotation += -offsetDir * MathHelper.Pi / 8;
+				projectile.velocity = vectorToTargetPosition * attackFrame / (float) windupFrames;
+			} else
+			{
+				int windupRadius = 64;
+				float rotationScale = MathHelper.Lerp(MathHelper.Pi / 128, MathHelper.Pi / 32, attackFrame / (float)windupFrames);
+				// swing backwards a little bit before swinging forwards a little bit
+				Vector2 centerOfRotation = attackStartPlayerOffset + offsetDir * windupRadius * attackStartRotation.ToRotationVector2();
+				projectile.rotation += offsetDir * rotationScale;
+				projectile.position = player.Center + centerOfRotation + -offsetDir * windupRadius * projectile.rotation.ToRotationVector2();
+			}
 		}
 
 		public override void AfterMoving()
 		{
-			if(travelStartFrame != default && (animationFrame - travelStartFrame > framesToLiveAfterAttack 
+			// left shift old position
+			int attackFrame = animationFrame - targetStartFrame;
+			if(targetStartFrame != default && attackFrame > windupFrames)
+			{
+				for(int i = myOldPos.Length -1; i > 0; i--)
+				{
+					myOldPos[i] = myOldPos[i - 1];
+				}
+				myOldPos[0] = projectile.position;
+			} 
+			if(targetStartFrame != default && (animationFrame - targetStartFrame > framesToLiveAfterAttack 
 				|| Vector2.DistanceSquared(player.Center, projectile.Center) > 1300f * 1300f))
 			{
 				projectile.Kill();
@@ -160,149 +309,4 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		}
 	}
 
-	public class LandChunkConfigs
-	{
-
-		public static Func<CompositeSpriteBatchDrawer[]>[] templates;
-		public static void Load()
-		{
-			// TODO some assembly stuff to autoload these
-			templates = new Func<CompositeSpriteBatchDrawer[]>[] { ForestTree, PalmTree, SnowyTree, JungleTree, HallowedTree, CorruptTree, CrimsonTree };
-		}
-
-		public static void Unload()
-		{
-			templates = null;
-		}
-
-		public static CompositeSpriteBatchDrawer[] Sunflowers()
-		{
-			return new CompositeSpriteBatchDrawer[]
-			{
-				new MonumentDrawer(GetTexture("Terraria/Tiles_27"), new Rectangle(2 * Main.rand.Next(3), 0, 2, 4)),
-				new ClutterDrawer(GetTexture("Terraria/Tiles_3"), 
-					Enumerable.Repeat(0, 4).Select(_ => Main.rand.Next(10)).ToArray(), 
-					height: 20),
-				new TileDrawer(GetTexture("Terraria/Tiles_2"),  2)
-			};
-		}
-		public static CompositeSpriteBatchDrawer[] Statue()
-		{
-			int tileTexture = Main.rand.NextBool() ? 179 : 1;
-			return new CompositeSpriteBatchDrawer[]
-			{
-				new MonumentDrawer(GetTexture("Terraria/Tiles_105"), new Rectangle(2* Main.rand.Next(20), 0, 2, 3)),
-				// no clutter
-				new TileDrawer(GetTexture("Terraria/Tiles_" + tileTexture), 1)
-			};
-		}
-		private static TreeDrawer MakeTreeDrawer(int[] tileSets, string trunkIdx, int minHeight = 3, int maxHeight = 6, int topFrames =3, int branchFrames = 3)
-		{
-			int tileSet = tileSets[Main.rand.Next(tileSets.Length)];
-			Texture2D folliageTexture = GetTexture("Terraria/Tree_Tops_" + tileSet);
-			Texture2D branchTexture = GetTexture("Terraria/Tree_Branches_" + tileSet);
-			Rectangle folliageBounds = new Rectangle(
-				folliageTexture.Width / topFrames * Main.rand.Next(topFrames), 0, 
-				folliageTexture.Width / topFrames, folliageTexture.Height);
-			return new TreeDrawer(
-				folliageTexture,
-				GetTexture("Terraria/Tiles_"+trunkIdx),
-				branchTexture,
-				folliageBounds,
-				trunkHeight: Main.rand.Next(minHeight, maxHeight),
-				branchFrames: branchFrames);
-		}
-
-		public static CompositeSpriteBatchDrawer[] ForestTree()
-		{
-			int[] tileSets = { 0, 6, 7, 8, 9, 10 };
-			return new CompositeSpriteBatchDrawer[]
-			{
-				MakeTreeDrawer(tileSets, "5"),
-				new ClutterDrawer(GetTexture("Terraria/Tiles_3"),
-					new int[] { Main.rand.Next(10), -1, -1, Main.rand.Next(10)},
-					height: 20),
-				new TileDrawer(GetTexture("Terraria/Tiles_2"),  2)
-			};
-		}
-
-		public static CompositeSpriteBatchDrawer[] CorruptTree()
-		{
-			int[] tileSets = { 1 };
-			return new CompositeSpriteBatchDrawer[]
-			{
-				MakeTreeDrawer(tileSets, "5_0"),
-				new ClutterDrawer(GetTexture("Terraria/Tiles_24"),
-					new int[] { Main.rand.Next(10), -1, -1, Main.rand.Next(20)},
-					height: 20),
-				new TileDrawer(GetTexture("Terraria/Tiles_23"),  14)
-			};
-		}
-
-		public static CompositeSpriteBatchDrawer[] CrimsonTree()
-		{
-			int[] tileSets = { 5 };
-			return new CompositeSpriteBatchDrawer[]
-			{
-				MakeTreeDrawer(tileSets, "5_4"),
-				new TileDrawer(GetTexture("Terraria/Tiles_199"),  125)
-			};
-		}
-
-		public static CompositeSpriteBatchDrawer[] SnowyTree()
-		{
-			int[] tileSets = { 4, 12, 16, 17, 18 };
-			return new CompositeSpriteBatchDrawer[]
-			{
-				MakeTreeDrawer(tileSets, "5_3"),
-				new TileDrawer(GetTexture("Terraria/Tiles_147"),  51)
-			};
-		}
-
-		public static CompositeSpriteBatchDrawer[] JungleTree()
-		{
-			int[] tileSets = { 2, 11, 13 };
-			return new CompositeSpriteBatchDrawer[]
-			{
-				MakeTreeDrawer(tileSets, Main.rand.NextBool() ? "5_1" : "5_5"),
-				new ClutterDrawer(GetTexture("Terraria/Tiles_61"),
-					new int[] { Main.rand.Next(20), -1, -1, Main.rand.Next(20)},
-					height: 20),
-				new TileDrawer(GetTexture("Terraria/Tiles_60"),  39)
-			};
-		}
-		public static CompositeSpriteBatchDrawer[] HallowedTree()
-		{
-			int[] tileSets = { 3 };
-			TreeDrawer drawer = MakeTreeDrawer(tileSets, "5_2", topFrames: 9, branchFrames: 9, minHeight: 2, maxHeight: 4);
-			drawer.trunkHeadstartFrames = 3;
-			return new CompositeSpriteBatchDrawer[]
-			{
-				drawer,
-				new ClutterDrawer(GetTexture("Terraria/Tiles_110"),
-					new int[] { Main.rand.Next(20), -1, -1, Main.rand.Next(20)},
-					height: 20),
-				new TileDrawer(GetTexture("Terraria/Tiles_109"),  39)
-			};
-		}
-
-		public static CompositeSpriteBatchDrawer[] PalmTree()
-		{
-			Texture2D folliageTexture = GetTexture("Terraria/Tree_Tops_15");
-			Rectangle folliageBounds = new Rectangle(
-				folliageTexture.Width / 3* Main.rand.Next(3), 0, 
-				folliageTexture.Width / 3, folliageTexture.Height / 4);
-			return new CompositeSpriteBatchDrawer[]
-			{
-				new PalmTreeDrawer(
-					folliageTexture,
-					GetTexture("Terraria/Tiles_323"),
-					null,
-					folliageBounds,
-					trunkHeight: Main.rand.Next(3, 6)),
-				// TODO add starfish
-				new TileDrawer(GetTexture("Terraria/Tiles_53"),  39)
-			};
-		}
-	}
 }

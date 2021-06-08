@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		private SpriteCompositionHelper scHelper;
 
 		private int framesSinceLastHit;
-		protected override int dustType => DustID.Shadowflame;
+		protected override int dustType => 2;
 
 		private Texture2D bodyTexture;
 

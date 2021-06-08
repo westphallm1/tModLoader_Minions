@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 {
@@ -333,5 +334,150 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		}
 	}
 
+	public class LandChunkConfigs
+	{
+
+		public static Func<CompositeSpriteBatchDrawer[]>[] templates;
+		public static void Load()
+		{
+			// TODO some assembly stuff to autoload these
+			templates = new Func<CompositeSpriteBatchDrawer[]>[] { ForestTree, PalmTree, SnowyTree, JungleTree, HallowedTree, CorruptTree, CrimsonTree };
+		}
+
+		public static void Unload()
+		{
+			templates = null;
+		}
+
+		public static CompositeSpriteBatchDrawer[] Sunflowers()
+		{
+			return new CompositeSpriteBatchDrawer[]
+			{
+				new MonumentDrawer(GetTexture("Terraria/Tiles_27"), new Rectangle(2 * Main.rand.Next(3), 0, 2, 4)),
+				new ClutterDrawer(GetTexture("Terraria/Tiles_3"), 
+					Enumerable.Repeat(0, 4).Select(_ => Main.rand.Next(10)).ToArray(), 
+					height: 20),
+				new TileDrawer(GetTexture("Terraria/Tiles_2"),  2)
+			};
+		}
+		public static CompositeSpriteBatchDrawer[] Statue()
+		{
+			int tileTexture = Main.rand.NextBool() ? 179 : 1;
+			return new CompositeSpriteBatchDrawer[]
+			{
+				new MonumentDrawer(GetTexture("Terraria/Tiles_105"), new Rectangle(2* Main.rand.Next(20), 0, 2, 3)),
+				// no clutter
+				new TileDrawer(GetTexture("Terraria/Tiles_" + tileTexture), 1)
+			};
+		}
+		private static TreeDrawer MakeTreeDrawer(int[] tileSets, string trunkIdx, int minHeight = 3, int maxHeight = 6, int topFrames =3, int branchFrames = 3)
+		{
+			int tileSet = tileSets[Main.rand.Next(tileSets.Length)];
+			Texture2D folliageTexture = GetTexture("Terraria/Tree_Tops_" + tileSet);
+			Texture2D branchTexture = GetTexture("Terraria/Tree_Branches_" + tileSet);
+			Rectangle folliageBounds = new Rectangle(
+				folliageTexture.Width / topFrames * Main.rand.Next(topFrames), 0, 
+				folliageTexture.Width / topFrames, folliageTexture.Height);
+			return new TreeDrawer(
+				folliageTexture,
+				GetTexture("Terraria/Tiles_"+trunkIdx),
+				branchTexture,
+				folliageBounds,
+				trunkHeight: Main.rand.Next(minHeight, maxHeight),
+				branchFrames: branchFrames);
+		}
+
+		public static CompositeSpriteBatchDrawer[] ForestTree()
+		{
+			int[] tileSets = { 0, 6, 7, 8, 9, 10 };
+			return new CompositeSpriteBatchDrawer[]
+			{
+				MakeTreeDrawer(tileSets, "5"),
+				new ClutterDrawer(GetTexture("Terraria/Tiles_3"),
+					new int[] { Main.rand.Next(10), -1, -1, Main.rand.Next(10)},
+					height: 20),
+				new TileDrawer(GetTexture("Terraria/Tiles_2"),  2)
+			};
+		}
+
+		public static CompositeSpriteBatchDrawer[] CorruptTree()
+		{
+			int[] tileSets = { 1 };
+			return new CompositeSpriteBatchDrawer[]
+			{
+				MakeTreeDrawer(tileSets, "5_0"),
+				new ClutterDrawer(GetTexture("Terraria/Tiles_24"),
+					new int[] { Main.rand.Next(10), -1, -1, Main.rand.Next(20)},
+					height: 20),
+				new TileDrawer(GetTexture("Terraria/Tiles_23"),  14)
+			};
+		}
+
+		public static CompositeSpriteBatchDrawer[] CrimsonTree()
+		{
+			int[] tileSets = { 5 };
+			return new CompositeSpriteBatchDrawer[]
+			{
+				MakeTreeDrawer(tileSets, "5_4"),
+				new TileDrawer(GetTexture("Terraria/Tiles_199"),  125)
+			};
+		}
+
+		public static CompositeSpriteBatchDrawer[] SnowyTree()
+		{
+			int[] tileSets = { 4, 12, 16, 17, 18 };
+			return new CompositeSpriteBatchDrawer[]
+			{
+				MakeTreeDrawer(tileSets, "5_3"),
+				new TileDrawer(GetTexture("Terraria/Tiles_147"),  51)
+			};
+		}
+
+		public static CompositeSpriteBatchDrawer[] JungleTree()
+		{
+			int[] tileSets = { 2, 11, 13 };
+			return new CompositeSpriteBatchDrawer[]
+			{
+				MakeTreeDrawer(tileSets, Main.rand.NextBool() ? "5_1" : "5_5"),
+				new ClutterDrawer(GetTexture("Terraria/Tiles_61"),
+					new int[] { Main.rand.Next(20), -1, -1, Main.rand.Next(20)},
+					height: 20),
+				new TileDrawer(GetTexture("Terraria/Tiles_60"),  39)
+			};
+		}
+		public static CompositeSpriteBatchDrawer[] HallowedTree()
+		{
+			int[] tileSets = { 3 };
+			TreeDrawer drawer = MakeTreeDrawer(tileSets, "5_2", topFrames: 9, branchFrames: 9, minHeight: 2, maxHeight: 4);
+			drawer.trunkHeadstartFrames = 3;
+			return new CompositeSpriteBatchDrawer[]
+			{
+				drawer,
+				new ClutterDrawer(GetTexture("Terraria/Tiles_110"),
+					new int[] { Main.rand.Next(20), -1, -1, Main.rand.Next(20)},
+					height: 20),
+				new TileDrawer(GetTexture("Terraria/Tiles_109"),  39)
+			};
+		}
+
+		public static CompositeSpriteBatchDrawer[] PalmTree()
+		{
+			Texture2D folliageTexture = GetTexture("Terraria/Tree_Tops_15");
+			Rectangle folliageBounds = new Rectangle(
+				folliageTexture.Width / 3* Main.rand.Next(3), 0, 
+				folliageTexture.Width / 3, folliageTexture.Height / 4);
+			return new CompositeSpriteBatchDrawer[]
+			{
+				new PalmTreeDrawer(
+					folliageTexture,
+					GetTexture("Terraria/Tiles_323"),
+					null,
+					folliageBounds,
+					trunkHeight: Main.rand.Next(3, 6)),
+				// TODO add starfish
+				new TileDrawer(GetTexture("Terraria/Tiles_53"),  39)
+			};
+		}
+	}
 
 }

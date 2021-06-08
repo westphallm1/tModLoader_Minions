@@ -28,6 +28,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		// snap all offset vectors to a Y x Y grid
 		internal int posResolution = 2;
 
+		internal Vector2? positionOverride { get; set; }
+		private Vector2 Center => positionOverride ?? projectile.Center;
+
+		internal Vector2 CenterOfRotation = Vector2.Zero;
+
 		internal SpriteBatch spriteBatch;
 		internal Color lightColor;
 
@@ -77,12 +82,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void AddSpriteToBatch(Texture2D texture, Rectangle bounds, Vector2 offsetFromCenter, float r, float scale)
 		{
-
+			offsetFromCenter -= CenterOfRotation;
 			offsetFromCenter = new Vector2(snapToGrid(offsetFromCenter.X), snapToGrid(offsetFromCenter.Y));
 			// don't rotate if snapping to grid
 			r = posResolution > 1 ? 0 : r;
 			float frameOfReferenceR = projectile.rotation + r;
-			Vector2 pos = projectile.Center + offsetFromCenter.RotatedBy(frameOfReferenceR);
+			Vector2 pos = Center + CenterOfRotation + offsetFromCenter.RotatedBy(frameOfReferenceR);
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			spriteBatch.Draw(texture, pos - Main.screenPosition, bounds, lightColor, frameOfReferenceR, origin, scale, effects, 0);
@@ -114,11 +119,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public void AddTileSpritesToBatch(Texture2D texture, int drawIdx, (byte, byte)?[,,] tilesInfo, Vector2 offsetFromCenter, float r = 0, int tileSize = 16)
 		{
 
+			offsetFromCenter -= CenterOfRotation;
 			int tileSpacing = tileSize+2;
 			// don't rotate if snapping to grid
 			r = posResolution > 1 ? 0 : r;
 			float frameOfReferenceR = projectile.rotation + r;
-			Vector2 pos = projectile.Center + offsetFromCenter.RotatedBy(frameOfReferenceR);
+			Vector2 pos = Center + offsetFromCenter.RotatedBy(frameOfReferenceR);
 			Vector2 foRX = Vector2.UnitY.RotatedBy(frameOfReferenceR) * tileSize;
 			Vector2 foRY = Vector2.UnitX.RotatedBy(frameOfReferenceR) * tileSize;
 			int xLength = tilesInfo.GetLength(1);
@@ -137,7 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 					Rectangle bounds = new Rectangle(tileSpacing * current.Item1, tileSpacing * current.Item2, tileSize, tileSize);
 					Vector2 currentOffset = startOffset + foRX * (i + 0.5f) + foRY * (j + 0.5f);
 					Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-					spriteBatch.Draw(texture, pos + currentOffset - Main.screenPosition, bounds, lightColor, frameOfReferenceR, origin, 1, 0, 0);
+					spriteBatch.Draw(texture, pos + currentOffset + CenterOfRotation - Main.screenPosition, bounds, lightColor, frameOfReferenceR, origin, 1, 0, 0);
 				}
 			}
 		}
