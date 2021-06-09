@@ -15,7 +15,9 @@ using static Terraria.ModLoader.ModContent;
 namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 {
 	/// <summary>
-	/// Uses ai[1] for positioning/sprite selection purposes
+	/// Uses ai[1] for positioning/sprite selection purposes, 
+	/// localAI[0] to communicate attack animations with main Ent
+	/// ai[0] already used by GroupAwareMinion
 	/// </summary>
 	public class LandChunkProjectile : GroupAwareMinion
 	{
@@ -179,6 +181,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
+			// localAI[0] used to communicate attack animation progress with main ent
+			int attackFrame = animationFrame - targetStartFrame;
+			projectile.localAI[0] = attackFrame > windupFrames ? 0 : Math.Sign(vectorToTargetPosition.X) * attackFrame;
 			if(attackStyle == 0)
 			{
 				BoomerangTargetedMovement(vectorToTargetPosition);
@@ -199,16 +204,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			int offsetDir = -Math.Sign(vectorToTargetPosition.X);
 			Vector2 targetBase = player.Center - new Vector2(0, 96);
 			int windupRadius = 256;
+			int genericSwingRadius = 30;
+			if(targetNPC.active)
+			{
+				travelDir = targetNPC.position - targetBase;
+				if(travelDir.LengthSquared() > 128 * 128)
+				{
+					Vector2 oppositeDir = -travelDir;
+					oppositeDir.SafeNormalize();
+					travelDir += oppositeDir * 48;
+				}
+			} else if (attackFrame == 0)
+			{
+				travelDir = travelDir * genericSwingRadius;
+			}
 			if (attackFrame > windupFrames)
 			{
 				float angle0 = -MathHelper.PiOver2 + MathHelper.Pi / 16;
-				if(attackFrame == windupFrames +1)
-				{
-					int leadFrames = 5;
-					int genericSwingRadius = 30;
-					travelDir = targetNPC.active ?
-						(targetNPC.position + leadFrames * targetNPC.velocity) - targetBase : travelDir * genericSwingRadius;
-				}
 				float travelLength = travelDir.Length();
 				int downSwingFrames = (int)Math.Max(10, travelLength / 50);
 				if(attackFrame - windupFrames > downSwingFrames)
@@ -217,9 +229,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					return;
 				}
 				// "swing" towards the target
+				float destinationAngle = travelDir.ToRotation();
+				if (offsetDir == 1 && destinationAngle > projectile.rotation)
+				{
+					destinationAngle -= MathHelper.TwoPi;
+				}
 				float swingFraction = (attackFrame - windupFrames) / (float)downSwingFrames;
 				float radius = MathHelper.Lerp(windupRadius, travelDir.Length(), swingFraction);
-				float angle = MathHelper.Lerp(angle0, travelDir.ToRotation(), swingFraction);
+				float angle = MathHelper.Lerp(angle0, destinationAngle, swingFraction);
 				projectile.velocity = targetBase + radius * angle.ToRotationVector2() - projectile.position;
 				projectile.rotation = angle + MathHelper.PiOver2;
 			}
@@ -229,7 +246,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				int swingFrame = (int)(attackFrame - windupFrames * windupRatio);
 				float swingFraction = attackFrame / (float) windupFrames;
 				float windupFraction = swingFrame < 0 ? 0 : (float)Math.Sin(MathHelper.PiOver2 * swingFrame / ((1-windupRatio) * windupFrames));
-				float targetRotation = -MathHelper.PiOver2 * windupFraction + MathHelper.Pi/16;
+				float targetRotation = -offsetDir * (-MathHelper.PiOver2 * windupFraction + MathHelper.Pi/16) + (offsetDir == -1 ? 0 : MathHelper.Pi);
 				Vector2 targetOffset = windupRadius * targetRotation.ToRotationVector2();
 				targetOffset.X *= 0.5f;
 				Vector2 target = targetBase + targetOffset;

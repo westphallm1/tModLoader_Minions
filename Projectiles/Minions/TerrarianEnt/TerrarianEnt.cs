@@ -68,6 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		private Texture2D foliageTexture;
 		private Texture2D vinesTexture;
 		private List<LandChunkProjectile> subProjectiles;
+		private Projectile swingingProjectile;
 
 		public override void SetStaticDefaults()
 		{
@@ -163,6 +164,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			// center on the player at all times
 			Vector2 idlePosition = player.Top;
 			idlePosition.Y += -96 + 8 * (float)Math.Sin(MathHelper.TwoPi * groupAnimationFrame / groupAnimationFrames);
+			if(swingingProjectile != default)
+			{
+				int attackStyle = (int)projectile.ai[1] / 2;
+				int swingTravelRadius = attackStyle == 2 ? 64 : 24;
+				Vector2 swingOffset = swingingProjectile.Center - idlePosition;
+				swingOffset.SafeNormalize();
+				swingOffset *= swingTravelRadius;
+				idlePosition += swingOffset;
+			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
@@ -170,9 +180,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				idlePosition.Y = player.Top.Y - 16;
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			SpawnTrees();
+			return vectorToIdlePosition;
+		}
+
+		public void SpawnTrees()
+		{
 			int subProjType = ProjectileType<LandChunkProjectile>();
 			
 			// get the list of currently active sub-projectiles
+			if(swingingProjectile != null && (!swingingProjectile.active || swingingProjectile.localAI[0] == 0))
+			{
+				swingingProjectile = null;
+			} 
 			subProjectiles.Clear();
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
@@ -180,6 +200,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				if(p.active && p.owner == player.whoAmI && p.type == subProjType)
 				{
 					subProjectiles.Add((LandChunkProjectile)p.modProjectile);
+					if(swingingProjectile == null && p.localAI[0] != 0)
+					{
+						swingingProjectile = p;
+					}
 				}
 			}
 			subProjectiles.Sort((s1, s2) => (int)(s1.projectile.position.Y - s2.projectile.position.Y));
@@ -205,7 +229,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					player.whoAmI,
 					ai1: lowestUnspawnedTree);
 			}
-			return vectorToIdlePosition;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
