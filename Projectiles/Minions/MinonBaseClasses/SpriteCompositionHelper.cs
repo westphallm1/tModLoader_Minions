@@ -11,11 +11,47 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
 	internal delegate void SpriteCycleDrawer(SpriteCompositionHelper helper, int frame, float angle);
 
+	internal class SpriteCompositionManager
+	{
+		internal static HashSet<SpriteCompositionHelper> activeHelpers;
+		public static void Load()
+		{
+			activeHelpers = new HashSet<SpriteCompositionHelper>();
+			Main.OnPreDraw += OnPreDraw;
+
+		}
+
+		private static void OnPreDraw(GameTime gameTime)
+		{
+			// clear out all the helpers for despawned projectiles
+			foreach(SpriteCompositionHelper helper in activeHelpers.Where(h => !h.projectile.active && h.renderTarget != null))
+			{
+				helper.renderTarget.Dispose();
+				helper.renderTarget = null;
+			}
+			activeHelpers.RemoveWhere(h => !h.projectile.active);
+			foreach(SpriteCompositionHelper helper in activeHelpers)
+			{
+				helper.Process(Main.spriteBatch);
+			}
+
+		}
+
+		public static void Unload()
+		{
+			activeHelpers = null;
+			Main.OnPreDraw -= OnPreDraw;
+		}
+	}
+
+
 	class SpriteCompositionHelper
 	{
 		private SimpleMinion minion;
+		private Rectangle bounds;
+		internal RenderTarget2D renderTarget;
 
-		private Projectile projectile => minion.projectile;
+		internal Projectile projectile => minion.projectile;
 
 		internal int walkCycleFrames = 60;
 		internal int idleCycleFrames = 90;
@@ -35,6 +71,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal SpriteBatch spriteBatch;
 		internal Color lightColor;
+		private bool _isWalking;
+		private SpriteCycleDrawer[] drawers;
 
 		internal int idleFrame => frameShift + minion.animationFrame - (minion.animationFrame % frameResolution);
 
@@ -46,9 +84,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal int snapToGrid(float val) => Math.Sign(val) * (int)(Math.Abs(val) / posResolution) *  posResolution;
 
-		public SpriteCompositionHelper(SimpleMinion minion)
+		internal static Rectangle DefaultBounds = new Rectangle(0, 0, 120, 120);
+
+		public SpriteCompositionHelper(SimpleMinion minion, Rectangle bounds = default)
 		{
 			this.minion = minion;
+			this.bounds = DefaultBounds;
+			renderTarget = new RenderTarget2D(
+				Main.graphics.GraphicsDevice, 
+				this.bounds.Width, 
+				this.bounds.Height, 
+				false, 
+				SurfaceFormat.Color, 
+				DepthFormat.None, 
+				0, 
+				RenderTargetUsage.PreserveContents);
+		}
+
+		public void Attach()
+		{
+			SpriteCompositionManager.activeHelpers.Add(this);
 		}
 
 		public void UpdateMovement()
@@ -84,13 +139,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			offsetFromCenter -= CenterOfRotation;
 			offsetFromCenter = new Vector2(snapToGrid(offsetFromCenter.X), snapToGrid(offsetFromCenter.Y));
-			// don't rotate if snapping to grid
-			r = posResolution > 1 ? 0 : r;
-			float frameOfReferenceR = projectile.rotation + r;
-			Vector2 pos = Center + CenterOfRotation + offsetFromCenter.RotatedBy(frameOfReferenceR);
+			r = posResolution > 1 ? 0 : r; // don't rotate if snapping to grid
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Vector2 pos = this.bounds.Center.ToVector2() + CenterOfRotation + offsetFromCenter.RotatedBy(r);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition, bounds, lightColor, frameOfReferenceR, origin, scale, effects, 0);
+			spriteBatch.Draw(texture, pos, bounds, lightColor, r, origin, scale, effects, 0);
 		}
 
 		public void AddSpriteToBatch(Texture2D texture, (int, int) boundsInfo, Vector2 offsetFromCenter, float r, float scale)
@@ -147,7 +200,47 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				}
 			}
 		}
+		internal void UpdateDrawers(bool isWalking, params SpriteCycleDrawer[] drawers)
+		{
+			_isWalking = isWalking;
+			this.drawers = drawers;
+		}
 
+		internal void Process(SpriteBatch spriteBatch)
+		{
+			if(minion.animationFrame % frameResolution != 0)
+			{
+				return;
+			}
+			SetDrawInfo(spriteBatch, Color.White);
+			Main.instance.GraphicsDevice.SetRenderTarget(renderTarget);
+			Main.instance.GraphicsDevice.Clear(Color.Transparent);
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+			if(_isWalking)
+			{
+				for(int i = 0; i < drawers.Length; i++)
+				{
+					drawers[i].Invoke(this, walkFrame, WalkCycleAngle);
+				}
+			} else
+			{
+				for(int i = 0; i < drawers.Length; i++)
+				{
+					drawers[i].Invoke(this, idleFrame, IdleCycleAngle);
+				}
+			}
+			spriteBatch.End();
+			Main.instance.GraphicsDevice.SetRenderTarget(null);
+			ClearDrawInfo();
+		}
+
+		internal void Draw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			spriteBatch.Draw(renderTarget, Center - Main.screenPosition, 
+				bounds, lightColor, projectile.rotation, bounds.Center(), 1, 0, 0);
+		}
+
+		// Deprecated
 		internal void Process(SpriteBatch spriteBatch, Color lightColor, bool isWalking, params SpriteCycleDrawer[] drawers)
 		{
 			SetDrawInfo(spriteBatch, lightColor);

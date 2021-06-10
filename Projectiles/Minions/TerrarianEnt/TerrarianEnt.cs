@@ -60,7 +60,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		private SpriteCompositionHelper scHelper;
 
-		private int framesSinceLastHit;
 		protected override int dustType => 2;
 
 		private Texture2D bodyTexture;
@@ -85,7 +84,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			projectile.width = 44;
 			projectile.height = 44;
 			projectile.tileCollide = false;
-			framesSinceLastHit = 0;
 			projectile.friendly = true;
 			attackThroughWalls = true;
 			useBeacon = false;

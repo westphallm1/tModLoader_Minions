@@ -20,6 +20,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 
 namespace AmuletOfManyMinions
 {
@@ -40,6 +41,7 @@ namespace AmuletOfManyMinions
 			UserInterfaces.Load();
 			MinionTacticsGroupMapper.Load();
 			LandChunkConfigs.Load();
+			SpriteCompositionManager.Load();
 
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
 			CycleTacticsGroupHotKey = RegisterHotKey("Cycle Tactics Group", "L");
@@ -67,6 +69,7 @@ namespace AmuletOfManyMinions
 			UserInterfaces.Unload();
 			MinionTacticsGroupMapper.Unload();
 			LandChunkConfigs.Unload();
+			SpriteCompositionManager.Unload();
 
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;

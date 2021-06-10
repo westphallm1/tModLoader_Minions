@@ -89,13 +89,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			defaultJumpVelocity = 4;
 			searchDistance = 900;
 			maxJumpVelocity = 12;
-			scHelper = new SpriteCompositionHelper(this);
+			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 48, 48));
 		}
 
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
 			projectile.damage = (int)(1.5f * projectile.damage);
+			scHelper.Attach();
 		}
 
 		protected override void DoGroundedMovement(Vector2 vector)
@@ -270,13 +271,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if(scHelper.IsWalking)
-			{
-				scHelper.Process(spriteBatch, lightColor, true, DrawLegs, DrawBodyWalking, DrawClouds);
-			} else
-			{
-				scHelper.Process(spriteBatch, lightColor, false, DrawLegs, DrawBodyIdle, DrawClouds);
-			}
+			scHelper.Draw(spriteBatch, lightColor);
 			return false;
 		}
 
@@ -323,6 +318,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			} else if (projectile.velocity.X < -1)
 			{
 				projectile.spriteDirection = -1;
+			}
+		}
+
+		public override void AfterAnimate()
+		{
+			if(scHelper.IsWalking)
+			{
+				scHelper.UpdateDrawers(true, DrawLegs, DrawBodyWalking, DrawClouds);
+			} else
+			{
+				scHelper.UpdateDrawers(false, DrawLegs, DrawBodyIdle, DrawClouds);
 			}
 		}
 	}
