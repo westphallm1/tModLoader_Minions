@@ -101,7 +101,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public virtual void AfterMoving() { }
 
-		public virtual void AfterAnimate() { }
 		public virtual void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 
@@ -227,7 +226,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			AfterMoving();
 			Animate();
-			AfterAnimate();
 			oldVectorToIdle = vectorToIdle;
 		}
 

@@ -206,6 +206,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			projectile.friendly = IsBouncing;
 			projectile.tileCollide |= IsBouncing;
 			scHelper.UpdateMovement();
+			if(scHelper.IsWalking)
+			{
+				scHelper.UpdateDrawers(true, DrawLegs, DrawBodyWalking, DrawClouds);
+			} else
+			{
+				scHelper.UpdateDrawers(false, DrawLegs, DrawBodyIdle, DrawClouds);
+			}
 		}
 
 		private void DrawLegs(SpriteCompositionHelper helper, int frame, float cycleAngle)
@@ -252,8 +259,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			Vector2 offsetVector = (-1 + 2f * (float)Math.Sin(2 * cycleAngle)) * Vector2.UnitY;
 			helper.AddSpriteToBatch(GetTexture(Texture), (textureFrame, 3), offsetVector, r, 1);
 			// head
-			int headDirection = projectile.spriteDirection == 0 ? -1 : projectile.spriteDirection;
-			offsetVector = new Vector2(headDirection * 10, -2 + 1.5f * (float)Math.Sin(2 * cycleAngle));
+			offsetVector = new Vector2(10, -2 + 1.5f * (float)Math.Sin(2 * cycleAngle));
 			helper.AddSpriteToBatch(GetTexture(Texture + "_Head"), offsetVector);
 		}
 
@@ -264,8 +270,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			helper.AddSpriteToBatch(GetTexture(Texture), (1, 3),  offsetVector);
 			
 			// head
-			int headDirection = projectile.spriteDirection == 0 ? -1 : projectile.spriteDirection;
-			offsetVector = new Vector2(headDirection * 10, -2 + 1.5f * (float)Math.Sin(cycleAngle));
+			offsetVector = new Vector2(10, -2 + 1.5f * (float)Math.Sin(cycleAngle));
 			scHelper.AddSpriteToBatch(GetTexture(Texture + "_Head"), offsetVector);
 		}
 
@@ -318,17 +323,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			} else if (projectile.velocity.X < -1)
 			{
 				projectile.spriteDirection = -1;
-			}
-		}
-
-		public override void AfterAnimate()
-		{
-			if(scHelper.IsWalking)
-			{
-				scHelper.UpdateDrawers(true, DrawLegs, DrawBodyWalking, DrawClouds);
-			} else
-			{
-				scHelper.UpdateDrawers(false, DrawLegs, DrawBodyIdle, DrawClouds);
 			}
 		}
 	}

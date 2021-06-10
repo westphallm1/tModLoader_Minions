@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal int walkFrame => frameShift + walkCycleFrame - (walkCycleFrame % frameResolution);
 
-		internal float WalkCycleAngle => Math.Sign(projectile.velocity.X) * MathHelper.TwoPi * walkFrame / walkCycleFrames;
+		internal float WalkCycleAngle => MathHelper.TwoPi * walkFrame / walkCycleFrames;
 		internal float IdleCycleAngle => MathHelper.TwoPi * idleFrame / idleCycleFrames;
 		internal bool IsWalking => Math.Abs(projectile.velocity.X) > walkVelocityThreshold;
 
@@ -140,10 +140,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			offsetFromCenter -= CenterOfRotation;
 			offsetFromCenter = new Vector2(snapToGrid(offsetFromCenter.X), snapToGrid(offsetFromCenter.Y));
 			r = posResolution > 1 ? 0 : r; // don't rotate if snapping to grid
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Vector2 pos = this.bounds.Center.ToVector2() + CenterOfRotation + offsetFromCenter.RotatedBy(r);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos, bounds, lightColor, r, origin, scale, effects, 0);
+			spriteBatch.Draw(texture, pos, bounds, lightColor, r, origin, scale, 0, 0);
 		}
 
 		public void AddSpriteToBatch(Texture2D texture, (int, int) boundsInfo, Vector2 offsetFromCenter, float r, float scale)
@@ -236,8 +235,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal void Draw(SpriteBatch spriteBatch, Color lightColor)
 		{
+			SpriteEffects effects = projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 			spriteBatch.Draw(renderTarget, Center - Main.screenPosition, 
-				bounds, lightColor, projectile.rotation, bounds.Center(), 1, 0, 0);
+				bounds, lightColor, projectile.rotation, bounds.Center(), 1, effects, 0);
 		}
 
 		// Deprecated
