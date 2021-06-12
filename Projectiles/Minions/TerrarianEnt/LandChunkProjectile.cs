@@ -27,6 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		internal SpriteCompositionHelper scHelper;
 		private int attackStyle;
+		private bool isEven;
 		internal CompositeSpriteBatchDrawer[] drawers;
 		internal SpriteCycleDrawer[] drawFuncs;
 		internal Vector2 travelDir;
@@ -52,6 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.MinionSacrificable[projectile.type] = false;
 			Main.projFrames[projectile.type] = 2;
 		}
 
@@ -60,16 +62,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			base.SetDefaults();
 			projectile.width = 24;
 			projectile.height = 24;
-			projectile.localNPCHitCooldown = 6;
+			projectile.localNPCHitCooldown = 18;
 			projectile.minionSlots = 0;
+			projectile.minion = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 			attackFrames = 60;
-			scHelper = new SpriteCompositionHelper(this)
+			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 120, 400))
 			{
 				idleCycleFrames = 160,
 				frameResolution = 1,
-				posResolution = 1
+				posResolution = 1,
+				BaseOffset = new Vector2(0, 100)
 			};
 		}
 
@@ -78,8 +82,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			base.OnSpawn();
 			int treeIdx = Math.Max(0,(int)projectile.ai[1] - 1);
 			attackStyle = (int)projectile.ai[1] / 2;
+			isEven = projectile.ai[1] % 2 == 0;
 			drawers = LandChunkConfigs.templates[treeIdx % LandChunkConfigs.templates.Length]();
 			drawFuncs = new SpriteCycleDrawer[drawers.Length];
+			scHelper.Attach();
 			for(int i = 0; i < drawers.Length; i++)
 			{
 				drawFuncs[i] = drawers[i].Draw;
@@ -112,17 +118,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			{
 				for (int k = 1; k < myOldPos.Length; k++)
 				{
-					if(myOldPos[k] == default)
+					if (myOldPos[k] == default)
 					{
 						break;
 					}
 					Color color = projectile.GetAlpha(lightColor) * 0.5f * ((myOldPos.Length - k) / (float)myOldPos.Length);
 					scHelper.positionOverride = myOldPos[k];
-					scHelper.Process(spriteBatch, color, false, drawFuncs);
+					scHelper.Draw(spriteBatch, color);
 				}
 			}
 			scHelper.positionOverride = null;
-			scHelper.Process(spriteBatch, lightColor, false, drawFuncs);
+			scHelper.Draw(spriteBatch, lightColor);
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -133,8 +139,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			float[] angleOffsets = { 0, MathHelper.PiOver4, -MathHelper.PiOver4 };
-			int ai1 = (int)projectile.ai[1];
-			bool isEven = ai1 % 2 == 0;
 			Vector2 center = new Vector2(-16, -64);
 			float baseAngle = isEven ? angleOffsets[attackStyle] : MathHelper.Pi - angleOffsets[attackStyle];
 			baseAngle += MathHelper.Pi / 16 * (float) Math.Sin(MathHelper.TwoPi * groupAnimationFrame / groupAnimationFrames);
@@ -155,24 +159,34 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override Vector2? FindTarget()
 		{
 			// TODO lift some EmpoweredMinion stuff from here
+			int attackFrame = animationFrame - targetStartFrame;
 			if(animationFrame < attackDelayFrames)
 			{
 				return null;
+			} else if (attackFrame == windupFrames && targetNPC != null && targetNPC.active)
+			{
+				// adjust the target direction right before flinging,
+				// increases accuracy a bit
+				travelDir = targetNPC.Center - projectile.Center;
+				travelDir.SafeNormalize();
+				travelDir *= 14;
+				travelDir += targetNPC.velocity;
+				return travelDir;
 			} else if (travelDir != default)
 			{
 				return travelDir;
-			} else if (IsMyTurn() && SelectedEnemyInRange(1000, player.Center, 1000) is Vector2 target)
+			} else if (IsMyTurn() && SelectedEnemyInRange(1400, player.Center, 1400) is Vector2 target)
 			{
+				if(targetNPCIndex == null)
+				{
+					return null; // need an actual npc target for this to work
+				}
+				targetNPC = Main.npc[(int)targetNPCIndex];
 				attackStartPlayerOffset = projectile.position - player.Center;
 				attackStartRotation = projectile.rotation;
 				travelDir = target - projectile.Center;
 				travelDir.SafeNormalize();
 				travelDir *= 14;
-				if(targetNPCIndex is int idx)
-				{
-					targetNPC = Main.npc[idx];
-					travelDir += targetNPC.velocity;
-				}
 				targetStartFrame = animationFrame;
 				return travelDir;
 			}
@@ -183,7 +197,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			// localAI[0] used to communicate attack animation progress with main ent
 			int attackFrame = animationFrame - targetStartFrame;
-			projectile.localAI[0] = attackFrame > windupFrames ? 0 : Math.Sign(vectorToTargetPosition.X) * attackFrame;
+			if (attackFrame > windupFrames)
+			{
+				projectile.ai[1] = -1; // no longer 'attached' the the main npc, can spawn a new one
+				projectile.localAI[0] = 0;
+			} else
+			{
+				projectile.localAI[0] = Math.Sign(vectorToTargetPosition.X) * attackFrame;
+			}
 			if(attackStyle == 0)
 			{
 				BoomerangTargetedMovement(vectorToTargetPosition);
@@ -323,6 +344,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			{
 				projectile.Kill();
 			}
+			scHelper.UpdateDrawers(false, drawFuncs);
 		}
 	}
 

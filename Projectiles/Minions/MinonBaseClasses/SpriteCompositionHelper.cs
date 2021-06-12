@@ -68,6 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		private Vector2 Center => positionOverride ?? projectile.Center;
 
 		internal Vector2 CenterOfRotation = Vector2.Zero;
+		internal Vector2 BaseOffset = Vector2.Zero;
 
 		internal SpriteBatch spriteBatch;
 		internal Color lightColor;
@@ -89,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public SpriteCompositionHelper(SimpleMinion minion, Rectangle bounds = default)
 		{
 			this.minion = minion;
-			this.bounds = DefaultBounds;
+			this.bounds = bounds == default ? DefaultBounds : bounds;
 			renderTarget = new RenderTarget2D(
 				Main.graphics.GraphicsDevice, 
 				this.bounds.Width, 
@@ -137,10 +138,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void AddSpriteToBatch(Texture2D texture, Rectangle bounds, Vector2 offsetFromCenter, float r, float scale)
 		{
-			offsetFromCenter -= CenterOfRotation;
-			offsetFromCenter = new Vector2(snapToGrid(offsetFromCenter.X), snapToGrid(offsetFromCenter.Y));
+			// offsetFromCenter -= CenterOfRotation;
+			offsetFromCenter = new Vector2(snapToGrid(offsetFromCenter.X), snapToGrid(offsetFromCenter.Y)) + BaseOffset;
 			r = posResolution > 1 ? 0 : r; // don't rotate if snapping to grid
-			Vector2 pos = this.bounds.Center.ToVector2() + CenterOfRotation + offsetFromCenter.RotatedBy(r);
+			Vector2 pos = this.bounds.Center.ToVector2() + offsetFromCenter.RotatedBy(r);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			spriteBatch.Draw(texture, pos, bounds, lightColor, r, origin, scale, 0, 0);
 		}
@@ -171,14 +172,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public void AddTileSpritesToBatch(Texture2D texture, int drawIdx, (byte, byte)?[,,] tilesInfo, Vector2 offsetFromCenter, float r = 0, int tileSize = 16)
 		{
 
-			offsetFromCenter -= CenterOfRotation;
+			offsetFromCenter += BaseOffset;
+			// offsetFromCenter -= CenterOfRotation;
 			int tileSpacing = tileSize+2;
 			// don't rotate if snapping to grid
 			r = posResolution > 1 ? 0 : r;
-			float frameOfReferenceR = projectile.rotation + r;
-			Vector2 pos = Center + offsetFromCenter.RotatedBy(frameOfReferenceR);
-			Vector2 foRX = Vector2.UnitY.RotatedBy(frameOfReferenceR) * tileSize;
-			Vector2 foRY = Vector2.UnitX.RotatedBy(frameOfReferenceR) * tileSize;
+			Vector2 pos = bounds.Center.ToVector2() + offsetFromCenter.RotatedBy(r);
+			Vector2 foRX = Vector2.UnitY.RotatedBy(r) * tileSize;
+			Vector2 foRY = Vector2.UnitX.RotatedBy(r) * tileSize;
 			int xLength = tilesInfo.GetLength(1);
 			int yLength = tilesInfo.GetLength(2);
 			Vector2 startOffset = -(xLength / 2f) * foRX + -(yLength / 2f) * foRY;
@@ -195,7 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 					Rectangle bounds = new Rectangle(tileSpacing * current.Item1, tileSpacing * current.Item2, tileSize, tileSize);
 					Vector2 currentOffset = startOffset + foRX * (i + 0.5f) + foRY * (j + 0.5f);
 					Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-					spriteBatch.Draw(texture, pos + currentOffset + CenterOfRotation - Main.screenPosition, bounds, lightColor, frameOfReferenceR, origin, 1, 0, 0);
+					spriteBatch.Draw(texture, pos + currentOffset, bounds, lightColor, r, origin, 1, 0, 0);
 				}
 			}
 		}
@@ -235,29 +236,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal void Draw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			SpriteEffects effects = projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-			spriteBatch.Draw(renderTarget, Center - Main.screenPosition, 
-				bounds, lightColor, projectile.rotation, bounds.Center(), 1, effects, 0);
-		}
-
-		// Deprecated
-		internal void Process(SpriteBatch spriteBatch, Color lightColor, bool isWalking, params SpriteCycleDrawer[] drawers)
-		{
-			SetDrawInfo(spriteBatch, lightColor);
-			if(isWalking)
+			if(renderTarget == null)
 			{
-				for(int i = 0; i < drawers.Length; i++)
-				{
-					drawers[i].Invoke(this, walkFrame, WalkCycleAngle);
-				}
-			} else
-			{
-				for(int i = 0; i < drawers.Length; i++)
-				{
-					drawers[i].Invoke(this, idleFrame, IdleCycleAngle);
-				}
+				return; // need this check here for some reason, should probably investigate further
 			}
-			ClearDrawInfo();
+			SpriteEffects effects = projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+			Vector2 pos = Center - Main.screenPosition - BaseOffset + CenterOfRotation.RotatedBy(projectile.rotation);
+			spriteBatch.Draw(renderTarget, pos, 
+				bounds, lightColor, projectile.rotation, bounds.Center(), 1, effects, 0);
 		}
 	}
 }

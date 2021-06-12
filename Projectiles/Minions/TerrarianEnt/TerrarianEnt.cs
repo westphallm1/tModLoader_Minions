@@ -68,6 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		private Texture2D vinesTexture;
 		private List<LandChunkProjectile> subProjectiles;
 		private Projectile swingingProjectile;
+		private int nextTreeIndex;
 
 		public override void SetStaticDefaults()
 		{
@@ -88,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			attackThroughWalls = true;
 			useBeacon = false;
 			frameSpeed = 5;
-			scHelper = new SpriteCompositionHelper(this)
+			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 300, 300))
 			{
 				idleCycleFrames = 160,
 				frameResolution = 1,
@@ -103,6 +104,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			}
 
 			subProjectiles = new List<LandChunkProjectile>();
+		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			// main guy doesn't hit anything
+			return false;
 		}
 
 
@@ -148,12 +155,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				}
 				subProjectiles[i].SubPreDraw(spriteBatch, lightColor);
 			}
-			scHelper.Process(spriteBatch, lightColor, false, DrawVines, DrawBody, DrawFoliage);
+			scHelper.Draw(spriteBatch, lightColor);
 			for(; i < subProjectiles.Count; i++)
 			{
 				subProjectiles[i].SubPreDraw(spriteBatch, lightColor);
 			}
 			return false;
+		}
+
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			scHelper.Attach();
+		}
+		public override void AfterMoving()
+		{
+			scHelper.UpdateDrawers(false, DrawVines, DrawBody, DrawFoliage);
 		}
 
 		public override Vector2 IdleBehavior()
@@ -184,6 +201,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public void SpawnTrees()
 		{
+			int maxCount = Math.Min(6, EmpowerCount + 1);
 			int subProjType = ProjectileType<LandChunkProjectile>();
 			
 			// get the list of currently active sub-projectiles
@@ -205,18 +223,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				}
 			}
 			subProjectiles.Sort((s1, s2) => (int)(s1.projectile.position.Y - s2.projectile.position.Y));
+			List<float> idle = subProjectiles.Select(s => s.projectile.ai[1])
+				.Where(v => v> -1)
+				.OrderBy(v=>v).ToList();
 
 
-			if(Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[subProjType] < 6 && animationFrame % 30 == 0)
+			if(Main.myPlayer == player.whoAmI && idle.Count < maxCount && animationFrame % 30 == 0)
 			{
-				int lowestUnspawnedTree;
-				int firstMissingIdx = subProjectiles.Select(s => (int)s.projectile.ai[1]).OrderBy(v=>v).Where((v, idx) => v != idx).FirstOrDefault();
-				if(firstMissingIdx == default)
+				for(int i = 0; i < idle.Count; i++)
 				{
-					lowestUnspawnedTree = player.ownedProjectileCounts[subProjType];
-				} else
-				{
-					lowestUnspawnedTree = firstMissingIdx - 1;
+					if(idle.Contains(nextTreeIndex))
+					{
+						nextTreeIndex = (nextTreeIndex + 1) % maxCount;
+					} else
+					{
+						break;
+					}
 				}
 				Projectile.NewProjectile(
 					player.Center,
@@ -225,7 +247,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					projectile.damage,
 					0,
 					player.whoAmI,
-					ai1: lowestUnspawnedTree);
+					ai1: nextTreeIndex);
+				nextTreeIndex = (nextTreeIndex + 1) % maxCount;
 			}
 		}
 
