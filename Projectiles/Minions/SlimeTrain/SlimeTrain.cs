@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.Projectiles.Minions.SlimeTrain.SlimeTrainMarkerProjectile;
+using System.Collections.Generic;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 {
@@ -71,6 +72,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private int SlimeFrameTop(int i) => 40 * (i % nSlimes) + 4;
 		private int YFrameTop => 40 * projectile.frame + 4;
 		private int FrameHeight => 34;
+
+		private int potentialTargetCount = 0;
+		private int lastSpawnedSlimeFrame;
+		private int nextSlimeIndex;
+		private bool inOpenAir;
 		
 
 		private int SubProjectileType; 
@@ -79,6 +85,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private Texture2D SlimeTexture;
 
 		private SlimeTrainRotationTracker rotationTracker;
+
+		private List<int> summonedSlimes = new List<int>();
 
 		public override void SetStaticDefaults()
 		{
@@ -124,15 +132,75 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 					break;
 				}
 			}
+			// spawn generic baby slime minions if there's a lot of enemies nearby
+			SpawnReinforcements();
 			return vectorToIdlePosition;
+		}
+
+		private void SpawnReinforcements()
+		{
+			Tile tile = Framing.GetTileSafely(new Point((int)projectile.position.X / 16, (int)projectile.position.Y / 16));
+			inOpenAir = !tile.active();
+			int slimeType = ProjectileType<SlimeTrainSlimeMinion>();
+			int currentSlimeCount = player.ownedProjectileCounts[slimeType];
+			summonedSlimes.Clear();
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == slimeType)
+				{
+					summonedSlimes.Add((int)p.ai[1]);
+				}
+			}
+			// If there's a lot of nearby enemies, sspawn in a slime buddy to help out
+			if (Main.myPlayer == player.whoAmI && inOpenAir 
+				&& animationFrame - lastSpawnedSlimeFrame > 120 &&
+				potentialTargetCount > 1 && currentSlimeCount < EmpowerCount)
+			{
+				lastSpawnedSlimeFrame = animationFrame;
+				for (int i = 0; i < summonedSlimes.Count; i++)
+				{
+					if(summonedSlimes.Contains(nextSlimeIndex +1))
+					{
+						nextSlimeIndex = (nextSlimeIndex + 1) % EmpowerCount;
+					} else
+					{
+						break;
+					}
+				}
+				Vector2 angle = Vector2.Zero;
+				int dist = 48 + 30 * (currentSlimeCount + 1);
+				Vector2 spawnPos = PositionLog.PositionAlongPath(dist, ref angle);
+				Projectile.NewProjectile(
+					spawnPos,
+					projectile.velocity,
+					slimeType,
+					baseDamage,
+					projectile.knockBack,
+					Main.myPlayer,
+					ai1: nextSlimeIndex + 1);
+				nextSlimeIndex = (nextSlimeIndex + 1) % EmpowerCount;
+			}
+			potentialTargetCount = 0;
+
 		}
 
 		public override bool ShouldIgnoreNPC(NPC npc)
 		{
 			// ignore any npc with a marker actively placed on it
-			return base.ShouldIgnoreNPC(npc) || Main.projectile.Any(p =>
+			bool shouldIgnore = base.ShouldIgnoreNPC(npc) || Main.projectile.Any(p =>
 				p.active && p.owner == player.whoAmI &&
 				p.type == SubProjectileType && (int)p.ai[0] == npc.whoAmI);
+			// this is a bit hacky, but it's the easiest existing hook to get
+			// info on every possible target
+			int subSpawnRadius = 700 * 700;
+			if(!shouldIgnore && inOpenAir
+				&& Vector2.DistanceSquared(projectile.Center, npc.Center) < subSpawnRadius 
+				&& Collision.CanHitLine(projectile.Center, 1, 1, npc.Center, 1, 1))
+			{
+				potentialTargetCount += 1;
+			}
+			return shouldIgnore;
 		}
 
 		protected override void DrawHead()
@@ -154,11 +222,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				{
 					body = new Rectangle(36, YFrameTop, 30, FrameHeight);
 				}
-				else
+				else 
 				{
-					Rectangle slime = new Rectangle(0, SlimeFrameTop(i), 30, FrameHeight);
-					texture = SlimeTexture;
-					AddSprite(48+30 * i, slime);
+					if(summonedSlimes.IndexOf(i) == -1)
+					{
+						Rectangle slime = new Rectangle(0, SlimeFrameTop(i), 30, FrameHeight);
+						texture = SlimeTexture;
+						AddSprite(48+30 * i, slime);
+					}
 					body = new Rectangle(2, YFrameTop, 30, FrameHeight);
 				}
 				texture = Main.projectileTexture[projectile.type];
@@ -168,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		protected override void DrawTail()
 		{
-			// no tail, maybe should add a caboose? 
+			// no tail
 			lightColor = Color.White * 0.85f;
 			lightColor.A = 128;
 		}
@@ -229,7 +300,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				{
 					Projectile.NewProjectile(
 						projectile.Center,
-						projectile.velocity,
+						projectile.velocity * 0.25f,
 						SubProjectileType,
 						projectile.damage,
 						projectile.knockBack,
