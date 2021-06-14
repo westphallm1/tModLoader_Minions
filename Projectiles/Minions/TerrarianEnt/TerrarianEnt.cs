@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Sacred Sapling");
+			DisplayName.SetDefault("Staff of the Sacred Sapling");
 			Tooltip.SetDefault("Summons a powerful forest spirit to fight for you!");
 		}
 

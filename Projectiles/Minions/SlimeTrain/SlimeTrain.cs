@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Staff of the Celestial Steam Train");
-			Tooltip.SetDefault("Summons a flexible helicopter to fight for you!");
+			DisplayName.SetDefault("Staff of the Celestial Slime Train");
+			Tooltip.SetDefault("Summons an ethereal train to fight for you!");
 
 		}
 

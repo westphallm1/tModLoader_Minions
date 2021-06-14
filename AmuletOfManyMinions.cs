@@ -42,6 +42,7 @@ namespace AmuletOfManyMinions
 			MinionTacticsGroupMapper.Load();
 			LandChunkConfigs.Load();
 			SpriteCompositionManager.Load();
+			CritterConfigs.Load();
 
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
 			CycleTacticsGroupHotKey = RegisterHotKey("Cycle Tactics Group", "L");
@@ -70,6 +71,7 @@ namespace AmuletOfManyMinions
 			MinionTacticsGroupMapper.Unload();
 			LandChunkConfigs.Unload();
 			SpriteCompositionManager.Unload();
+			CritterConfigs.Unload();
 
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;

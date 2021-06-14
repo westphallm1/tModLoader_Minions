@@ -40,13 +40,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		internal NPC targetNPC;
 
-
 		internal int spawnFrames = 30;
 		internal int attackDelayFrames = 40;
 		internal int framesToLiveAfterAttack = 120;
 
 		int windupFrames = 20;
 
+		internal bool hasSpawnedSwarm = false;
 		private Vector2[] myOldPos = new Vector2[4];
 
 		public override void SetStaticDefaults()
@@ -345,6 +345,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				projectile.Kill();
 			}
 			scHelper.UpdateDrawers(false, drawFuncs);
+		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			int projType = ProjectileType<CritterSwarmProjectile>();
+			if(!hasSpawnedSwarm && !Main.projectile.Any(p =>
+				p.active && p.owner == player.whoAmI &&
+				p.type == projType && (int)p.ai[0] == target.whoAmI))
+			{
+				hasSpawnedSwarm = true;
+				Projectile.NewProjectile(
+					target.Center,
+					Vector2.Zero,
+					projType,
+					(int)(projectile.damage * 0.75f),
+					0,
+					Main.myPlayer,
+					ai0: target.whoAmI,
+					// a bit silly to work back the original ai[1] here
+					ai1: 2 * attackStyle + (isEven ? 0 : 1));
+			}
 		}
 	}
 

@@ -267,10 +267,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			for(int i = 0; i < endLength + PlacementInterval; i+= PlacementInterval)
 			{
 				Vector2 drawPos = tracker.GetNPCTargetRadius(startFrame) + direction * i;
+				// gently undulate
+				Vector2 offset = drawPos - (tracker.target?.Center ?? Vector2.Zero);
+				offset.SafeNormalize();
+				offset *= 8 + 8 * (float)Math.Sin(MathHelper.TwoPi * (frame - startFrame) / 60f);
 				int drawFrame = i == 0 ? startDrawFrame : i >= endLength ? endDrawFrame : middleDrawFrame;
 				Rectangle bounds = new Rectangle(0, 18 * drawFrame, 16, 16);
 				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-				spriteBatch.Draw(texture, drawPos - Main.screenPosition,
+				spriteBatch.Draw(texture, drawPos  + offset - Main.screenPosition,
 					bounds, lightColor, 0, origin, 1, effects, 0);
 			}
 		}
