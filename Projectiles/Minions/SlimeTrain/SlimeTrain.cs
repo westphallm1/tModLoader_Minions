@@ -19,8 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			DisplayName.SetDefault("Copter-X");
-			Description.SetDefault("A flexible helicopter will fight for you!");
+			DisplayName.SetDefault("Celestial Slime Train");
+			Description.SetDefault("A celestial train and its passengers will fight for you!");
 		}
 	}
 
@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Staff of the Celestial Slime Train");
-			Tooltip.SetDefault("Summons an ethereal train to fight for you!");
+			Tooltip.SetDefault("Summons a celestial train to fight for you!");
 
 		}
 
