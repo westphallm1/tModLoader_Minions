@@ -341,7 +341,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			int waitTime = 15;
 			int activeFrame = frame - startFrame - DrawFrames - waitTime;
 			// ai[1] contains empower count
-			int spawnRate = Math.Max(20, 60 - 4 * (int)baseProj.ai[1]);
+			int spawnRate = Math.Max(15, 50 - 5 * (int)baseProj.ai[1]);
 			if(activeFrame < 0 || activeFrame % spawnRate != 0)
 			{
 				return;

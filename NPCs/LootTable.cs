@@ -12,8 +12,10 @@ using AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush;
 using AmuletOfManyMinions.Projectiles.Minions.Necromancer;
 using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
 using AmuletOfManyMinions.Projectiles.Minions.Slimepire;
+using AmuletOfManyMinions.Projectiles.Minions.SlimeTrain;
 using AmuletOfManyMinions.Projectiles.Minions.StarSurfer;
 using AmuletOfManyMinions.Projectiles.Minions.StoneCloud;
+using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
 using AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire;
@@ -158,6 +160,13 @@ namespace AmuletOfManyMinions.NPCs
 				{
 					Item.NewItem(npc.getRect(), ItemType<BoneSerpentMinionItem>(), 1, prefixGiven: -1);
 				}
+				if(spawnChance < 0.11f && npc.type == NPCID.MoonLordCore)
+				{
+					Item.NewItem(npc.getRect(), ItemType<SlimeTrainMinionItem>(), 1, prefixGiven: -1);
+				} else if (spawnChance < 0.22f && npc.type == NPCID.MoonLordCore)
+				{
+					Item.NewItem(npc.getRect(), ItemType<TerrarianEntMinionItem>(), 1, prefixGiven: -1);
+				}
 			}
 		}
 
@@ -221,6 +230,13 @@ namespace AmuletOfManyMinions.NPCs
 					break;
 				case ItemID.MoonLordBossBag:
 					player.QuickSpawnItem(ItemType<TrueEyeWaypointRod>());
+					if(spawnChance < 0.11f)
+					{
+						player.QuickSpawnItem(ItemType<SlimeTrainMinionItem>());
+					} else if (spawnChance < 0.22f)
+					{
+						player.QuickSpawnItem(ItemType<TerrarianEntMinionItem>());
+					}
 					break;
 				default:
 					break;

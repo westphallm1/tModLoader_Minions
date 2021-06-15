@@ -40,17 +40,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 32;
-			item.damage = 80;
+			item.damage = 120;
 			item.height = 34;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			item.value = Item.sellPrice(0, 15, 0, 0);
+			item.rare = ItemRarityID.Red;
 		}
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.MechanicalLens, 1);
-			recipe.AddIngredient(ItemID.HallowedBar, 12);
-			recipe.AddTile(TileID.MythrilAnvil);
+			recipe.AddIngredient(ItemID.DirtBlock, 1);
+			recipe.AddTile(TileID.WorkBenches);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
@@ -175,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 					spawnPos,
 					projectile.velocity,
 					slimeType,
-					baseDamage,
+					(int)(projectile.damage * 0.75f),
 					projectile.knockBack,
 					Main.myPlayer,
 					ai1: nextSlimeIndex + 1);

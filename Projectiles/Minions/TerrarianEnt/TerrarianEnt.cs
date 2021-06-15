@@ -40,9 +40,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			item.mana = 10;
 			item.width = 32;
 			item.height = 32;
-			item.damage = 165;
-			item.value = Item.sellPrice(0, 3, 0, 0);
+			item.damage = 185;
+			item.value = Item.sellPrice(0, 15, 0, 0);
 			item.rare = ItemRarityID.Red;
+		}
+
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ItemID.DirtBlock, 1);
+			recipe.AddTile(TileID.WorkBenches);
+			recipe.SetResult(this);
+			recipe.AddRecipe();
 		}
 	}
 
