@@ -349,17 +349,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
+			int maxSwarmSize = 4;
 			int projType = ProjectileType<CritterSwarmProjectile>();
-			if(!hasSpawnedSwarm && !Main.projectile.Any(p =>
+			if(!hasSpawnedSwarm && Main.projectile.Where(p =>
 				p.active && p.owner == player.whoAmI &&
-				p.type == projType && (int)p.ai[0] == target.whoAmI))
+				p.type == projType && (int)p.ai[0] == target.whoAmI).Count() < maxSwarmSize)
 			{
 				hasSpawnedSwarm = true;
 				Projectile.NewProjectile(
 					target.Center,
 					Vector2.Zero,
 					projType,
-					(int)(projectile.damage * 0.75f),
+					(int)(projectile.damage * 0.33f),
 					0,
 					Main.myPlayer,
 					ai0: target.whoAmI,

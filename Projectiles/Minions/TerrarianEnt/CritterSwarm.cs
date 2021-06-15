@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			projectile.penetrate = -1;
 			projectile.friendly = true;
 			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 20;
+			projectile.localNPCHitCooldown = 10;
 			projectile.timeLeft = 180;
 		}
 
