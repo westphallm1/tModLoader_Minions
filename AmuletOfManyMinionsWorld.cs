@@ -1,4 +1,8 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.ExciteSkull;
+﻿using AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey;
+using AmuletOfManyMinions.Projectiles.Minions.ExciteSkull;
+using AmuletOfManyMinions.Projectiles.Minions.FishBowl;
+using AmuletOfManyMinions.Projectiles.Minions.Rats;
+using AmuletOfManyMinions.Projectiles.Minions.TumbleSheep;
 using AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire;
 using Terraria;
 using Terraria.ID;
@@ -7,12 +11,74 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions
 {
+	enum ChestFrame
+	{
+		WoodenChest = 0,
+		GoldChest = 1,
+		LockedGoldChest = 2,
+		LockedShadowChest  = 4,
+		IvyChest = 10,
+		WaterChest = 17
+	}
+
+	struct ChestLootInfo
+	{
+		ChestFrame chestFrame;
+		int itemType;
+		int frequency;
+		bool didPlace;
+	
+		public ChestLootInfo(ChestFrame chestFrame, int frequency, int itemType)
+		{
+			this.chestFrame = chestFrame;
+			this.itemType = itemType;
+			this.frequency = frequency;
+			this.didPlace = false;
+		}
+
+		public int? GetItemForChest(Chest chest)
+		{
+			int? itemType = null;
+			Tile chestTile = Main.tile[chest.x, chest.y];
+			if (chestTile.type == TileID.Containers)
+			{
+				int tileFrame = chestTile.frameX / 36;
+				if (tileFrame == (int)chestFrame && (!didPlace || Main.rand.Next(frequency) == 0))
+				{
+					didPlace = true;
+					itemType = this.itemType;
+				}
+			}
+			return itemType;
+		}
+
+		public void reset()
+		{
+			didPlace = false;
+		}
+	}
 	class AmuletOfManyMinionsWorld : ModWorld
 	{
-		private bool didPlaceShadowSquire;
-		private bool didPlaceSeaSquire;
-		private bool didPlaceVikingSquire;
-		private bool didPlaceExciteSkull;
+		private static ChestLootInfo[] lootInfo;
+
+		public static void Load()
+		{
+			lootInfo = new ChestLootInfo[]
+			{
+				new ChestLootInfo(ChestFrame.LockedShadowChest, 4, ItemType<GoldenRogueSquireMinionItem>()),// shadow chest/golden rogue
+				new ChestLootInfo(ChestFrame.LockedGoldChest, 6, ItemType<ExciteSkullMinionItem>()),
+				new ChestLootInfo(ChestFrame.WoodenChest, 6, ItemType<TumbleSheepMinionItem>()),
+				new ChestLootInfo(ChestFrame.GoldChest, 6, ItemType<RatsMinionItem>()),
+				new ChestLootInfo(ChestFrame.WaterChest, 4, ItemType<FishBowlMinionItem>()),
+				new ChestLootInfo(ChestFrame.IvyChest, 4, ItemType<BalloonMonkeyMinionItem>()),
+			};
+		}
+
+		public static void Unload()
+		{
+			lootInfo = null;
+		}
+
 		private void placeItemInChest(Chest chest, int itemType)
 		{
 			for (int i = 0; i < 40; i++)
@@ -25,55 +91,27 @@ namespace AmuletOfManyMinions
 			}
 		}
 
-		private int? getItemForChest(Chest chest)
-		{
-			int frozenFrame = 11;
-			int shadowFrame = 4;
-			int lockedGoldFrame = 2;
-			int waterFrame = 17;
-			int? itemType = null;
-			Tile chestTile = Main.tile[chest.x, chest.y];
-			if (chestTile.type == TileID.Containers)
-			{
-				int tileFrame = chestTile.frameX / 36;
-				if (tileFrame == frozenFrame && (!didPlaceVikingSquire || Main.rand.Next(3) == 0))
-				{
-					// ice chests are rarer than I thought, make an npc drop instead
-					//didPlaceVikingSquire = true;
-					//itemType = ItemType<VikingSquireMinionItem>();
-				}
-				else if (tileFrame == shadowFrame && (!didPlaceShadowSquire || Main.rand.Next(4) == 0))
-				{
-					didPlaceShadowSquire = true;
-					itemType = ItemType<GoldenRogueSquireMinionItem>();
-				}
-				else if (tileFrame == waterFrame && (!didPlaceSeaSquire || Main.rand.Next(6) == 0))
-				{
-					// don't care for chest-only items
-					//didPlaceSeaSquire = true;
-					//itemType = ItemType<SeaSquireMinionItem>();
-				}
-				else if (tileFrame == lockedGoldFrame && (!didPlaceExciteSkull || Main.rand.Next(6) == 0))
-				{
-					didPlaceExciteSkull = true;
-					itemType = ItemType<ExciteSkullMinionItem>();
-
-				}
-			}
-			return itemType;
-		}
 		// populate chests
 		public override void PostWorldGen()
 		{
-			didPlaceShadowSquire = false;
-			didPlaceVikingSquire = false;
-			didPlaceSeaSquire = false;
+			for(int i = 0; i < lootInfo.Length; i++)
+			{
+				lootInfo[i].reset();
+			}
+
 			for (int chestIdx = 0; chestIdx < Main.chest.Length; chestIdx++)
 			{
 				Chest chest = Main.chest[chestIdx];
-				if (chest != null && getItemForChest(chest) is int chestItem)
+				if (chest != null)
 				{
-					placeItemInChest(chest, chestItem);
+					for(int i = 0; i < lootInfo.Length; i++)
+					{
+						if(lootInfo[i].GetItemForChest(chest) is int chestItem)
+						{
+							placeItemInChest(chest, chestItem);
+							break;
+						}
+					}
 				}
 			}
 		}

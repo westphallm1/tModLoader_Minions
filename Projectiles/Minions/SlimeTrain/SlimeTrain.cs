@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.Projectiles.Minions.SlimeTrain.SlimeTrainMarkerProjectile;
 using System.Collections.Generic;
+using AmuletOfManyMinions.Projectiles.Minions.Slimecart;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 {
@@ -48,8 +49,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.DirtBlock, 1);
-			recipe.AddTile(TileID.WorkBenches);
+			recipe.AddIngredient(ItemID.LunarBar, 12);
+			recipe.AddIngredient(ItemType<SlimecartMinionItem>(), 12);
+			recipe.AddRecipeGroup("AmuletOfManyMinions:StardustDragons", 1);
+			recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

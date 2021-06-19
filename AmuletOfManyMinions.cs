@@ -43,6 +43,7 @@ namespace AmuletOfManyMinions
 			LandChunkConfigs.Load();
 			SpriteCompositionManager.Load();
 			CritterConfigs.Load();
+			AmuletOfManyMinionsWorld.Load();
 
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
 			CycleTacticsGroupHotKey = RegisterHotKey("Cycle Tactics Group", "L");
@@ -72,6 +73,7 @@ namespace AmuletOfManyMinions
 			LandChunkConfigs.Unload();
 			SpriteCompositionManager.Unload();
 			CritterConfigs.Unload();
+			AmuletOfManyMinionsWorld.Unload();
 
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;
@@ -104,6 +106,11 @@ namespace AmuletOfManyMinions
 				() => "Void Dagger/Null Hatchet",
 				new int[] { ModContent.ItemType<VoidKnifeMinionItem>(), ModContent.ItemType<NullHatchetMinionItem>()});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:VoidDaggers", voidDaggerGroup);
+
+			RecipeGroup stardustDragonGroup = new RecipeGroup(
+				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.StardustDragonStaff"),
+				new int[] { ItemID.StardustDragonStaff, ModContent.ItemType<StardustDragonMinionItem>()});
+			RecipeGroup.RegisterGroup("AmuletOfManyMinions:StardustDragons", stardustDragonGroup);
 		}
 
 		public override void AddRecipes()

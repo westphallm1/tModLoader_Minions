@@ -1,8 +1,16 @@
 The Amulet of Many Minions is designed to add variety to the vanilla summoner progression while staying at least somewhat
 in line with vanilla balance. It adds a new, directly controllable minion type called the Squire,
-over 20 new minions, and several armor sets and accessories for both Squires and minions. 
+over 30 new minions, and several armor sets and accessories for both Squires and minions. 
+
 
 === Version History ==
+v0.10.0 - Tactics 2.0!
+       - Revamp Tactics UI 
+         - Menu can now be moved anywhere on screen
+         - Minions can be split into two teams 
+         - Each team follows its own tactic and waypoint target
+       - Add several new pre-hardmode minions as loot for most chest types
+       - Add two post-Moonlord minions!
 v0.9.0 - Vanilla-ish Update
        - Add an AoMM Variant for every vanilla summoning item! 
        - Crafted from regular vanilla item at a Demon Altar
@@ -15,13 +23,13 @@ v0.8.0 - Pathfinding 2.0
        - Target now placed using new class of tool called the Pathfinding Rod
        - Pathfinding Rod has 6 tiers, each increasing target placement range and decreasing use time
        - Only works with minions from this mod
-v0.7.0 - Minion Tactics
-       - Add new UI for fine-tuning minion AI (only works for mod minions)
-         - Unlocked as soon as you pick up a summoner weapon from this mod
-         - Choose from 8 different styles of target prioritization!
-         - Add several hotkeys to quickly toggle selected tactics, and several mod config options
-       - Resprite several existing minons & items
 ~~ See the Wiki for older changelogs ~~
+
+
+=== Credits === 
+Developers: Billybobmcbo, direwolf420, Metallumere
+Artists: SkyanUltra, frogpage
+Ideas/Feedback: Spatula Lemmy and everyone on the mod discord
 
 A cheat sheet for getting started is given below. A complete list mod content can be found from the homepage.
 

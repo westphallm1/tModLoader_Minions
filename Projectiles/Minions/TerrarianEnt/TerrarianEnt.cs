@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Projectiles.Minions.Acorn;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -48,8 +49,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.DirtBlock, 1);
-			recipe.AddTile(TileID.WorkBenches);
+			recipe.AddIngredient(ItemType<AcornMinionItem>(), 1);
+			recipe.AddIngredient(ItemID.LunarBar, 6);
+			recipe.AddIngredient(ItemID.FragmentNebula, 6);
+			recipe.AddIngredient(ItemID.FragmentSolar, 6);
+			recipe.AddIngredient(ItemID.FragmentStardust, 6);
+			recipe.AddIngredient(ItemID.FragmentVortex, 6);
+			recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

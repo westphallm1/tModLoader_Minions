@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Lighter-than-air Blowgun");
+			DisplayName.SetDefault("Staff of Darts");
 			Tooltip.SetDefault("Summons a dart-throwing monkey to fight for you!");
 		}
 
