@@ -17,8 +17,13 @@ namespace AmuletOfManyMinions
 		GoldChest = 1,
 		LockedGoldChest = 2,
 		LockedShadowChest  = 4,
+		RichMahogonyChest = 8,
 		IvyChest = 10,
-		WaterChest = 17
+		WaterChest = 17,
+		MushroomChest = 32,
+		GraniteChest= 50,
+		MarbleChest = 51,
+
 	}
 
 	struct ChestLootInfo
@@ -68,9 +73,14 @@ namespace AmuletOfManyMinions
 				new ChestLootInfo(ChestFrame.LockedShadowChest, 4, ItemType<GoldenRogueSquireMinionItem>()),// shadow chest/golden rogue
 				new ChestLootInfo(ChestFrame.LockedGoldChest, 6, ItemType<ExciteSkullMinionItem>()),
 				new ChestLootInfo(ChestFrame.WoodenChest, 6, ItemType<TumbleSheepMinionItem>()),
-				new ChestLootInfo(ChestFrame.GoldChest, 6, ItemType<RatsMinionItem>()),
 				new ChestLootInfo(ChestFrame.WaterChest, 4, ItemType<FishBowlMinionItem>()),
 				new ChestLootInfo(ChestFrame.IvyChest, 4, ItemType<BalloonMonkeyMinionItem>()),
+				// all the various gold chest variants
+				new ChestLootInfo(ChestFrame.GoldChest, 6, ItemType<RatsMinionItem>()),
+				new ChestLootInfo(ChestFrame.RichMahogonyChest, 6, ItemType<RatsMinionItem>()),
+				new ChestLootInfo(ChestFrame.MushroomChest, 6, ItemType<RatsMinionItem>()),
+				new ChestLootInfo(ChestFrame.GraniteChest, 6, ItemType<RatsMinionItem>()),
+				new ChestLootInfo(ChestFrame.MarbleChest, 6, ItemType<RatsMinionItem>()),
 			};
 		}
 
