@@ -298,7 +298,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			{
 				rotationTracker.SetRotationInfo(Main.npc[idx], projectile);
 				Vector2 startOffset = rotationTracker.GetStartOffset(vectorToTargetPosition);
-				if(startOffset.LengthSquared() < 16 * 16 && player.whoAmI == Main.myPlayer)
+				if(startOffset.LengthSquared() < 32 * 32 && player.whoAmI == Main.myPlayer)
 				{
 					Projectile.NewProjectile(
 						projectile.Center,
