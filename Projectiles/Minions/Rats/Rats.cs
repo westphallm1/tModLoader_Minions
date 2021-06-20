@@ -43,16 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			item.value = Item.buyPrice(0, 0, 5, 0);
 			item.rare = ItemRarityID.Blue;
 		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Minecart, 1);
-			recipe.AddIngredient(ItemID.MiningHelmet, 1);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:Silvers", 12);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
+
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);

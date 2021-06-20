@@ -152,14 +152,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void OnSpawn()
 		{
 			// cut down damage since it's got such a high rate of fire
-			projectile.damage = (int)(projectile.damage * 0.75f);
+			projectile.damage = (int)(projectile.damage * 0.75);
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
 			projectile.rotation = vectorToTargetPosition.ToRotation() + MathHelper.Pi;
-			if(animationFrame - hsHelper.lastShootFrame == 16 || animationFrame - hsHelper.lastShootFrame == 32)
+			int attackCycleFrame = animationFrame - hsHelper.lastShootFrame;
+			if(attackCycleFrame == 32)
 			{
 				Vector2 lineOfFire = vectorToTargetPosition;
 				lineOfFire.SafeNormalize();
@@ -258,7 +259,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				lineOfFire += projectile.velocity / 3;
 				if(player.whoAmI == Main.myPlayer)
 				{
-					hsHelper.FireProjectile(lineOfFire, (int)FiredProjectileId, framesSinceShoot % 12);
+					hsHelper.FireProjectile(lineOfFire, (int)FiredProjectileId, framesSinceShoot % 18);
 				}
 				AfterFiringProjectile();
 			}

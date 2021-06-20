@@ -160,13 +160,6 @@ namespace AmuletOfManyMinions.NPCs
 				{
 					Item.NewItem(npc.getRect(), ItemType<BoneSerpentMinionItem>(), 1, prefixGiven: -1);
 				}
-				if(spawnChance < 0.11f && npc.type == NPCID.MoonLordCore)
-				{
-					Item.NewItem(npc.getRect(), ItemType<SlimeTrainMinionItem>(), 1, prefixGiven: -1);
-				} else if (spawnChance < 0.22f && npc.type == NPCID.MoonLordCore)
-				{
-					Item.NewItem(npc.getRect(), ItemType<TerrarianEntMinionItem>(), 1, prefixGiven: -1);
-				}
 			}
 		}
 
@@ -230,13 +223,6 @@ namespace AmuletOfManyMinions.NPCs
 					break;
 				case ItemID.MoonLordBossBag:
 					player.QuickSpawnItem(ItemType<TrueEyeWaypointRod>());
-					if(spawnChance < 0.11f)
-					{
-						player.QuickSpawnItem(ItemType<SlimeTrainMinionItem>());
-					} else if (spawnChance < 0.22f)
-					{
-						player.QuickSpawnItem(ItemType<TerrarianEntMinionItem>());
-					}
 					break;
 				default:
 					break;

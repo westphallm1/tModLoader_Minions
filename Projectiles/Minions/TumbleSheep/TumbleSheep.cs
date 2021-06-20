@@ -45,16 +45,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			item.value = Item.buyPrice(0, 0, 5, 0);
 			item.rare = ItemRarityID.White;
 		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Minecart, 1);
-			recipe.AddIngredient(ItemID.MiningHelmet, 1);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:Silvers", 12);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
 	}
 
 	public class TumbleSheepMinion : SimpleGroundBasedMinion

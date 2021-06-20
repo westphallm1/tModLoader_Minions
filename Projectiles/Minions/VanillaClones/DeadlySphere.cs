@@ -35,6 +35,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public int[] projTypes;
 
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Tooltip.SetDefault("");
+		}
+
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);

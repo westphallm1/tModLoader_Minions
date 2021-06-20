@@ -43,15 +43,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			item.value = Item.buyPrice(0, 0, 2, 0);
 			item.rare = ItemRarityID.White;
 		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.FishBowl, 3);
-			recipe.AddRecipeGroup(RecipeGroupID.Wood, 10);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
 	}
 
 	/// <summary>
