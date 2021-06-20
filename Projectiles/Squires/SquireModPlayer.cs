@@ -33,6 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		// shouldn't be hand-rolling key press detection but here we are
 		private bool didReleaseTap;
 		private bool didDoubleTap;
+		internal bool graniteArmorEquipped;
 
 		public override void ResetEffects()
 		{
@@ -41,6 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			squireBatAccessory = false;
 			royalArmorSetEquipped = false;
 			aridArmorSetEquipped = false;
+			graniteArmorEquipped = false;
 			hardmodeOreSquireArmorSetEquipped = false;
 			spookyArmorSetEquipped = false;
 			squireAttackSpeedMultiplier = 1;

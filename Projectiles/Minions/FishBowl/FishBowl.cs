@@ -29,13 +29,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Fishbowl Staff");
-			Tooltip.SetDefault("Summons a flying fishbowl to fight for you!");
+			Tooltip.SetDefault("Summons a flying fishbowl to fight for you!\n"+
+				"Most effective against flying enemies");
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 12;
+			item.damage = 14;
 			item.knockBack = 0.5f;
 			item.mana = 10;
 			item.width = 28;
