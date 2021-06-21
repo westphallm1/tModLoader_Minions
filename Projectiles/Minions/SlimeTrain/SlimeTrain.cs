@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.LunarBar, 12);
-			recipe.AddIngredient(ItemType<SlimecartMinionItem>(), 12);
+			recipe.AddIngredient(ItemType<SlimecartMinionItem>(), 1);
 			recipe.AddRecipeGroup("AmuletOfManyMinions:StardustDragons", 1);
 			recipe.AddTile(TileID.LunarCraftingStation);
 			recipe.SetResult(this);
