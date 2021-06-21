@@ -89,6 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public SpriteCompositionHelper(SimpleMinion minion, Rectangle bounds = default)
 		{
+			if (Main.dedServ) { return; }
 			this.minion = minion;
 			this.bounds = bounds == default ? DefaultBounds : bounds;
 			renderTarget = new RenderTarget2D(
@@ -104,11 +105,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void Attach()
 		{
+			if (Main.dedServ) { return; }
 			SpriteCompositionManager.activeHelpers.Add(this);
 		}
 
 		public void UpdateMovement()
 		{
+			if (Main.dedServ) { return; }
 			if(Math.Abs(projectile.velocity.X) > walkVelocityThreshold)
 			{
 				walkCycleFrame++;
@@ -120,12 +123,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void SetDrawInfo(SpriteBatch spriteBatch, Color lightColor)
 		{
+			if (Main.dedServ) { return; }
 			this.spriteBatch = spriteBatch;
 			this.lightColor = lightColor;
 		}
 
 		public void ClearDrawInfo()
 		{
+			if (Main.dedServ) { return; }
 			// don't hang onto reference for too long
 			this.spriteBatch = null;
 		}
@@ -138,6 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void AddSpriteToBatch(Texture2D texture, Rectangle bounds, Vector2 offsetFromCenter, float r, float scale)
 		{
+			if (Main.dedServ) { return; }
 			// offsetFromCenter -= CenterOfRotation;
 			offsetFromCenter = new Vector2(snapToGrid(offsetFromCenter.X), snapToGrid(offsetFromCenter.Y)) + BaseOffset;
 			r = posResolution > 1 ? 0 : r; // don't rotate if snapping to grid
@@ -148,7 +154,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void AddSpriteToBatch(Texture2D texture, (int, int) boundsInfo, Vector2 offsetFromCenter, float r, float scale)
 		{
-
 			int frameHeight = texture.Height / boundsInfo.Item2;
 			Rectangle bounds = new Rectangle(0, boundsInfo.Item1 * frameHeight, texture.Width, frameHeight);
 			AddSpriteToBatch(texture, bounds, offsetFromCenter, r, scale);
@@ -171,7 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void AddTileSpritesToBatch(Texture2D texture, int drawIdx, (byte, byte)?[,,] tilesInfo, Vector2 offsetFromCenter, float r = 0, int tileSize = 16)
 		{
-
+			if (Main.dedServ) { return; }
 			offsetFromCenter += BaseOffset;
 			// offsetFromCenter -= CenterOfRotation;
 			int tileSpacing = tileSize+2;
@@ -208,6 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal void Process(SpriteBatch spriteBatch)
 		{
+			if (Main.dedServ) { return; }
 			if(minion.animationFrame % frameResolution != 0)
 			{
 				return;
