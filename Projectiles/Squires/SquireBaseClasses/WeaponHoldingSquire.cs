@@ -260,7 +260,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			return projectile.spriteDirection * (rotationBase - weaponAngle);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			usingWeapon = true;
 			weaponAngle = GetWeaponAngle();
@@ -268,7 +268,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			{
 				Main.PlaySound(attackSound, projectile.Center);
 			}
-			base.TargetedMovement(vectorToTargetPosition);
+			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)

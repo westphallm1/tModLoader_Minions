@@ -159,9 +159,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			return base.PreDraw(spriteBatch, Color.White);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.TargetedMovement(vectorToTargetPosition);
+			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				if (Main.myPlayer == player.whoAmI)

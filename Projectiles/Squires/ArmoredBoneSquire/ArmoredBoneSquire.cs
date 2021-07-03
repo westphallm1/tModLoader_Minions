@@ -175,9 +175,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			return base.PreDraw(spriteBatch, Color.White);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.TargetedMovement(vectorToTargetPosition);
+			base.StandardTargetedMovement(vectorToTargetPosition);
 			// bit of a long formula
 			Vector2 angleVector = UnitVectorFromWeaponAngle();
 			Vector2 flailPosition = projectile.Center +

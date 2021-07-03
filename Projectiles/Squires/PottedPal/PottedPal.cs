@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			}
 			return null;
 		}
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			if (cooldownCounter < hitCooldown)
 			{
@@ -111,11 +111,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			// Cling to the closest enemy a little bit
 			if (vectorToTargetPosition.Length() < 100f && SelectedEnemyInRange(100f, projectile.Center, maxRangeFromPlayer: false) is Vector2 autoTarget)
 			{
-				base.TargetedMovement(autoTarget - projectile.Center);
+				base.StandardTargetedMovement(autoTarget - projectile.Center);
 			}
 			else
 			{
-				base.TargetedMovement(vectorToTargetPosition);
+				base.StandardTargetedMovement(vectorToTargetPosition);
 			}
 			Vector2 vectorFromPlayer = player.Center - projectile.Center;
 			projectile.rotation = vectorFromPlayer.ToRotation() - (float)Math.PI / 2;

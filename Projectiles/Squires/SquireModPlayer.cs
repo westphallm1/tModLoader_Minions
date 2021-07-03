@@ -202,6 +202,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		}
 	}
 
+	class SquireCooldownBuff : ModBuff
+	{
+
+	}
+
 	class SquireGlobalProjectile : GlobalProjectile
 	{
 		public static HashSet<int> isSquireShot;

@@ -251,9 +251,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			return base.PreDraw(spriteBatch, lightColor);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.TargetedMovement(vectorToTargetPosition);
+			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				Main.PlaySound(new LegacySoundStyle(2, 102), projectile.position);
@@ -335,9 +335,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			return base.PreDraw(spriteBatch, lightColor);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.TargetedMovement(vectorToTargetPosition);
+			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				Main.PlaySound(new LegacySoundStyle(2, 71), projectile.position);

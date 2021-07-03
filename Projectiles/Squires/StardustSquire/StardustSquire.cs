@@ -331,9 +331,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		}
 
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.TargetedMovement(vectorToTargetPosition);
+			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();

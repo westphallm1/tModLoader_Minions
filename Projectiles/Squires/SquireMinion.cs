@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
@@ -51,6 +52,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		protected virtual bool attackSpeedCanBeModified => true;
 
 		protected virtual float projectileVelocity => default;
+
+		// state tracking variables for special attacks
+		protected bool usingSpecial;
+
+		protected int specialStartFrame;
+		protected virtual int SpecialDuration => 30;
+		protected virtual int SpecialCooldown => 300;
+		protected int specialFrame => animationFrame - specialStartFrame;
+
+		protected bool SpecialOnCooldown => player.HasBuff(ModContent.BuffType<SquireCooldownBuff>());
+
 		public SquireMinion(int itemID)
 		{
 			itemType = itemID;
@@ -99,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				returningToPlayer = true;
 				return null; // force back into non-attacking mode if too far from player
 			}
-			if (player.HeldItem.type == itemType && player.channel && player.altFunctionUse != 2)
+			if (player.HeldItem.type == itemType && (usingSpecial || (player.channel && player.altFunctionUse != 2)))
 			{
 				MousePlayer mPlayer = player.GetModPlayer<MousePlayer>();
 				mPlayer.SetMousePosition();
@@ -140,6 +152,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			return vectorToIdlePosition;
 		}
 
+		protected void CheckSpecialUsage()
+		{
+			// switch from "not using special" to "using special"
+			int cooldownBuffType = ModContent.BuffType<SquireCooldownBuff>();
+			if(!usingSpecial && !SpecialOnCooldown && player.channel && player.altFunctionUse == 2)
+			{
+				usingSpecial = true;
+				specialStartFrame = animationFrame;
+				player.AddBuff(cooldownBuffType, SpecialCooldown);
+			} else if (usingSpecial && specialFrame >= SpecialDuration)
+			{
+				usingSpecial = false;
+			} else if (SpecialOnCooldown && player.buffTime[cooldownBuffType] == 1)
+			{
+				// TODO a little dust animation to indicate special can be used again
+			}
+		}
+
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// always clamp to the idle position
@@ -161,6 +191,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
+			if(usingSpecial)
+			{
+				SpecialTargetedMovement(vectorToTargetPosition);
+			} else
+			{
+				StandardTargetedMovement(vectorToTargetPosition);
+			}
+		}
+
+		public virtual void StandardTargetedMovement(Vector2 vectorToTargetPosition)
+		{
 			if (vectorToTargetPosition.Length() < 8 && relativeVelocity.Length() < 4)
 			{
 				relativeVelocity = Vector2.Zero;
@@ -178,6 +219,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			vectorToTargetPosition *= speed;
 			relativeVelocity = (relativeVelocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 			projectile.velocity = player.velocity + relativeVelocity;
+		}
+
+		public virtual void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			// by default, don't do anything special
+			StandardTargetedMovement(vectorToTargetPosition);
 		}
 
 		public float ModifiedTargetedSpeed() => ComputeTargetedSpeed() * player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier;

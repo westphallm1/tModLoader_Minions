@@ -151,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			int maxDashDistance = 80;
 			float dashCheckDistance = 1.25f * maxDashDistance;
@@ -183,7 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					}
 				}
 			}
-			base.TargetedMovement(vectorToTargetPosition);
+			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -478,11 +478,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			base.PostDraw(spriteBatch, lightColor);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			if (knockbackCounter-- < 0)
 			{
-				base.TargetedMovement(vectorToTargetPosition);
+				base.StandardTargetedMovement(vectorToTargetPosition);
 			}
 			else
 			{

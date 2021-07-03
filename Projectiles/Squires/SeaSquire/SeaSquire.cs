@@ -149,10 +149,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			return base.IdleBehavior();
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			float bubbleVelOffset = Main.rand.NextFloat() * 2;
-			base.TargetedMovement(vectorToTargetPosition);
+			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
 				Main.PlaySound(new LegacySoundStyle(2, 85), projectile.position);
