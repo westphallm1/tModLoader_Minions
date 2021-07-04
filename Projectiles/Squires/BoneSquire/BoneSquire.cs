@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		protected override Vector2 WingOffset => new Vector2(-4, 2);
 
 		protected override int SpecialDuration => 8 * 60;
-		protected override int SpecialCooldown => 1200;
+		protected override int SpecialCooldown => 12 * 60;
 		public BoneSquireMinion() : base(ItemType<BoneSquireMinionItem>()) { }
 
 		public sealed override void SetDefaults()

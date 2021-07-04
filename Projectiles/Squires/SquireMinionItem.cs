@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		}
 		public override bool AltFunctionUse(Player player)
 		{
-			return false;
+			return true;
 		}
 
 		public override bool CanUseItem(Player player)
