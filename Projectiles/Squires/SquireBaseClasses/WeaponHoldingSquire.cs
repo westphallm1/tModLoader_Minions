@@ -41,6 +41,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
 		protected virtual LegacySoundStyle attackSound => SoundID.Item1;
 
+		// used for motion blur effects
+		protected Vector2 lastWeaponPos;
 		protected virtual float knockbackSelf => 10f;
 		protected int wingFrame = 0;
 		protected int attackFrame = 0;
@@ -293,9 +295,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			Rectangle bounds = GetWeaponTextureBounds(texture);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = SpriteRotationFromWeaponAngle();
-			Vector2 pos = GetWeaponSpriteLocation();
+			lastWeaponPos = GetWeaponSpriteLocation();
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			spriteBatch.Draw(texture, lastWeaponPos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
 		}

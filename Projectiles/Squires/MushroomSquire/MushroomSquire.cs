@@ -1,6 +1,8 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Items.Armor;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -50,11 +52,70 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		}
 	}
 
+	public class MushroomSquireMushroomProjectile : ModProjectile
+	{
+		const int TimeToLive = 180;
+		const int TimeLeftToStartFalling = TimeToLive - 15;
+
+		public override string Texture => "Terraria/Item_" + ItemID.Mushroom;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.penetrate = 1;
+			projectile.width = 12;
+			projectile.height = 12;
+			projectile.timeLeft = TimeToLive;
+			projectile.friendly = true;
+			projectile.tileCollide = true;
+			projectile.minion = true;
+		}
+
+		public override void AI()
+		{
+			base.AI();
+			if(projectile.timeLeft < TimeLeftToStartFalling && projectile.velocity.Y < 16)
+			{
+				projectile.velocity.Y += 0.5f;
+				projectile.velocity.X *= 0.99f;
+			}
+			projectile.rotation += MathHelper.Pi / 16 * Math.Sign(projectile.velocity.X);
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			base.Kill(timeLeft);
+			for (int i = 0; i < 3; i++)
+			{
+				Dust.NewDust(projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
+			}
+			if(projectile.owner == Main.myPlayer && Main.rand.Next(3) > 0)
+			{
+				Vector2 launcVel = new Vector2(0.25f * projectile.velocity.X, -Main.rand.Next(5, 8));
+				Projectile.NewProjectile(
+					projectile.Center,
+					launcVel,
+					ProjectileType<ForagerMushroom>(),
+					projectile.damage,
+					projectile.knockBack,
+					projectile.owner);
+
+			}
+		}
+	}
+
 
 	public class MushroomSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<MushroomSquireMinionBuff>();
 		protected override int AttackFrames => 20;
+
+		protected override int SpecialDuration => 30;
+		protected override float projectileVelocity => 9;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/LeafWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/MushroomSquire/MushroomSquireSword";
 
@@ -78,6 +139,26 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			base.SetDefaults();
 			projectile.width = 24;
 			projectile.height = 30;
+		}
+
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.SpecialTargetedMovement(vectorToTargetPosition);
+			if(specialFrame % 10 == 0 && player.whoAmI == Main.myPlayer)
+			{
+				Vector2 vector2Mouse = Vector2.DistanceSquared(projectile.Center, Main.MouseWorld) < 48 * 48 ?
+					Main.MouseWorld - player.Center : Main.MouseWorld - projectile.Center;
+				vector2Mouse.SafeNormalize();
+				vector2Mouse *= ModifiedProjectileVelocity();
+				vector2Mouse = vector2Mouse.RotatedBy(Main.rand.NextFloat(MathHelper.Pi / 8) - MathHelper.Pi/16);
+				Projectile.NewProjectile(
+					projectile.Center,
+					vector2Mouse,
+					ProjectileType<MushroomSquireMushroomProjectile>(),
+					5 * projectile.damage / 4,
+					projectile.knockBack,
+					projectile.owner);
+			}
 		}
 
 		public override float MaxDistanceFromPlayer() => 120;

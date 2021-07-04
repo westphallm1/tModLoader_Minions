@@ -161,10 +161,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				usingSpecial = true;
 				specialStartFrame = animationFrame;
-				player.AddBuff(cooldownBuffType, SpecialCooldown);
+				OnStartUsingSpecial();
 			} else if (usingSpecial && specialFrame >= SpecialDuration)
 			{
 				usingSpecial = false;
+				player.AddBuff(cooldownBuffType, SpecialCooldown);
+				OnStopUsingSpecial();
 			} else if (SpecialOnCooldown && player.buffTime[player.FindBuffIndex(cooldownBuffType)] == 1)
 			{
 				// TODO a little dust animation to indicate special can be used again
@@ -173,7 +175,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public virtual void OnStartUsingSpecial()
 		{
-			// default no-op
+			// default no-op, mostly used for visual effects
+		}
+
+		public virtual void OnStopUsingSpecial()
+		{
+			// default no-op, mostly used for visual effects
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)

@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 
 		string BaseWeaponTexture = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailBall";
-		protected override string WeaponTexturePath => usingSpecial ? BaseWeaponTexture + "_Flaming" : BaseWeaponTexture;
+		protected override string WeaponTexturePath => usingSpecial ? "Terraria/NPC_72" : BaseWeaponTexture;
 
 		string BaseChainPath = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailChain";
 		protected string ChainTexturePath => usingSpecial ? BaseChainPath + "_Flaming" : BaseChainPath;
@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		protected override float knockbackSelf => 5f;
 		protected override Vector2 WingOffset => new Vector2(-4, 2);
 
-		protected override int SpecialDuration => 300;
+		protected override int SpecialDuration => 8 * 60;
 		protected override int SpecialCooldown => 1200;
 		public BoneSquireMinion() : base(ItemType<BoneSquireMinionItem>()) { }
 
@@ -121,6 +121,55 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			}
 			base.PostDraw(spriteBatch, lightColor);
 		}
+
+		private void DrawFlailFlames(int iterations)
+		{
+			for (int i = 0; i < iterations; i++)
+			{
+				int dustId = Dust.NewDust(
+					lastWeaponPos - new Vector2(16, 16), 
+					32, 32, 6, 
+					projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 
+					100, default, 2f);
+				Main.dust[dustId].noGravity = true;
+				Main.dust[dustId].velocity.X *= 0.3f;
+				Main.dust[dustId].velocity.Y *= 0.3f;
+				Main.dust[dustId].noLight = true;
+			}
+		}
+
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+			if(usingSpecial)
+			{
+				damage = 5 * damage / 4; // 25% damage boost
+			}
+		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			base.OnHitNPC(target, damage, knockback, crit);
+			if(usingSpecial)
+			{
+				target.AddBuff(BuffID.OnFire, 300);
+			}
+		}
+
+		public override void OnStartUsingSpecial()
+		{
+			DrawFlailFlames(10);
+		}
+
+		public override void AfterMoving()
+		{
+			if(usingSpecial) 
+			{ 
+				DrawFlailFlames(2);
+			}
+		}
+
+		public override void OnStopUsingSpecial() => OnStartUsingSpecial();
 
 
 		protected override float WeaponDistanceFromCenter() => 60;

@@ -1,4 +1,5 @@
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -50,6 +51,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		}
 	}
 
+	public class CorruptFlaskProjectile : EvilSquireFlask
+	{
+		public override string Texture => "Terraria/Item_" + ItemID.FlaskofCursedFlames;
+		protected override int DustId => 89;
+		protected override int BuffId => BuffID.CursedInferno;
+		protected override int BuffDuration => 420;
+	}
 
 	public class ShadowSquireMinion : WeaponHoldingSquire
 	{
@@ -57,6 +65,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.WarAxeoftheNight;
+
+		protected override float projectileVelocity => 12;
 
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
@@ -76,6 +86,25 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 			base.SetDefaults();
 			projectile.width = 22;
 			projectile.height = 32;
+		}
+
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.SpecialTargetedMovement(vectorToTargetPosition);
+			if(specialFrame == 1 && player.whoAmI == Main.myPlayer)
+			{
+				Vector2 vector2Mouse = Vector2.DistanceSquared(projectile.Center, Main.MouseWorld) < 48 * 48 ?
+					Main.MouseWorld - player.Center : Main.MouseWorld - projectile.Center;
+				vector2Mouse.SafeNormalize();
+				vector2Mouse *= ModifiedProjectileVelocity();
+				Projectile.NewProjectile(projectile.Center,
+					vector2Mouse,
+					ProjectileType<CorruptFlaskProjectile>(),
+					3 * projectile.damage / 2,
+					projectile.knockBack,
+					Main.myPlayer,
+					8);
+			}
 		}
 
 		protected override float WeaponDistanceFromCenter() => 20;
