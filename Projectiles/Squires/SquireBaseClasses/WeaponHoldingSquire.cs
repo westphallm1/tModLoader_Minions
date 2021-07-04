@@ -278,6 +278,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
+		protected virtual Rectangle GetWeaponTextureBounds(Texture2D texture)
+		{
+			return new Rectangle(0, 0, texture.Width, texture.Height);
+		}
+
 		protected virtual void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
 		{
 			if (WeaponTexturePath == null)
@@ -285,7 +290,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 				return;
 			}
 			Texture2D texture = ModContent.GetTexture(WeaponTexturePath);
-			Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
+			Rectangle bounds = GetWeaponTextureBounds(texture);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = SpriteRotationFromWeaponAngle();
 			Vector2 pos = GetWeaponSpriteLocation();

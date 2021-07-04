@@ -45,10 +45,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 	public class BoneSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<BoneSquireMinionBuff>();
-		protected override int AttackFrames => 35;
+		protected override int AttackFrames => usingSpecial ? 20 : 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
-		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailBall";
 
+		string BaseWeaponTexture = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailBall";
+		protected override string WeaponTexturePath => usingSpecial ? BaseWeaponTexture + "_Flaming" : BaseWeaponTexture;
+
+		string BaseChainPath = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailChain";
+		protected string ChainTexturePath => usingSpecial ? BaseChainPath + "_Flaming" : BaseChainPath;
 		// swing weapon in a full circle
 		protected override float SwingAngle1 => SwingAngle0 - 2 * (float)Math.PI;
 
@@ -56,6 +60,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 		protected override float knockbackSelf => 5f;
 		protected override Vector2 WingOffset => new Vector2(-4, 2);
+
+		protected override int SpecialDuration => 300;
+		protected override int SpecialCooldown => 1200;
 		public BoneSquireMinion() : base(ItemType<BoneSquireMinionItem>()) { }
 
 		public sealed override void SetDefaults()
@@ -75,11 +82,29 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		}
 
 
+		protected override Rectangle GetWeaponTextureBounds(Texture2D texture)
+		{
+			if(usingSpecial)
+			{
+				int frame = (specialFrame / 5) % 4;
+				int frameHeight = texture.Height / 4;
+				return new Rectangle(0, frameHeight * frame, texture.Width, frameHeight);
+			} else
+			{
+				return base.GetWeaponTextureBounds(texture);
+			}
+		}
+
+		protected override void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
+		{
+			base.DrawWeapon(spriteBatch, usingSpecial ? Color.White : lightColor);
+		}
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			if (usingWeapon)
 			{
-				Texture2D chainTexture = GetTexture("AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailChain");
+				lightColor = usingSpecial ? Color.White : lightColor;
+				Texture2D chainTexture = GetTexture(ChainTexturePath);
 				Vector2 chainVector = UnitVectorFromWeaponAngle();
 				float r = (float)Math.PI / 2 + chainVector.ToRotation();
 				Vector2 center = projectile.Center + WeaponCenterOfRotation;
@@ -97,15 +122,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			base.PostDraw(spriteBatch, lightColor);
 		}
 
+
 		protected override float WeaponDistanceFromCenter() => 60;
 
 		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() - 10;
 		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 10;
 
-		public override float ComputeIdleSpeed() => 9;
+		public override float ComputeIdleSpeed() => usingSpecial ? 11 : 9;
 
-		public override float ComputeTargetedSpeed() => 9;
+		public override float ComputeTargetedSpeed() => usingSpecial ? 11 : 9;
 
-		public override float MaxDistanceFromPlayer() => 224;
+		public override float MaxDistanceFromPlayer() => usingSpecial ? 260 : 224;
 	}
 }

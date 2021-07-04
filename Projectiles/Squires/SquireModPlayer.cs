@@ -205,6 +205,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 	class SquireCooldownBuff : ModBuff
 	{
 
+		public override void SetDefaults()
+		{
+			DisplayName.SetDefault("Squire Special Cooldown");
+			Description.SetDefault("Your squire's special is on cooldown!");
+		}
 	}
 
 	class SquireGlobalProjectile : GlobalProjectile

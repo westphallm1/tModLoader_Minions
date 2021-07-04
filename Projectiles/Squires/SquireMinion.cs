@@ -149,6 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			CheckSpecialUsage();
 			return vectorToIdlePosition;
 		}
 
@@ -156,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			// switch from "not using special" to "using special"
 			int cooldownBuffType = ModContent.BuffType<SquireCooldownBuff>();
-			if(!usingSpecial && !SpecialOnCooldown && player.channel && player.altFunctionUse == 2)
+			if(!usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
 			{
 				usingSpecial = true;
 				specialStartFrame = animationFrame;
@@ -164,10 +165,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			} else if (usingSpecial && specialFrame >= SpecialDuration)
 			{
 				usingSpecial = false;
-			} else if (SpecialOnCooldown && player.buffTime[cooldownBuffType] == 1)
+			} else if (SpecialOnCooldown && player.buffTime[player.FindBuffIndex(cooldownBuffType)] == 1)
 			{
 				// TODO a little dust animation to indicate special can be used again
 			}
+		}
+
+		public virtual void OnStartUsingSpecial()
+		{
+			// default no-op
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
