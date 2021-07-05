@@ -1,6 +1,7 @@
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -88,6 +89,125 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		}
 	}
 
+	public class SeaSquireSharkMinion : SquireMinion
+	{
+		internal int dashDirection = 1;
+		private bool isDashing;
+		private Vector2[] myOldPos = new Vector2[5];
+		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
+		public SeaSquireSharkMinion() : base(ItemType<SeaSquireMinionItem>()) { }
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Sea Squire Shark");
+			// Sets the amount of frames this minion has on its spritesheet
+			Main.projFrames[projectile.type] = 2;
+		}
+		public sealed override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 24;
+			projectile.height = 24;
+			frameSpeed = 10;
+		}
+
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			Vector2 target = vectorToTargetPosition;
+			if(target.LengthSquared() < 128 * 128)
+			{
+				isDashing = true;
+				for(int i = 0; i < 4; i++)
+				{
+					Vector2 nextPos = target + dashDirection * 16 * Vector2.UnitX;
+					if(Collision.CanHitLine(target, 1, 1, nextPos, 1, 1))
+					{
+						target = nextPos;
+					} else
+					{
+						break;
+					}
+				}
+				if(target.LengthSquared() < 32 * 32)
+				{
+					dashDirection *= -1;
+				} 
+			} else
+			{
+				isDashing = false;
+			}
+			base.StandardTargetedMovement(target);
+		}
+
+		public override Vector2? FindTarget()
+		{
+			if (base.FindTarget() is Vector2 target)
+			{
+				// alternate between attacking to the left and right of the target
+				return target;
+			} else
+			{
+				return null;
+			}
+		}
+		public override float MaxDistanceFromPlayer() => 280;
+
+		public override float ComputeTargetedSpeed() => isDashing ? 18 : 14;
+
+		public override float ComputeIdleSpeed() => 14;
+
+		public override void AfterMoving()
+		{
+			if(projectile.velocity.X > 1)
+			{
+				projectile.spriteDirection = 1;
+				projectile.rotation = projectile.velocity.ToRotation();
+			} else if (projectile.velocity.X < -1)
+			{
+				projectile.spriteDirection = -1;
+				projectile.rotation = projectile.velocity.ToRotation() + MathHelper.Pi;
+			}
+			// left shift old position
+			if(isDashing)
+			{
+				for(int i = myOldPos.Length -1; i > 0; i--)
+				{
+					myOldPos[i] = myOldPos[i - 1];
+				}
+				myOldPos[0] = projectile.position;
+			} else
+			{
+				myOldPos = new Vector2[5];
+			}
+		}
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			// need to draw sprites manually for some reason
+			float r = projectile.rotation;
+			Vector2 pos = projectile.Center;
+			SpriteEffects effects = projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
+			Texture2D texture = Main.projectileTexture[projectile.type];
+			int frameHeight = texture.Height / Main.projFrames[projectile.type];
+			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			// motion blur
+			if(isDashing)
+			{
+				// lifted from ExampleMod's ExampleBullet
+				for (int k = 0; k < myOldPos.Length; k++)
+				{
+					Vector2 blurPos = myOldPos[k] - Main.screenPosition + origin;
+					Color color = projectile.GetAlpha(lightColor) * ((myOldPos.Length - k) / (float)myOldPos.Length);
+					spriteBatch.Draw(texture, blurPos, bounds, color, r, origin, 1, effects, 0);
+				}
+			}
+			// regular version
+			spriteBatch.Draw(texture, pos - Main.screenPosition,
+				bounds, lightColor, r, origin, 1, effects, 0);
+			return false;
+		}
+	}
+
 	public class SeaSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
@@ -102,6 +222,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		protected override float knockbackSelf => 5;
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 6);
 		protected override float projectileVelocity => 8;
+
+		protected override int SpecialDuration => 8 * 60;
+		protected override int SpecialCooldown => 12 * 60;
 		public SeaSquireMinion() : base(ItemType<SeaSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -127,6 +250,53 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			projectile.damage = projectile.damage / 2;
 		}
 
+		private void TransformBubbles()
+		{
+			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+			{
+				int goreIdx = Gore.NewGore(projectile.Center, default, Main.rand.Next(411, 413));
+				Main.gore[goreIdx].velocity *= 0.25f;
+				Main.gore[goreIdx].velocity += offset;
+			}
+		}
+
+		public override void OnStartUsingSpecial()
+		{
+			TransformBubbles();
+			if(player.whoAmI == Main.myPlayer)
+			{
+				Projectile.NewProjectile(
+					projectile.Center, 
+					projectile.velocity, 
+					ProjectileType<SeaSquireSharkMinion>(), 
+					3 * projectile.damage, 
+					projectile.knockBack, 
+					player.whoAmI);
+			}
+		}
+
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			base.IdleMovement(vectorToIdlePosition);
+		}
+
+		public override void OnStopUsingSpecial()
+		{
+			TransformBubbles();
+			if(player.whoAmI == Main.myPlayer)
+			{
+				for(int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SeaSquireSharkMinion>())
+					{
+						p.Kill();
+						break;
+					}
+				}
+			}
+		}
+
 		protected override float WeaponDistanceFromCenter()
 		{
 			//All of this is based on the weapon sprite and AttackFrames above.
@@ -142,11 +312,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			{
 				return (spearSpeed * reachFrames - spearStart) - spearSpeed * (attackFrame - reachFrames);
 			}
-		}
-
-		public override Vector2 IdleBehavior()
-		{
-			return base.IdleBehavior();
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -168,6 +333,31 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 						projectile.knockBack / 4,
 						Main.myPlayer);
 				}
+			}
+		}
+
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SeaSquireSharkMinion>())
+				{
+					projectile.Center = p.Center;
+					break;
+				}
+			}
+		}
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			return !usingSpecial && base.PreDraw(spriteBatch, lightColor);
+		}
+		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			if(!usingSpecial)
+			{
+				base.PostDraw(spriteBatch, lightColor);
 			}
 		}
 

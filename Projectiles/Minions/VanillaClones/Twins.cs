@@ -317,7 +317,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				myOldPos = new Vector2[5];
 			}
-
 		}
 	}
 }

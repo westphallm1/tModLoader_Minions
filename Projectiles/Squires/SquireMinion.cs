@@ -161,11 +161,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				usingSpecial = true;
 				specialStartFrame = animationFrame;
+				player.AddBuff(cooldownBuffType, SpecialCooldown + SpecialDuration);
 				OnStartUsingSpecial();
 			} else if (usingSpecial && specialFrame >= SpecialDuration)
 			{
 				usingSpecial = false;
-				player.AddBuff(cooldownBuffType, SpecialCooldown);
 				OnStopUsingSpecial();
 			} else if (SpecialOnCooldown && player.buffTime[player.FindBuffIndex(cooldownBuffType)] == 1)
 			{
