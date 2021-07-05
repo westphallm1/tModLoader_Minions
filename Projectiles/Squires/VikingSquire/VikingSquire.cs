@@ -1,4 +1,5 @@
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -46,13 +47,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		internal override int BuffId => BuffType<VikingSquireMinionBuff>();
 		protected override int AttackFrames => 18;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
-		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/VikingSquire/VikingSquireAxe";
+
+		private string baseWeaponPath = "AmuletOfManyMinions/Projectiles/Squires/VikingSquire/VikingSquireAxe";
+		protected override string WeaponTexturePath => usingSpecial ? baseWeaponPath + "_Frozen" : baseWeaponPath;
 
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
 		protected override float knockbackSelf => 5f;
 		protected override Vector2 WingOffset => new Vector2(-4, 2);
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(2, 4);
+
+		protected override int SpecialDuration => 8 * 60;
+		protected override int SpecialCooldown => 12 * 60;
 
 		protected int swingDirection = 1;
 		public VikingSquireMinion() : base(ItemType<VikingSquireMinionItem>()) { }
@@ -108,6 +114,26 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 			return (reallyColliding ?? false) || (otherColliding ?? false);
 		}
 
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.SpecialTargetedMovement(vectorToTargetPosition);
+			if (Main.rand.Next(8) == 0)
+			{
+				int dustId = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<SnowDust>(), 0f, 0f, 100, default, 1f);
+				Main.dust[dustId].velocity *= 0.3f;
+				Main.dust[dustId].noGravity = true;
+				Main.dust[dustId].noLight = true;
+			}
+		}
+
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			if(usingSpecial)
+			{
+				damage = 3 * damage / 2;
+				knockback *= 0.75f;
+			}
+		}
 
 		protected override float GetFixedWeaponAngle()
 		{
@@ -117,12 +143,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		protected override float WeaponDistanceFromCenter() => 25;
 
 		protected override int WeaponHitboxStart() => 25;
-		protected override int WeaponHitboxEnd() => 45;
+		protected override int WeaponHitboxEnd() => usingSpecial ? 60 : 45;
 
-		public override float ComputeIdleSpeed() => 8;
+		public override float ComputeIdleSpeed() => usingSpecial ? 10 : 8;
 
-		public override float ComputeTargetedSpeed() => 8;
+		public override float ComputeTargetedSpeed() => usingSpecial ? 10 : 8;
 
-		public override float MaxDistanceFromPlayer() => 140;
+		public override float MaxDistanceFromPlayer() => usingSpecial ? 220 : 140;
 	}
 }
