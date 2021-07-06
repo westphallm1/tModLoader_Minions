@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			Texture2D texture = GetTexture(Texture);
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = texture.Bounds.Center.ToVector2();
-			float spawnPercent = Math.Min(1f, (TimeToLive - projectile.timeLeft) / 15);
+			float spawnPercent = Math.Min(1f, (TimeToLive - projectile.timeLeft) / 5);
 			Color color = Color.White * spawnPercent;
 			float scale = 1;
 			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
@@ -189,7 +189,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
-		protected override int SpecialDuration => 120;
+		protected override int SpecialDuration => 3 * 60;
+		protected override int SpecialCooldown => 7 * 60;
 
 		private int daggerSpeed = 10;
 		private float daggerSpread = 2.25f;
@@ -198,7 +199,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		private bool didTeleport;
 		private int travelDir;
 		private float npcRadius;
-		private int maxKnifeCount = 16;
+		private int maxKnifeCount = 8;
 		private int knivesPerRow = 8;
 
 		public GoldenRogueSquireMinion() : base(ItemType<GoldenRogueSquireMinionItem>()) { }
@@ -266,12 +267,22 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			Rectangle bounds = glow.Bounds;
 			Vector2 origin = bounds.Center.ToVector2();
 			spriteBatch.Draw(glow, pos - Main.screenPosition,
-				bounds, Color.White, r,
-				origin, 1, effects, 0);
+				bounds, Color.White, r, origin, 1, effects, 0);
 			if (attackFrame < 10)
 			{
 				// only draw arm at start of attack
 				base.PostDraw(spriteBatch, lightColor);
+			}
+			// draw a spinning reticle as a visual indicator for the special
+			if(player.whoAmI == Main.myPlayer && usingSpecial)
+			{
+				Texture2D reticle = GetTexture(Texture + "_Reticle");
+				bounds = reticle.Bounds;
+				origin = bounds.Center.ToVector2();
+				r = MathHelper.TwoPi * animationFrame / 120;
+				float scale = 1f + 0.2f * (float)Math.Sin(r);
+				pos = targetNPC == default ? Main.MouseScreen + 8 * Vector2.One : targetNPC.Center - Main.screenPosition;
+				spriteBatch.Draw(reticle, pos, bounds, Color.White, r, origin, scale, effects, 0);
 			}
 		}
 
@@ -302,6 +313,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		private void HoverByTargetNPC()
 		{
 			projectile.tileCollide = false;
+			projectile.spriteDirection = travelDir;
 			Vector2 offset = syncedMouseWorld - targetNPC.Center;
 			offset.Y *= 0.5f;
 			if(Math.Abs(offset.Y) > npcRadius)
@@ -320,7 +332,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		private void ManageKnifeCloud()
 		{
 			int cloudSize = player.ownedProjectileCounts[ProjectileType<GoldenDaggerCloud>()];
-			if(Main.myPlayer == player.whoAmI && specialFrame % 2 == 0 && cloudSize < maxKnifeCount)
+			if(Main.myPlayer == player.whoAmI && specialFrame % 3 == 0 && cloudSize < maxKnifeCount)
 			{
 				Projectile.NewProjectile(projectile.Center,
 					Vector2.Zero,
@@ -349,10 +361,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 					int knifeRow = ai0 / knivesPerRow;
 					int knifeIdx = ai0 % knivesPerRow;
 					float angleOffset = MathHelper.PiOver4 - knifeIdx * MathHelper.PiOver2 / knivesPerRow;
-					angleOffset *= 1 + 0.1f * (float)Math.Sin(8 * MathHelper.Pi * specialFrame / SpecialDuration) * (knifeRow == 0 ? 1 : -1);
+					float animationSin = (float)Math.Sin(MathHelper.TwoPi * animationFrame / 30);
+					angleOffset *= 1 + 0.2f * animationSin * (knifeRow == 0 ? 1 : -1);
 					Vector2 baseOffset = (projectile.Center - targetNPC.Center).RotatedBy(angleOffset);
 					baseOffset.SafeNormalize();
-					baseOffset *= (npcRadius + 24 * (1+knifeRow));
+					baseOffset *= (npcRadius + (32 + 6 * animationSin)* (1+knifeRow));
 					p.rotation = baseOffset.ToRotation() - MathHelper.PiOver2;
 					p.position = targetNPC.Center + baseOffset;
 				}
@@ -403,7 +416,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == player.whoAmI && p.ai[0] > -1)
+				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == player.whoAmI)
 				{
 					p.Kill();
 				}
