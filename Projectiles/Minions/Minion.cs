@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			return null;
 		}
 
-		public Vector2? SelectedEnemyInRange(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
+		public Vector2? SelectedEnemyInRange(float maxRange, float noLOSRange = 0, bool maxRangeFromPlayer = true, Vector2? losCenter = null)
 		{
 			Vector2 losCenterVector = losCenter ?? projectile.Center;
 			currentTactic = player.GetModPlayer<MinionTacticsPlayer>().GetTacticForMinion(this);
@@ -182,6 +182,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				return null;
 			}
+		}
+
+		// A simpler version of SelectedEnemyInRange that doesn't require any tactics/teams stuff
+		public NPC GetClosestEnemyToPosition(Vector2 position, float searchRange, bool requireLOS = true)
+		{
+			for (int i = 0; i < Main.maxNPCs; i++)
+			{
+				NPC npc = Main.npc[i];
+				if (ShouldIgnoreNPC(npc))
+				{
+					continue;
+				}
+				bool inRange = Vector2.DistanceSquared(npc.Center, position) < searchRange * searchRange;
+				bool lineOfSight = (!requireLOS) || (inRange && Collision.CanHitLine(position, 1, 1, npc.position, npc.width, npc.height));
+				if (lineOfSight && inRange)
+				{
+					return npc;
+				}
+			}
+			return null;
 		}
 
 		public Vector2? AnyEnemyInRange(float maxRange, Vector2? centeredOn = null, bool noLOS = false)

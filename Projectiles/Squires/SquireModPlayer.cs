@@ -209,6 +209,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			DisplayName.SetDefault("Squire Special Cooldown");
 			Description.SetDefault("Your squire's special is on cooldown!");
+			Main.debuff[Type] = true;
+			Main.buffNoSave[Type] = true;
 		}
 	}
 

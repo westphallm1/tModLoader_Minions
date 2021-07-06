@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			{
 				return null;
 			}
-			if (SelectedEnemyInRange(searchDistance, projectile.position, noLOSSearchDistance, false) is Vector2 closest)
+			if (SelectedEnemyInRange(searchDistance, noLOSSearchDistance, maxRangeFromPlayer: false) is Vector2 closest)
 			{
 				return closest - projectile.position;
 			}

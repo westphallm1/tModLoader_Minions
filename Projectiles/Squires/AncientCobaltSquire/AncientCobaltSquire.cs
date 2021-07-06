@@ -41,8 +41,53 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		}
 	}
 
-
 	public class AncientCobaltBolt : ModProjectile
+	{
+
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.SapphireBolt;
+
+		public override void SetStaticDefaults()
+		{
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.CloneDefaults(ProjectileID.SapphireBolt);
+			projectile.minion = true;
+			projectile.timeLeft = 30;
+		}
+
+		public override void AI()
+		{
+			base.AI();
+			for (int i = 0; i < 2; i++)
+			{
+				int dustSpawned = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88, projectile.velocity.X, projectile.velocity.Y, 50, default, 1.2f);
+				Main.dust[dustSpawned].noGravity = true;
+				Main.dust[dustSpawned].velocity *= 0.3f;
+			}
+			if (projectile.localAI[0] == 0f)
+			{
+				projectile.localAI[0] = 1f;
+				Main.PlaySound(SoundID.Item8, projectile.Center);
+			}
+		}
+		public override void Kill(int timeLeft)
+		{
+			Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y);
+			for (int i = 0; i < 15; i++)
+			{
+				int dustCreated = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88, projectile.oldVelocity.X, projectile.oldVelocity.Y, 50, default(Color), 1.2f);
+				Main.dust[dustCreated].noGravity = true;
+				Main.dust[dustCreated].scale *= 1.25f;
+				Main.dust[dustCreated].velocity *= 0.5f;
+			}
+		}
+	}
+
+
+	public class AncientCobaltStream : ModProjectile
 	{
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.WaterStream;
@@ -82,6 +127,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 		protected override bool travelRangeCanBeModified => false;
 
+		protected override int SpecialDuration => 60;
+
+		private float weaponAngleOverride = -1;
+
 		public AncientCobaltSquireMinion() : base(ItemType<AncientCobaltSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -116,12 +165,43 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				{
 					Projectile.NewProjectile(projectile.Center,
 						angleVector,
-						ProjectileType<AncientCobaltBolt>(),
+						ProjectileType<AncientCobaltStream>(),
 						projectile.damage,
 						projectile.knockBack,
 						Main.myPlayer);
 				}
 			}
+		}
+
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.StandardTargetedMovement(vectorToTargetPosition);
+			// special frame is 1-indexed because it's a bug and I can't be bothered to fix it
+			if(specialFrame % 5 == 1 && specialFrame <= 46 && Main.myPlayer == player.whoAmI)
+			{
+				float angleOffset = Main.rand.NextFloat(MathHelper.Pi / 16) - MathHelper.Pi / 32;
+				Vector2 angleVector = UnitVectorFromWeaponAngle().RotatedBy(angleOffset);
+				angleVector *= ModifiedProjectileVelocity() * 2;
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(projectile.Center,
+						angleVector,
+						ProjectileType<AncientCobaltBolt>(),
+						3 * projectile.damage / 2,
+						projectile.knockBack,
+						Main.myPlayer);
+				}
+				weaponAngle += 2 * angleOffset;
+				weaponAngleOverride = weaponAngle;
+			} else if (weaponAngleOverride != -1)
+			{
+				weaponAngle = weaponAngleOverride ;
+			}
+		}
+
+		public override void OnStopUsingSpecial()
+		{
+			weaponAngleOverride = -1;
 		}
 
 

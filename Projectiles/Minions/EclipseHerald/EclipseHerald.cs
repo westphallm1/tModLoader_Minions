@@ -198,7 +198,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			{
 				return target - projectile.Center;
 			}
-			else if (SelectedEnemyInRange(searchDistance, player.Center, searchDistance / 2) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, searchDistance / 2) is Vector2 target2)
 			{
 				return target2 - projectile.Center;
 			}

@@ -175,7 +175,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			} else if (travelDir != default)
 			{
 				return travelDir;
-			} else if (IsMyTurn() && SelectedEnemyInRange(1400, player.Center, 1400) is Vector2 target)
+			} else if (IsMyTurn() && SelectedEnemyInRange(1400, 1400) is Vector2 target)
 			{
 				if(targetNPCIndex == null)
 				{

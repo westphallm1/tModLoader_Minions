@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			{
 				return target - projectile.Center;
 			}
-			else if (SelectedEnemyInRange(600f, player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(600f) is Vector2 target2)
 			{
 				return target2 - projectile.Center;
 			}

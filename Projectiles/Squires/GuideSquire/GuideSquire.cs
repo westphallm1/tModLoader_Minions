@@ -42,19 +42,37 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 	}
 
 
-	public class GuideArrow : ModProjectile
+	// cosmetic arrow for the 'shooting up' animation
+	public class AscendingGuideArrow : ModProjectile
+	{
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.FireArrow;
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.friendly = false;
+			projectile.tileCollide = false;
+			projectile.timeLeft = 60;
+		}
+
+		public override void AI()
+		{
+			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire);
+			if(projectile.position.Y < Main.screenPosition.Y)
+			{
+				projectile.Kill();
+			}
+		}
+	}
+
+	public abstract class BaseGuideArrow : ModProjectile
 	{
 
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.FireArrow;
 		public override void SetStaticDefaults()
 		{
 			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
-		}
-
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			projectile.CloneDefaults(ProjectileID.FireArrow);
 		}
 
 		public override void Kill(int timeLeft)
@@ -88,6 +106,43 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		}
 	}
 
+	public class GuideArrow : BaseGuideArrow
+	{
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.CloneDefaults(ProjectileID.FireArrow);
+		}
+	}
+
+	public class DescendingGuideArrow : BaseGuideArrow
+	{
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.tileCollide = false;
+			projectile.friendly = true;
+			projectile.width = 16;
+			projectile.height = 16;
+		}
+		public override void AI()
+		{
+			base.AI();
+			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			// start colliding with tiles 1/3 of the way down the screen
+			Vector2 position = projectile.position;
+			float collideCutoff = Main.screenPosition.Y + Main.screenHeight / 3f;
+			if(position.Y >= collideCutoff)
+			{
+				Tile tile = Framing.GetTileSafely((int)position.X / 16, (int)position.Y / 16);
+				if(!tile.active() || position.Y > Main.player[projectile.owner].position.Y)
+				{
+					projectile.tileCollide = true;
+				}
+			}
+		}
+	}
+
 	public class GuideSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<GuideSquireMinionBuff>();
@@ -107,6 +162,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
 
 		protected override float projectileVelocity => 12;
+
+		protected override int SpecialDuration => 90;
 		protected override bool travelRangeCanBeModified => false;
 
 
@@ -150,6 +207,47 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 						Main.myPlayer);
 				}
 			}
+		}
+
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.StandardTargetedMovement(vectorToTargetPosition);
+			weaponAngle = MathHelper.PiOver2;
+			if (specialFrame <= 31 && specialFrame % 10 == 1 && Main.myPlayer == player.whoAmI)
+			{
+				float launchAngle = -(7 * MathHelper.Pi / 16 + Main.rand.NextFloat(MathHelper.Pi / 8));
+				Vector2 launchVec = launchAngle.ToRotationVector2() * 20;
+				Projectile.NewProjectile(projectile.Center,
+					launchVec,
+					ProjectileType<AscendingGuideArrow>(),
+					0,
+					0,
+					Main.myPlayer);
+			}
+			else if (specialFrame > 31 && specialFrame % 8 == 1 && Main.myPlayer == player.whoAmI)
+			{
+				// spawn a downward facing arrow about halfway between the player and the mouse,
+				// angled towards the mouse
+				int spawnPosRange = 64;
+				float spawnAngleRange = MathHelper.Pi / 24;
+				Vector2 mousePos = Main.MouseWorld; // only run on client player, MP safe
+				float spawnX = (mousePos.X + player.position.X) / 2 + 
+					Main.rand.Next(-spawnPosRange, spawnPosRange);
+				float spawnY = Main.screenPosition.Y;
+				Vector2 spawnPos = new Vector2(spawnX, spawnY);
+				Vector2 launchAngle = (mousePos - spawnPos).RotatedBy(
+					Main.rand.NextFloat(spawnAngleRange) - spawnAngleRange/2);
+				launchAngle.SafeNormalize();
+				launchAngle *= 20;
+				Projectile.NewProjectile(spawnPos,
+					launchAngle,
+					ProjectileType<DescendingGuideArrow>(),
+					projectile.damage,
+					projectile.knockBack,
+					Main.myPlayer);
+
+			}
+
 		}
 
 

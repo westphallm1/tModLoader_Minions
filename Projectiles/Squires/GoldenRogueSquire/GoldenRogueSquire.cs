@@ -41,6 +41,62 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		}
 	}
 
+	public class GoldenDaggerCloud : ModProjectile
+	{
+
+		const int TimeToLive = 180;
+
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.MagicDagger;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.penetrate = 1;
+			projectile.width = 12;
+			projectile.height = 12;
+			projectile.timeLeft = TimeToLive;
+			projectile.friendly = false;
+			projectile.tileCollide = false;
+			projectile.minion = true;
+		}
+
+		// ai is wholly controlled by golden rogue squire, but die if squire does
+		public override void AI()
+		{
+			base.AI();
+			if(Main.player[projectile.owner].ownedProjectileCounts[ProjectileType<GoldenRogueSquireMinion>()] == 0)
+			{
+				projectile.Kill();
+			}
+		}
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			Texture2D texture = GetTexture(Texture);
+			Rectangle bounds = texture.Bounds;
+			Vector2 origin = texture.Bounds.Center.ToVector2();
+			float spawnPercent = Math.Min(1f, (TimeToLive - projectile.timeLeft) / 15);
+			Color color = Color.White * spawnPercent;
+			float scale = 1;
+			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
+				bounds, color, projectile.rotation,
+				origin, scale, 0, 0);
+			return false;
+		}
+
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			// manually bypass defense
+			// this may not be wholly correct
+			int defenseBypass = 10;
+			int defense = Math.Min(target.defense, defenseBypass);
+			damage += defense / 2;
+		}
+	}
+
 	public class GoldenDagger : ModProjectile
 	{
 
@@ -133,8 +189,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
+		protected override int SpecialDuration => 120;
+
 		private int daggerSpeed = 10;
 		private float daggerSpread = 2.25f;
+		private int knifeIdx;
+		protected NPC targetNPC = default;
+		private bool didTeleport;
+		private int travelDir;
+		private float npcRadius;
+		private int maxKnifeCount = 16;
+		private int knivesPerRow = 8;
 
 		public GoldenRogueSquireMinion() : base(ItemType<GoldenRogueSquireMinionItem>()) { }
 
@@ -210,18 +275,174 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			}
 		}
 
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if(targetNPC != default && !targetNPC.active)
+			{
+				ClearKnives();
+				targetNPC = default;
+			}
+			if(targetNPC == default && GetClosestEnemyToPosition(syncedMouseWorld, 200f, false) is NPC target)
+			{
+				targetNPC = target;
+				// try to teleport behind the enemy
+				travelDir = -targetNPC.direction;
+			    npcRadius = Math.Max(64, (targetNPC.width + targetNPC.height) / 2);
+				didTeleport = true;
+			}
+            if(targetNPC == default)
+			{
+				base.StandardTargetedMovement(vectorToTargetPosition);
+				return;
+			}
+			HoverByTargetNPC();
+			ManageKnifeCloud();
+		}
+
+		private void HoverByTargetNPC()
+		{
+			projectile.tileCollide = false;
+			Vector2 offset = syncedMouseWorld - targetNPC.Center;
+			offset.Y *= 0.5f;
+			if(Math.Abs(offset.Y) > npcRadius)
+			{
+				offset.Y = Math.Sign(offset.Y) * npcRadius;
+			}
+			if(Math.Sign(offset.X) != Math.Sign(travelDir))
+			{
+				offset.X *= -1;
+			}
+			offset.SafeNormalize();
+			offset *= npcRadius;
+			projectile.Center = targetNPC.Center + offset;
+		}
+
+		private void ManageKnifeCloud()
+		{
+			int cloudSize = player.ownedProjectileCounts[ProjectileType<GoldenDaggerCloud>()];
+			if(Main.myPlayer == player.whoAmI && specialFrame % 2 == 0 && cloudSize < maxKnifeCount)
+			{
+				Projectile.NewProjectile(projectile.Center,
+					Vector2.Zero,
+					ProjectileType<GoldenDaggerCloud>(),
+					projectile.damage,
+					projectile.knockBack,
+					Main.myPlayer,
+					ai0: knifeIdx);
+				knifeIdx++;
+			} 
+			PositionKnives();
+			if (cloudSize == maxKnifeCount)
+			{
+				LaunchKnives();
+			}
+		}
+
+		private void PositionKnives()
+		{
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == player.whoAmI && p.ai[0] > -1)
+				{
+					int ai0 = (int)p.ai[0];
+					int knifeRow = ai0 / knivesPerRow;
+					int knifeIdx = ai0 % knivesPerRow;
+					float angleOffset = MathHelper.PiOver4 - knifeIdx * MathHelper.PiOver2 / knivesPerRow;
+					angleOffset *= 1 + 0.1f * (float)Math.Sin(8 * MathHelper.Pi * specialFrame / SpecialDuration) * (knifeRow == 0 ? 1 : -1);
+					Vector2 baseOffset = (projectile.Center - targetNPC.Center).RotatedBy(angleOffset);
+					baseOffset.SafeNormalize();
+					baseOffset *= (npcRadius + 24 * (1+knifeRow));
+					p.rotation = baseOffset.ToRotation() - MathHelper.PiOver2;
+					p.position = targetNPC.Center + baseOffset;
+				}
+			}
+		}
+
+		private void TeleportDust()
+		{
+			if(!didTeleport)
+			{
+				return;
+			}
+			didTeleport = false;
+			float goreVel = 0.25f;
+			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+			{
+				if(Main.rand.Next(3) > 0)
+				{
+					continue;
+				}
+				int goreIdx = Gore.NewGore(projectile.position, default, Main.rand.Next(61, 64));
+				Main.gore[goreIdx].velocity *= goreVel;
+				Main.gore[goreIdx].velocity += offset;
+			}
+		}
+
+		private void LaunchKnives()
+		{
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == player.whoAmI)
+				{
+					p.ai[0] = -1;
+					p.timeLeft = Math.Min(p.timeLeft, 15);
+					p.friendly = true;
+					Vector2 velocity = (p.rotation - MathHelper.PiOver2).ToRotationVector2();
+					velocity.SafeNormalize();
+					velocity *= 20;
+					p.velocity = velocity;
+				}
+			}
+			knifeIdx = 0;
+		}
+
+		private void ClearKnives()
+		{
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == player.whoAmI && p.ai[0] > -1)
+				{
+					p.Kill();
+				}
+			}
+			knifeIdx = 0;
+		}
+
+		public override void OnStopUsingSpecial()
+		{
+			knifeIdx = 0;
+			if(targetNPC != default)
+			{
+				LaunchKnives();
+				// teleport back to player
+				projectile.position += vectorToIdle;
+				didTeleport = true;
+			}
+			targetNPC = default;
+		}
+
+
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			return false;
 		}
 
-		public override float MaxDistanceFromPlayer() => 232;
+		public override float MaxDistanceFromPlayer() => targetNPC == default ? 232 : 2000;
 
 		public override float ComputeTargetedSpeed() => 11;
 
 		public override float ComputeIdleSpeed() => 11;
 
 		protected override float WeaponDistanceFromCenter() => 12;
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			TeleportDust();
+		}
 	}
 }
 

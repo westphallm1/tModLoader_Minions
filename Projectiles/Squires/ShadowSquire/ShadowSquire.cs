@@ -2,6 +2,7 @@ using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -71,6 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
 		protected override Vector2 WingOffset => new Vector2(-4, 0);
+
 		public ShadowSquireMinion() : base(ItemType<ShadowSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -106,7 +108,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 					8);
 			}
 		}
-
 		protected override float WeaponDistanceFromCenter() => 20;
 
 		protected override int WeaponHitboxEnd() => 40;

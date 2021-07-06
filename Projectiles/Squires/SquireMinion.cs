@@ -57,6 +57,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		protected bool usingSpecial;
 
 		protected int specialStartFrame;
+		internal Vector2 syncedMouseWorld;
+
 		protected virtual int SpecialDuration => 30;
 		protected virtual int SpecialCooldown => 300;
 		protected int specialFrame => animationFrame - specialStartFrame;
@@ -118,6 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				Vector2? _mouseWorld = mPlayer.GetMousePosition();
 				if (_mouseWorld is Vector2 mouseWorld)
 				{
+					syncedMouseWorld = mouseWorld;
 					Vector2 targetFromPlayer = mouseWorld - player.Center;
 					if (targetFromPlayer.Length() < ModifiedMaxDistance())
 					{

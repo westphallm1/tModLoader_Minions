@@ -291,7 +291,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				return target - projectile.Center;
 			}
-			else if (SelectedEnemyInRange(searchDistance, player.Center, searchDistance, losCenter: player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: player.Center) is Vector2 target2)
 			{
 				return target2 - projectile.Center;
 			}

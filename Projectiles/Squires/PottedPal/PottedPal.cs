@@ -109,9 +109,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 				return;
 			}
 			// Cling to the closest enemy a little bit
-			if (vectorToTargetPosition.Length() < 100f && SelectedEnemyInRange(100f, projectile.Center, maxRangeFromPlayer: false) is Vector2 autoTarget)
+			if (vectorToTargetPosition.Length() < 100f && GetClosestEnemyToPosition(syncedMouseWorld, 100f, true) is NPC target)
 			{
-				base.StandardTargetedMovement(autoTarget - projectile.Center);
+				base.StandardTargetedMovement(target.Center - projectile.Center);
 			}
 			else
 			{

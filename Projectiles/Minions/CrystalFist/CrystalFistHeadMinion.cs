@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			{
 				return target - projectile.Center;
 			}
-			else if (SelectedEnemyInRange(950f, player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(950f) is Vector2 target2)
 			{
 				return target2 - projectile.Center;
 			}
