@@ -2,6 +2,7 @@ using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -102,6 +103,106 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.GreenLaser;
 	}
 
+	// uses ai[0] for relative position
+	public class SqueyereEyeMinion : SquireAccessoryMinion
+	{
+		protected override bool IsEquipped(SquireModPlayer player) => player.HasSquire() && 
+			player.GetSquire().type == ProjectileType<SqueyereMinion>();
+		private static int AnimationFrames = 80;
+
+		private int attackRate => (int)Math.Max(30, 60f / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
+
+		private int shootOnFrame => projectile.ai[0] == 0 ? 0 : 10;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[projectile.type] = 4;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 18;
+			projectile.height = 18;
+			frameSpeed = 10;
+		}
+
+		public override Vector2 IdleBehavior()
+		{
+			int angleFrame = animationFrame % AnimationFrames;
+			float baseAngle = projectile.ai[0] == 0 ? 0 : MathHelper.Pi;
+			float angle = baseAngle + (MathHelper.TwoPi * angleFrame) / AnimationFrames;
+			float radius = 24;
+			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+			SquireModPlayer modPlayer = player.GetModPlayer<SquireModPlayer>();
+			if(modPlayer.HasSquire())
+			{
+				projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
+			}
+			// offset downward vertically a bit
+			// the scale messes with the positioning in some way
+			return base.IdleBehavior() + angleVector;
+		}
+		public override Vector2? FindTarget()
+		{
+			if (animationFrame % attackRate == shootOnFrame && SquireAttacking())
+			{
+				return Vector2.One; // a bit hacky, doesn't actually attack along this vector
+			}
+			return null;
+		}
+
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			for(int i = 0; i < 3; i++)
+			{
+				int dustId = Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
+			}
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				int dustId = Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
+			}
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.IdleMovement(vectorToIdle);
+			if (animationFrame % attackRate == shootOnFrame && Main.myPlayer == player.whoAmI)
+			{
+				Projectile squire = squirePlayer.GetSquire();
+				// attack "towards the horizon" along the squire-mouse line
+				Vector2 horizonVector;
+				if (Vector2.DistanceSquared(squire.Center, Main.MouseWorld) < 48 * 48)
+				{
+					Vector2 horizonAngle = Main.MouseWorld - player.Center;
+					horizonAngle.SafeNormalize();
+					horizonVector = player.Center + 2000f * horizonAngle;
+				} else
+				{
+					Vector2 horizonAngle = Main.MouseWorld - squire.Center;
+					horizonAngle.SafeNormalize();
+					horizonVector = squire.Center + 2000f * horizonAngle;
+				}
+				Vector2 angleVector = horizonVector - projectile.Center;
+				angleVector.SafeNormalize();
+				angleVector *= 24f;
+				Projectile.NewProjectile(
+					projectile.Center,
+					angleVector,
+					ProjectileType<SqueyereLaser>(),
+					projectile.damage,
+					projectile.knockBack,
+					Main.myPlayer);
+			}
+		}
+	}
+
 	public class SqueyereMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SqueyereMinionBuff>();
@@ -119,6 +220,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		protected override Vector2 WeaponCenterOfRotation => projectile.spriteDirection == 1 ? new Vector2(4, -6) : new Vector2(8, -6);
 
 		protected override float projectileVelocity => 24f;
+
+		protected override int SpecialDuration => 8 * 60;
+		protected override int SpecialCooldown => 12 * 60;
 
 		public SqueyereMinion() : base(ItemType<SqueyereMinionItem>()) { }
 
@@ -165,6 +269,37 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				}
 
 				Main.PlaySound(SoundID.Item33.WithVolume(.5f), projectile.Center); //Why is it so LOUD?!
+			}
+		}
+
+		public override void OnStartUsingSpecial()
+		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				for(int i = 0; i < 2; i++)
+				{
+					Projectile.NewProjectile(
+						projectile.Center,
+						Vector2.Zero,
+						ProjectileType<SqueyereEyeMinion>(),
+						projectile.damage,
+						projectile.knockBack,
+						player.whoAmI,
+						ai0: i);
+				}
+			}
+		}
+
+		public override void OnStopUsingSpecial()
+		{
+			int projType = ProjectileType<SqueyereEyeMinion>();
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.owner == player.whoAmI && p.type == projType)
+				{
+					p.Kill();
+				}
 			}
 		}
 
