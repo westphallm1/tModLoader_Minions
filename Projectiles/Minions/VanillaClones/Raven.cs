@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -78,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 16;
 		bool isDashing = false;
-		private Vector2[] myOldPos = new Vector2[5];
+		private MotionBlurHelper blurHelper;
 		internal override int BuffId => BuffType<RavenMinionBuff>();
 
 		public override void SetStaticDefaults()
@@ -98,6 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			targetSearchDistance = 900;
 			circleHelper.idleBumbleFrames = 60;
 			bumbleSpriteDirection = -1;
+			blurHelper = new MotionBlurHelper(5);
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -147,18 +149,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			if(isDashing)
 			{
-				// lifted from ExampleMod's ExampleBullet
-				// motion blur
-				for (int k = 0; k < myOldPos.Length; k++)
+				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
-					if(myOldPos[k] == default)
-					{
-						break;
-					}
-					Vector2 blurPos = myOldPos[k] - Main.screenPosition + origin;
-					Color color = projectile.GetAlpha(lightColor) * ((myOldPos.Length - k) / (float)myOldPos.Length);
-					spriteBatch.Draw(texture, blurPos, bounds, color, r, origin, 1, effects, 0);
-					spriteBatch.Draw(glowTexture, blurPos, bounds, color, r, origin, 1, effects, 0);
+					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
+					blurPos = blurPos - Main.screenPosition + origin;
+					spriteBatch.Draw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
+					spriteBatch.Draw(glowTexture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}
 			// regular version
@@ -206,29 +202,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			// left shift old position
 			isDashing = vectorToTarget is Vector2 target && target.Length() < 256;
-			if(isDashing)
-			{
-				for(int i = myOldPos.Length -1; i > 0; i--)
-				{
-					myOldPos[i] = myOldPos[i - 1];
-				}
-				myOldPos[0] = projectile.position;
-				if(Main.rand.Next(2) == 0)
-				{
-					int dustId = Dust.NewDust(
-						projectile.position, 
-						projectile.width, projectile.height, 6, 
-						projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 
-						100, default, 2f);
-					Main.dust[dustId].noGravity = true;
-					Main.dust[dustId].velocity.X *= 0.3f;
-					Main.dust[dustId].velocity.Y *= 0.3f;
-					Main.dust[dustId].noLight = true;
-				}
-			} else
-			{
-				myOldPos = new Vector2[5];
-			}
+			blurHelper.Update(projectile.Center, isDashing);
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

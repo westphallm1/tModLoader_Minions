@@ -297,7 +297,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			{
 				targetNPC = target;
 				// try to teleport behind the enemy
-				travelDir = -targetNPC.direction;
+				travelDir = Math.Sign((syncedMouseWorld - targetNPC.Center).X);
 			    npcRadius = Math.Max(64, (targetNPC.width + targetNPC.height) / 2);
 				didTeleport = true;
 			}
@@ -320,7 +320,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			{
 				offset.Y = Math.Sign(offset.Y) * npcRadius;
 			}
-			if(Math.Sign(offset.X) != Math.Sign(travelDir))
+			if(Math.Sign(offset.X) != travelDir)
 			{
 				offset.X *= -1;
 			}
@@ -443,7 +443,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			return false;
 		}
 
-		public override float MaxDistanceFromPlayer() => targetNPC == default ? 232 : 2000;
+		public override float MaxDistanceFromPlayer() => usingSpecial ? 1400 : 232;
 
 		public override float ComputeTargetedSpeed() => 11;
 

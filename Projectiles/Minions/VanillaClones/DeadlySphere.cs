@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -114,9 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		private bool isDashing;
 		private Vector2 dashVector;
-		// something in the ai overrides seems to prevent projectile.oldPos from populating properly,
-		// so just replicate it manually
-		private Vector2[] myOldPos = new Vector2[5];
+		private MotionBlurHelper blurHelper;
 
 		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
@@ -139,6 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.height = 24;
 			attackFrames = 90;
 			targetSearchDistance = 950;
+			blurHelper = new MotionBlurHelper(5);
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 15;
 			hsHelper.projectileVelocity = 6;
@@ -202,11 +202,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(isDashing)
 			{
 				// lifted from ExampleMod's ExampleBullet
-				for (int k = 0; k < myOldPos.Length; k++)
+				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
-					Vector2 blurPos = myOldPos[k] - Main.screenPosition + origin;
-					Color color = projectile.GetAlpha(lightColor) * ((myOldPos.Length - k) / (float)myOldPos.Length);
-					spriteBatch.Draw(texture, blurPos, bounds, color, r, origin, 1, effects, 0);
+					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
+					blurPos = blurPos - Main.screenPosition + origin;
+					spriteBatch.Draw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}
 			// regular version
@@ -218,17 +218,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void AfterMoving()
 		{
 			// left shift old position
-			if(isDashing)
-			{
-				for(int i = myOldPos.Length -1; i > 0; i--)
-				{
-					myOldPos[i] = myOldPos[i - 1];
-				}
-				myOldPos[0] = projectile.position;
-			} else
-			{
-				myOldPos = new Vector2[5];
-			}
+			blurHelper.Update(projectile.Center, isDashing);
 
 		}
 	}

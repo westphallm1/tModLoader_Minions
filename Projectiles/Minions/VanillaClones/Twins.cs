@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -191,6 +192,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		// something in the ai overrides seems to prevent projectile.oldPos from populating properly,
 		// so just replicate it manually
 		private Vector2[] myOldPos = new Vector2[5];
+		private MotionBlurHelper blurHelper;
 
 		internal override int BuffId => BuffType<TwinsMinionBuff>();
 
@@ -223,6 +225,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
+			blurHelper = new MotionBlurHelper(5);
 		}
 
 		public override void OnSpawn()
@@ -285,11 +288,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(isDashing)
 			{
 				// lifted from ExampleMod's ExampleBullet
-				for (int k = 0; k < myOldPos.Length; k++)
+				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
-					Vector2 blurPos = myOldPos[k] - Main.screenPosition + origin;
-					Color color = projectile.GetAlpha(lightColor) * ((myOldPos.Length - k) / (float)myOldPos.Length);
-					spriteBatch.Draw(texture, blurPos, bounds, color, r, origin, 1, effects, 0);
+					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
+					blurPos = blurPos - Main.screenPosition + origin;
+					spriteBatch.Draw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}
 			// regular version

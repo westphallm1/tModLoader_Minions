@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -47,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		int windupFrames = 20;
 
 		internal bool hasSpawnedSwarm = false;
-		private Vector2[] myOldPos = new Vector2[4];
+		private MotionBlurHelper blurHelper;
 
 		public override void SetStaticDefaults()
 		{
@@ -68,6 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			attackThroughWalls = true;
 			useBeacon = false;
 			attackFrames = 60;
+			blurHelper = new MotionBlurHelper(4);
 			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 120, 400))
 			{
 				idleCycleFrames = 160,
@@ -116,15 +118,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			int attackFrame = animationFrame - targetStartFrame;
 			if(targetStartFrame != default && attackFrame > windupFrames)
 			{
-				for (int k = 1; k < myOldPos.Length; k++)
+				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
-					if (myOldPos[k] == default)
+					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor))
 					{
 						break;
 					}
-					Color color = projectile.GetAlpha(lightColor) * 0.5f * ((myOldPos.Length - k) / (float)myOldPos.Length);
-					scHelper.positionOverride = myOldPos[k];
-					scHelper.Draw(spriteBatch, color);
+					scHelper.positionOverride = blurPos;
+					scHelper.Draw(spriteBatch, blurColor * 0.25f);
 				}
 			}
 			scHelper.positionOverride = null;
@@ -331,14 +332,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			// left shift old position
 			int attackFrame = animationFrame - targetStartFrame;
-			if(targetStartFrame != default && attackFrame > windupFrames)
-			{
-				for(int i = myOldPos.Length -1; i > 0; i--)
-				{
-					myOldPos[i] = myOldPos[i - 1];
-				}
-				myOldPos[0] = projectile.position;
-			} 
+			blurHelper.Update(projectile.Center, targetStartFrame != default && attackFrame > windupFrames);
 			if(targetStartFrame != default && (animationFrame - targetStartFrame > framesToLiveAfterAttack 
 				|| Vector2.DistanceSquared(player.Center, projectile.Center) > 1300f * 1300f))
 			{

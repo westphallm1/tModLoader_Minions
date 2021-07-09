@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -93,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 	{
 		internal int dashDirection = 1;
 		private bool isDashing;
-		private Vector2[] myOldPos = new Vector2[5];
+		private MotionBlurHelper blurHelper;
 		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
 		public SeaSquireSharkMinion() : base(ItemType<SeaSquireMinionItem>()) { }
 		public override void SetStaticDefaults()
@@ -109,6 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			projectile.width = 24;
 			projectile.height = 24;
 			frameSpeed = 10;
+			blurHelper = new MotionBlurHelper(5);
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -139,17 +141,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.StandardTargetedMovement(target);
 		}
 
-		public override Vector2? FindTarget()
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if (base.FindTarget() is Vector2 target)
-			{
-				// alternate between attacking to the left and right of the target
-				return target;
-			} else
-			{
-				return null;
-			}
+			base.IdleMovement(vectorToIdlePosition);
+			isDashing = false;
 		}
+
 		public override float MaxDistanceFromPlayer() => 280;
 
 		public override float ComputeTargetedSpeed() => isDashing ? 18 : 14;
@@ -168,17 +165,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 				projectile.rotation = projectile.velocity.ToRotation() + MathHelper.Pi;
 			}
 			// left shift old position
-			if(isDashing)
-			{
-				for(int i = myOldPos.Length -1; i > 0; i--)
-				{
-					myOldPos[i] = myOldPos[i - 1];
-				}
-				myOldPos[0] = projectile.position;
-			} else
-			{
-				myOldPos = new Vector2[5];
-			}
+			blurHelper.Update(projectile.Center, isDashing);
 		}
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
@@ -193,12 +180,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			// motion blur
 			if(isDashing)
 			{
-				// lifted from ExampleMod's ExampleBullet
-				for (int k = 0; k < myOldPos.Length; k++)
+				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
-					Vector2 blurPos = myOldPos[k] - Main.screenPosition + origin;
-					Color color = projectile.GetAlpha(lightColor) * ((myOldPos.Length - k) / (float)myOldPos.Length);
-					spriteBatch.Draw(texture, blurPos, bounds, color, r, origin, 1, effects, 0);
+					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
+					blurPos = blurPos - Main.screenPosition + origin;
+					spriteBatch.Draw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}
 			// regular version
@@ -254,7 +240,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		{
 			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 			{
-				int goreIdx = Gore.NewGore(projectile.Center, default, Main.rand.Next(411, 413));
+				int goreIdx = Gore.NewGore(projectile.position, Vector2.Zero, mod.GetGoreSlot("Gores/SeaSquireBubbleGore"), 1f);
+				Main.gore[goreIdx].alpha = 128;
 				Main.gore[goreIdx].velocity *= 0.25f;
 				Main.gore[goreIdx].velocity += offset;
 			}
