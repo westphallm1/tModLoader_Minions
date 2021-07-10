@@ -98,6 +98,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 	}
 
+	public class SqueyereEyeLaser : SquireLaser
+	{
+		public override Color lightColor => Color.Red;
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.MiniRetinaLaser;
+	}
+
 	public class SqueyereLaser : SquireLaser
 	{
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.GreenLaser;
@@ -158,7 +164,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			base.OnSpawn();
 			for(int i = 0; i < 3; i++)
 			{
-				int dustId = Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
+				Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
 			}
 		}
 
@@ -166,7 +172,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		{
 			for(int i = 0; i < 3; i++)
 			{
-				int dustId = Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
+				Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
 			}
 		}
 
@@ -195,7 +201,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				Projectile.NewProjectile(
 					projectile.Center,
 					angleVector,
-					ProjectileType<SqueyereLaser>(),
+					ProjectileType<SqueyereEyeLaser>(),
 					projectile.damage,
 					projectile.knockBack,
 					Main.myPlayer);

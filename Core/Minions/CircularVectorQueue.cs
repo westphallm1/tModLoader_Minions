@@ -11,7 +11,6 @@ namespace AmuletOfManyMinions.Core.Minions
 		protected int startingPosition;
 		protected readonly int headerSize;
 		public int Length = 0;
-		public Mod mod;
 		private int headPosition
 		{
 			get { return (int)backingArray[startingPosition]; }

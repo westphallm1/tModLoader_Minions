@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -54,6 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			base.SetDefaults();
 			projectile.tileCollide = false;
 			attackThroughWalls = true;
+			wormDrawer = new StardustDragonDrawer();
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -67,67 +69,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.75f);
 			return vectorToIdlePosition;
-		}
-
-		protected override void DrawHead()
-		{
-			texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon1);
-			AddSprite(2, texture.Bounds);
-		}
-
-		protected override void DrawBody()
-		{
-			for (int i = 0; i < 2 * GetSegmentCount(); i++)
-			{
-				if (i % 2 == 0)
-				{
-					texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon2);
-				}
-				else
-				{
-					texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon3);
-				}
-				
-				AddSprite(22 + 16 * i, texture.Bounds);
-			}
-		}
-
-		protected override void DrawTail()
-		{
-			int dist = 22 + 32 * GetSegmentCount();
-			texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon4);
-			lightColor = Color.White;
-			lightColor.A = 128;
-			AddSprite(dist, texture.Bounds);
-		}
-
-		protected override SpriteEffects GetEffects(float angle)
-		{
-			SpriteEffects effects = SpriteEffects.FlipVertically;
-			angle = (angle + 2 * (float)Math.PI) % (2 * (float)Math.PI); // get to (0, 2PI) range
-			if (angle > Math.PI / 2 && angle < 3 * Math.PI / 2)
-			{
-				effects |= SpriteEffects.FlipHorizontally;
-			}
-			return effects;
-		}
-
-		protected override void AddSprite(float dist, Rectangle bounds, Color c = default)
-		{
-			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
-			Vector2 angle = new Vector2();
-			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
-			float r = angle.ToRotation();
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
-				bounds, c == default ? lightColor : c, r + MathHelper.PiOver2,
-				origin, 1, GetEffects(r), 0);
-			if (Main.rand.Next(30) == 0)
-			{
-				int dustId = Dust.NewDust(pos, projectile.width, projectile.height, 135, 0f, 0f, 0, default, 2f);
-				Main.dust[dustId].noGravity = true;
-				Main.dust[dustId].fadeIn = 2f;
-				Main.dust[dustId].noLight = true;
-			}
 		}
 
 		protected override float ComputeSearchDistance()
@@ -164,6 +105,70 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			else
 			{
 				return null;
+			}
+		}
+	}
+
+	public class StardustDragonDrawer : WormHelper
+	{
+		protected override void DrawHead()
+		{
+			texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon1);
+			AddSprite(2, texture.Bounds);
+		}
+
+		protected override void DrawBody()
+		{
+			for (int i = 0; i < 2 * SegmentCount; i++)
+			{
+				if (i % 2 == 0)
+				{
+					texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon2);
+				}
+				else
+				{
+					texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon3);
+				}
+				
+				AddSprite(22 + 16 * i, texture.Bounds);
+			}
+		}
+
+		protected override void DrawTail()
+		{
+			int dist = 22 + 32 * SegmentCount;
+			texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon4);
+			lightColor = Color.White;
+			lightColor.A = 128;
+			AddSprite(dist, texture.Bounds);
+		}
+
+		protected override SpriteEffects GetEffects(float angle)
+		{
+			SpriteEffects effects = SpriteEffects.FlipVertically;
+			angle = (angle + 2 * (float)Math.PI) % (2 * (float)Math.PI); // get to (0, 2PI) range
+			if (angle > Math.PI / 2 && angle < 3 * Math.PI / 2)
+			{
+				effects |= SpriteEffects.FlipHorizontally;
+			}
+			return effects;
+		}
+
+		protected override void AddSprite(float dist, Rectangle bounds, Color c = default)
+		{
+			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
+			Vector2 angle = new Vector2();
+			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
+			float r = angle.ToRotation();
+			spriteBatch.Draw(texture, pos - Main.screenPosition,
+				bounds, c == default ? lightColor : c, r + MathHelper.PiOver2,
+				origin, 1, GetEffects(r), 0);
+			if (Main.rand.Next(30) == 0)
+			{
+				int dustId = Dust.NewDust(pos, 8, 8, 135, 0f, 0f, 0, default, 2f);
+				Main.dust[dustId].noGravity = true;
+				Main.dust[dustId].fadeIn = 2f;
+				Main.dust[dustId].noLight = true;
 			}
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -73,16 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			framesInAir = 0;
 			framesInGround = 0;
 			gHelper = new GroundAwarenessHelper(this);
-		}
-
-		protected override void DrawHead()
-		{
-			Rectangle head = new Rectangle(56, 0, 48, 36);
-			lightColor = new Color(
-				Math.Max(lightColor.R, (byte)25),
-				Math.Max(lightColor.G, (byte)25),
-				Math.Max(lightColor.B, (byte)25));
-			AddSprite(2, head);
+			wormDrawer = new BoneSerpentDrawer();
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -126,30 +118,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			vectorToIdle.Y += 48; // circle under the player's feet
 			return vectorToIdle;
 		}
-		protected override void DrawBody()
-		{
-			Rectangle body = new Rectangle(28, 6, 24, 30);
-			lightColor = new Color(
-				Math.Max(lightColor.R, (byte)25),
-				Math.Max(lightColor.G, (byte)25),
-				Math.Max(lightColor.B, (byte)25));
-			for (int i = 0; i < GetSegmentCount() + 1; i++)
-			{
-				AddSprite(32 + 20 * i, body);
-			}
-
-		}
-		protected override void DrawTail()
-		{
-			Rectangle tail = new Rectangle(0, 10, 24, 22);
-			lightColor = new Color(
-				Math.Max(lightColor.R, (byte)25),
-				Math.Max(lightColor.G, (byte)25),
-				Math.Max(lightColor.B, (byte)25));
-			int dist = 32 + 20 * (GetSegmentCount() + 1);
-			AddSprite(dist, tail);
-		}
-
 		protected override float ComputeSearchDistance()
 		{
 			return 500 + 25 * GetSegmentCount();
@@ -194,5 +162,45 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 				return null;
 			}
 		}
+	}
+
+	internal class BoneSerpentDrawer : WormHelper
+	{
+		protected override void DrawHead()
+		{
+			Rectangle head = new Rectangle(56, 0, 48, 36);
+			lightColor = new Color(
+				Math.Max(lightColor.R, (byte)25),
+				Math.Max(lightColor.G, (byte)25),
+				Math.Max(lightColor.B, (byte)25));
+			AddSprite(2, head);
+		}
+
+		protected override void DrawTail()
+		{
+			Rectangle tail = new Rectangle(0, 10, 24, 22);
+			lightColor = new Color(
+				Math.Max(lightColor.R, (byte)25),
+				Math.Max(lightColor.G, (byte)25),
+				Math.Max(lightColor.B, (byte)25));
+			int dist = 32 + 20 * (SegmentCount + 1);
+			AddSprite(dist, tail);
+		}
+
+		protected override void DrawBody()
+		{
+			Rectangle body = new Rectangle(28, 6, 24, 30);
+			lightColor = new Color(
+				Math.Max(lightColor.R, (byte)25),
+				Math.Max(lightColor.G, (byte)25),
+				Math.Max(lightColor.B, (byte)25));
+			for (int i = 0; i < SegmentCount + 1; i++)
+			{
+				AddSprite(32 + 20 * i, body);
+			}
+
+		}
+
+
 	}
 }

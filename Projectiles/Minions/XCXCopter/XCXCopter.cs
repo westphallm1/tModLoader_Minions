@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -62,12 +63,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		internal override int BuffId => BuffType<XCXCopterMinionBuff>();
 		protected override int CounterType => ProjectileType<XCXCopterCounterMinion>();
 		protected override int dustType => 72;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Copter-X");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 4;
+			wormDrawer = new CopterDrawer();
 		}
 
 		public sealed override void SetDefaults()
@@ -75,41 +78,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			base.SetDefaults();
 			projectile.tileCollide = false;
 			frameSpeed = 2;
-		}
-
-		protected override void DrawHead()
-		{
-			Rectangle head = new Rectangle(0, 0, 26, 36);
-			AddSprite(2, head);
-		}
-
-		protected override void DrawBody()
-		{
-			Rectangle body;
-			for (int i = 0; i < GetSegmentCount() + 1; i++)
-			{
-				if (i % 3 == 0)
-				{
-					body = GetRotorFrame();
-				}
-				else
-				{
-					body = new Rectangle(0, 36, 18, 36);
-				}
-				AddSprite(22 + 16 * i, body);
-			}
-		}
-
-		private Rectangle GetRotorFrame()
-		{
-			return new Rectangle(0, 108 + 36 * projectile.frame, 38, 36);
-		}
-
-		protected override void DrawTail()
-		{
-			Rectangle tail = new Rectangle(0, 72, 32, 36);
-			int dist = 26 + 16 * (GetSegmentCount() + 1);
-			AddSprite(dist, tail);
 		}
 
 		protected override float ComputeSearchDistance()
@@ -137,5 +105,57 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			minFrame = 0;
 			maxFrame = 4;
 		}
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			((CopterDrawer)wormDrawer).Update(projectile.frame);
+		}
+	}
+
+	public class CopterDrawer : WormHelper
+	{
+		internal int frame;
+
+		public void Update(int frame)
+		{
+			this.frame = frame;
+		}
+
+		protected override void DrawHead()
+		{
+			Rectangle head = new Rectangle(0, 0, 26, 36);
+			AddSprite(2, head);
+		}
+
+		protected override void DrawBody()
+		{
+			Rectangle body;
+			for (int i = 0; i < SegmentCount + 1; i++)
+			{
+				if (i % 3 == 0)
+				{
+					body = GetRotorFrame();
+				}
+				else
+				{
+					body = new Rectangle(0, 36, 18, 36);
+				}
+				AddSprite(22 + 16 * i, body);
+			}
+		}
+
+		private Rectangle GetRotorFrame()
+		{
+			return new Rectangle(0, 108 + 36 * frame, 38, 36);
+		}
+
+		protected override void DrawTail()
+		{
+			Rectangle tail = new Rectangle(0, 72, 32, 36);
+			int dist = 26 + 16 * (SegmentCount + 1);
+			AddSprite(dist, tail);
+		}
+
 	}
 }

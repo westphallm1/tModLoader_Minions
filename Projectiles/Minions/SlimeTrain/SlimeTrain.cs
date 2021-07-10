@@ -11,6 +11,7 @@ using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.Projectiles.Minions.SlimeTrain.SlimeTrainMarkerProjectile;
 using System.Collections.Generic;
 using AmuletOfManyMinions.Projectiles.Minions.Slimecart;
+using AmuletOfManyMinions.Core.Minions.Effects;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 {
@@ -70,10 +71,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		protected override int CounterType => ProjectileType<SlimeTrainCounterMinion>();
 		protected override int dustType => DustType<StarDust>();
 
-		private int nSlimes = 7;
-		private int SlimeFrameTop(int i) => 40 * (i % nSlimes) + 4;
-		private int YFrameTop => 40 * projectile.frame + 4;
-		private int FrameHeight => 34;
 
 		private int potentialTargetCount = 0;
 		private int lastSpawnedSlimeFrame;
@@ -106,10 +103,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			frameSpeed = 8;
 			if(SlimeTexture == null)
 			{
-				SlimeTexture = GetTexture(Texture + "_Slimes");
 			}
 			SubProjectileType = ProjectileType<SlimeTrainMarkerProjectile>();
 			rotationTracker = new SlimeTrainRotationTracker();
+			wormDrawer = new SlimeTrainDrawer();
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -172,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				}
 				Vector2 angle = Vector2.Zero;
 				int dist = 48 + 30 * (currentSlimeCount + 1);
-				Vector2 spawnPos = PositionLog.PositionAlongPath(dist, ref angle);
+				Vector2 spawnPos = wormDrawer.PositionLog.PositionAlongPath(dist, ref angle);
 				Projectile.NewProjectile(
 					spawnPos,
 					projectile.velocity,
@@ -203,47 +200,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				potentialTargetCount += 1;
 			}
 			return shouldIgnore;
-		}
-
-		protected override void DrawHead()
-		{
-			Rectangle slime = new Rectangle(0, SlimeFrameTop(0), 52, FrameHeight);
-			texture = SlimeTexture;
-			AddSprite(2, slime);
-			Rectangle head = new Rectangle(70, YFrameTop, 52, FrameHeight);
-			texture = Main.projectileTexture[projectile.type];
-			AddSprite(2, head);
-		}
-
-		protected override void DrawBody()
-		{
-			Rectangle body;
-			for (int i = 0; i < GetSegmentCount() + 1; i++)
-			{
-				if (i == 0)
-				{
-					body = new Rectangle(36, YFrameTop, 30, FrameHeight);
-				}
-				else 
-				{
-					if(summonedSlimes.IndexOf(i) == -1)
-					{
-						Rectangle slime = new Rectangle(0, SlimeFrameTop(i), 30, FrameHeight);
-						texture = SlimeTexture;
-						AddSprite(48+30 * i, slime);
-					}
-					body = new Rectangle(2, YFrameTop, 30, FrameHeight);
-				}
-				texture = Main.projectileTexture[projectile.type];
-				AddSprite(48 + 30 * i, body);
-			}
-		}
-
-		protected override void DrawTail()
-		{
-			// no tail
-			lightColor = Color.White * 0.85f;
-			lightColor.A = 128;
 		}
 
 		protected override float ComputeSearchDistance()
@@ -337,8 +293,78 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
+			((SlimeTrainDrawer)wormDrawer).Update(projectile.frame, summonedSlimes);
 			projectile.friendly = false;
 		}
+	}
+
+	internal class SlimeTrainDrawer : WormHelper
+	{
+		int dustType => DustType<StarDust>();
+		private int SlimeFrameTop(int i) => 40 * (i % nSlimes) + 4;
+		private int FrameHeight => 34;
+
+		private int nSlimes = 7;
+		private Texture2D SlimeTexture;
+
+		private int frame; 
+		private List<int> summonedSlimes = new List<int>();
+		private int YFrameTop => 40 * frame + 4;
+
+
+		public void Update(int frame, List<int> summonedSlimes)
+		{
+			this.frame = frame;
+			this.summonedSlimes = summonedSlimes;
+		}
+		public override void Draw(Texture2D texture, SpriteBatch spriteBatch, Color lightColor)
+		{
+			SlimeTexture = GetTexture(texture + "_Slimes");
+			base.Draw(texture, spriteBatch, lightColor);
+		}
+		protected override void DrawHead()
+		{
+			Rectangle slime = new Rectangle(0, SlimeFrameTop(0), 52, FrameHeight);
+			Texture2D mainTexture = texture;
+			texture = SlimeTexture;
+			AddSprite(2, slime);
+			Rectangle head = new Rectangle(70, YFrameTop, 52, FrameHeight);
+			texture = mainTexture;
+			AddSprite(2, head);
+		}
+
+		protected override void DrawBody()
+		{
+			Rectangle body;
+			Texture2D mainTexture = texture;
+			for (int i = 0; i < SegmentCount + 1; i++)
+			{
+				if (i == 0)
+				{
+					body = new Rectangle(36, YFrameTop, 30, FrameHeight);
+				}
+				else 
+				{
+					if(summonedSlimes.IndexOf(i) == -1)
+					{
+						Rectangle slime = new Rectangle(0, SlimeFrameTop(i), 30, FrameHeight);
+						texture = SlimeTexture;
+						AddSprite(48+30 * i, slime);
+					}
+					body = new Rectangle(2, YFrameTop, 30, FrameHeight);
+				}
+				texture = mainTexture;
+				AddSprite(48 + 30 * i, body);
+			}
+		}
+
+		protected override void DrawTail()
+		{
+			// no tail
+			lightColor = Color.White * 0.85f;
+			lightColor.A = 128;
+		}
+
 		protected override void AddSprite(float dist, Rectangle bounds, Color c = default)
 		{
 			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
@@ -356,5 +382,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				Main.dust[dustId].velocity = Vector2.Zero;
 			}
 		}
+
 	}
+
 }

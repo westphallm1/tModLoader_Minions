@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -65,29 +66,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 			base.SetDefaults();
 			projectile.tileCollide = false;
 			projectile.localNPCHitCooldown = 20;
+			wormDrawer = new BalloonBuddyDrawer();
 		}
 
-
-		protected override void DrawHead()
-		{
-			Rectangle head = new Rectangle(0, 0, 28, 44);
-			AddSprite(2, head);
-		}
-		protected override void DrawBody()
-		{
-			Rectangle body = new Rectangle(0, 44, 14, 44);
-			for (int i = 0; i < GetSegmentCount() + 1; i++)
-			{
-				AddSprite(22 + 14 * i, body);
-			}
-		}
-
-		protected override void DrawTail()
-		{
-			Rectangle tail = new Rectangle(0, 88, 22, 44);
-			int dist = 22 + 14 * (GetSegmentCount() + 1);
-			AddSprite(dist, tail);
-		}
 
 		protected override float ComputeSearchDistance()
 		{
@@ -107,6 +88,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		protected override float ComputeIdleSpeed()
 		{
 			return ComputeTargetedSpeed() + 3;
+		}
+	}
+
+	internal class BalloonBuddyDrawer : WormHelper
+	{
+		protected override void DrawHead()
+		{
+			Rectangle head = new Rectangle(0, 0, 28, 44);
+			AddSprite(2, head);
+		}
+		protected override void DrawBody()
+		{
+			Rectangle body = new Rectangle(0, 44, 14, 44);
+			for (int i = 0; i < SegmentCount + 1; i++)
+			{
+				AddSprite(22 + 14 * i, body);
+			}
+		}
+
+		protected override void DrawTail()
+		{
+			Rectangle tail = new Rectangle(0, 88, 22, 44);
+			int dist = 22 + 14 * (SegmentCount + 1);
+			AddSprite(dist, tail);
 		}
 	}
 }
