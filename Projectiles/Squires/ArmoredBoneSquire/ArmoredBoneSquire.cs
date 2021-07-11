@@ -248,12 +248,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		private void UpdateFlailOffset()
 		{
 			Vector2 flailOffset = flailTarget - flailPosition;
+			int inertia = 5;
 			if(flailOffset.LengthSquared() > flailSpeed * flailSpeed)
 			{
 				flailOffset.Normalize();
 				flailOffset *= flailSpeed;
 			}
-			flailPosition += flailOffset;
+			flailVelocity = (flailVelocity * (inertia - 1) + flailOffset) / inertia;
+			flailPosition += flailVelocity;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)

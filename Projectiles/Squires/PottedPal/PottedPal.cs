@@ -1,10 +1,13 @@
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
@@ -40,14 +43,179 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			item.rare = ItemRarityID.Pink;
 		}
 	}
+	public class PottedPalSeedProjectile : ModProjectile
+	{
+		const int TIME_TO_LIVE = 60;
+		private bool didCollide;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 16;
+			projectile.height = 16;
+			projectile.timeLeft = TIME_TO_LIVE;
+			projectile.tileCollide = true;
+			projectile.penetrate = 1;
+			projectile.friendly = true;
+		}
+
+		public override void AI()
+		{
+			if (TIME_TO_LIVE - projectile.timeLeft > 6)
+			{
+				projectile.velocity.Y += 0.5f;
+			}
+			projectile.rotation += projectile.velocity.X * 0.05f;
+		}
+
+		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+		{
+			fallThrough = false;
+			return true;
+		}
+
+		public override bool OnTileCollide(Vector2 oldVelocity)
+		{
+			didCollide = true;
+			return true;
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			if (projectile.owner == Main.myPlayer)
+			{
+				Projectile.NewProjectile(
+					projectile.Center,
+					-projectile.velocity,
+					ProjectileType<PottedPalJrMinion>(),
+					projectile.damage,
+					projectile.knockBack,
+					projectile.owner,
+					ai1: didCollide ? 1 : 0); ;
+			}
+		}
+	}
+
+	public class PottedPalJrMinion : TransientMinion
+	{
+
+		private Vector2 spawnPos;
+		private Vector2 idleDirection;
+
+		internal override bool tileCollide => false;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[projectile.type] = 5;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.timeLeft = 20 * 60;
+			attackThroughWalls = false;
+			projectile.width = 16;
+			projectile.height = 16;
+			frameSpeed = 15;
+		}
+
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			spawnPos = projectile.Center;
+			idleDirection = projectile.velocity;
+			idleDirection.SafeNormalize();
+			projectile.velocity = Vector2.Zero;
+		}
+
+		public override Vector2 IdleBehavior()
+		{
+			projectile.rotation = (projectile.Center - spawnPos).ToRotation() + MathHelper.PiOver2;
+			Vector2 vectorToIdle = spawnPos - projectile.position;
+			float offsetMagnitude = 16 + 8 * (float)Math.Sin(MathHelper.TwoPi * animationFrame / 60);
+			return vectorToIdle + idleDirection * offsetMagnitude;
+		}
+
+		public override Vector2? FindTarget()
+		{
+			if(GetClosestEnemyToPosition(projectile.Center, 400f, true) is NPC targetNPC && 
+				Vector2.DistanceSquared(targetNPC.Center, spawnPos) < 600 * 600)
+			{
+				return targetNPC.Center - projectile.Center;
+			} else
+			{
+				return null;
+			}
+		}
+
+		private void Move(Vector2 target)
+		{
+			int moveSpeed = 10;
+			int inertia = 12;
+			if(target.LengthSquared() > moveSpeed * moveSpeed)
+			{
+				target.Normalize();
+				target *= moveSpeed;
+			}
+			projectile.velocity = (projectile.velocity * (inertia - 1) + target) / inertia;
+		}
+
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			Move(vectorToIdlePosition);
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			Move(vectorToTargetPosition);
+		}
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			projectile.tileCollide = vectorToTarget != null;
+		}
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			// draw chain
+			Texture2D texture = Main.projectileTexture[projectile.type];
+			ChainDrawer chainDrawer = new ChainDrawer(new Rectangle(0, 36, 16, 16), new Rectangle(0, 54, 16, 16));
+			chainDrawer.DrawChain(spriteBatch, texture, spawnPos, projectile.Center);
+
+			// draw dirt block
+			Rectangle bounds = new Rectangle(0, 18 * 4, 16, 16);
+			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			lightColor = Lighting.GetColor((int)spawnPos.X / 16, (int)spawnPos.Y / 16);
+			spriteBatch.Draw(texture, spawnPos - Main.screenPosition,
+				bounds, lightColor, 0, origin, 1, SpriteEffects.None, 0);
+			return true;
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			base.Animate(minFrame, 2);
+		}
+	}
 
 	public class PottedPalMinion : SquireMinion
 	{
 		internal override int BuffId => BuffType<PottedPalMinionBuff>();
 		public PottedPalMinion() : base(ItemType<PottedPalMinionItem>()) { }
 		protected int wingFrameCounter = 0;
+
+		protected override float projectileVelocity => 12;
+
 		static int hitCooldown = 6;
 		static int cooldownCounter;
+
+		protected override int SpecialDuration => 5; // very short
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -121,6 +289,39 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			Vector2 vectorFromPlayer = player.Center - projectile.Center;
 			projectile.rotation = vectorFromPlayer.ToRotation() - (float)Math.PI / 2;
 		}
+
+		public override void OnStartUsingSpecial()
+		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				int projType = ProjectileType<PottedPalJrMinion>();
+				if(player.ownedProjectileCounts[projType] > 2)
+				{
+					// prune the oldest child
+					Projectile oldestChild = Main.projectile.Where(p =>
+							p.active && p.owner == Main.myPlayer && p.type == projType)
+						.OrderBy(p => p.timeLeft)
+						.FirstOrDefault();
+					if(oldestChild != default)
+					{
+						oldestChild.Kill();
+					}
+				}
+				Vector2 vector2Mouse = Vector2.DistanceSquared(projectile.Center, Main.MouseWorld) < 48 * 48 ?
+					Main.MouseWorld - player.Center : Main.MouseWorld - projectile.Center;
+				vector2Mouse.SafeNormalize();
+				vector2Mouse *= ModifiedProjectileVelocity();
+				Projectile.NewProjectile(
+					projectile.Center,
+					vector2Mouse,
+					ProjectileType<PottedPalSeedProjectile>(),
+					projectile.damage / 2,
+					projectile.knockBack,
+					player.whoAmI);
+			}
+		}
+
+
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Vector2 center = projectile.Center;

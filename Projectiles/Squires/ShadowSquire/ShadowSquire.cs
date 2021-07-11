@@ -90,10 +90,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 			projectile.height = 32;
 		}
 
-		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		public override void OnStartUsingSpecial()
 		{
-			base.SpecialTargetedMovement(vectorToTargetPosition);
-			if(specialFrame == 1 && player.whoAmI == Main.myPlayer)
+			if(player.whoAmI == Main.myPlayer)
 			{
 				Vector2 vector2Mouse = Vector2.DistanceSquared(projectile.Center, Main.MouseWorld) < 48 * 48 ?
 					Main.MouseWorld - player.Center : Main.MouseWorld - projectile.Center;

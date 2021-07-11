@@ -124,12 +124,12 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[projectile.type] = 10;
-			projectile.width = 16;
-			projectile.height = 16;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			projectile.width = 16;
+			projectile.height = 16;
 			projectile.timeLeft = 62;
 			attackThroughWalls = true;
 			frameSpeed = 5;
