@@ -94,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 	{
 		internal int dashDirection = 1;
 		private bool isDashing;
-		private MotionBlurHelper blurHelper;
+		private MotionBlurDrawer blurHelper;
 		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
 		public SeaSquireSharkMinion() : base(ItemType<SeaSquireMinionItem>()) { }
 		public override void SetStaticDefaults()
@@ -110,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			projectile.width = 24;
 			projectile.height = 24;
 			frameSpeed = 10;
-			blurHelper = new MotionBlurHelper(5);
+			blurHelper = new MotionBlurDrawer(5);
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)

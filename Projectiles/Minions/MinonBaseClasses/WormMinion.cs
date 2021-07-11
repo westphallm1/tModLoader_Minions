@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected virtual float baseDamageRatio => 0.67f;
 		protected virtual float damageGrowthRatio => 0.33f;
 
-		protected WormHelper wormDrawer;
+		protected WormDrawer wormDrawer;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

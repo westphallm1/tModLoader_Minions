@@ -8,7 +8,7 @@ using Terraria;
 
 namespace AmuletOfManyMinions.Core.Minions.Effects
 {
-	class MotionBlurHelper
+	class MotionBlurDrawer
 	{
 		// something in the ai overrides seems to prevent projectile.oldPos from populating properly,
 		// so just replicate it manually
@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		public int BlurLength { get; private set; }
 
 		private bool isCleared;
-		public MotionBlurHelper(int blurLength)
+		public MotionBlurDrawer(int blurLength)
 		{
 			BlurLength = blurLength;
 			myOldPos = new Vector2[blurLength];

@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		protected override int SpecialDuration => 8 * 60;
 		protected override int SpecialCooldown => 12 * 60;
 
-		private MotionBlurHelper blurHelper;
+		private MotionBlurDrawer blurHelper;
 		private int dashDirection = 1;
 		private bool isDashing = false;
 
@@ -90,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			projectile.width = 30;
 			projectile.height = 32;
 			horseTexture = GetTexture(Texture + "_Pegasus");
-			blurHelper = new MotionBlurHelper(5);
+			blurHelper = new MotionBlurDrawer(5);
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

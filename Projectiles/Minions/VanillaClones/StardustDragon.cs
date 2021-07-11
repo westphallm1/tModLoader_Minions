@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class StardustDragonDrawer : WormHelper
+	public class StardustDragonDrawer : WormDrawer
 	{
 		protected override void DrawHead()
 		{

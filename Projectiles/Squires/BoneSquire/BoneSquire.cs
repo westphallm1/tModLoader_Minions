@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -101,23 +102,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		}
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			if (usingWeapon)
+			if (IsAttacking())
 			{
-				lightColor = usingSpecial ? Color.White : lightColor;
 				Texture2D chainTexture = GetTexture(ChainTexturePath);
-				Vector2 chainVector = UnitVectorFromWeaponAngle();
-				float r = (float)Math.PI / 2 + chainVector.ToRotation();
+				ChainDrawer drawer = new ChainDrawer(chainTexture.Bounds);
 				Vector2 center = projectile.Center + WeaponCenterOfRotation;
-				Rectangle bounds = chainTexture.Bounds;
-				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-				int i;
-				for (i = bounds.Height / 2; i < WeaponDistanceFromCenter(); i += bounds.Height)
-				{
-					Vector2 pos = center + chainVector * i;
-					spriteBatch.Draw(chainTexture, pos - Main.screenPosition,
-						bounds, lightColor, r,
-						origin, 1, SpriteEffects.None, 0);
-				}
+				Vector2 chainVector = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
+				drawer.DrawChain(spriteBatch, chainTexture, center, center + chainVector, usingSpecial ? Color.White : default);
 			}
 			base.PostDraw(spriteBatch, lightColor);
 		}

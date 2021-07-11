@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		int windupFrames = 20;
 
 		internal bool hasSpawnedSwarm = false;
-		private MotionBlurHelper blurHelper;
+		private MotionBlurDrawer blurHelper;
 
 		public override void SetStaticDefaults()
 		{
@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			attackThroughWalls = true;
 			useBeacon = false;
 			attackFrames = 60;
-			blurHelper = new MotionBlurHelper(4);
+			blurHelper = new MotionBlurDrawer(4);
 			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 120, 400))
 			{
 				idleCycleFrames = 160,

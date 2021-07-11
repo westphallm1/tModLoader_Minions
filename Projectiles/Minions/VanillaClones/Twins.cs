@@ -192,7 +192,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		// something in the ai overrides seems to prevent projectile.oldPos from populating properly,
 		// so just replicate it manually
 		private Vector2[] myOldPos = new Vector2[5];
-		private MotionBlurHelper blurHelper;
+		private MotionBlurDrawer blurHelper;
 
 		internal override int BuffId => BuffType<TwinsMinionBuff>();
 
@@ -225,7 +225,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
-			blurHelper = new MotionBlurHelper(5);
+			blurHelper = new MotionBlurDrawer(5);
 		}
 
 		public override void OnSpawn()

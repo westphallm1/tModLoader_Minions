@@ -141,7 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		internal Vector2 flailVelocity;
 		internal Vector2 flailTarget;
 		internal int flailSpeed = 12;
-		internal WormHelper wormDrawer;
+		internal WormDrawer wormDrawer;
 		private NPC target;
 		private int firingFrame1 = 0;
 		private int firingFrame2 = 15;
@@ -285,7 +285,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Lighting.AddLight(flailPos, Color.Cyan.ToVector3());
 		}
 	}
-	public class SpiritFlailDrawer : WormHelper
+	public class SpiritFlailDrawer : WormDrawer
 	{
 
 		public SpiritFlailDrawer() : base(128, 48, 200)
@@ -414,20 +414,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			if (usingWeapon)
 			{
 				Texture2D chainTexture = GetTexture("AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailChain");
-				Vector2 chainVector = UnitVectorFromWeaponAngle();
-				float r = (float)Math.PI / 2 + chainVector.ToRotation();
+				ChainDrawer drawer = new ChainDrawer(chainTexture.Bounds);
 				Vector2 center = projectile.Center + WeaponCenterOfRotation;
-				Rectangle bounds = chainTexture.Bounds;
-				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-				int i;
-				for (i = bounds.Height / 2; i < WeaponDistanceFromCenter(); i += bounds.Height)
-				{
-					Vector2 pos = center + chainVector * i;
-					spriteBatch.Draw(chainTexture, pos - Main.screenPosition,
-						bounds, lightColor, r,
-						origin, 1, SpriteEffects.None, 0);
-				}
-
+				Vector2 chainVector = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
+				drawer.DrawChain(spriteBatch, chainTexture, center, center + chainVector, Color.White);
 			}
 			base.PostDraw(spriteBatch, lightColor);
 		}

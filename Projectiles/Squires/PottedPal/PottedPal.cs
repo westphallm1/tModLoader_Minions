@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -122,33 +123,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		}
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			Vector2 vineEnd = vectorToIdle + new Vector2(0, 8);
 			Vector2 center = projectile.Center;
-			Rectangle bounds = new Rectangle(0, 36, 16, 16);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			Vector2 pos;
-			float r;
-			if (vineEnd.Length() > 16)
-			{
-				Vector2 unitToIdle = vineEnd;
-				unitToIdle.Normalize();
-				Texture2D vineTexture = GetTexture(Texture);
-				r = (float)Math.PI / 2 + vineEnd.ToRotation();
-				int i;
-				for (i = bounds.Height / 2; i < vineEnd.Length(); i += bounds.Height)
-				{
-					if (vineEnd.Length() - i < bounds.Height / 2)
-					{
-						i = (int)(vineEnd.Length() - bounds.Height / 2);
-					}
-					bounds.Y = bounds.Y == 36 ? 54 : 36;
-					pos = center + unitToIdle * i;
-					lightColor = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
-					spriteBatch.Draw(vineTexture, pos - Main.screenPosition,
-						bounds, lightColor, r,
-						origin, 1, SpriteEffects.None, 0);
-				}
-			}
+			Vector2 vineEnd = center + vectorToIdle + new Vector2(0, 8);
+			ChainDrawer chainDrawer = new ChainDrawer(new Rectangle(0, 36, 16, 16), new Rectangle(0, 54, 16, 16));
+			chainDrawer.DrawChain(spriteBatch, Main.projectileTexture[projectile.type], center, vineEnd);
 			return true;
 		}
 

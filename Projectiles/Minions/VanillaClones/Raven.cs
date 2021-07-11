@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 16;
 		bool isDashing = false;
-		private MotionBlurHelper blurHelper;
+		private MotionBlurDrawer blurHelper;
 		internal override int BuffId => BuffType<RavenMinionBuff>();
 
 		public override void SetStaticDefaults()
@@ -99,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			targetSearchDistance = 900;
 			circleHelper.idleBumbleFrames = 60;
 			bumbleSpriteDirection = -1;
-			blurHelper = new MotionBlurHelper(5);
+			blurHelper = new MotionBlurDrawer(5);
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{

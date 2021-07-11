@@ -107,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		}
 	}
 
-	public class CopterDrawer : WormHelper
+	public class CopterDrawer : WormDrawer
 	{
 		protected override void DrawHead()
 		{

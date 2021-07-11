@@ -115,7 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		private bool isDashing;
 		private Vector2 dashVector;
-		private MotionBlurHelper blurHelper;
+		private MotionBlurDrawer blurHelper;
 
 		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
@@ -138,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			projectile.height = 24;
 			attackFrames = 90;
 			targetSearchDistance = 950;
-			blurHelper = new MotionBlurHelper(5);
+			blurHelper = new MotionBlurDrawer(5);
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 15;
 			hsHelper.projectileVelocity = 6;

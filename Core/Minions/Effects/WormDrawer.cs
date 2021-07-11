@@ -10,7 +10,7 @@ using Terraria;
 namespace AmuletOfManyMinions.Core.Minions.Effects
 {
 	// needs a per-minion implementation
-	public abstract class WormHelper
+	public abstract class WormDrawer
 	{
 		private float[] backingArray;
 		internal int frame;
@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 		internal int SegmentCount { get; set; } = 0;
 
-		public WormHelper(int segmentCapacity = 512, int queueSize = 255, int maxLength = 1200)
+		public WormDrawer(int segmentCapacity = 512, int queueSize = 255, int maxLength = 1200)
 		{
 			backingArray = new float[segmentCapacity];
 			CircularVectorQueue.Initialize(backingArray);

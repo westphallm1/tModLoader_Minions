@@ -91,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		}
 	}
 
-	internal class BalloonBuddyDrawer : WormHelper
+	internal class BalloonBuddyDrawer : WormDrawer
 	{
 		protected override void DrawHead()
 		{

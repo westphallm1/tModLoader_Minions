@@ -298,7 +298,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		}
 	}
 
-	internal class SlimeTrainDrawer : WormHelper
+	internal class SlimeTrainDrawer : WormDrawer
 	{
 		int dustType => DustType<StarDust>();
 		private int SlimeFrameTop(int i) => 40 * (i % nSlimes) + 4;

@@ -164,7 +164,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		}
 	}
 
-	internal class BoneSerpentDrawer : WormHelper
+	internal class BoneSerpentDrawer : WormDrawer
 	{
 		protected override void DrawHead()
 		{

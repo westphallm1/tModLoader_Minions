@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -347,36 +348,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			}
 		}
 
-		private void DrawVertibrae(SpriteBatch spriteBatch, Color lightColor, Projectile head)
+		private void DrawVertibrae(Texture2D headTexture, SpriteBatch spriteBatch, Color lightColor, Projectile head)
 		{
-			Vector2 spinalCordEndOffset = new Vector2(24 * projectile.spriteDirection, -4);
-			Vector2 endPosition = (projectile.Top + spinalCordEndOffset) - head.Center;
+			Vector2 endPosition = projectile.Top + new Vector2(24 * projectile.spriteDirection, -4);
 			Vector2 center = head.Center;
-			Rectangle bounds = new Rectangle(6, 36, 12, 14);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			Vector2 pos;
-			float r;
-			if (endPosition.Length() > 16)
-			{
-				Vector2 unitToIdle = endPosition;
-				unitToIdle.Normalize();
-				Texture2D vertibraeTexture = GetTexture(Texture + "_Head");
-				r = (float)Math.PI / 2 + endPosition.ToRotation();
-				int i;
-				for (i = bounds.Height / 2; i < endPosition.Length(); i += bounds.Height)
-				{
-					if (endPosition.Length() - i < bounds.Height / 2)
-					{
-						i = (int)(endPosition.Length() - bounds.Height / 2);
-					}
-					pos = center + unitToIdle * i;
-					lightColor = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
-					spriteBatch.Draw(vertibraeTexture, pos - Main.screenPosition,
-						bounds, lightColor, r,
-						origin, 1, SpriteEffects.None, 0);
-				}
-			}
-
+			ChainDrawer drawer = new ChainDrawer(new Rectangle(6, 36, 12, 14));
+			drawer.DrawChain(spriteBatch, headTexture, center, endPosition);
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -385,6 +362,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			Vector2 pos = projectile.Center;
 			Texture2D bodyTexture = GetTexture(Texture);
 			Texture2D ribsTexture = GetTexture(Texture + "_Ribs");
+			Texture2D headTexture = GetTexture(Texture + "_Head");
 			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			int frameHeight = bodyTexture.Height / Main.projFrames[projectile.type];
 			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, bodyTexture.Width, frameHeight);
@@ -398,7 +376,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 				origin, 1, effects, 0);
 			foreach (Projectile head in allHeads)
 			{
-				DrawVertibrae(spriteBatch, lightColor, head);
+				DrawVertibrae(headTexture, spriteBatch, lightColor, head);
 			}
 			return false;
 		}
