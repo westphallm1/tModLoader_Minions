@@ -13,6 +13,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 	public abstract class WormHelper
 	{
 		private float[] backingArray;
+		internal int frame;
 		internal CircularLengthQueue PositionLog;
 		protected SpriteBatch spriteBatch;
 		protected Texture2D texture;
@@ -66,6 +67,11 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		public void AddPosition(Vector2 position)
 		{
 			PositionLog.AddPosition(position);
+		}
+
+		public void Update(int frame)
+		{
+			this.frame = frame;
 		}
 	}
 }

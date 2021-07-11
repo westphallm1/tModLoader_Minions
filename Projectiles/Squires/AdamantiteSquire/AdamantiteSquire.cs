@@ -134,7 +134,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			if(usingSpecial)
 			{
-				damage = 3 * damage / 2;
+				damage = 5 * damage / 4;
 			}
 		}
 

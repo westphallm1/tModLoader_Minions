@@ -262,11 +262,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			}
 		}
 
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
-		{
-			base.IdleMovement(vectorToIdlePosition);
-		}
-
 		public override void OnStopUsingSpecial()
 		{
 			TransformBubbles();

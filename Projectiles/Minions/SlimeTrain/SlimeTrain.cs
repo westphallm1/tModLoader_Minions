@@ -307,14 +307,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private int nSlimes = 7;
 		private Texture2D SlimeTexture;
 
-		private int frame; 
 		private List<int> summonedSlimes = new List<int>();
 		private int YFrameTop => 40 * frame + 4;
 
 
 		public void Update(int frame, List<int> summonedSlimes)
 		{
-			this.frame = frame;
+			base.Update(frame);
 			this.summonedSlimes = summonedSlimes;
 		}
 		public override void Draw(Texture2D texture, SpriteBatch spriteBatch, Color lightColor)

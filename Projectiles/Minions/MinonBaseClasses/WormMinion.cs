@@ -38,7 +38,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
-			
 			wormDrawer.Draw(Main.projectileTexture[projectile.type], spriteBatch, lightColor);
 			return false;
 		}
@@ -117,6 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.AfterMoving();
 			wormDrawer.AddPosition(projectile.position);
+			wormDrawer.Update(projectile.frame);
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Copter-X");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[projectile.type] = 5;
 			wormDrawer = new CopterDrawer();
 		}
 
@@ -105,23 +105,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			minFrame = 0;
 			maxFrame = 4;
 		}
-
-		public override void AfterMoving()
-		{
-			base.AfterMoving();
-			((CopterDrawer)wormDrawer).Update(projectile.frame);
-		}
 	}
 
 	public class CopterDrawer : WormHelper
 	{
-		internal int frame;
-
-		public void Update(int frame)
-		{
-			this.frame = frame;
-		}
-
 		protected override void DrawHead()
 		{
 			Rectangle head = new Rectangle(0, 0, 26, 36);
@@ -156,6 +143,5 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			int dist = 26 + 16 * (SegmentCount + 1);
 			AddSprite(dist, tail);
 		}
-
 	}
 }

@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -128,6 +129,193 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		}
 	}
 
+	public class SpiritFlailWormMinion : SquireMinion
+	{
+		public SpiritFlailWormMinion() : base(ItemType<ArmoredBoneSquireMinionItem>()) { }
+
+		internal override int BuffId => BuffType<ArmoredBoneSquireMinionBuff>();
+
+		// used to allow the flail itself to move through walls a bit while the "center"
+		// remains bounded by tiles
+		internal Vector2 flailPosition;
+		internal Vector2 flailVelocity;
+		internal Vector2 flailTarget;
+		internal int flailSpeed = 12;
+		internal WormHelper wormDrawer;
+		private NPC target;
+		private int firingFrame1 = 0;
+		private int firingFrame2 = 15;
+		private int attackFrames = 20;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Spirit Flail Chain");
+			// Sets the amount of frames this minion has on its spritesheet
+			Main.projFrames[projectile.type] = 3;
+		}
+		public sealed override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 24;
+			projectile.height = 24;
+			frameSpeed = 10;
+			wormDrawer = new SpiritFlailDrawer();
+		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			return targetHitbox.Contains((projectile.Center + flailPosition).ToPoint());
+		}
+
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			// prefer circling around the target, or between the target and the mouse
+			if(GetClosestEnemyToPosition(syncedMouseWorld, 120f, false) is NPC newTarget)
+			{
+				target = newTarget;
+			}
+			if(target == default || !target.active || Vector2.DistanceSquared(target.Center, projectile.Center) > 128 * 128)
+			{
+				target = default;
+				float flailAngle = 2 * MathHelper.Pi * animationFrame / 60f;
+				flailTarget = 40 * flailAngle.ToRotationVector2();
+			} 
+			else 
+			{
+				float flailAngle = 2 * MathHelper.Pi * animationFrame / attackFrames;
+				flailTarget = 40 * flailAngle.ToRotationVector2();
+				// circle between the mouse cursor and the target
+				Vector2 axis = projectile.Center - target.Center;
+				axis.SafeNormalize();
+				axis *= 40;
+				flailTarget += target.Center + axis - projectile.Center;
+			}
+			SpawnWisps();
+			base.StandardTargetedMovement(vectorToTargetPosition);
+			UpdateFlailOffset();
+		}
+
+		private void SpawnWisps()
+		{
+			int attackFrame = animationFrame % attackFrames;
+			if(attackFrame == 0)
+			{
+				firingFrame1 = Main.rand.Next(attackFrames);
+				firingFrame2 = Main.rand.Next(attackFrames);
+			}
+			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
+			{
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(
+						projectile.Center + flailPosition,
+						Vector2.Zero,
+						ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
+						(int)(projectile.damage / 2),
+						projectile.knockBack / 2,
+						Main.myPlayer);
+					Main.PlaySound(SoundID.Item20, projectile.position);
+				}
+			}
+		}
+
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			SpawnDust(10);
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			base.Kill(timeLeft);
+			SpawnDust(10);
+		}
+
+		public void SpawnDust(int count)
+		{
+			Vector2 flailPos = projectile.Center + flailPosition;
+			for(int i = 0; i < count; i++)
+			{
+				int bonedust = Dust.NewDust(flailPos, projectile.width, projectile.height, 137, 0f, 0f, 0, Scale: 1f);
+				Main.dust[bonedust].position.X = flailPos.X - 4f + (float)Main.rand.Next(-2, 3);
+				Main.dust[bonedust].position.Y = flailPos.Y - (float)Main.rand.Next(-2, 3);
+				Main.dust[bonedust].noGravity = true;
+			}
+
+		}
+
+		private void UpdateFlailOffset()
+		{
+			Vector2 flailOffset = flailTarget - flailPosition;
+			if(flailOffset.LengthSquared() > flailSpeed * flailSpeed)
+			{
+				flailOffset.Normalize();
+				flailOffset *= flailSpeed;
+			}
+			flailPosition += flailOffset;
+		}
+
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			base.IdleMovement(vectorToIdlePosition);
+			float flailAngle = 2 * MathHelper.Pi * animationFrame / 60f;
+			flailTarget = 40 * flailAngle.ToRotationVector2();
+			UpdateFlailOffset();
+		}
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			wormDrawer.Draw(Main.projectileTexture[projectile.type], spriteBatch, lightColor);
+			return false;
+		}
+
+		public override float MaxDistanceFromPlayer() => 800;
+
+		public override float ComputeTargetedSpeed() => 18;
+
+		public override float ComputeIdleSpeed() => 18;
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			// todo add a little swirly effect
+			Vector2 flailPos = projectile.Center + flailPosition;
+			wormDrawer.Update(projectile.frame);
+			wormDrawer.AddPosition(flailPos);
+			Lighting.AddLight(flailPos, Color.Cyan.ToVector3());
+		}
+	}
+	public class SpiritFlailDrawer : WormHelper
+	{
+
+		public SpiritFlailDrawer() : base(128, 48, 200)
+		{
+			SegmentCount = 3; 
+		}
+		protected override void DrawHead()
+		{
+			Rectangle headFrame = new Rectangle(0, 32 * frame, 32, 32);
+			AddSprite(2, headFrame);
+		}
+
+		protected override void DrawBody()
+		{
+			Rectangle body = new Rectangle(8, 98, 24, 6);
+			for (int i = 0; i < SegmentCount + 1; i++)
+			{
+				AddSprite(30 + 22* i, body);
+			}
+		}
+
+
+		protected override void DrawTail()
+		{
+			lightColor = Color.White * 0.85f; // bright/transparent
+			Rectangle tail = new Rectangle(18, 108, 14, 14);
+			int dist = 30 + 22 * (SegmentCount + 1);
+			AddSprite(dist, tail);
+		}
+	}
 
 	public class ArmoredBoneSquireMinion : WeaponHoldingSquire
 	{
@@ -147,6 +335,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		protected override float knockbackSelf => 5f;
 
+		protected override int SpecialDuration => 8 * 60;
+		protected override int SpecialCooldown => 12 * 60;
 		protected override LegacySoundStyle attackSound => SoundID.Item1;
 
 		private int firingFrame1 = 0;
@@ -203,6 +393,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			}
 		}
 
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			// the flail takes over while using special
+			base.IdleMovement(vectorToIdle);
+		}
+
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D glow = GetTexture(Texture + "_Glow");
@@ -234,6 +430,36 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 			}
 			base.PostDraw(spriteBatch, lightColor);
+		}
+
+		public override void OnStartUsingSpecial()
+		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				Projectile.NewProjectile(
+					projectile.Center, 
+					projectile.velocity, 
+					ProjectileType<SpiritFlailWormMinion>(), 
+					projectile.damage, 
+					projectile.knockBack, 
+					player.whoAmI);
+			}
+		}
+
+		public override void OnStopUsingSpecial()
+		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				for(int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SpiritFlailWormMinion>())
+					{
+						p.Kill();
+						break;
+					}
+				}
+			}
 		}
 
 		protected override float WeaponDistanceFromCenter() => 45;
