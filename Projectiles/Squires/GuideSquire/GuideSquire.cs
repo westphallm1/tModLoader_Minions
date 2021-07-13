@@ -125,6 +125,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			projectile.width = 16;
 			projectile.height = 16;
 		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			// make the arrow a bit bigger to hit things more reliably
+			projHitbox.Inflate(32, 32);
+			return projHitbox.Intersects(targetHitbox);
+		}
+
 		public override void AI()
 		{
 			base.AI();
@@ -163,7 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 		protected override float projectileVelocity => 12;
 
-		protected override int SpecialDuration => 90;
+		protected override int SpecialDuration => 2 * 60;
 		protected override bool travelRangeCanBeModified => false;
 
 

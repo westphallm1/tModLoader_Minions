@@ -107,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			{
 				return true;
 			}
-			return base.Colliding(projHitbox, targetHitbox);
+			return projHitbox.Intersects(targetHitbox);
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)

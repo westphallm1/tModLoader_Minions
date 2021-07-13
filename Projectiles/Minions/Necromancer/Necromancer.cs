@@ -435,7 +435,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			{
 				return true;
 			}
-			return base.Colliding(projHitbox, targetHitbox);
+			return projHitbox.Intersects(targetHitbox);
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

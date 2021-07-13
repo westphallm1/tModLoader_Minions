@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -63,6 +64,68 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		}
 	}
 
+	public class SoulboundSpecialSword : ModProjectile
+	{
+		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundSword/SoulboundSword";
+		protected virtual Color LightColor => new Color(1f, 0f, 0.8f, 1f);
+
+		internal static int TimeToLive = 15;
+		private bool hasSpawned;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.timeLeft = TimeToLive;
+			projectile.friendly = true;
+			projectile.minion = true;
+			projectile.tileCollide = false;
+			projectile.penetrate = 2;
+			projectile.usesLocalNPCImmunity = true;
+			projectile.localNPCHitCooldown = 20;
+		}
+		public override void AI()
+		{
+			// travel in a straight line along velocity
+			if(!hasSpawned)
+			{
+				SpawnDust();
+				hasSpawned = true;
+			}
+			Color lightColor = new Color(0.75f, 0f, 1f, 1f);
+			projectile.rotation = (float)Math.PI / 4 + projectile.velocity.ToRotation();
+			Lighting.AddLight(projectile.Center, lightColor.ToVector3());
+		}
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			Texture2D texture = Main.projectileTexture[projectile.type];
+			float colorStep = (float)Math.Sin(MathHelper.Pi * projectile.timeLeft / TimeToLive);
+			float colorIntensity = MathHelper.Lerp(0.75f, 1, colorStep);
+			lightColor = Color.White * colorIntensity;
+			lightColor.A /= 2;
+			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
+				texture.Bounds, lightColor, projectile.rotation,
+				texture.Bounds.Center.ToVector2(), 1, 0, 0);
+			return false;
+		}
+		public void SpawnDust()
+		{
+			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
+			{
+				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
+				int dustCreated = Dust.NewDust(projectile.position, 1, 1, 255, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
+				Main.dust[dustCreated].color = new Color(0.75f, 0f, 1f, 1f);
+				Main.dust[dustCreated].noGravity = true;
+				Main.dust[dustCreated].velocity *= 0.8f;
+			}
+		}
+	}
 
 	public class SoulboundArrow : ModProjectile
 	{
@@ -124,6 +187,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		protected override bool travelRangeCanBeModified => false;
 
 		protected override float projectileVelocity => 18;
+
+		protected override int SpecialDuration => 2 * 60;
+		protected override int SpecialCooldown => 6 * 60;
 		public SoulboundBowMinion() : base(ItemType<SoulboundBowMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -188,6 +254,28 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 						Main.myPlayer);
 				}
 				Main.PlaySound(SoundID.Item39, projectile.Center);
+			}
+		}
+
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.IdleMovement(vectorToIdle);
+			if(player.whoAmI == Main.myPlayer && specialFrame % 8 == 1)
+			{
+				Vector2 center = Main.MouseWorld; // only run on main player safe to use
+				// spawn two whole circles of swords over the course of the special
+				Vector2 offset = (4 * MathHelper.Pi * specialFrame / SpecialDuration).ToRotationVector2();
+				float spawnRadius = 96;
+				float travelSpeed = 1.25f * spawnRadius / SoulboundSpecialSword.TimeToLive;
+				Vector2 spawnPos = center + offset * spawnRadius;
+				Vector2 spawnVelocity = -offset * travelSpeed;
+				Projectile.NewProjectile(
+					spawnPos,
+					spawnVelocity,
+					ProjectileType<SoulboundSpecialSword>(),
+					projectile.damage,
+					projectile.knockBack,
+					Main.myPlayer);
 			}
 		}
 

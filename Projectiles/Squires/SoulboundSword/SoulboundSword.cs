@@ -76,6 +76,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 		protected override float knockbackSelf => 4;
 
+		protected override int SpecialDuration => 4 * 60;
+		protected override int SpecialCooldown => 8 * 60;
+
 		public SoulboundSwordMinion() : base(ItemType<SoulboundSwordMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -124,6 +127,41 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			for (int i = 0; i < 3; i++)
 			{
 				Dust.NewDust(target.position, target.width, target.height, DustID.Shadowflame);
+			}
+		}
+
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.IdleMovement(vectorToIdle);
+		}
+
+		public override void OnStartUsingSpecial()
+		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				Projectile.NewProjectile(
+					projectile.Center, 
+					projectile.velocity, 
+					ProjectileType<SoulboundSpecialBow>(), 
+					5 * projectile.damage / 4, 
+					projectile.knockBack, 
+					player.whoAmI);
+			}
+		}
+
+		public override void OnStopUsingSpecial()
+		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				for(int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SoulboundSpecialBow>())
+					{
+						p.Kill();
+						break;
+					}
+				}
 			}
 		}
 

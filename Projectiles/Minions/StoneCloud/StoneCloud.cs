@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			}
 			else
 			{
-				return base.Colliding(projHitbox, targetHitbox);
+				return projHitbox.Intersects(targetHitbox);
 			}
 		}
 

@@ -63,6 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			projectile.tileCollide = true;
 			projectile.penetrate = 1;
 			projectile.friendly = true;
+			projectile.localNPCHitCooldown = 20; // hit a little slower than usual
 		}
 
 		public override void AI()
@@ -119,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = 20 * 60;
+			projectile.timeLeft = 12 * 60;
 			attackThroughWalls = false;
 			projectile.width = 16;
 			projectile.height = 16;
@@ -129,6 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
+			SpawnDust();
 			spawnPos = projectile.Center;
 			idleDirection = projectile.velocity;
 			idleDirection.SafeNormalize();
@@ -201,6 +203,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, 2);
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			base.Kill(timeLeft);
+			SpawnDust();
+		}
+		private void SpawnDust()
+		{
+			for(int i = 0; i < 4; i++)
+			{
+				Dust.NewDust(projectile.TopLeft, 24, 24, 39);
+			}
 		}
 	}
 
@@ -295,9 +310,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			if(player.whoAmI == Main.myPlayer)
 			{
 				int projType = ProjectileType<PottedPalJrMinion>();
-				if(player.ownedProjectileCounts[projType] > 2)
+				if(player.ownedProjectileCounts[projType] > 1)
 				{
-					// prune the oldest child
+					// "prune" the oldest child (heh, plants)
 					Projectile oldestChild = Main.projectile.Where(p =>
 							p.active && p.owner == Main.myPlayer && p.type == projType)
 						.OrderBy(p => p.timeLeft)
