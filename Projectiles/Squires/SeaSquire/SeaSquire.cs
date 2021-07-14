@@ -335,6 +335,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		{
 			return !usingSpecial && base.PreDraw(spriteBatch, lightColor);
 		}
+
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			if(!usingSpecial)

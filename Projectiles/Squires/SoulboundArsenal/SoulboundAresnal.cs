@@ -117,7 +117,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			velocityTangent *= projectile.ai[0] * (float)Math.Sin(projectile.ai[1] + 16 * Math.PI * (projectile.timeLeft) / TimeLeft);
 			projectile.position = expectedPosition + velocityTangent;
 			Lighting.AddLight(projectile.Center, LightColor.ToVector3() * 0.5f);
-			Dust.NewDust(projectile.Center, 1, 1, DustType<MinionWaypointDust>(), newColor: LightColor, Scale: 1.2f);
+			int dustId  = Dust.NewDust(projectile.Center, 1, 1, 255, newColor: LightColor, Scale: 1.2f);
+			Main.dust[dustId].noGravity = true;
+			Main.dust[dustId].velocity *= 0.8f;
 		}
 
 		public override void Kill(int timeLeft)
@@ -126,7 +128,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
-				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: LightColor, Scale: 1f);
+				int dustId = Dust.NewDust(projectile.Center, 1, 1, 255, velocity.X, velocity.Y, newColor: LightColor, Scale: 1.2f);
+				Main.dust[dustId].noGravity = true;
+				Main.dust[dustId].velocity *= 0.8f;
 			}
 		}
 
@@ -188,6 +192,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override float ComputeTargetedSpeed() => 13;
 
 		public override float MaxDistanceFromPlayer() => 48;
+
+		protected override bool IsMyTurn() => usingSpecial || base.IsMyTurn();
+
+		protected override int SpecialDuration => 6 * 60;
+		protected override int SpecialCooldown => 1 * 60;
+
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			if (!IsAttacking())
@@ -202,6 +212,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		{
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
 			base.PostDraw(spriteBatch, translucentColor);
+		}
+
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
 
 	}
@@ -287,7 +302,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 	{
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/SoulboundArsenal/SoulboundSword";
 
-		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
+		protected override WeaponAimMode aimMode => usingSpecial ? WeaponAimMode.TOWARDS_MOUSE : WeaponAimMode.FIXED;
 
 		public override bool IsBoss => true;
 
@@ -356,8 +371,54 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				}
 			}
 		}
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.SpecialTargetedMovement(vectorToTargetPosition);
+			int projType = ProjectileType<SoulboundArsenalLaser>();
+			Vector2 offset = UnitVectorFromWeaponAngle();
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == projType)
+				{
+					p.ai[0] = offset.ToRotation();
+					p.Center = projectile.Center + offset * 48;
+					p.velocity = Vector2.Zero;
+					break;
+				}
+			}
+		}
 
-		protected override float WeaponDistanceFromCenter() => 30;
+		public override void OnStopUsingSpecial()
+		{
+			int projType = ProjectileType<SoulboundArsenalLaser>();
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == projType)
+				{
+					p.Kill();
+					break;
+				}
+			}
+		}
+
+		public override void OnStartUsingSpecial()
+		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				Projectile.NewProjectile(
+					projectile.Center, 
+					Vector2.Zero, 
+					ProjectileType<SoulboundArsenalLaser>(), 
+					3 * projectile.damage, 
+					projectile.knockBack, 
+					player.whoAmI,
+					ai0: UnitVectorFromWeaponAngle().ToRotation());
+			}
+		}
+
+		protected override float WeaponDistanceFromCenter() => usingSpecial ? 1 : 30;
 
 		protected override int WeaponHitboxEnd() => 45;
 	}

@@ -162,10 +162,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			int cooldownBuffType = ModContent.BuffType<SquireCooldownBuff>();
 			if(!usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
 			{
-				usingSpecial = true;
-				specialStartFrame = animationFrame;
 				player.AddBuff(cooldownBuffType, SpecialCooldown + SpecialDuration);
-				OnStartUsingSpecial();
+				// this is a bit hacky, but this code only runs on the first squire, so
+				// manually propegate the special to all squires the player owns
+				for(int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if(p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
+					{
+						((SquireMinion)p.modProjectile).SetSpecialStartFrame();
+					}
+				}
 			} else if (usingSpecial && specialFrame >= SpecialDuration)
 			{
 				usingSpecial = false;
@@ -174,6 +181,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				// TODO a little dust animation to indicate special can be used again
 			}
+		}
+
+		public void SetSpecialStartFrame()
+		{
+			usingSpecial = true;
+			specialStartFrame = animationFrame;
+			OnStartUsingSpecial();
 		}
 
 		public virtual void OnStartUsingSpecial()
@@ -253,26 +267,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		// 15 blocks extra range doubles projectile speed
 		protected float ModifiedProjectileVelocity() => projectileVelocity * (1 + player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus / 240f);
 
-		public virtual float ComputeInertia()
-		{
-			return 12;
-		}
+		public virtual float ComputeInertia() => 12;
 
-		public virtual float ComputeIdleSpeed()
-		{
-			return 8;
-		}
+		public virtual float ComputeIdleSpeed() => 8;
 
-		public virtual float ComputeTargetedSpeed()
-		{
-			return 8;
-		}
+		public virtual float ComputeTargetedSpeed() => 8;
 
 
-		public virtual float MaxDistanceFromPlayer()
-		{
-			return 80;
-		}
+		public virtual float MaxDistanceFromPlayer() => 80;
 
 	}
 }
