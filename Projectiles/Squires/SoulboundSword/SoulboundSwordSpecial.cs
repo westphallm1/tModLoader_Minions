@@ -42,7 +42,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			base.AI();
 			// start colliding with tiles 1/3 of the way down the screen
 			Vector2 position = projectile.position;
-			float collideCutoff = Main.screenPosition.Y + Main.screenHeight / 3f;
+			Vector2 myScreenPosition = Main.player[projectile.owner].Center 
+				- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+			float collideCutoff = myScreenPosition.Y + Main.screenHeight / 3f;
 			if(position.Y >= collideCutoff)
 			{
 				Tile tile = Framing.GetTileSafely((int)position.X / 16, (int)position.Y / 16);
@@ -104,7 +106,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			float spawnAngleRange = MathHelper.Pi / 16;
 			Vector2 mousePos = syncedMouseWorld;
 			float hoverX = (mousePos.X + player.position.X) / 2;
-			float hoverY = Main.screenPosition.Y + 0.05f * Main.screenHeight; // hover 5% of the way down the screen
+			Vector2 myScreenPosition = Main.player[projectile.owner].Center 
+				- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+			float hoverY = myScreenPosition.Y + 0.05f * Main.screenHeight; // hover 5% of the way down the screen
 			Vector2 hoverPos = new Vector2(hoverX, hoverY);
 			Vector2 attackAngle = mousePos - hoverPos;
 			projectile.Center = hoverPos;

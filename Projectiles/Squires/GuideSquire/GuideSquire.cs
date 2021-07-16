@@ -59,7 +59,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		{
 			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire);
-			if(projectile.position.Y < Main.screenPosition.Y)
+			Vector2 myScreenPosition = Main.player[projectile.owner].Center 
+				- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+			if(projectile.position.Y < myScreenPosition.Y)
 			{
 				projectile.Kill();
 			}
@@ -139,7 +141,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			// start colliding with tiles 1/3 of the way down the screen
 			Vector2 position = projectile.position;
-			float collideCutoff = Main.screenPosition.Y + Main.screenHeight / 3f;
+			Vector2 myScreenPosition = Main.player[projectile.owner].Center 
+				- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+			float collideCutoff = myScreenPosition.Y + Main.screenHeight / 3f;
 			if(position.Y >= collideCutoff)
 			{
 				Tile tile = Framing.GetTileSafely((int)position.X / 16, (int)position.Y / 16);
@@ -241,7 +245,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				Vector2 mousePos = Main.MouseWorld; // only run on client player, MP safe
 				float spawnX = (mousePos.X + player.position.X) / 2 + 
 					Main.rand.Next(-spawnPosRange, spawnPosRange);
-				float spawnY = Main.screenPosition.Y;
+				Vector2 myScreenPosition = Main.player[projectile.owner].Center 
+					- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+				float spawnY = myScreenPosition.Y;
 				Vector2 spawnPos = new Vector2(spawnX, spawnY);
 				Vector2 launchAngle = (mousePos - spawnPos).RotatedBy(
 					Main.rand.NextFloat(spawnAngleRange) - spawnAngleRange/2);

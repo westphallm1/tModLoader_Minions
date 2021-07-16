@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
@@ -102,13 +103,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		}
 	}
 
-	public class WoFEyeLaser : SquireLaser
-	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.PurpleLaser;
-
-		public override Color lightColor => Color.Purple;
-	}
-
 	public class WoFSquireMinion : SquireMinion
 	{
 		internal override int BuffId => BuffType<WoFSquireMinionBuff>();
@@ -117,6 +111,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		private Vector2?[] laserTargets;
 		private int[] laserFrames;
+
+		static int SpecialChargeTime = 60;
+
+		static int SpecialXRange = 1000;
+
+		static int SpecialLoopSpeed = 40;
+
+		static int SpecialLoopCount = 2;
+
+		// used for tracking special state
+		Vector2 specialStartPos;
+		int chargeDirection;
+		protected override int SpecialDuration => SpecialLoopCount * SpecialLoopSpeed + SpecialLoopSpeed / 2 + SpecialChargeTime;
+		protected override int SpecialCooldown => 3 * 60;
+
+		private MotionBlurDrawer blurDrawer;
+
+		private Texture2D shockwaveTexture;
 
 		public WoFSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
@@ -136,11 +148,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			laserTargets = new Vector2?[2];
 			laserFrames = new int[2];
 			isDashing = false;
+			blurDrawer = new MotionBlurDrawer(5);
+			shockwaveTexture = GetTexture(Texture + "_Shockwave");
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			Lighting.AddLight(projectile.Center, Color.Red.ToVector3() * 0.75f);
+			// use very small hit cooldown during special, since the hitbox moves so quickly
+			baseLocalIFrames = usingSpecial ? 2 : 10;
 			return base.IdleBehavior() + new Vector2(-player.direction * 8, 0);
 		}
 
@@ -186,11 +202,93 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
 
+		public override void OnStartUsingSpecial()
+		{
+			specialStartPos = projectile.Center;
+		}
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			float targetX;
+			if(specialFrame < SpecialChargeTime / 2)
+			{
+				isDashing = false;
+				targetX = MathHelper.Lerp(specialStartPos.X, player.Center.X, 2f * specialFrame / SpecialChargeTime );
+				projectile.spriteDirection = Math.Sign(targetX - player.Center.X);
+			} else if (specialFrame < SpecialChargeTime)
+			{
+				targetX = player.Center.X;
+				chargeDirection = Math.Sign(syncedMouseWorld.X - targetX);
+				projectile.spriteDirection = chargeDirection;
+			} else
+			{
+				isDashing = true;
+				int dashFrame = (specialFrame - SpecialChargeTime) % SpecialLoopSpeed;
+				int xPerFrame =  chargeDirection * SpecialXRange / SpecialLoopSpeed;
+				targetX = player.Center.X + 2 * dashFrame * xPerFrame +
+					(dashFrame < SpecialLoopSpeed / 2 ? 0 : -2 * chargeDirection * SpecialXRange); 
+			}
+			float maxYSpeed = 20;
+			float yInertia = 8;
+			float targetY = vectorToTargetPosition.Y;
+			float yVelMagnitude = Math.Sign(targetY) * Math.Min(maxYSpeed, Math.Abs(targetY));
+			float yVel = (projectile.velocity.Y * (yInertia - 1) + yVelMagnitude) / yInertia;
+			projectile.Center = new Vector2(targetX, projectile.Center.Y);
+			projectile.velocity = Vector2.UnitY * yVel;
+
+			projectile.tileCollide = false;
+		}
+
+		public override void AfterMoving()
+		{
+			blurDrawer.Update(projectile.Center, isDashing);
+			// also interpolate extra blurs while using special
+			if(isDashing && usingSpecial)
+			{
+				AddShockwaveDust();
+			}
+		}
+
+		public override void OnStopUsingSpecial()
+		{
+			for(int i = 0; i < 10; i++)
+			{
+				AddShockwaveDust(1f);
+			}
+			returningToPlayer = true;
+		}
+
+		private void AddShockwaveDust(float speedMult = 0.25f)
+		{
+			int boxWidth =  SpecialXRange / SpecialLoopSpeed;
+			int boxHeight = 60;
+			Vector2 startPos = projectile.Center + new Vector2(chargeDirection == -1 ? boxWidth : 0, -boxHeight / 2);
+			for(int i = 0; i < 2; i++)
+			{
+				int dustCreated = Dust.NewDust(startPos, boxWidth, boxHeight, 60, boxHeight * speedMult * chargeDirection, 0, 50, Scale: 1.4f);
+				Main.dust[dustCreated].noGravity = true;
+				Main.dust[dustCreated].velocity *= 0.8f;
+			}
+		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			if(usingSpecial && specialFrame < SpecialChargeTime)
+			{
+				return false;
+			} else if(usingSpecial && isDashing)
+			{
+				projHitbox.Inflate(128, 64);
+				projHitbox.X += -chargeDirection * 64;
+				return projHitbox.Intersects(targetHitbox);
+			}
+			return base.Colliding(projHitbox, targetHitbox);
+		}
+
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			if (isDashing)
 			{
-				DrawAferImage(spriteBatch);
+				DrawAferImage(spriteBatch, lightColor);
 			}
 			if (vectorToTarget != null)
 			{
@@ -207,8 +305,41 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
 			DrawEyes(spriteBatch, lightColor);
+			if(usingSpecial && isDashing)
+			{
+				DrawSonicBoom(spriteBatch, projectile.Center);
+			}
 			return false;
 		}
+
+		private void DrawSonicBoom(SpriteBatch spriteBatch, Vector2 center)
+		{
+			Vector2 offset = new Vector2(96, 0) * chargeDirection;
+			float animSin = (float)Math.Sin(MathHelper.TwoPi * animationFrame / 15);
+			float scale = 1.1f + 0.1f * animSin;
+			// stamp out an "aura" around the main shockwave
+			// I'm pretty sure this effect is accomplished via shaders in vanilla, but..
+			float offsetScale = 2.5f + 1.5f * animSin;
+			for (int i = 0; i < 4; i++)
+			{
+				// thanks to direwolf420 for this outline effect
+				int x = i / 2 % 2 == 0 ? -1 : 1;
+				int y = i % 2 == 0 ? -1 : 1;
+				Vector2 outlineOffset = new Vector2(x, y) * offsetScale;
+				DrawShockwave(spriteBatch, center + offset + outlineOffset, Color.Crimson * 0.5f, scale);
+			}
+			DrawShockwave(spriteBatch, center + offset, Color.White * 0.5f, scale);
+		}
+
+		private void DrawShockwave(SpriteBatch spriteBatch, Vector2 center, Color color, float scale)
+		{
+			float r = projectile.rotation + projectile.spriteDirection * MathHelper.PiOver2;
+			spriteBatch.Draw(shockwaveTexture, center - Main.screenPosition,
+				shockwaveTexture.Bounds, color, r,
+				shockwaveTexture.Bounds.Center.ToVector2(), scale, 0, 0);
+		}
+
+
 
 		private Vector2 EyePos(int idx)
 		{
@@ -244,31 +375,28 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			}
 		}
 
-		private void DrawAferImage(SpriteBatch spriteBatch)
+		private void DrawAferImage(SpriteBatch spriteBatch, Color lightColor)
 		{
-			int nToDraw = 4;
-			float velocityFraction = 0.75f;
-			Vector2 velocity = -projectile.velocity;
-			if (Math.Abs(velocity.Y) > 4)
-			{
-				velocity.Y = 4 * Math.Sign(velocity.Y);
-			}
 			float r = projectile.rotation;
 			SpriteEffects effects = projectile.spriteDirection == -1 ? 0 : SpriteEffects.FlipHorizontally;
 			Texture2D texture = GetTexture(Texture);
 			int frameHeight = texture.Height / Main.projFrames[projectile.type];
 			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			for (int i = 0; i < nToDraw; i++)
+			for(int i = 0; i < blurDrawer.BlurLength; i++)
 			{
-				Vector2 pos = projectile.Center + i * velocity * velocityFraction;
-				Color lightColor = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
-				lightColor.A = (byte)128;
-				spriteBatch.Draw(texture, pos - Main.screenPosition,
-					bounds, lightColor, r,
-					origin, 1, effects, 0);
+				if(!blurDrawer.GetBlurPosAndColor(i, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
+				spriteBatch.Draw(texture, blurPos - Main.screenPosition,
+					bounds, blurColor, r, origin, 1, effects, 0);
+				if(usingSpecial && isDashing)
+				{
+					float scale = (blurDrawer.BlurLength - i) / (float)(blurDrawer.BlurLength + 1);
+					Vector2 offset = new Vector2(96, 0) * chargeDirection;
+					DrawShockwave(spriteBatch, blurPos + offset, Color.Crimson * scale, scale);
+				}
 			}
 		}
+
 		private void DrawClingers(SpriteBatch spriteBatch, Color lightColor)
 		{
 			Texture2D texture = GetTexture(Texture + "_Clingers");
@@ -322,7 +450,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if (vectorToIdle.Length() < 32)
+			if(usingSpecial)
+			{
+				// set in SpecialTargetedMovement
+			} else if (vectorToIdle.Length() < 32)
 			{
 				projectile.spriteDirection = player.direction;
 			}
@@ -352,7 +483,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override float ComputeInertia() => isDashing ? 4 : base.ComputeInertia();
 
-		public override float MaxDistanceFromPlayer() => 700f;
+		public override float MaxDistanceFromPlayer() => usingSpecial ? 2 * SpecialXRange : 700f;
 	}
 
 	public class GuideVoodooSquireMinion : WeaponHoldingSquire
@@ -426,6 +557,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			{
 				projectile.Kill();
 			}
+		}
+
+		public override void OnStartUsingSpecial()
+		{
+			mockHealth = 0;
+			projectile.Kill();
 		}
 
 		private byte getGradient(byte b1, byte b2, float weight)
