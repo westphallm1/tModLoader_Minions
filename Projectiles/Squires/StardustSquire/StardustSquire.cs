@@ -285,6 +285,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		protected override float projectileVelocity => 14;
 		private int attackSequence = 0; // kinda replicate CoordinatedWeaponHoldingSquire but not quire
 		protected override bool travelRangeCanBeModified => false;
+
+		protected override int SpecialCooldown => 60;
 		public StardustSquireMinion() : base(ItemType<StardustSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -376,5 +378,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override float ComputeTargetedSpeed() => 16;
 
 		public override float MaxDistanceFromPlayer() => 60;
+
+		public override void OnStartUsingSpecial()
+		{
+			if(player.whoAmI == Main.myPlayer)
+			{
+				Projectile.NewProjectile(
+					Main.MouseWorld,
+					Vector2.Zero,
+					ProjectileType<StardustConstellation>(),
+					0,
+					0,
+					player.whoAmI);
+			}
+		}
 	}
 }
