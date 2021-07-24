@@ -107,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			} 
 			if(smallStars.Count < MaxSmallStars && Main.rand.NextFloat() < SmallSpawnChance)
 			{
-				Vector2 parentPos = bigStars[Main.rand.Next(bigStars.Count)].EndOffset;
+				Vector2 parentPos = bigStars[Main.rand.Next(bigStars.Count)].position;
 				smallStars.Add(new ConstellationSmallStar(animationFrame, parentPos));
 			}
 		}
@@ -169,7 +169,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		static int MaxConnection = 80;
 
 		Vector2 StartPoint;
-		internal Vector2 EndOffset;
+		internal Vector2 EndOffset { get; private set; }
+		internal Vector2 position => StartPoint + EndOffset;
 		Texture2D texture;
 		int idx;
 		int maxConnections;
