@@ -285,8 +285,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		protected override float projectileVelocity => 14;
 		private int attackSequence = 0; // kinda replicate CoordinatedWeaponHoldingSquire but not quire
 		protected override bool travelRangeCanBeModified => false;
-
-		protected override int SpecialCooldown => 60;
 		public StardustSquireMinion() : base(ItemType<StardustSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -349,7 +347,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 							projectile.Center,
 							angleVector,
 							ProjectileType<StardustGuardianProjectile>(),
-							projectile.damage / 3,
+							projectile.damage,
 							projectile.knockBack,
 							Main.myPlayer);
 					}
@@ -371,6 +369,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			}
 		}
 
+		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.StandardTargetedMovement(vectorToTargetPosition);
+		}
+
 		protected override float WeaponDistanceFromCenter() => 12;
 
 		public override float ComputeIdleSpeed() => 16;
@@ -383,13 +386,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
+				Vector2 target = Main.MouseWorld - projectile.Center;
+				target.SafeNormalize();
+				target *= 2 * projectileVelocity;
 				Projectile.NewProjectile(
-					Main.MouseWorld,
-					Vector2.Zero,
-					ProjectileType<StardustConstellation>(),
-					0,
-					0,
-					player.whoAmI);
+					projectile.Center,
+					target,
+					ProjectileType<ConstellationSeed>(),
+					projectile.damage / 2,
+					projectile.knockBack / 2,
+					player.whoAmI,
+					ai0: Main.MouseWorld.X,
+					ai1: Main.MouseWorld.Y);
 			}
 		}
 	}

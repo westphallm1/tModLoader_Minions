@@ -1,4 +1,8 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.NPCs;
+using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,15 +12,160 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 {
+
+
+	/// <summary>
+	/// Uses ai[0], ai[1] to store target position
+	/// </summary>
+	class ConstellationSeed : ModProjectile
+	{
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.Twinkle;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[projectile.type] = 1;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
+		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 56;
+			projectile.height = 56;
+			projectile.penetrate = -1;
+			projectile.friendly = false;
+			projectile.tileCollide = false;
+			projectile.usesLocalNPCImmunity = true;
+			projectile.timeLeft = 60;
+		}
+
+		public override void AI()
+		{
+			projectile.rotation = projectile.velocity.ToRotation();
+			Vector2 targetPos = new Vector2(projectile.ai[0], projectile.ai[1]);
+			if(Vector2.DistanceSquared(projectile.Center, targetPos) < 32 * 32)
+			{
+				projectile.Kill();
+			}
+			for (int i = 0; i < 5; i++)
+			{
+				Vector2 velocity = Vector2.Zero;
+				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 0.9f);
+			}
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			Vector2 targetPos = new Vector2(projectile.ai[0], projectile.ai[1]);
+			if(projectile.owner == Main.myPlayer)
+			{
+				Projectile.NewProjectile(
+					targetPos,
+					Vector2.Zero,
+					ProjectileType<StardustConstellation>(),
+					projectile.damage,
+					projectile.knockBack,
+					projectile.owner);
+			}
+		}
+	}
+	/// <summary>
+	/// Uses ai[0] for target
+	/// </summary>
+	class StardustHomingStar : ModProjectile
+	{
+		NPC target;
+		float baseVelocity;
+		MotionBlurDrawer blurDrawer;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[projectile.type] = 1;
+			ProjectileID.Sets.MinionShot[projectile.type] = true;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 16;
+			projectile.height = 16;
+			projectile.penetrate = 1;
+			projectile.friendly = true;
+			projectile.tileCollide = false;
+			projectile.usesLocalNPCImmunity = true;
+			projectile.timeLeft = 300;
+			blurDrawer = new MotionBlurDrawer(10);
+		}
+
+		public override void AI()
+		{
+			base.AI();
+			if(projectile.ai[0] == 0)
+			{
+				return; // failsafe in case we got a bad NPC index
+			}
+			if(target == null)
+			{
+				target = Main.npc[(int)projectile.ai[0]];
+				baseVelocity = projectile.velocity.Length();
+			}
+			if(!target.active)
+			{
+				projectile.Kill();
+				return;
+			}
+			Vector2 vectorToTarget = target.Center - projectile.Center;
+			float distanceToTarget = vectorToTarget.Length();
+			if(distanceToTarget > baseVelocity)
+			{
+				vectorToTarget.SafeNormalize();
+				vectorToTarget *= baseVelocity;
+			}
+			int inertia = projectile.timeLeft > 285 ? 12 : 4;
+			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTarget) / inertia;
+			blurDrawer.Update(projectile.Center);
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				int dustId = Dust.NewDust(projectile.position, projectile.width, projectile.height, 229);
+				Dust dust = Main.dust[dustId];
+				dust.noGravity = true;
+				dust.velocity *= 3f;
+			}
+		}
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			float r = projectile.rotation;
+			Vector2 pos = projectile.Center;
+			Texture2D texture = Main.projectileTexture[projectile.type];
+			for(int i = 0; i < blurDrawer.BlurLength; i++)
+			{
+				if(!blurDrawer.GetBlurPosAndColor(i, Color.White, out Vector2 blurPos, out Color blurColor)) { break; }
+				float scale = MathHelper.Lerp(0.75f, 0.25f, i / (float)blurDrawer.BlurLength);
+				spriteBatch.Draw(texture, blurPos - Main.screenPosition,
+					texture.Bounds, blurColor * 0.5f, r,
+					texture.Bounds.Center(), scale, 0, 0);
+			}
+			spriteBatch.Draw(texture, pos - Main.screenPosition,
+				texture.Bounds, Color.White, r,
+				texture.Bounds.Center(), 0.75f, 0, 0);
+			return false;
+		}
+	}
 	// This is an unfortunate class hierarchy
 	class StardustConstellation : TransientMinion
 	{
-		internal static int TimeToLive = 240;
+		internal static int TimeToLive = 8 * 60;
 		internal static int ConstellationSize = 400;
+		internal static int AttackRange = 600;
 		internal static int BigStarCount = 16;
 		internal static int MaxSmallStars = 16;
 		internal static float SmallSpawnChance = 0.125f; // 25% chance to spawn a small star each frame
@@ -25,6 +174,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		internal List<ConstellationSmallStar> smallStars;
 		private SpriteCompositionHelper scHelper;
 		private Texture2D smallStarTexture;
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			return false;
+		}
 
 		public override void SetDefaults()
 		{
@@ -84,6 +238,41 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// no-op
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if(player.whoAmI == Main.myPlayer && animationFrame % 10 == 0 && targetNPCIndex is int idx)
+			{
+				Vector2 launchPos = projectile.Center + bigStars[Main.rand.Next(bigStars.Count)].EndOffset;
+				int projectileVelocity = 12;
+				vectorToTargetPosition.SafeNormalize();
+				vectorToTargetPosition *= projectileVelocity;
+				Vector2 launchVel = vectorToTargetPosition.RotatedBy(Main.rand.NextFloat(MathHelper.Pi / 8) - MathHelper.Pi / 16);
+
+				Projectile.NewProjectile(
+					launchPos,
+					launchVel,
+					ProjectileType<StardustHomingStar>(),
+					projectile.damage,
+					projectile.knockBack,
+					player.whoAmI,
+					ai0: idx);
+			}
+		}
+
+		public override Vector2? FindTarget()
+		{
+			if (animationFrame < 15) 
+			{ 
+				return null; 
+			}
+			if(GetClosestEnemyToPosition(projectile.Center, AttackRange, false) is NPC target)
+			{
+				targetNPCIndex = target.whoAmI;
+				return target.Center - projectile.Center;
+			}
+			return null;
 		}
 
 		private void UpdateSmallStars()

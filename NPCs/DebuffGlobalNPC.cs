@@ -12,6 +12,7 @@ namespace AmuletOfManyMinions.NPCs
 	{
 		public short cellStack;
 		public short pygmySpearStack;
+		public short starstruckStack;
 
 		public override bool InstancePerEntity => true;
 		public override void UpdateLifeRegen(NPC npc, ref int damage)
@@ -22,7 +23,7 @@ namespace AmuletOfManyMinions.NPCs
 				{
 					npc.lifeRegen = 0;
 				}
-				npc.lifeRegen -= 20 * cellStack;
+				npc.lifeRegen -= 2 * 20 * cellStack;
 				if(damage < 10 * cellStack)
 				{
 					damage = 10 * cellStack;
@@ -35,10 +36,23 @@ namespace AmuletOfManyMinions.NPCs
 				{
 					npc.lifeRegen = 0;
 				}
-				npc.lifeRegen -= 10 * pygmySpearStack;
+				npc.lifeRegen -= 2 * 10 * pygmySpearStack;
 				if(damage < 5 * pygmySpearStack)
 				{
 					damage = 5 * pygmySpearStack;
+				}
+			}
+
+			if(starstruckStack > 0)
+			{
+				if(npc.lifeRegen > 0)
+				{
+					npc.lifeRegen = 0;
+				}
+				npc.lifeRegen -= 2 * 40 * starstruckStack;
+				if(damage < 20 * starstruckStack)
+				{
+					damage = 10 * starstruckStack;
 				}
 			}
 		}
