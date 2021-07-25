@@ -35,9 +35,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			item.knockBack = 4.0f;
 			item.width = 24;
 			item.height = 38;
-			item.damage = 24;
+			item.damage = 32;
 			item.value = Item.buyPrice(0, 2, 0, 0);
-			item.rare = ItemRarityID.Orange;
+			item.rare = ItemRarityID.Yellow;
 		}
 	}
 
