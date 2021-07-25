@@ -187,6 +187,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// A simpler version of SelectedEnemyInRange that doesn't require any tactics/teams stuff
 		public NPC GetClosestEnemyToPosition(Vector2 position, float searchRange, bool requireLOS = true)
 		{
+			float minDist = float.MaxValue;
+			NPC closest = null;
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
@@ -194,14 +196,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					continue;
 				}
-				bool inRange = Vector2.DistanceSquared(npc.Center, position) < searchRange * searchRange;
+				float distanceSq = Vector2.DistanceSquared(npc.Center, position);
+				bool inRange =  distanceSq < searchRange * searchRange;
 				bool lineOfSight = (!requireLOS) || (inRange && Collision.CanHitLine(position, 1, 1, npc.position, npc.width, npc.height));
-				if (lineOfSight && inRange)
+				if (lineOfSight && inRange && distanceSq < minDist)
 				{
-					return npc;
+					minDist = distanceSq;
+					closest = npc;
 				}
 			}
-			return null;
+			return closest;
 		}
 
 		public Vector2? AnyEnemyInRange(float maxRange, Vector2? centeredOn = null, bool noLOS = false)
