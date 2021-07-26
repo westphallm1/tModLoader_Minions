@@ -220,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 					Projectile.NewProjectile(projectile.Center,
 						angleVector,
 						ProjectileType<SkywareArrow>(),
-						2 * projectile.damage,
+						3 * projectile.damage / 2,
 						projectile.knockBack,
 						Main.myPlayer);
 				}

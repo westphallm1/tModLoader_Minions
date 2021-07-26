@@ -443,11 +443,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			return false;
 		}
 
-		public override float MaxDistanceFromPlayer() => usingSpecial ? 1400 : 232;
+		public override float MaxDistanceFromPlayer() => usingSpecial ? 1400 : 300;
 
-		public override float ComputeTargetedSpeed() => 11;
+		public override float ComputeTargetedSpeed() => 14;
 
-		public override float ComputeIdleSpeed() => 11;
+		public override float ComputeIdleSpeed() => 14;
 
 		protected override float WeaponDistanceFromCenter() => 12;
 

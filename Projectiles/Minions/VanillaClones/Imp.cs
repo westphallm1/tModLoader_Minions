@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class ImpFireball : ModProjectile
+	public abstract class BaseImpFireball : ModProjectile
 	{
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.ImpFireball;
 		public override void SetStaticDefaults()
@@ -76,7 +76,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class ImpPortalUnholyTrident: ModProjectile
+	public class ImpFireball : BaseImpFireball
+	{
+	}
+
+	public abstract class BaseMinionUnholyTrident: ModProjectile
 	{
 
 		public override void SetStaticDefaults()
@@ -138,6 +142,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				origin, 1, 0, 0);
 			return false;
 		}
+	}
+	public class ImpPortalUnholyTrident: BaseMinionUnholyTrident
+	{
+
 	}
 
 	public class ImpMinion : HoverShooterMinion
