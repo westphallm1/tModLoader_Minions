@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
@@ -54,6 +56,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 		internal override int BuffId => BuffType<VoidKnifeMinionBuff>();
 		protected override Vector3 lightColor => Color.Purple.ToVector3() * 0.75f;
+
+		protected HashSet<int> markedNPCs = new HashSet<int>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -75,6 +79,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			targetIsDead = false;
 		}
 
+		public override Vector2 IdleBehavior()
+		{
+			markedNPCs.Clear();
+			int projType = ProjectileType<VoidButterflyTargetMarker>();
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == projType)
+				{
+					markedNPCs.Add((int)p.ai[0]);
+				}
+			}
+			return base.IdleBehavior();
+		}
+
+		public override bool ShouldIgnoreNPC(NPC npc)
+		{
+			return base.ShouldIgnoreNPC(npc) || !markedNPCs.Contains(npc.whoAmI);
+		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
@@ -150,6 +173,149 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			float r = projectile.rotation + 3 * (float)Math.PI / 2;
 			projectile.velocity = new Vector2((float)Math.Cos(r), (float)Math.Sin(r));
 			projectile.velocity *= travelVelocity;
+		}
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			int MinionType = ProjectileType<VoidButterflyMinion>();
+			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[MinionType] == 0)
+			{
+				// hack to prevent multiple 
+				if (GetMinionsOfType(projectile.type)[0].whoAmI == projectile.whoAmI)
+				{
+					Projectile.NewProjectile(player.Top, Vector2.Zero, MinionType, projectile.damage, projectile.knockBack, Main.myPlayer);
+				}
+			} 
+		}
+	}
+
+	public class VoidButterflyTargetMarker : ModProjectile
+	{
+		private NPC clingTarget;
+
+		public override string Texture => "Terraria/Item_0";
+		public override void SetDefaults()
+		{
+			projectile.friendly = false;
+			projectile.timeLeft = 240;
+		}
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			return false;
+		}
+		public override void AI()
+		{
+			base.AI();
+			// failsafe in case we got a bad NPC index
+			if (projectile.ai[0] == 0)
+			{
+				projectile.Kill();
+				return; 
+			}
+			// "on spawn" code
+			if (clingTarget == null)
+			{
+				clingTarget = Main.npc[(int)projectile.ai[0]];
+				projectile.velocity = Vector2.Zero;
+			}
+			if (!clingTarget.active)
+			{
+				projectile.Kill();
+				return;
+			}
+			projectile.Center = clingTarget.Center;
+		}
+	}
+
+	public class VoidButterflyMinion : HeadCirclingGroupAwareMinion
+	{
+		internal override int BuffId => BuffType<VoidKnifeMinionBuff>();
+
+		internal HashSet<int> markedNPCs = new HashSet<int>();
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Voidwing Butterfly");
+			Main.projFrames[projectile.type] = 4;
+			IdleLocationSets.circlingHead.Add(projectile.type);
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.width = 24;
+			projectile.height = 24;
+			attackFrames = 60;
+			targetSearchDistance = 900;
+			maxSpeed = 12;
+		}
+
+		public override Vector2 IdleBehavior()
+		{
+			markedNPCs.Clear();
+			int projType = ProjectileType<VoidButterflyTargetMarker>();
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == projType)
+				{
+					markedNPCs.Add((int)p.ai[0]);
+				}
+			}
+			return base.IdleBehavior();
+		}
+
+		public override bool ShouldIgnoreNPC(NPC npc)
+		{
+			return base.ShouldIgnoreNPC(npc) || markedNPCs.Contains(npc.whoAmI);
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			int inertia = 14;
+			if(vectorToTargetPosition.LengthSquared() > maxSpeed * maxSpeed)
+			{
+				vectorToTargetPosition.Normalize();
+				vectorToTargetPosition *= maxSpeed;
+			}
+			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+			projectile.spriteDirection = Math.Sign(projectile.velocity.X);
+		}
+
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			damage = 1;
+		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			if(player.whoAmI == Main.myPlayer && !markedNPCs.Contains(target.whoAmI))
+			{
+				Projectile.NewProjectile(
+					target.Center,
+					Vector2.Zero,
+					ProjectileType<VoidButterflyTargetMarker>(),
+					0,
+					0,
+					player.whoAmI,
+					ai0: target.whoAmI);
+			}
+		}
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
+			Texture2D texture = Main.projectileTexture[projectile.type];
+			int height = texture.Height / Main.projFrames[projectile.type];
+			Rectangle bounds = new Rectangle(0, projectile.frame * height, texture.Width, height);
+			Vector2 origin = bounds.Size() / 2;
+			SpriteEffects effects = projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
+			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
+				bounds, translucentColor, projectile.rotation,
+				origin, 1, effects, 0);
+			return false;
 		}
 	}
 }

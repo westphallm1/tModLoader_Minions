@@ -37,11 +37,14 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases minion damage by 35%\n" +
+			player.setBonus = 
+				"Decreases max minions by 1\n" +
+				"Increases minion damage by 35%\n" +
 				"Increases squire travel range by 7 blocks\n" +
 				"Increases squire travel speed by 30%\n" +
 				"Increases squire attack speed by 20%\n";
 			player.minionDamageMult += 0.35f;
+			player.maxMinions -= 1;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squirePlayer.squireRangeFlatBonus += 112f;
 			squirePlayer.squireTravelSpeedMultiplier += 0.30f;
