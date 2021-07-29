@@ -161,6 +161,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			projectile.height = 24;
 			frameSpeed = 10;
 			wormDrawer = new SpiritFlailDrawer();
+			projectile.minionSlots = 0;
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

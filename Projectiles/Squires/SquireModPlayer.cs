@@ -29,11 +29,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		internal bool hardmodeOreSquireArmorSetEquipped;
 		internal bool spookyArmorSetEquipped;
 		internal bool squireTechnoSkullAccessory;
+		internal bool graniteArmorEquipped;
+		internal float usedMinionSlots;
 
 		// shouldn't be hand-rolling key press detection but here we are
 		private bool didReleaseTap;
 		private bool didDoubleTap;
-		internal bool graniteArmorEquipped;
+		
 
 		public override void ResetEffects()
 		{
@@ -177,6 +179,29 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if (player.ownedProjectileCounts[ProjectileType<SquireSkullProjectile>()] == 0)
 			{
 				squireDebuffOnHit = -1;
+			}
+
+			// count used minion slots
+			usedMinionSlots = 0;
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI)
+				{
+					usedMinionSlots += p.minionSlots;
+				}
+			}
+			if(usedMinionSlots > 0)
+			{
+				float damageReduction = ClientConfig.Instance.SquireDamageMinionNerf / 100f;
+				squireDamageMultiplierBonus -= damageReduction;
+			}
+			if (ClientConfig.Instance.SquireMinionSlot && GetSquire() != default)
+			{
+				if( GetSquire() != default)
+				{
+					player.maxMinions -= 1;
+				}
 			}
 		}
 

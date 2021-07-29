@@ -325,12 +325,18 @@ namespace AmuletOfManyMinions.Items.Accessories
 			}
 			Player player = Main.player[projectile.owner];
 			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
+			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			// require multiple minion types for any bonus
+			float damageMult = 1;
 			if (modPlayer.minionVarietyBonusCount > 1)
 			{
-				float damageMult = 1 + modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus;
-				damage = (int)(damage * damageMult);
+				damageMult += modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus;
 			}
+			if(squirePlayer.GetSquire() != default)
+			{
+				damageMult -= ClientConfig.Instance.MinionDamageSquireNerf / 100f;
+			}
+			damage = (int)(damage * damageMult);
 		}
 	}
 }

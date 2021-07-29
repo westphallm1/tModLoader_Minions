@@ -87,6 +87,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 		public SoulboundSpecialBow() : base(ItemType<SoulboundSwordMinionItem>()) { }
 
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			projectile.minionSlots = 0;
+		}
 		public override void OnSpawn()
 		{
 			base.OnSpawn();

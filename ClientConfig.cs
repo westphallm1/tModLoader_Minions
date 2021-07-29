@@ -53,6 +53,28 @@ namespace AmuletOfManyMinions
 		[JsonIgnore]
 		public bool AnchorToHealth => TacticsUIAnchorPos == AnchorHealth;
 
+
+		[Range(0, 50)]
+		[Increment(10)]
+		[DrawTicks]
+		[DefaultValue(0)]
+		[Label("Minion/Squire damage nerf")]
+		[Tooltip("If > 0, minion damage will be reduced by a percentage while a squire is active")]
+		public int MinionDamageSquireNerf;
+
+		[Range(0, 15)]
+		[Increment(1)]
+		[DrawTicks]
+		[DefaultValue(0)]
+		[Label("Squire/Minion damage nerf")]
+		[Tooltip("If > 0, squire damage will be reduced by a percentage for each active minion")]
+		public int SquireDamageMinionNerf;
+
+		[DefaultValue(false)]
+		[Label("Squires Occupy a minion slot")]
+		[Tooltip("If true, squires will occupy a minion slot")]
+		public bool SquireMinionSlot;
+
 		[OnDeserialized]
 		internal void OnDeserializedMethod(StreamingContext context)
 		{

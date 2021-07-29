@@ -111,6 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			projectile.height = 24;
 			frameSpeed = 10;
 			blurHelper = new MotionBlurDrawer(5);
+			projectile.minionSlots = 0;
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
