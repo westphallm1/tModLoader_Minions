@@ -70,7 +70,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			DisplayName.SetDefault("Copter-X");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[projectile.type] = 5;
-			wormDrawer = new CopterDrawer();
 		}
 
 		public sealed override void SetDefaults()
@@ -78,6 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			base.SetDefaults();
 			projectile.tileCollide = false;
 			frameSpeed = 2;
+			wormDrawer = new CopterDrawer();
 		}
 
 		protected override float ComputeSearchDistance()

@@ -264,7 +264,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 			}
 			otherMinions.Sort((x, y) => x.minionPos - y.minionPos);
-			if(otherMinions.Count == 0)
+			if(otherMinions.Count == 0 && projectile.type == projectileType)
 			{
 				otherMinions.Add(projectile);
 			}
