@@ -54,6 +54,14 @@ namespace AmuletOfManyMinions
 		public bool AnchorToHealth => TacticsUIAnchorPos == AnchorHealth;
 
 
+		[Range(-80, 100)]
+		[Increment(10)]
+		[DrawTicks]
+		[DefaultValue(0)]
+		[Label("Global damage adjustment")]
+		[Tooltip("Modify the damage of every item in the mod by a percentage")]
+		public int GlobalDamageMultiplier;
+
 		[Range(0, 50)]
 		[Increment(10)]
 		[DrawTicks]
@@ -63,7 +71,7 @@ namespace AmuletOfManyMinions
 		public int MinionDamageSquireNerf;
 
 		[Range(0, 15)]
-		[Increment(1)]
+		[Increment(5)]
 		[DrawTicks]
 		[DefaultValue(0)]
 		[Label("Squire/Minion damage nerf")]

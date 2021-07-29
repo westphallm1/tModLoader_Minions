@@ -168,6 +168,10 @@ namespace AmuletOfManyMinions.Items.Accessories
 					accessory.ModifyPlayerWeaponDamage(this, item, ref add, ref mult, ref flat);
 				}
 			}
+			if(item.modItem != null && item.modItem.mod == mod)
+			{
+				add += ClientConfig.Instance.GlobalDamageMultiplier / 100f;
+			}
 			// a bit hacky, will wanna make this nicer eventually
 			flat += summonFlatDamage;
 		}
