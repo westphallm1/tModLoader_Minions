@@ -81,7 +81,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)
 		{
-			base.ModifyWeaponDamage(item, ref add, ref mult, ref flat);
+			if(!item.summon && usedMinionSlots > 0)
+			{
+				add -= ClientConfig.Instance.OtherDamageMinionNerf / 100f;
+			}
 			if (!SquireMinionTypes.Contains(item.shoot))
 			{
 				return;

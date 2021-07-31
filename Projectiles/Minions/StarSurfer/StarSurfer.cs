@@ -149,7 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 				{
 					vectorToTargetPosition.SafeNormalize();
 					vectorToTargetPosition *= projectileVelocity;
-					Projectile.NewProjectile(projectile.position, vectorToTargetPosition, projectileType, projectileDamage, 5, Main.myPlayer, ai0: projectile.minionPos);
+					Projectile.NewProjectile(projectile.position, VaryLaunchVelocity(vectorToTargetPosition), projectileType, projectileDamage, 5, Main.myPlayer, ai0: projectile.minionPos);
 				}
 			}
 		}

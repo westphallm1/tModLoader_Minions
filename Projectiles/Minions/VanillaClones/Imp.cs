@@ -375,7 +375,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				Vector2 randomShoot = lineOfFire + Main.rand.NextFloatDirection().ToRotationVector2();
 				Projectile.NewProjectile(
 					projectile.Center + fireOffset,
-					randomShoot,
+					VaryLaunchVelocity(randomShoot),
 					projId,
 					projectile.damage,
 					projectile.knockBack,

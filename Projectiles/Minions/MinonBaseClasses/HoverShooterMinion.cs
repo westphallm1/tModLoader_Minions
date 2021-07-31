@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			Projectile.NewProjectile(
 				projectile.Center,
-				lineOfFire,
+				minion.VaryLaunchVelocity(lineOfFire),
 				projId,
 				projectile.damage,
 				projectile.knockBack,

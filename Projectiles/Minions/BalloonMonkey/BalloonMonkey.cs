@@ -278,7 +278,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 				}
 				Projectile.NewProjectile(
 					projectile.Center,
-					angleToTarget,
+					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<BalloonMonkeyDart>(),
 					projectile.damage,
 					projectile.knockBack,

@@ -146,7 +146,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				lastShootFrame = animationFrame;
 				Projectile.NewProjectile(
 					projectile.Center,
-					lineOfFire,
+					VaryLaunchVelocity(lineOfFire),
 					ProjectileType<GoblinGunnerBullet>(),
 					projectile.damage,
 					projectile.knockBack,
@@ -331,7 +331,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				{
 					Projectile.NewProjectile(
 						pos,
-						vectorToTargetPosition,
+						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<GoblinGunnerBullet>(),
 						projectile.damage,
 						projectile.knockBack,

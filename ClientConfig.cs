@@ -23,6 +23,8 @@ namespace AmuletOfManyMinions
 		public const string QuickDefendHold = "Hold";
 		public static readonly string[] QuickDefendOptions = new string[] { QuickDefendToggle, QuickDefendHold };
 
+		// Miscellaneous config options
+		[Header("General Configuration")]
 		[Label("Minion Tactic UI Anchor Position")]
 		[Tooltip("Choose between anchoring the UI with the right side of the inventory, or the left side of the health/minimap")]
 		[DrawTicks]
@@ -54,33 +56,47 @@ namespace AmuletOfManyMinions
 		public bool AnchorToHealth => TacticsUIAnchorPos == AnchorHealth;
 
 
-		[Range(-80, 100)]
-		[Increment(10)]
-		[DrawTicks]
-		[DefaultValue(0)]
-		[Label("Global damage adjustment")]
-		[Tooltip("Modify the damage of every item in the mod by a percentage")]
+		// balance config options
+		[Header("Balance Configuration")]
+
+		[Range(20, 300)]
+		[Increment(5)]
+		[DefaultValue(100)]
+		[Label("Global Damage Scale")]
+		[Tooltip("Scale the damage of every item in the mod by a positive or negative percentage. 100% = default")]
+		[Slider]
 		public int GlobalDamageMultiplier;
 
-		[Range(0, 50)]
-		[Increment(10)]
-		[DrawTicks]
+
+		[Range(0, 80)]
 		[DefaultValue(0)]
-		[Label("Minion/Squire damage nerf")]
-		[Tooltip("If > 0, minion damage will be reduced by a percentage while a squire is active")]
+		[Label("Non-Minion Anti-Synergy")]
+		[Tooltip("Reduce damage done by non-summon weapons while a minion is active")]
+		[Slider]
+		public int OtherDamageMinionNerf;
+
+		[Range(0, 50)]
+		[DefaultValue(0)]
+		[Label("Minion/Squire Anti-Synergy")]
+		[Tooltip("Reduce minion damage by a percentage while a squire is active")]
+		[Slider]
 		public int MinionDamageSquireNerf;
 
 		[Range(0, 15)]
-		[Increment(5)]
-		[DrawTicks]
 		[DefaultValue(0)]
-		[Label("Squire/Minion damage nerf")]
-		[Tooltip("If > 0, squire damage will be reduced by a percentage for each active minion")]
+		[Label("Squire/Minion Anti-Synergy")]
+		[Tooltip("Reduce squire damage by a percentage for *each* active minion")]
+		[Slider]
 		public int SquireDamageMinionNerf;
 
+		[Label("Minions Are Less Accurate")]
+		[Tooltip("If enabled, minions will shoot less acurately and turn less sharply while chasing enemies")]
 		[DefaultValue(false)]
-		[Label("Squires Occupy a minion slot")]
-		[Tooltip("If true, squires will occupy a minion slot")]
+		public bool MinionsInnacurate;
+
+		[DefaultValue(false)]
+		[Label("Squires Occupy a Minion Slot")]
+		[Tooltip("If enabled, squires will occupy a minion slot")]
 		public bool SquireMinionSlot;
 
 		[OnDeserialized]
@@ -97,6 +113,11 @@ namespace AmuletOfManyMinions
 			{
 				QuickDefendHotkeyStyle = QuickDefendToggle;
 			}
+		}
+
+		public override void OnChanged()
+		{
+			// TODO handle presets
 		}
 	}
 }

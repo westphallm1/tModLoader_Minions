@@ -353,7 +353,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 				}
 				Projectile.NewProjectile(
 					projectile.Center,
-					angleToTarget,
+					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<PirateDeadeyeBullet>(),
 					projectile.damage,
 					projectile.knockBack,

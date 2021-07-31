@@ -364,7 +364,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				velocity.X += Main.npc[targetIdx].velocity.X;
 				Projectile.NewProjectile(
 					projectile.Center,
-					velocity,
+					VaryLaunchVelocity(velocity),
 					ProjectileType<WhackAMoleMinionProjectile>(),
 					projectile.damage,
 					projectile.knockBack,

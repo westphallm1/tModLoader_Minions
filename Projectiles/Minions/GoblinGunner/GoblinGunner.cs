@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 				{
 					Projectile.NewProjectile(
 						pos,
-						vectorToTargetPosition,
+						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<GoblinGunnerBullet>(),
 						projectile.damage,
 						projectile.knockBack,

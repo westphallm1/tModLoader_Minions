@@ -264,7 +264,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			{
 				Projectile.NewProjectile(
 					projectile.Center,
-					new Vector2(vectorAbove.X / 8, 2),
+					VaryLaunchVelocity(new Vector2(vectorAbove.X / 8, 2)),
 					ProjectileType<BeeQueenBucket>(),
 					projectile.damage,
 					projectile.knockBack,

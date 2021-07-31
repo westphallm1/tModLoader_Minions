@@ -196,7 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 					{
 						Projectile.NewProjectile(
 							pos,
-							vectorToTargetPosition,
+							VaryLaunchVelocity(vectorToTargetPosition),
 							projType,
 							projectile.damage,
 							projectile.knockBack,

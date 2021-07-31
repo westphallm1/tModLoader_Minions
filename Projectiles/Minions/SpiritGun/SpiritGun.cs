@@ -229,6 +229,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			IdleMovement(vectorToIdle);
 			if (framesSinceLastHit > 15 && unfiredShots > 0 && !isReloading)
 			{
+				vectorToTargetPosition = VaryLaunchVelocity(vectorToTargetPosition);
 				Vector2 pos = projectile.Center;
 				if (Main.myPlayer == player.whoAmI)
 				{

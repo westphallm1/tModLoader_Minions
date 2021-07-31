@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			}
 			if(item.modItem != null && item.modItem.mod == mod)
 			{
-				add += ClientConfig.Instance.GlobalDamageMultiplier / 100f;
+				add += (ClientConfig.Instance.GlobalDamageMultiplier - 100) / 100f;
 			}
 			// a bit hacky, will wanna make this nicer eventually
 			flat += summonFlatDamage;

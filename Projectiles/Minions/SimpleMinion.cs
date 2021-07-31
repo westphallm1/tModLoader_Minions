@@ -2,6 +2,7 @@
 using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -227,6 +228,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			AfterMoving();
 			Animate();
 			oldVectorToIdle = vectorToIdle;
+			AdjustInertia();
 		}
 
 		/**
@@ -234,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		 */
 		public virtual void OnHitTarget(NPC target)
 		{
-
+			// no-op
 		}
 
 
@@ -269,6 +271,48 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				otherMinions.Add(projectile);
 			}
 			return otherMinions;
+		}
+
+		/**
+		 * Optionally tune down the turning radius of minions for a gameplay
+		 * experience closer to standard vanilla AI
+		 */
+		private void AdjustInertia()
+		{
+			if(ClientConfig.Instance.MinionsInnacurate && useBeacon && vectorToTarget is Vector2 target)
+			{
+				// only alter horizontal velocity, messes with gravity otherwise
+				float accelerationX = projectile.velocity.X - projectile.oldVelocity.X;
+				if(Math.Sign(accelerationX) == Math.Sign(target.X))
+				{
+					accelerationX *= 0.75f;
+				}
+				projectile.velocity.X = projectile.oldVelocity.X + accelerationX;
+			}
+		}
+
+		/**
+		 * Optionally introduce a shot spread to minions for a gameplay experience closer to standard
+		 * vanilla ai
+		 */
+		internal Vector2 VaryLaunchVelocity(Vector2 initial)
+		{
+			if(!ClientConfig.Instance.MinionsInnacurate)
+			{
+				return initial;
+			}
+			float maxRotation = MathHelper.Pi / 8;
+			float minRotation = MathHelper.Pi / 24;
+			float minRotDist = 800f;
+			if(targetNPCIndex is int idx)
+			{
+				float distance = Math.Min(minRotDist, Vector2.Distance(Main.npc[idx].Center, projectile.Center));
+				float rotation = MathHelper.Lerp(maxRotation, minRotation, distance/ minRotDist);
+				return initial.RotatedBy(Main.rand.NextFloat(rotation) - rotation/2);
+			} else
+			{
+				return initial.RotatedBy(Main.rand.NextFloat(minRotation) - minRotation/2);
+			}
 		}
 	}
 }

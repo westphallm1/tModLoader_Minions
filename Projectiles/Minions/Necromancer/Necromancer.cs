@@ -280,7 +280,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				{
 					projId = Projectile.NewProjectile(
 						pos,
-						vectorToTargetPosition,
+						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<BoneSphereProjectile>(),
 						projectile.damage,
 						projectile.knockBack,

@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 					{
 						Projectile.NewProjectile(
 							pos,
-							vectorToTargetPosition,
+							VaryLaunchVelocity(vectorToTargetPosition),
 							projType,
 							projectile.damage,
 							projectile.knockBack,

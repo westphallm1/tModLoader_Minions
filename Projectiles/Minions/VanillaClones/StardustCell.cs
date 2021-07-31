@@ -241,7 +241,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				Projectile.NewProjectile(
 					projectile.Center,
-					lineOfFire,
+					VaryLaunchVelocity(lineOfFire),
 					projId,
 					projectile.damage,
 					projectile.knockBack,

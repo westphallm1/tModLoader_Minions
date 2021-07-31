@@ -251,7 +251,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				}
 				Projectile.NewProjectile(
 					projectile.Center,
-					angleToTarget,
+					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<PygmySpear>(),
 					projectile.damage,
 					projectile.knockBack,

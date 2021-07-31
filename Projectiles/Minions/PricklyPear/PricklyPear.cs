@@ -242,7 +242,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 					velocity.X += projectile.velocity.X;
 					Projectile.NewProjectile(
 						projectile.Center,
-						velocity,
+						VaryLaunchVelocity(velocity),
 						ProjectileType<PricklyPearSeedProjectile>(),
 						projectile.damage,
 						projectile.knockBack,
