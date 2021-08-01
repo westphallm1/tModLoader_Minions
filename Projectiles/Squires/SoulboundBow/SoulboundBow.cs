@@ -189,7 +189,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		protected override float projectileVelocity => 18;
 
 		protected override int SpecialDuration => 2 * 60;
-		protected override int SpecialCooldown => 6 * 60;
+		protected override int SpecialCooldown => 8 * 60;
 		public SoulboundBowMinion() : base(ItemType<SoulboundBowMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -276,6 +276,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 					projectile.damage,
 					projectile.knockBack,
 					Main.myPlayer);
+				Main.PlaySound(new LegacySoundStyle(2, 1), projectile.Center);
 			}
 		}
 

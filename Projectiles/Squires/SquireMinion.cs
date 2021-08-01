@@ -69,6 +69,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public virtual int CooldownDoneDust => 15;
 
+		protected virtual LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 43);
+
 		public SquireMinion(int itemID)
 		{
 			itemType = itemID;
@@ -182,7 +184,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 					Main.dust[dustIdx].noLight = true;
 				}
 				// maybe using the mana refill sound isn't the best idea
-				Main.PlaySound(SoundID.MaxMana, projectile.Center);
+				Main.PlaySound(SoundID.MaxMana, player.Center);
 			}
 		}
 		
@@ -211,6 +213,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			usingSpecial = true;
 			specialStartFrame = animationFrame;
+			if(SpecialStartSound != null)
+			{
+				Main.PlaySound(SpecialStartSound, projectile.Center);
+			}
 			OnStartUsingSpecial();
 		}
 

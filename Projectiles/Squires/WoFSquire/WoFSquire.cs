@@ -123,8 +123,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		// used for tracking special state
 		Vector2 specialStartPos;
 		int chargeDirection;
+
+		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(15, 0);
 		protected override int SpecialDuration => SpecialLoopCount * SpecialLoopSpeed + SpecialLoopSpeed / 2 + SpecialChargeTime;
-		protected override int SpecialCooldown => 5 * 60;
+		protected override int SpecialCooldown => 6 * 60;
 
 		private MotionBlurDrawer blurDrawer;
 
@@ -507,6 +509,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		protected static int MockMaxHealth = 4;
 
 		protected int knockbackCounter = 0;
+
+		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(1, 0);
+
 
 		protected override LegacySoundStyle attackSound => null;
 

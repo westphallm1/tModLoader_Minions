@@ -259,6 +259,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 					projectile.damage,
 					projectile.knockBack,
 					Main.myPlayer);
+				Main.PlaySound(attackSound, spawnPos);
 
 			}
 

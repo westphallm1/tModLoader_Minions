@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -231,6 +232,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		static int cooldownCounter;
 
 		protected override int SpecialDuration => 5; // very short
+
+		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 5);
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

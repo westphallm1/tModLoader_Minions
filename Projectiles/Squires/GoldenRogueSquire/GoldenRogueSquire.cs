@@ -190,7 +190,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
 		protected override int SpecialDuration => 3 * 60;
-		protected override int SpecialCooldown => 8 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 
 		private int daggerSpeed = 10;
 		private float daggerSpread = 2.25f;

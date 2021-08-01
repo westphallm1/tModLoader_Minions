@@ -196,7 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		protected override bool IsMyTurn() => usingSpecial || base.IsMyTurn();
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
@@ -376,6 +376,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.SpecialTargetedMovement(vectorToTargetPosition);
 			int projType = ProjectileType<SoulboundArsenalLaser>();
 			Vector2 offset = UnitVectorFromWeaponAngle();
+			if(specialFrame % 10 == 0)
+			{
+				Main.PlaySound(SoundID.Item13, projectile.Center);
+			}
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];

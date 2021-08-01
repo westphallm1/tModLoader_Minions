@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -160,6 +161,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 					Main.dust[dustId].scale = Main.rand.NextFloat(0.9f, 1.3f);
 					Main.dust[dustId].velocity *= 0.2f;
 				}
+				Main.PlaySound(new LegacySoundStyle(2, 92), projectile.Center);
 			}
 		}
 
@@ -195,7 +197,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 6);
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 		public TitaniumSquireMinion() : base(ItemType<TitaniumSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()

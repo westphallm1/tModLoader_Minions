@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -58,6 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		const int TimeLeftToStartFalling = TimeToLive - 15;
 
 		public override string Texture => "Terraria/Item_" + ItemID.Mushroom;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -119,6 +121,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/LeafWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/MushroomSquire/MushroomSquireSword";
 
+		protected override LegacySoundStyle SpecialStartSound => null;
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
 		protected override Vector2 WingOffset => new Vector2(-4, 4);
@@ -158,6 +161,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 					5 * projectile.damage / 4,
 					projectile.knockBack,
 					projectile.owner);
+				Main.PlaySound(new LegacySoundStyle(2, 5), projectile.Center);
 			}
 		}
 

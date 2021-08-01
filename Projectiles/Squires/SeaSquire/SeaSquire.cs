@@ -211,7 +211,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		protected override float projectileVelocity => 8;
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 		public SeaSquireMinion() : base(ItemType<SeaSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()

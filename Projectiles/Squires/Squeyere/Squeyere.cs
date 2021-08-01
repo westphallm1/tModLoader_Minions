@@ -228,7 +228,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		protected override float projectileVelocity => 24f;
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 
 		public SqueyereMinion() : base(ItemType<SqueyereMinionItem>()) { }
 

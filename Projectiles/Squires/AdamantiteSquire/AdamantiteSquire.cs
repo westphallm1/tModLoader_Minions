@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -68,7 +69,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 6);
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
+
+		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(3, 12);
 
 		private MotionBlurDrawer blurHelper;
 		private int dashDirection = 1;

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -137,6 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 		public override void Kill(int timeLeft)
 		{
+			Main.PlaySound(new LegacySoundStyle(2, 107), projectile.Center);
 			Vector2 position = projectile.Center;
 			int width = 22;
 			int height = 22;
@@ -174,7 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override string Texture => "Terraria/Item_" + ItemID.FlaskofIchor;
 		protected override int DustId => 87;
 		protected override int BuffId => BuffID.Ichor;
-		protected override int BuffDuration => 240;
+		protected override int BuffDuration => 300;
 	}
 
 	public class CrimsonSquireMinion : WeaponHoldingSquire
@@ -191,6 +193,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
 		protected override float projectileVelocity => 12;
+
+		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 106);
+
+		protected override int SpecialCooldown => 8 * 60;
 		public CrimsonSquireMinion() : base(ItemType<CrimsonSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()

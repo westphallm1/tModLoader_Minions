@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		{
 			base.SetDefaults();
 			projectile.tileCollide = false;
-			frameSpeed = 2;
+			frameSpeed = 5;
 			wormDrawer = new CopterDrawer();
 		}
 
@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 	{
 		protected override void DrawHead()
 		{
-			Rectangle head = new Rectangle(76, 102, 24, 32);
+			Rectangle head = new Rectangle(206, 0, 24, 36);
 			AddSprite(2, head);
 		}
 
@@ -126,22 +126,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 				}
 				else
 				{
-					body = new Rectangle(0, 36, 18, 36);
+					body = new Rectangle(174, 0, 24, 36);
 				}
-				AddSprite(22 + 16 * i, body);
+				AddSprite(22 + 22 * i, body);
 			}
 		}
 
 		private Rectangle GetRotorFrame()
 		{
 			int frame = this.frame == 3 ? 1 : this.frame;
-			return new Rectangle(0, 108 + 36 * frame, 44, 36);
+			return new Rectangle(38 + 46 * frame, 0, 44, 36);
 		}
 
 		protected override void DrawTail()
 		{
-			Rectangle tail = new Rectangle(0, 72, 32, 36);
-			int dist = 26 + 16 * (SegmentCount + 1);
+			Rectangle tail = new Rectangle(0, 0, 36, 36);
+			int dist = 26 + 22 * (SegmentCount + 1);
 			AddSprite(dist, tail);
 		}
 	}

@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(2, 4);
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 
 		protected int swingDirection = 1;
 		public VikingSquireMinion() : base(ItemType<VikingSquireMinionItem>()) { }
@@ -112,6 +112,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 			bool? otherColliding = base.Colliding(projHitbox, targetHitbox);
 			weaponAngle = myWeaponAngle;
 			return (reallyColliding ?? false) || (otherColliding ?? false);
+		}
+
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if(usingSpecial && attackFrame == 0)
+			{
+				Main.PlaySound(attackSound, projectile.Center);
+			}
+			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
 
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)

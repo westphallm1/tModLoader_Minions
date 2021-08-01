@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		protected override Vector2 WingOffset => new Vector2(-4, 2);
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 		public BoneSquireMinion() : base(ItemType<BoneSquireMinionItem>()) { }
 
 		public sealed override void SetDefaults()
@@ -96,6 +96,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			}
 		}
 
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if(usingSpecial && attackFrame == 0)
+			{
+				Main.PlaySound(attackSound, projectile.Center);
+			}
+			base.StandardTargetedMovement(vectorToTargetPosition);
+		}
 		protected override void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
 		{
 			base.DrawWeapon(spriteBatch, usingSpecial ? Color.White : lightColor);

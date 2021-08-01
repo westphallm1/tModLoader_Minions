@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		{
 			base.SetDefaults();
 			DisplayName.SetDefault("Demon Squire");
-			Description.SetDefault("A bone squire will follow your orders!");
+			Description.SetDefault("A demonic squire will follow your orders!");
 		}
 	}
 
@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of Demons");
-			Tooltip.SetDefault("Summons a squire\nA bone squire will fight for you!\nClick and hold to guide its attacks");
+			Tooltip.SetDefault("Summons a squire\nA demon squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults()
@@ -119,6 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			base.IdleMovement(vectorToIdle);
 			if (animationFrame % attackRate == shootOnFrame && Main.myPlayer == player.whoAmI)
 			{
+				Main.PlaySound(SoundID.Item20, projectile.Center);
 				Projectile squire = squirePlayer.GetSquire();
 				// attack "towards the horizon" along the squire-mouse line
 				Vector2 horizonVector;
@@ -192,7 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		protected override Vector2 WingOffset => new Vector2(-4, 2);
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 
 		protected override float projectileVelocity => 12;
 		public DemonSquireMinion() : base(ItemType<DemonSquireMinionItem>()) { }

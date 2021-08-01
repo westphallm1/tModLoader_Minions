@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		protected override float knockbackSelf => 4;
 
 		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 12 * 60;
+		protected override int SpecialCooldown => 10 * 60;
 
 		public SoulboundSwordMinion() : base(ItemType<SoulboundSwordMinionItem>()) { }
 

@@ -266,7 +266,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			usingWeapon = true;
 			weaponAngle = GetWeaponAngle();
-			if (attackFrame == 0 && attackSound != null)
+			if (attackFrame == 0 && attackSound != null && !usingSpecial)
 			{
 				Main.PlaySound(attackSound, projectile.Center);
 			}

@@ -123,6 +123,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 13);
 
+		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 28);
 		protected override float projectileVelocity => 8;
 
 		protected override bool travelRangeCanBeModified => false;

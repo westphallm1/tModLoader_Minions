@@ -243,6 +243,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 						projectile.knockBack,
 						Main.myPlayer);
 				}
+				Main.PlaySound(attackSound, projectile.Center);
 			}
 		}
 

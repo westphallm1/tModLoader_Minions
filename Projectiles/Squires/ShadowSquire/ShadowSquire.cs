@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -72,6 +73,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
 		protected override Vector2 WingOffset => new Vector2(-4, 0);
+
+		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 106);
 
 		public ShadowSquireMinion() : base(ItemType<ShadowSquireMinionItem>()) { }
 
