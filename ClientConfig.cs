@@ -56,6 +56,28 @@ namespace AmuletOfManyMinions
 		public bool AnchorToHealth => TacticsUIAnchorPos == AnchorHealth;
 
 
+		[OnDeserialized]
+		internal void OnDeserializedMethod(StreamingContext context)
+		{
+			// Correct invalid names
+			if (Array.IndexOf(AnchorOptions, TacticsUIAnchorPos) <= -1)
+			{
+				TacticsUIAnchorPos = AnchorDefault;
+			}
+
+			// Correct invalid names
+			if (Array.IndexOf(QuickDefendOptions, QuickDefendHotkeyStyle) <= -1)
+			{
+				QuickDefendHotkeyStyle = QuickDefendToggle;
+			}
+		}
+	}
+
+	public class ServerConfig : ModConfig
+	{
+		public override ConfigScope Mode => ConfigScope.ServerSide;
+		public static ServerConfig Instance => ModContent.GetInstance<ServerConfig>();
+
 		// balance config options
 		[Header("Balance Configuration")]
 
@@ -98,26 +120,5 @@ namespace AmuletOfManyMinions
 		[Label("Squires Occupy a Minion Slot")]
 		[Tooltip("If enabled, squires will occupy a minion slot")]
 		public bool SquireMinionSlot;
-
-		[OnDeserialized]
-		internal void OnDeserializedMethod(StreamingContext context)
-		{
-			// Correct invalid names
-			if (Array.IndexOf(AnchorOptions, TacticsUIAnchorPos) <= -1)
-			{
-				TacticsUIAnchorPos = AnchorDefault;
-			}
-
-			// Correct invalid names
-			if (Array.IndexOf(QuickDefendOptions, QuickDefendHotkeyStyle) <= -1)
-			{
-				QuickDefendHotkeyStyle = QuickDefendToggle;
-			}
-		}
-
-		public override void OnChanged()
-		{
-			// TODO handle presets
-		}
 	}
 }

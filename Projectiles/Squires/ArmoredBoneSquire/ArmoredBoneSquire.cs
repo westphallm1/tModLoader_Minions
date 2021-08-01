@@ -338,7 +338,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		protected override float knockbackSelf => 5f;
 
-		protected override int SpecialDuration => 8 * 60;
+		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 12 * 60;
 		protected override LegacySoundStyle attackSound => SoundID.Item1;
 

@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 	{
 		protected override void DrawHead()
 		{
-			Rectangle head = new Rectangle(0, 0, 26, 36);
+			Rectangle head = new Rectangle(76, 102, 24, 32);
 			AddSprite(2, head);
 		}
 
@@ -134,7 +134,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 
 		private Rectangle GetRotorFrame()
 		{
-			return new Rectangle(0, 108 + 36 * frame, 38, 36);
+			int frame = this.frame == 3 ? 1 : this.frame;
+			return new Rectangle(0, 108 + 36 * frame, 44, 36);
 		}
 
 		protected override void DrawTail()

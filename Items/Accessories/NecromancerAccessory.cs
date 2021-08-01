@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			}
 			if(item.modItem != null && item.modItem.mod == mod)
 			{
-				add += (ClientConfig.Instance.GlobalDamageMultiplier - 100) / 100f;
+				add += (ServerConfig.Instance.GlobalDamageMultiplier - 100) / 100f;
 			}
 			// a bit hacky, will wanna make this nicer eventually
 			flat += summonFlatDamage;
@@ -338,7 +338,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			}
 			if(squirePlayer.GetSquire() != default)
 			{
-				damageMult -= ClientConfig.Instance.MinionDamageSquireNerf / 100f;
+				damageMult -= ServerConfig.Instance.MinionDamageSquireNerf / 100f;
 			}
 			damage = (int)(damage * damageMult);
 		}

@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 	// angle and position manipulated by SoulboundArsenal
 	class SoulboundArsenalLaser : ModProjectile
 	{
-		static int TimeToLive = 6 * 60;
+		static int TimeToLive = 4 * 60;
 		static int ChargeTime = 2 * 60;
 		static int maxLength = 200 * 16;
 		protected Vector2 endPoint = Vector2.Zero;

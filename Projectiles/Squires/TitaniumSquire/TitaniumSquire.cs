@@ -194,7 +194,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		protected override float knockbackSelf => 5;
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 6);
 
-		protected override int SpecialDuration => 8 * 60;
+		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 12 * 60;
 		public TitaniumSquireMinion() : base(ItemType<TitaniumSquireMinionItem>()) { }
 

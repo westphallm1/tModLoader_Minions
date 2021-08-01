@@ -195,8 +195,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		protected override bool IsMyTurn() => usingSpecial || base.IsMyTurn();
 
-		protected override int SpecialDuration => 6 * 60;
-		protected override int SpecialCooldown => 1 * 60;
+		protected override int SpecialDuration => 4 * 60;
+		protected override int SpecialCooldown => 12 * 60;
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{

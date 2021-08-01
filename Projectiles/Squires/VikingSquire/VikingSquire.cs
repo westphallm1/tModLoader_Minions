@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		protected override Vector2 WingOffset => new Vector2(-4, 2);
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(2, 4);
 
-		protected override int SpecialDuration => 8 * 60;
+		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 12 * 60;
 
 		protected int swingDirection = 1;

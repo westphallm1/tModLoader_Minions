@@ -118,13 +118,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		static int SpecialLoopSpeed = 40;
 
-		static int SpecialLoopCount = 2;
+		static int SpecialLoopCount = 1;
 
 		// used for tracking special state
 		Vector2 specialStartPos;
 		int chargeDirection;
 		protected override int SpecialDuration => SpecialLoopCount * SpecialLoopSpeed + SpecialLoopSpeed / 2 + SpecialChargeTime;
-		protected override int SpecialCooldown => 3 * 60;
+		protected override int SpecialCooldown => 5 * 60;
 
 		private MotionBlurDrawer blurDrawer;
 
@@ -561,8 +561,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override void OnStartUsingSpecial()
 		{
-			mockHealth = 0;
-			projectile.Kill();
+			mockHealth = Math.Max(0, mockHealth - 1);
+			if(mockHealth == 0)
+			{
+				projectile.Kill();
+			}
 		}
 
 		private byte getGradient(byte b1, byte b2, float weight)
@@ -661,7 +664,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 				if (player.whoAmI == Main.myPlayer)
 				{
-					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 3 minutes
+					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
 					Projectile.NewProjectile(projectile.Center, projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
 				}
 			}

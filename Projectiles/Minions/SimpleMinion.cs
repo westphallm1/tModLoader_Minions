@@ -279,10 +279,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		 */
 		private void AdjustInertia()
 		{
-			if(ClientConfig.Instance.MinionsInnacurate && useBeacon && vectorToTarget is Vector2 target)
+			if(ServerConfig.Instance.MinionsInnacurate && useBeacon && vectorToTarget is Vector2 target)
 			{
 				// only alter horizontal velocity, messes with gravity otherwise
 				float accelerationX = projectile.velocity.X - projectile.oldVelocity.X;
+				// only make minion more slugish when it's moving towards the enemy, allow it 
+				// to fall away at regular speeds
 				if(Math.Sign(accelerationX) == Math.Sign(target.X))
 				{
 					accelerationX *= 0.75f;
@@ -297,7 +299,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		 */
 		internal Vector2 VaryLaunchVelocity(Vector2 initial)
 		{
-			if(!ClientConfig.Instance.MinionsInnacurate)
+			if(!ServerConfig.Instance.MinionsInnacurate)
 			{
 				return initial;
 			}

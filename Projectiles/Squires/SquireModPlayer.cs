@@ -83,7 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			if(!item.summon && usedMinionSlots > 0)
 			{
-				add -= ClientConfig.Instance.OtherDamageMinionNerf / 100f;
+				add -= ServerConfig.Instance.OtherDamageMinionNerf / 100f;
 			}
 			if (!SquireMinionTypes.Contains(item.shoot))
 			{
@@ -196,10 +196,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 			if(usedMinionSlots > 0)
 			{
-				float damageReduction = ClientConfig.Instance.SquireDamageMinionNerf / 100f;
+				float damageReduction = ServerConfig.Instance.SquireDamageMinionNerf / 100f;
 				squireDamageMultiplierBonus -= damageReduction;
 			}
-			if (ClientConfig.Instance.SquireMinionSlot && GetSquire() != default)
+			if (ServerConfig.Instance.SquireMinionSlot && GetSquire() != default)
 			{
 				if( GetSquire() != default)
 				{

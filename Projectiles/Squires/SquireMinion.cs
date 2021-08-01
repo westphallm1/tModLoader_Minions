@@ -1,8 +1,10 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -64,6 +66,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		protected int specialFrame => animationFrame - specialStartFrame;
 
 		protected bool SpecialOnCooldown => player.HasBuff(ModContent.BuffType<SquireCooldownBuff>());
+
+		public virtual int CooldownDoneDust => 15;
 
 		public SquireMinion(int itemID)
 		{
@@ -160,26 +164,46 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			// switch from "not using special" to "using special"
 			int cooldownBuffType = ModContent.BuffType<SquireCooldownBuff>();
-			if(!usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
+			if(player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
 			{
-				player.AddBuff(cooldownBuffType, SpecialCooldown + SpecialDuration);
-				// this is a bit hacky, but this code only runs on the first squire, so
-				// manually propegate the special to all squires the player owns
-				for(int i = 0; i < Main.maxProjectiles; i++)
-				{
-					Projectile p = Main.projectile[i];
-					if(p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
-					{
-						((SquireMinion)p.modProjectile).SetSpecialStartFrame();
-					}
-				}
+				StartSpecial();
 			} else if (usingSpecial && specialFrame >= SpecialDuration)
 			{
 				usingSpecial = false;
 				OnStopUsingSpecial();
-			} else if (SpecialOnCooldown && player.buffTime[player.FindBuffIndex(cooldownBuffType)] == 1)
+			} else if (player.whoAmI == Main.myPlayer 
+				&& SpecialOnCooldown && player.buffTime[player.FindBuffIndex(cooldownBuffType)] == 1)
 			{
-				// TODO a little dust animation to indicate special can be used again
+				// a little dust animation to indicate special can be used again
+				for(int i = 0; i < 3; i++)
+				{
+					int dustIdx = Dust.NewDust(projectile.position, projectile.width, projectile.height, CooldownDoneDust, 0, 0);
+					Main.dust[dustIdx].noGravity = true;
+					Main.dust[dustIdx].noLight = true;
+				}
+				// maybe using the mana refill sound isn't the best idea
+				Main.PlaySound(SoundID.MaxMana, projectile.Center);
+			}
+		}
+		
+		// little bit weird to put this in the squire itself rather than the modplayer, but so it goes
+		public void StartSpecial(bool fromSync = false)
+		{
+			int cooldownBuffType = ModContent.BuffType<SquireCooldownBuff>();
+			player.AddBuff(cooldownBuffType, SpecialCooldown + SpecialDuration);
+			// this is a bit hacky, but this code only runs on the first squire, so
+			// manually propegate the special to all squires the player owns
+			for(int i = 0; i < Main.maxProjectiles; i++)
+			{
+				Projectile p = Main.projectile[i];
+				if(p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
+				{
+					((SquireMinion)p.modProjectile).SetSpecialStartFrame();
+				}
+			}
+			if(!fromSync)
+			{
+				new SquireSpecialStartPacket(player).Send();
 			}
 		}
 
