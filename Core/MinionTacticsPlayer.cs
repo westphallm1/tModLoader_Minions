@@ -121,7 +121,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		/// <param name="fromSync">If this is called within SyncPlayer, so it doesn't send TacticPacket unnecessarily</param>
 		public void SetTactic(byte id, bool fromSync = false)
 		{
-			if (!fromSync && TacticID != id && Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
+			if (!fromSync && TacticID != id && Main.myPlayer == Player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				SyncTimer = 1;
 				syncTactic = true;
@@ -268,7 +268,7 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public override void PreUpdate()
 		{
-			if(Main.myPlayer == player.whoAmI)
+			if(Main.myPlayer == Player.whoAmI)
 			{
 				byte newIgnoreTargetStatus =(byte)(ClientConfig.Instance.IgnoreVanillaTargetReticle ? 1 : 0);
 				if(IgnoreVanillaMinionTarget != newIgnoreTargetStatus)
@@ -282,7 +282,7 @@ namespace AmuletOfManyMinions.Core.Minions
 				SetInstancedCollections();
 			}
 			//Client sends his newly selected tactic after a small delay
-			if (Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
+			if (Main.myPlayer == Player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				if (SyncTimer > 0)
 				{
@@ -292,18 +292,18 @@ namespace AmuletOfManyMinions.Core.Minions
 						SyncTimer = 0; //Stop timer from incrementing
 						if(syncTactic)
 						{
-							new TacticPacket(player, TacticsIDs).Send();
+							new TacticPacket(Player, TacticsIDs).Send();
 							syncTactic = false;
 						}
 						if(syncConfig)
 						{
-							new ConfigPacket(player, IgnoreVanillaMinionTarget).Send();
+							new ConfigPacket(Player, IgnoreVanillaMinionTarget).Send();
 							syncConfig = false;
 						}
 						if(BuffIdsToSync.Count > 0)
 						{
 							Dictionary<int, int> buffsToSend = BuffIdsToSync.ToDictionary(k => k, k => MinionTacticsMap[k]);
-							new MinionGroupsPacket(player, buffsToSend).Send();
+							new MinionGroupsPacket(Player, buffsToSend).Send();
 							BuffIdsToSync.Clear();
 						}
 					}
@@ -313,7 +313,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{
 				PlayerTacticsGroups[i]?.PreUpdate();
-				PlayerTacticsGroups[i]?.UpdatePlayerAdjacentNPCs(player);
+				PlayerTacticsGroups[i]?.UpdatePlayerAdjacentNPCs(Player);
 			}
 		}
 
@@ -350,7 +350,7 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		internal void SetGroupForMinion(int groupId, int minionBuffId)
 		{
-			if (Main.myPlayer == player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
+			if (Main.myPlayer == Player.whoAmI && Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				SyncTimer = 1;
 				BuffIdsToSync.Add(minionBuffId);
@@ -374,17 +374,17 @@ namespace AmuletOfManyMinions.Core.Minions
 		private void CheckForAoMMItem()
 		{
 			// only check once per second on the client player
-			if(player.whoAmI != Main.myPlayer || TacticsUnlocked || Main.GameUpdateCount % 60 != 0)
+			if(Player.whoAmI != Main.myPlayer || TacticsUnlocked || Main.GameUpdateCount % 60 != 0)
 			{
 				return;
 			}
-			foreach(Item item in player.inventory)
+			foreach(Item item in Player.inventory)
 			{
-				if(item.type == ItemID.None || item.modItem == null)
+				if(item.type == ItemID.None || item.ModItem == null)
 				{
 					continue;
 				}
-				if(item.modItem.mod.Name == mod.Name && item.summon)
+				if(item.ModItem?.Mod== Mod && item.CountsAsClass<SummonDamageClass>())
 				{
 					TacticsUnlocked = true;
 					break;
@@ -431,7 +431,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void ProcessTriggers(TriggersSet triggersSet)
 		{
 			// this is probably only run client side, but to be safe
-			if(player.whoAmI != Main.myPlayer || !TacticsUnlocked)
+			if(Player.whoAmI != Main.myPlayer || !TacticsUnlocked)
 			{
 				return;
 			}

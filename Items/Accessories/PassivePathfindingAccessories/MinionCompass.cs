@@ -19,11 +19,11 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(silver: 50);
-			item.rare = ItemRarityID.Green;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(silver: 50);
+			Item.rare = ItemRarityID.Green;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -32,13 +32,7 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.SetResult(this);
-			recipe.AddIngredient(ItemType<GraniteSpark>(), 12);
-			recipe.AddIngredient(ItemID.Granite, 10);
-			recipe.AddIngredient(ItemID.Compass, 1);
-			recipe.AddTile(TileID.Anvils);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemType<GraniteSpark>(), 12).AddIngredient(ItemID.Granite, 10).AddIngredient(ItemID.Compass, 1).AddTile(TileID.Anvils).Register();
 		}
 	}
 }

@@ -12,9 +12,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 	public class XCXCopterMinionBuff : MinionBuff
 	{
 		public XCXCopterMinionBuff() : base(ProjectileType<XCXCopterCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Copter-X");
 			Description.SetDefault("A flexible helicopter will fight for you!");
 		}
@@ -33,22 +33,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 32;
-			item.damage = 43;
-			item.height = 34;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.damage = 43;
+			Item.height = 34;
+			Item.value = Item.buyPrice(0, 15, 0, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.MechanicalLens, 1);
-			recipe.AddIngredient(ItemID.HallowedBar, 12);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.MechanicalLens, 1).AddIngredient(ItemID.HallowedBar, 12).AddTile(TileID.MythrilAnvil).Register();
 		}
 	}
 
@@ -69,13 +64,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Copter-X");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 			frameSpeed = 5;
 			wormDrawer = new CopterDrawer();
 		}

@@ -11,16 +11,16 @@ using Terraria.ModLoader;
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
 
-	public static class SquireMinionTypes
+	public class SquireMinionTypes : ModSystem
 	{
 		public static HashSet<int> squireTypes;
 
-		public static void Load()
+		public override void OnModLoad()
 		{
 			squireTypes = new HashSet<int>();
 		}
 
-		public static void Unload()
+		public override void Unload()
 		{
 			squireTypes = null;
 		}
@@ -79,31 +79,31 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireMinionTypes.Add(projectile.type);
-			ProjectileID.Sets.MinionTargettingFeature[projectile.type] = false;
+			SquireMinionTypes.Add(Projectile.type);
+			ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = false;
 
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 
 			// These below are needed for a minion
 			// Denotes that this projectile is a pet or minion
-			Main.projPet[projectile.type] = false;
+			Main.projPet[Projectile.type] = false;
 			// This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
-			ProjectileID.Sets.MinionSacrificable[projectile.type] = false;
-			IdleLocationSets.trailingInAir.Add(projectile.type);
+			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
+			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			useBeacon = false;
 			usesTactics = false;
-			projectile.minionSlots = 0;
+			Projectile.minionSlots = 0;
 		}
 
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			baseLocalIFrames = projectile.localNPCHitCooldown;
+			baseLocalIFrames = Projectile.localNPCHitCooldown;
 		}
 
 		public override bool? CanCutTiles()
@@ -114,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override Vector2? FindTarget()
 		{
 			// move towards the mouse if player is holding and clicking
-			if (returningToPlayer || Vector2.Distance(projectile.Center, player.Center) > IdleDistanceMulitplier * ModifiedMaxDistance())
+			if (returningToPlayer || Vector2.Distance(Projectile.Center, player.Center) > IdleDistanceMulitplier * ModifiedMaxDistance())
 			{
 				returningToPlayer = true;
 				return null; // force back into non-attacking mode if too far from player
@@ -130,11 +130,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 					Vector2 targetFromPlayer = mouseWorld - player.Center;
 					if (targetFromPlayer.Length() < ModifiedMaxDistance())
 					{
-						return mouseWorld - projectile.Center;
+						return mouseWorld - Projectile.Center;
 					}
 					targetFromPlayer.Normalize();
 					targetFromPlayer *= ModifiedMaxDistance();
-					return player.Center + targetFromPlayer - projectile.Center;
+					return player.Center + targetFromPlayer - Projectile.Center;
 				}
 			}
 			return null;
@@ -149,14 +149,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			// not sure what side effects changing this each frame might have
 			if (attackSpeedCanBeModified)
 			{
-				projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
+				Projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
 			}
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition.X = player.Center.X;
 				idlePosition.Y = player.Center.Y - 24;
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			CheckSpecialUsage();
 			return vectorToIdlePosition;
@@ -179,12 +179,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				// a little dust animation to indicate special can be used again
 				for(int i = 0; i < 3; i++)
 				{
-					int dustIdx = Dust.NewDust(projectile.position, projectile.width, projectile.height, CooldownDoneDust, 0, 0);
+					int dustIdx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, CooldownDoneDust, 0, 0);
 					Main.dust[dustIdx].noGravity = true;
 					Main.dust[dustIdx].noLight = true;
 				}
 				// maybe using the mana refill sound isn't the best idea
-				Main.PlaySound(SoundID.MaxMana, player.Center);
+				SoundEngine.PlaySound(SoundID.MaxMana, player.Center);
 			}
 		}
 		
@@ -200,7 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				Projectile p = Main.projectile[i];
 				if(p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
 				{
-					((SquireMinion)p.modProjectile).SetSpecialStartFrame();
+					((SquireMinion)p.ModProjectile).SetSpecialStartFrame();
 				}
 			}
 			if(!fromSync)
@@ -215,7 +215,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			specialStartFrame = animationFrame;
 			if(SpecialStartSound != null)
 			{
-				Main.PlaySound(SpecialStartSound, projectile.Center);
+				SoundEngine.PlaySound(SpecialStartSound, Projectile.Center);
 			}
 			OnStartUsingSpecial();
 		}
@@ -235,7 +235,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			// always clamp to the idle position
 			float inertia = ComputeInertia();
 			float maxSpeed = ModifiedIdleSpeed();
-			Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
+			Vector2 speedChange = vectorToIdlePosition - Projectile.velocity;
 			if (speedChange.Length() > maxSpeed)
 			{
 				speedChange.SafeNormalize();
@@ -246,7 +246,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				returningToPlayer = false;
 			}
 			relativeVelocity = (relativeVelocity * (inertia - 1) + speedChange) / inertia;
-			projectile.velocity = player.velocity + relativeVelocity;
+			Projectile.velocity = player.velocity + relativeVelocity;
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -265,8 +265,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if (vectorToTargetPosition.Length() < 8 && relativeVelocity.Length() < 4)
 			{
 				relativeVelocity = Vector2.Zero;
-				projectile.velocity = player.velocity;
-				projectile.position += vectorToTargetPosition;
+				Projectile.velocity = player.velocity;
+				Projectile.position += vectorToTargetPosition;
 				return;
 			}
 			else if (relativeVelocity.Length() > vectorToTargetPosition.Length() / 3)
@@ -278,7 +278,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			vectorToTargetPosition.SafeNormalize();
 			vectorToTargetPosition *= speed;
 			relativeVelocity = (relativeVelocity * (inertia - 1) + vectorToTargetPosition) / inertia;
-			projectile.velocity = player.velocity + relativeVelocity;
+			Projectile.velocity = player.velocity + relativeVelocity;
 		}
 
 		public virtual void SpecialTargetedMovement(Vector2 vectorToTargetPosition)

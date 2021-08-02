@@ -27,36 +27,36 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.localNPCHitCooldown = 30;
-			projectile.timeLeft = timeToLive;
-			lastHitFrame = timeToLive + projectile.localNPCHitCooldown;
+			Projectile.localNPCHitCooldown = 30;
+			Projectile.timeLeft = timeToLive;
+			lastHitFrame = timeToLive + Projectile.localNPCHitCooldown;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			Color translucentColor = transformLight(lightColor);
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 
 
-			int height = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * height, texture.Width, height);
+			int height = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * height, texture.Width, height);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 
 			SpriteEffects effects = GetSpriteEffects();
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				bounds, translucentColor, projectile.rotation,
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				bounds, translucentColor, Projectile.rotation,
 				origin, 1, effects, 0);
 			return false;
 		}
 
 		protected virtual SpriteEffects GetSpriteEffects()
 		{
-			if (projectile.velocity.X > 0)
+			if (Projectile.velocity.X > 0)
 			{
 				return SpriteEffects.FlipHorizontally;
 			}
@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 		{
 			vector2Target.SafeNormalize();
 			vector2Target *= isIdle ? idleSpeed : maxSpeed;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vector2Target) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vector2Target) / inertia;
 			base.TargetedMovement(vector2Target);
 		}
 
@@ -84,11 +84,11 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 		{
 			if (maxSpeed == default)
 			{
-				maxSpeed = projectile.velocity.Length();
-				initialVelocity = projectile.velocity;
+				maxSpeed = Projectile.velocity.Length();
+				initialVelocity = Projectile.velocity;
 			}
-			Vector2 vector2Player = player.Center - projectile.Center;
-			if (lastHitFrame - projectile.timeLeft > projectile.localNPCHitCooldown &&
+			Vector2 vector2Player = player.Center - Projectile.Center;
+			if (lastHitFrame - Projectile.timeLeft > Projectile.localNPCHitCooldown &&
 				vector2Player.Length() > distanceToBumbleBack)
 			{
 				vector2Player.SafeNormalize();
@@ -99,19 +99,19 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if (oldVelocity.Y != 0 && projectile.velocity.Y == 0)
+			if (oldVelocity.Y != 0 && Projectile.velocity.Y == 0)
 			{
-				projectile.velocity.Y = -oldVelocity.Y;
+				Projectile.velocity.Y = -oldVelocity.Y;
 			}
-			if (oldVelocity.X != 0 && projectile.velocity.X == 0)
+			if (oldVelocity.X != 0 && Projectile.velocity.X == 0)
 			{
-				projectile.velocity.X = -oldVelocity.X;
+				Projectile.velocity.X = -oldVelocity.X;
 			}
-			initialVelocity = projectile.velocity;
+			initialVelocity = Projectile.velocity;
 			return false;
 		}
 
-		protected virtual bool onAttackCooldown => lastHitFrame - projectile.timeLeft < projectile.localNPCHitCooldown;
+		protected virtual bool onAttackCooldown => lastHitFrame - Projectile.timeLeft < Projectile.localNPCHitCooldown;
 		public override Vector2? FindTarget()
 		{
 			if (onAttackCooldown)
@@ -120,14 +120,14 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			}
 			if (SelectedEnemyInRange(searchDistance, noLOSSearchDistance, maxRangeFromPlayer: false) is Vector2 closest)
 			{
-				return closest - projectile.position;
+				return closest - Projectile.position;
 			}
 			return null;
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			lastHitFrame = projectile.timeLeft;
+			lastHitFrame = Projectile.timeLeft;
 		}
 		protected virtual Color transformLight(Color color)
 		{

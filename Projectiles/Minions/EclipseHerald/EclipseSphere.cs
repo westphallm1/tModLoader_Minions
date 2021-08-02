@@ -13,49 +13,49 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 	{
 		private bool hitTarget;
 
-		private NPC targetNPC => Main.npc[(int)projectile.ai[1]];
+		private NPC targetNPC => Main.npc[(int)Projectile.ai[1]];
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 6;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 6;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
-			projectile.width = 64;
-			projectile.height = 64;
-			projectile.friendly = true;
-			projectile.penetrate = -1;
-			projectile.tileCollide = false;
-			projectile.timeLeft = 300;
+			Projectile.width = 64;
+			Projectile.height = 64;
+			Projectile.friendly = true;
+			Projectile.penetrate = -1;
+			Projectile.tileCollide = false;
+			Projectile.timeLeft = 300;
 			hitTarget = false;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 20;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 20;
 		}
 		public override void AI()
 		{
 			base.AI();
 			if (hitTarget)
 			{
-				projectile.frame = Math.Min(5, (int)projectile.ai[0]);
+				Projectile.frame = Math.Min(5, (int)Projectile.ai[0]);
 			}
 			else
 			{
-				projectile.frame = 0;
+				Projectile.frame = 0;
 			}
-			projectile.rotation += (float)(Math.PI) / 90;
+			Projectile.rotation += (float)(Math.PI) / 90;
 			if (!hitTarget && targetNPC.active)
 			{
-				Vector2 vectorToTarget = targetNPC.Center - projectile.Center;
+				Vector2 vectorToTarget = targetNPC.Center - Projectile.Center;
 				if (vectorToTarget.Length() < 32)
 				{
 					OnHitTarget();
 				}
 				vectorToTarget.SafeNormalize();
-				projectile.velocity = vectorToTarget * (6 + Math.Min(5, projectile.ai[0]));
+				Projectile.velocity = vectorToTarget * (6 + Math.Min(5, Projectile.ai[0]));
 			}
-			Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
+			Lighting.AddLight(Projectile.position, Color.White.ToVector3() * 0.5f);
 			AddDust();
 			//DrawInNPCs();
 		}
@@ -64,19 +64,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		{
 			if (!hitTarget)
 			{
-				Vector2 velocity = -projectile.velocity;
-				int dustSize = (int)(2 + 2 * projectile.ai[0]);
-				Dust.NewDust(projectile.Center, dustSize, dustSize, DustID.GoldFlame, velocity.X, velocity.Y);
+				Vector2 velocity = -Projectile.velocity;
+				int dustSize = (int)(2 + 2 * Projectile.ai[0]);
+				Dust.NewDust(Projectile.Center, dustSize, dustSize, DustID.GoldFlame, velocity.X, velocity.Y);
 			}
 		}
 
 		private void OnHitTarget()
 		{
 			hitTarget = true;
-			projectile.timeLeft = Math.Min(projectile.timeLeft, 60);
-			projectile.position += projectile.velocity;
-			projectile.velocity.SafeNormalize();
-			projectile.velocity *= 2; // slowly drift from place of impact
+			Projectile.timeLeft = Math.Min(Projectile.timeLeft, 60);
+			Projectile.position += Projectile.velocity;
+			Projectile.velocity.SafeNormalize();
+			Projectile.velocity *= 2; // slowly drift from place of impact
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

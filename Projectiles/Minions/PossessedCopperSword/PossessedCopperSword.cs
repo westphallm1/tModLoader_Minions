@@ -11,9 +11,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 	public class CopperSwordMinionBuff : MinionBuff
 	{
 		public CopperSwordMinionBuff() : base(ProjectileType<CopperSwordMinion>(), ProjectileType<CopperSwordMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Starry SkySlasher");
 			Description.SetDefault("An enchanted sword will fight for you!");
 		}
@@ -32,22 +32,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 13;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
-			item.value = Item.buyPrice(0, 0, 20, 0);
-			item.rare = ItemRarityID.Green;
+			Item.damage = 13;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.height = 32;
+			Item.value = Item.buyPrice(0, 0, 20, 0);
+			Item.rare = ItemRarityID.Green;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Feather, 8);
-			recipe.AddIngredient(ItemID.FallenStar, 3);
-			recipe.AddTile(TileID.SkyMill);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Feather, 8).AddIngredient(ItemID.FallenStar, 3).AddTile(TileID.SkyMill).Register();
 		}
 	}
 	public class CopperSwordMinion : GroupAwareMinion
@@ -62,17 +57,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Starry SkySlasher");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
-			IdleLocationSets.trailingInAir.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 1;
+			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.tileCollide = false;
-			projectile.localNPCHitCooldown = 20;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.tileCollide = false;
+			Projectile.localNPCHitCooldown = 20;
 			attackState = AttackState.IDLE;
 			attackFrames = 60;
 		}
@@ -90,29 +85,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
-			idlePosition.Y += -5 * projectile.minionPos;
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			idlePosition.Y += -5 * Projectile.minionPos;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition.X = player.Center.X + 20 * -player.direction;
 				idlePosition.Y = player.Center.Y - 5;
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			Lighting.AddLight(projectile.Center, Color.LightYellow.ToVector3() * 0.125f);
+			Lighting.AddLight(Projectile.Center, Color.LightYellow.ToVector3() * 0.125f);
 			return vectorToIdlePosition;
 		}
 
 		public override Vector2? FindTarget()
 		{
-			if (FindTargetInTurnOrder(625f, projectile.Top) is Vector2 target)
+			if (FindTargetInTurnOrder(625f, Projectile.Top) is Vector2 target)
 			{
-				projectile.friendly = true;
+				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				projectile.friendly = false;
+				Projectile.friendly = false;
 				return null;
 			}
 		}
@@ -126,17 +121,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			vectorToTargetPosition *= speed;
 			if (Main.rand.Next(5) == 0)
 			{
-				Dust.NewDust(projectile.Center,
-					projectile.width / 2,
-					projectile.height / 2, DustType<StarDust>(),
-					-projectile.velocity.X,
-					-projectile.velocity.Y);
+				Dust.NewDust(Projectile.Center,
+					Projectile.width / 2,
+					Projectile.height / 2, DustType<StarDust>(),
+					-Projectile.velocity.X,
+					-Projectile.velocity.Y);
 			}
 			if (framesSinceLastHit++ > 10)
 			{
-				projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 			}
-			projectile.rotation += (float)Math.PI / 9;
+			Projectile.rotation += (float)Math.PI / 9;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -151,17 +146,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 				hitsSinceLastIdle = 0;
 				framesSinceLastHit = 0;
 			}
-			Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
+			Vector2 speedChange = vectorToIdlePosition - Projectile.velocity;
 			if (speedChange.Length() > maxSpeed)
 			{
 				speedChange.SafeNormalize();
 				speedChange *= maxSpeed;
 			}
-			projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + speedChange) / inertia;
 
-			float intendedRotation = baseRoation + player.direction * (projectile.minionPos * (float)Math.PI / 36);
-			intendedRotation += projectile.velocity.X * 0.05f;
-			projectile.rotation = intendedRotation;
+			float intendedRotation = baseRoation + player.direction * (Projectile.minionPos * (float)Math.PI / 36);
+			intendedRotation += Projectile.velocity.X * 0.05f;
+			Projectile.rotation = intendedRotation;
 		}
 	}
 }

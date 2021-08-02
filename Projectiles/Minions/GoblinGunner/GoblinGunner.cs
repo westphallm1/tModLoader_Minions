@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -13,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 	public class GoblinGunnerMinionBuff : MinionBuff
 	{
 		public GoblinGunnerMinionBuff() : base(ProjectileType<GoblinGunnerCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Goblin Gunner");
 			Description.SetDefault("A goblin gunner will fight for you!");
 		}
@@ -33,13 +34,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
-			item.damage = 28;
-			item.value = Item.sellPrice(0, 3, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.knockBack = 3f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.height = 32;
+			Item.damage = 28;
+			Item.value = Item.sellPrice(0, 3, 0, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 	}
 
@@ -50,26 +51,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 1;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 2;
-			projectile.friendly = true;
-			projectile.penetrate = 1;
-			projectile.tileCollide = true;
-			projectile.timeLeft = 60;
+			Projectile.width = 24;
+			Projectile.height = 2;
+			Projectile.friendly = true;
+			Projectile.penetrate = 1;
+			Projectile.tileCollide = true;
+			Projectile.timeLeft = 60;
 		}
 
 		public override void AI()
 		{
-			projectile.rotation = projectile.velocity.ToRotation();
-			Lighting.AddLight(projectile.position, Color.Violet.ToVector3() * 0.5f);
+			Projectile.rotation = Projectile.velocity.ToRotation();
+			Lighting.AddLight(Projectile.position, Color.Violet.ToVector3() * 0.5f);
 		}
 	}
 	public class GoblinGunnerCounterMinion : CounterMinion
@@ -90,18 +91,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Goblin Gunner");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
-			IdleLocationSets.trailingInAir.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 1;
+			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 44;
-			projectile.height = 44;
-			projectile.tileCollide = false;
+			Projectile.width = 44;
+			Projectile.height = 44;
+			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			projectile.friendly = true;
+			Projectile.friendly = true;
 			attackThroughWalls = true;
 			useBeacon = false;
 			frameSpeed = 5;
@@ -109,17 +110,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 
 
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = Main.projectileTexture[ProjectileType<GoblinGunnerMinionGuns>()];
-			Vector2 angle = vectorToTarget ?? new Vector2(-projectile.spriteDirection, 0);
+			Texture2D texture = TextureAssets.Projectile[ProjectileType<GoblinGunnerMinionGuns>()].Value;
+			Vector2 angle = vectorToTarget ?? new Vector2(-Projectile.spriteDirection, 0);
 			int frame = Math.Min(4, (int)EmpowerCount - 1);
 			Rectangle bounds = new Rectangle(0, 14 * frame, 14, 14);
 			int distanceFromOrigin = framesSinceLastHit > 3 ? 34 : 32;
 			Vector2 origin = new Vector2(distanceFromOrigin, bounds.Height / 2f);
-			Vector2 pos = projectile.Center;
+			Vector2 pos = Projectile.Center;
 			float r = angle.ToRotation() + (float)Math.PI;
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, 0, 0);
 
@@ -130,9 +131,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -32;
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition.X = player.Top.X;
@@ -145,7 +146,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			base.IdleMovement(vectorToIdlePosition);
-			Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
+			Lighting.AddLight(Projectile.position, Color.White.ToVector3() * 0.5f);
 		}
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
@@ -161,20 +162,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 				vectorToTargetPosition += (vectorToTargetPosition.Length() / projectileVelocity) * target.velocity;
 				vectorToTargetPosition.SafeNormalize();
 				vectorToTargetPosition *= projectileVelocity;
-				Vector2 pos = projectile.Center;
+				Vector2 pos = Projectile.Center;
 				framesSinceLastHit = 0;
-				projectile.spriteDirection = vectorToTargetPosition.X > 0 ? -1 : 1;
+				Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? -1 : 1;
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
+						Projectile.GetProjectileSource_FromThis(),
 						pos,
 						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<GoblinGunnerBullet>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
-				Main.PlaySound(new LegacySoundStyle(2, 11), pos);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 11), pos);
 			}
 		}
 
@@ -188,11 +190,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			float searchDistance = ComputeSearchDistance();
 			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{
@@ -234,11 +236,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if (Math.Abs(projectile.velocity.X) > 2 && vectorToTarget is null)
+			if (Math.Abs(Projectile.velocity.X) > 2 && vectorToTarget is null)
 			{
-				projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
+				Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
 			}
-			projectile.rotation = projectile.velocity.X * 0.05f;
+			Projectile.rotation = Projectile.velocity.X * 0.05f;
 		}
 	}
 }

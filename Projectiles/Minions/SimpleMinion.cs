@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
@@ -48,15 +49,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			base.SetStaticDefaults();
 			// This is necessary for right-click targeting
-			ProjectileID.Sets.MinionTargettingFeature[projectile.type] = true;
+			ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
 
 			// These below are needed for a minion
 			// Denotes that this projectile is a pet or minion
-			Main.projPet[projectile.type] = true;
+			Main.projPet[Projectile.type] = true;
 			// This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
-			ProjectileID.Sets.MinionSacrificable[projectile.type] = true;
+			ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
 			// Don't mistake this with "if this is true, then it will automatically home". It is just for damage reduction for certain NPCs
-			ProjectileID.Sets.Homing[projectile.type] = true;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
@@ -64,20 +65,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			base.SetDefaults();
 			// These below are needed for a minion weapon
 			// Only controls if it deals damage to enemies on contact (more on that later)
-			projectile.friendly = true;
-			// Only determines the damage type
-			projectile.minion = true;
+			Projectile.friendly = true;
+			// Determines multiple things
+			Projectile.minion = true;
+			// Determines damage type
+			Projectile.DamageType = DamageClass.Summon; //TODO check shot projectiles, the spawn for originalDamage
 			// Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
-			projectile.minionSlots = 1f;
+			Projectile.minionSlots = 1f;
 			// Needed so the minion doesn't despawn on collision with enemies or tiles
-			projectile.penetrate = -1;
+			Projectile.penetrate = -1;
 			// Makes the minion go through tiles
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 			// use local projectile i-frames
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 10;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 10;
 			// Makes sure this projectile is synced to other newly joined players 
-			projectile.netImportant = true;
+			Projectile.netImportant = true;
 
 			pathfinder = new MinionPathfindingHelper(this);
 		}
@@ -106,18 +109,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 
 			// This is a simple "loop through all frames from top to bottom" animation
-			projectile.frameCounter++;
-			if (projectile.frame < minFrame)
+			Projectile.frameCounter++;
+			if (Projectile.frame < minFrame)
 			{
-				projectile.frame = minFrame;
+				Projectile.frame = minFrame;
 			}
-			if (projectile.frameCounter >= frameSpeed)
+			if (Projectile.frameCounter >= frameSpeed)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= (maxFrame ?? Main.projFrames[projectile.type]))
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+				if (Projectile.frame >= (maxFrame ?? Main.projFrames[Projectile.type]))
 				{
-					projectile.frame = minFrame;
+					Projectile.frame = minFrame;
 				}
 			}
 		}
@@ -158,13 +161,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				if (player.whoAmI == Main.myPlayer && oldVectorToTarget == null)
 				{
-					projectile.netUpdate = true;
+					Projectile.netUpdate = true;
 				}
 				if (useBeacon)
 				{
 					pathfinder.DetachFromPath();
 				}
-				projectile.tileCollide = !attackThroughWalls;
+				Projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
 				TargetedMovement(targetPosition);
 				oldVectorToTarget = vectorToTarget;
@@ -176,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					pathfinder.DetachFromPath();
 				}
-				projectile.tileCollide = !attackThroughWalls;
+				Projectile.tileCollide = !attackThroughWalls;
 				if (!Main.npc[previousIndex].active)
 				{
 					oldTargetNpcIndex = null;
@@ -184,7 +187,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 				else if (previousIndex < Main.maxNPCs)
 				{
-					vectorToTarget = Main.npc[previousIndex].Center - projectile.Center;
+					vectorToTarget = Main.npc[previousIndex].Center - Projectile.Center;
 					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
 				}
 			}
@@ -202,24 +205,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 					{
 						TargetedMovement(pathNode);
 					}
-					projectile.tileCollide = !pathfinder.atStart && !attackThroughWalls;
+					Projectile.tileCollide = !pathfinder.atStart && !attackThroughWalls;
 				}
 			} 
 			else
 			{
 				if (framesSinceHadTarget > 30)
 				{
-					projectile.tileCollide = false;
+					Projectile.tileCollide = false;
 				}
 				if (player.whoAmI == Main.myPlayer && oldVectorToTarget != null)
 				{
-					projectile.netUpdate = true;
+					Projectile.netUpdate = true;
 				}
 				oldVectorToTarget = null;
 				IdleMovement(vectorToIdle);
 			}
 			if (targetNPCIndex is int idx &&
-				targetFrameCounter++ > projectile.localNPCHitCooldown &&
+				targetFrameCounter++ > Projectile.localNPCHitCooldown &&
 				vectorToTarget is Vector2 target && target.LengthSquared() < proximityForOnHitTarget * proximityForOnHitTarget)
 			{
 				targetFrameCounter = 0;
@@ -245,9 +248,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			if (Main.myPlayer == player.whoAmI && vectorToIdlePosition.Length() > maxDistance)
 			{
-				projectile.position += vectorToIdlePosition;
-				projectile.velocity = Vector2.Zero;
-				projectile.netUpdate = true;
+				Projectile.position += vectorToIdlePosition;
+				Projectile.velocity = Vector2.Zero;
+				Projectile.netUpdate = true;
 				vectorToIdlePosition = Vector2.Zero;
 			}
 		}
@@ -260,15 +263,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				// Fix overlap with other minions
 				Projectile other = Main.projectile[i];
-				if (other.active && other.owner == projectile.owner && other.type == projectileType)
+				if (other.active && other.owner == Projectile.owner && other.type == projectileType)
 				{
 					otherMinions.Add(other);
 				}
 			}
 			otherMinions.Sort((x, y) => x.minionPos - y.minionPos);
-			if(otherMinions.Count == 0 && projectile.type == projectileType)
+			if(otherMinions.Count == 0 && Projectile.type == projectileType)
 			{
-				otherMinions.Add(projectile);
+				otherMinions.Add(Projectile);
 			}
 			return otherMinions;
 		}
@@ -282,14 +285,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			if(ServerConfig.Instance.MinionsInnacurate && useBeacon && vectorToTarget is Vector2 target)
 			{
 				// only alter horizontal velocity, messes with gravity otherwise
-				float accelerationX = projectile.velocity.X - projectile.oldVelocity.X;
+				float accelerationX = Projectile.velocity.X - Projectile.oldVelocity.X;
 				// only make minion more slugish when it's moving towards the enemy, allow it 
 				// to fall away at regular speeds
 				if(Math.Sign(accelerationX) == Math.Sign(target.X))
 				{
 					accelerationX *= 0.75f;
 				}
-				projectile.velocity.X = projectile.oldVelocity.X + accelerationX;
+				Projectile.velocity.X = Projectile.oldVelocity.X + accelerationX;
 			}
 		}
 
@@ -308,7 +311,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			float minRotDist = 800f;
 			if(targetNPCIndex is int idx)
 			{
-				float distance = Math.Min(minRotDist, Vector2.Distance(Main.npc[idx].Center, projectile.Center));
+				float distance = Math.Min(minRotDist, Vector2.Distance(Main.npc[idx].Center, Projectile.Center));
 				float rotation = MathHelper.Lerp(maxRotation, minRotation, distance/ minRotDist);
 				return initial.RotatedBy(Main.rand.NextFloat(rotation) - rotation/2);
 			} else

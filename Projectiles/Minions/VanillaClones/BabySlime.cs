@@ -12,9 +12,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class BabySlimeMinionBuff : MinionBuff
 	{
 		public BabySlimeMinionBuff() : base(ProjectileType<BabySlimeMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.BabySlime") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.BabySlime"));
 		}
@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class BabySlimeMinion : SimpleGroundBasedMinion
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.BabySlime;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabySlime;
 		internal override int BuffId => BuffType<BabySlimeMinionBuff>();
 		private float intendedX = 0;
 
@@ -38,16 +38,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BabySlime") + " (AoMM Version)");
-			Main.projFrames[projectile.type] = 6;
+			Main.projFrames[Projectile.type] = 6;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 20;
-			projectile.height = 20;
-			drawOffsetX = (projectile.width - 44) / 2;
-			drawOriginOffsetY = 0;
+			Projectile.width = 20;
+			Projectile.height = 20;
+			DrawOffsetX = (Projectile.width - 44) / 2;
+			DrawOriginOffsetY = 0;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -61,24 +61,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			if (!gHelper.didJustLand)
 			{
-				projectile.velocity.X = intendedX;
+				Projectile.velocity.X = intendedX;
 				// only path after landing
 				return false;
 			}
 			return true;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 128);
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.velocity.X < 0 ? 0 : SpriteEffects.FlipHorizontally;
-			Texture2D texture = GetTexture(Texture);
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.velocity.X < 0 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, translucentColor, r,
 				origin, 1, effects, 0);
 			return false;
@@ -101,14 +101,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				// go fast enough to hit the enemy while chasing them
 				Vector2 targetVelocity = Main.npc[idx].velocity;
-				projectile.velocity.X = Math.Max(4, Math.Min(maxHorizontalSpeed, Math.Abs(targetVelocity.X) * 1.25f)) * Math.Sign(vector.X);
+				Projectile.velocity.X = Math.Max(4, Math.Min(maxHorizontalSpeed, Math.Abs(targetVelocity.X) * 1.25f)) * Math.Sign(vector.X);
 			} else
 			{
 				maxHorizontalSpeed = vector.Y < -64 ? 4 : 8;
 				// try to match the player's speed while not chasing an enemy
-				projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
+				Projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
 			}
-			intendedX = projectile.velocity.X;
+			intendedX = Projectile.velocity.X;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

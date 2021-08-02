@@ -12,9 +12,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 	public class StarSurferMinionBuff : MinionBuff
 	{
 		public StarSurferMinionBuff() : base(ProjectileType<StarSurferMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Star Surfer");
 			Description.SetDefault("A star surfer will fight for you!");
 		}
@@ -32,13 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 32;
-			item.knockBack = 3f;
-			item.mana = 10;
-			item.width = 46;
-			item.height = 46;
-			item.value = Item.buyPrice(0, 6, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.damage = 32;
+			Item.knockBack = 3f;
+			Item.mana = 10;
+			Item.width = 46;
+			Item.height = 46;
+			Item.value = Item.buyPrice(0, 6, 0, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 
 	}
@@ -50,33 +50,33 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 	{
 		public override void SetStaticDefaults()
 		{
-			Main.projFrames[projectile.type] = 3;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 3;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 1;
-			projectile.maxPenetrate = 1;
-			projectile.tileCollide = true;
-			projectile.timeLeft = 120;
-			projectile.width = 8;
-			projectile.height = 8;
-			projectile.friendly = true;
-			projectile.ignoreWater = true;
+			Projectile.penetrate = 1;
+			Projectile.maxPenetrate = 1;
+			Projectile.tileCollide = true;
+			Projectile.timeLeft = 120;
+			Projectile.width = 8;
+			Projectile.height = 8;
+			Projectile.friendly = true;
+			Projectile.ignoreWater = true;
 		}
 
 		public override void AI()
 		{
 			base.AI();
-			if (projectile.timeLeft < 90) // start falling after so many frames
+			if (Projectile.timeLeft < 90) // start falling after so many frames
 			{
-				projectile.velocity.Y += 0.5f;
+				Projectile.velocity.Y += 0.5f;
 			}
-			projectile.rotation += (float)Math.PI / 9;
-			projectile.frame = ((int)projectile.ai[0]) % 3;
+			Projectile.rotation += (float)Math.PI / 9;
+			Projectile.frame = ((int)Projectile.ai[0]) % 3;
 			//Dust.NewDust(projectile.position, projectile.width / 2, projectile.height / 2, DustID.Gold, -projectile.velocity.X, -projectile.velocity.Y);
 		}
 	}
@@ -106,27 +106,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			approachSpeed = 15;
 			approachInertia = 20;
 			bumbleSpriteDirection = -1;
-			projectile.width = 26;
-			projectile.height = 32;
+			Projectile.width = 26;
+			Projectile.height = 32;
 			projectileType = ProjectileType<StarSurferProjectile>();
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			Lighting.AddLight(projectile.position, Color.Yellow.ToVector3());
+			Lighting.AddLight(Projectile.position, Color.Yellow.ToVector3());
 			return base.IdleBehavior();
 		}
 
 		public override Vector2? FindTarget()
 		{
-			if (FindTargetInTurnOrder(900f, projectile.Center) is Vector2 target)
+			if (FindTargetInTurnOrder(900f, Projectile.Center) is Vector2 target)
 			{
-				projectile.friendly = true;
+				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				projectile.friendly = false;
+				Projectile.friendly = false;
 				return null;
 			}
 		}
@@ -136,11 +136,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			base.TargetedMovement(vectorToTargetPosition);
 			if (Main.rand.Next(5) == 0)
 			{
-				Dust.NewDust(projectile.Center,
+				Dust.NewDust(Projectile.Center,
 					8,
 					8, DustType<StarDust>(),
-					-projectile.velocity.X,
-					-projectile.velocity.Y);
+					-Projectile.velocity.X,
+					-Projectile.velocity.Y);
 			}
 			if (projectileFrameCount++ > projectileFireRate)
 			{
@@ -149,7 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 				{
 					vectorToTargetPosition.SafeNormalize();
 					vectorToTargetPosition *= projectileVelocity;
-					Projectile.NewProjectile(projectile.position, VaryLaunchVelocity(vectorToTargetPosition), projectileType, projectileDamage, 5, Main.myPlayer, ai0: projectile.minionPos);
+					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.position, VaryLaunchVelocity(vectorToTargetPosition), projectileType, projectileDamage, 5, Main.myPlayer, ai0: Projectile.minionPos);
 				}
 			}
 		}

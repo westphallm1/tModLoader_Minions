@@ -23,7 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.friendly = false;
+			Projectile.friendly = false;
 			hsHelper = new HoverShooterHelper(this, FiredProjectileId)
 			{
 				AfterFiringProjectile = AfterFiringProjectile,
@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			if(ShootSound != null)
 			{
-				Main.PlaySound(ShootSound, projectile.Center);
+				SoundEngine.PlaySound(ShootSound, Projectile.Center);
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal bool inAttackRange;
 
 		private SimpleMinion minion;
-		private Projectile projectile => minion.projectile;
+		private Projectile projectile => minion.Projectile;
 		internal int? firedProjectileId;
 
 		// delegate methods
@@ -96,6 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
 		{
 			Projectile.NewProjectile(
+				projectile.GetProjectileSource_FromThis(),
 				projectile.Center,
 				minion.VaryLaunchVelocity(lineOfFire),
 				projId,

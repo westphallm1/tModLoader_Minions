@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 
@@ -11,9 +12,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 	public class NullHatchetMinionBuff : MinionBuff
 	{
 		public NullHatchetMinionBuff() : base(ProjectileType<NullHatchetMinion>(), ProjectileType<NullHatchetMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Null Hatchet");
 			Description.SetDefault("An ethereal axe will fight for you!");
 		}
@@ -31,19 +32,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 32;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 34;
-			item.height = 34;
-			item.value = Item.sellPrice(0, 1, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.damage = 32;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 34;
+			Item.height = 34;
+			Item.value = Item.sellPrice(0, 1, 0, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
-			Projectile.NewProjectile(position - new Vector2(5, 0), new Vector2(speedX, speedY), item.shoot, damage, knockBack, Main.myPlayer);
+			base.Shoot(player, source, position, velocity, type, damage, knockback);
+			Projectile.NewProjectile(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
+			Projectile.NewProjectile(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
 			return false;
 		}
 	}
@@ -69,11 +71,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.tileCollide = false;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.tileCollide = false;
 			attackState = AttackState.IDLE;
-			projectile.minionSlots = 1;
+			Projectile.minionSlots = 1;
 			attackFrames = 60;
 			attackThroughWalls = true;
 			useBeacon = false;
@@ -83,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 		}
 
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			int alpha = 128;
 			float phaseLength = maxPhaseFrames / 2;
@@ -96,15 +98,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 				alpha = (int)(128 * (phaseFrames - phaseLength) / phaseLength);
 			}
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, alpha);
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 
 
-			int height = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * height, texture.Width, height);
+			int height = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * height, texture.Width, height);
 			Vector2 origin = bounds.Size() / 2;
-			float r = projectile.spriteDirection == 1 ? projectile.rotation - MathHelper.PiOver4 : projectile.rotation + MathHelper.PiOver4;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
+			float r = Projectile.spriteDirection == 1 ? Projectile.rotation - MathHelper.PiOver4 : Projectile.rotation + MathHelper.PiOver4;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
 				bounds, translucentColor, r,
 				origin, 1, effects, 0);
 			return false;
@@ -120,7 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			{
 				distanceFromFoe = swingDistance + Main.rand.Next(-20, 20); ;
 				teleportAngle = Main.rand.NextFloat(MathHelper.TwoPi);
-				projectile.netUpdate = true;
+				Projectile.netUpdate = true;
 				//Don't change position continuously, bandaid fix until a proper way for it to work in MP is figured out
 			}
 			else if (distanceFromFoe != default)
@@ -131,8 +133,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 				// move to fixed position relative to NPC, preDraw will do phase in animation
 				float swingAngle = (teleportAngle + MathHelper.Pi + initialWindUp + windUpPerFrame * swingFrame);
 				Vector2 swingAngleVector = swingAngle.ToRotationVector2();
-				projectile.rotation = swingAngle + MathHelper.PiOver2;
-				projectile.Center = swingCenter + swingAngleVector * distanceFromFoe;
+				Projectile.rotation = swingAngle + MathHelper.PiOver2;
+				Projectile.Center = swingCenter + swingAngleVector * distanceFromFoe;
 			}
 		}
 
@@ -153,11 +155,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			// move to fixed position relative to NPC, preDraw will do phase in animation
 			float swingAngle = (teleportAngle + MathHelper.Pi + initialWindUp + windUpPerFrame * maxPhaseFrames / 2 - swingPerFrame * framesInAir);
 			Vector2 swingAngleVector = swingAngle.ToRotationVector2();
-			projectile.rotation = swingAngle + MathHelper.PiOver2;
-			projectile.Center = swingCenter + swingAngleVector * distanceFromFoe;
+			Projectile.rotation = swingAngle + MathHelper.PiOver2;
+			Projectile.Center = swingCenter + swingAngleVector * distanceFromFoe;
 			if (framesInAir % 3 == 0)
 			{
-				Dust.NewDust(projectile.Center, 8, 8, 235);
+				Dust.NewDust(Projectile.Center, 8, 8, 235);
 			}
 		}
 
@@ -175,14 +177,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 
 		internal override void OnAcquireTarget(Vector2 vectorToTargetPosition)
 		{
-			projectile.spriteDirection = -1;
+			Projectile.spriteDirection = -1;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			if (attackState == AttackState.IDLE || phaseFrames < maxPhaseFrames / 2)
 			{
-				projectile.spriteDirection = projectile.Center.X > player.Center.X ? 1 : -1;
+				Projectile.spriteDirection = Projectile.Center.X > player.Center.X ? 1 : -1;
 			}
 			base.IdleMovement(vectorToIdlePosition);
 		}

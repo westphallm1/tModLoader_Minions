@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 {
 	// Contains a list of static utility methods for persisting minion team assignments to disk/
 	// transporting them over the network
-	public class MinionTacticsGroupMapper
+	public class MinionTacticsGroupMapper : ModSystem
 	{
 		// create a buffType <-> hash of fully qualified type name map, used for saving/loading
 		// tactics buff map.
@@ -20,13 +20,13 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		public static Dictionary<uint, int> HashToTypeDict;
 		// reverse map for quick look up (probably not efficient)
 		public static Dictionary<int, uint> TypeToHashDict;
-		public static void Load()
+		public override void OnModLoad()
 		{
 			HashToTypeDict = new Dictionary<uint, int>();
 			TypeToHashDict = new Dictionary<int, uint>();
 		}
 
-		public static void Unload()
+		public override void Unload()
 		{
 			HashToTypeDict = null;
 			TypeToHashDict = null;

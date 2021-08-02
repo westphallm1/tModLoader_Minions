@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				return true;
 			}
 			Tile tile = Framing.GetTileSafely(x, y);
-			return tile.active() && !tile.actuator() && tile.collisionType == 1;
+			return tile.IsActive && !tile.HasActuator && tile.CollisionType == 1;
 		}
 		public bool UpdateGroundProbe()
 		{
@@ -167,7 +167,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		private MinionPathfindingPlayer modPlayer;
 
 		internal int tacticsGroup;
-		internal Player player => modPlayer.player;
+		internal Player player => modPlayer.Player;
 
 		internal static List<NPC> npcsInBeaconRange;
 

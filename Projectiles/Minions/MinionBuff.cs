@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			this.projectileTypes = projectileTypes;
 		}
 
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.buffNoSave[Type] = true;
 			Main.buffNoTimeDisplay[Type] = true;

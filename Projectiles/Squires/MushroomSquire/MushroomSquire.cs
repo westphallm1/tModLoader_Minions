@@ -14,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 	public class MushroomSquireMinionBuff : MinionBuff
 	{
 		public MushroomSquireMinionBuff() : base(ProjectileType<MushroomSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Mushroom Squire");
 			Description.SetDefault("A mushroom squire will follow your orders!");
 		}
@@ -35,22 +35,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 2f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 9;
-			item.value = Item.sellPrice(0, 0, 0, 75);
-			item.rare = ItemRarityID.White;
+			Item.knockBack = 2f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 9;
+			Item.value = Item.sellPrice(0, 0, 0, 75);
+			Item.rare = ItemRarityID.White;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddRecipeGroup(RecipeGroupID.Wood, 18);
-			recipe.AddIngredient(ItemID.Mushroom, 8);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddRecipeGroup(RecipeGroupID.Wood, 18).AddIngredient(ItemID.Mushroom, 8).AddTile(TileID.Anvils).Register();
 		}
 	}
 
@@ -59,34 +54,34 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		const int TimeToLive = 180;
 		const int TimeLeftToStartFalling = TimeToLive - 15;
 
-		public override string Texture => "Terraria/Item_" + ItemID.Mushroom;
+		public override string Texture => "Terraria/Images/Item_" + ItemID.Mushroom;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 1;
-			projectile.width = 12;
-			projectile.height = 12;
-			projectile.timeLeft = TimeToLive;
-			projectile.friendly = true;
-			projectile.tileCollide = true;
-			projectile.minion = true;
+			Projectile.penetrate = 1;
+			Projectile.width = 12;
+			Projectile.height = 12;
+			Projectile.timeLeft = TimeToLive;
+			Projectile.friendly = true;
+			Projectile.tileCollide = true;
+			Projectile.minion = true;
 		}
 
 		public override void AI()
 		{
 			base.AI();
-			if(projectile.timeLeft < TimeLeftToStartFalling && projectile.velocity.Y < 16)
+			if(Projectile.timeLeft < TimeLeftToStartFalling && Projectile.velocity.Y < 16)
 			{
-				projectile.velocity.Y += 0.5f;
-				projectile.velocity.X *= 0.99f;
+				Projectile.velocity.Y += 0.5f;
+				Projectile.velocity.X *= 0.99f;
 			}
-			projectile.rotation += MathHelper.Pi / 16 * Math.Sign(projectile.velocity.X);
+			Projectile.rotation += MathHelper.Pi / 16 * Math.Sign(Projectile.velocity.X);
 		}
 
 		public override void Kill(int timeLeft)
@@ -94,18 +89,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			base.Kill(timeLeft);
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
+				Dust.NewDust(Projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
 			}
-			if(projectile.owner == Main.myPlayer && Main.rand.Next(3) > 0)
+			if(Projectile.owner == Main.myPlayer && Main.rand.Next(3) > 0)
 			{
-				Vector2 launcVel = new Vector2(0.25f * projectile.velocity.X, -Main.rand.Next(5, 8));
+				Vector2 launcVel = new Vector2(0.25f * Projectile.velocity.X, -Main.rand.Next(5, 8));
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					launcVel,
 					ProjectileType<ForagerMushroom>(),
-					projectile.damage,
-					projectile.knockBack,
-					projectile.owner);
+					Projectile.damage,
+					Projectile.knockBack,
+					Projectile.owner);
 
 			}
 		}
@@ -135,14 +131,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Mushroom Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 30;
+			Projectile.width = 24;
+			Projectile.height = 30;
 		}
 
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
@@ -150,19 +146,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			base.SpecialTargetedMovement(vectorToTargetPosition);
 			if(specialFrame % 10 == 0 && player.whoAmI == Main.myPlayer)
 			{
-				Vector2 vector2Mouse = Vector2.DistanceSquared(projectile.Center, Main.MouseWorld) < 48 * 48 ?
-					Main.MouseWorld - player.Center : Main.MouseWorld - projectile.Center;
+				Vector2 vector2Mouse = Vector2.DistanceSquared(Projectile.Center, Main.MouseWorld) < 48 * 48 ?
+					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				vector2Mouse = vector2Mouse.RotatedBy(Main.rand.NextFloat(MathHelper.Pi / 8) - MathHelper.Pi/16);
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<MushroomSquireMushroomProjectile>(),
-					5 * projectile.damage / 4,
-					projectile.knockBack,
-					projectile.owner);
-				Main.PlaySound(new LegacySoundStyle(2, 5), projectile.Center);
+					5 * Projectile.damage / 4,
+					Projectile.knockBack,
+					Projectile.owner);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 5), Projectile.Center);
 			}
 		}
 

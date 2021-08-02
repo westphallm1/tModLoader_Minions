@@ -12,12 +12,8 @@ namespace AmuletOfManyMinions.Dusts
 {
 	class SnowDust : ModDust
 	{
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.NorthPoleSnowflake;
 
-		public override bool Autoload(ref string name, ref string texture)
-		{
-			texture = "Terraria/Projectile_" + ProjectileID.NorthPoleSnowflake;
-			return base.Autoload(ref name, ref texture);
-		}
 		public override void OnSpawn(Dust dust)
 		{
 			dust.frame = new Rectangle(0, Main.rand.Next(2) * 26, 26, 26);

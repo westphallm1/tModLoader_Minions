@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Gores
 		public override void OnSpawn(Gore gore)
 		{
 			base.OnSpawn(gore);
-			updateType = 61;
+			UpdateType = 61;
 		}
 	}
 }

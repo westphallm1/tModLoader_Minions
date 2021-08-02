@@ -14,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class RavenMinionBuff : MinionBuff
 	{
 		public RavenMinionBuff() : base(ProjectileType<RavenMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.Ravens") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.Ravens"));
 		}
@@ -32,24 +32,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class RavenGreekFire: ModProjectile
 	{
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.aiStyle = 14;
-			projectile.friendly = true;
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 30;
-			projectile.penetrate = 5;
-			projectile.timeLeft = 120;
+			Projectile.aiStyle = 14;
+			Projectile.friendly = true;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 30;
+			Projectile.penetrate = 5;
+			Projectile.timeLeft = 120;
 		}
 
 		public override void AI()
 		{
 			base.AI();
-			int dustId = Dust.NewDust(projectile.position, projectile.width, projectile.height, 6, 0f, 0f, 100);
+			int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100);
 			Main.dust[dustId].position.X -= 2f;
 			Main.dust[dustId].position.Y += 2f;
 			Main.dust[dustId].scale += Main.rand.NextFloat(0.5f);
@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.dust[dustId].velocity.Y -= 2f;
 			if (Main.rand.Next(2) == 0)
 			{
-				dustId = Dust.NewDust(projectile.position, projectile.width, projectile.height, 6, 0f, 0f, 100);
+				dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100);
 				Main.dust[dustId].position.X -= 2f;
 				Main.dust[dustId].position.Y += 2f;
 				Main.dust[dustId].scale += 0.3f + Main.rand.NextFloat(0.5f);
@@ -66,7 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			return false;
 		}
@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class RavenMinion : HeadCirclingGroupAwareMinion
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.Raven;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Raven;
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 16;
 		bool isDashing = false;
@@ -86,15 +86,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Raven") + " (AoMM Version)");
-			Main.projFrames[projectile.type] = 8;
-			IdleLocationSets.circlingHead.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 8;
+			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 24;
+			Projectile.width = 24;
+			Projectile.height = 24;
 			attackFrames = 60;
 			targetSearchDistance = 900;
 			circleHelper.idleBumbleFrames = 60;
@@ -105,7 +105,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 
 			int frameSpeed = 5;
-			projectile.frameCounter++;
+			Projectile.frameCounter++;
 			if(vectorToTarget is Vector2 target && target.Length() < 256)
 			{
 				minFrame = 4;
@@ -115,37 +115,37 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				minFrame = 0;
 				maxFrame = 4;
 			}
-			if (projectile.frameCounter >= frameSpeed)
+			if (Projectile.frameCounter >= frameSpeed)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= (int)maxFrame)
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+				if (Projectile.frame >= (int)maxFrame)
 				{
-					projectile.frame = minFrame;
+					Projectile.frame = minFrame;
 				}
 			}
 			if(vectorToTarget != null)
 			{
-				if(projectile.velocity.X > 1)
+				if(Projectile.velocity.X > 1)
 				{
-					projectile.spriteDirection = -1;
-				} else if (projectile.velocity.X < -1)
+					Projectile.spriteDirection = -1;
+				} else if (Projectile.velocity.X < -1)
 				{
-					projectile.spriteDirection = 1;
+					Projectile.spriteDirection = 1;
 				}
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			// need to draw sprites manually for some reason
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
-			Texture2D texture = GetTexture(Texture);
-			Texture2D glowTexture = GetTexture(base.Texture + "_Glow");
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			Texture2D glowTexture = Request<Texture2D>(base.Texture + "_Glow").Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			if(isDashing)
 			{
@@ -153,17 +153,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				{
 					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
 					blurPos = blurPos - Main.screenPosition;
-					spriteBatch.Draw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
-					spriteBatch.Draw(glowTexture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
+					Main.EntitySpriteDraw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
+					Main.EntitySpriteDraw(glowTexture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}
 			// regular version
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r, origin, 1, effects, 0);
 			// glow
 			if(isDashing)
 			{
-				spriteBatch.Draw(glowTexture, pos - Main.screenPosition, bounds, Color.White, r, origin, 1, effects, 0);
+				Main.EntitySpriteDraw(glowTexture, pos - Main.screenPosition, bounds, Color.White, r, origin, 1, effects, 0);
 			}
 			return false;
 		}
@@ -178,18 +178,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if (framesSinceLastHit < cooldownAfterHitFrames && framesSinceLastHit > cooldownAfterHitFrames / 2)
 			{
 				// start turning so we don't double directly back
-				Vector2 turnVelocity = new Vector2(-projectile.velocity.Y, projectile.velocity.X) / 8;
-				turnVelocity *= Math.Sign(projectile.velocity.X);
-				projectile.velocity += turnVelocity;
+				Vector2 turnVelocity = new Vector2(-Projectile.velocity.Y, Projectile.velocity.X) / 8;
+				turnVelocity *= Math.Sign(Projectile.velocity.X);
+				Projectile.velocity += turnVelocity;
 			}
 			else if (framesSinceLastHit++ > cooldownAfterHitFrames)
 			{
-				projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 			}
 			else
 			{
-				projectile.velocity.SafeNormalize();
-				projectile.velocity *= 10; // kick it away from enemies that it's just hit
+				Projectile.velocity.SafeNormalize();
+				Projectile.velocity *= 10; // kick it away from enemies that it's just hit
 			}
 		}
 
@@ -202,7 +202,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			// left shift old position
 			isDashing = vectorToTarget is Vector2 target && target.Length() < 256;
-			blurHelper.Update(projectile.Center, isDashing);
+			blurHelper.Update(Projectile.Center, isDashing);
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -211,11 +211,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				Vector2 lineOfFire = (Main.rand.NextFloat(MathHelper.Pi) + MathHelper.Pi).ToRotationVector2() * Main.rand.NextFloat(6, 8);
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					lineOfFire,
 					ProjectileType<RavenGreekFire>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer);
 			}
 		}

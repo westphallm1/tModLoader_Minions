@@ -9,10 +9,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 	// Works around many of the issues involved with changing a projectiles minionSlots
 	public abstract class CounterMinion : SimpleMinion
 	{
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 
 		protected virtual int MinionType => default;
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			return false;
 		}
@@ -20,21 +20,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override void Behavior()
 		{
-			projectile.friendly = false;
-			projectile.velocity = Vector2.Zero;
-			projectile.position = player.Center;
+			Projectile.friendly = false;
+			Projectile.velocity = Vector2.Zero;
+			Projectile.position = player.Center;
 			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[MinionType] == 0)
 			{
 				// hack to prevent multiple 
-				if (GetMinionsOfType(projectile.type)[0].whoAmI == projectile.whoAmI)
+				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(player.Top, Vector2.Zero, MinionType, projectile.damage, projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, MinionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			} else
 			{
 				// do this to prevent NPC projectile reflections from insta-killing the player
-				projectile.damage = 0;
-				projectile.hostile = false;
+				Projectile.damage = 0;
+				Projectile.hostile = false;
 			}
 		}
 		public override Vector2? FindTarget()
@@ -78,13 +78,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.SetStaticDefaults();
 			// the empowered minion is technically a sub-minion if its counter minion, not a main minion
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.minion = false;
-			projectile.minionSlots = 0;
+			Projectile.minion = false;
+			Projectile.minionSlots = 0;
 		}
 
 		protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			// little visual effect on empower
 			for (int i = 0; i < dustCount; i++)
 			{
-				Dust.NewDust(projectile.Center, 16, 16, dustType);
+				Dust.NewDust(Projectile.Center, 16, 16, dustType);
 			}
 		}
 
@@ -108,14 +108,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			if (baseDamage == -1)
 			{
-				baseDamage = projectile.damage;
+				baseDamage = Projectile.damage;
 			}
 			if (EmpowerCount > previousEmpowerCount)
 			{
 				OnEmpower();
 				previousEmpowerCount = EmpowerCount;
 			}
-			projectile.damage = ComputeDamage();
+			Projectile.damage = ComputeDamage();
 			return Vector2.Zero;
 		}
 
@@ -124,11 +124,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			float searchDistance = ComputeSearchDistance();
 			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{
@@ -143,7 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			float speed = ComputeTargetedSpeed();
 			vectorToTargetPosition.SafeNormalize();
 			vectorToTargetPosition *= speed;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 		}
 
 
@@ -152,13 +152,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			// alway clamp to the idle position
 			float inertia = ComputeInertia();
 			float maxSpeed = ComputeIdleSpeed();
-			Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
+			Vector2 speedChange = vectorToIdlePosition - Projectile.velocity;
 			if (speedChange.Length() > maxSpeed)
 			{
 				speedChange.SafeNormalize();
 				speedChange *= maxSpeed;
 			}
-			projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + speedChange) / inertia;
 		}
 
 
@@ -167,15 +167,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			int max = 0;
 			SetMinAndMaxFrames(ref minFrame, ref max);
 			maxFrame = max;
-			projectile.frameCounter++;
-			if (projectile.frameCounter >= frameSpeed)
+			Projectile.frameCounter++;
+			if (Projectile.frameCounter >= frameSpeed)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= (maxFrame ?? Main.projFrames[projectile.type]) ||
-					projectile.frame < minFrame)
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+				if (Projectile.frame >= (maxFrame ?? Main.projFrames[Projectile.type]) ||
+					Projectile.frame < minFrame)
 				{
-					projectile.frame = minFrame;
+					Projectile.frame = minFrame;
 				}
 			}
 		}

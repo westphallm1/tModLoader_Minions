@@ -23,11 +23,11 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(silver: 3);
-			item.rare = ItemRarityID.Green;
-			item.defense = 5;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(silver: 3);
+			Item.rare = ItemRarityID.Green;
+			Item.defense = 5;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.08f;
+			player.GetDamage<SummonDamageClass>() += 0.08f;
 			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 48;
 		}
 
@@ -46,7 +46,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 			player.setBonus = "Increases minion damage by 15%\n"
 				+ "Increases squire travel range by 1 block\n"
 				+ "An Angry Tumbler will assist your squire in combat!";
-			player.minionDamageMult += 0.15f;
+			player.GetDamage<SummonDamageClass>() += 0.15f;
 			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 16f;
 			player.GetModPlayer<SquireModPlayer>().aridArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
@@ -54,13 +54,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.AncientCloth, 3);
-			recipe.AddIngredient(ItemID.AntlionMandible, 3);
-			recipe.AddIngredient(ItemID.FossilOre, 10);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.AncientCloth, 3).AddIngredient(ItemID.AntlionMandible, 3).AddIngredient(ItemID.FossilOre, 10).AddTile(TileID.Anvils).Register();
 		}
 	}
 	public class AridTumblerProjectile : SquireBoomerangMinion
@@ -81,14 +75,14 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
+			Main.projFrames[Projectile.type] = 1;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 18;
-			projectile.height = 18;
+			Projectile.width = 18;
+			Projectile.height = 18;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -102,21 +96,21 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 			return base.IdleBehavior() + angleVector + new Vector2(0, 8);
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
 			// draw the body
-			Texture2D texture = GetTexture(Texture);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 0.75f, 0, 0);
 			// draw the eyes
-			Texture2D eyesTexture = GetTexture(Texture + "_Eyes");
+			Texture2D eyesTexture = Request<Texture2D>(Texture + "_Eyes").Value;
 			SpriteEffects effects = animationFrame % AnimationFrames < AnimationFrames / 2 ? 0 : SpriteEffects.FlipHorizontally;
-			spriteBatch.Draw(eyesTexture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(eyesTexture, pos - Main.screenPosition,
 				bounds, Color.White, 0,
 				origin, 0.75f, effects, 0);
 			return false;
@@ -135,11 +129,11 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 			}
 			if (vectorToTarget is null || returning)
 			{
-				projectile.rotation += squire.spriteDirection * 0.2f;
+				Projectile.rotation += squire.spriteDirection * 0.2f;
 			}
 			else
 			{
-				projectile.rotation += squire.spriteDirection * 0.3f;
+				Projectile.rotation += squire.spriteDirection * 0.3f;
 			}
 		}
 	}

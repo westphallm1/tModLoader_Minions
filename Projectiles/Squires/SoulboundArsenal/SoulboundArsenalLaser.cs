@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		private Vector2 tangent;
 		private float chargeScale;
 
-		protected float firingAngle => projectile.ai[0];
-		protected int animationFrame => TimeToLive - projectile.timeLeft;
+		protected float firingAngle => Projectile.ai[0];
+		protected int animationFrame => TimeToLive - Projectile.timeLeft;
 
 		protected virtual Color LightColor => Color.White;
 
@@ -45,12 +45,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			// Todo: Not O(n) solution
-			Vector2 direction = endPoint - projectile.Center;
+			Vector2 direction = endPoint - Projectile.Center;
 			float laserLength = direction.Length();
 			direction.SafeNormalize();
 			for(int i = 0; i < laserLength; i+= 8)
 			{
-				Vector2 checkPoint = projectile.Center + direction * i;
+				Vector2 checkPoint = Projectile.Center + direction * i;
 				if(targetHitbox.Contains(checkPoint.ToPoint())) 
 				{
 					return true;
@@ -62,30 +62,30 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = TimeToLive;
-			projectile.penetrate = -1;
-			projectile.tileCollide = false;
-			projectile.friendly = true;
-			projectile.width = 1;
-			projectile.height = 1;
+			Projectile.timeLeft = TimeToLive;
+			Projectile.penetrate = -1;
+			Projectile.tileCollide = false;
+			Projectile.friendly = true;
+			Projectile.width = 1;
+			Projectile.height = 1;
 		}
 
 		public override void AI()
 		{
 			Vector2 travelVector = firingAngle.ToRotationVector2();
-			endPoint = projectile.Center;
+			endPoint = Projectile.Center;
 			chargeScale = Math.Min(1, MathHelper.Lerp(0, 1, animationFrame / (float)ChargeTime));
 			int i;
 			int step = 16;
 			for(i = step; i < maxLength; i += step)
 			{
-				Vector2 next = projectile.Center + travelVector * i;
+				Vector2 next = Projectile.Center + travelVector * i;
 				if(!Collision.CanHitLine(endPoint, 1, 1, next, 1, 1))
 				{
 					if(step < 2)
@@ -106,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				}
 			}
 			// LOTs of dust
-			Vector2 direction = endPoint - projectile.Center;
+			Vector2 direction = endPoint - Projectile.Center;
 			direction.SafeNormalize();
 			tangent = new Vector2(direction.Y, -direction.X);
 			int dustFrequency = (int)(5 * (4 - 3 * chargeScale));
@@ -143,9 +143,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int duration = (int)Math.Max(30, 60f * (1 - chargeScale/2));
 			float angle = MathHelper.TwoPi * (animationFrame % duration) / duration;
 			ChainDrawer goodDrawer = new ChainDrawer(GoodFrame);
@@ -154,16 +154,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			// beams line up with the tip of the sword
 			Vector2 baseTangent = 12 * this.tangent;
 			Vector2 tangent =  (6 * (0.25f + chargeScale) * (float)Math.Sin(angle)) * this.tangent;
-			Vector2 center = projectile.Center + baseTangent;
+			Vector2 center = Projectile.Center + baseTangent;
 			Vector2 end = endPoint + baseTangent;
 			if(angle > MathHelper.Pi)
 			{
-				goodDrawer.DrawChain(spriteBatch, texture, center  + tangent, end + tangent, Color.White * chargeScale);
-				evilDrawer.DrawChain(spriteBatch, texture, center - tangent, end - tangent, Color.White * chargeScale);
+				goodDrawer.DrawChain(texture, center  + tangent, end + tangent, Color.White * chargeScale);
+				evilDrawer.DrawChain(texture, center - tangent, end - tangent, Color.White * chargeScale);
 			} else
 			{
-				evilDrawer.DrawChain(spriteBatch, texture, center - tangent, end - tangent, Color.White * chargeScale);
-				goodDrawer.DrawChain(spriteBatch, texture, center + tangent, end + tangent, Color.White * chargeScale);
+				evilDrawer.DrawChain(texture, center - tangent, end - tangent, Color.White * chargeScale);
+				goodDrawer.DrawChain(texture, center + tangent, end + tangent, Color.White * chargeScale);
 			}
 			return false;
 		}

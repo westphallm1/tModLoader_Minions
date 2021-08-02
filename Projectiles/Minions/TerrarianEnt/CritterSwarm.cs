@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -27,25 +28,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		// length of 'spawn' animation before damage dealing starts
 		internal static int SpawnFrames = 45;
 
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 6;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 6;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.penetrate = -1;
-			projectile.friendly = true;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 10;
-			projectile.timeLeft = 180;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.penetrate = -1;
+			Projectile.friendly = true;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 10;
+			Projectile.timeLeft = 180;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
@@ -55,13 +56,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			if(projectile.localAI[0] < SpawnFrames)
+			if(Projectile.localAI[0] < SpawnFrames)
 			{
 				return false;
 			}
 			for(int i = 0; i < critters.Count; i++)
 			{
-				Vector2 critterCenter = projectile.Center + critters[i].offset;
+				Vector2 critterCenter = Projectile.Center + critters[i].offset;
 				if(targetHitbox.Contains(critterCenter.ToPoint()))
 				{
 					return true;
@@ -73,37 +74,38 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void AI()
 		{
 			base.AI();
-			projectile.localAI[0]++;
+			Projectile.localAI[0]++;
 			// failsafe in case we got a bad NPC index
-			if (projectile.ai[0] == 0)
+			if (Projectile.ai[0] == 0)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 				return; 
 			}
 			// "on spawn" code
 			if (clingTarget == null)
 			{
-				clingTarget = Main.npc[(int)projectile.ai[0]];
+				clingTarget = Main.npc[(int)Projectile.ai[0]];
 				int radius = Math.Max(96, (clingTarget.width + clingTarget.height) / 2);
-				critters = CritterConfigs.GetCrittersForBiome((int)projectile.ai[1], radius, Main.rand.Next(3, 5));
+				//TODO 1.4 test if drawing these does not crash
+				critters = CritterConfigs.GetCrittersForBiome((int)Projectile.ai[1], radius, Main.rand.Next(3, 5));
 			}
 			if (clingTarget.active)
 			{
-				projectile.Center = clingTarget.Center;
+				Projectile.Center = clingTarget.Center;
 			} 
 			for(int i = 0; i < critters.Count; i++)
 			{
-				critters[i].Update((int)projectile.localAI[0]);
+				critters[i].Update((int)Projectile.localAI[0]);
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			float colorMult = Math.Min(0.75f, Math.Min(projectile.timeLeft, projectile.localAI[0]) / SpawnFrames);
+			float colorMult = Math.Min(0.75f, Math.Min(Projectile.timeLeft, Projectile.localAI[0]) / SpawnFrames);
 			lightColor = Color.White * colorMult;
 			for(int i = 0; i < critters.Count; i++)
 			{
-				critters[i].Draw(spriteBatch, lightColor, (int)projectile.localAI[0], projectile.Center);
+				critters[i].Draw(lightColor, (int)Projectile.localAI[0], Projectile.Center);
 			}
 			return false;
 		}
@@ -146,8 +148,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			List<SwarmCritter> critters = new List<SwarmCritter>();
 			for(int i = 0; i < count; i++)
 			{
-				int critterType = critterTypes[Main.rand.Next(critterTypes.Length)];
-				Texture2D texture = GetTexture("Terraria/NPC_" + critterType);
+				int critterType = Main.rand.Next(critterTypes);
+				Main.instance.LoadNPC(critterType);
+				Texture2D texture = TextureAssets.Npc[critterType].Value;
 				critters.Add(new ElipseFlyingCritter(texture, i, nFrames, 
 					minFrame: minFrame, maxFrame: maxFrame, 
 					majorRadius: majorRadius, swarmSize: count));
@@ -227,7 +230,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public static List<SwarmCritter> GetButterflyCritters(int majorRadius, int count)
 		{
-			Texture2D texture = GetTexture("Terraria/NPC_" + NPCID.Butterfly);
+			Main.instance.LoadNPC(NPCID.Butterfly);
+			Texture2D texture = TextureAssets.Npc[NPCID.Butterfly].Value;
 			List<SwarmCritter> critters = new List<SwarmCritter>();
 			int butterflyTypes = 8;
 			for(int i = 0; i < count; i++)
@@ -259,12 +263,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		internal abstract void Update(int frame);
 		internal abstract Rectangle GetBounds(int frame);
 
-		internal void Draw(SpriteBatch spriteBatch, Color lightColor, int frame, Vector2 center)
+		internal void Draw(Color lightColor, int frame, Vector2 center)
 		{
 			Rectangle bounds = GetBounds(frame);
 			Vector2 pos = center + offset;
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition, bounds, lightColor, rotation, origin, scale, effects, 0);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, rotation, origin, scale, effects, 0);
 		}
 	}
 

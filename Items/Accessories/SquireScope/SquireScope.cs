@@ -16,11 +16,11 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(gold: 6, silver: 1);
-			item.rare = ItemRarityID.Lime;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(gold: 6, silver: 1);
+			Item.rare = ItemRarityID.Lime;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -34,12 +34,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.RifleScope, 1);
-			recipe.AddIngredient(ItemType<SquireSpyglass.SquireSpyglass>(), 1);
-			recipe.AddTile(TileID.TinkerersWorkbench);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.RifleScope, 1).AddIngredient(ItemType<SquireSpyglass.SquireSpyglass>(), 1).AddTile(TileID.TinkerersWorkbench).Register();
 		}
 	}
 }

@@ -23,11 +23,11 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(silver: 3);
-			item.rare = ItemRarityID.Orange;
-			item.defense = 4;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(silver: 3);
+			Item.rare = ItemRarityID.Orange;
+			Item.defense = 4;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.maxMinions += 1;
-			player.minionDamageMult += 0.04f;
+			player.GetDamage<SummonDamageClass>() += 0.04f;
 		}
 
 		public override void ArmorSetShadows(Player player)
@@ -71,12 +71,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.ShadowScale, 10);
-			recipe.AddIngredient(ItemID.Bone, 20);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.ShadowScale, 10).AddIngredient(ItemID.Bone, 20).AddTile(TileID.Anvils).Register();
 		}
 
 	}
@@ -86,12 +81,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.TissueSample, 10);
-			recipe.AddIngredient(ItemID.Bone, 20);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.TissueSample, 10).AddIngredient(ItemID.Bone, 20).AddTile(TileID.Anvils).Register();
 		}
 
 	}
@@ -99,7 +89,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	public class IllusionistWispBuff : ModBuff
 	{
 
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.buffNoSave[Type] = true;
 			Main.buffNoTimeDisplay[Type] = true;
@@ -113,9 +103,9 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	public class IllusionistWisp : TransientMinion
 	{
 		public static int SpawnFrequency = 60;
-		private bool isCorrupt => projectile.ai[0] == 0;
+		private bool isCorrupt => Projectile.ai[0] == 0;
 		internal override bool tileCollide => false;
-		private int targetNPCIdx => (int)projectile.ai[1];
+		private int targetNPCIdx => (int)Projectile.ai[1];
 		private NPC targetNPC;
 
 		bool isAttacking = false;
@@ -123,37 +113,37 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 10;
+			Main.projFrames[Projectile.type] = 10;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.timeLeft = 62;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.timeLeft = 62;
 			attackThroughWalls = true;
 			frameSpeed = 5;
-			projectile.penetrate = 1;
+			Projectile.penetrate = 1;
 		}
 		public override Vector2 IdleBehavior()
 		{
-			List<Projectile> others = GetMinionsOfType(projectile.type);
-			int myIndex = others.FindIndex(p => p.whoAmI == projectile.whoAmI);
+			List<Projectile> others = GetMinionsOfType(Projectile.type);
+			int myIndex = others.FindIndex(p => p.whoAmI == Projectile.whoAmI);
 			if (player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped)
 			{
-				projectile.timeLeft = Math.Max(projectile.timeLeft, 2);
+				Projectile.timeLeft = Math.Max(Projectile.timeLeft, 2);
 			}
 
 			if (targetNPCIdx != 0 && !isAttacking)
 			{
-				projectile.netUpdate = true;
-				projectile.friendly = true;
+				Projectile.netUpdate = true;
+				Projectile.friendly = true;
 				targetNPC = Main.npc[targetNPCIdx];
 				isAttacking = true;
 			}
 			if (isAttacking && targetNPC != null && !targetNPC.active)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 
 			Vector2 offsetVector;
@@ -170,8 +160,8 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 					break;
 			}
 			offsetVector.Y += 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 120);
-			Lighting.AddLight(projectile.Center, Color.LimeGreen.ToVector3() * 0.25f);
-			return player.Center - projectile.Center + offsetVector;
+			Lighting.AddLight(Projectile.Center, Color.LimeGreen.ToVector3() * 0.25f);
+			return player.Center - Projectile.Center + offsetVector;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -180,9 +170,9 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			projectile.position += vectorToIdlePosition;
-			projectile.velocity = Vector2.Zero;
-			projectile.friendly = false;
+			Projectile.position += vectorToIdlePosition;
+			Projectile.velocity = Vector2.Zero;
+			Projectile.friendly = false;
 		}
 
 		public override void Kill(int timeLeft)
@@ -190,7 +180,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			int dustType = isCorrupt ? 89 : 87;
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.position, 16, 16, dustType);
+				Dust.NewDust(Projectile.position, 16, 16, dustType);
 			}
 		}
 
@@ -199,7 +189,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			vectorToTargetPosition.Normalize();
 			vectorToTargetPosition *= 8;
 			int inertia = 8;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 		}
 
 		public override Vector2? FindTarget()
@@ -210,22 +200,22 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			}
 			else
 			{
-				return Main.npc[targetNPCIdx].Center - projectile.Center;
+				return Main.npc[targetNPCIdx].Center - Projectile.Center;
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			Color translucentColor = isCorrupt ? new Color(160, 213, 137, 100) : new Color(253, 204, 129, 100);
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = player.direction < 0 ? 0 : SpriteEffects.FlipHorizontally;
-			Texture2D texture = GetTexture(Texture);
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			float scale = 1f - projectile.timeLeft / 62f;
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			float scale = 1f - Projectile.timeLeft / 62f;
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, translucentColor, r,
 				origin, scale, effects, 0);
 			return false;

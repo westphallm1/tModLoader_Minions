@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 		public SquireSpecialStartPacket(Player player) : base(player) { }
 		protected override void PostReceive(BinaryReader reader, int sender, Player player)
 		{
-			((SquireMinion)player.GetModPlayer<SquireModPlayer>().GetSquire()?.modProjectile)?.StartSpecial(true);
+			((SquireMinion)player.GetModPlayer<SquireModPlayer>().GetSquire()?.ModProjectile)?.StartSpecial(true);
 			if(Main.netMode == NetmodeID.Server)
 			{
 				new SquireSpecialStartPacket(player)

@@ -15,9 +15,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 	public class SoulboundBowMinionBuff : MinionBuff
 	{
 		public SoulboundBowMinionBuff() : base(ProjectileType<SoulboundBowMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Bow");
 			Description.SetDefault("A soulbound bow will follow your orders!");
 		}
@@ -39,29 +39,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 35;
-			item.value = Item.sellPrice(0, 0, 50, 0);
-			item.rare = ItemRarityID.LightRed;
-			item.noUseGraphic = true;
+			Item.knockBack = 3f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 35;
+			Item.value = Item.sellPrice(0, 0, 50, 0);
+			Item.rare = ItemRarityID.LightRed;
+			Item.noUseGraphic = true;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.PearlwoodBow, 1);
-			recipe.AddIngredient(ItemID.SoulofLight, 10);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.PearlwoodBow, 1).AddIngredient(ItemID.SoulofLight, 10).AddTile(TileID.Anvils).Register();
 		}
 
 		public override bool CanUseItem(Player player)
 		{
 			var canUse = base.CanUseItem(player);
-			item.noUseGraphic = true;
+			Item.noUseGraphic = true;
 			return canUse;
 		}
 	}
@@ -77,19 +72,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = TimeToLive;
-			projectile.friendly = true;
-			projectile.minion = true;
-			projectile.tileCollide = false;
-			projectile.penetrate = 2;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 20;
+			Projectile.timeLeft = TimeToLive;
+			Projectile.friendly = true;
+			Projectile.minion = true;
+			Projectile.tileCollide = false;
+			Projectile.penetrate = 2;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 20;
 		}
 		public override void AI()
 		{
@@ -100,19 +95,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 				hasSpawned = true;
 			}
 			Color lightColor = new Color(0.75f, 0f, 1f, 1f);
-			projectile.rotation = (float)Math.PI / 4 + projectile.velocity.ToRotation();
-			Lighting.AddLight(projectile.Center, lightColor.ToVector3());
+			Projectile.rotation = (float)Math.PI / 4 + Projectile.velocity.ToRotation();
+			Lighting.AddLight(Projectile.Center, lightColor.ToVector3());
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = Main.projectileTexture[projectile.type];
-			float colorStep = (float)Math.Sin(MathHelper.Pi * projectile.timeLeft / TimeToLive);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			float colorStep = (float)Math.Sin(MathHelper.Pi * Projectile.timeLeft / TimeToLive);
 			float colorIntensity = MathHelper.Lerp(0.75f, 1, colorStep);
 			lightColor = Color.White * colorIntensity;
 			lightColor.A /= 2;
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				texture.Bounds, lightColor, projectile.rotation,
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				texture.Bounds, lightColor, Projectile.rotation,
 				texture.Bounds.Center.ToVector2(), 1, 0, 0);
 			return false;
 		}
@@ -121,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
-				int dustCreated = Dust.NewDust(projectile.position, 1, 1, 255, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
+				int dustCreated = Dust.NewDust(Projectile.position, 1, 1, 255, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
 				Main.dust[dustCreated].color = new Color(0.75f, 0f, 1f, 1f);
 				Main.dust[dustCreated].noGravity = true;
 				Main.dust[dustCreated].velocity *= 0.8f;
@@ -136,31 +131,31 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
-			projectile.ranged = false; //Bandaid fix
-			projectile.minion = true;
+			Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
+			// projectile.ranged = false; //Bandaid fix
+			Projectile.minion = true;
 		}
 
 		public override void AI()
 		{
 			base.AI();
-			Lighting.AddLight(projectile.Center, Color.LightPink.ToVector3() * 0.5f);
+			Lighting.AddLight(Projectile.Center, Color.LightPink.ToVector3() * 0.5f);
 		}
 
 		public override void Kill(int timeLeft)
 		{
-			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
 			// don't spawn an arrow on kill
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
-				int dustCreated = Dust.NewDust(projectile.position, 1, 1, 255, velocity.X, velocity.Y, 50, default(Color), Scale: 1.4f);
+				int dustCreated = Dust.NewDust(Projectile.position, 1, 1, 255, velocity.X, velocity.Y, 50, default(Color), Scale: 1.4f);
 				Main.dust[dustCreated].noGravity = true;
 				Main.dust[dustCreated].velocity *= 0.8f;
 			}
@@ -175,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundBow";
 
 		protected override float IdleDistanceMulitplier => 3;
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 
 		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
@@ -199,20 +194,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 32;
-			projectile.tileCollide = false;
+			Projectile.width = 22;
+			Projectile.height = 32;
+			Projectile.tileCollide = false;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			Lighting.AddLight(projectile.Center, Color.LightPink.ToVector3() * 0.5f);
+			Lighting.AddLight(Projectile.Center, Color.LightPink.ToVector3() * 0.5f);
 			return base.IdleBehavior();
 		}
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -220,22 +215,22 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			return false;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			if (!usingWeapon && attackFrame == 0)
 			{
-				weaponAngle = projectile.velocity.X * -projectile.spriteDirection * 0.05f;
+				weaponAngle = Projectile.velocity.X * -Projectile.spriteDirection * 0.05f;
 				Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
-				DrawWeapon(spriteBatch, translucentColor);
+				DrawWeapon(translucentColor);
 			}
 			return false;
 		}
 
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
 
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
-			base.PostDraw(spriteBatch, translucentColor);
+			base.PostDraw(translucentColor);
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -248,14 +243,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(
-						projectile.Center,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center,
 						angleVector,
 						ProjectileType<SoulboundArrow>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
-				Main.PlaySound(SoundID.Item39, projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item39, Projectile.Center);
 			}
 		}
 
@@ -272,13 +268,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 				Vector2 spawnPos = center + offset * spawnRadius;
 				Vector2 spawnVelocity = -offset * travelSpeed;
 				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
 					spawnPos,
 					spawnVelocity,
 					ProjectileType<SoulboundSpecialSword>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer);
-				Main.PlaySound(new LegacySoundStyle(2, 1), projectile.Center);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 1), Projectile.Center);
 			}
 		}
 

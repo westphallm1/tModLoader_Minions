@@ -41,6 +41,8 @@ namespace AmuletOfManyMinions.NPCs
 {
 	class LootTable : GlobalNPC
 	{
+		//TODO 1.4 port drops
+		/*
 		public override void NPCLoot(NPC npc)
 		{
 			base.NPCLoot(npc);
@@ -175,6 +177,7 @@ namespace AmuletOfManyMinions.NPCs
 				}
 			}
 		}
+		*/
 
 		public override void SetupShop(int type, Chest shop, ref int nextSlot)
 		{

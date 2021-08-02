@@ -21,11 +21,11 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.Orange;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(gold: 5);
+			Item.rare = ItemRarityID.Orange;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 		{
 			// don't allow side by side with squire skull, so their debuffs don't overwrite each other
 			int skullType = ItemType<TechnoCharmAccessory>();
-			return slot > 9 || !player.armor.Skip(3).Take(5 + player.extraAccessorySlots).Any(a => !a.IsAir && a.type == skullType);
+			return slot > 9 || !player.armor.Skip(3).Take(5 + player.GetAmountOfExtraAccessorySlotsToShow()).Any(a => !a.IsAir && a.type == skullType);
 		}
 	}
 
@@ -50,14 +50,14 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 
 		public override void SetStaticDefaults()
 		{
-			Main.projFrames[projectile.type] = 24;
+			Main.projFrames[Projectile.type] = 24;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
+			Projectile.width = 16;
+			Projectile.height = 16;
 		}
 
 		private int debuffCycle => (animationFrame % DebuffCycleFrames) / (DebuffCycleFrames / 3);
@@ -70,19 +70,19 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Bleeding;
 				squirePlayer.squireDebuffTime = 180;
-				Lighting.AddLight(projectile.position, Color.Red.ToVector3() * 0.25f);
+				Lighting.AddLight(Projectile.position, Color.Red.ToVector3() * 0.25f);
 			}
 			else if (debuffCycle == 1)
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.OnFire;
 				squirePlayer.squireDebuffTime = 180;
-				Lighting.AddLight(projectile.position, Color.Orange.ToVector3() * 0.25f);
+				Lighting.AddLight(Projectile.position, Color.Orange.ToVector3() * 0.25f);
 			}
 			else
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Poisoned;
 				squirePlayer.squireDebuffTime = 180;
-				Lighting.AddLight(projectile.position, Color.Aquamarine.ToVector3() * 0.25f);
+				Lighting.AddLight(Projectile.position, Color.Aquamarine.ToVector3() * 0.25f);
 			}
 			int angleFrame = animationFrame % AnimationFrames;
 			float angle = 2 * (float)(Math.PI * angleFrame) / AnimationFrames;

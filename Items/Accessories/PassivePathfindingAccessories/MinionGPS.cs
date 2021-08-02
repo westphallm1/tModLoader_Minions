@@ -19,11 +19,11 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(gold: 2);
-			item.rare = ItemRarityID.LightRed;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(gold: 2);
+			Item.rare = ItemRarityID.LightRed;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -32,13 +32,7 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.SetResult(this);
-			recipe.AddIngredient(ItemType<MinionCompass>(), 1);
-			recipe.AddIngredient(ItemID.CrystalShard, 10);
-			recipe.AddIngredient(ItemID.SoulofLight, 8);
-			recipe.AddTile(TileID.TinkerersWorkbench);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemType<MinionCompass>(), 1).AddIngredient(ItemID.CrystalShard, 10).AddIngredient(ItemID.SoulofLight, 8).AddTile(TileID.TinkerersWorkbench).Register();
 		}
 	}
 }

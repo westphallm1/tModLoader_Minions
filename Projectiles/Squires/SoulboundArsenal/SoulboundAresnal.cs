@@ -17,9 +17,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 	public class SoulboundArsenalMinionBuff : MinionBuff
 	{
 		public SoulboundArsenalMinionBuff() : base(ProjectileType<SoulboundArsenalMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Arsenal");
 			Description.SetDefault("A soulbound bow and sword will follow your orders!");
 		}
@@ -42,29 +42,23 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 70;
-			item.value = Item.sellPrice(0, 8, 0, 0);
-			item.rare = ItemRarityID.Lime;
-			item.noUseGraphic = true;
+			Item.knockBack = 3f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 70;
+			Item.value = Item.sellPrice(0, 8, 0, 0);
+			Item.rare = ItemRarityID.Lime;
+			Item.noUseGraphic = true;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.BrokenHeroSword, 1);
-			recipe.AddIngredient(ItemType<SoulboundSwordMinionItem>(), 1);
-			recipe.AddIngredient(ItemType<SoulboundBowMinionItem>(), 1);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.BrokenHeroSword, 1).AddIngredient(ItemType<SoulboundSwordMinionItem>(), 1).AddIngredient(ItemType<SoulboundBowMinionItem>(), 1).AddTile(TileID.MythrilAnvil).Register();
 		}
 		public override bool CanUseItem(Player player)
 		{
 			var canUse = base.CanUseItem(player);
-			item.noUseGraphic = true;
+			Item.noUseGraphic = true;
 			return canUse;
 		}
 	}
@@ -81,28 +75,28 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = 180;
-			projectile.penetrate = 1;
-			projectile.friendly = true;
-			projectile.width = 8;
-			projectile.height = 8;
+			Projectile.timeLeft = 180;
+			Projectile.penetrate = 1;
+			Projectile.friendly = true;
+			Projectile.width = 8;
+			Projectile.height = 8;
 		}
 
 		public abstract float GetRotation();
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				texture.Bounds, translucentColor, projectile.rotation,
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				texture.Bounds, translucentColor, Projectile.rotation,
 				texture.Bounds.Center.ToVector2(), 1, SpriteEffects.None, 0);
 			return false;
 		}
@@ -110,27 +104,27 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		{
 			if (expectedPosition == Vector2.Zero)
 			{
-				expectedPosition = projectile.position;
-				projectile.rotation = GetRotation();
+				expectedPosition = Projectile.position;
+				Projectile.rotation = GetRotation();
 			}
-			expectedPosition += projectile.velocity;
-			Vector2 velocityTangent = new Vector2(projectile.velocity.Y, -projectile.velocity.X);
+			expectedPosition += Projectile.velocity;
+			Vector2 velocityTangent = new Vector2(Projectile.velocity.Y, -Projectile.velocity.X);
 			velocityTangent.Normalize();
-			velocityTangent *= projectile.ai[0] * (float)Math.Sin(projectile.ai[1] + 16 * Math.PI * (projectile.timeLeft) / TimeLeft);
-			projectile.position = expectedPosition + velocityTangent;
-			Lighting.AddLight(projectile.Center, LightColor.ToVector3() * 0.5f);
-			int dustId  = Dust.NewDust(projectile.Center, 1, 1, 255, newColor: LightColor, Scale: 1.2f);
+			velocityTangent *= Projectile.ai[0] * (float)Math.Sin(Projectile.ai[1] + 16 * Math.PI * (Projectile.timeLeft) / TimeLeft);
+			Projectile.position = expectedPosition + velocityTangent;
+			Lighting.AddLight(Projectile.Center, LightColor.ToVector3() * 0.5f);
+			int dustId  = Dust.NewDust(Projectile.Center, 1, 1, 255, newColor: LightColor, Scale: 1.2f);
 			Main.dust[dustId].noGravity = true;
 			Main.dust[dustId].velocity *= 0.8f;
 		}
 
 		public override void Kill(int timeLeft)
 		{
-			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
-				int dustId = Dust.NewDust(projectile.Center, 1, 1, 255, velocity.X, velocity.Y, newColor: LightColor, Scale: 1.2f);
+				int dustId = Dust.NewDust(Projectile.Center, 1, 1, 255, velocity.X, velocity.Y, newColor: LightColor, Scale: 1.2f);
 				Main.dust[dustId].noGravity = true;
 				Main.dust[dustId].velocity *= 0.8f;
 			}
@@ -145,11 +139,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.minion = true; //Bandaid fix?
+			Projectile.minion = true; //Bandaid fix?
 		}
 		public override float GetRotation()
 		{
-			return (float)Math.PI / 2 + projectile.velocity.ToRotation();
+			return (float)Math.PI / 2 + Projectile.velocity.ToRotation();
 		}
 	}
 	public class SoulboundArsenalSwordProjectile : SoulboundArsenalProjectile
@@ -160,11 +154,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 3;
+			Projectile.penetrate = 3;
 		}
 		public override float GetRotation()
 		{
-			return (float)Math.PI / 4 + projectile.velocity.ToRotation();
+			return (float)Math.PI / 4 + Projectile.velocity.ToRotation();
 		}
 	}
 
@@ -177,7 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		protected override float IdleDistanceMulitplier => 3;
 
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
@@ -200,20 +194,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			if (!IsAttacking())
 			{
 				Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
-				DrawWeapon(spriteBatch, translucentColor);
+				DrawWeapon(translucentColor);
 			}
 			return false;
 		}
 
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 0.5f);
-			base.PostDraw(spriteBatch, translucentColor);
+			base.PostDraw(translucentColor);
 		}
 
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
@@ -238,20 +232,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 32;
-			projectile.tileCollide = false;
+			Projectile.width = 22;
+			Projectile.height = 32;
+			Projectile.tileCollide = false;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			Lighting.AddLight(projectile.Center, Color.LightPink.ToVector3() * 0.5f);
+			Lighting.AddLight(Projectile.Center, Color.LightPink.ToVector3() * 0.5f);
 			return base.IdleBehavior();
 		}
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -259,13 +253,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			return false;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			if (!IsAttacking())
 			{
-				weaponAngle = projectile.velocity.X * -projectile.spriteDirection * 0.05f;
+				weaponAngle = Projectile.velocity.X * -Projectile.spriteDirection * 0.05f;
 			}
-			return base.PreDraw(spriteBatch, lightColor);
+			return base.PreDraw(ref lightColor);
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -273,7 +267,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				Main.PlaySound(new LegacySoundStyle(2, 102), projectile.position);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 102), Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					int type = ProjectileType<SoulboundArsenalArrow>();
@@ -284,11 +278,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 					for (int i = 0; i < 2; i++)
 					{
 						Projectile.NewProjectile(
-							projectile.Center,
+							Projectile.GetProjectileSource_FromThis(),
+							Projectile.Center,
 							angleVector,
 							type,
-							projectile.damage,
-							projectile.knockBack,
+							Projectile.damage,
+							Projectile.knockBack,
 							Main.myPlayer,
 							amplitudes[i],
 							phases[i]);
@@ -315,14 +310,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Arsenal");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 32;
+			Projectile.width = 22;
+			Projectile.height = 32;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -330,26 +325,27 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0)
 			{
 				Projectile.NewProjectile(
-					projectile.position,
-					projectile.velocity,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.position,
+					Projectile.velocity,
 					ProjectileType<SoulboundArsenalBowMinion>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer,
-					projectile.identity);
+					Projectile.identity);
 			}
-			Lighting.AddLight(projectile.Center, Color.Purple.ToVector3() * 0.5f);
+			Lighting.AddLight(Projectile.Center, Color.Purple.ToVector3() * 0.5f);
 			return base.IdleBehavior();
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			if (!IsAttacking())
 			{
 				weaponAngle = -9 * (float)Math.PI / 16 +
-					projectile.velocity.X * -projectile.spriteDirection * 0.01f;
+					Projectile.velocity.X * -Projectile.spriteDirection * 0.01f;
 			}
-			return base.PreDraw(spriteBatch, lightColor);
+			return base.PreDraw(ref lightColor);
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -357,17 +353,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				Main.PlaySound(new LegacySoundStyle(2, 71), projectile.position);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 71), Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
-					Vector2 vector2Mouse = Main.MouseWorld - projectile.Center;
+					Vector2 vector2Mouse = Main.MouseWorld - Projectile.Center;
 					vector2Mouse.Normalize();
 					vector2Mouse *= ModifiedProjectileVelocity();
-					Projectile.NewProjectile(projectile.Center,
+					Projectile.NewProjectile(
+						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.Center,
 						vector2Mouse,
 						ProjectileType<SoulboundArsenalSwordProjectile>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer,
 						8);
 				}
@@ -380,7 +378,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			Vector2 offset = UnitVectorFromWeaponAngle();
 			if(specialFrame % 10 == 0)
 			{
-				Main.PlaySound(SoundID.Item13, projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item13, Projectile.Center);
 			}
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
@@ -388,7 +386,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				if(p.active && p.owner == player.whoAmI && p.type == projType)
 				{
 					p.ai[0] = offset.ToRotation();
-					p.Center = projectile.Center + offset * 48;
+					p.Center = Projectile.Center + offset * 48;
 					p.velocity = Vector2.Zero;
 					break;
 				}
@@ -414,11 +412,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					projectile.Center, 
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center, 
 					Vector2.Zero, 
 					ProjectileType<SoulboundArsenalLaser>(), 
-					3 * projectile.damage, 
-					projectile.knockBack, 
+					3 * Projectile.damage, 
+					Projectile.knockBack, 
 					player.whoAmI,
 					ai0: UnitVectorFromWeaponAngle().ToRotation());
 			}

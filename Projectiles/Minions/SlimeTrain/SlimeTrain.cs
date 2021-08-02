@@ -18,9 +18,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 	public class SlimeTrainMinionBuff : MinionBuff
 	{
 		public SlimeTrainMinionBuff() : base(ProjectileType<SlimeTrainCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Celestial Slime Train");
 			Description.SetDefault("A celestial train and its passengers will fight for you!");
 		}
@@ -39,23 +39,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 32;
-			item.damage = 120;
-			item.height = 34;
-			item.value = Item.sellPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.Red;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.damage = 120;
+			Item.height = 34;
+			Item.value = Item.sellPrice(0, 15, 0, 0);
+			Item.rare = ItemRarityID.Red;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.LunarBar, 12);
-			recipe.AddIngredient(ItemType<SlimecartMinionItem>(), 1);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:StardustDragons", 1);
-			recipe.AddTile(TileID.LunarCraftingStation);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.LunarBar, 12).AddIngredient(ItemType<SlimecartMinionItem>(), 1).AddRecipeGroup("AmuletOfManyMinions:StardustDragons", 1).AddTile(TileID.LunarCraftingStation).Register();
 		}
 	}
 
@@ -92,13 +86,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Celestial Steam Train");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 			attackThroughWalls = true;
 			frameSpeed = 8;
 			if(SlimeTexture == null)
@@ -116,9 +110,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			float idleAngle = 2 * PI * groupAnimationFrame / groupAnimationFrames;
 			idlePosition.X += radius * (float)Math.Cos(idleAngle);
 			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.75f);
+			Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.75f);
 			// find the SlimeTrainMarker that's still in its spawn animation, if any
 			currentMarker = null;
 			for(int i = 0; i < Main.maxProjectiles; i++)
@@ -138,8 +132,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		private void SpawnReinforcements()
 		{
-			Tile tile = Framing.GetTileSafely(new Point((int)projectile.position.X / 16, (int)projectile.position.Y / 16));
-			inOpenAir = !tile.active();
+			Tile tile = Framing.GetTileSafely(new Point((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16));
+			inOpenAir = !tile.IsActive;
 			int slimeType = ProjectileType<SlimeTrainSlimeMinion>();
 			int currentSlimeCount = player.ownedProjectileCounts[slimeType];
 			summonedSlimes.Clear();
@@ -171,11 +165,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				int dist = 48 + 30 * (currentSlimeCount + 1);
 				Vector2 spawnPos = wormDrawer.PositionLog.PositionAlongPath(dist, ref angle);
 				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
 					spawnPos,
-					projectile.velocity,
+					Projectile.velocity,
 					slimeType,
-					(int)(projectile.damage * 0.75f),
-					projectile.knockBack,
+					(int)(Projectile.damage * 0.75f),
+					Projectile.knockBack,
 					Main.myPlayer,
 					ai1: nextSlimeIndex + 1);
 				nextSlimeIndex = (nextSlimeIndex + 1) % EmpowerCount;
@@ -194,8 +189,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			// info on every possible target
 			int subSpawnRadius = 700 * 700;
 			if(!shouldIgnore && inOpenAir
-				&& Vector2.DistanceSquared(projectile.Center, npc.Center) < subSpawnRadius 
-				&& Collision.CanHitLine(projectile.Center, 1, 1, npc.Center, 1, 1))
+				&& Vector2.DistanceSquared(Projectile.Center, npc.Center) < subSpawnRadius 
+				&& Collision.CanHitLine(Projectile.Center, 1, 1, npc.Center, 1, 1))
 			{
 				potentialTargetCount += 1;
 			}
@@ -231,7 +226,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private void DoMarkerSpawnMovement()
 		{
 			int frame = (int)currentMarker.localAI[0];
-			projectile.velocity = rotationTracker.GetNPCTargetRadius(frame) - projectile.position;
+			Projectile.velocity = rotationTracker.GetNPCTargetRadius(frame) - Projectile.position;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -252,16 +247,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				DoMarkerSpawnMovement();
 			} else if(targetNPCIndex is int idx)
 			{
-				rotationTracker.SetRotationInfo(Main.npc[idx], projectile);
+				rotationTracker.SetRotationInfo(Main.npc[idx], Projectile);
 				Vector2 startOffset = rotationTracker.GetStartOffset(vectorToTargetPosition);
 				if(startOffset.LengthSquared() < 32 * 32 && player.whoAmI == Main.myPlayer)
 				{
 					Projectile.NewProjectile(
-						projectile.Center,
-						projectile.velocity * 0.25f,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center,
+						Projectile.velocity * 0.25f,
 						SubProjectileType,
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer,
 						ai0: idx,
 						ai1: EmpowerCount);
@@ -278,11 +274,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			float searchDistance = ComputeSearchDistance();
 			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance, losCenter: player.Center) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: player.Center) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{
@@ -293,8 +289,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			((SlimeTrainDrawer)wormDrawer).Update(projectile.frame, summonedSlimes);
-			projectile.friendly = false;
+			((SlimeTrainDrawer)wormDrawer).Update(Projectile.frame, summonedSlimes);
+			Projectile.friendly = false;
 		}
 	}
 
@@ -316,10 +312,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			base.Update(frame);
 			this.summonedSlimes = summonedSlimes;
 		}
-		public override void Draw(Texture2D texture, SpriteBatch spriteBatch, Color lightColor)
+		public override void Draw(Texture2D texture, Color lightColor)
 		{
-			SlimeTexture = GetTexture(texture + "_Slimes");
-			base.Draw(texture, spriteBatch, lightColor);
+			SlimeTexture = Request<Texture2D>(texture + "_Slimes").Value;
+			base.Draw(texture, lightColor);
 		}
 		protected override void DrawHead()
 		{
@@ -370,7 +366,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r,
 				origin, 1, GetEffects(r), 0);
 			if (Main.rand.Next(20) == 0)

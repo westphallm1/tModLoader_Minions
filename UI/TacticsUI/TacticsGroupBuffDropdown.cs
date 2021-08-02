@@ -8,6 +8,8 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.UI;
+using Terraria.Audio;
+using Terraria.GameContent;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
@@ -44,12 +46,13 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			{
 				return;
 			}
+			Main.NewText("currentBuffId: " + currentBuffId);
 			if (listeningElement is TacticsGroupButton clickedButton)
 			{
 				if (selectedIndex != clickedButton.index)
 				{
 					selectedIndex = clickedButton.index;
-					Main.PlaySound(SoundID.MenuTick);
+					SoundEngine.PlaySound(SoundID.MenuTick);
 				}
 
 				//Recalculate selected status for each button, and set players tactic
@@ -77,12 +80,12 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			{
 				//Prevents drawing item textures on mouseover (bed, selected tool etc.)
 				Main.LocalPlayer.mouseInterface = true;
-				Main.LocalPlayer.showItemIcon = false;
+				Main.LocalPlayer.cursorItemIconEnabled = false;
 				Main.ItemIconCacheUpdate(0);
 			}
 			base.DrawSelf(spriteBatch);
 			// Draw panels
-			Texture2D bgTexture = Main.wireUITexture[0];
+			Texture2D bgTexture = TextureAssets.WireUi[0].Value;
 			Vector2 top = new Vector2(GetDimensions().X, GetDimensions().Y);
 			float scale = 1;
 			for(int i = 0; i < buttons.Count; i++)
@@ -91,7 +94,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				// extremely hardcoded
 				Vector2 drawPos = top + i * new Vector2(40, 0);
 				Color color = shouldHover ? Color.White : Color.Gray;
-				spriteBatch.Draw(bgTexture, drawPos, null, color, 0f, Vector2.Zero, scale, 0f, 0f);
+				spriteBatch.Draw(bgTexture, drawPos, null, color, 0f, Vector2.Zero, scale, 0f, 0);
 			}
 		}
 

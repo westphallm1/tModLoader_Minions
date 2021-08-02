@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,18 +16,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.autoReuse = true;
-			item.useStyle = ItemUseStyleID.HoldingUp;
-			item.channel = true;
-			item.noUseGraphic = false;
-			item.mana = 0;
+			Item.autoReuse = true;
+			Item.useStyle = ItemUseStyleID.HoldUp;
+			Item.channel = true;
+			Item.noUseGraphic = false;
+			Item.mana = 0;
 		}
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+
+		public override bool CanShoot(Player player)
 		{
-			if (player.ownedProjectileCounts[item.shoot] > 0 || player.altFunctionUse == 2)
+			if (player.ownedProjectileCounts[Item.shoot] > 0 || player.altFunctionUse == 2)
 			{
 				return false;
 			}
+			return true;
+		}
+
+		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		{
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
@@ -35,10 +42,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 					p.Kill();
 				}
 			}
-			player.AddBuff(item.buffType, 2);
-			Projectile.NewProjectile(player.Center, Vector2.Zero, item.shoot, damage, item.knockBack, player.whoAmI);
+			player.AddBuff(Item.buffType, 2);
+			Projectile.NewProjectile(source, player.Center, Vector2.Zero, Item.shoot, damage, Item.knockBack, player.whoAmI);
 			return false;
 		}
+
 		public override bool AltFunctionUse(Player player)
 		{
 			return true;
@@ -46,30 +54,30 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override bool CanUseItem(Player player)
 		{
-			if (player.ownedProjectileCounts[item.shoot] > 0)
+			if (player.ownedProjectileCounts[Item.shoot] > 0)
 			{
-				item.UseSound = null;
-				item.noUseGraphic = true;
-				item.useStyle = ItemUseStyleID.HoldingOut;
+				Item.UseSound = null;
+				Item.noUseGraphic = true;
+				Item.useStyle = ItemUseStyleID.Shoot;
 			}
 			else
 			{
-				item.useStyle = ItemUseStyleID.HoldingUp;
-				item.noUseGraphic = false;
-				item.UseSound = SoundID.Item44;
+				Item.useStyle = ItemUseStyleID.HoldUp;
+				Item.noUseGraphic = false;
+				Item.UseSound = SoundID.Item44;
 			}
 			return true;
 		}
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			tooltips.Add(new TooltipLine(mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
+			tooltips.Add(new TooltipLine(Mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
 			{
 				overrideColor = Color.LimeGreen
 			});
 			if(SpecialDescription != null)
 			{
-				tooltips.Add(new TooltipLine(mod, "SquireSpecialDescription", SpecialDescription));
+				tooltips.Add(new TooltipLine(Mod, "SquireSpecialDescription", SpecialDescription));
 			}
 		}
 	}

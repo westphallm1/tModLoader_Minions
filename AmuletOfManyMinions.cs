@@ -26,54 +26,34 @@ namespace AmuletOfManyMinions
 {
 	public class AmuletOfManyMinions : Mod
 	{
-		internal static ModHotKey CycleTacticHotKey;
-		internal static ModHotKey CycleTacticsGroupHotKey;
-		internal static ModHotKey QuickDefendHotKey;
+		internal static ModKeybind CycleTacticHotKey;
+		internal static ModKeybind CycleTacticsGroupHotKey;
+		internal static ModKeybind QuickDefendHotKey;
 		public override void Load()
 		{
 			NetHandler.Load();
-			NPCSets.Load();
-			SquireMinionTypes.Load();
-			NecromancerAccessory.Load();
-			SquireGlobalProjectile.Load();
-			IdleLocationSets.Load();
 			TargetSelectionTacticHandler.Load();
-			UserInterfaces.Load();
-			MinionTacticsGroupMapper.Load();
 			LandChunkConfigs.Load();
 			SpriteCompositionManager.Load();
 			CritterConfigs.Load();
-			AmuletOfManyMinionsWorld.Load();
 
-			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
-			CycleTacticsGroupHotKey = RegisterHotKey("Cycle Tactics Group", "L");
-			QuickDefendHotKey = RegisterHotKey("Minion Quick Defend", "V");
+			CycleTacticHotKey = KeybindLoader.RegisterKeybind(this, "Cycle Minion Tactic", "K");
+			CycleTacticsGroupHotKey = KeybindLoader.RegisterKeybind(this, "Cycle Tactics Group", "L");
+			QuickDefendHotKey = KeybindLoader.RegisterKeybind(this, "Minion Quick Defend", "V");
 			if (!Main.dedServ)
 			{
-				AddEquipTexture(null, EquipType.Legs, "RoyalGown_Legs", "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
+				//TODO 1.4
+				//AddEquipTexture(null, EquipType.Legs, "RoyalGown_Legs", "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
 			}
-		}
-
-		public override void PostSetupContent()
-		{
-			NPCSets.Populate();
 		}
 
 		public override void Unload()
 		{
 			NetHandler.Unload();
-			NPCSets.Unload();
-			SquireMinionTypes.Unload();
-			NecromancerAccessory.Unload();
-			SquireGlobalProjectile.Unload();
-			IdleLocationSets.Unload();
 			TargetSelectionTacticHandler.Unload();
-			UserInterfaces.Unload();
-			MinionTacticsGroupMapper.Unload();
 			LandChunkConfigs.Unload();
 			SpriteCompositionManager.Unload();
 			CritterConfigs.Unload();
-			AmuletOfManyMinionsWorld.Unload();
 
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;
@@ -115,46 +95,7 @@ namespace AmuletOfManyMinions
 
 		public override void AddRecipes()
 		{
-			// make vanilla minion items craftable from AoMM version and vice versa
-			// there is probably a more elegant approach to this
-			(int, int)[] pairs = new (int, int)[]
-			{
-				(ItemID.SlimeStaff,          ModContent.ItemType<BabySlimeMinionItem>()),
-				(ItemID.HornetStaff,         ModContent.ItemType<HornetMinionItem>()),
-				(ItemID.ImpStaff,            ModContent.ItemType<ImpMinionItem>()),
-				(ItemID.SpiderStaff,         ModContent.ItemType<SpiderMinionItem>()),
-				(ItemID.PirateStaff,         ModContent.ItemType<PirateMinionItem>()),
-				(ItemID.OpticStaff,          ModContent.ItemType<TwinsMinionItem>()),
-				(ItemID.PygmyStaff,          ModContent.ItemType<PygmyMinionItem>()),
-				(ItemID.RavenStaff,          ModContent.ItemType<RavenMinionItem>()),
-				(ItemID.DeadlySphereStaff,   ModContent.ItemType<DeadlySphereMinionItem>()),
-				(ItemID.TempestStaff,        ModContent.ItemType<SharknadoMinionItem>()),
-				(ItemID.XenoStaff,           ModContent.ItemType<UFOMinionItem>()),
-				(ItemID.StardustDragonStaff, ModContent.ItemType<StardustDragonMinionItem>()),
-				(ItemID.StardustCellStaff,   ModContent.ItemType<StardustCellMinionItem>()),
-			};
-			foreach((int,int) itemPair in pairs) {
-				for(int i = 0; i < 2; i++)
-				{
-					int src = i == 0 ? itemPair.Item1 : itemPair.Item2;
-					int dst = i == 0 ? itemPair.Item2 : itemPair.Item1;
-					ModRecipe recipe = new ModRecipe(this);
-					recipe.AddIngredient(src, 1);
-					recipe.AddTile(TileID.DemonAltar);
-					recipe.SetResult(dst);
-					recipe.AddRecipe();
-				}
-			}
-		}
 
-		public override void UpdateUI(GameTime gameTime)
-		{
-			UserInterfaces.UpdateUI(gameTime);
-		}
-
-		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-		{
-			UserInterfaces.ModifyInterfaceLayers(layers);
 		}
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)

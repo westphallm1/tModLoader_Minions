@@ -14,11 +14,11 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(silver: 2);
-			item.rare = ItemRarityID.Orange;
-			item.defense = 6;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(silver: 2);
+			Item.rare = ItemRarityID.Orange;
+			Item.defense = 6;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -32,12 +32,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.ShadowScale, 15);
-			recipe.AddIngredient(ItemID.Bone, 30);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.ShadowScale, 15).AddIngredient(ItemID.Bone, 30).AddTile(TileID.Anvils).Register();
 		}
 
 	}
@@ -47,12 +42,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.TissueSample, 15);
-			recipe.AddIngredient(ItemID.Bone, 30);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.TissueSample, 15).AddIngredient(ItemID.Bone, 30).AddTile(TileID.Anvils).Register();
 		}
 
 	}

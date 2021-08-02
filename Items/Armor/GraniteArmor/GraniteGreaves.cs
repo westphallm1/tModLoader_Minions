@@ -26,28 +26,23 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(gold: 3);
-			item.rare = ItemRarityID.Pink;
-			item.defense = 12;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(gold: 3);
+			Item.rare = ItemRarityID.Pink;
+			Item.defense = 12;
 		}
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.12f;
+			player.GetDamage<SummonDamageClass>() += 0.12f;
 			player.moveSpeed += 0.1f;
 			player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier += 0.28f;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.HallowedBar, 14);
-			recipe.AddIngredient(ItemType<GraniteSpark>(), 6);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.HallowedBar, 14).AddIngredient(ItemType<GraniteSpark>(), 6).AddTile(TileID.MythrilAnvil).Register();
 		}
 	}
 }

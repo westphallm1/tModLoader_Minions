@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
-	internal class IdleLocationSets
+	internal class IdleLocationSets : ModSystem
 	{
 		public static HashSet<int> trailingOnGround;
 		public static HashSet<int> trailingInAir;
@@ -11,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public static HashSet<int> circlingBody;
 		public static HashSet<int> circlingHead;
 
-		public static void Load()
+		public override void OnModLoad()
 		{
 			trailingOnGround = new HashSet<int>();
 			trailingInAir = new HashSet<int>();
@@ -19,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			circlingBody = new HashSet<int>();
 			circlingHead = new HashSet<int>();
 		}
-		public static void Unload()
+		public override void Unload()
 		{
 			trailingOnGround = null;
 			trailingInAir = null;

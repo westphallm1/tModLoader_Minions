@@ -10,9 +10,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 	public class SlimepireMinionBuff : MinionBuff
 	{
 		public SlimepireMinionBuff() : base(ProjectileType<SlimepireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slimepire");
 			Description.SetDefault("A vampire slime will fight for you!");
 		}
@@ -30,13 +30,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 20;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 2, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.damage = 20;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 2, 0, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 	}
 
@@ -49,16 +49,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slimepire");
-			Main.projFrames[projectile.type] = 6;
+			Main.projFrames[Projectile.type] = 6;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 20;
-			projectile.height = 20;
-			drawOffsetX = (projectile.width - 44) / 2;
-			drawOriginOffsetY = 0;
+			Projectile.width = 20;
+			Projectile.height = 20;
+			DrawOffsetX = (Projectile.width - 44) / 2;
+			DrawOriginOffsetY = 0;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -72,7 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		{
 			if (!gHelper.didJustLand)
 			{
-				projectile.velocity.X = intendedX;
+				Projectile.velocity.X = intendedX;
 				// only path after landing
 				return false;
 			}
@@ -96,13 +96,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			{
 				// go fast enough to hit the enemy while chasing them
 				Vector2 targetVelocity = Main.npc[idx].velocity;
-				projectile.velocity.X = Math.Max(4, Math.Min(maxHorizontalSpeed, Math.Abs(targetVelocity.X) * 1.25f)) * Math.Sign(vector.X);
+				Projectile.velocity.X = Math.Max(4, Math.Min(maxHorizontalSpeed, Math.Abs(targetVelocity.X) * 1.25f)) * Math.Sign(vector.X);
 			} else
 			{
 				// try to match the player's speed while not chasing an enemy
-				projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
+				Projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
 			}
-			intendedX = projectile.velocity.X;
+			intendedX = Projectile.velocity.X;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

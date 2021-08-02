@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 	/// </summary>
 	public class LandChunkProjectile : GroupAwareMinion
 	{
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 
 		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
 
@@ -53,23 +53,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
-			ProjectileID.Sets.MinionSacrificable[projectile.type] = false;
-			Main.projFrames[projectile.type] = 2;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
+			Main.projFrames[Projectile.type] = 2;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 24;
-			projectile.localNPCHitCooldown = 18;
-			projectile.minionSlots = 0;
-			projectile.minion = false;
+			Projectile.width = 24;
+			Projectile.height = 24;
+			Projectile.localNPCHitCooldown = 18;
+			Projectile.minionSlots = 0;
+			Projectile.minion = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 			attackFrames = 60;
 			blurHelper = new MotionBlurDrawer(4);
+		}
+
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
 			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 120, 400))
 			{
 				idleCycleFrames = 160,
@@ -77,14 +82,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				posResolution = 1,
 				BaseOffset = new Vector2(0, 100)
 			};
-		}
 
-		public override void OnSpawn()
-		{
-			base.OnSpawn();
-			int treeIdx = Math.Max(0,(int)projectile.ai[1] - 1);
-			attackStyle = (int)projectile.ai[1] / 2;
-			isEven = projectile.ai[1] % 2 == 0;
+			int treeIdx = Math.Max(0,(int)Projectile.ai[1] - 1);
+			attackStyle = (int)Projectile.ai[1] / 2;
+			isEven = Projectile.ai[1] % 2 == 0;
 			drawers = LandChunkConfigs.templates[treeIdx % LandChunkConfigs.templates.Length]();
 			drawFuncs = new SpriteCycleDrawer[drawers.Length];
 			scHelper.Attach();
@@ -111,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		// for layering purposes, this needs to be done manually
 		// Called from TerrarianEnt.PreDraw
-		public void SubPreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public void SubPreDraw(Color lightColor)
 		{
 			// this is a lot of sprite drawing
 			// lifted from ExampleMod's ExampleBullet
@@ -125,14 +126,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 						break;
 					}
 					scHelper.positionOverride = blurPos;
-					scHelper.Draw(spriteBatch, blurColor * 0.25f);
+					scHelper.Draw(blurColor * 0.25f);
 				}
 			}
 			scHelper.positionOverride = null;
-			scHelper.Draw(spriteBatch, lightColor);
+			scHelper.Draw(lightColor);
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			return false;
 		}
@@ -145,15 +146,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			baseAngle += MathHelper.Pi / 16 * (float) Math.Sin(MathHelper.TwoPi * groupAnimationFrame / groupAnimationFrames);
 			Vector2 offset = 164 * baseAngle.ToRotationVector2();
 			offset.Y *= 0.5f;
-			projectile.rotation = MathHelper.Pi/48 * (float) Math.Sin(MathHelper.TwoPi * animationFrame / 120);
-			projectile.position = player.Center + center + offset;
-			projectile.velocity = Vector2.Zero;
+			Projectile.rotation = MathHelper.Pi/48 * (float) Math.Sin(MathHelper.TwoPi * animationFrame / 120);
+			Projectile.position = player.Center + center + offset;
+			Projectile.velocity = Vector2.Zero;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Array.ForEach(drawers, d => d.Update(projectile, animationFrame, spawnFrames));
+			Array.ForEach(drawers, d => d.Update(Projectile, animationFrame, spawnFrames));
 			return Vector2.Zero;
 		}
 
@@ -168,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			{
 				// adjust the target direction right before flinging,
 				// increases accuracy a bit
-				travelDir = targetNPC.Center - projectile.Center;
+				travelDir = targetNPC.Center - Projectile.Center;
 				travelDir.SafeNormalize();
 				travelDir *= 14;
 				travelDir += targetNPC.velocity;
@@ -183,9 +184,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					return null; // need an actual npc target for this to work
 				}
 				targetNPC = Main.npc[(int)targetNPCIndex];
-				attackStartPlayerOffset = projectile.position - player.Center;
-				attackStartRotation = projectile.rotation;
-				travelDir = target - projectile.Center;
+				attackStartPlayerOffset = Projectile.position - player.Center;
+				attackStartRotation = Projectile.rotation;
+				travelDir = target - Projectile.Center;
 				travelDir.SafeNormalize();
 				travelDir *= 14;
 				targetStartFrame = animationFrame;
@@ -200,11 +201,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			int attackFrame = animationFrame - targetStartFrame;
 			if (attackFrame > windupFrames)
 			{
-				projectile.ai[1] = -1; // no longer 'attached' the the main npc, can spawn a new one
-				projectile.localAI[0] = 0;
+				Projectile.ai[1] = -1; // no longer 'attached' the the main npc, can spawn a new one
+				Projectile.localAI[0] = 0;
 			} else
 			{
-				projectile.localAI[0] = Math.Sign(vectorToTargetPosition.X) * attackFrame;
+				Projectile.localAI[0] = Math.Sign(vectorToTargetPosition.X) * attackFrame;
 			}
 			if(attackStyle == 0)
 			{
@@ -252,15 +253,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				}
 				// "swing" towards the target
 				float destinationAngle = travelDir.ToRotation();
-				if (offsetDir == 1 && destinationAngle > projectile.rotation)
+				if (offsetDir == 1 && destinationAngle > Projectile.rotation)
 				{
 					destinationAngle -= MathHelper.TwoPi;
 				}
 				float swingFraction = (attackFrame - windupFrames) / (float)downSwingFrames;
 				float radius = MathHelper.Lerp(windupRadius, travelDir.Length(), swingFraction);
 				float angle = MathHelper.Lerp(angle0, destinationAngle, swingFraction);
-				projectile.velocity = targetBase + radius * angle.ToRotationVector2() - projectile.position;
-				projectile.rotation = angle + MathHelper.PiOver2;
+				Projectile.velocity = targetBase + radius * angle.ToRotationVector2() - Projectile.position;
+				Projectile.rotation = angle + MathHelper.PiOver2;
 			}
 			else
 			{
@@ -274,9 +275,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				Vector2 target = targetBase + targetOffset;
 
 				// asymptotically approach the correct location
-				projectile.rotation = MathHelper.Lerp(projectile.rotation, targetRotation + MathHelper.PiOver2, swingFraction);
-				projectile.position.X = MathHelper.Lerp(projectile.position.X, target.X, swingFraction);
-				projectile.position.Y = MathHelper.Lerp(projectile.position.Y, target.Y, swingFraction);
+				Projectile.rotation = MathHelper.Lerp(Projectile.rotation, targetRotation + MathHelper.PiOver2, swingFraction);
+				Projectile.position.X = MathHelper.Lerp(Projectile.position.X, target.X, swingFraction);
+				Projectile.position.Y = MathHelper.Lerp(Projectile.position.Y, target.Y, swingFraction);
 			}
 		}
 
@@ -287,8 +288,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			if (attackFrame > windupFrames)
 			{
 				// simply spin towards the target
-				projectile.rotation = vectorToTargetPosition.ToRotation() -MathHelper.PiOver2;
-				projectile.velocity = vectorToTargetPosition * 1.5f * attackFrame / (float) windupFrames;
+				Projectile.rotation = vectorToTargetPosition.ToRotation() -MathHelper.PiOver2;
+				Projectile.velocity = vectorToTargetPosition * 1.5f * attackFrame / (float) windupFrames;
 			}
 			else
 			{
@@ -301,8 +302,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				float rotation = MathHelper.Lerp(attackStartRotation, targetRotation, attackFrame / (float)windupFrames);
 				// swing backwards a little bit before swinging forwards a little bit
 				Vector2 centerOfRotation = attackStartPlayerOffset + offsetDir * windupRadius * attackStartRotation.ToRotationVector2();
-				projectile.rotation = rotation;
-				projectile.position = player.Center + centerOfRotation + -offsetDir * windupRadius * projectile.rotation.ToRotationVector2();
+				Projectile.rotation = rotation;
+				Projectile.position = player.Center + centerOfRotation + -offsetDir * windupRadius * Projectile.rotation.ToRotationVector2();
 			}
 		}
 
@@ -315,16 +316,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				// spinning from the center looks nicer
 				scHelper.CenterOfRotation = new Vector2(0, -48);
 				// simply spin towards the target
-				projectile.rotation += -offsetDir * MathHelper.Pi / 8;
-				projectile.velocity = vectorToTargetPosition * attackFrame / (float) windupFrames;
+				Projectile.rotation += -offsetDir * MathHelper.Pi / 8;
+				Projectile.velocity = vectorToTargetPosition * attackFrame / (float) windupFrames;
 			} else
 			{
 				int windupRadius = 64;
 				float rotationScale = MathHelper.Lerp(MathHelper.Pi / 128, MathHelper.Pi / 32, attackFrame / (float)windupFrames);
 				// swing backwards a little bit before swinging forwards a little bit
 				Vector2 centerOfRotation = attackStartPlayerOffset + offsetDir * windupRadius * attackStartRotation.ToRotationVector2();
-				projectile.rotation += offsetDir * rotationScale;
-				projectile.position = player.Center + centerOfRotation + -offsetDir * windupRadius * projectile.rotation.ToRotationVector2();
+				Projectile.rotation += offsetDir * rotationScale;
+				Projectile.position = player.Center + centerOfRotation + -offsetDir * windupRadius * Projectile.rotation.ToRotationVector2();
 			}
 		}
 
@@ -332,11 +333,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			// left shift old position
 			int attackFrame = animationFrame - targetStartFrame;
-			blurHelper.Update(projectile.Center, targetStartFrame != default && attackFrame > windupFrames);
+			blurHelper.Update(Projectile.Center, targetStartFrame != default && attackFrame > windupFrames);
 			if(targetStartFrame != default && (animationFrame - targetStartFrame > framesToLiveAfterAttack 
-				|| Vector2.DistanceSquared(player.Center, projectile.Center) > 1300f * 1300f))
+				|| Vector2.DistanceSquared(player.Center, Projectile.Center) > 1300f * 1300f))
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 			scHelper.UpdateDrawers(false, drawFuncs);
 		}
@@ -351,10 +352,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			{
 				hasSpawnedSwarm = true;
 				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
 					target.Center,
 					Vector2.Zero,
 					projType,
-					(int)(projectile.damage * 0.33f),
+					(int)(Projectile.damage * 0.33f),
 					0,
 					Main.myPlayer,
 					ai0: target.whoAmI,

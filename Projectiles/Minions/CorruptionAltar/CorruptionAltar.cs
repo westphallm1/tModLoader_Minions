@@ -13,9 +13,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 	public class CorruptionAltarMinionBuff : MinionBuff
 	{
 		public CorruptionAltarMinionBuff() : base(ProjectileType<CorruptionAltarCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Corrupt Cell");
 			Description.SetDefault("A corrupt cell will fight for you!");
 		}
@@ -34,22 +34,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
-			item.damage = 14;
-			item.value = Item.sellPrice(0, 0, 70, 0);
-			item.rare = ItemRarityID.Green;
+			Item.knockBack = 3f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.height = 32;
+			Item.damage = 14;
+			Item.value = Item.sellPrice(0, 0, 70, 0);
+			Item.rare = ItemRarityID.Green;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.DemoniteBar, 12);
-			recipe.AddIngredient(ItemID.ShadowScale, 6);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.DemoniteBar, 12).AddIngredient(ItemID.ShadowScale, 6).AddTile(TileID.Anvils).Register();
 		}
 	}
 
@@ -70,16 +65,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		{
 			base.SetDefaults();
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = GetTexture(Texture);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Color maskColor = new Color(96, 248, 2);
 			Rectangle bounds = new Rectangle(0, 0,
 				texture.Bounds.Width, texture.Bounds.Height / 2);
 			Vector2 origin = bounds.Center.ToVector2();
-			Vector2 pos = projectile.Center;
-			float r = projectile.rotation;
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Vector2 pos = Projectile.Center;
+			float r = Projectile.rotation;
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, maskColor, r,
 				origin, 1.5f, 0, 0);
 			return false;
@@ -113,36 +108,36 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Corruption Cell");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 4;
-			IdleLocationSets.trailingInAir.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 4;
+			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 40;
-			projectile.height = 50;
-			projectile.tileCollide = false;
+			Projectile.width = 40;
+			Projectile.height = 50;
+			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			projectile.friendly = true;
+			Projectile.friendly = true;
 			attackThroughWalls = true;
 			useBeacon = false;
 		}
 
 
 
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
 			if (EmpowerCount < 4)
 			{
 				return;
 			}
-			Texture2D texture = GetTexture(Texture + "_Glow");
+			Texture2D texture = Request<Texture2D>(Texture + "_Glow").Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = bounds.Center.ToVector2();
-			Vector2 pos = projectile.Center;
-			float r = projectile.rotation;
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Vector2 pos = Projectile.Center;
+			float r = Projectile.rotation;
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, Color.White, r,
 				origin, 1, 0, 0);
 		}
@@ -151,7 +146,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -8;
 			animationFrame += 1;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
@@ -160,9 +155,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 				idlePosition.Y = player.Top.Y - 16;
 			}
 			idlePosition.Y += 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 120f);
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			Lighting.AddLight(projectile.Center, Color.Purple.ToVector3() * 0.25f);
+			Lighting.AddLight(Projectile.Center, Color.Purple.ToVector3() * 0.25f);
 			return vectorToIdlePosition;
 		}
 
@@ -190,16 +185,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 					float projectileVelocity = summonBig ? 9.5f : 12.5f;
 					vectorToTargetPosition.SafeNormalize();
 					vectorToTargetPosition *= projectileVelocity;
-					Vector2 pos = projectile.Center;
+					Vector2 pos = Projectile.Center;
 					framesSinceLastHit = 0;
 					if (Main.myPlayer == player.whoAmI)
 					{
 						Projectile.NewProjectile(
+							Projectile.GetProjectileSource_FromThis(),
 							pos,
 							VaryLaunchVelocity(vectorToTargetPosition),
 							projType,
-							projectile.damage,
-							projectile.knockBack,
+							Projectile.damage,
+							Projectile.knockBack,
 							Main.myPlayer);
 					}
 				}
@@ -216,11 +212,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			float searchDistance = ComputeSearchDistance();
 			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{
@@ -261,15 +257,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			projectile.spriteDirection = 1;
-			projectile.frame = Math.Min(4, (int)EmpowerCount) - 1;
-			projectile.rotation = (float)(Math.PI / 8 * Math.Cos(2 * Math.PI * animationFrame / 120f));
+			Projectile.spriteDirection = 1;
+			Projectile.frame = Math.Min(4, (int)EmpowerCount) - 1;
+			Projectile.rotation = (float)(Math.PI / 8 * Math.Cos(2 * Math.PI * animationFrame / 120f));
 
 			if (Main.rand.Next(120) == 0)
 			{
 				for (int i = 0; i < 3; i++)
 				{
-					Dust.NewDust(projectile.Center, 16, 16, 14, Main.rand.Next(6) - 3, Main.rand.Next(6) - 3);
+					Dust.NewDust(Projectile.Center, 16, 16, 14, Main.rand.Next(6) - 3, Main.rand.Next(6) - 3);
 				}
 			}
 		}

@@ -6,15 +6,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 {
 	public class VikingSquireMinionBuff : MinionBuff
 	{
 		public VikingSquireMinionBuff() : base(ProjectileType<VikingSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Viking Squire");
 			Description.SetDefault("A dual-wielding viking squire will follow your orders!");
 		}
@@ -33,12 +34,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 4.5f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 9;
-			item.value = Item.sellPrice(0, 0, 50, 0);
-			item.rare = ItemRarityID.Blue;
+			Item.knockBack = 4.5f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 9;
+			Item.value = Item.sellPrice(0, 0, 50, 0);
+			Item.rare = ItemRarityID.Blue;
 		}
 	}
 
@@ -64,16 +65,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		protected int swingDirection = 1;
 		public VikingSquireMinion() : base(ItemType<VikingSquireMinionItem>()) { }
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			bool doPreDraw = base.PreDraw(spriteBatch, lightColor);
+			bool doPreDraw = base.PreDraw(ref lightColor);
 			if (usingWeapon)
 			{
 				float oppositeWeaponAngle = SwingAngle1 - weaponAngle + SwingAngle0;
 				float myWeaponAngle = weaponAngle;
 				// draw the weapon again offset 180 degrees
 				weaponAngle = oppositeWeaponAngle;
-				DrawWeapon(spriteBatch, lightColor);
+				DrawWeapon(lightColor);
 				weaponAngle = myWeaponAngle;
 			}
 			return doPreDraw;
@@ -81,9 +82,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 30;
-			drawOriginOffsetY = -8;
+			Projectile.width = 22;
+			Projectile.height = 30;
+			DrawOriginOffsetY = -8;
 		}
 
 		public override void SetStaticDefaults()
@@ -91,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Viking Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -119,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		{
 			if(usingSpecial && attackFrame == 0)
 			{
-				Main.PlaySound(attackSound, projectile.Center);
+				SoundEngine.PlaySound(attackSound, Projectile.Center);
 			}
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
@@ -129,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 			base.SpecialTargetedMovement(vectorToTargetPosition);
 			if (Main.rand.Next(8) == 0)
 			{
-				int dustId = Dust.NewDust(projectile.position, projectile.width, projectile.height, DustType<SnowDust>(), 0f, 0f, 100, default, 1f);
+				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<SnowDust>(), 0f, 0f, 100, default, 1f);
 				Main.dust[dustId].velocity *= 0.3f;
 				Main.dust[dustId].noGravity = true;
 				Main.dust[dustId].noLight = true;

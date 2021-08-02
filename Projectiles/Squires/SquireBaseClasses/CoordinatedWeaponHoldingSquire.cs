@@ -39,11 +39,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 				if (IsBoss && attackFrame == ModifiedAttackFrames - 1)
 				{
 					attackSequence = (attackSequence + 1) % AttackSequenceLength;
-					projectile.ai[0] = attackSequence;
+					Projectile.ai[0] = attackSequence;
 				}
 				if (!IsBoss)
 				{
-					attackSequence = (int)Main.projectile[(int)projectile.ai[0]].ai[0];
+					attackSequence = (int)Main.projectile[(int)Projectile.ai[0]].ai[0];
 				}
 				// default frame increment path gets blocked, need to recreate here
 				if (!IsAttacking())

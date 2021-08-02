@@ -26,18 +26,18 @@ namespace AmuletOfManyMinions.Items.Accessories
 		protected virtual int maxTransientMinions => 0;
 		protected virtual float baseDamage => 0;
 
-		public static void Load()
+		public override void Load()
 		{
 			accessories = new List<NecromancerAccessory>();
 		}
 
-		public static void Unload()
+		public override void Unload()
 		{
 			accessories?.Clear();
 			accessories = null;
 		}
 
-		internal virtual void ModifyPlayerWeaponDamage(MinionSpawningItemPlayer necromancerAccessoryPlayer, Item item, ref float add, ref float mult, ref float flat)
+		internal virtual void ModifyPlayerWeaponDamage(MinionSpawningItemPlayer necromancerAccessoryPlayer, Item item, ref StatModifier modifier, ref float flat)
 		{
 			// no op
 		}
@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 					oldest.Kill();
 				}
 			}
-			Projectile.NewProjectile(target.Center, spawnVelocity, projType, (int)(baseDamage * player.minionDamageMult), 2, player.whoAmI);
+			Projectile.NewProjectile(player.GetProjectileSource_Accessory(this.Item), target.Center, spawnVelocity, projType, (int)(baseDamage * player.GetDamage<SummonDamageClass>()), 2, player.whoAmI);
 			return true;
 		}
 
@@ -147,7 +147,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				// only count minions that take up slots (no squires, temporary projectiles that were lazily coded
 				// as minions, etc.)
-				if (proj.active && proj.owner == player.whoAmI && proj.minionSlots > 0)
+				if (proj.active && proj.owner == Player.whoAmI && proj.minionSlots > 0)
 				{
 					uniqueMinionTypes.Add(proj.type);
 				}
@@ -155,9 +155,9 @@ namespace AmuletOfManyMinions.Items.Accessories
 			minionVarietyBonusCount = uniqueMinionTypes.Count;
 		}
 
-		public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)
+		public override void ModifyWeaponDamage(Item item, ref StatModifier modifier, ref float flat)
 		{
-			if (!item.summon)
+			if (!item.CountsAsClass<SummonDamageClass>())
 			{
 				return;
 			}
@@ -165,17 +165,19 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				if (accessory.IsEquipped(this))
 				{
-					accessory.ModifyPlayerWeaponDamage(this, item, ref add, ref mult, ref flat);
+					accessory.ModifyPlayerWeaponDamage(this, item, ref modifier, ref flat);
 				}
 			}
-			if(item.modItem != null && item.modItem.mod == mod)
+			if(item.ModItem?.Mod == Mod)
 			{
-				add += (ServerConfig.Instance.GlobalDamageMultiplier - 100) / 100f;
+				modifier += (ServerConfig.Instance.GlobalDamageMultiplier - 100) / 100f;
 			}
 			// a bit hacky, will wanna make this nicer eventually
 			flat += summonFlatDamage;
 		}
 
+		//TODO 1.4
+		/*
 		public static readonly PlayerLayer IllusionistRobeLegs = new PlayerLayer("AmuletOfManyMinions", "IllusionistRobeLegs", PlayerLayer.Legs, delegate (PlayerDrawInfo drawInfo)
 		{
 			Player drawPlayer = drawInfo.drawPlayer;
@@ -184,11 +186,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 			// this may not be the most efficient
 			if (drawPlayer.armor[11].type == ItemType<IllusionistCorruptRobe>() || drawPlayer.armor[11].IsAir && drawPlayer.armor[1].type == ItemType<IllusionistCorruptRobe>())
 			{
-				texture = mod.GetTexture("Items/Armor/IllusionistArmor/IllusionistCorruptRobe_Legs");
+				texture = mod.Assets.Request<Texture2D>("Items/Armor/IllusionistArmor/IllusionistCorruptRobe_Legs");
 			}
 			else if (drawPlayer.armor[11].type == ItemType<IllusionistCrimsonRobe>() || drawPlayer.armor[11].IsAir && drawPlayer.armor[1].type == ItemType<IllusionistCrimsonRobe>())
 			{
-				texture = mod.GetTexture("Items/Armor/IllusionistArmor/IllusionistCrimsonRobe_Legs");
+				texture = mod.Assets.Request<Texture2D>("Items/Armor/IllusionistArmor/IllusionistCrimsonRobe_Legs");
 			}
 			else
 			{
@@ -211,7 +213,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 				IllusionistRobeLegs.visible = true;
 				layers.Insert(legLayer + 1, IllusionistRobeLegs);
 			}
-		}
+		*/
 		public List<Projectile> GetMinionsOfType(int projectileType)
 		{
 			var otherMinions = new List<Projectile>();
@@ -219,7 +221,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				// Fix overlap with other minions
 				Projectile other = Main.projectile[i];
-				if (other.active && other.owner == player.whoAmI && other.type == projectileType)
+				if (other.active && other.owner == Player.whoAmI && other.type == projectileType)
 				{
 					otherMinions.Add(other);
 				}
@@ -231,7 +233,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void PostUpdate()
 		{
 			idleMinionSyncronizationFrame++;
-			if (player.whoAmI != Main.myPlayer)
+			if (Player.whoAmI != Main.myPlayer)
 			{
 				return;
 			}
@@ -240,35 +242,35 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				int buffType = BuffType<IllusionistWispBuff>();
 				// this is a hacky check
-				bool isCorrupt = player.armor.Any(i => i.type == ItemType<IllusionistCorruptHood>());
-				if (!player.HasBuff(buffType))
+				bool isCorrupt = Player.armor.Any(i => i.type == ItemType<IllusionistCorruptHood>());
+				if (!Player.HasBuff(buffType))
 				{
-					player.AddBuff(buffType, IllusionistWisp.SpawnFrequency);
+					Player.AddBuff(buffType, IllusionistWisp.SpawnFrequency);
 				}
-				else if (player.buffTime[player.FindBuffIndex(buffType)] == 1)
+				else if (Player.buffTime[Player.FindBuffIndex(buffType)] == 1)
 				{
-					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamageMult), 0.1f, player.whoAmI, ai0: isCorrupt ? 0 : 1);
+					Projectile.NewProjectile(Player.GetProjectileSource_SetBonus(-1), Player.Center, Vector2.Zero, projectileType, (int)(20 * Player.GetDamage<SummonDamageClass>()), 0.1f, Player.whoAmI, ai0: isCorrupt ? 0 : 1);
 				}
 			}
 			if (minionVarietyBonusCount > 1 && ClientConfig.Instance.ShowMinionVarietyBonus)
 			{
 				int buffType = BuffType<MinionVarietyBuff>();
-				if (!player.HasBuff(buffType))
+				if (!Player.HasBuff(buffType))
 				{
-					player.AddBuff(buffType, 2);
+					Player.AddBuff(buffType, 2);
 				}
 			}
 		}
 
 		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
 		{
-			new SyncIdleAnimationFramePacket(player, idleMinionSyncronizationFrame).Send(toWho, fromWho);
+			new SyncIdleAnimationFramePacket(Player, idleMinionSyncronizationFrame).Send(toWho, fromWho);
 		}
 	}
 
 	public class MinionVarietyBuff : ModBuff
 	{
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.buffNoSave[Type] = true;
 			Main.debuff[Type] = true; // don't allow cancellation

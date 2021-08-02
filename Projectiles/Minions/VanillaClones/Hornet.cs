@@ -14,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class HornetMinionBuff : MinionBuff
 	{
 		public HornetMinionBuff() : base(ProjectileType<HornetMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.HornetMinion") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.HornetMinion"));
 		}
@@ -31,22 +31,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.UseSound = new LegacySoundStyle(2, 76);
+			Item.UseSound = new LegacySoundStyle(2, 76);
 		}
 	}
 
 	public class HornetStinger : ModProjectile
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.HornetStinger;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.HornetStinger;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
-			projectile.CloneDefaults(ProjectileID.HornetStinger);
+			Projectile.CloneDefaults(ProjectileID.HornetStinger);
 			base.SetDefaults();
 		}
 
@@ -54,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			if (Main.rand.Next(2) == 0)
 			{
-				int dustId = Dust.NewDust(projectile.position, projectile.width, projectile.height, 18, 0f, 0f, 0, default, 0.9f);
+				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 18, 0f, 0f, 0, default, 0.9f);
 				Main.dust[dustId].noGravity = true;
 				Main.dust[dustId].velocity *= 0.5f;
 			}
@@ -69,28 +69,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		internal override int BuffId => BuffType<HornetMinionBuff>();
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.Hornet;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Hornet;
 		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();
 		internal override LegacySoundStyle ShootSound => SoundID.Item17;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Hornet"));
-			Main.projFrames[projectile.type] = 3;
-			IdleLocationSets.circlingHead.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 3;
+			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override void OnSpawn()
 		{
 			// vanilla version is a bit weak, so buff it
-			projectile.damage = (int)(projectile.damage * 1.25f);
+			Projectile.damage = (int)(Projectile.damage * 1.25f);
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			drawOffsetX = (projectile.width - 44) / 2;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			DrawOffsetX = (Projectile.width - 44) / 2;
 			targetSearchDistance = 700;
 			attackFrames = 50;
 			hsHelper.attackFrames = attackFrames;
@@ -104,29 +104,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 
 			int frameSpeed = 5;
-			projectile.frameCounter++;
-			if (projectile.frameCounter >= frameSpeed)
+			Projectile.frameCounter++;
+			if (Projectile.frameCounter >= frameSpeed)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= Main.projFrames[projectile.type])
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+				if (Projectile.frame >= Main.projFrames[Projectile.type])
 				{
-					projectile.frame = 0;
+					Projectile.frame = 0;
 				}
 			}
 			if(vectorToTarget is Vector2 target)
 			{
-				projectile.spriteDirection = -Math.Sign(target.X);
+				Projectile.spriteDirection = -Math.Sign(target.X);
 			}
-			else if(projectile.velocity.X > 1)
+			else if(Projectile.velocity.X > 1)
 			{
-				projectile.spriteDirection = -1;
+				Projectile.spriteDirection = -1;
 			}
-			else if (projectile.velocity.X < -1)
+			else if (Projectile.velocity.X < -1)
 			{
-				projectile.spriteDirection = 1;
+				Projectile.spriteDirection = 1;
 			}
-			projectile.rotation = projectile.velocity.X * 0.05f;
+			Projectile.rotation = Projectile.velocity.X * 0.05f;
 		}
 	}
 }

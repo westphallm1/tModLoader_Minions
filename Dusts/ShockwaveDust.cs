@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Dusts
 			int x = (int)dust.position.X / 16;
 			int y = (int)dust.position.Y / 16;
 			Tile tile = Framing.GetTileSafely(x, y);
-			if (tile.collisionType == 1)
+			if (tile.CollisionType == 1)
 			{
 				dust.active = false;
 			}

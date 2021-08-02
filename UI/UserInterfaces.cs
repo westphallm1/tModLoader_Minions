@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.UI
 	/// <summary>
 	/// Contains all UIs, and manages boilerplate drawing/updating
 	/// </summary>
-	public static class UserInterfaces
+	public class UserInterfaces : ModSystem
 	{
 		internal static UserInterface tacticsInterface;
 		internal static TacticsUIMain tacticsUI;
@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.UI
 
 		private static GameTime _lastUpdateUiGameTime;
 
-		public static void Load()
+		public override void OnModLoad()
 		{
 			if (!Main.dedServ)
 			{
@@ -42,23 +42,30 @@ namespace AmuletOfManyMinions.UI
 			}
 		}
 
-		public static void Unload()
+		public override void Unload()
 		{
 			tacticsInterface = null;
 			tacticsUI = null;
 			buffClickCapture = null;
 		}
 
-		public static void UpdateUI(GameTime gameTime)
+		/// <summary>
+		/// Accurate in-UI Mouse position used to spawn UI outside UpdateUI()
+		/// </summary>
+		public static Vector2 MousePositionUI;
+
+		public override void UpdateUI(GameTime gameTime)
 		{
 			_lastUpdateUiGameTime = gameTime;
 			if (tacticsInterface?.CurrentState != null)
 			{
 				tacticsInterface.Update(gameTime);
 			}
+
+			MousePositionUI = Main.MouseScreen;
 		}
 
-		public static void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 		{
 			int index = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
 			if (index != -1)

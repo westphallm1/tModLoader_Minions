@@ -15,9 +15,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 	public class NecromancerMinionBuff : MinionBuff
 	{
 		public NecromancerMinionBuff() : base(ProjectileType<NecromancerMinion>(), ProjectileType<NecromancerSkeletonMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Necromancer");
 			Description.SetDefault("A necromancer and his skeletal servants will fight for you!");
 		}
@@ -35,35 +35,35 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
-			item.damage = 60;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.Yellow;
-			item.useStyle = ItemUseStyleID.HoldingUp;
+			Item.knockBack = 3f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.height = 32;
+			Item.damage = 60;
+			Item.value = Item.buyPrice(0, 15, 0, 0);
+			Item.rare = ItemRarityID.Yellow;
+			Item.useStyle = ItemUseStyleID.HoldUp;
 		}
 	}
 
 	public class BoneSphereBoneProjectile : ModProjectile
 	{
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.Bone;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Bone;
 		public override void SetStaticDefaults()
 		{
 			// this is a bit sneaky, doesn't set any of the SimpleMinion defaults
-			Main.projFrames[projectile.type] = 1;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 1;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
-			projectile.CloneDefaults(ProjectileID.Bone);
-			projectile.penetrate = 1;
-			projectile.ranged = false;
-			projectile.minion = true;
+			Projectile.CloneDefaults(ProjectileID.Bone);
+			Projectile.penetrate = 1;
+			// projectile.ranged = false;
+			Projectile.minion = true;
 		}
 	}
 
@@ -76,32 +76,32 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		public override void SetStaticDefaults()
 		{
 			// this is a bit sneaky, doesn't set any of the SimpleMinion defaults
-			Main.projFrames[projectile.type] = 1;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 1;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
 			// this is a bit sneaky, doesn't set any of the SimpleMinion defaults
-			projectile.width = 30;
-			projectile.height = 30;
-			projectile.friendly = true;
-			projectile.penetrate = 15;
-			projectile.tileCollide = false;
-			projectile.timeLeft = TimeToLive;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 60;
+			Projectile.width = 30;
+			Projectile.height = 30;
+			Projectile.friendly = true;
+			Projectile.penetrate = 15;
+			Projectile.tileCollide = false;
+			Projectile.timeLeft = TimeToLive;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 60;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = bounds.Center.ToVector2();
-			int timeElapsed = TimeToLive - projectile.timeLeft;
+			int timeElapsed = TimeToLive - Projectile.timeLeft;
 			float scale = timeElapsed > 20 ? 1 : timeElapsed / 20f;
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				bounds, lightColor, projectile.rotation,
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				bounds, lightColor, Projectile.rotation,
 				origin, scale, 0, 0);
 			return false;
 		}
@@ -109,14 +109,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		{
 			if (velocity == default)
 			{
-				velocity = projectile.velocity;
+				velocity = Projectile.velocity;
 			}
-			player = Main.player[projectile.owner];
-			projectile.rotation += 0.05f;
-			int timeElapsed = TimeToLive - projectile.timeLeft;
+			player = Main.player[Projectile.owner];
+			Projectile.rotation += 0.05f;
+			int timeElapsed = TimeToLive - Projectile.timeLeft;
 			if (timeElapsed % 2 == 0)
 			{
-				int dustIdx = Dust.NewDust(projectile.position, projectile.width, projectile.height, 203);
+				int dustIdx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 203);
 				Main.dust[dustIdx].velocity = Vector2.Zero;
 				Main.dust[dustIdx].noGravity = true;
 			}
@@ -125,31 +125,32 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				Projectile parent = GetMinionsOfType(ProjectileType<NecromancerMinion>()).FirstOrDefault();
 				if (parent != default)
 				{
-					projectile.velocity = Vector2.Zero;
-					projectile.Center = parent.Top + new Vector2(0, -8);
+					Projectile.velocity = Vector2.Zero;
+					Projectile.Center = parent.Top + new Vector2(0, -8);
 				}
 			}
 			else
 			{
-				projectile.tileCollide = true;
-				if (projectile.velocity == Vector2.Zero)
+				Projectile.tileCollide = true;
+				if (Projectile.velocity == Vector2.Zero)
 				{
-					projectile.velocity = velocity;
+					Projectile.velocity = velocity;
 				}
-				if (projectile.owner == Main.myPlayer && timeElapsed - lastShotFrame > 20 && AnyEnemyInRange(400f) is Vector2 target)
+				if (Projectile.owner == Main.myPlayer && timeElapsed - lastShotFrame > 20 && AnyEnemyInRange(400f) is Vector2 target)
 				{
 					lastShotFrame = timeElapsed;
-					Vector2 vectorToTarget = target - projectile.Center;
+					Vector2 vectorToTarget = target - Projectile.Center;
 					vectorToTarget.Normalize();
 					vectorToTarget *= 12;
 					vectorToTarget += Main.npc[(int)targetNPCIndex].velocity;
 					Projectile.NewProjectile(
-						projectile.Center,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center,
 						vectorToTarget,
 						ProjectileType<BoneSphereBoneProjectile>(),
-						3 * projectile.damage / 4,
-						projectile.knockBack,
-						projectile.owner);
+						3 * Projectile.damage / 4,
+						Projectile.knockBack,
+						Projectile.owner);
 				}
 			}
 		}
@@ -159,19 +160,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			base.Kill(timeLeft);
 			for (int i = 0; i < 5; i++)
 			{
-				Dust.NewDust(projectile.position, projectile.width, projectile.height, 203);
+				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 203);
 			}
 			for (int i = 0; i < 4; i++)
 			{
 				Vector2 angle = Main.rand.NextFloat(MathHelper.Pi).ToRotationVector2();
 				angle *= 8;
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					angle,
 					ProjectileType<BoneSphereBoneProjectile>(),
-					3 * projectile.damage / 4,
-					projectile.knockBack,
-					projectile.owner);
+					3 * Projectile.damage / 4,
+					Projectile.knockBack,
+					Projectile.owner);
 			}
 		}
 
@@ -218,18 +220,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Necromancer");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 8;
-			IdleLocationSets.trailingInAir.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 8;
+			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 36;
-			projectile.height = 46;
-			projectile.tileCollide = false;
+			Projectile.width = 36;
+			Projectile.height = 46;
+			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			projectile.friendly = true;
+			Projectile.friendly = true;
 			attackThroughWalls = true;
 			useBeacon = false;
 			frameSpeed = 15;
@@ -240,9 +242,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		{
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -24 + 8 * (float)Math.Sin(MathHelper.TwoPi * (animationFrame % 120) / 120);
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition.X = player.Top.X;
@@ -259,7 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			{
 				framesSinceLastHit = rateOfFire;
 			}
-			Lighting.AddLight(projectile.position, Color.White.ToVector3() * 0.5f);
+			Lighting.AddLight(Projectile.position, Color.White.ToVector3() * 0.5f);
 		}
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
@@ -272,18 +274,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				// try to predict the position at the time of impact a bit
 				vectorToTargetPosition.SafeNormalize();
 				vectorToTargetPosition *= projectileVelocity;
-				Vector2 pos = projectile.Center;
+				Vector2 pos = Projectile.Center;
 				framesSinceLastHit = 0;
-				projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
-				Main.PlaySound(new LegacySoundStyle(2, 8), projectile.position);
+				Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 8), Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					projId = Projectile.NewProjectile(
+						Projectile.GetProjectileSource_FromThis(),
 						pos,
 						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<BoneSphereProjectile>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
 			}
@@ -305,11 +308,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			float searchDistance = ComputeSearchDistance();
 			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{
@@ -343,15 +346,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		{
 			if (vectorToTarget != null && framesSinceLastHit < 75)
 			{
-				projectile.frame = 5;
+				Projectile.frame = 5;
 			}
 			else
 			{
 				base.Animate(minFrame, maxFrame);
 			}
-			if (Math.Abs(projectile.velocity.X) > 2 && vectorToTarget is null)
+			if (Math.Abs(Projectile.velocity.X) > 2 && vectorToTarget is null)
 			{
-				projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
+				Projectile.spriteDirection = Projectile.velocity.X > 0 ? 1 : -1;
 			}
 		}
 		public override void CheckActive()
@@ -359,7 +362,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			base.CheckActive();
 			if(player.ownedProjectileCounts[CounterType] == 0 && animationFrame > 2)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 		}
 	}
@@ -389,16 +392,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Necromancer Skeleton");
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 28;
-			projectile.height = 30;
-			drawOriginOffsetY = -10;
-			drawOriginOffsetX = -1;
+			Projectile.width = 28;
+			Projectile.height = 30;
+			DrawOriginOffsetY = -10;
+			DrawOriginOffsetX = -1;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -408,7 +411,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			searchDistance = 900;
 			maxSpeed = 14;
 			idleInertia = 6;
-			projectile.timeLeft = 3;
+			Projectile.timeLeft = 3;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -463,23 +466,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				// clamp to the summoner while respawning
 				if (summoner != default)
 				{
-					projectile.Top = summoner.Center;
-					projectile.velocity = summoner.velocity;
+					Projectile.Top = summoner.Center;
+					Projectile.velocity = summoner.velocity;
 				}
 				else
 				{
-					projectile.position = player.position;
-					projectile.velocity = player.velocity;
+					Projectile.position = player.position;
+					Projectile.velocity = player.velocity;
 				}
 				return true;
 			}
 			else if (isDropping)
 			{
-				if (projectile.velocity.Y < 16)
+				if (Projectile.velocity.Y < 16)
 				{
-					projectile.velocity.Y += 0.6f;
+					Projectile.velocity.Y += 0.6f;
 				}
-				projectile.tileCollide = true;
+				Projectile.tileCollide = true;
 				return true;
 			}
 			return false;
@@ -487,19 +490,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 3f : 8;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 3f : 8;
 			float xMaxSpeed = 14f;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+			Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -511,9 +514,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			else if (vectorToTargetPosition.Length() < explosionRadius / 2 && !usingBeacon)
 			{
 				lastExplosionFrame = animationFrame;
-				explosionLocation = projectile.Center;
+				explosionLocation = Projectile.Center;
 				isDropping = true;
-				Main.PlaySound(SoundID.Item62, projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
 				DoExplosionEffects();
 			}
 			else
@@ -528,14 +531,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			return canAttack ? base.FindTarget() : null;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			return !isRespawning;
 		}
 
 		private void DoExplosionEffects()
 		{
-			Vector2 position = projectile.position;
+			Vector2 position = Projectile.position;
 			int width = 22;
 			int height = 22;
 			for (int i = 0; i < 30; i++)
@@ -563,14 +566,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		{
 			if (isDropping)
 			{
-				projectile.rotation = 0;
-				projectile.frame = 4;
+				Projectile.rotation = 0;
+				Projectile.frame = 4;
 				return;
 			}
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			if (state == GroundAnimationState.FLYING && animationFrame % 3 == 0)
 			{
-				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;
 				Main.dust[idx].scale = .9f;
 			}
@@ -579,15 +582,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 
 		public override void AfterMoving()
 		{
-			projectile.friendly = isRespawning && animationFrame - lastExplosionFrame <= 15;
+			Projectile.friendly = isRespawning && animationFrame - lastExplosionFrame <= 15;
 			// Lifted from EmpoweredMinion.cs
 			int minionType = ProjectileType<NecromancerMinion>();
 			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[minionType] == 0)
 			{
 				// hack to prevent multiple 
-				if (GetMinionsOfType(projectile.type)[0].whoAmI == projectile.whoAmI)
+				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(player.Top, Vector2.Zero, minionType, projectile.damage, projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}

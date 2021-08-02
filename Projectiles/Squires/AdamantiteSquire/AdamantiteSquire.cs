@@ -14,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 	public class AdamantiteSquireMinionBuff : MinionBuff
 	{
 		public AdamantiteSquireMinionBuff() : base(ProjectileType<AdamantiteSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Adamantite Squire");
 			Description.SetDefault("An adamantite squire will follow your orders!");
 		}
@@ -36,21 +36,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 5.5f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 33;
-			item.value = Item.buyPrice(0, 2, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.knockBack = 5.5f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 33;
+			Item.value = Item.buyPrice(0, 2, 0, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.AdamantiteBar, 14);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.AdamantiteBar, 14).AddTile(TileID.MythrilAnvil).Register();
 		}
 	}
 
@@ -86,15 +82,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Adamantite Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 30;
-			projectile.height = 32;
-			horseTexture = GetTexture(Texture + "_Pegasus");
+			Projectile.width = 30;
+			Projectile.height = 32;
+			horseTexture = Request<Texture2D>(Texture + "_Pegasus").Value;
 			blurHelper = new MotionBlurDrawer(5);
 		}
 
@@ -117,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			//All of this is based on the weapon sprite and AttackFrames above.
 			int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
-			int spearLength = GetTexture(WeaponTexturePath).Width; //A decent aproximation of how long the spear is.
+			int spearLength = Request<Texture2D>(WeaponTexturePath).Width(); //A decent aproximation of how long the spear is.
 			int spearStart = (spearLength / 3); //Two thirds of the spear starts behind by default.
 			float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
 
@@ -143,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			if(usingSpecial)
 			{
@@ -152,12 +148,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 					for (int k = 0; k < blurHelper.BlurLength; k++)
 					{
 						if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-						DrawHorse(spriteBatch, blurColor, blurPos);
+						DrawHorse(blurColor, blurPos);
 					}
 				}
 			} else
 			{
-				base.PreDraw(spriteBatch, lightColor);
+				base.PreDraw(ref lightColor);
 			}
 			return true;
 		}
@@ -198,34 +194,34 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			base.StandardTargetedMovement(target);
 		}
 
-		private void DrawHorse(SpriteBatch spriteBatch, Color lightColor, Vector2 projCenter)
+		private void DrawHorse(Color lightColor, Vector2 projCenter)
 		{
 			float r = 0;
-			Vector2 offset = new Vector2(4 * projectile.spriteDirection, 12).RotatedBy(r);
+			Vector2 offset = new Vector2(4 * Projectile.spriteDirection, 12).RotatedBy(r);
 			int frameHeight = horseTexture.Height / 4;
 			Rectangle bounds = new Rectangle(0, frameHeight * (wingFrame % 4), horseTexture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Vector2 pos = projCenter + offset;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			spriteBatch.Draw(horseTexture, pos - Main.screenPosition,
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Main.EntitySpriteDraw(horseTexture, pos - Main.screenPosition,
 				bounds, lightColor, r, origin, 1, effects, 0);
 
 		}
 
-		protected override void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
+		protected override void DrawWeapon(Color lightColor)
 		{
 			// draw the horse after the arms, but before the weapon
 			if(usingSpecial)
 			{
-				DrawHorse(spriteBatch, lightColor, projectile.Center);
+				DrawHorse(lightColor, Projectile.Center);
 			}
-			base.DrawWeapon(spriteBatch, lightColor);
+			base.DrawWeapon(lightColor);
 		}
 
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			blurHelper.Update(projectile.Center, usingSpecial);
+			blurHelper.Update(Projectile.Center, usingSpecial);
 		}
 
 		protected override int? GetSpriteDirection()

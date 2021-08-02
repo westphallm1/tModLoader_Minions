@@ -25,52 +25,53 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 	/// </summary>
 	class ConstellationSeed : ModProjectile
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.Twinkle;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Twinkle;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 1;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 56;
-			projectile.height = 56;
-			projectile.penetrate = -1;
-			projectile.friendly = false;
-			projectile.tileCollide = false;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.timeLeft = 60;
+			Projectile.width = 56;
+			Projectile.height = 56;
+			Projectile.penetrate = -1;
+			Projectile.friendly = false;
+			Projectile.tileCollide = false;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.timeLeft = 60;
 		}
 
 		public override void AI()
 		{
-			projectile.rotation = projectile.velocity.ToRotation();
-			Vector2 targetPos = new Vector2(projectile.ai[0], projectile.ai[1]);
-			if(Vector2.DistanceSquared(projectile.Center, targetPos) < 32 * 32)
+			Projectile.rotation = Projectile.velocity.ToRotation();
+			Vector2 targetPos = new Vector2(Projectile.ai[0], Projectile.ai[1]);
+			if(Vector2.DistanceSquared(Projectile.Center, targetPos) < 32 * 32)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 			for (int i = 0; i < 5; i++)
 			{
 				Vector2 velocity = Vector2.Zero;
-				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 0.9f);
+				Dust.NewDust(Projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 0.9f);
 			}
 		}
 
 		public override void Kill(int timeLeft)
 		{
-			Vector2 targetPos = new Vector2(projectile.ai[0], projectile.ai[1]);
-			if(projectile.owner == Main.myPlayer)
+			Vector2 targetPos = new Vector2(Projectile.ai[0], Projectile.ai[1]);
+			if(Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
 					targetPos,
 					Vector2.Zero,
 					ProjectileType<StardustConstellation>(),
-					projectile.damage,
-					projectile.knockBack,
-					projectile.owner);
+					Projectile.damage,
+					Projectile.knockBack,
+					Projectile.owner);
 			}
 		}
 	}
@@ -85,76 +86,76 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 1;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.penetrate = 1;
-			projectile.friendly = true;
-			projectile.tileCollide = false;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.timeLeft = 300;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.penetrate = 1;
+			Projectile.friendly = true;
+			Projectile.tileCollide = false;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.timeLeft = 300;
 			blurDrawer = new MotionBlurDrawer(10);
 		}
 
 		public override void AI()
 		{
 			base.AI();
-			if(projectile.ai[0] == 0)
+			if(Projectile.ai[0] == 0)
 			{
 				return; // failsafe in case we got a bad NPC index
 			}
 			if(target == null)
 			{
-				target = Main.npc[(int)projectile.ai[0]];
-				baseVelocity = projectile.velocity.Length();
+				target = Main.npc[(int)Projectile.ai[0]];
+				baseVelocity = Projectile.velocity.Length();
 			}
 			if(!target.active)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 				return;
 			}
-			Vector2 vectorToTarget = target.Center - projectile.Center;
+			Vector2 vectorToTarget = target.Center - Projectile.Center;
 			float distanceToTarget = vectorToTarget.Length();
 			if(distanceToTarget > baseVelocity)
 			{
 				vectorToTarget.SafeNormalize();
 				vectorToTarget *= baseVelocity;
 			}
-			int inertia = projectile.timeLeft > 285 ? 12 : 4;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTarget) / inertia;
-			blurDrawer.Update(projectile.Center);
+			int inertia = Projectile.timeLeft > 285 ? 12 : 4;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTarget) / inertia;
+			blurDrawer.Update(Projectile.Center);
 		}
 
 		public override void Kill(int timeLeft)
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				int dustId = Dust.NewDust(projectile.position, projectile.width, projectile.height, 229);
+				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 229);
 				Dust dust = Main.dust[dustId];
 				dust.noGravity = true;
 				dust.velocity *= 3f;
 			}
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			for(int i = 0; i < blurDrawer.BlurLength; i++)
 			{
 				if(!blurDrawer.GetBlurPosAndColor(i, Color.White, out Vector2 blurPos, out Color blurColor)) { break; }
 				float scale = MathHelper.Lerp(0.75f, 0.25f, i / (float)blurDrawer.BlurLength);
-				spriteBatch.Draw(texture, blurPos - Main.screenPosition,
+				Main.EntitySpriteDraw(texture, blurPos - Main.screenPosition,
 					texture.Bounds, blurColor * 0.5f, r,
 					texture.Bounds.Center(), scale, 0, 0);
 			}
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				texture.Bounds, Color.White, r,
 				texture.Bounds.Center(), 0.75f, 0, 0);
 			return false;
@@ -183,18 +184,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = TimeToLive;
-			smallStarTexture = ModContent.GetTexture(Texture + "_Small");
-			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, ConstellationSize, ConstellationSize))
-			{
-				idleCycleFrames = projectile.timeLeft,
-				frameResolution = 1,
-				posResolution = 1
-			};
+			Projectile.timeLeft = TimeToLive;
+			smallStarTexture = Request<Texture2D>(Texture + "_Small").Value;
 		}
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
+			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, ConstellationSize, ConstellationSize))
+			{
+				idleCycleFrames = Projectile.timeLeft,
+				frameResolution = 1,
+				posResolution = 1
+			};
 			scHelper.Attach();
 			SpawnBigStars();
 			smallStars = new List<ConstellationSmallStar>();
@@ -218,7 +219,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		{
 			for(int i = 0; i < bigStars.Count; i++)
 			{
-				bigStars[i].DrawConnections(Main.projectileTexture[projectile.type], helper.spriteBatch, animationFrame);
+				bigStars[i].DrawConnections(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, helper.spriteBatch, animationFrame);
 			}
 			for(int i = 0; i < bigStars.Count; i++)
 			{
@@ -244,18 +245,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		{
 			if(player.whoAmI == Main.myPlayer && animationFrame % 10 == 0 && targetNPCIndex is int idx)
 			{
-				Vector2 launchPos = projectile.Center + bigStars[Main.rand.Next(bigStars.Count)].EndOffset;
+				Vector2 launchPos = Projectile.Center + bigStars[Main.rand.Next(bigStars.Count)].EndOffset;
 				int projectileVelocity = 12;
 				vectorToTargetPosition.SafeNormalize();
 				vectorToTargetPosition *= projectileVelocity;
 				Vector2 launchVel = vectorToTargetPosition.RotatedBy(Main.rand.NextFloat(MathHelper.Pi / 8) - MathHelper.Pi / 16);
 
 				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
 					launchPos,
 					launchVel,
 					ProjectileType<StardustHomingStar>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					player.whoAmI,
 					ai0: idx);
 			}
@@ -267,10 +269,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			{ 
 				return null; 
 			}
-			if(GetClosestEnemyToPosition(projectile.Center, AttackRange, false) is NPC target)
+			if(GetClosestEnemyToPosition(Projectile.Center, AttackRange, false) is NPC target)
 			{
 				targetNPCIndex = target.whoAmI;
-				return target.Center - projectile.Center;
+				return target.Center - Projectile.Center;
 			}
 			return null;
 		}
@@ -301,11 +303,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			float fadeOutFrames = 30;
-			float brightness = projectile.timeLeft > fadeOutFrames ? 1 : projectile.timeLeft / fadeOutFrames;
-			scHelper.Draw(spriteBatch, Color.White * brightness);
+			float brightness = Projectile.timeLeft > fadeOutFrames ? 1 : Projectile.timeLeft / fadeOutFrames;
+			scHelper.Draw(Color.White * brightness);
 			return false;
 		}
 
@@ -341,7 +343,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				return;
 			}
 			float brightness = 0.75f * (float)Math.Sin(MathHelper.Pi * timeLeft / TimeToLive);
-			spriteBatch.Draw(
+			Main.EntitySpriteDraw(
 				texture, position, texture.Bounds, Color.White * brightness, 0, 
 				texture.Bounds.Center.ToVector2(), 0.5f, 0, 0);
 		}
@@ -372,7 +374,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			int tier = idx / TierSize;
 			int radius = tier * TierRadius + Main.rand.Next(TierRadius);
 			EndOffset = Main.rand.NextFloat(MathHelper.TwoPi).ToRotationVector2() * radius;
-			texture = ModContent.GetTexture("Terraria/Misc/StarDustSky/Star " + Main.rand.Next(1));
+			texture = Main.Assets.Request<Texture2D>("Images/Misc/StarDustSky/Star " + Main.rand.Next(1)).Value;
 			maxConnections = Main.rand.Next(3) == 0 ? 2 : 1;
 			connections = new Vector2[maxConnections];
 		}
@@ -398,7 +400,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				int connectionLength = (int)connection.Length();
 				Rectangle bounds = new Rectangle(0, 0, connectionLength, connectionTexture.Height);
 				float r = connection.ToRotation();
-				spriteBatch.Draw(
+				Main.EntitySpriteDraw(
 					connectionTexture, pos + midPoint, bounds, Color.White * brightness, r, 
 					bounds.Center.ToVector2(), 1, 0, 0);
 			}
@@ -412,7 +414,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			float brightness = 0.625f + 0.125f * (float)Math.Sin(MathHelper.TwoPi * animFrame / AnimFrames);
 			float r = 0; // todo oscillate
 			float scale = 0.5f; // todo oscillate
-			spriteBatch.Draw(
+			Main.EntitySpriteDraw(
 				texture, pos, texture.Bounds, Color.White * brightness, r, 
 				texture.Bounds.Center.ToVector2(), scale, 0, 0);
 		}

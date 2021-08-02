@@ -7,15 +7,16 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 {
 	public class SqueyereMinionBuff : MinionBuff
 	{
 		public SqueyereMinionBuff() : base(ProjectileType<SqueyereMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Squeyere");
 			Description.SetDefault("A Squeyere will follow your orders!");
 		}
@@ -35,12 +36,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 6f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 70;
-			item.value = Item.sellPrice(0, 4, 0, 0);
-			item.rare = ItemRarityID.Pink;
+			Item.knockBack = 6f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 70;
+			Item.value = Item.sellPrice(0, 4, 0, 0);
+			Item.rare = ItemRarityID.Pink;
 		}
 	}
 
@@ -49,18 +50,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.friendly = true;
-			projectile.penetrate = 1;
-			projectile.timeLeft = 60;
-			projectile.minion = true; //Bandaid fix?
-			projectile.width = 12;
-			projectile.height = 12;
+			Projectile.friendly = true;
+			Projectile.penetrate = 1;
+			Projectile.timeLeft = 60;
+			Projectile.minion = true; //Bandaid fix?
+			Projectile.width = 12;
+			Projectile.height = 12;
 		}
 
 		public virtual Color lightColor => Color.Green;
@@ -69,22 +70,22 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		{
 			//This caused the projectile to render at a wrong rotation for a single frame, leaving it here 'cause i don't know if this was important, i just moved it to the predraw override.
 			//projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
-			Lighting.AddLight(projectile.position, this.lightColor.ToVector3());
+			Lighting.AddLight(Projectile.position, this.lightColor.ToVector3());
 			base.AI();
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			// manually draw at 2x scale with transparency
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 128);
-			float r = projectile.velocity.ToRotation() + MathHelper.PiOver2;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.velocity.X < 0 ? 0 : SpriteEffects.FlipHorizontally;
-			Texture2D texture = GetTexture(Texture);
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			float r = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.velocity.X < 0 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, translucentColor, r,
 				origin, 1.5f, effects, 0);
 			return false;
@@ -92,8 +93,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			Main.PlaySound(SoundID.Item10, (int)projectile.position.X, (int)projectile.position.Y);
-			Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, 16, 16);
+			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, 16, 16);
 			return true;
 		}
 
@@ -102,12 +103,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 	public class SqueyereEyeLaser : SquireLaser
 	{
 		public override Color lightColor => Color.Red;
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.MiniRetinaLaser;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MiniRetinaLaser;
 	}
 
 	public class SqueyereLaser : SquireLaser
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.GreenLaser;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.GreenLaser;
 	}
 
 	// uses ai[0] for relative position
@@ -119,33 +120,33 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 		private int attackRate => (int)Math.Max(30, 60f / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
 
-		private int shootOnFrame => projectile.ai[0] == 0 ? 0 : 10;
+		private int shootOnFrame => Projectile.ai[0] == 0 ? 0 : 10;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 18;
-			projectile.height = 18;
+			Projectile.width = 18;
+			Projectile.height = 18;
 			frameSpeed = 10;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			int angleFrame = animationFrame % AnimationFrames;
-			float baseAngle = projectile.ai[0] == 0 ? 0 : MathHelper.Pi;
+			float baseAngle = Projectile.ai[0] == 0 ? 0 : MathHelper.Pi;
 			float angle = baseAngle + (MathHelper.TwoPi * angleFrame) / AnimationFrames;
 			float radius = 24;
 			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
 			SquireModPlayer modPlayer = player.GetModPlayer<SquireModPlayer>();
 			if(modPlayer.HasSquire())
 			{
-				projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
+				Projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
 			}
 			// offset downward vertically a bit
 			// the scale messes with the positioning in some way
@@ -165,7 +166,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			base.OnSpawn();
 			for(int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
+				Dust.NewDust(Projectile.position, 20, 20, DustID.Blood);
 			}
 		}
 
@@ -173,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		{
 			for(int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
+				Dust.NewDust(Projectile.position, 20, 20, DustID.Blood);
 			}
 		}
 
@@ -196,15 +197,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 					horizonAngle.SafeNormalize();
 					horizonVector = squire.Center + 2000f * horizonAngle;
 				}
-				Vector2 angleVector = horizonVector - projectile.Center;
+				Vector2 angleVector = horizonVector - Projectile.Center;
 				angleVector.SafeNormalize();
 				angleVector *= 24f;
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					angleVector,
 					ProjectileType<SqueyereEyeLaser>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer);
 			}
 		}
@@ -224,7 +226,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		protected override bool travelRangeCanBeModified => false;
 
 		//unfortunately just flipping the the direction doesn't look great for this one
-		protected override Vector2 WeaponCenterOfRotation => projectile.spriteDirection == 1 ? new Vector2(4, -6) : new Vector2(8, -6);
+		protected override Vector2 WeaponCenterOfRotation => Projectile.spriteDirection == 1 ? new Vector2(4, -6) : new Vector2(8, -6);
 
 		protected override float projectileVelocity => 24f;
 
@@ -238,14 +240,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 20;
-			projectile.height = 32;
+			Projectile.width = 20;
+			Projectile.height = 32;
 		}
 
 
@@ -264,18 +266,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity();
 					Vector2 weaponCenter = WeaponCenterOfRotation;
-					weaponCenter.X *= projectile.spriteDirection;
-					Vector2 tipCenter = projectile.Center + weaponCenter;
+					weaponCenter.X *= Projectile.spriteDirection;
+					Vector2 tipCenter = Projectile.Center + weaponCenter;
 					Projectile.NewProjectile(
+						Projectile.GetProjectileSource_FromThis(),
 						tipCenter,
 						angleVector,
 						ProjectileType<SqueyereLaser>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
 
-				Main.PlaySound(SoundID.Item33.WithVolume(.5f), projectile.Center); //Why is it so LOUD?!
+				SoundEngine.PlaySound(SoundID.Item33.WithVolume(.5f), Projectile.Center); //Why is it so LOUD?!
 			}
 		}
 
@@ -286,11 +289,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				for(int i = 0; i < 2; i++)
 				{
 					Projectile.NewProjectile(
-						projectile.Center,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center,
 						Vector2.Zero,
 						ProjectileType<SqueyereEyeMinion>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						player.whoAmI,
 						ai0: i);
 				}

@@ -76,7 +76,7 @@
 	//		projectile.rotation += 0.1f;
 	//	}
 
-	//	public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+	//	public override bool PreDraw(ref Color lightColor)
 	//	{
 	//		SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, projectile.rotation);
 	//		return false;

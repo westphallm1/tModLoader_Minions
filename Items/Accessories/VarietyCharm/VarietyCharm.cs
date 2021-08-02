@@ -14,11 +14,11 @@ namespace AmuletOfManyMinions.Items.Accessories.VarietyCharm
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(gold: 2);
-			item.rare = ItemRarityID.Green;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(gold: 2);
+			Item.rare = ItemRarityID.Green;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -28,15 +28,7 @@ namespace AmuletOfManyMinions.Items.Accessories.VarietyCharm
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Ruby, 3);
-			recipe.AddIngredient(ItemID.Topaz, 3);
-			recipe.AddIngredient(ItemID.Emerald, 3);
-			recipe.AddIngredient(ItemID.Sapphire, 3);
-			recipe.AddIngredient(ItemID.Amethyst, 3);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Ruby, 3).AddIngredient(ItemID.Topaz, 3).AddIngredient(ItemID.Emerald, 3).AddIngredient(ItemID.Sapphire, 3).AddIngredient(ItemID.Amethyst, 3).AddTile(TileID.Anvils).Register();
 		}
 
 	}

@@ -14,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class UFOMinionBuff : MinionBuff
 	{
 		public UFOMinionBuff() : base(ProjectileType<UFOMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.UFOMinion") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.UFOMinion"));
 		}
@@ -31,19 +31,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class UfoDamageHitbox : ModProjectile
 	{
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 1;
-			projectile.tileCollide = false;
-			projectile.friendly = true;
+			Projectile.penetrate = 1;
+			Projectile.tileCollide = false;
+			Projectile.friendly = true;
 		}
 	}
 
@@ -52,21 +52,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		internal override int BuffId => BuffType<UFOMinionBuff>();
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.UFOMinion;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.UFOMinion;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.UFOMinion") + " (AoMM Version)");
-			Main.projFrames[projectile.type] = 4;
-			IdleLocationSets.circlingHead.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 4;
+			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 24;
-			drawOffsetX = (projectile.width - 44) / 2;
+			Projectile.width = 24;
+			Projectile.height = 24;
+			DrawOffsetX = (Projectile.width - 44) / 2;
 			attackFrames = 30;
 			targetSearchDistance = 900;
 			hsHelper.attackFrames = attackFrames;
@@ -80,17 +80,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 
 			int frameSpeed = 5;
-			projectile.frameCounter++;
-			if (projectile.frameCounter >= frameSpeed)
+			Projectile.frameCounter++;
+			if (Projectile.frameCounter >= frameSpeed)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= Main.projFrames[projectile.type])
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+				if (Projectile.frame >= Main.projFrames[Projectile.type])
 				{
-					projectile.frame = 0;
+					Projectile.frame = 0;
 				}
 			}
-			projectile.rotation = projectile.velocity.X * 0.05f;
+			Projectile.rotation = Projectile.velocity.X * 0.05f;
 		}
 
 		internal override void AfterFiringProjectile()
@@ -102,20 +102,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				if(Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
 						target.Center,
 						Vector2.Zero,
 						ProjectileType<UfoDamageHitbox>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
-				Vector2 targetVector = target.Center - projectile.Center;
+				Vector2 targetVector = target.Center - Projectile.Center;
 				Vector2 stepVector = targetVector;
 				stepVector.Normalize();
 
 				for(int i = 12; i < targetVector.Length(); i++)
 				{
-					Vector2 posVector = projectile.Center + stepVector * i;
+					Vector2 posVector = Projectile.Center + stepVector * i;
 					int dustId = Dust.NewDust(posVector, 1, 1, 160);
 					if (Main.rand.Next(2) == 0)
 					{

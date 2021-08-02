@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			activeHelpers.RemoveWhere(h => !h.projectile.active);
 			foreach(SpriteCompositionHelper helper in activeHelpers)
 			{
-				helper.Process(Main.spriteBatch);
+				helper.Process();
 			}
 
 		}
@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		private Rectangle bounds;
 		internal RenderTarget2D renderTarget;
 
-		internal Projectile projectile => minion.projectile;
+		internal Projectile projectile => minion.Projectile;
 
 		internal int walkCycleFrames = 60;
 		internal int idleCycleFrames = 90;
@@ -149,7 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			r = posResolution > 1 ? 0 : r; // don't rotate if snapping to grid
 			Vector2 pos = this.bounds.Center.ToVector2() + offsetFromCenter.RotatedBy(r);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos, bounds, lightColor, r, origin, scale, 0, 0);
+			Main.EntitySpriteDraw(texture, pos, bounds, lightColor, r, origin, scale, 0, 0);
 		}
 
 		public void AddSpriteToBatch(Texture2D texture, (int, int) boundsInfo, Vector2 offsetFromCenter, float r, float scale)
@@ -201,7 +201,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 					Rectangle bounds = new Rectangle(tileSpacing * current.Item1, tileSpacing * current.Item2, tileSize, tileSize);
 					Vector2 currentOffset = startOffset + foRX * (i + 0.5f) + foRY * (j + 0.5f);
 					Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-					spriteBatch.Draw(texture, pos + currentOffset, bounds, lightColor, r, origin, 1, 0, 0);
+					Main.EntitySpriteDraw(texture, pos + currentOffset, bounds, lightColor, r, origin, 1, 0, 0);
 				}
 			}
 		}
@@ -211,13 +211,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			this.drawers = drawers;
 		}
 
-		internal void Process(SpriteBatch spriteBatch)
+		internal void Process()
 		{
 			if (Main.dedServ) { return; }
 			if(minion.animationFrame % frameResolution != 0)
 			{
 				return;
 			}
+			var spriteBatch = Main.spriteBatch;
 			SetDrawInfo(spriteBatch, Color.White);
 			Main.instance.GraphicsDevice.SetRenderTarget(renderTarget);
 			Main.instance.GraphicsDevice.Clear(Color.Transparent);
@@ -240,7 +241,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			ClearDrawInfo();
 		}
 
-		internal void Draw(SpriteBatch spriteBatch, Color lightColor)
+		internal void Draw(Color lightColor)
 		{
 			if(renderTarget == null)
 			{
@@ -248,7 +249,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 			SpriteEffects effects = projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 			Vector2 pos = Center - Main.screenPosition - BaseOffset + CenterOfRotation.RotatedBy(projectile.rotation);
-			spriteBatch.Draw(renderTarget, pos, 
+			Main.EntitySpriteDraw(renderTarget, pos, 
 				bounds, lightColor, projectile.rotation, bounds.Center(), 1, effects, 0);
 		}
 	}

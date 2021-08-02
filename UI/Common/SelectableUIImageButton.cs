@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace AmuletOfManyMinions.UI.Common
 		internal abstract string ShortHoverText { get; }
 		internal abstract string LongHoverText { get; }
 
-		internal abstract Texture2D OutlineTexture { get; }
+		internal abstract Asset<Texture2D> OutlineTexture { get; }
 		/// <summary>
 		/// Represents if it is the currently selected tactic by the player. Only one tactic can be selected exclusively
 		/// </summary>
@@ -26,7 +27,7 @@ namespace AmuletOfManyMinions.UI.Common
 		private int hoverTime = 0;
 		private const int StartShowingDescription = 60;
 
-		internal SelectableUIImageButton(Texture2D texture) : base(texture)
+		internal SelectableUIImageButton(Asset<Texture2D> texture) : base(texture)
 		{
 		}
 
@@ -56,7 +57,7 @@ namespace AmuletOfManyMinions.UI.Common
 					int x = i / 2 % 2 == 0 ? -1 : 1;
 					int y = i % 2 == 0 ? -1 : 1;
 
-					DrawInternal(spriteBatch, OutlineTexture, new Vector2(x, y) * 1.5f, Color.White);
+					DrawInternal(spriteBatch, OutlineTexture.Value, new Vector2(x, y) * 1.5f, Color.White);
 				}
 			}
 

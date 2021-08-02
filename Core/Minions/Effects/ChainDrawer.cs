@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			frameSelector = selector;
 		}
 
-		public void DrawChain(SpriteBatch spriteBatch, Texture2D texture, Vector2 startPos, Vector2 endPos, Color lightColor = default)
+		public void DrawChain(Texture2D texture, Vector2 startPos, Vector2 endPos, Color lightColor = default)
 		{
 			Vector2 chainVector = endPos - startPos;
 			Rectangle bounds = EvenFrame;
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 					bounds = frameSelector?.Invoke(idx, isLast) ?? (bounds == EvenFrame ? OddFrame : EvenFrame);
 					pos = startPos + unitToIdle * i;
 					lightColor = lightColor == default ? Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16) : lightColor;
-					spriteBatch.Draw(texture, pos - Main.screenPosition,
+					Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 						bounds, lightColor, r,
 						origin, 1, SpriteEffects.None, 0);
 					idx++;

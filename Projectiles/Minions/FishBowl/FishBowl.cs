@@ -15,9 +15,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 	public class FishBowlMinionBuff : MinionBuff
 	{
 		public FishBowlMinionBuff() : base(ProjectileType<FishBowlMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Flying Fishbowl");
 			Description.SetDefault("A flying fishbowl will fight for you!");
 		}
@@ -36,13 +36,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 14;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.White;
+			Item.damage = 14;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 0, 2, 0);
+			Item.rare = ItemRarityID.White;
 		}
 	}
 
@@ -53,55 +53,55 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 	public class FishBowlFish : ModProjectile
 	{
 
-		public override string Texture => "Terraria/NPC_" + NPCID.Goldfish;
+		public override string Texture => "Terraria/Images/NPC_" + NPCID.Goldfish;
 		const int TIME_TO_LIVE = 90;
 		bool isFlopping = false;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
-			Main.projFrames[projectile.type] = 6;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+			Main.projFrames[Projectile.type] = 6;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.timeLeft = TIME_TO_LIVE;
-			projectile.friendly = true;
-			projectile.tileCollide = true;
-			projectile.penetrate = -1;
-			projectile.localNPCHitCooldown = 30;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.timeLeft = TIME_TO_LIVE;
+			Projectile.friendly = true;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = -1;
+			Projectile.localNPCHitCooldown = 30;
 		}
 
 		public override void AI()
 		{
-			if(TIME_TO_LIVE - projectile.timeLeft > 10)
+			if(TIME_TO_LIVE - Projectile.timeLeft > 10)
 			{
-				projectile.velocity.Y += 0.5f;
+				Projectile.velocity.Y += 0.5f;
 			}
-			projectile.frameCounter++;
+			Projectile.frameCounter++;
 			if(isFlopping)
 			{
-				projectile.frame = 4 + (projectile.frameCounter / 8) % 2;
-				projectile.rotation = 0;
+				Projectile.frame = 4 + (Projectile.frameCounter / 8) % 2;
+				Projectile.rotation = 0;
 			} else
 			{
-				projectile.frame = (projectile.frameCounter / 8) % 4;
-				projectile.rotation = projectile.velocity.ToRotation() + MathHelper.Pi;
+				Projectile.frame = (Projectile.frameCounter / 8) % 4;
+				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.Pi;
 			}
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
 			isFlopping = true;
-			projectile.friendly = false;
-			if(oldVelocity.Y > 0 && projectile.velocity.Y == 0 || projectile.velocity.Y == -0.5f)
+			Projectile.friendly = false;
+			if(oldVelocity.Y > 0 && Projectile.velocity.Y == 0 || Projectile.velocity.Y == -0.5f)
 			{
 				// let the bowl know it's time to go home
-				projectile.localAI[0] = 1;
-				projectile.velocity.X = 0;
+				Projectile.localAI[0] = 1;
+				Projectile.velocity.X = 0;
 			}
 			return false;
 		}
@@ -119,33 +119,33 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Flying FishBowl");
-			Main.projFrames[projectile.type] = 17;
-			IdleLocationSets.circlingHead.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 17;
+			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			drawOriginOffsetX = -4;
-			drawOriginOffsetY = -2;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			DrawOriginOffsetX = -4;
+			DrawOriginOffsetY = -2;
 			attackFrames = 30;
 			frameSpeed = 15;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			projectile.rotation = 0.05f * projectile.velocity.X;
+			Projectile.rotation = 0.05f * Projectile.velocity.X;
 			if(launchedFish != default)
 			{
-				projectile.frame = 0;
+				Projectile.frame = 0;
 			} else
 			{
 				base.Animate(4, maxFrame);
 			}
 			if(vectorToTarget is Vector2 target)
 			{
-				projectile.spriteDirection = Math.Sign(target.X);
+				Projectile.spriteDirection = Math.Sign(target.X);
 			}
 		}
 
@@ -157,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == Main.myPlayer && p.type == ProjectileType<FishBowlFish>() && p.ai[0] == projectile.whoAmI)
+				if(p.active && p.owner == Main.myPlayer && p.type == ProjectileType<FishBowlFish>() && p.ai[0] == Projectile.whoAmI)
 				{
 					launchedFish = p;
 					break;
@@ -193,7 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			List<Projectile> minions = GetActiveMinions();
 			if (side == -1 && minions.Count > 0)
 			{
-				side = minions.IndexOf(projectile) % 2;
+				side = minions.IndexOf(Projectile) % 2;
 			} else if (side == -1)
 			{
 				side = 0;
@@ -202,10 +202,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			Vector2 targetTop = default;
 			if(targetNPCIndex is int idx && Main.npc[idx].active)
 			{
-				targetTop = Main.npc[idx].Top - projectile.Center;
+				targetTop = Main.npc[idx].Top - Projectile.Center;
 				targetTop += 2 * Main.npc[idx].velocity;
 				Vector2 newTarget = side == 0 ? Main.npc[idx].BottomRight : Main.npc[idx].BottomLeft; 
-				vectorToTargetPosition = newTarget - projectile.Center;
+				vectorToTargetPosition = newTarget - Projectile.Center;
 			}
 			int targetBelow = 80;
 			Vector2 vectorBelow = vectorToTargetPosition;
@@ -214,7 +214,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			float losCheckAngle = MathHelper.Pi / 6 + 2 * MathHelper.Pi * side / 3;
 
 			Vector2 losCheckVector = losCheckAngle.ToRotationVector2();
-			projectile.friendly = false;
+			Projectile.friendly = false;
 
 			// only check for exact position once close to target
 			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
@@ -222,7 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 				for (int i = 16; i < targetBelow; i++)
 				{
 					vectorBelow = vectorToTargetPosition + i * losCheckVector;
-					if (!Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorBelow, 1, 1))
+					if (!Collision.CanHit(Projectile.Center, 1, 1, Projectile.Center + vectorBelow, 1, 1))
 					{
 						break;
 					}
@@ -245,102 +245,103 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 					targetTop *= 4;
 				}
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					targetTop,
 					ProjectileType<FishBowlFish>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					player.whoAmI,
-					ai0: projectile.whoAmI);
+					ai0: Projectile.whoAmI);
 				for(int i = 0; i < 5; i++)
 				{
-					Dust.NewDust(projectile.Top, projectile.width, 16, 13, -projectile.velocity.X / 4, -projectile.velocity.Y / 4, newColor: Color.LightBlue);
+					Dust.NewDust(Projectile.Top, Projectile.width, 16, 13, -Projectile.velocity.X / 4, -Projectile.velocity.Y / 4, newColor: Color.LightBlue);
 				}
 			}
 			vectorBelow.SafeNormalize();
 			vectorBelow *= 8;
 			int inertia = 12;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorBelow) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorBelow) / inertia;
 		}
 
 		private void DoFishCatchingMovement()
 		{
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 			// cop out, always be under the fish
-			projectile.Center = new Vector2(launchedFish.Center.X, projectile.Center.Y);
-			projectile.velocity.X = launchedFish.velocity.X;
+			Projectile.Center = new Vector2(launchedFish.Center.X, Projectile.Center.Y);
+			Projectile.velocity.X = launchedFish.velocity.X;
 			// start moving Y-wise to catch the fish once it's hit a tile
 			int yIntertia = 8;
 			if(launchedFish.localAI[0] == 1)
 			{
 				// regular intertia code, but only for Y
-				float yOffset = launchedFish.position.Y - projectile.position.Y;
+				float yOffset = launchedFish.position.Y - Projectile.position.Y;
 				if(Math.Abs(yOffset) > 8)
 				{
 					yOffset = Math.Sign(yOffset) * 8;
 				}
-				projectile.velocity.Y = (projectile.velocity.Y * (yIntertia - 1) + yOffset) / yIntertia;
+				Projectile.velocity.Y = (Projectile.velocity.Y * (yIntertia - 1) + yOffset) / yIntertia;
 			} else
 			{
-				projectile.velocity.Y = 0;
+				Projectile.velocity.Y = 0;
 			}
-			if(animationFrame - lastFiredFrame > 8 && Vector2.DistanceSquared(projectile.Center, launchedFish.Center) < 16 * 16)
+			if(animationFrame - lastFiredFrame > 8 && Vector2.DistanceSquared(Projectile.Center, launchedFish.Center) < 16 * 16)
 			{
-				projectile.tileCollide = true;
+				Projectile.tileCollide = true;
 				// (hopefully) get out of any blocks we were stuck in
 				Vector2 catchVelocity = -launchedFish.velocity;
 				catchVelocity.SafeNormalize();
 				catchVelocity.X *= 3;
 				catchVelocity.Y *= 6;
-				if(Framing.GetTileSafely((int)projectile.Center.X/16, (int)projectile.Center.Y/16).active())
+				if(Framing.GetTileSafely((int)Projectile.Center.X/16, (int)Projectile.Center.Y/16).IsActive)
 				{
-					projectile.Bottom = launchedFish.Bottom;
+					Projectile.Bottom = launchedFish.Bottom;
 				} else
 				{
 					// otherwise, get "kicked back" by the catch
-					projectile.velocity -= catchVelocity;
+					Projectile.velocity -= catchVelocity;
 				}
 				for(int i = 0; i < 5; i++)
 				{
-					Dust.NewDust(projectile.Top, projectile.width, 16, 13, catchVelocity.X / 4, catchVelocity.Y / 4, newColor: Color.LightBlue);
+					Dust.NewDust(Projectile.Top, Projectile.width, 16, 13, catchVelocity.X / 4, catchVelocity.Y / 4, newColor: Color.LightBlue);
 				}
 				side = side == 0 ? 1 : 0;
-				Main.PlaySound(new LegacySoundStyle(19, 1), projectile.Center);
+				SoundEngine.PlaySound(new LegacySoundStyle(19, 1), Projectile.Center);
 				launchedFish.Kill();
 			}
 
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			Texture2D texture = GetTexture(Texture);
-			Texture2D waterTexture = GetTexture(base.Texture+ "_Water");
-			Texture2D bowlTexture = GetTexture(base.Texture+ "_Bowl");
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			Texture2D waterTexture = Request<Texture2D>(base.Texture+ "_Water").Value;
+			Texture2D bowlTexture = Request<Texture2D>(base.Texture+ "_Bowl").Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Color waterColor = lightColor.MultiplyRGBA(new Color(196, 196, 196, 128));
-			spriteBatch.Draw(waterTexture, pos - Main.screenPosition, waterTexture.Bounds, waterColor, 0, origin, 1, 0, 0);
-			spriteBatch.Draw(texture, pos - Main.screenPosition, bounds, lightColor, 0, origin, 1, 0, 0);
-			spriteBatch.Draw(bowlTexture, pos - Main.screenPosition, bowlTexture.Bounds, lightColor, r, origin, 1, effects, 0);
-			DrawWings(spriteBatch, lightColor);
+			Main.EntitySpriteDraw(waterTexture, pos - Main.screenPosition, waterTexture.Bounds, waterColor, 0, origin, 1, 0, 0);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, 0, origin, 1, 0, 0);
+			Main.EntitySpriteDraw(bowlTexture, pos - Main.screenPosition, bowlTexture.Bounds, lightColor, r, origin, 1, effects, 0);
+			DrawWings(lightColor);
 			return false;
 		}
 
-		private void DrawWings(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawWings(Color lightColor)
 		{
-			Texture2D texture = GetTexture(Texture + "_Wings");
+			Texture2D texture = Request<Texture2D>(Texture + "_Wings").Value;
 			int frame = (animationFrame / 8) % 4;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			Vector2 wingsOffset = new Vector2(-8 * projectile.spriteDirection, -4);
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Vector2 wingsOffset = new Vector2(-8 * Projectile.spriteDirection, -4);
 			int frameHeight = texture.Height / 4;
 			Rectangle bounds = new Rectangle(0, frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos + wingsOffset - Main.screenPosition, bounds, lightColor, 0, origin, 1, effects, 0);
+			Main.EntitySpriteDraw(texture, pos + wingsOffset - Main.screenPosition, bounds, lightColor, 0, origin, 1, effects, 0);
 
 		}
 	}

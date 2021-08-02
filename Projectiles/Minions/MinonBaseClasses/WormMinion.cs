@@ -25,20 +25,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
-			IdleLocationSets.circlingHead.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 1;
+			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 8;
-			projectile.height = 8;
+			Projectile.width = 8;
+			Projectile.height = 8;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			wormDrawer.Draw(Main.projectileTexture[projectile.type], spriteBatch, lightColor);
+			wormDrawer.Draw(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, lightColor);
 			return false;
 		}
 
@@ -59,13 +59,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				int radius = player.velocity.Length() < 4 ? 48 + 2 * EmpowerCount : 48;
 				float yRadius = player.velocity.Length() < 4 ? 8 + 0.5f * EmpowerCount : 8;
-				int order = minions.IndexOf(projectile);
+				int order = minions.IndexOf(Projectile);
 				float idleAngle = (2 * PI * order) / minionCount;
 				idleAngle += 2 * PI * groupAnimationFrame / groupAnimationFrames;
 				idlePosition.X += radius * (float)Math.Cos(idleAngle);
 				idlePosition.Y += -20 + EmpowerCount + yRadius * (float)Math.Sin(idleAngle);
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
@@ -86,18 +86,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (framesSinceLastHit < cooldownAfterHitFrames && framesSinceLastHit > cooldownAfterHitFrames / 2)
 			{
 				// start turning so we don't double directly back
-				Vector2 turnVelocity = new Vector2(-projectile.velocity.Y, projectile.velocity.X) / 8;
-				turnVelocity *= Math.Sign(projectile.velocity.X);
-				projectile.velocity += turnVelocity;
+				Vector2 turnVelocity = new Vector2(-Projectile.velocity.Y, Projectile.velocity.X) / 8;
+				turnVelocity *= Math.Sign(Projectile.velocity.X);
+				Projectile.velocity += turnVelocity;
 			}
 			else if (framesSinceLastHit++ > cooldownAfterHitFrames)
 			{
-				projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 			}
 			else
 			{
-				projectile.velocity.SafeNormalize();
-				projectile.velocity *= speed; // kick it away from enemies that it's just hit
+				Projectile.velocity.SafeNormalize();
+				Projectile.velocity *= speed; // kick it away from enemies that it's just hit
 			}
 		}
 
@@ -115,8 +115,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			wormDrawer.AddPosition(projectile.position);
-			wormDrawer.Update(projectile.frame);
+			wormDrawer.AddPosition(Projectile.position);
+			wormDrawer.Update(Projectile.frame);
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

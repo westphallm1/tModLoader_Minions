@@ -12,9 +12,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 	public class GuideSquireMinionBuff : MinionBuff
 	{
 		public GuideSquireMinionBuff() : base(ProjectileType<GuideSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Guide Squire");
 			Description.SetDefault("You can guide the Guide!");
 		}
@@ -33,12 +33,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 24;
-			item.value = Item.sellPrice(0, 0, 1, 0);
-			item.rare = ItemRarityID.Blue;
+			Item.knockBack = 3f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 24;
+			Item.value = Item.sellPrice(0, 0, 1, 0);
+			Item.rare = ItemRarityID.Blue;
 		}
 	}
 
@@ -46,25 +46,26 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 	// cosmetic arrow for the 'shooting up' animation
 	public class AscendingGuideArrow : ModProjectile
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.FireArrow;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.FireArrow;
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.friendly = false;
-			projectile.tileCollide = false;
-			projectile.timeLeft = 60;
+			Projectile.friendly = false;
+			Projectile.tileCollide = false;
+			Projectile.timeLeft = 60;
 		}
 
 		public override void AI()
 		{
-			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
-			Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire);
-			Vector2 myScreenPosition = Main.player[projectile.owner].Center 
+			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6);
+			//TODO screenposition
+			Vector2 myScreenPosition = Main.player[Projectile.owner].Center 
 				- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
-			if(projectile.position.Y < myScreenPosition.Y)
+			if(Projectile.position.Y < myScreenPosition.Y)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 		}
 	}
@@ -72,31 +73,31 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 	public abstract class BaseGuideArrow : ModProjectile
 	{
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.FireArrow;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.FireArrow;
 		public override void SetStaticDefaults()
 		{
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void Kill(int timeLeft)
 		{
 			// don't spawn the arrow
-			Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y);
 			for (int i = 0; i < 6; i++)
 			{
-				Dust.NewDust(projectile.position, projectile.width, projectile.height, 158);
+				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 158);
 			}
 		}
 
 		public override void AI()
 		{
 			base.AI();
-			Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Fire);
+			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6);
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, projectile.width, projectile.height);
+			Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
 			return base.OnTileCollide(oldVelocity);
 		}
 
@@ -114,7 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.CloneDefaults(ProjectileID.FireArrow);
+			Projectile.CloneDefaults(ProjectileID.FireArrow);
 		}
 	}
 
@@ -123,10 +124,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.tileCollide = false;
-			projectile.friendly = true;
-			projectile.width = 16;
-			projectile.height = 16;
+			Projectile.tileCollide = false;
+			Projectile.friendly = true;
+			Projectile.width = 16;
+			Projectile.height = 16;
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -139,18 +140,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void AI()
 		{
 			base.AI();
-			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			// start colliding with tiles 1/3 of the way down the screen
-			Vector2 position = projectile.position;
-			Vector2 myScreenPosition = Main.player[projectile.owner].Center 
+			Vector2 position = Projectile.position;
+			Vector2 myScreenPosition = Main.player[Projectile.owner].Center 
 				- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 			float collideCutoff = myScreenPosition.Y + Main.screenHeight / 3f;
 			if(position.Y >= collideCutoff)
 			{
 				Tile tile = Framing.GetTileSafely((int)position.X / 16, (int)position.Y / 16);
-				if(!tile.active() || position.Y > Main.player[projectile.owner].position.Y)
+				if(!tile.IsActive || position.Y > Main.player[Projectile.owner].position.Y)
 				{
-					projectile.tileCollide = true;
+					Projectile.tileCollide = true;
 				}
 			}
 		}
@@ -161,7 +162,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		internal override int BuffId => BuffType<GuideSquireMinionBuff>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
-		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.WoodenBow;
+		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.WoodenBow;
 
 		protected override float IdleDistanceMulitplier => 2.5f;
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
@@ -188,14 +189,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Guide Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 32;
+			Projectile.width = 22;
+			Projectile.height = 32;
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -213,11 +214,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				angleVector *= ModifiedProjectileVelocity();
 				if (Main.myPlayer == player.whoAmI)
 				{
-					Projectile.NewProjectile(projectile.Center,
+					Projectile.NewProjectile(
+						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.Center,
 						angleVector,
 						ProjectileType<GuideArrow>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
 			}
@@ -231,7 +234,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			{
 				float launchAngle = -(7 * MathHelper.Pi / 16 + Main.rand.NextFloat(MathHelper.Pi / 8));
 				Vector2 launchVec = launchAngle.ToRotationVector2() * 20;
-				Projectile.NewProjectile(projectile.Center,
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.Center,
 					launchVec,
 					ProjectileType<AscendingGuideArrow>(),
 					0,
@@ -247,7 +252,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				Vector2 mousePos = Main.MouseWorld; // only run on client player, MP safe
 				float spawnX = (mousePos.X + player.position.X) / 2 + 
 					Main.rand.Next(-spawnPosRange, spawnPosRange);
-				Vector2 myScreenPosition = Main.player[projectile.owner].Center 
+				Vector2 myScreenPosition = Main.player[Projectile.owner].Center 
 					- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 				float spawnY = myScreenPosition.Y;
 				Vector2 spawnPos = new Vector2(spawnX, spawnY);
@@ -255,13 +260,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 					Main.rand.NextFloat(spawnAngleRange) - spawnAngleRange/2);
 				launchAngle.SafeNormalize();
 				launchAngle *= 20;
-				Projectile.NewProjectile(spawnPos,
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(), 
+					spawnPos,
 					launchAngle,
 					ProjectileType<DescendingGuideArrow>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer);
-				Main.PlaySound(attackSound, spawnPos);
+				SoundEngine.PlaySound(attackSound, spawnPos);
 
 			}
 

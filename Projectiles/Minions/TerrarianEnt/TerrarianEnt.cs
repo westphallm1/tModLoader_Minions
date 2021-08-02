@@ -17,9 +17,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 	public class TerrarianEntMinionBuff : MinionBuff
 	{
 		public TerrarianEntMinionBuff() : base(ProjectileType<TerrarianEntCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ent of the Forest");
 			Description.SetDefault("A powerful forest spirit will fight for you!");
 		}
@@ -37,27 +37,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
-			item.damage = 185;
-			item.value = Item.sellPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.Red;
+			Item.knockBack = 3f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.height = 32;
+			Item.damage = 185;
+			Item.value = Item.sellPrice(0, 15, 0, 0);
+			Item.rare = ItemRarityID.Red;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<AcornMinionItem>(), 1);
-			recipe.AddIngredient(ItemID.LunarBar, 6);
-			recipe.AddIngredient(ItemID.FragmentNebula, 6);
-			recipe.AddIngredient(ItemID.FragmentSolar, 6);
-			recipe.AddIngredient(ItemID.FragmentStardust, 6);
-			recipe.AddIngredient(ItemID.FragmentVortex, 6);
-			recipe.AddTile(TileID.LunarCraftingStation);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemType<AcornMinionItem>(), 1).AddIngredient(ItemID.LunarBar, 6).AddIngredient(ItemID.FragmentNebula, 6).AddIngredient(ItemID.FragmentSolar, 6).AddIngredient(ItemID.FragmentStardust, 6).AddIngredient(ItemID.FragmentVortex, 6).AddTile(TileID.LunarCraftingStation).Register();
 		}
 	}
 
@@ -90,33 +81,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ent of the Forest");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
-			IdleLocationSets.trailingInAir.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 1;
+			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 44;
-			projectile.height = 44;
-			projectile.tileCollide = false;
-			projectile.friendly = true;
+			Projectile.width = 44;
+			Projectile.height = 44;
+			Projectile.tileCollide = false;
+			Projectile.friendly = true;
 			attackThroughWalls = true;
 			useBeacon = false;
 			frameSpeed = 5;
-			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 300, 300))
-			{
-				idleCycleFrames = 160,
-				frameResolution = 1,
-				posResolution = 1
-			};
-
-			if(bodyTexture == null || foliageTexture == null || vinesTexture == null)
-			{
-				bodyTexture = GetTexture(Texture);
-				foliageTexture = GetTexture(Texture + "_Foliage");
-				vinesTexture = GetTexture(Texture + "_Vines");
-			}
 
 			subProjectiles = new List<LandChunkProjectile>();
 		}
@@ -155,25 +133,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		private void DrawBody(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
 			// body
-			helper.AddSpriteToBatch(bodyTexture, (projectile.frame, 5),  Vector2.Zero);
+			helper.AddSpriteToBatch(bodyTexture, (Projectile.frame, 5),  Vector2.Zero);
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			lightColor = Color.White * 0.75f;
 			int i;
 			for(i = 0; i < subProjectiles.Count; i++)
 			{
-				if(subProjectiles[i].projectile.position.Y > projectile.position.Y + 96)
+				if(subProjectiles[i].Projectile.position.Y > Projectile.position.Y + 96)
 				{
 					break;
 				}
-				subProjectiles[i].SubPreDraw(spriteBatch, lightColor);
+				subProjectiles[i].SubPreDraw(lightColor);
 			}
-			scHelper.Draw(spriteBatch, lightColor);
+			scHelper.Draw(lightColor);
 			for(; i < subProjectiles.Count; i++)
 			{
-				subProjectiles[i].SubPreDraw(spriteBatch, lightColor);
+				subProjectiles[i].SubPreDraw(lightColor);
 			}
 			return false;
 		}
@@ -181,6 +159,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
+			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 300, 300))
+			{
+				idleCycleFrames = 160,
+				frameResolution = 1,
+				posResolution = 1
+			};
+
+			if (bodyTexture == null || foliageTexture == null || vinesTexture == null)
+			{
+				bodyTexture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+				foliageTexture = Request<Texture2D>(Texture + "_Foliage").Value;
+				vinesTexture = Request<Texture2D>(Texture + "_Vines").Value;
+			}
 			scHelper.Attach();
 		}
 		public override void AfterMoving()
@@ -196,14 +187,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			idlePosition.Y += -96 + 8 * (float)Math.Sin(MathHelper.TwoPi * groupAnimationFrame / groupAnimationFrames);
 			if(swingingProjectile != default)
 			{
-				int attackStyle = (int)projectile.ai[1] / 2;
+				int attackStyle = (int)Projectile.ai[1] / 2;
 				int swingTravelRadius = attackStyle == 2 ? 64 : 24;
 				Vector2 swingOffset = swingingProjectile.Center - idlePosition;
 				swingOffset.SafeNormalize();
 				swingOffset *= swingTravelRadius;
 				idlePosition += swingOffset;
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition.X = player.Top.X;
@@ -230,15 +221,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				Projectile p = Main.projectile[i];
 				if(p.active && p.owner == player.whoAmI && p.type == subProjType)
 				{
-					subProjectiles.Add((LandChunkProjectile)p.modProjectile);
+					subProjectiles.Add((LandChunkProjectile)p.ModProjectile);
 					if(swingingProjectile == null && p.localAI[0] != 0)
 					{
 						swingingProjectile = p;
 					}
 				}
 			}
-			subProjectiles.Sort((s1, s2) => (int)(s1.projectile.position.Y - s2.projectile.position.Y));
-			List<float> idle = subProjectiles.Select(s => s.projectile.ai[1])
+			subProjectiles.Sort((s1, s2) => (int)(s1.Projectile.position.Y - s2.Projectile.position.Y));
+			List<float> idle = subProjectiles.Select(s => s.Projectile.ai[1])
 				.Where(v => v> -1)
 				.OrderBy(v=>v).ToList();
 
@@ -256,10 +247,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					}
 				}
 				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
 					player.Center,
 					Vector2.Zero,
 					subProjType,
-					projectile.damage,
+					Projectile.damage,
 					0,
 					player.whoAmI,
 					ai1: nextTreeIndex);
@@ -287,11 +279,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			float searchDistance = ComputeSearchDistance();
 			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{
@@ -320,18 +312,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			int rawFrame = (animationFrame / 8) % 20;
 			if(rawFrame < 7)
 			{
-				projectile.frame = 0;
+				Projectile.frame = 0;
 			} else if (rawFrame < 10)
 			{
-				projectile.frame = rawFrame - 6;
+				Projectile.frame = rawFrame - 6;
 			} else if (rawFrame < 17)
 			{
-				projectile.frame = 4;
+				Projectile.frame = 4;
 			} else
 			{
-				projectile.frame = 20 - rawFrame;
+				Projectile.frame = 20 - rawFrame;
 			}
-			projectile.rotation = projectile.velocity.X * 0.01f;
+			Projectile.rotation = Projectile.velocity.X * 0.01f;
 			
 		}
 	}

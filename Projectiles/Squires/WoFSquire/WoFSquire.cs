@@ -11,17 +11,19 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using ReLogic.Content;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 {
 	public class GuideVoodooSquireMinionBuff : MinionBuff
 	{
 		public GuideVoodooSquireMinionBuff() : base(ProjectileType<GuideVoodooSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Guide Squire");
 			Description.SetDefault("You can guide the Guide!");
 		}
@@ -29,8 +31,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 	public class WoFSquireMinionBuff : MinionBuff
 	{
 		public WoFSquireMinionBuff() : base(ProjectileType<WoFSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
+			//TODO 1.4 did not call base before
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Wall of Flesh Squire");
 			Description.SetDefault("You can guide the Wall of Flesh!");
 		}
@@ -62,48 +66,43 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 5f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 130;
-			item.value = Item.sellPrice(0, 0, 1, 0);
-			item.rare = ItemRarityID.Red;
+			Item.knockBack = 5f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 130;
+			Item.value = Item.sellPrice(0, 0, 1, 0);
+			Item.rare = ItemRarityID.Red;
 		}
 
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		public override bool CanShoot(Player player)
 		{
 			if (player.ownedProjectileCounts[wofType] > 0)
 			{
 				return false;
 			}
-			return base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
+			return true;
 		}
+
 		public override bool CanUseItem(Player player)
 		{
 			base.CanUseItem(player);
-			if (player.ownedProjectileCounts[item.shoot] > 0 || player.ownedProjectileCounts[wofType] > 0)
+			if (player.ownedProjectileCounts[Item.shoot] > 0 || player.ownedProjectileCounts[wofType] > 0)
 			{
-				item.UseSound = null;
-				item.noUseGraphic = true;
-				item.useStyle = ItemUseStyleID.HoldingOut;
+				Item.UseSound = null;
+				Item.noUseGraphic = true;
+				Item.useStyle = ItemUseStyleID.Shoot;
 			}
 			else
 			{
-				item.useStyle = ItemUseStyleID.HoldingUp;
-				item.noUseGraphic = false;
-				item.UseSound = SoundID.Item44;
+				Item.useStyle = ItemUseStyleID.HoldUp;
+				Item.noUseGraphic = false;
+				Item.UseSound = SoundID.Item44;
 			}
 			return true;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.GuideVoodooDoll, 1);
-			recipe.AddIngredient(ItemType<GuideSquireMinionItem>(), 1);
-			recipe.AddIngredient(ItemType<GuideHair>(), 1);
-			recipe.AddTile(TileID.LunarCraftingStation);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.GuideVoodooDoll, 1).AddIngredient(ItemType<GuideSquireMinionItem>(), 1).AddIngredient(ItemType<GuideHair>(), 1).AddTile(TileID.LunarCraftingStation).Register();
 		}
 	}
 
@@ -134,7 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		private MotionBlurDrawer blurDrawer;
 
-		private Texture2D shockwaveTexture;
+		private Asset<Texture2D> shockwaveTexture;
 
 		public WoFSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
@@ -143,24 +142,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Squire of Flesh");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 32;
-			projectile.height = 32;
+			Projectile.width = 32;
+			Projectile.height = 32;
 			frameSpeed = 7;
 			laserTargets = new Vector2?[2];
 			laserFrames = new int[2];
 			isDashing = false;
 			blurDrawer = new MotionBlurDrawer(5);
-			shockwaveTexture = GetTexture(Texture + "_Shockwave");
+			shockwaveTexture = Request<Texture2D>(Texture + "_Shockwave");
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			Lighting.AddLight(projectile.Center, Color.Red.ToVector3() * 0.75f);
+			Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.75f);
 			// use very small hit cooldown during special, since the hitbox moves so quickly
 			baseLocalIFrames = usingSpecial ? 2 : 10;
 			return base.IdleBehavior() + new Vector2(-player.direction * 8, 0);
@@ -168,7 +167,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			projectile.friendly = false;
+			Projectile.friendly = false;
 			isDashing = false;
 			base.IdleMovement(vectorToIdlePosition);
 		}
@@ -179,12 +178,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			float dashCheckDistance = 1.25f * maxDashDistance;
 			float searchDistance = 2 * dashCheckDistance;
 			int collisionStep = 8;
-			projectile.friendly = true;
+			Projectile.friendly = true;
 			isDashing = false;
-			Vector2? _nearestNPCVector = AnyEnemyInRange(searchDistance, projectile.Center);
+			Vector2? _nearestNPCVector = AnyEnemyInRange(searchDistance, Projectile.Center);
 			if (_nearestNPCVector is Vector2 nearestNPCVector)
 			{
-				vectorToTargetPosition = nearestNPCVector - projectile.Center;
+				vectorToTargetPosition = nearestNPCVector - Projectile.Center;
 			}
 			if (_nearestNPCVector != null)
 			{
@@ -194,7 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					for (int i = 0; i < maxDashDistance; i += collisionStep)
 					{
 						vectorToTargetPosition.X += collisionStep * dashDirection;
-						if (!Collision.CanHit(projectile.position, projectile.width, projectile.height, projectile.position + vectorToTargetPosition, 1, 1))
+						if (!Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Projectile.position + vectorToTargetPosition, 1, 1))
 						{
 							break;
 						}
@@ -210,7 +209,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override void OnStartUsingSpecial()
 		{
-			specialStartPos = projectile.Center;
+			specialStartPos = Projectile.Center;
 		}
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
@@ -219,12 +218,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			{
 				isDashing = false;
 				targetX = MathHelper.Lerp(specialStartPos.X, player.Center.X, 2f * specialFrame / SpecialChargeTime );
-				projectile.spriteDirection = Math.Sign(targetX - player.Center.X);
+				Projectile.spriteDirection = Math.Sign(targetX - player.Center.X);
 			} else if (specialFrame < SpecialChargeTime)
 			{
 				targetX = player.Center.X;
 				chargeDirection = Math.Sign(syncedMouseWorld.X - targetX);
-				projectile.spriteDirection = chargeDirection;
+				Projectile.spriteDirection = chargeDirection;
 			} else
 			{
 				isDashing = true;
@@ -237,16 +236,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			float yInertia = 8;
 			float targetY = vectorToTargetPosition.Y;
 			float yVelMagnitude = Math.Sign(targetY) * Math.Min(maxYSpeed, Math.Abs(targetY));
-			float yVel = (projectile.velocity.Y * (yInertia - 1) + yVelMagnitude) / yInertia;
-			projectile.Center = new Vector2(targetX, projectile.Center.Y);
-			projectile.velocity = Vector2.UnitY * yVel;
+			float yVel = (Projectile.velocity.Y * (yInertia - 1) + yVelMagnitude) / yInertia;
+			Projectile.Center = new Vector2(targetX, Projectile.Center.Y);
+			Projectile.velocity = Vector2.UnitY * yVel;
 
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 		}
 
 		public override void AfterMoving()
 		{
-			blurDrawer.Update(projectile.Center, isDashing);
+			blurDrawer.Update(Projectile.Center, isDashing);
 			// also interpolate extra blurs while using special
 			if(isDashing && usingSpecial)
 			{
@@ -267,7 +266,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		{
 			int boxWidth =  SpecialXRange / SpecialLoopSpeed;
 			int boxHeight = 60;
-			Vector2 startPos = projectile.Center + new Vector2(chargeDirection == -1 ? boxWidth : 0, -boxHeight / 2);
+			Vector2 startPos = Projectile.Center + new Vector2(chargeDirection == -1 ? boxWidth : 0, -boxHeight / 2);
 			for(int i = 0; i < 2; i++)
 			{
 				int dustCreated = Dust.NewDust(startPos, boxWidth, boxHeight, 60, boxHeight * speedMult * chargeDirection, 0, 50, Scale: 1.4f);
@@ -290,35 +289,35 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			return base.Colliding(projHitbox, targetHitbox);
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			if (isDashing)
 			{
-				DrawAferImage(spriteBatch, lightColor);
+				DrawAferImage(ref lightColor);
 			}
 			if (vectorToTarget != null)
 			{
-				DrawClingers(spriteBatch, lightColor);
+				DrawClingers(ref lightColor);
 			}
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == -1 ? 0 : SpriteEffects.FlipHorizontally;
-			Texture2D texture = GetTexture(Texture);
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == -1 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
-			DrawEyes(spriteBatch, lightColor);
+			DrawEyes(ref lightColor);
 			if(usingSpecial && isDashing)
 			{
-				DrawSonicBoom(spriteBatch, projectile.Center);
+				DrawSonicBoom(Projectile.Center);
 			}
 			return false;
 		}
 
-		private void DrawSonicBoom(SpriteBatch spriteBatch, Vector2 center)
+		private void DrawSonicBoom(Vector2 center)
 		{
 			Vector2 offset = new Vector2(96, 0) * chargeDirection;
 			float animSin = (float)Math.Sin(MathHelper.TwoPi * animationFrame / 15);
@@ -332,32 +331,32 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				int x = i / 2 % 2 == 0 ? -1 : 1;
 				int y = i % 2 == 0 ? -1 : 1;
 				Vector2 outlineOffset = new Vector2(x, y) * offsetScale;
-				DrawShockwave(spriteBatch, center + offset + outlineOffset, Color.Crimson * 0.5f, scale);
+				DrawShockwave(center + offset + outlineOffset, Color.Crimson * 0.5f, scale);
 			}
-			DrawShockwave(spriteBatch, center + offset, Color.White * 0.5f, scale);
+			DrawShockwave(center + offset, Color.White * 0.5f, scale);
 		}
 
-		private void DrawShockwave(SpriteBatch spriteBatch, Vector2 center, Color color, float scale)
+		private void DrawShockwave(Vector2 center, Color color, float scale)
 		{
-			float r = projectile.rotation + projectile.spriteDirection * MathHelper.PiOver2;
-			spriteBatch.Draw(shockwaveTexture, center - Main.screenPosition,
-				shockwaveTexture.Bounds, color, r,
-				shockwaveTexture.Bounds.Center.ToVector2(), scale, 0, 0);
+			float r = Projectile.rotation + Projectile.spriteDirection * MathHelper.PiOver2;
+			Main.EntitySpriteDraw(shockwaveTexture.Value, center - Main.screenPosition,
+				shockwaveTexture.Frame(1, 1), color, r,
+				shockwaveTexture.Frame(1, 1).Center.ToVector2(), scale, 0, 0);
 		}
 
 
 
 		private Vector2 EyePos(int idx)
 		{
-			Vector2 pos = projectile.Center;
-			pos.X += 8 * projectile.spriteDirection;
+			Vector2 pos = Projectile.Center;
+			pos.X += 8 * Projectile.spriteDirection;
 			pos.Y += idx == 0 ? 13 : -15;
 			return pos;
 		}
 
-		private void DrawEyes(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawEyes(ref Color lightColor)
 		{
-			Texture2D texture = GetTexture(Texture + "_Eye");
+			Texture2D texture = Request<Texture2D>(Texture + "_Eye").Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			for (int i = 0; i < 2; i++)
@@ -367,7 +366,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				{
 					r = target.ToRotation();
 				}
-				else if (projectile.spriteDirection == 1)
+				else if (Projectile.spriteDirection == 1)
 				{
 					r = MathHelper.Pi;
 				}
@@ -375,40 +374,40 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				{
 					r = 0;
 				}
-				spriteBatch.Draw(texture, EyePos(i) - Main.screenPosition,
+				Main.EntitySpriteDraw(texture, EyePos(i) - Main.screenPosition,
 					bounds, lightColor, r,
 					origin, 1, 0, 0);
 			}
 		}
 
-		private void DrawAferImage(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawAferImage(ref Color lightColor)
 		{
-			float r = projectile.rotation;
-			SpriteEffects effects = projectile.spriteDirection == -1 ? 0 : SpriteEffects.FlipHorizontally;
-			Texture2D texture = GetTexture(Texture);
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			float r = Projectile.rotation;
+			SpriteEffects effects = Projectile.spriteDirection == -1 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			for(int i = 0; i < blurDrawer.BlurLength; i++)
 			{
 				if(!blurDrawer.GetBlurPosAndColor(i, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-				spriteBatch.Draw(texture, blurPos - Main.screenPosition,
+				Main.EntitySpriteDraw(texture, blurPos - Main.screenPosition,
 					bounds, blurColor, r, origin, 1, effects, 0);
 				if(usingSpecial && isDashing)
 				{
 					float scale = (blurDrawer.BlurLength - i) / (float)(blurDrawer.BlurLength + 1);
 					Vector2 offset = new Vector2(96, 0) * chargeDirection;
-					DrawShockwave(spriteBatch, blurPos + offset, Color.Crimson * scale, scale);
+					DrawShockwave(blurPos + offset, Color.Crimson * scale, scale);
 				}
 			}
 		}
 
-		private void DrawClingers(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawClingers(ref Color lightColor)
 		{
-			Texture2D texture = GetTexture(Texture + "_Clingers");
+			Texture2D texture = Request<Texture2D>(Texture + "_Clingers").Value;
 			int nFrames = 2;
 			int frameHeight = texture.Height / nFrames;
-			float r = projectile.spriteDirection == 1 ? MathHelper.PiOver2 : -MathHelper.PiOver2;
+			float r = Projectile.spriteDirection == 1 ? MathHelper.PiOver2 : -MathHelper.PiOver2;
 			for (int i = 0; i < 3; i++)
 			{
 				int frame = animationFrame % 60 < 30 ? 0 : 1;
@@ -418,7 +417,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				}
 				Rectangle bounds = new Rectangle(0, frame * frameHeight, texture.Width, frameHeight);
 				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-				Vector2 pos = projectile.Center;
+				Vector2 pos = Projectile.Center;
 				float yOffset = 15 + 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 60f);
 				if (i == 0)
 				{
@@ -428,8 +427,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				{
 					pos.Y += yOffset;
 				}
-				pos.X += (float)(projectile.spriteDirection * 20 + 4 * Math.Sin(2 * Math.PI * (animationFrame / 60f + i / 3f)));
-				spriteBatch.Draw(texture, pos - Main.screenPosition,
+				pos.X += (float)(Projectile.spriteDirection * 20 + 4 * Math.Sin(2 * Math.PI * (animationFrame / 60f + i / 3f)));
+				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 					bounds, lightColor, r,
 					origin, 1, 0, 0);
 			}
@@ -438,12 +437,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override void Kill(int timeLeft)
 		{
-			Vector2 goreVelocity = projectile.velocity;
+			Vector2 goreVelocity = Projectile.velocity;
 			goreVelocity.Normalize();
 			goreVelocity *= 4f;
-			int gore1 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFEyeGore"), 1f);
-			int gore2 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFEyeGore"), 1f);
-			int gore3 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/WoFHammerGore"), 1f);
+			int gore1 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/WoFEyeGore").Type, 1f);
+			int gore2 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/WoFEyeGore").Type, 1f);
+			int gore3 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/WoFHammerGore").Type, 1f);
 			foreach (int gore in new int[] { gore1, gore2, gore3 })
 			{
 				Main.gore[gore].timeLeft = 180; // make it last not as long
@@ -451,7 +450,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			}
 			for (int i = 0; i < 8; i++)
 			{
-				Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y);
+				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X, Projectile.velocity.Y);
 			}
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -461,21 +460,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				// set in SpecialTargetedMovement
 			} else if (vectorToIdle.Length() < 32)
 			{
-				projectile.spriteDirection = player.direction;
+				Projectile.spriteDirection = player.direction;
 			}
 			else if (vectorToTarget is Vector2 target)
 			{
 				if (target.Length() < 64f && !isDashing)
 				{
-					projectile.spriteDirection = player.Center.X - projectile.Center.X > 0 ? -1 : 1;
+					Projectile.spriteDirection = player.Center.X - Projectile.Center.X > 0 ? -1 : 1;
 				}
 				else if (relativeVelocity.X > 2)
 				{
-					projectile.spriteDirection = 1;
+					Projectile.spriteDirection = 1;
 				}
 				else if (relativeVelocity.X < -2)
 				{
-					projectile.spriteDirection = -1;
+					Projectile.spriteDirection = -1;
 				}
 			}
 			base.Animate(minFrame, maxFrame);
@@ -527,35 +526,35 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Guide Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 32;
+			Projectile.width = 22;
+			Projectile.height = 32;
 			mockHealth = MockMaxHealth;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 12;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 12;
 		}
 
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			baseDamage = projectile.damage;
-			baseKnockback = projectile.knockBack;
-			projectile.damage = 1;
-			projectile.knockBack = 0;
+			baseDamage = Projectile.damage;
+			baseKnockback = Projectile.knockBack;
+			Projectile.damage = 1;
+			Projectile.knockBack = 0;
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			if (knockbackCounter < 0)
 			{
-				Vector2 kbDirection = target.Center - projectile.Center;
+				Vector2 kbDirection = target.Center - Projectile.Center;
 				kbDirection.Normalize();
 				kbDirection *= -3.5f;
-				projectile.velocity = target.velocity + kbDirection;
+				Projectile.velocity = target.velocity + kbDirection;
 				if (target.CanBeChasedBy())
 				{
 					mockHealth = Math.Max(0, mockHealth - 1);
@@ -564,7 +563,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			}
 			if (mockHealth == 0)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 		}
 
@@ -573,7 +572,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			mockHealth = Math.Max(0, mockHealth - 1);
 			if(mockHealth == 0)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 		}
 
@@ -581,7 +580,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		{
 			return (byte)(b2 + (b1 - b2) * (weight));
 		}
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
 			if (mockHealth != MockMaxHealth)
 			{
@@ -612,19 +611,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					b = getGradient(halfHealthColor.B, zeroHealthColor.B, weight);
 				}
 				Color drawColor = new Color(r, g, b);
-				Texture2D healthBar = GetTexture("Terraria/HealthBar1");
-				Texture2D healthBarBack = GetTexture("Terraria/HealthBar2");
+				Texture2D healthBar = Main.Assets.Request<Texture2D>("Images/HealthBar1").Value;
+				Texture2D healthBarBack = Main.Assets.Request<Texture2D>("Images/HealthBar2").Value;
 				Rectangle bounds = new Rectangle(0, 0, (int)(healthBar.Width * widthFraction), healthBar.Height);
 				Vector2 origin = healthBar.Bounds.Center.ToVector2();
-				Vector2 pos = projectile.Bottom + new Vector2(0, 8);
-				spriteBatch.Draw(healthBarBack, pos - Main.screenPosition,
+				Vector2 pos = Projectile.Bottom + new Vector2(0, 8);
+				Main.EntitySpriteDraw(healthBarBack, pos - Main.screenPosition,
 					healthBarBack.Bounds, drawColor, 0,
 					healthBarBack.Bounds.Center.ToVector2(), 1, 0, 0);
-				spriteBatch.Draw(healthBar, pos - Main.screenPosition,
+				Main.EntitySpriteDraw(healthBar, pos - Main.screenPosition,
 					bounds, drawColor, 0,
 					origin, 1, 0, 0);
 			}
-			base.PostDraw(spriteBatch, lightColor);
+			base.PostDraw(lightColor);
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -635,7 +634,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			}
 			else
 			{
-				projectile.velocity *= 0.99f;
+				Projectile.velocity *= 0.99f;
 			}
 		}
 
@@ -647,7 +646,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			}
 			else
 			{
-				projectile.velocity *= 0.99f;
+				Projectile.velocity *= 0.99f;
 			}
 		}
 
@@ -655,12 +654,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		{
 			if (mockHealth == 0)
 			{
-				Vector2 goreVelocity = projectile.velocity;
+				Vector2 goreVelocity = Projectile.velocity;
 				goreVelocity.Normalize();
 				goreVelocity *= 4f;
-				int gore1 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideGore"), 1f);
-				int gore2 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideBodyGore"), 1f);
-				int gore3 = Gore.NewGore(projectile.position, goreVelocity, mod.GetGoreSlot("Gores/GuideLegsGore"), 1f);
+				int gore1 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/GuideGore").Type, 1f);
+				int gore2 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/GuideBodyGore").Type, 1f);
+				int gore3 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/GuideLegsGore").Type, 1f);
 				foreach (int gore in new int[] { gore1, gore2, gore3 })
 				{
 					Main.gore[gore].timeLeft = 180; // make it last not as long
@@ -668,13 +667,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				}
 				for (int i = 0; i < 6; i++)
 				{
-					Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.Blood, projectile.velocity.X, projectile.velocity.Y);
+					Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X, Projectile.velocity.Y);
 				}
 
 				if (player.whoAmI == Main.myPlayer)
 				{
 					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
-					Projectile.NewProjectile(projectile.Center, projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
+					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.Center, Projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
 				}
 			}
 		}

@@ -7,15 +7,16 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
 	public class SpiritGunMinionBuff : MinionBuff
 	{
 		public SpiritGunMinionBuff() : base(ProjectileType<SpiritGunCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Spirit Revolver");
 			Description.SetDefault("A group of sentient bullets will fight for you!");
 		}
@@ -33,22 +34,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.mana = 10;
-			item.width = 36;
-			item.height = 22;
-			item.damage = 53;
-			item.value = Item.buyPrice(0, 20, 0, 0);
-			item.rare = ItemRarityID.Red;
+			Item.knockBack = 3f;
+			Item.mana = 10;
+			Item.width = 36;
+			Item.height = 22;
+			Item.damage = 53;
+			Item.value = Item.buyPrice(0, 20, 0, 0);
+			Item.rare = ItemRarityID.Red;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SpectreBar, 12);
-			recipe.AddIngredient(ItemID.IllegalGunParts, 1);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.SpectreBar, 12).AddIngredient(ItemID.IllegalGunParts, 1).AddTile(TileID.MythrilAnvil).Register();
 		}
 	}
 
@@ -72,8 +68,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		private float unfiredShots
 		{
-			get => projectile.ai[1];
-			set => projectile.ai[1] = value;
+			get => Projectile.ai[1];
+			set => Projectile.ai[1] = value;
 		}
 
 		protected override int CounterType => ProjectileType<SpiritGunCounterMinion>();
@@ -82,19 +78,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Spirit Revolver");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 2;
-			IdleLocationSets.trailingInAir.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 2;
+			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 36;
-			projectile.height = 22;
-			projectile.tileCollide = false;
+			Projectile.width = 36;
+			Projectile.height = 22;
+			Projectile.tileCollide = false;
 			animationFrame = 0;
 			framesSinceLastHit = 0;
-			projectile.friendly = true;
+			Projectile.friendly = true;
 			attackThroughWalls = true;
 			useBeacon = false;
 			activeTargetVectors = new Queue<Vector2>();
@@ -108,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		private Vector2 GetSpiritLocation(int index)
 		{
 			float r = (float)(2 * Math.PI * animationFrame) / AnimationFrames;
-			Vector2 pos = projectile.Center;
+			Vector2 pos = Projectile.Center;
 			float r1 = r + 2 * (float)Math.PI * index / (EmpowerCount + 1);
 			Vector2 pos1 = pos + new Vector2((float)Math.Cos(r1), (float)Math.Sin(r1)) * 32;
 			return pos1;
@@ -119,50 +115,50 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		{
 			Dust.NewDust(GetSpiritLocation(index), 10, 14, 137);
 		}
-		private void DrawSpirits(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawSpirits(Color lightColor)
 		{
-			Rectangle bounds = new Rectangle(0, projectile.height, 10, 14);
+			Rectangle bounds = new Rectangle(0, Projectile.height, 10, 14);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			for (int i = 0; i < unfiredShots; i++)
 			{
-				spriteBatch.Draw(texture, GetSpiritLocation(i) - Main.screenPosition,
+				Main.EntitySpriteDraw(texture, GetSpiritLocation(i) - Main.screenPosition,
 					bounds, lightColor, 0,
 					origin, 1, 0, 0);
 			}
 			foreach (Vector2 active in activeTargetVectors)
 			{
 				Lighting.AddLight(active, Color.LightCyan.ToVector3() * 0.75f);
-				spriteBatch.Draw(texture, active - Main.screenPosition,
+				Main.EntitySpriteDraw(texture, active - Main.screenPosition,
 					bounds, Color.LightCyan, 0,
 					origin, 1, 0, 0);
 			}
 		}
 
 
-		private void DrawShadows(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawShadows(Color lightColor)
 		{
-			Vector2 pos = projectile.Center;
-			Rectangle bounds = new Rectangle(0, 0, projectile.width, projectile.height);
+			Vector2 pos = Projectile.Center;
+			Rectangle bounds = new Rectangle(0, 0, Projectile.width, Projectile.height);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Color shadowColor = ShadowColor(lightColor);
-			Texture2D texture = Main.projectileTexture[projectile.type];
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			// echo 1
 			float offset = 2f * (float)Math.Sin(Math.PI * (animationFrame % 60) / 30);
-			spriteBatch.Draw(texture, pos - Main.screenPosition + Vector2.One * offset,
-				bounds, shadowColor, projectile.rotation, origin, 1, effects, 0);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition + Vector2.One * offset,
+				bounds, shadowColor, Projectile.rotation, origin, 1, effects, 0);
 			// echo 2
-			spriteBatch.Draw(texture, pos - Main.screenPosition - Vector2.One * offset,
-				bounds, shadowColor, projectile.rotation, origin, 1, effects, 0);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition - Vector2.One * offset,
+				bounds, shadowColor, Projectile.rotation, origin, 1, effects, 0);
 
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			animationFrame %= AnimationFrames;
-			DrawSpirits(spriteBatch, lightColor);
-			DrawShadows(spriteBatch, lightColor);
+			DrawSpirits(lightColor);
+			DrawShadows(lightColor);
 			return true;
 		}
 
@@ -175,7 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		public override void OnEmpower()
 		{
 			base.OnEmpower();
-			projectile.ai[1] += 1;
+			Projectile.ai[1] += 1;
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -206,14 +202,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			}
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -32;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition.X = player.Center.X;
 				idlePosition.Y = player.Center.Y - 24;
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
@@ -221,7 +217,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			base.IdleMovement(vectorToIdlePosition);
-			Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3() * 0.75f);
+			Lighting.AddLight(Projectile.position, Color.LightCyan.ToVector3() * 0.75f);
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -230,25 +226,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			if (framesSinceLastHit > 15 && unfiredShots > 0 && !isReloading)
 			{
 				vectorToTargetPosition = VaryLaunchVelocity(vectorToTargetPosition);
-				Vector2 pos = projectile.Center;
+				Vector2 pos = Projectile.Center;
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
+						Projectile.GetProjectileSource_FromThis(),
 						pos,
 						vectorToTargetPosition,
 						ProjectileType<SpiritGunMinionBullet>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
-				Main.PlaySound(SoundID.Item97, pos);
+				SoundEngine.PlaySound(SoundID.Item97, pos);
 				// TODO handle flipping and stuff
-				projectile.rotation = vectorToTargetPosition.ToRotation();
+				Projectile.rotation = vectorToTargetPosition.ToRotation();
 				unfiredShots -= 1;
-				activeTargetVectors.Enqueue(projectile.Center + vectorToTargetPosition);
+				activeTargetVectors.Enqueue(Projectile.Center + vectorToTargetPosition);
 				for (int i = 0; i < 3; i++)
 				{
-					Dust.NewDust(projectile.Center + vectorToTargetPosition, 4, 10, 137);
+					Dust.NewDust(Projectile.Center + vectorToTargetPosition, 4, 10, 137);
 				}
 				framesSinceLastHit = 0;
 				if (unfiredShots == 0)
@@ -286,14 +283,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			// search a fraction of possible positions each frame
 			float angle = 2 * frame * (float)Math.PI / AnimationFrames;
 			float distance = ComputeSearchDistance() / (1 + frame % 8);
-			Vector2 target = projectile.Center + distance * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-			if (!Collision.CanHitLine(projectile.Center, 1, 1, target, 1, 1))
+			Vector2 target = Projectile.Center + distance * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+			if (!Collision.CanHitLine(Projectile.Center, 1, 1, target, 1, 1))
 			{
 				return null;
 			}
 			if (GetAnyTargetVector(target) != null)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else
 			{
@@ -340,15 +337,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			base.Animate(minFrame, maxFrame);
 			if (framesSinceLastHit > 30)
 			{
-				if (Math.Abs(projectile.velocity.X) > 2)
+				if (Math.Abs(Projectile.velocity.X) > 2)
 				{
-					projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
+					Projectile.spriteDirection = Projectile.velocity.X > 0 ? 1 : -1;
 				}
-				projectile.rotation = 0.025f * projectile.velocity.X;
+				Projectile.rotation = 0.025f * Projectile.velocity.X;
 			}
 			else
 			{
-				projectile.spriteDirection = 1;
+				Projectile.spriteDirection = 1;
 			}
 		}
 	}
