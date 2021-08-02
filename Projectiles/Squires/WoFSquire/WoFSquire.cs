@@ -47,6 +47,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class GuideVoodooSquireMinionItem : SquireMinionItem<GuideVoodooSquireMinionBuff, GuideVoodooSquireMinion>
 	{
+		protected override string SpecialName => "Brutal Dash";
+		protected override string SpecialDescription => 
+			"Dashes across the whole screen horizontally,\n" +
+			"hitting everything in its path";
 		private int wofType => ProjectileType<WoFSquireMinion>();
 		public override void SetStaticDefaults()
 		{

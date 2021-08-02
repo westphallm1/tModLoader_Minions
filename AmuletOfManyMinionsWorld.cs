@@ -3,7 +3,9 @@ using AmuletOfManyMinions.Projectiles.Minions.ExciteSkull;
 using AmuletOfManyMinions.Projectiles.Minions.FishBowl;
 using AmuletOfManyMinions.Projectiles.Minions.Rats;
 using AmuletOfManyMinions.Projectiles.Minions.TumbleSheep;
+using AmuletOfManyMinions.Projectiles.Squires.DemonSquire;
 using AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire;
+using AmuletOfManyMinions.Projectiles.Squires.SkywareSquire;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -19,11 +21,11 @@ namespace AmuletOfManyMinions
 		LockedShadowChest  = 4,
 		RichMahogonyChest = 8,
 		IvyChest = 10,
+		SkywareChest = 13,
 		WaterChest = 17,
 		MushroomChest = 32,
 		GraniteChest= 50,
 		MarbleChest = 51,
-
 	}
 
 	struct ChestLootInfo
@@ -70,11 +72,12 @@ namespace AmuletOfManyMinions
 		{
 			lootInfo = new ChestLootInfo[]
 			{
-				new ChestLootInfo(ChestFrame.LockedShadowChest, 4, ItemType<GoldenRogueSquireMinionItem>()),// shadow chest/golden rogue
 				new ChestLootInfo(ChestFrame.LockedGoldChest, 6, ItemType<ExciteSkullMinionItem>()),
 				new ChestLootInfo(ChestFrame.WoodenChest, 6, ItemType<TumbleSheepMinionItem>()),
 				new ChestLootInfo(ChestFrame.WaterChest, 4, ItemType<FishBowlMinionItem>()),
 				new ChestLootInfo(ChestFrame.IvyChest, 4, ItemType<BalloonMonkeyMinionItem>()),
+				new ChestLootInfo(ChestFrame.SkywareChest, 4, ItemType<SkywareSquireMinionItem>()),// shadow chest/golden rogue
+				new ChestLootInfo(ChestFrame.LockedShadowChest, 4, ItemType<DemonSquireMinionItem>()),// shadow chest/golden rogue
 				// all the various gold chest variants
 				new ChestLootInfo(ChestFrame.GoldChest, 6, ItemType<RatsMinionItem>()),
 				new ChestLootInfo(ChestFrame.RichMahogonyChest, 6, ItemType<RatsMinionItem>()),

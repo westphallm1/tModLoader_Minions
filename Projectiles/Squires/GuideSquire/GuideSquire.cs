@@ -22,6 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 	public class GuideSquireMinionItem : SquireMinionItem<GuideSquireMinionBuff, GuideSquireMinion>
 	{
+		protected override string SpecialName => "Flaming Arrow Volley";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -176,6 +177,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		protected override float projectileVelocity => 12;
 
 		protected override int SpecialDuration => 2 * 60;
+		protected override int SpecialCooldown => 9 * 60;
 		protected override bool travelRangeCanBeModified => false;
 
 

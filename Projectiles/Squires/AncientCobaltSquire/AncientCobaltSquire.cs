@@ -22,6 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 	public class AncientCobaltSquireMinionItem : SquireMinionItem<AncientCobaltSquireMinionBuff, AncientCobaltSquireMinion>
 	{
+		protected override string SpecialName => "Magic Shotblast";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -25,6 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 	public class ArmoredBoneSquireMinionItem : SquireMinionItem<ArmoredBoneSquireMinionBuff, ArmoredBoneSquireMinion>
 	{
+		protected override string SpecialName => "Spirit of the Flail";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

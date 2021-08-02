@@ -27,6 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 	{
 
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundBow";
+		protected override string SpecialName => "Soulbound Companion";
+		protected override string SpecialDescription => "The Soulbound Sword will briefly assist you";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

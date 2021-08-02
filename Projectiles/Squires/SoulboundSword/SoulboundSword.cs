@@ -24,6 +24,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 	public class SoulboundSwordMinionItem : SquireMinionItem<SoulboundSwordMinionBuff, SoulboundSwordMinion>
 	{
 
+		protected override string SpecialName => "Soulbound Companion";
+		protected override string SpecialDescription => "The Soulbound Bow will briefly assist you";
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundSword/SoulboundSword";
 		public override void SetStaticDefaults()
 		{
@@ -76,8 +78,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 		protected override float knockbackSelf => 4;
 
-		protected override int SpecialDuration => 4 * 60;
-		protected override int SpecialCooldown => 10 * 60;
+		protected override int SpecialDuration => 2 * 60;
+		protected override int SpecialCooldown => 9 * 60;
 
 		public SoulboundSwordMinion() : base(ItemType<SoulboundSwordMinionItem>()) { }
 

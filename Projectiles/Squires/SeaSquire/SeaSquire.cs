@@ -24,6 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 	public class SeaSquireMinionItem : SquireMinionItem<SeaSquireMinionBuff, SeaSquireMinion>
 	{
+		protected override string SpecialName => "Shark Form";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -184,7 +185,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
 					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-					blurPos = blurPos - Main.screenPosition + origin;
+					blurPos = blurPos - Main.screenPosition;
 					spriteBatch.Draw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}

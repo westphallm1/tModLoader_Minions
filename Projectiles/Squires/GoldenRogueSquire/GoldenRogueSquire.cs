@@ -22,6 +22,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	}
 	public class GoldenRogueSquireMinionItem : SquireMinionItem<GoldenRogueSquireMinionBuff, GoldenRogueSquireMinion>
 	{
+		protected override string SpecialName => "Cloud of Knives";
+		protected override string SpecialDescription =>
+			"Teleports to the enemy nearest the cursor\n" +
+			"and throws a barrage of knives at them";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -91,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			// manually bypass defense
 			// this may not be wholly correct
-			int defenseBypass = 10;
+			int defenseBypass = 20;
 			int defense = Math.Min(target.defense, defenseBypass);
 			damage += defense / 2;
 		}
@@ -115,13 +119,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 1;
+			projectile.penetrate = 2;
 			projectile.width = 12;
 			projectile.height = 12;
 			projectile.timeLeft = TimeToLive;
 			projectile.friendly = true;
 			projectile.tileCollide = true;
 			projectile.minion = true;
+			projectile.usesLocalNPCImmunity = true;
 			baseVelocity = default;
 		}
 
@@ -174,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	public class GoldenRogueSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<GoldenRogueSquireMinionBuff>();
-		protected override int AttackFrames => 15;
+		protected override int AttackFrames => 12;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/GoldenWings";
 

@@ -1,4 +1,4 @@
 displayName = The Amulet Of Many Minions
 author = billybobmcbo, SkyanUltra, direwolf420, Metallumere, SPATULA LEMMY
-version = 0.10.0.2
+version = 0.11.0
 homepage = https://forums.terraria.org/index.php?threads/the-amulet-of-many-minions.97188/

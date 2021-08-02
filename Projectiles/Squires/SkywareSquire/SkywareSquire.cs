@@ -24,6 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 
 	public class SkywareSquireMinionItem : SquireMinionItem<SkywareSquireMinionBuff, SkywareSquireMinion>
 	{
+		protected override string SpecialName => "Barrage";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

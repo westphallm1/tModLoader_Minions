@@ -30,6 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundArsenal/SoulboundArsenalItem";
 
+		protected override string SpecialName => "Soulbound Coalescence";
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

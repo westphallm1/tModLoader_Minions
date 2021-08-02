@@ -152,7 +152,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
 					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-					blurPos = blurPos - Main.screenPosition + origin;
+					blurPos = blurPos - Main.screenPosition;
 					spriteBatch.Draw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 					spriteBatch.Draw(glowTexture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}

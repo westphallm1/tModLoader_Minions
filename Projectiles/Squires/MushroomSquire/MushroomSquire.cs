@@ -24,6 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
 	public class MushroomSquireMinionItem : SquireMinionItem<MushroomSquireMinionBuff, MushroomSquireMinion>
 	{
+		protected override string SpecialName => "Mushroom Toss";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

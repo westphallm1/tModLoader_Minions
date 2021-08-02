@@ -24,6 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 	public class ShadowSquireMinionItem : SquireMinionItem<ShadowSquireMinionBuff, ShadowSquireMinion>
 	{
+		protected override string SpecialName => "Flask of Cursed Flames";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

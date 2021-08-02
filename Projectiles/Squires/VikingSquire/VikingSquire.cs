@@ -22,6 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 
 	public class VikingSquireMinionItem : SquireMinionItem<VikingSquireMinionBuff, VikingSquireMinion>
 	{
+		protected override string SpecialName => "Icy Axe";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

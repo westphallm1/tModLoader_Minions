@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,6 +10,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 	public abstract class SquireMinionItem<TBuff, TProj> : MinionItem<TBuff, TProj> where TBuff : ModBuff where TProj : SquireMinion
 	{
 
+		protected abstract string SpecialName { get; }
+		protected virtual string SpecialDescription => null;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -56,6 +59,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				item.UseSound = SoundID.Item44;
 			}
 			return true;
+		}
+
+		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		{
+			tooltips.Add(new TooltipLine(mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
+			{
+				overrideColor = Color.LimeGreen
+			});
+			if(SpecialDescription != null)
+			{
+				tooltips.Add(new TooltipLine(mod, "SquireSpecialDescription", SpecialDescription));
+			}
 		}
 	}
 

@@ -26,6 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 	public class PumpkinSquireMinionItem : SquireMinionItem<PumpkinSquireMinionBuff, PumpkinSquireMinion>
 	{
+		protected override string SpecialName => "Giant Pumpkin";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -47,6 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.Pumpkin, 15);
+			recipe.AddRecipeGroup("AmuletOfManyMinions:EvilBars", 12);
 			recipe.AddTile(TileID.Anvils);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

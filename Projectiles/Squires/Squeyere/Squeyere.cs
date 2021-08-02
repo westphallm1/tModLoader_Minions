@@ -23,6 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 	public class SqueyereMinionItem : SquireMinionItem<SqueyereMinionBuff, SqueyereMinion>
 	{
+		protected override string SpecialName => "Seeing Double";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

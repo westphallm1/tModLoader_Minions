@@ -4,6 +4,11 @@ over 30 new minions, and several armor sets and accessories for both Squires and
 
 
 === Version History ==
+v0.11.0 - Squire Specials!
+       - Each squire now has a cooldown-based special, activated by right click
+       - Specials are unique for each squire, try them all!
+       - Add several config options for mod content balance
+         - Buff or nerf minion damage and AI for a more customized experience
 v0.10.0 - Tactics 2.0!
        - Revamp Tactics UI 
          - Menu can now be moved anywhere on screen
@@ -17,12 +22,6 @@ v0.9.0 - Vanilla-ish Update
        - AoMM variants use advanced pathfinding and tactics, + other AI tweaks
        - NOTE: Regular vanilla summon weapons will not use AoMM AI.
          You must craft the AoMM Variant weapon at a Demon Altar to use AoMM AI.
-v0.8.0 - Pathfinding 2.0
-       - Complete overhaul of the minion targeting system!
-       - Minions can now automatically navigate most obstacles in order to reach the target
-       - Target now placed using new class of tool called the Pathfinding Rod
-       - Pathfinding Rod has 6 tiers, each increasing target placement range and decreasing use time
-       - Only works with minions from this mod
 ~~ See the Wiki for older changelogs ~~
 
 
