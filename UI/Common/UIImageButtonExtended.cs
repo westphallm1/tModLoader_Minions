@@ -29,12 +29,12 @@ namespace AmuletOfManyMinions.UI.Common
 
 		private void UIImageButtonExtended_OnMouseOut(UIMouseEvent evt, UIElement listeningElement)
 		{
-			Main.NewText("out");
+			//TODO 1.4 remove
 		}
 
 		private void UIImageButtonExtended_OnMouseOver(UIMouseEvent evt, UIElement listeningElement)
 		{
-			Main.NewText("over");
+			//TODO 1.4 remove
 		}
 
 		public override void Click(UIMouseEvent evt)

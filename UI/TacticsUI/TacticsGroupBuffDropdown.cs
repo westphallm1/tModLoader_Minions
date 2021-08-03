@@ -46,7 +46,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			{
 				return;
 			}
-			Main.NewText("currentBuffId: " + currentBuffId);
 			if (listeningElement is TacticsGroupButton clickedButton)
 			{
 				if (selectedIndex != clickedButton.index)

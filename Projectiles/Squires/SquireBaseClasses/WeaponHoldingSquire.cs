@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected virtual float SwingAngle0 => 5 * (float)Math.PI / 8;
 		protected virtual float SwingAngle1 => -(float)Math.PI / 4;
 		protected virtual string WingTexturePath => null;
-		protected abstract string WeaponTexturePath { get; } //TODO 1.4 cache this
+		protected abstract string WeaponTexturePath { get; } //TODO 1.4 cache this //Actually not possible since it is supposed to be dynamic :pensive:
 		protected virtual Vector2 WingOffset => Vector2.Zero;
 		protected virtual WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 		protected virtual WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.DIAGONAL;

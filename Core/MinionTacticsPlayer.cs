@@ -393,7 +393,6 @@ namespace AmuletOfManyMinions.Core.Minions
 			if(TacticsUnlocked)
 			{
 				UserInterfaces.tacticsUI.SetOpenClosedState(OpenedTriState.TRUE);
-				Main.NewText(TacticsUnlockedText);
 			}
 
 		}

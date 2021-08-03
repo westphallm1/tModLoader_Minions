@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// Determines multiple things
 			Projectile.minion = true;
 			// Determines damage type
-			Projectile.DamageType = DamageClass.Summon; //TODO check shot projectiles, the spawn for originalDamage
+			Projectile.DamageType = DamageClass.Summon; //TODO 1.4 check shot projectiles, the spawn for originalDamage
 			// Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
 			Projectile.minionSlots = 1f;
 			// Needed so the minion doesn't despawn on collision with enemies or tiles
