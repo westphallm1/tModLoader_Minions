@@ -2,6 +2,8 @@
 using AmuletOfManyMinions.Items.Accessories.SquireSkull;
 using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Items.WaypointRods;
+using AmuletOfManyMinions.NPCs.DropConditions;
+using AmuletOfManyMinions.NPCs.DropRules;
 using AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy;
 using AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey;
 using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
@@ -33,15 +35,201 @@ using AmuletOfManyMinions.Projectiles.Squires.Squeyere;
 using AmuletOfManyMinions.Projectiles.Squires.VikingSquire;
 using System.Linq;
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.NPCs
 {
-	class LootTable : GlobalNPC
+	public class LootTable : GlobalNPC
 	{
-		//TODO 1.4 port drops
+		private static void NPCAddExpertScalingRuleCommon(NPCLoot npcLoot, int itemId, int chanceDenominator = 1, int minimumDropped = 1, int maximumDropped = 1, int chanceNumerator = 1, IItemDropRule ruleExpert = null, IItemDropRule ruleNormal = null)
+		{
+			//Since the conditions are exclusive, only one of them will show up
+			IItemDropRule expertRule = new LeadingConditionRule(new Conditions.IsExpert());
+			IItemDropRule ruleToAdd = expertRule;
+			if (ruleExpert != null)
+			{
+				ruleToAdd = ruleExpert; //If a rule is specified, use that to add it (Always add the "baseline" rule first)
+				expertRule = ruleToAdd.OnSuccess(expertRule);
+			}
+			expertRule.OnSuccess(new CommonDropWithReroll(itemId, chanceDenominator, minimumDropped, maximumDropped, chanceNumerator));
+			npcLoot.Add(ruleToAdd);
+
+			//Vanilla example
+			//Conditions.IsPumpkinMoon condition2 = new Conditions.IsPumpkinMoon();
+			//Conditions.FromCertainWaveAndAbove condition3 = new Conditions.FromCertainWaveAndAbove(15);
+
+			//LeadingConditionRule entry = new LeadingConditionRule(condition2);
+			//LeadingConditionRule ruleToChain = new LeadingConditionRule(condition3);
+			//npcLoot.Add(entry).OnSuccess(ruleToChain).OnSuccess(ItemDropRule.Common(1856));
+
+			IItemDropRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+			ruleToAdd = notExpertRule;
+			if (ruleNormal != null)
+			{
+				ruleToAdd = ruleNormal;
+				notExpertRule = ruleToAdd.OnSuccess(notExpertRule);
+			}
+			notExpertRule.OnSuccess(new CommonDrop(itemId, chanceDenominator, minimumDropped, maximumDropped, chanceNumerator));
+			npcLoot.Add(ruleToAdd);
+		}
+
+		private static void GlobalAddExpertScalingRuleCommon(GlobalLoot globalLoot, int itemId, int chanceDenominator = 1, int minimumDropped = 1, int maximumDropped = 1, int chanceNumerator = 1, IItemDropRule ruleExpert = null, IItemDropRule ruleNormal = null)
+		{
+			IItemDropRule expertRule = new LeadingConditionRule(new Conditions.IsExpert());
+			IItemDropRule ruleToAdd = expertRule;
+			if (ruleExpert != null)
+			{
+				ruleToAdd = ruleExpert; //If a rule is specified, use that to add it (Always add the "baseline" rule first)
+				expertRule = ruleToAdd.OnSuccess(expertRule);
+			}
+			expertRule.OnSuccess(new CommonDropWithReroll(itemId, chanceDenominator, minimumDropped, maximumDropped, chanceNumerator));
+			globalLoot.Add(ruleToAdd);
+
+			IItemDropRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+			ruleToAdd = notExpertRule;
+			if (ruleNormal != null)
+			{
+				ruleToAdd = ruleNormal;
+				notExpertRule = ruleToAdd.OnSuccess(notExpertRule);
+			}
+			notExpertRule.OnSuccess(new CommonDrop(itemId, chanceDenominator, minimumDropped, maximumDropped, chanceNumerator));
+			globalLoot.Add(ruleToAdd);
+		}
+
+		public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+		{
+			base.ModifyNPCLoot(npc, npcLoot);
+
+			var notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+
+			if (npc.type == NPCID.Guide)
+			{
+				var anyLunars = new AnyLunarEventCondition();
+				var anyLunarsRule = new LeadingConditionRule(anyLunars);
+				var hair = ItemDropRule.Common(ItemType<GuideHair>(), 1);
+				anyLunarsRule.OnSuccess(hair);
+				npcLoot.Add(anyLunarsRule);
+
+				var noLunars = new NoLunarEventCondition();
+				var noLunarsRule = new LeadingConditionRule(noLunars);
+				var anyFirstBoss = new FirstBossDefeatedCondition();
+				var squire = ItemDropRule.ByCondition(anyFirstBoss, ItemType<GuideSquireMinionItem>());
+				noLunarsRule.OnSuccess(squire);
+				npcLoot.Add(noLunarsRule);
+			}
+			else if (NPCSets.preHardmodeIceEnemies.Contains(npc.netID))
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<VikingSquireMinionItem>(), 20);
+			}
+			else if (npc.type == NPCID.GraniteFlyer || npc.type == NPCID.GraniteGolem)
+			{
+				int item = ItemType<GraniteSpark>();
+				npcLoot.Add(new DropBasedOnExpertMode(new CommonDrop(item, 1, amountDroppedMaximum: 2),
+					new CommonDrop(item, 1, amountDroppedMaximum: 3)));
+			}
+			else if (npc.type == NPCID.ManEater)
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 25, chanceNumerator: 3);
+			}
+			else if (NPCSets.hornets.Contains(npc.netID))
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 25);
+			}
+			else if (NPCSets.angryBones.Contains(npc.netID))
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<BoneSquireMinionItem>(), 2000, chanceNumerator: 3);
+			}
+			else if (npc.type == NPCID.AngryNimbus)
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<StoneCloudMinionItem>(), 25, chanceNumerator: 3);
+			}
+			else if (npc.type == NPCID.GiantBat)
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<SquireBatAccessory>(), 20);
+			}
+			else if (npc.type == NPCID.BigMimicHallow)
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<StarSurferMinionItem>(), 3);
+			}
+			else if (npc.type == NPCID.BigMimicCrimson)
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<NullHatchetMinionItem>(), 3);
+			}
+			else if (npc.type == NPCID.BigMimicCorruption)
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<VoidKnifeMinionItem>(), 3);
+			}
+			else if (npc.type == NPCID.GoblinSummoner)
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<GoblinGunnerMinionItem>(), 3);
+			}
+			else if (npc.type == NPCID.Eyezor)
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<SqueyereMinionItem>(), 10);
+			}
+			else if (NPCSets.blueArmoredBones.Contains(npc.netID))
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<ArmoredBoneSquireMinionItem>(), 33);
+			}
+			else if (NPCSets.hellArmoredBones.Contains(npc.netID))
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<CharredChimeraMinionItem>(), 40);
+			}
+			else if (NPCSets.necromancers.Contains(npc.netID))
+			{
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<NecromancerMinionItem>(), 20);
+			}
+			else if (npc.type == NPCID.Pumpking)
+			{
+				var pumpkin = new Conditions.IsPumpkinMoon();
+				var wave = new Conditions.FromCertainWaveAndAbove(10);
+				IItemDropRule entry = new LeadingConditionRule(pumpkin);
+				IItemDropRule ruleToChain = new LeadingConditionRule(wave);
+				ruleToChain = entry.OnSuccess(ruleToChain);
+
+				IItemDropRule entry2 = new LeadingConditionRule(pumpkin);
+				IItemDropRule ruleToChain2 = new LeadingConditionRule(wave);
+				ruleToChain2 = entry2.OnSuccess(ruleToChain2);
+
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<GoldenRogueSquireMinionItem>(), 8, ruleExpert: ruleToChain, ruleNormal: ruleToChain2);
+				//float pumpkingSpawnChance = 0.0156f + 0.1f * (Main.invasionProgressWave - 10) / 5f;
+			}
+			else if (npc.type == NPCID.Plantera)
+			{
+				//Does not use method as it is expert only (no normal mode)
+				npcLoot.Add(notExpertRule.OnSuccess(new CommonDropWithReroll(ItemType<PottedPalMinionItem>(), 3)));
+			}
+			else if (npc.type == NPCID.QueenBee)
+			{
+				npcLoot.Add(notExpertRule.OnSuccess(new CommonDropWithReroll(ItemType<BeeQueenMinionItem>(), 3)));
+			}
+			else if (npc.type == NPCID.SkeletronHead)
+			{
+				npcLoot.Add(notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<BoneWaypointRod>())));
+			}
+			else if (npc.type == NPCID.SkeletronHead)
+			{
+				npcLoot.Add(notExpertRule.OnSuccess(new CommonDropWithReroll(ItemType<SquireSkullAccessory>(), 2)));
+			}
+			else if (npc.type == NPCID.WallofFlesh)
+			{
+				npcLoot.Add(notExpertRule.OnSuccess(new CommonDropWithReroll(ItemType<BoneSerpentMinionItem>(), 4)));
+			}
+		}
+
+		public override void ModifyGlobalLoot(GlobalLoot globalLoot)
+		{
+			//This is used for things like souls of night or yoyos, where there are no clear NPC (or a small subset of NPCs) to give drops to
+			var condition = new SlimepireCondition();
+			var ruleToChain = new LeadingConditionRule(condition);
+			var ruleToChain2 = new LeadingConditionRule(condition);
+			GlobalAddExpertScalingRuleCommon(globalLoot, ItemType<SlimepireMinionItem>(), 100, ruleExpert: ruleToChain, ruleNormal: ruleToChain2);
+		}
+
+		//Old code kept for reference
 		/*
 		public override void NPCLoot(NPC npc)
 		{
