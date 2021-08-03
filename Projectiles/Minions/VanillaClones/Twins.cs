@@ -33,9 +33,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			bool ret = base.Shoot(player, source, position, velocity, type, damage, knockback);
-			Projectile.NewProjectile(source, position, Vector2.Zero, ProjectileType<MiniSpazmatismMinion>(), damage, knockback, player.whoAmI);
-			return ret;
+			ApplyBuff(player);
+
+			var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, ProjectileType<MiniSpazmatismMinion>(), damage, knockback, player.whoAmI);
+			p.originalDamage = damage;
+			return false;
 		}
 	}
 

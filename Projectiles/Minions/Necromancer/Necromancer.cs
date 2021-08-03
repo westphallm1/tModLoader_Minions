@@ -63,7 +63,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			Projectile.CloneDefaults(ProjectileID.Bone);
 			Projectile.penetrate = 1;
 			// projectile.ranged = false;
-			Projectile.minion = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 	}
 

@@ -52,10 +52,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 	public class SeaSquireBubble : ModProjectile
 	{
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SeaSquire/SeaSquireBubble";
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 			Projectile.CloneDefaults(ProjectileID.Bubble);
 			Projectile.alpha = 240;
 			Projectile.timeLeft = 180;
@@ -65,7 +72,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			Projectile.width = 12;
 			Projectile.height = 12;
 			// projectile.magic = false; //Bandaid fix
-			Projectile.minion = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

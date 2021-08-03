@@ -59,7 +59,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			Projectile.friendly = true;
 			Projectile.penetrate = 1;
 			Projectile.timeLeft = 60;
-			Projectile.minion = true; //Bandaid fix?
+			//Projectile.minion = true; //Bandaid fix? //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 			Projectile.width = 12;
 			Projectile.height = 12;
 		}

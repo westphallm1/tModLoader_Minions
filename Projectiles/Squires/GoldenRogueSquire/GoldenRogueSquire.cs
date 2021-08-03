@@ -65,7 +65,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			Projectile.timeLeft = TimeToLive;
 			Projectile.friendly = false;
 			Projectile.tileCollide = false;
-			Projectile.minion = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 
 		// ai is wholly controlled by golden rogue squire, but die if squire does
@@ -125,7 +126,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			Projectile.timeLeft = TimeToLive;
 			Projectile.friendly = true;
 			Projectile.tileCollide = true;
-			Projectile.minion = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 			Projectile.usesLocalNPCImmunity = true;
 			baseVelocity = default;
 		}

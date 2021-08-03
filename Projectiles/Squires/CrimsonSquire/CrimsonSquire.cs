@@ -113,7 +113,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			Projectile.timeLeft = TimeToLive;
 			Projectile.friendly = true;
 			Projectile.tileCollide = true;
-			Projectile.minion = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 
 		public override void AI()

@@ -139,7 +139,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.minion = true; //Bandaid fix?
+			//Projectile.minion = true; //Bandaid fix? //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 		public override float GetRotation()
 		{

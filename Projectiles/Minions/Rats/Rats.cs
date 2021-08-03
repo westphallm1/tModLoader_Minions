@@ -47,10 +47,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 
 		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			base.Shoot(player, source, position, velocity, type, damage, knockback);            // summon 3 rats at a time
+			ApplyBuff(player);
+			//summon 3 rats at a time
 			for (int i = 0; i < 3; i++)
 			{
-				Projectile.NewProjectile(source, position, Vector2.Zero, ProjectileType<RatsMinion>(), damage, knockback, player.whoAmI);
+				var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, ProjectileType<RatsMinion>(), damage, knockback, player.whoAmI);
+				p.originalDamage = damage;
 			}
 			return false;
 		}

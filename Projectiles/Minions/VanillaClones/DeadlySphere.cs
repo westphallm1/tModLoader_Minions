@@ -45,7 +45,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			base.Shoot(player, source, position, velocity, type, damage, knockback); if (projTypes == null)
+			ApplyBuff(player);
+
+			if (projTypes == null)
 			{
 				projTypes = new int[]
 				{
@@ -55,7 +57,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				};
 			}
 			int spawnCycle = projTypes.Select(v => player.ownedProjectileCounts[v]).Sum();
-			Projectile.NewProjectile(source, position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockback, player.whoAmI);
+			var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockback, player.whoAmI);
+			p.originalDamage = damage;
 			return false;
 		}
 

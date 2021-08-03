@@ -81,6 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			Projectile.timeLeft = TimeToLive;
 			Projectile.friendly = true;
 			Projectile.minion = true;
+			Projectile.DamageType = DamageClass.Summon;
 			Projectile.tileCollide = false;
 			Projectile.penetrate = 2;
 			Projectile.usesLocalNPCImmunity = true;
@@ -139,7 +140,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			base.SetDefaults();
 			Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 			// projectile.ranged = false; //Bandaid fix
-			Projectile.minion = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 
 		public override void AI()

@@ -34,6 +34,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
+			ApplyBuff(player);
+
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
@@ -42,8 +44,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 					p.Kill();
 				}
 			}
-			player.AddBuff(Item.buffType, 2);
-			Projectile.NewProjectile(source, player.Center, Vector2.Zero, Item.shoot, damage, Item.knockBack, player.whoAmI);
+
+			var projectile = Projectile.NewProjectileDirect(source, player.Center, Vector2.Zero, Item.shoot, damage, Item.knockBack, player.whoAmI);
+			projectile.originalDamage = damage;
 			return false;
 		}
 

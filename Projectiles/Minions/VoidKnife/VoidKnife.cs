@@ -43,8 +43,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			base.Shoot(player, source, position, velocity, type, damage, knockback);
-			Projectile.NewProjectile(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
+			ApplyBuff(player);
+
+			var p = Projectile.NewProjectileDirect(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
+			p.originalDamage = damage;
 			return false;
 		}
 	}

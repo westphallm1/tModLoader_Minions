@@ -37,10 +37,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			position = Main.MouseWorld;
 		}
 
-		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		protected void ApplyBuff(Player player)
 		{
 			player.AddBuff(Item.buffType, 3);
-			return base.Shoot(player, source, position, velocity, type, damage, knockback);
+		}
+
+		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		{
+			ApplyBuff(player);
+
+			var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
+			projectile.originalDamage = damage; //TODO 1.4 this might not be correct, vanilla uses Item.damage. But it takes damage changes from ModifyWeaponDamage etc which may be beneficial here)
+
+			return false;
 		}
 
 		public override bool AltFunctionUse(Player player)

@@ -55,7 +55,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		{
 			base.SetDefaults();
 			Projectile.CloneDefaults(ProjectileID.SapphireBolt);
-			Projectile.minion = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 			Projectile.timeLeft = 30;
 		}
 

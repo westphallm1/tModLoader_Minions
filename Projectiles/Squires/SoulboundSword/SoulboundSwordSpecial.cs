@@ -27,7 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			base.SetDefaults();
 			Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 			// projectile.ranged = false; //Bandaid fix
-			Projectile.minion = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 			Projectile.tileCollide = false;
 		}
 

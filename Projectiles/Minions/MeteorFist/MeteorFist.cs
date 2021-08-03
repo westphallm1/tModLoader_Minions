@@ -48,9 +48,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 
 		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			base.Shoot(player, source, position, velocity, type, damage, knockback);
-			Projectile.NewProjectile(source, position + new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
-			Projectile.NewProjectile(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
+			ApplyBuff(player);
+			var p1 = Projectile.NewProjectileDirect(source, position + new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
+			p1.originalDamage = damage;
+			var p2 = Projectile.NewProjectileDirect(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
+			p2.originalDamage = damage;
 			return false;
 		}
 	}
