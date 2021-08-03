@@ -266,7 +266,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				relativeVelocity = Vector2.Zero;
 				Projectile.velocity = player.velocity;
-				Projectile.position += vectorToTargetPosition;
+				Vector2 newPosition = Projectile.position + vectorToTargetPosition;
+				if (!Collision.SolidCollision(newPosition, Projectile.width, Projectile.height))
+				{
+					Projectile.position = newPosition;
+				}
 				return;
 			}
 			else if (relativeVelocity.Length() > vectorToTargetPosition.Length() / 3)
