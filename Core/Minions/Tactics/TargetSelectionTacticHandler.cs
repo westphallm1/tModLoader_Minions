@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Tactics.TacticsGroups;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,13 +34,13 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		//"static" properties that are best to be cached
 		public static List<string> DisplayNames { get; private set; }
 		public static List<string> Descriptions { get; private set; }
-		public static List<Texture2D> Textures { get; private set; }
-		public static List<Texture2D> OutlineTextures { get; private set; }
-		public static List<Texture2D> SmallTextures { get; private set; }
+		public static List<Asset<Texture2D>> Textures { get; private set; }
+		public static List<Asset<Texture2D>> OutlineTextures { get; private set; }
+		public static List<Asset<Texture2D>> SmallTextures { get; private set; }
 
-		public static List<Texture2D> GroupTextures { get; private set; }
-		public static List<Texture2D> GroupOutlineTextures { get; private set; }
-		public static List<Texture2D> GroupOverlayTextures { get; private set; }
+		public static List<Asset<Texture2D>> GroupTextures { get; private set; }
+		public static List<Asset<Texture2D>> GroupOutlineTextures { get; private set; }
+		public static List<Asset<Texture2D>> GroupOverlayTextures { get; private set; }
 
 		public static Mod Mod { get; private set; }
 
@@ -51,12 +52,12 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			NameToID = new Dictionary<string, byte>();
 			DisplayNames = new List<string>();
 			Descriptions = new List<string>();
-			Textures = new List<Texture2D>();
-			OutlineTextures = new List<Texture2D>();
-			SmallTextures = new List<Texture2D>();
-			GroupTextures = new List<Texture2D>();
-			GroupOutlineTextures = new List<Texture2D>();
-			GroupOverlayTextures = new List<Texture2D>();
+			Textures = new List<Asset<Texture2D>>();
+			OutlineTextures = new List<Asset<Texture2D>>();
+			SmallTextures = new List<Asset<Texture2D>>();
+			GroupTextures = new List<Asset<Texture2D>>();
+			GroupOutlineTextures = new List<Asset<Texture2D>>();
+			GroupOverlayTextures = new List<Asset<Texture2D>>();
 			OrderedIds = new List<byte>();
 
 			RegisterTacticDatas();
@@ -107,9 +108,10 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 				DisplayNames.Add(tactic.DisplayName);
 				Descriptions.Add(tactic.Description);
 				string texture = tactic.Texture;
-				Textures.Add(ModContent.GetTexture(texture));
-				OutlineTextures.Add(ModContent.GetTexture(texture + "_Outline"));
-				SmallTextures.Add(ModContent.GetTexture(texture + "_Small"));
+				var immediate = AssetRequestMode.ImmediateLoad; //Directly used in UI to set dimensions
+				Textures.Add(ModContent.Request<Texture2D>(texture, immediate));
+				OutlineTextures.Add(ModContent.Request<Texture2D>(texture + "_Outline", immediate));
+				SmallTextures.Add(ModContent.Request<Texture2D>(texture + "_Small", immediate));
 
 				byte id = (byte)count;
 				Count++;
@@ -136,13 +138,14 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 
 		private static void RegisterTacticsGroups()
 		{
-			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			var immediate = AssetRequestMode.ImmediateLoad;
+			for (int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
 				TacticsGroup group = new TacticsGroup(i);
 				TacticsGroups.Add(group);
-				GroupTextures.Add(ModContent.GetTexture(group.Texture));
-				GroupOutlineTextures.Add(ModContent.GetTexture(group.Texture + "_Outline"));
-				GroupOverlayTextures.Add(ModContent.GetTexture(group.Texture + "_Overlay"));
+				GroupTextures.Add(ModContent.Request<Texture2D>(group.Texture, immediate));
+				GroupOutlineTextures.Add(ModContent.Request<Texture2D>(group.Texture + "_Outline", immediate));
+				GroupOverlayTextures.Add(ModContent.Request<Texture2D>(group.Texture + "_Overlay", immediate));
 			}
 		}
 
@@ -156,12 +159,12 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			return Descriptions[id];
 		}
 
-		public static Texture2D GetTexture(byte id)
+		public static Asset<Texture2D> GetTexture(byte id)
 		{
 			return Textures[id];
 		}
 
-		public static Texture2D GetOutlineTexture(byte id)
+		public static Asset<Texture2D> GetOutlineTexture(byte id)
 		{
 			return OutlineTextures[id];
 		}

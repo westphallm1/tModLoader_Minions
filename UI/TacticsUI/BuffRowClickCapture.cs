@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.UI.Common;
 using Terraria.ModLoader;
+using Terraria.GameContent;
+using ReLogic.Content;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
@@ -44,22 +46,22 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		internal static TacticsGroupBuffDropdown dropDown;
 		internal static TacticQuickSelectRadialMenu radialMenu;
 
-		internal Texture2D moreTexture;
-		internal Texture2D cancelTexture;
-		internal Texture2D smallBgTexture;
+		internal Asset<Texture2D> moreTexture;
+		internal Asset<Texture2D> cancelTexture;
+		internal Asset<Texture2D> smallBgTexture;
 		public override void OnInitialize()
 		{
 			if (moreTexture == null)
 			{
-				moreTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/MoreIcon");
+				moreTexture = ModContent.Request<Texture2D>("AmuletOfManyMinions/UI/Common/MoreIcon", AssetRequestMode.ImmediateLoad);
 			}
 			if (cancelTexture == null)
 			{
-				cancelTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/CancelIcon");
+				cancelTexture = ModContent.Request<Texture2D>("AmuletOfManyMinions/UI/Common/CancelIcon", AssetRequestMode.ImmediateLoad);
 			}
 			if(smallBgTexture == null)
 			{
-				smallBgTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/BgCircle_Small");
+				smallBgTexture = ModContent.Request<Texture2D>("AmuletOfManyMinions/UI/Common/BgCircle_Small", AssetRequestMode.ImmediateLoad);
 			}
 			base.OnInitialize();
 			SetupDropdown();
@@ -76,8 +78,8 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		private void SetupDropdown()
 		{
 			List<TacticsGroupButton> groupButtons = new List<TacticsGroupButton>();
-			int rows = 1;  
-			int columns = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;;
+			int rows = 1;
+			int columns = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1; ;
 
 			int width = 40;
 			int height = 40;
@@ -89,7 +91,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			int widthWithMargin = width + xMargin;
 			int heightWithMargin = height + yMargin;
 
-			for(int i = 0; i< MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1; i++)
+			for (int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1; i++)
 			{
 				TacticsGroupButton button = new TacticsGroupButton(i, quiet: true, radialHover: true);
 
@@ -125,7 +127,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			for(int i = 0; i< MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
 				RadialMenuButton button = new RadialMenuButton(
-					Main.wireUITexture[0], 
+					TextureAssets.WireUi[0], 
 					TargetSelectionTacticHandler.GroupTextures[i], 
 					radialOffsets[i]);
 				groupButtons.Add(button);
@@ -137,11 +139,14 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			List<RadialMenuButton> groupButtons = new List<RadialMenuButton>();
 			groupButtons.AddRange(GetSharedTacticsButtons());
 			RadialMenuButton button = new RadialMenuButton(
-				Main.wireUITexture[0], 
+				TextureAssets.WireUi[0], 
 				cancelTexture, 
 				radialOffsets[MinionTacticsPlayer.TACTICS_GROUPS_COUNT]);
 			groupButtons.Add(button);
-			radialMenu = new TacticQuickSelectRadialMenu(groupButtons);
+			radialMenu = new TacticQuickSelectRadialMenu(groupButtons)
+			{
+				IgnoresMouseInteraction = true
+			};
 			radialMenu.Width.Pixels = 100;
 			radialMenu.Height.Pixels = 100;
 		}
@@ -169,11 +174,11 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				return;
 			}
 			MinionTacticsPlayer myPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
-			int buffType = myPlayer.player.buffType[clickedBuffIdx];
+			int buffType = myPlayer.Player.buffType[clickedBuffIdx];
 			if(myPlayer.GroupIsSetForMinion(buffType))
 			{
 				Vector2 buffTop = GetBuffTopLeft(clickedBuffIdx);
-				dropDown.Left.Pixels = xMin + buffTop.X - dropDown.Width.Pixels/2 + Main.buffTexture[buffType].Width/2;
+				dropDown.Left.Pixels = xMin + buffTop.X - dropDown.Width.Pixels/2 + TextureAssets.Buff[buffType].Width()/2;
 				dropDown.Top.Pixels = buffTop.Y + 38;
 				dropDown.SetSelected(buffType);
 			}
@@ -181,6 +186,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
+			radialMenu.IgnoresMouseInteraction = radialMenu.framesUntilHide <= 0; //IMPORANT; OTHERWISE IT WILL CONSUME MOUSE HOVERS
 			float buffCount = (float)Main.player[Main.myPlayer].CountBuffs();
 			int nextBuffRows = (int)Math.Ceiling(buffCount / buffsPerLine);
 			if(buffRows != nextBuffRows)
@@ -200,7 +206,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			}
 			// should probably read this from TacticsPlayer but that's a bit clunky
 			MinionTacticsPlayer myPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
-			int buffType = myPlayer.player.buffType[clickedBuffIdx];
+			int buffType = myPlayer.Player.buffType[clickedBuffIdx];
 			clickedBuffIdx = -1;
 
 			float mouseY = evt.MousePosition.Y;
@@ -234,15 +240,15 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			float scale = 1;
 			
 			MinionTacticsPlayer myPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
-			for(int i = 0; i < myPlayer.player.CountBuffs(); i++)
+			for(int i = 0; i < myPlayer.Player.CountBuffs(); i++)
 			{
-				int buffType = myPlayer.player.buffType[i];
+				int buffType = myPlayer.Player.buffType[i];
 				if(myPlayer.GroupIsSetForMinion(buffType))
 				{
 					int groupIdx = myPlayer.GetGroupForBuff(buffType);
 					Vector2 drawPos = topCorner + GetBuffTopLeft(i);
-					Texture2D texture = TargetSelectionTacticHandler.GroupOverlayTextures[groupIdx];
-					spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, Vector2.Zero, scale, 0f, 0f);
+					Texture2D texture = TargetSelectionTacticHandler.GroupOverlayTextures[groupIdx].Value;
+					spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, Vector2.Zero, scale, 0f, 0);
 				}
 			}
 		}

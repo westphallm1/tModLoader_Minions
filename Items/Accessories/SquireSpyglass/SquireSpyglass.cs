@@ -14,11 +14,11 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSpyglass
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(silver: 50);
-			item.rare = ItemRarityID.Blue;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(silver: 50);
+			Item.rare = ItemRarityID.Blue;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -28,12 +28,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSpyglass
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:Golds", 6);
-			recipe.AddIngredient(ItemID.Lens, 4);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddRecipeGroup("AmuletOfManyMinions:Golds", 6).AddIngredient(ItemID.Lens, 4).AddTile(TileID.Anvils).Register();
 		}
 	}
 }

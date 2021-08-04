@@ -1,6 +1,7 @@
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -13,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 	public class TitaniumSquireMinionBuff : MinionBuff
 	{
 		public TitaniumSquireMinionBuff() : base(ProjectileType<TitaniumSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Titanium Squire");
 			Description.SetDefault("A titanium squire will follow your orders!");
 		}
@@ -34,39 +35,35 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 8f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 51;
-			item.value = Item.buyPrice(0, 2, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.knockBack = 8f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 51;
+			Item.value = Item.buyPrice(0, 2, 0, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.TitaniumBar, 14);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.TitaniumBar, 14).AddTile(TileID.MythrilAnvil).Register();
 		}
 	}
 
 	public class TitaniumDroneDamageHitbox : ModProjectile
 	{
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 1;
-			projectile.tileCollide = false;
-			projectile.friendly = true;
+			Projectile.penetrate = 1;
+			Projectile.tileCollide = false;
+			Projectile.friendly = true;
 		}
 	}
 
@@ -80,14 +77,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 18;
-			projectile.height = 18;
+			Projectile.width = 18;
+			Projectile.height = 18;
 			frameSpeed = 10;
 		}
 
@@ -100,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			SquireModPlayer modPlayer = player.GetModPlayer<SquireModPlayer>();
 			if(modPlayer.HasSquire())
 			{
-				projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
+				Projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
 			}
 			// offset downward vertically a bit
 			// the scale messes with the positioning in some way
@@ -111,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			if (animationFrame % attackRate == 0 && SquireAttacking() &&
 				SelectedEnemyInRange(180, maxRangeFromPlayer: false) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			return null;
 		}
@@ -121,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			base.OnSpawn();
 			for(int i = 0; i < 3; i++)
 			{
-				int dustId = Dust.NewDust(projectile.position, 20, 20, 160);
+				int dustId = Dust.NewDust(Projectile.position, 20, 20, 160);
 				ColorDust(dustId);
 			}
 		}
@@ -130,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		{
 			for(int i = 0; i < 3; i++)
 			{
-				int dustId = Dust.NewDust(projectile.position, 20, 20, 160);
+				int dustId = Dust.NewDust(Projectile.position, 20, 20, 160);
 				ColorDust(dustId);
 			}
 		}
@@ -143,10 +140,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 				if(player.whoAmI == Main.myPlayer)
 				{
 					Projectile.NewProjectile(
-						projectile.Center + vectorToTargetPosition,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center + vectorToTargetPosition,
 						Vector2.Zero,
 						ProjectileType<TitaniumDroneDamageHitbox>(),
-						projectile.damage,
+						Projectile.damage,
 						0,
 						player.whoAmI);
 				}
@@ -156,13 +154,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 				for(int i = 12; i < targetVector.Length(); i++)
 				{
-					Vector2 posVector = projectile.Center + stepVector * i;
+					Vector2 posVector = Projectile.Center + stepVector * i;
 					int dustId = Dust.NewDust(posVector, 1, 1, 160);
 					ColorDust(dustId);
 					Main.dust[dustId].scale = Main.rand.NextFloat(0.9f, 1.3f);
 					Main.dust[dustId].velocity *= 0.2f;
 				}
-				Main.PlaySound(new LegacySoundStyle(2, 92), projectile.Center);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 92), Projectile.Center);
 			}
 		}
 
@@ -206,21 +204,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Titanium Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 32;
+			Projectile.width = 24;
+			Projectile.height = 32;
 		}
 
 		protected override float WeaponDistanceFromCenter()
 		{
 			//All of this is based on the weapon sprite and AttackFrames above.
 			int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
-			int spearLength = GetTexture(WeaponTexturePath).Width; //A decent aproximation of how long the spear is.
+			int spearLength = Request<Texture2D>(WeaponTexturePath).Width(); //A decent aproximation of how long the spear is.
 			int spearStart = (spearLength / 3); //Two thirds of the spear starts behind by default.
 			float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
 			if (attackFrame <= reachFrames)
@@ -238,10 +236,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					Vector2.Zero,
 					ProjectileType<TitaniumSquireDrone>(),
-					projectile.damage,
+					Projectile.damage,
 					0,
 					player.whoAmI);
 			}

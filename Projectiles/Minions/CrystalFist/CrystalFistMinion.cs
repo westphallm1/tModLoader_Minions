@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -11,9 +12,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 	public class CrystalFistMinionBuff : MinionBuff
 	{
 		public CrystalFistMinionBuff() : base(ProjectileType<CrystalFistMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crystal Fist");
 			Description.SetDefault("A crystal fist will fight for you!");
 		}
@@ -31,30 +32,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 42;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 16;
-			item.height = 16;
-			item.value = Item.buyPrice(0, 12, 0, 0);
-			item.rare = ItemRarityID.Pink;
+			Item.damage = 42;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 16;
+			Item.height = 16;
+			Item.value = Item.buyPrice(0, 12, 0, 0);
+			Item.rare = ItemRarityID.Pink;
 		}
 
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
-			Projectile.NewProjectile(position + new Vector2(5, 0), new Vector2(speedX, speedY), item.shoot, damage, knockBack, Main.myPlayer);
-			Projectile.NewProjectile(position - new Vector2(5, 0), new Vector2(speedX, speedY), item.shoot, damage, knockBack, Main.myPlayer);
+			ApplyBuff(player);
+			var p1 = Projectile.NewProjectileDirect(source, position + new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
+			p1.originalDamage = damage;
+			var p2 = Projectile.NewProjectileDirect(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
+			p2.originalDamage = damage;
+
 			return false;
 		}
+
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SoulofMight, 10);
-			recipe.AddIngredient(ItemID.CrystalShard, 10);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.SoulofMight, 10).AddIngredient(ItemID.CrystalShard, 10).AddTile(TileID.MythrilAnvil).Register();
 		}
 	}
 
@@ -71,17 +71,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crystal Fist");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
+			Main.projFrames[Projectile.type] = 1;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 32;
-			projectile.height = 20;
-			projectile.tileCollide = false;
+			Projectile.width = 32;
+			Projectile.height = 20;
+			Projectile.tileCollide = false;
 			attackState = AttackState.IDLE;
-			projectile.minionSlots = 0.5f;
+			Projectile.minionSlots = 0.5f;
 			attackThroughWalls = false;
 			useBeacon = false;
 			attackFrames = 30;
@@ -89,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if (projectile.tileCollide)
+			if (Projectile.tileCollide)
 			{
 				attackState = AttackState.RETURNING;
 			}
@@ -102,10 +102,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			List<Projectile> minions = GetActiveMinions();
 			Projectile leader = GetFirstMinion(minions);
 			if (Main.myPlayer == player.whoAmI &&
-				leader.minionPos == projectile.minionPos &&
+				leader.minionPos == Projectile.minionPos &&
 				player.ownedProjectileCounts[ProjectileType<CrystalFistHeadMinion>()] == 0)
 			{
-				Projectile.NewProjectile(projectile.position, Vector2.Zero, ProjectileType<CrystalFistHeadMinion>(), 0, 0, Main.myPlayer);
+				Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<CrystalFistHeadMinion>(), 0, 0, Main.myPlayer);
 			}
 			Projectile head = GetHead(ProjectileType<CrystalFistHeadMinion>());
 			if (head == default)
@@ -115,12 +115,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			}
 			Vector2 idlePosition = head.Center;
 			int minionCount = minions.Count;
-			int order = minions.IndexOf(projectile);
+			int order = minions.IndexOf(Projectile);
 			idleAngle = (float)(2 * Math.PI * order) / minionCount;
-			idleAngle += projectile.spriteDirection * 2 * (float)Math.PI * groupAnimationFrame / groupAnimationFrames;
+			idleAngle += Projectile.spriteDirection * 2 * (float)Math.PI * groupAnimationFrame / groupAnimationFrames;
 			idlePosition.X += 2 + 45 * (float)Math.Sin(idleAngle);
 			idlePosition.Y += 2 + 45 * (float)Math.Cos(idleAngle);
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
@@ -135,12 +135,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			}
 			if (FindTargetInTurnOrder(600f, head.Center) is Vector2 target)
 			{
-				projectile.friendly = true;
+				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				projectile.friendly = false;
+				Projectile.friendly = false;
 				return null;
 			}
 		}
@@ -148,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		public override void OnHitTarget(NPC target)
 		{
 			framesInAir = Math.Max(framesInAir, 12); // force a return shortly after hitting a target
-			Dust.NewDust(projectile.position, 16, 16, DustID.PinkCrystalShard, projectile.velocity.X / 2, projectile.velocity.Y / 2);
+			Dust.NewDust(Projectile.position, 16, 16, DustID.PinkCrystalShard, Projectile.velocity.X / 2, Projectile.velocity.Y / 2);
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -160,10 +160,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 				target.SafeNormalize();
 				target *= speed;
 				framesInAir = 0;
-				projectile.velocity = target;
+				Projectile.velocity = target;
 			}
-			projectile.spriteDirection = 1;
-			projectile.rotation = (float)(Math.PI + projectile.velocity.ToRotation());
+			Projectile.spriteDirection = 1;
+			Projectile.rotation = (float)(Math.PI + Projectile.velocity.ToRotation());
 			if (framesInAir++ > 15)
 			{
 				attackState = AttackState.RETURNING;
@@ -178,9 +178,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 				TargetedMovement(Vector2.Zero);
 				return;
 			}
-			projectile.rotation = (float)Math.PI;
+			Projectile.rotation = (float)Math.PI;
 			// alway clamp to the idle position
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 			int inertia = 2;
 			int maxSpeed = 20;
 			if (vectorToIdlePosition.Length() < 32)
@@ -190,27 +190,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 				if (head != default)
 				{
 					// the head got despawned, wait for it to respawn
-					projectile.spriteDirection = head.spriteDirection;
+					Projectile.spriteDirection = head.spriteDirection;
 				}
-				projectile.position += vectorToIdlePosition;
-				projectile.velocity = Vector2.Zero;
+				Projectile.position += vectorToIdlePosition;
+				Projectile.velocity = Vector2.Zero;
 			}
 			else
 			{
-				Vector2 speedChange = vectorToIdlePosition - projectile.velocity;
+				Vector2 speedChange = vectorToIdlePosition - Projectile.velocity;
 				if (speedChange.Length() > maxSpeed)
 				{
 					speedChange.SafeNormalize();
 					speedChange *= maxSpeed;
 				}
-				projectile.velocity = (projectile.velocity * (inertia - 1) + speedChange) / inertia;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + speedChange) / inertia;
 			}
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			Lighting.AddLight(projectile.position, Color.Pink.ToVector3() * 0.75f);
+			Lighting.AddLight(Projectile.position, Color.Pink.ToVector3() * 0.75f);
 		}
 	}
 }

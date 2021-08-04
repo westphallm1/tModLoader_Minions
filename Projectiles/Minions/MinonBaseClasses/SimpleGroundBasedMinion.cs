@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			IdleLocationSets.trailingOnGround.Add(projectile.type);
+			IdleLocationSets.trailingOnGround.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
@@ -45,12 +45,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			// , but the flying versions can't
 			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
 			Vector2 idlePosition = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, projectile);
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, Projectile);
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition = player.Center;
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			if (vectorToTarget is null || gHelper.stuckInfo.overCliff)
 			{
-				Vector2 vectorToUnstuck = destination - projectile.Center;
+				Vector2 vectorToUnstuck = destination - Projectile.Center;
 				if (vectorToUnstuck.Length() < 16)
 				{
 					done = true;
@@ -158,27 +158,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			projectile.frameCounter++;
-			if (projectile.velocity.X > 1)
+			Projectile.frameCounter++;
+			if (Projectile.velocity.X > 1)
 			{
-				projectile.spriteDirection = 1;
+				Projectile.spriteDirection = 1;
 			}
-			else if (projectile.velocity.X < -1)
+			else if (Projectile.velocity.X < -1)
 			{
-				projectile.spriteDirection = -1;
+				Projectile.spriteDirection = -1;
 			}
-			maxFrame = maxFrame ?? Main.projFrames[projectile.type];
-			if (projectile.frame < minFrame)
+			maxFrame = maxFrame ?? Main.projFrames[Projectile.type];
+			if (Projectile.frame < minFrame)
 			{
-				projectile.frame = minFrame;
+				Projectile.frame = minFrame;
 			}
-			if (projectile.frameCounter >= frameSpeed)
+			if (Projectile.frameCounter >= frameSpeed)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
-				if (projectile.frame >= maxFrame)
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+				if (Projectile.frame >= maxFrame)
 				{
-					projectile.frame = minFrame;
+					Projectile.frame = minFrame;
 				}
 			}
 		}
@@ -186,7 +186,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			IdleMovement(vectorToTargetPosition);
-			projectile.tileCollide = true;
+			Projectile.tileCollide = true;
 		}
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
 		{
@@ -201,17 +201,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override Vector2? FindTarget()
 		{
-			if (Vector2.Distance(player.Center, projectile.Center) > 1.5f * searchDistance)
+			if (Vector2.Distance(player.Center, Projectile.Center) > 1.5f * searchDistance)
 			{
 				return null;
 			}
 			else if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{

@@ -13,23 +13,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 	public static class SpinningBladeDrawer
 	{
-		public static void DrawBlade(ISpinningBladeMinion self, SpriteBatch spriteBatch, Color lightColor, float rotation)
+		public static void DrawBlade(ISpinningBladeMinion self, Color lightColor, float rotation)
 		{
 			Vector2 pos = self.projectile.Center;
-			Texture2D texture = GetTexture(self.Texture);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[self.projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, rotation,
 				origin, 1, 0, 0);
 		}
-		public static void DrawGlow(ISpinningBladeMinion self, SpriteBatch spriteBatch)
+		public static void DrawGlow(ISpinningBladeMinion self)
 		{
 			Vector2 pos = self.projectile.Center;
-			Texture2D texture = GetTexture(self.Texture + "_Glow");
+			Texture2D texture = Request<Texture2D>(self.Texture + "_Glow").Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, Color.White, 0,
 				origin, 1, 0, 0);
 		}
@@ -48,18 +48,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected abstract int bladeType { get; }
 
+		public Projectile projectile => this.projectile;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
+			Main.projFrames[Projectile.type] = 1;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			targetSearchDistance = 800;
-			projectile.width = 16;
-			projectile.height = 16;
+			Projectile.width = 16;
+			Projectile.height = 16;
 			attackFrames = 60;
 			idleInertia = 8;
 		}
@@ -67,27 +69,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			if (!isSpinning)
 			{
-				projectile.rotation = projectile.velocity.X * 0.05f;
+				Projectile.rotation = Projectile.velocity.X * 0.05f;
 			}
 			else
 			{
-				projectile.rotation += 0.15f;
+				Projectile.rotation += 0.15f;
 			}
 		}
 
 		protected virtual void DoDrift(Vector2 driftVelocity)
 		{
-			projectile.velocity = driftVelocity;
+			Projectile.velocity = driftVelocity;
 		}
 
 		protected virtual void DoSpin(Vector2 spinVelocity)
 		{
-			projectile.velocity = spinVelocity;
+			Projectile.velocity = spinVelocity;
 		}
 
 		protected virtual void StopSpin()
 		{
-			projectile.velocity = Vector2.Zero;
+			Projectile.velocity = Vector2.Zero;
 		}
 
 		protected virtual void SummonSecondBlade(Vector2 vectorToTargetPosition)
@@ -101,11 +103,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (Main.myPlayer == player.whoAmI)
 			{
 				int projId = Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					launchVelocity,
 					bladeType,
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					player.whoAmI,
 					ai1: SpinAnimationLength - SpinTravelLength);
 				Main.projectile[projId].timeLeft = SpinAnimationLength + 1;
@@ -144,7 +147,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				vectorToTargetPosition *= 8;
 				int inertia = 18;
-				projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 			}
 		}
 
@@ -154,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (isSpinning)
 			{
 				TargetedMovement(Vector2.Zero);
-				projectile.tileCollide = true; // can phase through walls like this otherwise
+				Projectile.tileCollide = true; // can phase through walls like this otherwise
 				return;
 			}
 			base.IdleMovement(vectorToIdlePosition);
@@ -172,21 +175,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual float GetSpinningBladeAngle()
 		{
-			return projectile.rotation;
+			return Projectile.rotation;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			if (!isSpinning)
 			{
-				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetBackBladeAngle());
-				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetFrontBladeAngle());
+				SpinningBladeDrawer.DrawBlade(this, lightColor, GetBackBladeAngle());
+				SpinningBladeDrawer.DrawBlade(this, lightColor, GetFrontBladeAngle());
 			}
 			else
 			{
-				SpinningBladeDrawer.DrawBlade(this, spriteBatch, lightColor, GetSpinningBladeAngle());
+				SpinningBladeDrawer.DrawBlade(this, lightColor, GetSpinningBladeAngle());
 			}
-			SpinningBladeDrawer.DrawGlow(this, spriteBatch);
+			SpinningBladeDrawer.DrawGlow(this);
 			return false;
 		}
 

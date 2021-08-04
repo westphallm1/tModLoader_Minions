@@ -13,9 +13,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	public class GoldenRogueSquireMinionBuff : MinionBuff
 	{
 		public GoldenRogueSquireMinionBuff() : base(ProjectileType<GoldenRogueSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Golden Rogue Squire");
 			Description.SetDefault("A golden rogue squire will follow your orders!");
 		}
@@ -36,12 +36,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 4.0f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 32;
-			item.value = Item.buyPrice(0, 2, 0, 0);
-			item.rare = ItemRarityID.Yellow;
+			Item.knockBack = 4.0f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 32;
+			Item.value = Item.buyPrice(0, 2, 0, 0);
+			Item.rare = ItemRarityID.Yellow;
 		}
 	}
 
@@ -50,43 +50,44 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		const int TimeToLive = 180;
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.MagicDagger;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MagicDagger;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 1;
-			projectile.width = 12;
-			projectile.height = 12;
-			projectile.timeLeft = TimeToLive;
-			projectile.friendly = false;
-			projectile.tileCollide = false;
-			projectile.minion = true;
+			Projectile.penetrate = 1;
+			Projectile.width = 12;
+			Projectile.height = 12;
+			Projectile.timeLeft = TimeToLive;
+			Projectile.friendly = false;
+			Projectile.tileCollide = false;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 
 		// ai is wholly controlled by golden rogue squire, but die if squire does
 		public override void AI()
 		{
 			base.AI();
-			if(Main.player[projectile.owner].ownedProjectileCounts[ProjectileType<GoldenRogueSquireMinion>()] == 0)
+			if(Main.player[Projectile.owner].ownedProjectileCounts[ProjectileType<GoldenRogueSquireMinion>()] == 0)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = GetTexture(Texture);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = texture.Bounds.Center.ToVector2();
-			float spawnPercent = Math.Min(1f, (TimeToLive - projectile.timeLeft) / 5);
+			float spawnPercent = Math.Min(1f, (TimeToLive - Projectile.timeLeft) / 5);
 			Color color = Color.White * spawnPercent;
 			float scale = 1;
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				bounds, color, projectile.rotation,
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				bounds, color, Projectile.rotation,
 				origin, scale, 0, 0);
 			return false;
 		}
@@ -107,63 +108,64 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		const int TimeToLive = 60;
 		const int TimeLeftToStartFalling = TimeToLive - 15;
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.MagicDagger;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MagicDagger;
 
 		private Vector2 baseVelocity;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 2;
-			projectile.width = 12;
-			projectile.height = 12;
-			projectile.timeLeft = TimeToLive;
-			projectile.friendly = true;
-			projectile.tileCollide = true;
-			projectile.minion = true;
-			projectile.usesLocalNPCImmunity = true;
+			Projectile.penetrate = 2;
+			Projectile.width = 12;
+			Projectile.height = 12;
+			Projectile.timeLeft = TimeToLive;
+			Projectile.friendly = true;
+			Projectile.tileCollide = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
+			Projectile.usesLocalNPCImmunity = true;
 			baseVelocity = default;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = GetTexture(Texture);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = texture.Bounds.Center.ToVector2();
 			Color color = Color.White;
 			float scale = 1;
-			if (projectile.timeLeft < TimeLeftToStartFalling)
+			if (Projectile.timeLeft < TimeLeftToStartFalling)
 			{
 				color.A = 64;
-				scale = projectile.timeLeft / (float)TimeLeftToStartFalling;
+				scale = Projectile.timeLeft / (float)TimeLeftToStartFalling;
 			}
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				bounds, color, projectile.rotation,
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				bounds, color, Projectile.rotation,
 				origin, scale, 0, 0);
 			return false;
 		}
 		public override void AI()
 		{
-			Projectile parent = Main.projectile[(int)projectile.ai[0]];
+			Projectile parent = Main.projectile[(int)Projectile.ai[0]];
 			if (baseVelocity == default)
 			{
-				baseVelocity = projectile.velocity;
-				projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+				baseVelocity = Projectile.velocity;
+				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			}
-			if (parent.active && projectile.timeLeft > TimeLeftToStartFalling)
+			if (parent.active && Projectile.timeLeft > TimeLeftToStartFalling)
 			{
-				projectile.velocity = parent.velocity + baseVelocity;
+				Projectile.velocity = parent.velocity + baseVelocity;
 			}
 			else
 			{
-				projectile.velocity.Y = Math.Min(projectile.velocity.Y + 0.5f, 16);
-				projectile.rotation += 0.15f;
-				projectile.velocity.X *= 0.99f;
+				Projectile.velocity.Y = Math.Min(Projectile.velocity.Y + 0.5f, 16);
+				Projectile.rotation += 0.15f;
+				Projectile.velocity.X *= 0.99f;
 			}
 		}
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -214,20 +216,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Golden Rogue Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 32;
+			Projectile.width = 24;
+			Projectile.height = 32;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			// glowy golden wings
-			return base.PreDraw(spriteBatch, Color.White);
+			lightColor = Color.White;
+			return base.PreDraw(ref lightColor);
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -251,43 +254,45 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 					foreach (Vector2 velocity in velocities)
 					{
 
-						Projectile.NewProjectile(projectile.Center,
+						Projectile.NewProjectile(
+							Projectile.GetProjectileSource_FromThis(), 
+							Projectile.Center,
 							velocity,
 							ProjectileType<GoldenDagger>(),
-							projectile.damage,
-							projectile.knockBack,
+							Projectile.damage,
+							Projectile.knockBack,
 							Main.myPlayer,
-							ai0: projectile.whoAmI);
+							ai0: Projectile.whoAmI);
 					}
 				}
 			}
 		}
 
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
-			Texture2D glow = GetTexture(Texture + "_Glow");
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D glow = Request<Texture2D>(Texture + "_Glow").Value;
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Rectangle bounds = glow.Bounds;
 			Vector2 origin = bounds.Center.ToVector2();
-			spriteBatch.Draw(glow, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(glow, pos - Main.screenPosition,
 				bounds, Color.White, r, origin, 1, effects, 0);
 			if (attackFrame < 10)
 			{
 				// only draw arm at start of attack
-				base.PostDraw(spriteBatch, lightColor);
+				base.PostDraw(lightColor);
 			}
 			// draw a spinning reticle as a visual indicator for the special
 			if(player.whoAmI == Main.myPlayer && usingSpecial)
 			{
-				Texture2D reticle = GetTexture(Texture + "_Reticle");
+				Texture2D reticle = Request<Texture2D>(Texture + "_Reticle").Value;
 				bounds = reticle.Bounds;
 				origin = bounds.Center.ToVector2();
 				r = MathHelper.TwoPi * animationFrame / 120;
 				float scale = 1f + 0.2f * (float)Math.Sin(r);
 				pos = targetNPC == default ? Main.MouseScreen + 8 * Vector2.One : targetNPC.Center - Main.screenPosition;
-				spriteBatch.Draw(reticle, pos, bounds, Color.White, r, origin, scale, effects, 0);
+				Main.EntitySpriteDraw(reticle, pos, bounds, Color.White, r, origin, scale, effects, 0);
 			}
 		}
 
@@ -317,8 +322,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		private void HoverByTargetNPC()
 		{
-			projectile.tileCollide = false;
-			projectile.spriteDirection = travelDir;
+			Projectile.tileCollide = false;
+			Projectile.spriteDirection = travelDir;
 			Vector2 offset = syncedMouseWorld - targetNPC.Center;
 			offset.Y *= 0.5f;
 			if(Math.Abs(offset.Y) > npcRadius)
@@ -331,7 +336,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			}
 			offset.SafeNormalize();
 			offset *= npcRadius;
-			projectile.Center = targetNPC.Center + offset;
+			Projectile.Center = targetNPC.Center + offset;
 		}
 
 		private void ManageKnifeCloud()
@@ -339,11 +344,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			int cloudSize = player.ownedProjectileCounts[ProjectileType<GoldenDaggerCloud>()];
 			if(Main.myPlayer == player.whoAmI && specialFrame % 3 == 0 && cloudSize < maxKnifeCount)
 			{
-				Projectile.NewProjectile(projectile.Center,
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.Center,
 					Vector2.Zero,
 					ProjectileType<GoldenDaggerCloud>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer,
 					ai0: knifeIdx);
 				knifeIdx++;
@@ -368,7 +375,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 					float angleOffset = MathHelper.PiOver4 - knifeIdx * MathHelper.PiOver2 / knivesPerRow;
 					float animationSin = (float)Math.Sin(MathHelper.TwoPi * animationFrame / 30);
 					angleOffset *= 1 + 0.2f * animationSin * (knifeRow == 0 ? 1 : -1);
-					Vector2 baseOffset = (projectile.Center - targetNPC.Center).RotatedBy(angleOffset);
+					Vector2 baseOffset = (Projectile.Center - targetNPC.Center).RotatedBy(angleOffset);
 					baseOffset.SafeNormalize();
 					baseOffset *= (npcRadius + (32 + 6 * animationSin)* (1+knifeRow));
 					p.rotation = baseOffset.ToRotation() - MathHelper.PiOver2;
@@ -391,7 +398,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 				{
 					continue;
 				}
-				int goreIdx = Gore.NewGore(projectile.position, default, Main.rand.Next(61, 64));
+				int goreIdx = Gore.NewGore(Projectile.position, default, Main.rand.Next(61, 64));
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += offset;
 			}
@@ -436,7 +443,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			{
 				LaunchKnives();
 				// teleport back to player
-				projectile.position += vectorToIdle;
+				Projectile.position += vectorToIdle;
 				didTeleport = true;
 			}
 			targetNPC = default;

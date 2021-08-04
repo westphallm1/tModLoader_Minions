@@ -2,6 +2,7 @@
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -14,9 +15,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class StardustDragonMinionBuff : MinionBuff
 	{
 		public StardustDragonMinionBuff() : base(ProjectileType<StardustDragonCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.StardustDragonMinion") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.StardustDragonMinion"));
 		}
@@ -38,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class StardustDragonMinion : WormMinion
 	{
-		public override string Texture => "Terraria/Item_0";
+		public override string Texture => "Terraria/Images/Item_0";
 		internal override int BuffId => BuffType<StardustDragonMinionBuff>();
 		protected override int CounterType => ProjectileType<StardustDragonCounterMinion>();
 		protected override int dustType => 135;
@@ -53,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 			attackThroughWalls = true;
 			wormDrawer = new StardustDragonDrawer();
 		}
@@ -65,9 +66,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			float idleAngle = 2 * PI * groupAnimationFrame / groupAnimationFrames;
 			idlePosition.X += radius * (float)Math.Cos(idleAngle);
 			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.75f);
+			Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.75f);
 			return vectorToIdlePosition;
 		}
 
@@ -96,11 +97,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			float searchDistance = ComputeSearchDistance();
 			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance, losCenter: player.Center) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: player.Center) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{
@@ -111,10 +112,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class StardustDragonDrawer : WormDrawer
 	{
+
+		public StardustDragonDrawer() : base()
+		{
+			Main.instance.LoadProjectile(ProjectileID.StardustDragon1);
+			Main.instance.LoadProjectile(ProjectileID.StardustDragon2);
+			Main.instance.LoadProjectile(ProjectileID.StardustDragon3);
+			Main.instance.LoadProjectile(ProjectileID.StardustDragon4);
+		}
+
 		protected override void DrawHead()
 		{
-			texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon1);
-			AddSprite(2, texture.Bounds);
+			texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon1];
+			AddSprite(2, texture.Frame());
 		}
 
 		protected override void DrawBody()
@@ -123,24 +133,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				if (i % 2 == 0)
 				{
-					texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon2);
+					texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon2];
 				}
 				else
 				{
-					texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon3);
+					texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon3];
 				}
 				
-				AddSprite(22 + 16 * i, texture.Bounds);
+				AddSprite(22 + 16 * i, texture.Frame());
 			}
 		}
 
 		protected override void DrawTail()
 		{
 			int dist = 22 + 32 * SegmentCount;
-			texture = GetTexture("Terraria/Projectile_"+ProjectileID.StardustDragon4);
+			texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon4];
 			lightColor = Color.White;
 			lightColor.A = 128;
-			AddSprite(dist, texture.Bounds);
+			AddSprite(dist, texture.Frame());
 		}
 
 		protected override SpriteEffects GetEffects(float angle)
@@ -160,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r + MathHelper.PiOver2,
 				origin, 1, GetEffects(r), 0);
 			if (Main.rand.Next(30) == 0)

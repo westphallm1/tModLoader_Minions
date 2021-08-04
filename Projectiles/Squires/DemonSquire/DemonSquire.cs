@@ -8,15 +8,16 @@ using System;
 using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 {
 	public class DemonSquireMinionBuff : MinionBuff
 	{
 		public DemonSquireMinionBuff() : base(ProjectileType<DemonSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Demon Squire");
 			Description.SetDefault("A demonic squire will follow your orders!");
 		}
@@ -35,12 +36,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 7.0f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 32;
-			item.value = Item.sellPrice(0, 0, 50, 0);
-			item.rare = ItemRarityID.Orange;
+			Item.knockBack = 7.0f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 32;
+			Item.value = Item.sellPrice(0, 0, 50, 0);
+			Item.rare = ItemRarityID.Orange;
 		}
 	}
 
@@ -57,33 +58,33 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 
 		private int attackRate => (int)Math.Max(30, 60f / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
 
-		private int shootOnFrame => projectile.ai[0] == 0 ? 0 : 10;
+		private int shootOnFrame => Projectile.ai[0] == 0 ? 0 : 10;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 42;
-			projectile.height = 34;
+			Projectile.width = 42;
+			Projectile.height = 34;
 			frameSpeed = 10;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			int angleFrame = animationFrame % AnimationFrames;
-			float baseAngle = projectile.ai[0] == 0 ? 0 : MathHelper.Pi;
+			float baseAngle = Projectile.ai[0] == 0 ? 0 : MathHelper.Pi;
 			float angle = baseAngle + (MathHelper.TwoPi * angleFrame) / AnimationFrames;
 			float radius = 24;
 			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
 			SquireModPlayer modPlayer = player.GetModPlayer<SquireModPlayer>();
 			if(modPlayer.HasSquire())
 			{
-				projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
+				Projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
 			}
 			// offset downward vertically a bit
 			// the scale messes with the positioning in some way
@@ -103,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			base.OnSpawn();
 			for(int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
+				Dust.NewDust(Projectile.position, 20, 20, DustID.Blood);
 			}
 		}
 
@@ -111,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		{
 			for(int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.position, 20, 20, DustID.Blood);
+				Dust.NewDust(Projectile.position, 20, 20, DustID.Blood);
 			}
 		}
 
@@ -120,7 +121,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			base.IdleMovement(vectorToIdle);
 			if (animationFrame % attackRate == shootOnFrame && Main.myPlayer == player.whoAmI)
 			{
-				Main.PlaySound(SoundID.Item20, projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
 				Projectile squire = squirePlayer.GetSquire();
 				// attack "towards the horizon" along the squire-mouse line
 				Vector2 horizonVector;
@@ -135,15 +136,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 					horizonAngle.SafeNormalize();
 					horizonVector = squire.Center + 2000f * horizonAngle;
 				}
-				Vector2 angleVector = horizonVector - projectile.Center;
+				Vector2 angleVector = horizonVector - Projectile.Center;
 				angleVector.SafeNormalize();
 				angleVector *= 24f;
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					angleVector,
 					ProjectileType<DemonSquireImpFireball>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer);
 			}
 		}
@@ -157,26 +159,26 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = 30;
+			Projectile.timeLeft = 30;
 		}
 		public override void AI()
 		{
 			base.AI();
-			Projectile parent = Main.projectile[(int)projectile.ai[0]];
+			Projectile parent = Main.projectile[(int)Projectile.ai[0]];
 			if (baseVelocity == default)
 			{
-				baseVelocity = projectile.velocity;
+				baseVelocity = Projectile.velocity;
 			}
 			if (parent.active)
 			{
-				projectile.velocity = parent.velocity + baseVelocity;
+				Projectile.velocity = parent.velocity + baseVelocity;
 			}
-			projectile.rotation = baseVelocity.ToRotation() + MathHelper.Pi/4;
+			Projectile.rotation = baseVelocity.ToRotation() + MathHelper.Pi/4;
 		}
 	}
 
@@ -202,9 +204,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 30;
-			drawOriginOffsetY = -8;
+			Projectile.width = 22;
+			Projectile.height = 30;
+			DrawOriginOffsetY = -8;
 		}
 
 		public override void SetStaticDefaults()
@@ -212,7 +214,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Demon Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -222,13 +224,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			{
 				Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 				vector2Mouse *= ModifiedProjectileVelocity();
-				Projectile.NewProjectile(projectile.Center,
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<DemonSquireUnholyTrident>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer,
-					ai0: projectile.whoAmI);
+					ai0: Projectile.whoAmI);
 			}
 		}
 
@@ -239,11 +243,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				for(int i = 0; i < 2; i++)
 				{
 					Projectile.NewProjectile(
-						projectile.Center,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center,
 						Vector2.Zero,
 						ProjectileType<DemonSquireImpMinion>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						player.whoAmI,
 						ai0: i);
 				}

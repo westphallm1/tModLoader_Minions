@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.UI;
 
@@ -10,7 +11,7 @@ namespace AmuletOfManyMinions.UI.Common
 	/// </summary>
 	public class UIImageButtonExtended : UIElement
 	{
-		protected Texture2D texture;
+		protected Asset<Texture2D> texture;
 		private float alphaOver = 1f;
 		private float alphaOut = 0.4f;
 
@@ -18,10 +19,22 @@ namespace AmuletOfManyMinions.UI.Common
 
 		// need to override in TacticsGroupButton
 		public virtual bool InHoverState => IsMouseHovering;
-		public UIImageButtonExtended(Texture2D texture)
+		public UIImageButtonExtended(Asset<Texture2D> texture)
 		{
 			SetImage(texture);
 			Recalculate();
+			OnMouseOver += UIImageButtonExtended_OnMouseOver;
+			OnMouseOut += UIImageButtonExtended_OnMouseOut;
+		}
+
+		private void UIImageButtonExtended_OnMouseOut(UIMouseEvent evt, UIElement listeningElement)
+		{
+			//TODO 1.4 remove
+		}
+
+		private void UIImageButtonExtended_OnMouseOver(UIMouseEvent evt, UIElement listeningElement)
+		{
+			//TODO 1.4 remove
 		}
 
 		public override void Click(UIMouseEvent evt)
@@ -47,22 +60,22 @@ namespace AmuletOfManyMinions.UI.Common
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
-			DrawInternal(spriteBatch, texture);
+			DrawInternal(spriteBatch, texture.Value);
 
 			if (IsMouseHovering)
 			{
 				Main.LocalPlayer.mouseInterface = true;
-				Main.LocalPlayer.showItemIcon = false;
+				Main.LocalPlayer.cursorItemIconEnabled = false;
 				Main.ItemIconCacheUpdate(0);
 				Main.hoverItemName = hoverText;
 			}
 		}
 
-		public void SetImage(Texture2D texture)
+		public void SetImage(Asset<Texture2D> texture)
 		{
 			this.texture = texture;
-			Width.Pixels = this.texture.Width;
-			Height.Pixels = this.texture.Height;
+			Width.Pixels = this.texture.Width();
+			Height.Pixels = this.texture.Height();
 		}
 
 		public void SetHoverText(string hoverText)

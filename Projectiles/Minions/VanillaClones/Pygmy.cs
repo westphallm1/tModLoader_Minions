@@ -8,6 +8,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -21,9 +22,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			ProjectileType<Pygmy2Minion>(),
 			ProjectileType<Pygmy3Minion>(),
 			ProjectileType<Pygmy4Minion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.Pygmies") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.Pygmies"));
 		}
@@ -41,10 +42,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.SetDefaults();
 		}
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+
+		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
-			if(projTypes == null)
+			ApplyBuff(player); 
+
+			if (projTypes == null)
 			{
 				projTypes = new int[]
 				{
@@ -55,7 +58,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				};
 			}
 			int spawnCycle = projTypes.Select(v => player.ownedProjectileCounts[v]).Sum();
-			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle % 4], damage, knockBack, player.whoAmI);
+			var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, projTypes[spawnCycle % 4], damage, knockback, player.whoAmI);
+			p.originalDamage = Item.damage;
 			return false;
 		}
 	}
@@ -65,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	/// </summary>
 	public class PygmySpear : ModProjectile
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.PygmySpear;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.PygmySpear;
 
 		public Vector2 stickOffset;
 		public NPC stickNPC = null;
@@ -73,37 +77,37 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
-			projectile.CloneDefaults(ProjectileID.PygmySpear);
+			Projectile.CloneDefaults(ProjectileID.PygmySpear);
 			base.SetDefaults();
-			projectile.timeLeft = 540;
-			projectile.tileCollide = true;
-			projectile.penetrate = -1;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 10;
-			projectile.tileCollide = true;
+			Projectile.timeLeft = 540;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = -1;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 10;
+			Projectile.tileCollide = true;
 		}
 
 		public override bool PreAI()
 		{
-			if(stickNPC == null && projectile.ai[0] > -1)
+			if(stickNPC == null && Projectile.ai[0] > -1)
 			{
-				stickNPC = Main.npc[(int)projectile.ai[0]];
+				stickNPC = Main.npc[(int)Projectile.ai[0]];
 			}
 			if(stickNPC != null && !stickNPC.active)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 			if(stickOffset != default)
 			{
-				projectile.position = stickNPC.position + stickOffset;
-				projectile.velocity = Vector2.Zero;
+				Projectile.position = stickNPC.position + stickOffset;
+				Projectile.velocity = Vector2.Zero;
 			}
-			if(stickNPC != null && projectile.owner != Main.myPlayer && stickNPC.Hitbox.Contains(projectile.Center.ToPoint()))
+			if(stickNPC != null && Projectile.owner != Main.myPlayer && stickNPC.Hitbox.Contains(Projectile.Center.ToPoint()))
 			{
 				OnHitNPC(stickNPC, 0, 0, false);
 			}
@@ -116,24 +120,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if (stickNPC.GetGlobalNPC<DebuffGlobalNPC>().pygmySpearStack < 5)
 			{
 				stickNPC.GetGlobalNPC<DebuffGlobalNPC>().pygmySpearStack++;
-				projectile.tileCollide = false;
-				projectile.friendly = false;
+				Projectile.tileCollide = false;
+				Projectile.friendly = false;
 				// move back a little bit to stick closer to the exterior
-				projectile.position -= projectile.velocity / 2;
-				stickOffset = projectile.position - target.position;
+				Projectile.position -= Projectile.velocity / 2;
+				stickOffset = Projectile.position - target.position;
 				// stop using the spear AI
-				projectile.aiStyle = 0;
-				projectile.rotation += Main.rand.NextFloat(-MathHelper.Pi / 16, MathHelper.Pi / 16);
+				Projectile.aiStyle = 0;
+				Projectile.rotation += Main.rand.NextFloat(-MathHelper.Pi / 16, MathHelper.Pi / 16);
 			} else
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
 			
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			Collision.HitTiles(projectile.position + oldVelocity, oldVelocity, projectile.width, projectile.height);
+			Collision.HitTiles(Projectile.position + oldVelocity, oldVelocity, Projectile.width, Projectile.height);
 			return true;
 		}
 
@@ -146,9 +150,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			base.Kill(timeLeft);
 		}
 
-		public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI)
+		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 		{
-			drawCacheProjsBehindNPCs.Add(index);
+			behindNPCs.Add(index);
 		}
 	}
 
@@ -170,16 +174,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Pygmy"));
-			Main.projFrames[projectile.type] = 18;
+			Main.projFrames[Projectile.type] = 18;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 26;
-			drawOffsetX = -2;
-			drawOriginOffsetY = -18;
+			Projectile.width = 24;
+			Projectile.height = 26;
+			DrawOffsetX = -2;
+			DrawOriginOffsetY = -18;
 			attackFrames = 30;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -206,26 +210,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -3 * projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 11;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
 			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
 			{
-				projectile.velocity.X = Main.npc[idx].velocity.X;
+				Projectile.velocity.X = Main.npc[idx].velocity.X;
 			}
 			else
 			{
-				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
 		}
 
@@ -233,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			int spearVelocity = 16;
 			lastFiredFrame = animationFrame;
-			Main.PlaySound(new LegacySoundStyle(2, 17), projectile.position);
+			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;
@@ -250,11 +254,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					angleToTarget += targetVelocity / 4;
 				}
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<PygmySpear>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					player.whoAmI,
 					ai0: targetNPCIndex ?? -1);
 			}
@@ -284,53 +289,53 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void AfterMoving()
 		{
-			projectile.friendly = false;
+			Projectile.friendly = false;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			if (animationFrame - lastFiredFrame < 5)
 			{
-				projectile.frame = 1;
+				Projectile.frame = 1;
 			} else if (animationFrame - lastFiredFrame < 10)
 			{
-				projectile.frame = 2;
+				Projectile.frame = 2;
 			} else if (animationFrame - lastFiredFrame < 15)
 			{
-				projectile.frame = 3;
+				Projectile.frame = 3;
 			} else
 			{
 				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
 			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
-				projectile.spriteDirection = -Math.Sign(target.X);
-			} else if (projectile.velocity.X > 1)
+				Projectile.spriteDirection = -Math.Sign(target.X);
+			} else if (Projectile.velocity.X > 1)
 			{
-				projectile.spriteDirection = -1;
-			} else if (projectile.velocity.X < -1)
+				Projectile.spriteDirection = -1;
+			} else if (Projectile.velocity.X < -1)
 			{
-				projectile.spriteDirection = 1;
+				Projectile.spriteDirection = 1;
 			}
 		}
 	}
 
 	public class Pygmy1Minion : BasePygmyMinion
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.Pygmy;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Pygmy;
 	}
 
 	public class Pygmy2Minion : BasePygmyMinion
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.Pygmy2;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Pygmy2;
 	}
 
 	public class Pygmy3Minion : BasePygmyMinion
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.Pygmy3;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Pygmy3;
 	}
 
 	public class Pygmy4Minion : BasePygmyMinion
 	{
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.Pygmy4;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Pygmy4;
 	}
 }

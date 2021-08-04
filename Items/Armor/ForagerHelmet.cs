@@ -30,11 +30,11 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(silver: 3);
-			item.rare = ItemRarityID.White;
-			item.defense = 1;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(silver: 3);
+			Item.rare = ItemRarityID.White;
+			Item.defense = 1;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -62,12 +62,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Mushroom, 4);
-			recipe.AddRecipeGroup(RecipeGroupID.Wood, 12);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Mushroom, 4).AddRecipeGroup(RecipeGroupID.Wood, 12).AddTile(TileID.WorkBenches).Register();
 		}
 
 		internal override bool IsEquipped(MinionSpawningItemPlayer player)
@@ -86,50 +81,50 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
+			Main.projFrames[Projectile.type] = 1;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			frameSpeed = 15;
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.tileCollide = true;
-			projectile.penetrate = 1;
-			projectile.friendly = false;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = 1;
+			Projectile.friendly = false;
 		}
 
 		public override void Kill(int timeLeft)
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
+				Dust.NewDust(Projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
 			}
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			return oldVelocity.Y > 0 && projectile.velocity.X == oldVelocity.X;
+			return oldVelocity.Y > 0 && Projectile.velocity.X == oldVelocity.X;
 		}
 
 		protected override void Move(Vector2 vector2Target, bool isIdle = false)
 		{
-			if (projectile.timeLeft < timeToLive - 30)
+			if (Projectile.timeLeft < timeToLive - 30)
 			{
 				// enforce drifting left and right
-				float lifeFraction = projectile.timeLeft / (float)timeToLive;
+				float lifeFraction = Projectile.timeLeft / (float)timeToLive;
 				vector2Target.X += 12 * (1 - lifeFraction) * (float)Math.Sin(10 * PI * lifeFraction);
 			}
 			base.Move(vector2Target, isIdle);
-			if (projectile.timeLeft > timeToLive - 30)
+			if (Projectile.timeLeft > timeToLive - 30)
 			{
-				projectile.friendly = false;
-				projectile.velocity.Y = -3;
+				Projectile.friendly = false;
+				Projectile.velocity.Y = -3;
 			}
 			else
 			{
-				projectile.friendly = true;
-				projectile.velocity.Y = 1.5f;
+				Projectile.friendly = true;
+				Projectile.velocity.Y = 1.5f;
 			}
 		}
 

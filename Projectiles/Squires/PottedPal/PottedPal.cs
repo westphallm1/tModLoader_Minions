@@ -16,9 +16,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 	public class PottedPalMinionBuff : MinionBuff
 	{
 		public PottedPalMinionBuff() : base(ProjectileType<PottedPalMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Potted Pal");
 			Description.SetDefault("A friendly plant will follow your orders!");
 		}
@@ -40,12 +40,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 51;
-			item.value = Item.sellPrice(0, 5, 0, 0);
-			item.rare = ItemRarityID.Pink;
+			Item.knockBack = 3f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 51;
+			Item.value = Item.sellPrice(0, 5, 0, 0);
+			Item.rare = ItemRarityID.Pink;
 		}
 	}
 	public class PottedPalSeedProjectile : ModProjectile
@@ -56,28 +56,28 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.timeLeft = TIME_TO_LIVE;
-			projectile.tileCollide = true;
-			projectile.penetrate = 1;
-			projectile.friendly = true;
-			projectile.localNPCHitCooldown = 20; // hit a little slower than usual
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.timeLeft = TIME_TO_LIVE;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = 1;
+			Projectile.friendly = true;
+			Projectile.localNPCHitCooldown = 20; // hit a little slower than usual
 		}
 
 		public override void AI()
 		{
-			if (TIME_TO_LIVE - projectile.timeLeft > 6)
+			if (TIME_TO_LIVE - Projectile.timeLeft > 6)
 			{
-				projectile.velocity.Y += 0.5f;
+				Projectile.velocity.Y += 0.5f;
 			}
-			projectile.rotation += projectile.velocity.X * 0.05f;
+			Projectile.rotation += Projectile.velocity.X * 0.05f;
 		}
 
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
@@ -94,15 +94,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 		public override void Kill(int timeLeft)
 		{
-			if (projectile.owner == Main.myPlayer)
+			if (Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					projectile.Center,
-					-projectile.velocity,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
+					-Projectile.velocity,
 					ProjectileType<PottedPalJrMinion>(),
-					projectile.damage,
-					projectile.knockBack,
-					projectile.owner,
+					Projectile.damage,
+					Projectile.knockBack,
+					Projectile.owner,
 					ai1: didCollide ? 1 : 0); ;
 			}
 		}
@@ -119,16 +120,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = 12 * 60;
+			Projectile.timeLeft = 12 * 60;
 			attackThroughWalls = false;
-			projectile.width = 16;
-			projectile.height = 16;
+			Projectile.width = 16;
+			Projectile.height = 16;
 			frameSpeed = 15;
 		}
 
@@ -136,26 +137,26 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		{
 			base.OnSpawn();
 			SpawnDust();
-			spawnPos = projectile.Center;
-			idleDirection = projectile.velocity;
+			spawnPos = Projectile.Center;
+			idleDirection = Projectile.velocity;
 			idleDirection.SafeNormalize();
-			projectile.velocity = Vector2.Zero;
+			Projectile.velocity = Vector2.Zero;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			projectile.rotation = (projectile.Center - spawnPos).ToRotation() + MathHelper.PiOver2;
-			Vector2 vectorToIdle = spawnPos - projectile.position;
+			Projectile.rotation = (Projectile.Center - spawnPos).ToRotation() + MathHelper.PiOver2;
+			Vector2 vectorToIdle = spawnPos - Projectile.position;
 			float offsetMagnitude = 16 + 8 * (float)Math.Sin(MathHelper.TwoPi * animationFrame / 60);
 			return vectorToIdle + idleDirection * offsetMagnitude;
 		}
 
 		public override Vector2? FindTarget()
 		{
-			if(GetClosestEnemyToPosition(projectile.Center, 400f, true) is NPC targetNPC && 
+			if(GetClosestEnemyToPosition(Projectile.Center, 400f, true) is NPC targetNPC && 
 				Vector2.DistanceSquared(targetNPC.Center, spawnPos) < 600 * 600)
 			{
-				return targetNPC.Center - projectile.Center;
+				return targetNPC.Center - Projectile.Center;
 			} else
 			{
 				return null;
@@ -171,7 +172,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 				target.Normalize();
 				target *= moveSpeed;
 			}
-			projectile.velocity = (projectile.velocity * (inertia - 1) + target) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + target) / inertia;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -187,20 +188,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			projectile.tileCollide = vectorToTarget != null;
+			Projectile.tileCollide = vectorToTarget != null;
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			// draw chain
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			ChainDrawer chainDrawer = new ChainDrawer(new Rectangle(0, 36, 16, 16), new Rectangle(0, 54, 16, 16));
-			chainDrawer.DrawChain(spriteBatch, texture, spawnPos, projectile.Center);
+			chainDrawer.DrawChain(texture, spawnPos, Projectile.Center);
 
 			// draw dirt block
 			Rectangle bounds = new Rectangle(0, 18 * 4, 16, 16);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			lightColor = Lighting.GetColor((int)spawnPos.X / 16, (int)spawnPos.Y / 16);
-			spriteBatch.Draw(texture, spawnPos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, spawnPos - Main.screenPosition,
 				bounds, lightColor, 0, origin, 1, SpriteEffects.None, 0);
 			return true;
 		}
@@ -219,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		{
 			for(int i = 0; i < 4; i++)
 			{
-				Dust.NewDust(projectile.TopLeft, 24, 24, 39);
+				Dust.NewDust(Projectile.TopLeft, 24, 24, 39);
 			}
 		}
 	}
@@ -243,16 +244,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Potted Pal");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
+			Projectile.width = 16;
+			Projectile.height = 16;
 			frameSpeed = 15;
-			projectile.localNPCHitCooldown = 10;
+			Projectile.localNPCHitCooldown = 10;
 			cooldownCounter = hitCooldown;
 		}
 
@@ -267,12 +268,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		{
 			if (vectorToIdle.Length() > 32)
 			{
-				Vector2 vectorFromPlayer = player.Center - projectile.Center;
-				projectile.rotation = vectorFromPlayer.ToRotation() - (float)Math.PI / 2;
+				Vector2 vectorFromPlayer = player.Center - Projectile.Center;
+				Projectile.rotation = vectorFromPlayer.ToRotation() - (float)Math.PI / 2;
 			}
 			else
 			{
-				projectile.rotation = 0;
+				Projectile.rotation = 0;
 			}
 			base.IdleMovement(vectorToIdlePosition);
 		}
@@ -280,9 +281,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			projectile.velocity = -projectile.velocity;
-			projectile.velocity.SafeNormalize();
-			projectile.velocity *= ModifiedTargetedSpeed();
+			Projectile.velocity = -Projectile.velocity;
+			Projectile.velocity.SafeNormalize();
+			Projectile.velocity *= ModifiedTargetedSpeed();
 		}
 
 		public override Vector2? FindTarget()
@@ -302,14 +303,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			// Cling to the closest enemy a little bit
 			if (vectorToTargetPosition.Length() < 100f && GetClosestEnemyToPosition(syncedMouseWorld, 100f, true) is NPC target)
 			{
-				base.StandardTargetedMovement(target.Center - projectile.Center);
+				base.StandardTargetedMovement(target.Center - Projectile.Center);
 			}
 			else
 			{
 				base.StandardTargetedMovement(vectorToTargetPosition);
 			}
-			Vector2 vectorFromPlayer = player.Center - projectile.Center;
-			projectile.rotation = vectorFromPlayer.ToRotation() - (float)Math.PI / 2;
+			Vector2 vectorFromPlayer = player.Center - Projectile.Center;
+			Projectile.rotation = vectorFromPlayer.ToRotation() - (float)Math.PI / 2;
 		}
 
 		public override void OnStartUsingSpecial()
@@ -329,51 +330,52 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 						oldestChild.Kill();
 					}
 				}
-				Vector2 vector2Mouse = Vector2.DistanceSquared(projectile.Center, Main.MouseWorld) < 48 * 48 ?
-					Main.MouseWorld - player.Center : Main.MouseWorld - projectile.Center;
+				Vector2 vector2Mouse = Vector2.DistanceSquared(Projectile.Center, Main.MouseWorld) < 48 * 48 ?
+					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<PottedPalSeedProjectile>(),
-					projectile.damage / 2,
-					projectile.knockBack,
+					Projectile.damage / 2,
+					Projectile.knockBack,
 					player.whoAmI);
 			}
 		}
 
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Vector2 center = projectile.Center;
+			Vector2 center = Projectile.Center;
 			Vector2 vineEnd = center + vectorToIdle + new Vector2(0, 8);
 			ChainDrawer chainDrawer = new ChainDrawer(new Rectangle(0, 36, 16, 16), new Rectangle(0, 54, 16, 16));
-			chainDrawer.DrawChain(spriteBatch, Main.projectileTexture[projectile.type], center, vineEnd);
+			chainDrawer.DrawChain(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, center, vineEnd);
 			return true;
 		}
 
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
 			float r;
 			Vector2 pos;
 			int wingFrame = (wingFrameCounter % 20) / 5;
-			Texture2D potTexture = GetTexture(Texture + "_Pot");
+			Texture2D potTexture = Request<Texture2D>(Texture + "_Pot").Value;
 			int frameHeight = potTexture.Height / 4;
 			Rectangle bounds = new Rectangle(0, wingFrame * frameHeight, potTexture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			if (vectorToIdle.Length() > 16 || vectorToTarget is Vector2 target)
 			{
-				pos = projectile.Center + vectorToIdle + new Vector2(0, 8); // move pot down a bit;
+				pos = Projectile.Center + vectorToIdle + new Vector2(0, 8); // move pot down a bit;
 				r = player.velocity.X * 0.05f;
 			}
 			else
 			{
-				pos = projectile.Center + new Vector2(0, 12);
-				r = projectile.rotation;
+				pos = Projectile.Center + new Vector2(0, 12);
+				r = Projectile.rotation;
 			}
 			lightColor = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
-			spriteBatch.Draw(potTexture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(potTexture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, SpriteEffects.None, 0);
 		}
@@ -382,14 +384,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		{
 			if (vectorToTarget is null)
 			{
-				projectile.frame = 0;
+				Projectile.frame = 0;
 			}
 			else
 			{
 				maxFrame = 2;
 				base.Animate(minFrame, maxFrame);
 			}
-			projectile.spriteDirection = 1;
+			Projectile.spriteDirection = 1;
 		}
 
 		public override float ComputeIdleSpeed() => 14;

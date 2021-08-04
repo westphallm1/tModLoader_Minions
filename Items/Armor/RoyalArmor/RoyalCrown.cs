@@ -23,22 +23,22 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(silver: 3);
-			item.rare = ItemRarityID.Green;
-			item.defense = 3;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(silver: 3);
+			Item.rare = ItemRarityID.Green;
+			Item.defense = 3;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
-			return head.type == item.type && body.type == ItemType<RoyalGown>();
+			return head.type == Item.type && body.type == ItemType<RoyalGown>();
 		}
 
 		public override void UpdateEquip(Player player)
 		{
 			player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier *= 0.9f;
-			player.minionDamageMult += 0.08f;
+			player.GetDamage<SummonDamageClass>() += 0.08f;
 		}
 
 		public override void UpdateArmorSet(Player player)
@@ -53,13 +53,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Gel, 25);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:Golds", 10);
-			recipe.AddIngredient(ItemID.Ruby, 4);
-			recipe.AddTile(TileID.Solidifier);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Gel, 25).AddRecipeGroup("AmuletOfManyMinions:Golds", 10).AddIngredient(ItemID.Ruby, 4).AddTile(TileID.Solidifier).Register();
 		}
 	}
 
@@ -79,14 +73,14 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 8;
+			Main.projFrames[Projectile.type] = 8;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 20;
-			projectile.height = 14;
+			Projectile.width = 20;
+			Projectile.height = 14;
 			frameSpeed = 3;
 		}
 
@@ -110,14 +104,14 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			}
 			if (vectorToTarget is null || returning)
 			{
-				projectile.rotation = (float)(Math.PI / 12 * Math.Cos(2 * Math.PI * animationFrame / 60f));
+				Projectile.rotation = (float)(Math.PI / 12 * Math.Cos(2 * Math.PI * animationFrame / 60f));
 				if (squire.spriteDirection == 1)
 				{
-					projectile.frame = 0;
+					Projectile.frame = 0;
 				}
 				else
 				{
-					projectile.frame = 4;
+					Projectile.frame = 4;
 				}
 			}
 			else

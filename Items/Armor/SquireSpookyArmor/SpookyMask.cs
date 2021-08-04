@@ -17,11 +17,11 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(gold: 1);
-			item.rare = ItemRarityID.Yellow;
-			item.defense = 21;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(gold: 1);
+			Item.rare = ItemRarityID.Yellow;
+			Item.defense = 21;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.15f;
+			player.GetDamage<SummonDamageClass>() += 0.15f;
 			player.maxMinions += 1;
 		}
 
@@ -41,7 +41,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 				"Increases squire travel range by 7 blocks\n" +
 				"Increases squire travel speed by 30%\n" +
 				"Increases squire attack speed by 20%\n";
-			player.minionDamageMult += 0.35f;
+			player.GetDamage<SummonDamageClass>() += 0.35f;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squirePlayer.squireRangeFlatBonus += 112f;
 			squirePlayer.squireTravelSpeedMultiplier += 0.30f;
@@ -60,11 +60,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SpookyWood, 200);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.SpookyWood, 200).AddTile(TileID.WorkBenches).Register();
 		}
 	}
 }

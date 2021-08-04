@@ -22,8 +22,8 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 
 		public override void SetStaticDefaults()
 		{
-			ItemID.Sets.GamepadWholeScreenUseRange[item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
-			ItemID.Sets.LockOnIgnoresCollision[item.type] = true;
+			ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
+			ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
 			Tooltip.SetDefault(
 				"Tool\n"+
 				"Click to place a minion guidance waypoint!\n" +
@@ -34,18 +34,18 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 
 		public override void SetDefaults()
 		{
-			item.useTime = 60;
-			item.useAnimation = 60;
-			item.useStyle = ItemUseStyleID.SwingThrow;
-			item.UseSound = SoundID.Item44;
+			Item.useTime = 60;
+			Item.useAnimation = 60;
+			Item.useStyle = ItemUseStyleID.Swing;
+			Item.UseSound = SoundID.Item44;
 			// These below are needed for a minion weapon
-			item.noMelee = true;
-			item.summon = true;
-			item.autoReuse = true;
+			Item.noMelee = true;
+			Item.DamageType = DamageClass.Summon;
+			Item.autoReuse = true;
 			placementRange = 16 * placementRangeInBlocks;
 		}
 
-		public override bool UseItem(Player player)
+		public override bool? UseItem(Player player)
 		{
 			// it seems that it's possible to useItem without calling SetDefaults somehow, so check here as well
 			if(placementRange == 0)
@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 			player.GetModPlayer<MinionPathfindingPlayer>().WaypointPlacementRange = placementRange;
 			if(Main.myPlayer == player.whoAmI)
 			{
-				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint();
+				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(player.selectedItem);
 			}
 			return true;
 		}
@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
 				//player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
-				UserInterfaces.buffClickCapture.PlaceTacticSelectRadial(Main.MouseScreen);
+				UserInterfaces.buffClickCapture.PlaceTacticSelectRadial(UserInterfaces.MousePositionUI);
 				return false;
 			}
 			return base.CanUseItem(player);
@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			tooltips.Add(new TooltipLine(mod, "MinionWaypointRange", placementRangeInBlocks + " block range.")
+			tooltips.Add(new TooltipLine(Mod, "MinionWaypointRange", placementRangeInBlocks + " block range.")
 			{
 				overrideColor = Color.LimeGreen
 			});
@@ -97,17 +97,12 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.useTime = 60;
-			item.useAnimation = 60;
+			Item.useTime = 60;
+			Item.useAnimation = 60;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Wood, 15);
-			recipe.AddIngredient(ItemID.Sunflower, 2);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Wood, 15).AddIngredient(ItemID.Sunflower, 2).AddTile(TileID.WorkBenches).Register();
 		}
 	}
 
@@ -123,18 +118,13 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.rare = ItemRarityID.Blue;
-			item.useTime = 45;
-			item.useAnimation = 45;
+			Item.rare = ItemRarityID.Blue;
+			Item.useTime = 45;
+			Item.useAnimation = 45;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<GraniteSpark>(), 12);
-			recipe.AddIngredient(ItemID.Granite, 30);
-			// crafted by hand
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemType<GraniteSpark>(), 12).AddIngredient(ItemID.Granite, 30).Register();
 		}
 	}
 
@@ -150,9 +140,9 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.rare = ItemRarityID.Green;
-			item.useTime = 40;
-			item.useAnimation = 40;
+			Item.rare = ItemRarityID.Green;
+			Item.useTime = 40;
+			Item.useAnimation = 40;
 		}
 	}
 	public class CrystalWaypointRod : WaypointRod
@@ -167,19 +157,13 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.rare = ItemRarityID.LightRed;
-			item.useTime = 35;
-			item.useAnimation = 35;
+			Item.rare = ItemRarityID.LightRed;
+			Item.useTime = 35;
+			Item.useAnimation = 35;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<GraniteWaypointRod>(), 1);
-			recipe.AddIngredient(ItemID.CrystalShard, 15);
-			recipe.AddIngredient(ItemID.SoulofLight, 8);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemType<GraniteWaypointRod>(), 1).AddIngredient(ItemID.CrystalShard, 15).AddIngredient(ItemID.SoulofLight, 8).AddTile(TileID.Anvils).Register();
 		}
 	}
 
@@ -195,20 +179,13 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.rare = ItemRarityID.Pink;
-			item.useTime = 25;
-			item.useAnimation = 25;
+			Item.rare = ItemRarityID.Pink;
+			Item.useTime = 25;
+			Item.useAnimation = 25;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.HallowedBar, 12);
-			recipe.AddIngredient(ItemID.SoulofSight, 16);
-			recipe.AddIngredient(ItemID.SoulofFright, 4);
-			recipe.AddIngredient(ItemID.SoulofMight, 4);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.HallowedBar, 12).AddIngredient(ItemID.SoulofSight, 16).AddIngredient(ItemID.SoulofFright, 4).AddIngredient(ItemID.SoulofMight, 4).AddTile(TileID.MythrilAnvil).Register();
 		}
 	}
 
@@ -224,9 +201,9 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.rare = ItemRarityID.Expert;
-			item.useTime = 18;
-			item.useAnimation = 18;
+			Item.rare = ItemRarityID.Expert;
+			Item.useTime = 18;
+			Item.useAnimation = 18;
 		}
 	}
 }

@@ -13,6 +13,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Default;
 using Terraria.UI;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
@@ -47,7 +48,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				if (selectedIndex != clickedButton.index)
 				{
 					selectedIndex = clickedButton.index;
-					Main.PlaySound(SoundID.MenuTick);
+					SoundEngine.PlaySound(SoundID.MenuTick);
 				}
 
 				//Recalculate selected status for each button, and set players tactic
@@ -70,13 +71,13 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			{
 				//Prevents drawing item textures on mouseover (bed, selected tool etc.)
 				Main.LocalPlayer.mouseInterface = true;
-				Main.LocalPlayer.showItemIcon = false;
+				Main.LocalPlayer.cursorItemIconEnabled = false;
 				Main.ItemIconCacheUpdate(0);
 			}
 			base.DrawSelf(spriteBatch);
 			Color color = Color.White * 0.85f;
 			Vector2 bgDrawPos = new Vector2(GetDimensions().X, GetDimensions().Y);
-			spriteBatch.Draw(UserInterfaces.tacticsUI.bgSmallTexture, bgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0f);
+			spriteBatch.Draw(UserInterfaces.tacticsUI.bgSmallTexture.Value, bgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0);
 		}
 
 		/// <summary>

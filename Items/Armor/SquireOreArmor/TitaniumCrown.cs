@@ -19,11 +19,11 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(gold: 3);
-			item.rare = ItemRarityID.LightRed;
-			item.defense = 6;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(gold: 3);
+			Item.rare = ItemRarityID.LightRed;
+			Item.defense = 6;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.15f;
+			player.GetDamage<SummonDamageClass>() += 0.15f;
 			player.maxMinions += 1;
 		}
 
@@ -43,7 +43,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 				"Increases minion damage by 10%\n" +
 				"Increases squire travel range by 5 blocks\n" +
 				"Increases squire travel speed by 20%";
-			player.minionDamageMult += 0.10f;
+			player.GetDamage<SummonDamageClass>() += 0.10f;
 			player.onHitDodge = true; // titanium armor effect
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squirePlayer.squireRangeFlatBonus += 80f;
@@ -54,11 +54,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.TitaniumBar, 12);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.TitaniumBar, 12).AddTile(TileID.MythrilAnvil).Register();
 		}
 	}
 }

@@ -11,9 +11,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 	public class BalloonBuddyMinionBuff : MinionBuff
 	{
 		public BalloonBuddyMinionBuff() : base(ProjectileType<BalloonBuddyCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Balloon Buddy");
 			Description.SetDefault("A balloon buddy will fight for you!");
 		}
@@ -32,13 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 32;
-			item.damage = 18;
-			item.height = 32;
-			item.value = Item.buyPrice(0, 3, 0, 0);
-			item.rare = ItemRarityID.Orange;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.damage = 18;
+			Item.height = 32;
+			Item.value = Item.buyPrice(0, 3, 0, 0);
+			Item.rare = ItemRarityID.Orange;
 		}
 	}
 
@@ -58,14 +58,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Balloon Buddy");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
+			Main.projFrames[Projectile.type] = 1;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.tileCollide = false;
-			projectile.localNPCHitCooldown = 20;
+			Projectile.tileCollide = false;
+			Projectile.localNPCHitCooldown = 20;
 			wormDrawer = new BalloonBuddyDrawer();
 		}
 

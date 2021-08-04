@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 
 		public SyncMinionTacticsPlayerPacket() { }
 
-		public SyncMinionTacticsPlayerPacket(MinionTacticsPlayer player) : base(player.player)
+		public SyncMinionTacticsPlayerPacket(MinionTacticsPlayer player) : base(player.Player)
 		{
 			tacticsIds = player.TacticsIDs;
 			selectedTactic = (byte)player.CurrentTacticGroup;

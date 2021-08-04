@@ -13,9 +13,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 	public class PricklyPearMinionBuff : MinionBuff
 	{
 		public PricklyPearMinionBuff() : base(ProjectileType<PricklyPearMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Prickly Pear Hedgehog");
 			Description.SetDefault("A prickly pear pal will fight for you!");
 		}
@@ -33,23 +33,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 10;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 5, 0);
-			item.rare = ItemRarityID.Blue;
+			Item.damage = 10;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 0, 5, 0);
+			Item.rare = ItemRarityID.Blue;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.PinkPricklyPear, 1);
-			recipe.AddIngredient(ItemID.Cactus, 25);
-			recipe.AddIngredient(ItemID.Amber, 3);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.PinkPricklyPear, 1).AddIngredient(ItemID.Cactus, 25).AddIngredient(ItemID.Amber, 3).AddTile(TileID.Anvils).Register();
 		}
 	}
 	public class PricklyPearSeedProjectile : ModProjectile
@@ -58,27 +52,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.timeLeft = TIME_TO_LIVE;
-			projectile.tileCollide = true;
-			projectile.penetrate = 1;
-			projectile.friendly = true;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.timeLeft = TIME_TO_LIVE;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = 1;
+			Projectile.friendly = true;
 		}
 
 		public override void AI()
 		{
-			if (TIME_TO_LIVE - projectile.timeLeft > 6)
+			if (TIME_TO_LIVE - Projectile.timeLeft > 6)
 			{
-				projectile.velocity.Y += 0.5f;
+				Projectile.velocity.Y += 0.5f;
 			}
-			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 		}
 
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
@@ -91,15 +85,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			// only spawn 1ish cactus per volley
 			// this can spawn cacti upon hitting walls/ceilings/enemies , but that's ok
-			if (projectile.owner == Main.myPlayer && Main.rand.Next(3) == 0)
+			if (Projectile.owner == Main.myPlayer && Main.rand.Next(3) == 0)
 			{
 				Projectile.NewProjectile(
-					projectile.position,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.position,
 					Vector2.Zero,
 					ProjectileType<PricklyPearCactusProjectile>(),
-					projectile.damage,
-					projectile.knockBack,
-					projectile.owner);
+					Projectile.damage,
+					Projectile.knockBack,
+					Projectile.owner);
 
 			}
 		}
@@ -111,43 +106,43 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
-			Main.projFrames[projectile.type] = 4;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+			Main.projFrames[Projectile.type] = 4;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 32;
-			projectile.timeLeft = TIME_TO_LIVE;
-			projectile.tileCollide = true;
-			projectile.penetrate = 9;
-			projectile.friendly = true;
-			projectile.usesLocalNPCImmunity = true;
+			Projectile.width = 16;
+			Projectile.height = 32;
+			Projectile.timeLeft = TIME_TO_LIVE;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = 9;
+			Projectile.friendly = true;
+			Projectile.usesLocalNPCImmunity = true;
 			// don't instakill an an enemy that falls onto a cactus
-			projectile.localNPCHitCooldown = 30;
-			drawOriginOffsetY = 2;
+			Projectile.localNPCHitCooldown = 30;
+			DrawOriginOffsetY = 2;
 		}
 
 		public override void AI()
 		{
-			projectile.velocity.Y += 0.5f;
+			Projectile.velocity.Y += 0.5f;
 			// hack to play the despawn animation after running out of penetrates
-			if (projectile.penetrate == 1 && projectile.friendly)
+			if (Projectile.penetrate == 1 && Projectile.friendly)
 			{
-				projectile.friendly = false;
-				projectile.timeLeft = 20;
+				Projectile.friendly = false;
+				Projectile.timeLeft = 20;
 			}
-			if (projectile.timeLeft > 20 && projectile.frame < 3 && projectile.frameCounter++ >= 5)
+			if (Projectile.timeLeft > 20 && Projectile.frame < 3 && Projectile.frameCounter++ >= 5)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame++;
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
 			}
-			else if (projectile.timeLeft <= 20 && projectile.frame > 0 && projectile.frameCounter++ >= 5)
+			else if (Projectile.timeLeft <= 20 && Projectile.frame > 0 && Projectile.frameCounter++ >= 5)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame--;
+				Projectile.frameCounter = 0;
+				Projectile.frame--;
 			}
 		}
 
@@ -184,16 +179,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("PricklyPear");
-			Main.projFrames[projectile.type] = 10;
+			Main.projFrames[Projectile.type] = 10;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 32;
-			projectile.height = 26;
-			drawOffsetX = -2;
-			drawOriginOffsetY = -6;
+			Projectile.width = 32;
+			Projectile.height = 26;
+			DrawOffsetX = -2;
+			DrawOriginOffsetY = -6;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -205,26 +200,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -3 * projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 7;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
 			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
 			{
-				projectile.velocity.X = Main.npc[idx].velocity.X;
+				Projectile.velocity.X = Main.npc[idx].velocity.X;
 			}
 			else
 			{
-				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
 		}
 
@@ -232,20 +227,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			int seedVelocity = 7;
 			lastFiredFrame = animationFrame;
-			Main.PlaySound(new LegacySoundStyle(6, 1), projectile.position);
+			SoundEngine.PlaySound(new LegacySoundStyle(6, 1), Projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				foreach (float seedAngle in seedAngles)
 				{
 					Vector2 velocity = seedVelocity * seedAngle.ToRotationVector2();
 					velocity.Y *= -1;
-					velocity.X += projectile.velocity.X;
+					velocity.X += Projectile.velocity.X;
 					Projectile.NewProjectile(
-						projectile.Center,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center,
 						VaryLaunchVelocity(velocity),
 						ProjectileType<PricklyPearSeedProjectile>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						player.whoAmI);
 				}
 			}
@@ -270,14 +266,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 		public override void AfterMoving()
 		{
-			projectile.friendly = false;
+			Projectile.friendly = false;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
-				projectile.spriteDirection = Math.Sign(target.X);
+				Projectile.spriteDirection = Math.Sign(target.X);
 			}
 		}
 	}

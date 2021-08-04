@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.UI.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
@@ -27,10 +28,10 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		internal const string Close = "Close Minion Tactics";
 		internal const string Open = "Open Minion Tactics";
 
-		internal Texture2D openTexture;
-		internal Texture2D closeTexture;
-		internal Texture2D bgSmallTexture;
-		internal Texture2D bgLargeTexture;
+		internal Asset<Texture2D> openTexture;
+		internal Asset<Texture2D> closeTexture;
+		internal Asset<Texture2D> bgSmallTexture;
+		internal Asset<Texture2D> bgLargeTexture;
 
 		private float openAmount = 1f; //1f closed, 2f opened
 
@@ -48,21 +49,22 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		public override void OnInitialize()
 		{
+			var immediate = AssetRequestMode.ImmediateLoad;
 			if (openTexture == null)
 			{
-				openTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/OpenButton");
+				openTexture = ModContent.Request<Texture2D>("AmuletOfManyMinions/UI/Common/OpenButton", immediate);
 			}
 			if (closeTexture == null)
 			{
-				closeTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/CloseButton");
+				closeTexture = ModContent.Request<Texture2D>("AmuletOfManyMinions/UI/Common/CloseButton", immediate);
 			}
 			if (bgLargeTexture == null)
 			{
-				bgLargeTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/BgRectangle_Large");
+				bgLargeTexture = ModContent.Request<Texture2D>("AmuletOfManyMinions/UI/Common/BgRectangle_Large", immediate);
 			}
 			if (bgSmallTexture == null)
 			{
-				bgSmallTexture = ModContent.GetTexture("AmuletOfManyMinions/UI/Common/BgRectangle_Small");
+				bgSmallTexture = ModContent.Request<Texture2D>("AmuletOfManyMinions/UI/Common/BgRectangle_Small", immediate);
 			}
 
 			//Move outside of screen initially, we update the location manually each tick in Update
@@ -323,7 +325,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 					if (k > 0 && Main.mapStyle == k - 1)
 						num11 = 200;
 
-					//Main.spriteBatch.Draw(Main.mapIconTexture[num14], new Vector2(num12, num13), new Microsoft.Xna.Framework.Rectangle(0, 0, Main.mapIconTexture[num14].Width, Main.mapIconTexture[num14].Height), new Microsoft.Xna.Framework.Color(num11, num11, num11, num11), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+					//Main.Main.EntitySpriteDraw(Main.mapIconTexture[num14], new Vector2(num12, num13), new Microsoft.Xna.Framework.Rectangle(0, 0, Main.mapIconTexture[num14].Width, Main.mapIconTexture[num14].Height), new Microsoft.Xna.Framework.Color(num11, num11, num11, num11), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
 				}
 
 				return leftEdgeOfMap - this.Width.Pixels;

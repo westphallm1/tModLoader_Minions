@@ -16,28 +16,23 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.LightRed;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(gold: 5);
+			Item.rare = ItemRarityID.LightRed;
 		}
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult -= 0.1f;
+			player.GetDamage<SummonDamageClass>() -= 0.1f;
 			player.maxMinions += 1;
 			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus += 0.01f;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.LightShard, 1);
-			recipe.AddIngredient(ItemID.SoulofNight, 8);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.LightShard, 1).AddIngredient(ItemID.SoulofNight, 8).AddTile(TileID.Anvils).Register();
 		}
 
 	}

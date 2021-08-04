@@ -9,9 +9,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 	public class PaperSurferMinionBuff : MinionBuff
 	{
 		public PaperSurferMinionBuff() : base(ProjectileType<PaperSurferMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Paper Surfer");
 			Description.SetDefault("A paper surfer will fight for you!");
 		}
@@ -29,22 +29,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 12;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 38;
-			item.height = 40;
-			item.value = Item.buyPrice(0, 0, 70, 0);
-			item.rare = ItemRarityID.Green;
+			Item.damage = 12;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 38;
+			Item.height = 40;
+			Item.value = Item.buyPrice(0, 0, 70, 0);
+			Item.rare = ItemRarityID.Green;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.ClayBlock, 30);
-			recipe.AddIngredient(ItemID.Cloud, 30);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.ClayBlock, 30).AddIngredient(ItemID.Cloud, 30).AddTile(TileID.Anvils).Register();
 		}
 	}
 	public class PaperSurferMinion : SurferMinion
@@ -63,8 +58,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 			approachInertia = 40;
 			targetSearchDistance = 800;
 			bumbleSpriteDirection = -1;
-			projectile.width = 28;
-			projectile.height = 32;
+			Projectile.width = 28;
+			Projectile.height = 32;
 		}
 	}
 }

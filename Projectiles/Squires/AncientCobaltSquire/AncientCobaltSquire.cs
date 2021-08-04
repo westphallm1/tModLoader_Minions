@@ -12,9 +12,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 	public class AncientCobaltSquireMinionBuff : MinionBuff
 	{
 		public AncientCobaltSquireMinionBuff() : base(ProjectileType<AncientCobaltSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Cobalt Squire");
 			Description.SetDefault("An ancient cobalt squire will follow your orders!");
 		}
@@ -33,30 +33,31 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 10;
-			item.value = Item.sellPrice(0, 0, 1, 0);
-			item.rare = ItemRarityID.Orange;
+			Item.knockBack = 3f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 10;
+			Item.value = Item.sellPrice(0, 0, 1, 0);
+			Item.rare = ItemRarityID.Orange;
 		}
 	}
 
 	public class AncientCobaltBolt : ModProjectile
 	{
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.SapphireBolt;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SapphireBolt;
 
 		public override void SetStaticDefaults()
 		{
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.CloneDefaults(ProjectileID.SapphireBolt);
-			projectile.minion = true;
-			projectile.timeLeft = 30;
+			Projectile.CloneDefaults(ProjectileID.SapphireBolt);
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
+			Projectile.timeLeft = 30;
 		}
 
 		public override void AI()
@@ -64,22 +65,22 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			base.AI();
 			for (int i = 0; i < 2; i++)
 			{
-				int dustSpawned = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88, projectile.velocity.X, projectile.velocity.Y, 50, default, 1.2f);
+				int dustSpawned = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, Projectile.velocity.X, Projectile.velocity.Y, 50, default, 1.2f);
 				Main.dust[dustSpawned].noGravity = true;
 				Main.dust[dustSpawned].velocity *= 0.3f;
 			}
-			if (projectile.localAI[0] == 0f)
+			if (Projectile.localAI[0] == 0f)
 			{
-				projectile.localAI[0] = 1f;
-				Main.PlaySound(SoundID.Item8, projectile.Center);
+				Projectile.localAI[0] = 1f;
+				SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
 			}
 		}
 		public override void Kill(int timeLeft)
 		{
-			Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y);
 			for (int i = 0; i < 15; i++)
 			{
-				int dustCreated = Dust.NewDust(projectile.position, projectile.width, projectile.height, 88, projectile.oldVelocity.X, projectile.oldVelocity.Y, 50, default(Color), 1.2f);
+				int dustCreated = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 50, default(Color), 1.2f);
 				Main.dust[dustCreated].noGravity = true;
 				Main.dust[dustCreated].scale *= 1.25f;
 				Main.dust[dustCreated].velocity *= 0.5f;
@@ -91,18 +92,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 	public class AncientCobaltStream : ModProjectile
 	{
 
-		public override string Texture => "Terraria/Projectile_" + ProjectileID.WaterStream;
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.WaterStream;
 
 		public override void SetStaticDefaults()
 		{
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.CloneDefaults(ProjectileID.WaterStream);
-			projectile.magic = false; //Bandaid fix
+			Projectile.CloneDefaults(ProjectileID.WaterStream);
+			// projectile.magic = false; //Bandaid fix
 		}
 	}
 
@@ -140,14 +141,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 32;
+			Projectile.width = 22;
+			Projectile.height = 32;
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -165,11 +166,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				angleVector *= ModifiedProjectileVelocity();
 				if (Main.myPlayer == player.whoAmI)
 				{
-					Projectile.NewProjectile(projectile.Center,
+					Projectile.NewProjectile(
+						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.Center,
 						angleVector,
 						ProjectileType<AncientCobaltStream>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
 			}
@@ -186,11 +189,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				angleVector *= ModifiedProjectileVelocity() * 2;
 				if (Main.myPlayer == player.whoAmI)
 				{
-					Projectile.NewProjectile(projectile.Center,
+					Projectile.NewProjectile(
+						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.Center,
 						angleVector,
 						ProjectileType<AncientCobaltBolt>(),
-						3 * projectile.damage / 2,
-						projectile.knockBack,
+						3 * Projectile.damage / 2,
+						Projectile.knockBack,
 						Main.myPlayer);
 				}
 				weaponAngle += 2 * angleOffset;

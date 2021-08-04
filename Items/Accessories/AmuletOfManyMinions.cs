@@ -22,32 +22,23 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.Expert;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(gold: 5);
+			Item.rare = ItemRarityID.Expert;
 		}
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.2f;
+			player.GetDamage<SummonDamageClass>() += 0.2f;
 			player.maxMinions += 2;
 			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus += 0.02f;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<CopperSwordMinionItem>(), 1);
-			recipe.AddIngredient(ItemType<SpiritGunMinionItem>(), 1);
-			recipe.AddIngredient(ItemType<FlyingSwordMinionItem>(), 1);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:VoidDaggers");
-			recipe.AddIngredient(ItemType<CharmOfManyMinions>(), 1);
-			recipe.AddIngredient(ItemType<CharmOfMightyMinions>(), 1);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemType<CopperSwordMinionItem>(), 1).AddIngredient(ItemType<SpiritGunMinionItem>(), 1).AddIngredient(ItemType<FlyingSwordMinionItem>(), 1).AddRecipeGroup("AmuletOfManyMinions:VoidDaggers").AddIngredient(ItemType<CharmOfManyMinions>(), 1).AddIngredient(ItemType<CharmOfMightyMinions>(), 1).AddTile(TileID.MythrilAnvil).Register();
 		}
 
 	}

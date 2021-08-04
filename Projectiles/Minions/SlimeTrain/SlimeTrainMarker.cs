@@ -119,18 +119,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 4;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 4;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.penetrate = 1;
-			projectile.friendly = true;
-			projectile.timeLeft = 30;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.penetrate = 1;
+			Projectile.friendly = true;
+			Projectile.timeLeft = 30;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
@@ -141,63 +141,63 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void AI()
 		{
 			base.AI();
-			projectile.localAI[0]++;
+			Projectile.localAI[0]++;
 			// failsafe in case we got a bad NPC index
-			if (projectile.ai[0] == 0)
+			if (Projectile.ai[0] == 0)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 				return; 
 			}
 			// "on spawn" code
 			if (clingTarget == null)
 			{
-				clingTarget = Main.npc[(int)projectile.ai[0]];
-				startOffset = projectile.Center - clingTarget.Center;
-				travelOffset = projectile.velocity;
+				clingTarget = Main.npc[(int)Projectile.ai[0]];
+				startOffset = Projectile.Center - clingTarget.Center;
+				travelOffset = Projectile.velocity;
 				travelOffset.SafeNormalize();
 				travelOffset *= TravelVelocity;
-				projectile.rotation = projectile.velocity.ToRotation() + (projectile.velocity.X > 0 ? 0 : MathHelper.Pi);
-				projectile.spriteDirection = projectile.velocity.X > 0 ? 1 : -1;
-				projectile.velocity = Vector2.Zero;
+				Projectile.rotation = Projectile.velocity.ToRotation() + (Projectile.velocity.X > 0 ? 0 : MathHelper.Pi);
+				Projectile.spriteDirection = Projectile.velocity.X > 0 ? 1 : -1;
+				Projectile.velocity = Vector2.Zero;
 				mySlimeIndex = slimeIndex % 7;
 				slimeIndex++;
 				// SpawnDust();
 			}
 			if (!clingTarget.active)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 				return;
 			}
 			// slide towards enemy on a fixed path
-			projectile.Center = clingTarget.Center + startOffset + travelOffset * projectile.localAI[0];
+			Projectile.Center = clingTarget.Center + startOffset + travelOffset * Projectile.localAI[0];
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			lightColor = Color.White * 0.85f;
 			lightColor.A = 128;
-			lightColor *= Math.Min(8, projectile.localAI[0]) / 8;
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			lightColor *= Math.Min(8, Projectile.localAI[0]) / 8;
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 
 			// slime
-			Texture2D texture = ModContent.GetTexture(Texture + "_Slime");
+			Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Slime").Value;
 			int frameHeight = texture.Height / 7;
 			Rectangle bounds = new Rectangle(0, mySlimeIndex * frameHeight, texture.Width, frameHeight);
 			Vector2 tangent = travelOffset.X > 0 ? new Vector2(travelOffset.Y, -travelOffset.X) : new Vector2(-travelOffset.Y, travelOffset.X);
 			tangent.SafeNormalize();
 			tangent *= 14;
-			spriteBatch.Draw(texture, pos + tangent - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos + tangent - Main.screenPosition,
 				bounds, lightColor, r,
 				new Vector2(bounds.Width/2, bounds.Height/2), 1, effects, 0);
 
 			// cart
-			texture = ModContent.GetTexture(Texture);
-			frameHeight = texture.Height / Main.projFrames[projectile.type];
-			bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
 			return false;
@@ -213,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				{
 					continue;
 				}
-				int goreIdx = Gore.NewGore(projectile.position, default, Main.rand.Next(61, 64));
+				int goreIdx = Gore.NewGore(Projectile.position, default, Main.rand.Next(61, 64));
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += offset;
 			}
@@ -250,7 +250,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		}
 
 
-		public void Draw(SpriteBatch spriteBatch, Texture2D texture, Color lightColor, int frame, SlimeTrainRotationTracker tracker)
+		public void Draw(Texture2D texture, Color lightColor, int frame, SlimeTrainRotationTracker tracker)
 		{
 			if(frame < startFrame)
 			{
@@ -274,7 +274,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				int drawFrame = i == 0 ? startDrawFrame : i >= endLength ? endDrawFrame : middleDrawFrame;
 				Rectangle bounds = new Rectangle(0, 18 * drawFrame, 16, 16);
 				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-				spriteBatch.Draw(texture, drawPos  + offset - Main.screenPosition,
+				Main.EntitySpriteDraw(texture, drawPos  + offset - Main.screenPosition,
 					bounds, lightColor, 0, origin, 1, effects, 0);
 			}
 		}
@@ -351,6 +351,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Vector2 tangent = direction.X > 0 ? new Vector2(direction.Y, -direction.X) : new Vector2(-direction.Y, direction.X);
 			Vector2 spawnOffset = 14 * tangent;
 			Projectile.NewProjectile(
+				baseProj.GetProjectileSource_FromThis(),
 				spawnPos + spawnOffset,
 				direction,
 				ModContent.ProjectileType<SlimeTrainCartProjectile>(),
@@ -395,19 +396,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 6;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 6;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.penetrate = -1;
-			projectile.friendly = false;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.timeLeft = SetupTime + BaseAttackTime;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.penetrate = -1;
+			Projectile.friendly = false;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.timeLeft = SetupTime + BaseAttackTime;
 			rotationTracker = new SlimeTrainRotationTracker();
 		}
 
@@ -419,41 +420,41 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void AI()
 		{
 			base.AI();
-			projectile.localAI[0]++;
+			Projectile.localAI[0]++;
 			// failsafe in case we got a bad NPC index
-			if (projectile.ai[0] == 0)
+			if (Projectile.ai[0] == 0)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 				return; 
 			}
 			// "on spawn" code
 			if (clingTarget == null)
 			{
-				clingTarget = Main.npc[(int)projectile.ai[0]];
-				projectile.timeLeft += (int)projectile.ai[1] * PerEmpowerTime;
-				rotationTracker.SetRotationInfo(clingTarget, projectile);
-				projectile.velocity = Vector2.Zero;
+				clingTarget = Main.npc[(int)Projectile.ai[0]];
+				Projectile.timeLeft += (int)Projectile.ai[1] * PerEmpowerTime;
+				rotationTracker.SetRotationInfo(clingTarget, Projectile);
+				Projectile.velocity = Vector2.Zero;
 			}
 			if (!clingTarget.active)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 				return;
 			}
-			projectile.Center = clingTarget.Center;
-			Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.5f);
+			Projectile.Center = clingTarget.Center;
+			Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.5f);
 			UpdateTracks();
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = ModContent.GetTexture(Texture);
-			int currentFrame = (int)projectile.localAI[0];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int currentFrame = (int)Projectile.localAI[0];
 			lightColor = Color.White * 0.85f;
 			lightColor.A = 128;
 			for(int i = 0; i < spawnFrames.Length; i++)
 			{
 				SlimeTrainRails rails = spawnFrames[i];
-				rails.Draw(spriteBatch, texture, lightColor, currentFrame, rotationTracker);
+				rails.Draw(texture, lightColor, currentFrame, rotationTracker);
 			}
 			return false;
 		}
@@ -461,13 +462,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private void UpdateTracks()
 		{
 			// for starters, just draw a track at the rotation 
-			int currentFrame = (int)projectile.localAI[0];
+			int currentFrame = (int)Projectile.localAI[0];
 			for(int i = 0; i < spawnFrames.Length; i++)
 			{
 				SlimeTrainRails rails = spawnFrames[i];
-				if(projectile.owner == Main.myPlayer)
+				if(Projectile.owner == Main.myPlayer)
 				{
-					rails.SpawnCart(rotationTracker, currentFrame, projectile);
+					rails.SpawnCart(rotationTracker, currentFrame, Projectile);
 				}
 				 if (rails.startFrame + SlimeTrainRails.DrawFrames == currentFrame)
 				{

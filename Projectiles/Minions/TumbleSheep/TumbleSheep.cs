@@ -17,9 +17,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 	public class TumbleSheepMinionBuff : MinionBuff
 	{
 		public TumbleSheepMinionBuff() : base(ProjectileType<TumbleSheepMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Tumble Sheep");
 			Description.SetDefault("A tumbling sheep will fight for you!");
 		}
@@ -37,13 +37,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 11;
-			item.knockBack = 4f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 5, 0);
-			item.rare = ItemRarityID.White;
+			Item.damage = 11;
+			Item.knockBack = 4f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 0, 5, 0);
+			Item.rare = ItemRarityID.White;
 		}
 	}
 
@@ -70,8 +70,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 32;
-			projectile.height = 32;
+			Projectile.width = 32;
+			Projectile.height = 32;
 			attackFrames = 90;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -79,57 +79,57 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			defaultJumpVelocity = 4;
 			searchDistance = 900;
 			maxJumpVelocity = 12;
-			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 48, 48));
 		}
 
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			projectile.damage = (int)(1.5f * projectile.damage);
+			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 48, 48));
+			Projectile.damage = (int)(1.5f * Projectile.damage);
 			scHelper.Attach();
 		}
 
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -3 * projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 11;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
 			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
 			{
-				projectile.velocity.X = Main.npc[idx].velocity.X;
+				Projectile.velocity.X = Main.npc[idx].velocity.X;
 			}
 			else
 			{
-				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
 		}
 
 		private void LaunchBounce(Vector2 vectorToTarget)
 		{
 			lastFiredFrame = animationFrame;
-			launchPos = projectile.position;
-			Main.PlaySound(new LegacySoundStyle(2, 17), projectile.position);
+			launchPos = Projectile.position;
+			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
 			if(gHelper.didJustLand && vectorToTarget.Y > -Math.Abs(vectorToTarget.X/4))
 			{
 				vectorToTarget.Y = -Math.Abs(vectorToTarget.X / 4);
 			}
 			vectorToTarget.SafeNormalize();
 			vectorToTarget *= 8;
-			projectile.velocity = vectorToTarget;
+			Projectile.velocity = vectorToTarget;
 			for(int i = 0; i < 3; i++)
 			{
-				int idx = Dust.NewDust(projectile.BottomLeft - new Vector2(0, 16), 32, 16, 16, 0, 0);
+				int idx = Dust.NewDust(Projectile.BottomLeft - new Vector2(0, 16), 32, 16, 16, 0, 0);
 				Main.dust[idx].alpha = 112;
 				Main.dust[idx].scale = 1.2f;
 			}
@@ -139,11 +139,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		// If your name is AG...
 		private void DoBounce()
 		{
-			if(animationFrame - lastFiredFrame > 10 && projectile.velocity.Y < 16)
+			if(animationFrame - lastFiredFrame > 10 && Projectile.velocity.Y < 16)
 			{
-				projectile.velocity.Y += 0.5f;
+				Projectile.velocity.Y += 0.5f;
 			}
-			if(Vector2.DistanceSquared(launchPos, projectile.position) > 240 * 240)
+			if(Vector2.DistanceSquared(launchPos, Projectile.position) > 240 * 240)
 			{
 				// snap out of bounce if we go too far in a straight line
 				lastFiredFrame = animationFrame - bounceCycleLength;
@@ -193,8 +193,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 		public override void AfterMoving()
 		{
-			projectile.friendly = IsBouncing;
-			projectile.tileCollide |= IsBouncing;
+			Projectile.friendly = IsBouncing;
+			Projectile.tileCollide |= IsBouncing;
 			scHelper.UpdateMovement();
 			if(scHelper.IsWalking)
 			{
@@ -218,7 +218,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 				Vector2 legRotationAngle = (cycleAngle + i * MathHelper.Pi).ToRotationVector2();
 				legRotationAngle.X *= 4;
 				legRotationAngle.Y *= 1.5f;
-				helper.AddSpriteToBatch(GetTexture(Texture + "_Legs" + (i+1)), legRotationAngle + new Vector2(0, 14));
+				helper.AddSpriteToBatch(Request<Texture2D>(Texture + "_Legs" + (i+1)).Value, legRotationAngle + new Vector2(0, 14));
 			}
 		}
 
@@ -235,7 +235,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 				float r = -MathHelper.Pi / 64 + MathHelper.Pi / 32 * (float)mySin;
 				byte oldAlpha = helper.lightColor.A;
 				helper.lightColor.A = 128;
-				helper.AddSpriteToBatch(GetTexture(Texture), (i,3), offsetVector, r, 0.5f + 0.1f * mySin);
+				helper.AddSpriteToBatch(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, (i,3), offsetVector, r, 0.5f + 0.1f * mySin);
 				helper.lightColor.A = oldAlpha;
 			}
 		}
@@ -247,26 +247,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			float r = -MathHelper.Pi / 64 + MathHelper.Pi / 32 * (float)Math.Sin(cycleAngle);
 			// body
 			Vector2 offsetVector = (-1 + 2f * (float)Math.Sin(2 * cycleAngle)) * Vector2.UnitY;
-			helper.AddSpriteToBatch(GetTexture(Texture), (textureFrame, 3), offsetVector, r, 1);
+			helper.AddSpriteToBatch(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, (textureFrame, 3), offsetVector, r, 1);
 			// head
 			offsetVector = new Vector2(10, -2 + 1.5f * (float)Math.Sin(2 * cycleAngle));
-			helper.AddSpriteToBatch(GetTexture(Texture + "_Head"), offsetVector);
+			helper.AddSpriteToBatch(Request<Texture2D>(Texture + "_Head").Value, offsetVector);
 		}
 
 		private void DrawBodyIdle(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
 			// body
 			Vector2 offsetVector = (-1 + 2f * (float)Math.Sin(cycleAngle + MathHelper.Pi / 2)) * Vector2.UnitY;
-			helper.AddSpriteToBatch(GetTexture(Texture), (1, 3),  offsetVector);
+			helper.AddSpriteToBatch(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, (1, 3),  offsetVector);
 			
 			// head
 			offsetVector = new Vector2(10, -2 + 1.5f * (float)Math.Sin(cycleAngle));
-			scHelper.AddSpriteToBatch(GetTexture(Texture + "_Head"), offsetVector);
+			scHelper.AddSpriteToBatch(Request<Texture2D>(Texture + "_Head").Value, offsetVector);
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			scHelper.Draw(spriteBatch, lightColor);
+			scHelper.Draw(lightColor);
 			return false;
 		}
 
@@ -274,20 +274,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		{
 			if(IsBouncing)
 			{
-				bool hitFloor = (projectile.velocity.Y == 0 || projectile.velocity.Y == -0.5f) && oldVelocity.Y >= 0;
-				bool hitCeil = (projectile.velocity.Y == 0 || projectile.velocity.Y == 0.5f) && oldVelocity.Y < 0;
-				bool hitWall = projectile.velocity.X == 0;
+				bool hitFloor = (Projectile.velocity.Y == 0 || Projectile.velocity.Y == -0.5f) && oldVelocity.Y >= 0;
+				bool hitCeil = (Projectile.velocity.Y == 0 || Projectile.velocity.Y == 0.5f) && oldVelocity.Y < 0;
+				bool hitWall = Projectile.velocity.X == 0;
 				if(hitFloor)
 				{
-					projectile.velocity.Y = Math.Min(-4, -projectile.oldVelocity.Y * 0.95f);
+					Projectile.velocity.Y = Math.Min(-4, -Projectile.oldVelocity.Y * 0.95f);
 				} 				
 				if(hitCeil)
 				{
-					projectile.velocity.Y = Math.Max(4, -projectile.oldVelocity.Y);
+					Projectile.velocity.Y = Math.Max(4, -Projectile.oldVelocity.Y);
 				}
 				if(hitWall)
 				{
-					projectile.velocity.X = -oldVelocity.X;
+					Projectile.velocity.X = -oldVelocity.X;
 				}
 				return false;
 			} else
@@ -299,20 +299,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		{
 			if(IsBouncing)
 			{
-				projectile.spriteDirection = Math.Sign(projectile.velocity.X);
-				projectile.rotation += projectile.spriteDirection * MathHelper.Pi / 16;
+				Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
+				Projectile.rotation += Projectile.spriteDirection * MathHelper.Pi / 16;
 				return;
 			} 				
-			projectile.rotation = 0;
+			Projectile.rotation = 0;
 			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
-				projectile.spriteDirection = Math.Sign(target.X);
-			} else if (projectile.velocity.X > 1)
+				Projectile.spriteDirection = Math.Sign(target.X);
+			} else if (Projectile.velocity.X > 1)
 			{
-				projectile.spriteDirection = 1;
-			} else if (projectile.velocity.X < -1)
+				Projectile.spriteDirection = 1;
+			} else if (Projectile.velocity.X < -1)
 			{
-				projectile.spriteDirection = -1;
+				Projectile.spriteDirection = -1;
 			}
 		}
 	}

@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public int attackFrames = 60;
 		public int attackFrame
 		{
-			get => (int)projectile.ai[0];
-			set => projectile.ai[0] = value;
+			get => (int)Projectile.ai[0];
+			set => Projectile.ai[0] = value;
 		}
 
 		public override void SetDefaults()
@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			if (others == null)
 			{
-				others = GetMinionsOfType(projectile.type);
+				others = GetMinionsOfType(Projectile.type);
 			}
 			return others;
 		}
@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public List<Projectile> GetAllMinionsOwnedByPlayer()
 		{
 			return Main.projectile
-				.Where(p => p.active && p.owner == projectile.owner && (p.minion || ProjectileID.Sets.MinionShot[p.type]))
+				.Where(p => p.active && p.owner == Projectile.owner && (p.minion || ProjectileID.Sets.MinionShot[p.type]))
 				.ToList();
 		}
 
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public bool IsMyTurn()
 		{
-			if (player.ownedProjectileCounts[projectile.type] == 1)
+			if (player.ownedProjectileCounts[Projectile.type] == 1)
 			{
 				// don't obey cycle if only one minion
 				return true;
@@ -92,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				return false;
 			}
 			var leader = GetFirstMinion(minions);
-			int order = minions.IndexOf(projectile);
+			int order = minions.IndexOf(Projectile);
 			int attackFrame = order * (attackFrames / minions.Count);
 			int currentFrame = (int)leader.ai[0];
 			return currentFrame == attackFrame;
@@ -105,13 +105,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				foreach (Projectile otherMinion in GetAllMinionsOwnedByPlayer())
 				{
-					if (otherMinion.whoAmI == projectile.whoAmI)
+					if (otherMinion.whoAmI == Projectile.whoAmI)
 					{
 						continue;
 					}
-					if (projectile.Hitbox.Intersects(otherMinion.Hitbox))
+					if (Projectile.Hitbox.Intersects(otherMinion.Hitbox))
 					{
-						Vector2 difference = otherMinion.Center - projectile.Center;
+						Vector2 difference = otherMinion.Center - Projectile.Center;
 						difference.SafeNormalize();
 						distanceToTarget += -separation * difference;
 					}
@@ -133,12 +133,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			if (PlayerTargetPosition(searchDistance, center, noLOSDistance) is Vector2 target)
 			{
 				attackState = AttackState.ATTACKING;
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance, noLOSDistance) is Vector2 target2)
 			{
 				attackState = AttackState.ATTACKING;
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{

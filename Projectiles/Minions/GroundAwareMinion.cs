@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
@@ -92,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal int transformRateLimit = 15;
 		private int slowFrameCount;
 
-		private Projectile projectile => self.projectile;
+		private Projectile projectile => self.Projectile;
 		public GroundAwarenessHelper(SimpleMinion self)
 		{
 			this.self = self;
@@ -107,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal bool InTheGround(Vector2 position)
 		{
 			Tile tile = TileAtLocation(position);
-			return tile.collisionType == 1 || Main.tileSolidTop[tile.type];
+			return tile.CollisionType == 1 || Main.tileSolidTop[tile.type];
 		}
 
 		internal bool StandingOnPlatform()
@@ -130,7 +131,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			Vector2 bottomOfProjectile = projectile.Bottom;
 			bottomOfProjectile.Y += 8; // go to the next block down
 			Tile tileUnderfoot = TileAtLocation(bottomOfProjectile);
-			return tileUnderfoot.leftSlope() || tileUnderfoot.rightSlope();
+			//return tileUnderfoot.leftSlope() || tileUnderfoot.rightSlope();
+			var s = tileUnderfoot.Slope;
+			return s == SlopeType.SlopeDownRight || s == SlopeType.SlopeUpRight ||
+				s == SlopeType.SlopeDownLeft || s == SlopeType.SlopeUpLeft;
 		}
 
 		// Find the nearest tile that's directly beneath the minion and directly above the ground eg:

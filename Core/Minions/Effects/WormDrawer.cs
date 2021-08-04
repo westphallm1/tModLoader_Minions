@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 
 namespace AmuletOfManyMinions.Core.Minions.Effects
@@ -15,8 +12,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		private float[] backingArray;
 		internal int frame;
 		internal CircularLengthQueue PositionLog;
-		protected SpriteBatch spriteBatch;
-		protected Texture2D texture;
+		protected Asset<Texture2D> texture;
 		protected Color lightColor;
 
 		internal int SegmentCount { get; set; } = 0;
@@ -39,10 +35,9 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			return effects;
 		}
 
-		public virtual void Draw(Texture2D texture, SpriteBatch spriteBatch, Color lightColor)
+		public virtual void Draw(Asset<Texture2D> texture, Color lightColor)
 		{
 			this.texture = texture;
-			this.spriteBatch = spriteBatch;
 			this.lightColor = lightColor;
 
 			DrawTail();
@@ -59,7 +54,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r,
 				origin, 1, GetEffects(r), 0);
 		}

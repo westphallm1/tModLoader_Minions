@@ -7,15 +7,16 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 {
 	public class BombBuddyMinionBuff : MinionBuff
 	{
 		public BombBuddyMinionBuff() : base(ProjectileType<BombBuddyMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bomb Buddy");
 			Description.SetDefault("A bomb buddy will explode for you!");
 		}
@@ -33,22 +34,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 24;
-			item.knockBack = 5.5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 5, 0);
-			item.rare = ItemRarityID.Blue;
+			Item.damage = 24;
+			Item.knockBack = 5.5f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 0, 5, 0);
+			Item.rare = ItemRarityID.Blue;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:EvilBars", 12);
-			recipe.AddIngredient(ItemID.Bomb, 20);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddRecipeGroup("AmuletOfManyMinions:EvilBars", 12).AddIngredient(ItemID.Bomb, 20).AddTile(TileID.Anvils).Register();
 		}
 	}
 
@@ -78,15 +74,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bomb Buddy");
-			Main.projFrames[projectile.type] = 12;
+			Main.projFrames[Projectile.type] = 12;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 30;
-			drawOriginOffsetY = -4;
+			Projectile.width = 24;
+			Projectile.height = 30;
+			DrawOriginOffsetY = -4;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -115,13 +111,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			if (isRespawning)
 			{
 				// clamp to the player while respawning
-				projectile.position = player.position;
-				projectile.velocity = player.velocity;
+				Projectile.position = player.position;
+				Projectile.velocity = player.velocity;
 			}
 			else if (didJustRespawn)
 			{
-				projectile.position += vectorToIdle;
-				projectile.velocity = player.velocity;
+				Projectile.position += vectorToIdle;
+				Projectile.velocity = player.velocity;
 				DoRespawnEffects();
 			}
 			else
@@ -132,19 +128,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			float xMaxSpeed = 9.5f;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+			Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -152,14 +148,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			if (isRespawning)
 			{
 				// clamp to the player while respawning
-				projectile.position = player.position;
-				projectile.velocity = player.velocity;
+				Projectile.position = player.position;
+				Projectile.velocity = player.velocity;
 			}
 			else if (vectorToTargetPosition.Length() < explosionRadius / 2 && !usingBeacon)
 			{
 				lastExplosionFrame = animationFrame;
-				explosionLocation = projectile.Center;
-				Main.PlaySound(SoundID.Item62, projectile.Center);
+				explosionLocation = Projectile.Center;
+				SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
 				DoExplosionEffects();
 			}
 			else
@@ -174,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			return canAttack ? base.FindTarget() : null;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			return !isRespawning;
 		}
@@ -184,7 +180,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			float goreVel = 0.4f;
 			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 			{
-				int goreIdx = Gore.NewGore(projectile.Center, default, Main.rand.Next(61, 64));
+				int goreIdx = Gore.NewGore(Projectile.Center, default, Main.rand.Next(61, 64));
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += 0.5f * offset;
 				Main.gore[goreIdx].scale = 0.75f;
@@ -194,7 +190,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		}
 		private void DoExplosionEffects()
 		{
-			Vector2 position = projectile.position;
+			Vector2 position = Projectile.position;
 			int width = 22;
 			int height = 22;
 			for (int i = 0; i < 30; i++)
@@ -226,7 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			if (state == GroundAnimationState.FLYING && animationFrame % 3 == 0)
 			{
-				int idx = Dust.NewDust(projectile.Bottom, 8, 8, 16, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;
 				Main.dust[idx].scale = .9f;
 			}
@@ -234,7 +230,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 
 		public override void AfterMoving()
 		{
-			projectile.friendly = isRespawning && animationFrame - lastExplosionFrame <= 15;
+			Projectile.friendly = isRespawning && animationFrame - lastExplosionFrame <= 15;
 		}
 	}
 }

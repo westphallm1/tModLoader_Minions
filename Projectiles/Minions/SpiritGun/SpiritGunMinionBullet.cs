@@ -11,8 +11,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 	{
 		bool hitTarget
 		{
-			get => projectile.ai[0] != 0;
-			set => projectile.ai[0] = value ? 1 : 0;
+			get => Projectile.ai[0] != 0;
+			set => Projectile.ai[0] = value ? 1 : 0;
 		}
 
 		internal override int BuffId => -1;
@@ -25,19 +25,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 1;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
-			projectile.width = 24;
-			projectile.height = 2;
-			projectile.friendly = true;
-			projectile.penetrate = 3;
-			projectile.tileCollide = true;
-			projectile.timeLeft = 120;
+			Projectile.width = 24;
+			Projectile.height = 2;
+			Projectile.friendly = true;
+			Projectile.penetrate = 3;
+			Projectile.tileCollide = true;
+			Projectile.timeLeft = 120;
 			hitTarget = false;
 			lookingForTarget = false;
 		}
@@ -46,7 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		{
 			if ((PlayerTargetPosition(600) ?? SelectedEnemyInRange(600)) is Vector2 target && targetNPCIndex is int targetIdx)
 			{
-				velocity = target - projectile.Center;
+				velocity = target - Projectile.Center;
 				vectorToTarget = velocity;
 				lookingForTarget = false;
 				velocity.SafeNormalize();
@@ -57,10 +57,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public override void AI()
 		{
-			player = Main.player[projectile.owner];
+			player = Main.player[Projectile.owner];
 			if (velocity == default)
 			{
-				velocity = projectile.velocity;
+				velocity = Projectile.velocity;
 				vectorToTarget = velocity;
 				velocity.SafeNormalize();
 				velocity *= speed;
@@ -78,12 +78,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 				LookForTarget();
 			}
 			vectorToTarget -= velocity;
-			projectile.rotation = velocity.ToRotation();
-			projectile.velocity = velocity;
-			Lighting.AddLight(projectile.position, Color.LightCyan.ToVector3());
+			Projectile.rotation = velocity.ToRotation();
+			Projectile.velocity = velocity;
+			Lighting.AddLight(Projectile.position, Color.LightCyan.ToVector3());
 			// MP-safe collision check
 			if (targetNPC != null && targetNPC.active &&
-				Vector2.DistanceSquared(targetNPC.Center, projectile.Center) < projectile.velocity.LengthSquared())
+				Vector2.DistanceSquared(targetNPC.Center, Projectile.Center) < Projectile.velocity.LengthSquared())
 			{
 				hitTarget = true;
 			}

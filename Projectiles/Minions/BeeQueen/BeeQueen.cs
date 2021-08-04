@@ -13,9 +13,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 	public class BeeQueenMinionBuff : MinionBuff
 	{
 		public BeeQueenMinionBuff() : base(ProjectileType<BeeQueenCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bumble Bombardier");
 			Description.SetDefault("A bee assistant will fight for you!");
 		}
@@ -33,13 +33,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 20;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.Green;
+			Item.damage = 20;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 0, 2, 0);
+			Item.rare = ItemRarityID.Green;
 		}
 	}
 
@@ -51,25 +51,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 
 		private Vector2 rememberedEnemyAngle = new Vector2(0, -6);
 
-		private int spawnFrequency => (int)projectile.ai[0];
+		private int spawnFrequency => (int)Projectile.ai[0];
 		private int timeToLive = 360;
 		private bool inSummoningMode = false;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
-			Main.projFrames[projectile.type] = 2;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+			Main.projFrames[Projectile.type] = 2;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 26;
-			projectile.tileCollide = true;
-			projectile.penetrate = -1;
-			projectile.friendly = true;
-			projectile.usesLocalNPCImmunity = true;
+			Projectile.width = 22;
+			Projectile.height = 26;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = -1;
+			Projectile.friendly = true;
+			Projectile.usesLocalNPCImmunity = true;
 		}
 
 		private void EnterSummoningMode()
@@ -79,13 +79,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				return;
 			}
 			inSummoningMode = true;
-			projectile.netUpdate = true; //TODO investigate if this is enough
-			projectile.friendly = false;
-			projectile.timeLeft = timeToLive - (int)projectile.ai[0] - 1;
-			projectile.velocity = Vector2.Zero;
+			Projectile.netUpdate = true; //TODO investigate if this is enough
+			Projectile.friendly = false;
+			Projectile.timeLeft = timeToLive - (int)Projectile.ai[0] - 1;
+			Projectile.velocity = Vector2.Zero;
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.Top, 16, 16, 153);
+				Dust.NewDust(Projectile.Top, 16, 16, 153);
 			}
 		}
 
@@ -119,43 +119,44 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if (projectile.timeLeft % spawnFrequency == 0 && projectile.timeLeft > 60)
+			if (Projectile.timeLeft % spawnFrequency == 0 && Projectile.timeLeft > 60)
 			{
 
 				for (int i = 0; i < 3; i++)
 				{
-					Dust.NewDust(projectile.Top, 16, 16, 153);
+					Dust.NewDust(Projectile.Top, 16, 16, 153);
 				}
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						projectile.Center,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center,
 						rememberedEnemyAngle,
 						ProjectileType<HoneySlime>(),
-						projectile.damage,
-						projectile.knockBack,
+						Projectile.damage,
+						Projectile.knockBack,
 						player.whoAmI);
 				}
 			}
-			if (projectile.timeLeft == 60)
+			if (Projectile.timeLeft == 60)
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					Dust.NewDust(projectile.Top, 16, 16, 153);
+					Dust.NewDust(Projectile.Top, 16, 16, 153);
 				}
 			}
-			projectile.velocity.Y += 0.5f;
+			Projectile.velocity.Y += 0.5f;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			projectile.frame = projectile.timeLeft > 60 ? 0 : 1;
+			Projectile.frame = Projectile.timeLeft > 60 ? 0 : 1;
 		}
 
 		public override void Kill(int timeLeft)
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.position, 1, 1, DustType<BucketDust>(), Main.rand.Next(6) - 3, -3);
+				Dust.NewDust(Projectile.position, 1, 1, DustType<BucketDust>(), Main.rand.Next(6) - 3, -3);
 			}
 		}
 	}
@@ -181,15 +182,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bee Bombardier");
-			Main.projFrames[projectile.type] = 6;
-			IdleLocationSets.trailingInAir.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 6;
+			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 32;
-			projectile.height = 32;
+			Projectile.width = 32;
+			Projectile.height = 32;
 			frameSpeed = 15;
 			animationFrameCounter = 0;
 			reloadStartFrame = -reloadCycleLength;
@@ -198,13 +199,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if (projectile.velocity.X >= 2)
+			if (Projectile.velocity.X >= 2)
 			{
-				projectile.spriteDirection = -1;
+				Projectile.spriteDirection = -1;
 			}
-			else if (projectile.velocity.X <= -2)
+			else if (Projectile.velocity.X <= -2)
 			{
-				projectile.spriteDirection = 1;
+				Projectile.spriteDirection = 1;
 			}
 		}
 
@@ -213,7 +214,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			base.IdleBehavior();
 			float idleAngle = (float)(2 * Math.PI * animationFrameCounter % 240) / 240;
 			Vector2 idlePosition = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, projectile);
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -35 + 5 * (float)Math.Sin(idleAngle);
 			if (!Collision.CanHit(idlePosition, 1, 1, player.Center, 1, 1))
 			{
@@ -221,7 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				idlePosition.X += 30 * -player.direction;
 				idlePosition.Y += -35;
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			animationFrameCounter++;
 			if (animationFrameCounter - reloadStartFrame == reloadCycleLength)
@@ -247,14 +248,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		{
 			int targetAbove = 80;
 			Vector2 vectorAbove = vectorToTargetPosition;
-			projectile.friendly = false;
+			Projectile.friendly = false;
 			// only check for exact position once close to target
 			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
 			{
 				for (int i = 16; i < targetAbove; i++)
 				{
 					vectorAbove = new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - i);
-					if (!Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorAbove, 1, 1))
+					if (!Collision.CanHit(Projectile.Center, 1, 1, Projectile.Center + vectorAbove, 1, 1))
 					{
 						break;
 					}
@@ -263,11 +264,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			if (readyToAttack && Main.myPlayer == player.whoAmI && Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
 			{
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					VaryLaunchVelocity(new Vector2(vectorAbove.X / 8, 2)),
 					ProjectileType<BeeQueenBucket>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					player.whoAmI,
 					ai0: Math.Max(45, 100 - 10 * EmpowerCount));
 				reloadStartFrame = animationFrameCounter;
@@ -275,40 +277,40 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			vectorAbove.SafeNormalize();
 			vectorAbove *= 8;
 			int inertia = 18;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorAbove) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorAbove) / inertia;
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			DrawWings(spriteBatch, lightColor);
-			DrawBody(spriteBatch, lightColor);
+			DrawWings(lightColor);
+			DrawBody(lightColor);
 			return false;
 		}
 
-		private void DrawWings(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawWings(Color lightColor)
 		{
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 128);
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center + new Vector2(8 * projectile.spriteDirection, 0);
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center + new Vector2(8 * Projectile.spriteDirection, 0);
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			int wingFrame = (animationFrameCounter % 12) / 3;
-			Texture2D texture = GetTexture(Texture + "_Wings");
+			Texture2D texture = Request<Texture2D>(Texture + "_Wings").Value;
 			int frameHeight = texture.Height / 4;
 			Rectangle bounds = new Rectangle(0, wingFrame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, translucentColor, r,
 				origin, 1f, effects, 0);
 		}
-		private void DrawBody(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawBody(Color lightColor)
 		{
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			Texture2D texture = GetTexture(Texture);
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 0.75f, effects, 0);
 		}
@@ -345,7 +347,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				minFrame = 0;
 				maxFrame = 2;
 			}
-			else if (Math.Abs(projectile.velocity.Length()) > 4)
+			else if (Math.Abs(Projectile.velocity.Length()) > 4)
 			{
 				minFrame = 2;
 				maxFrame = 4;

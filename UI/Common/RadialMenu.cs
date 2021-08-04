@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.UI.Common
 			{
 				//Prevents drawing item textures on mouseover (bed, selected tool etc.)
 				Main.LocalPlayer.mouseInterface = true;
-				Main.LocalPlayer.showItemIcon = false;
+				Main.LocalPlayer.cursorItemIconEnabled = false;
 				Main.ItemIconCacheUpdate(0);
 			}
 			base.DrawSelf(spriteBatch);

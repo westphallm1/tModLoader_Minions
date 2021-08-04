@@ -16,11 +16,11 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 18;
-			item.value = Item.sellPrice(silver: 2, copper: 50);
-			item.rare = ItemRarityID.Orange;
-			item.defense = 7;
+			Item.width = 30;
+			Item.height = 18;
+			Item.value = Item.sellPrice(silver: 2, copper: 50);
+			Item.rare = ItemRarityID.Orange;
+			Item.defense = 7;
 		}
 
 		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.maxMinions += 1;
-			player.minionDamageMult += 0.04f;
+			player.GetDamage<SummonDamageClass>() += 0.04f;
 		}
 	}
 
@@ -40,12 +40,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.ShadowScale, 20);
-			recipe.AddIngredient(ItemID.Bone, 35);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.ShadowScale, 20).AddIngredient(ItemID.Bone, 35).AddTile(TileID.Anvils).Register();
 		}
 	}
 
@@ -54,12 +49,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.TissueSample, 20);
-			recipe.AddIngredient(ItemID.Bone, 35);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.TissueSample, 20).AddIngredient(ItemID.Bone, 35).AddTile(TileID.Anvils).Register();
 		}
 	}
 }

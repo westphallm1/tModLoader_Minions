@@ -14,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 	public class CrimsonSquireMinionBuff : MinionBuff
 	{
 		public CrimsonSquireMinionBuff() : base(ProjectileType<CrimsonSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crimson Squire");
 			Description.SetDefault("A crimson squire will follow your orders!");
 		}
@@ -35,50 +35,45 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 5f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 28;
-			item.value = Item.sellPrice(0, 0, 20, 0);
-			item.rare = ItemRarityID.Green;
+			Item.knockBack = 5f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 28;
+			Item.value = Item.sellPrice(0, 0, 20, 0);
+			Item.rare = ItemRarityID.Green;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.CrimtaneBar, 12);
-			recipe.AddIngredient(ItemID.TissueSample, 6);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.CrimtaneBar, 12).AddIngredient(ItemID.TissueSample, 6).AddTile(TileID.Anvils).Register();
 		}
 	}
 
 	public class EvilSquireExplosion : ModProjectile
 	{
-		public override string Texture => "Terraria/Projectile_0";
+		public override string Texture => "Terraria/Images/Projectile_0";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 1;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 1;
-			projectile.height = 1;
-			projectile.friendly = true;
-			projectile.penetrate = -1;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 30;
-			projectile.tileCollide = false;
-			projectile.timeLeft = 30;
+			Projectile.width = 1;
+			Projectile.height = 1;
+			Projectile.friendly = true;
+			Projectile.penetrate = -1;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 30;
+			Projectile.tileCollide = false;
+			Projectile.timeLeft = 30;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			return false;
 		}
@@ -92,7 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			// pass buff type and duration in via ai
-			target.AddBuff((int)projectile.ai[0], (int)projectile.ai[1]);
+			target.AddBuff((int)Projectile.ai[0], (int)Projectile.ai[1]);
 		}
 	}
 
@@ -107,29 +102,30 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = 1;
-			projectile.width = 12;
-			projectile.height = 12;
-			projectile.timeLeft = TimeToLive;
-			projectile.friendly = true;
-			projectile.tileCollide = true;
-			projectile.minion = true;
+			Projectile.penetrate = 1;
+			Projectile.width = 12;
+			Projectile.height = 12;
+			Projectile.timeLeft = TimeToLive;
+			Projectile.friendly = true;
+			Projectile.tileCollide = true;
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 
 		public override void AI()
 		{
 			base.AI();
-			if(projectile.timeLeft < TimeLeftToStartFalling && projectile.velocity.Y < 16)
+			if(Projectile.timeLeft < TimeLeftToStartFalling && Projectile.velocity.Y < 16)
 			{
-				projectile.velocity.Y += 0.5f;
-				projectile.velocity.X *= 0.99f;
+				Projectile.velocity.Y += 0.5f;
+				Projectile.velocity.X *= 0.99f;
 			}
-			projectile.rotation += MathHelper.Pi / 16 * Math.Sign(projectile.velocity.X);
+			Projectile.rotation += MathHelper.Pi / 16 * Math.Sign(Projectile.velocity.X);
 		}
 
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -139,8 +135,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 		public override void Kill(int timeLeft)
 		{
-			Main.PlaySound(new LegacySoundStyle(2, 107), projectile.Center);
-			Vector2 position = projectile.Center;
+			SoundEngine.PlaySound(new LegacySoundStyle(2, 107), Projectile.Center);
+			Vector2 position = Projectile.Center;
 			int width = 22;
 			int height = 22;
 			for (int i = 0; i < 10; i++)
@@ -157,15 +153,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 				Main.gore[goreIdx].velocity *= 0.25f;
 				Main.gore[goreIdx].velocity += offset;
 			}
-			if(projectile.owner == Main.myPlayer)
+			if(Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					Vector2.Zero,
 					ProjectileType<EvilSquireExplosion>(),
-					projectile.damage,
-					projectile.knockBack,
-					projectile.owner,
+					Projectile.damage,
+					Projectile.knockBack,
+					Projectile.owner,
 					ai0: BuffId,
 					ai1: BuffDuration);
 			}
@@ -174,7 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 	public class IchorFlaskProjectile : EvilSquireFlask
 	{
-		public override string Texture => "Terraria/Item_" + ItemID.FlaskofIchor;
+		public override string Texture => "Terraria/Images/Item_" + ItemID.FlaskofIchor;
 		protected override int DustId => 87;
 		protected override int BuffId => BuffID.Ichor;
 		protected override int BuffDuration => 300;
@@ -185,7 +182,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		internal override int BuffId => BuffType<CrimsonSquireMinionBuff>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
-		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.BloodLustCluster;
+		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.BloodLustCluster;
 
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
@@ -205,14 +202,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crimson Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 32;
+			Projectile.width = 22;
+			Projectile.height = 32;
 		}
 
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
@@ -220,15 +217,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			base.SpecialTargetedMovement(vectorToTargetPosition);
 			if(specialFrame == 1 && player.whoAmI == Main.myPlayer)
 			{
-				Vector2 vector2Mouse = Vector2.DistanceSquared(projectile.Center, Main.MouseWorld) < 48 * 48 ?
-					Main.MouseWorld - player.Center : Main.MouseWorld - projectile.Center;
+				Vector2 vector2Mouse = Vector2.DistanceSquared(Projectile.Center, Main.MouseWorld) < 48 * 48 ?
+					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
-				Projectile.NewProjectile(projectile.Center,
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<IchorFlaskProjectile>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer,
 					8);
 			}

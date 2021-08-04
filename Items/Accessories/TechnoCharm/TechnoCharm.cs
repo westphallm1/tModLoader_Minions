@@ -21,21 +21,16 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.LightPurple;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(gold: 5);
+			Item.rare = ItemRarityID.LightPurple;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.AvengerEmblem, 1);
-			recipe.AddIngredient(ItemType<SquireSkullAccessory>(), 1);
-			recipe.AddTile(TileID.TinkerersWorkbench);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.AvengerEmblem, 1).AddIngredient(ItemType<SquireSkullAccessory>(), 1).AddTile(TileID.TinkerersWorkbench).Register();
 		}
 		public override void UpdateEquip(Player player)
 		{
@@ -48,7 +43,7 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 		{
 			// don't allow side by side with squire skull, so their debuffs don't overwrite each other
 			int skullType = ItemType<SquireSkullAccessory>();
-			return slot > 9 || !player.armor.Skip(3).Take(5 + player.extraAccessorySlots).Any(a => !a.IsAir && a.type == skullType);
+			return slot > 9 || !player.armor.Skip(3).Take(5 + player.GetAmountOfExtraAccessorySlotsToShow()).Any(a => !a.IsAir && a.type == skullType);
 		}
 	}
 
@@ -60,14 +55,14 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 
 		public override void SetStaticDefaults()
 		{
-			Main.projFrames[projectile.type] = 8;
+			Main.projFrames[Projectile.type] = 8;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 20;
-			projectile.height = 16;
+			Projectile.width = 20;
+			Projectile.height = 16;
 		}
 
 		private int debuffCycle => (animationFrame % DebuffCycleFrames) / (DebuffCycleFrames / 3);
@@ -80,19 +75,19 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Frostburn;
 				squirePlayer.squireDebuffTime = 180;
-				Lighting.AddLight(projectile.position, Color.Cyan.ToVector3() * 0.33f);
+				Lighting.AddLight(Projectile.position, Color.Cyan.ToVector3() * 0.33f);
 			}
 			else if (debuffCycle == 1)
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.Ichor;
 				squirePlayer.squireDebuffTime = 60;
-				Lighting.AddLight(projectile.position, Color.Gold.ToVector3() * 0.33f);
+				Lighting.AddLight(Projectile.position, Color.Gold.ToVector3() * 0.33f);
 			}
 			else
 			{
 				squirePlayer.squireDebuffOnHit = BuffID.CursedInferno;
 				squirePlayer.squireDebuffTime = 180;
-				Lighting.AddLight(projectile.position, Color.LimeGreen.ToVector3() * 0.33f);
+				Lighting.AddLight(Projectile.position, Color.LimeGreen.ToVector3() * 0.33f);
 			}
 			int angleFrame = animationFrame % AnimationFrames;
 			float angle = 2 * (float)(Math.PI * angleFrame) / AnimationFrames;

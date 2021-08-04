@@ -14,10 +14,10 @@ namespace AmuletOfManyMinions.Items.Materials
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.Lime;
+			Item.width = 30;
+			Item.height = 32;
+			Item.value = Item.sellPrice(gold: 5);
+			Item.rare = ItemRarityID.Lime;
 		}
 	}
 	public class GraniteSpark : ModItem
@@ -32,11 +32,11 @@ namespace AmuletOfManyMinions.Items.Materials
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.maxStack = 999;
-			item.value = Item.sellPrice(copper: 50);
-			item.rare = ItemRarityID.White;
+			Item.width = 30;
+			Item.height = 32;
+			Item.maxStack = 999;
+			Item.value = Item.sellPrice(copper: 50);
+			Item.rare = ItemRarityID.White;
 		}
 	}
 }

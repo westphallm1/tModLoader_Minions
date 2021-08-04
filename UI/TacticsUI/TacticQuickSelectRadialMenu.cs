@@ -47,18 +47,19 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			{
 				// remove every waypoint, lack of ability to remove individual ones is a bit annoying
 				// but less annoying than having to click multiple times to remove a single waypoint
-				MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
-				MinionPathfindingPlayer waypointPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionPathfindingPlayer>();
+				Player player = Main.LocalPlayer;
+				MinionTacticsPlayer tacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
+				MinionPathfindingPlayer waypointPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
 				int oldGroup = tacticsPlayer.CurrentTacticGroup;
 				tacticsPlayer.CurrentTacticGroup = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;
-				waypointPlayer.ToggleWaypoint(true);
+				waypointPlayer.ToggleWaypoint(player.selectedItem, true);
 				tacticsPlayer.CurrentTacticGroup = oldGroup;
 				for(int j = 0; j < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; j++)
 				{
 					buttons[j].Highlighted = false;
 				}
 				buttons.Last().Highlighted = true;
-				StopShowing();
+				base.StopShowing();
 			};
 
 			// all buttons have the same left and right click 

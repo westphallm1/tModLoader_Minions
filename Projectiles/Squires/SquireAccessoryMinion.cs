@@ -9,8 +9,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 	{
 		new protected int animationFrame
 		{
-			get => (int)projectile.localAI[1];
-			set => projectile.localAI[1] = value;
+			get => (int)Projectile.localAI[1];
+			set => Projectile.localAI[1] = value;
 		}
 
 		protected abstract bool IsEquipped(SquireModPlayer player);
@@ -21,9 +21,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.friendly = false;
-			projectile.tileCollide = false;
-			projectile.timeLeft = 2;
+			Projectile.friendly = false;
+			Projectile.tileCollide = false;
+			Projectile.timeLeft = 2;
 			animationFrame = 0;
 		}
 
@@ -34,10 +34,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			squire = squirePlayer.GetSquire();
 			if (squire == null || !IsEquipped(squirePlayer))
 			{
-				return projectile.velocity;
+				return Projectile.velocity;
 			}
-			projectile.timeLeft = 2;
-			Vector2 target = squire.Center - projectile.Center;
+			Projectile.timeLeft = 2;
+			Vector2 target = squire.Center - Projectile.Center;
 			TeleportToPlayer(ref target, 2000f);
 			return target;
 		}
@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			projectile.position += vectorToIdlePosition;
+			Projectile.position += vectorToIdlePosition;
 		}
 	}
 }

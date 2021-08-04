@@ -13,9 +13,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 	public class SlimecartMinionBuff : MinionBuff
 	{
 		public SlimecartMinionBuff() : base(ProjectileType<SlimecartMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slimecart");
 			Description.SetDefault("A slime miner will fight for you!");
 		}
@@ -33,23 +33,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 10;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 5, 0);
-			item.rare = ItemRarityID.White;
+			Item.damage = 10;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 0, 5, 0);
+			Item.rare = ItemRarityID.White;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Minecart, 1);
-			recipe.AddIngredient(ItemID.MiningHelmet, 1);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:Silvers", 12);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Minecart, 1).AddIngredient(ItemID.MiningHelmet, 1).AddRecipeGroup("AmuletOfManyMinions:Silvers", 12).AddTile(TileID.Anvils).Register();
 		}
 	}
 
@@ -64,17 +58,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slimecart");
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 32;
-			projectile.height = 28;
-			projectile.localNPCHitCooldown = 20;
-			drawOffsetX = -2;
-			drawOriginOffsetY = 2;
+			Projectile.width = 32;
+			Projectile.height = 28;
+			Projectile.localNPCHitCooldown = 20;
+			DrawOffsetX = -2;
+			DrawOriginOffsetY = 2;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -82,27 +76,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			defaultJumpVelocity = 4;
 			maxJumpVelocity = 12;
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			Texture2D texture;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			float brightness = (lightColor.R + lightColor.G + lightColor.B) / (3f * 255f);
 			if (gHelper.isFlying)
 			{
-				texture = GetTexture(Texture + "_Umbrella");
-				spriteBatch.Draw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
+				texture = Request<Texture2D>(Texture + "_Umbrella").Value;
+				Main.EntitySpriteDraw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
 					texture.Bounds, lightColor, 0,
 					texture.Bounds.Center.ToVector2(), 1, effects, 0);
 			}
-			texture = GetTexture(Texture + "_Slime");
+			texture = Request<Texture2D>(Texture + "_Slime").Value;
 			int frameHeight = texture.Height / 7;
 			Rectangle bounds = new Rectangle(0, slimeIndex * frameHeight, texture.Width, frameHeight);
-			spriteBatch.Draw(texture, pos + new Vector2(0, -14) - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos + new Vector2(0, -14) - Main.screenPosition,
 				bounds, lightColor, 0,
 				new Vector2(bounds.Width/2, bounds.Height/2), 1, effects, 0);
-			texture = GetTexture(Texture + "_Hat");
-			spriteBatch.Draw(texture, pos + new Vector2(0, -23) - Main.screenPosition,
+			texture = Request<Texture2D>(Texture + "_Hat").Value;
+			Main.EntitySpriteDraw(texture, pos + new Vector2(0, -23) - Main.screenPosition,
 				texture.Bounds, lightColor, 0,
 				texture.Bounds.Center.ToVector2(), 1, effects, 0);
 			return true;
@@ -115,25 +109,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
-			if (vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 8;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			if (animationFrame - lastHitFrame > 15)
 			{
-				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
 			else
 			{
-				projectile.velocity.X = Math.Sign(projectile.velocity.X) * xMaxSpeed * 0.75f;
+				Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * xMaxSpeed * 0.75f;
 			}
 		}
 
@@ -141,22 +135,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		{
 			if (gHelper.didJustLand)
 			{
-				projectile.rotation = 0;
+				Projectile.rotation = 0;
 			}
 			else
 			{
-				projectile.rotation = -projectile.spriteDirection * MathHelper.Pi / 8;
+				Projectile.rotation = -Projectile.spriteDirection * MathHelper.Pi / 8;
 			}
-			if (Math.Abs(projectile.velocity.X) < 1)
+			if (Math.Abs(Projectile.velocity.X) < 1)
 			{
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if (gHelper.didJustLand && Math.Abs(projectile.velocity.X) > 4 && animationFrame % 5 == 0)
+			if (gHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4 && animationFrame % 5 == 0)
 			{
-				Vector2 pos = projectile.Bottom;
+				Vector2 pos = Projectile.Bottom;
 				pos.Y -= 4;
-				int idx = Dust.NewDust(pos, 8, 8, 16, -projectile.velocity.X / 2, 0, newColor: Color.Coral);
+				int idx = Dust.NewDust(pos, 8, 8, 16, -Projectile.velocity.X / 2, 0, newColor: Color.Coral);
 				Main.dust[idx].scale = .8f;
 				Main.dust[idx].alpha = 112;
 			}

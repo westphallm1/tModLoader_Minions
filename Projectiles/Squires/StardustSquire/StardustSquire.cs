@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -16,9 +17,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 	public class StardustSquireMinionBuff : MinionBuff
 	{
 		public StardustSquireMinionBuff() : base(ProjectileType<StardustSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Stardust Squire");
 			Description.SetDefault("A stardust squire will follow your orders!");
 		}
@@ -40,21 +41,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 92;
-			item.value = Item.sellPrice(0, 10, 0, 0);
-			item.rare = ItemRarityID.Red;
+			Item.knockBack = 3f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 92;
+			Item.value = Item.sellPrice(0, 10, 0, 0);
+			Item.rare = ItemRarityID.Red;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.FragmentStardust, 18);
-			recipe.AddTile(TileID.LunarCraftingStation);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.FragmentStardust, 18).AddTile(TileID.LunarCraftingStation).Register();
 		}
 	}
 
@@ -68,24 +65,24 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			ProjectileID.Sets.MinionShot[projectile.type] = false; // hack to undo TransientMinion.SetStaticDefaults
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			ProjectileID.Sets.MinionShot[Projectile.type] = false; // hack to undo TransientMinion.SetStaticDefaults
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 100);
-			Texture2D texture = Main.projectileTexture[projectile.type];
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 
-			Rectangle bounds = new Rectangle(0, projectile.frame * texture.Height / Main.projFrames[projectile.type], projectile.width, projectile.height);
-			Vector2 origin = new Vector2(projectile.width / 2, projectile.height / 2);
+			Rectangle bounds = new Rectangle(0, Projectile.frame * texture.Height / Main.projFrames[Projectile.type], Projectile.width, Projectile.height);
+			Vector2 origin = new Vector2(Projectile.width / 2, Projectile.height / 2);
 
 			SpriteEffects effects = 0;
-			if (projectile.velocity.X < 0)
+			if (Projectile.velocity.X < 0)
 			{
 				effects = SpriteEffects.FlipVertically;
 			}
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				bounds, translucentColor, projectile.rotation,
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				bounds, translucentColor, Projectile.rotation,
 				origin, 1, effects, 0);
 			return false;
 		}
@@ -94,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		{
 			vector2Target.SafeNormalize();
 			vector2Target *= maxSpeed;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vector2Target) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vector2Target) / inertia;
 			base.TargetedMovement(vector2Target);
 		}
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -108,12 +105,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override Vector2 IdleBehavior()
 		{
-			Lighting.AddLight(projectile.Center, Color.DeepSkyBlue.ToVector3());
-			projectile.rotation = projectile.velocity.ToRotation();
+			Lighting.AddLight(Projectile.Center, Color.DeepSkyBlue.ToVector3());
+			Projectile.rotation = Projectile.velocity.ToRotation();
 			if (initialVelocity == Vector2.Zero)
 			{
-				initialVelocity = projectile.velocity;
-				maxSpeed = projectile.velocity.Length();
+				initialVelocity = Projectile.velocity;
+				maxSpeed = Projectile.velocity.Length();
 			}
 			return initialVelocity;
 		}
@@ -125,13 +122,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override void Kill(int timeLeft)
 		{
-			Main.PlaySound(SoundID.Item20, projectile.position);
+			SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
-				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 1f);
+				Dust.NewDust(Projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 1f);
 				velocity *= 2;
-				Dust.NewDust(projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 1f);
+				Dust.NewDust(Projectile.Center, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 1f);
 			}
 		}
 	}
@@ -141,29 +138,29 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 6;
+			Main.projFrames[Projectile.type] = 6;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			frameSpeed = 5;
-			projectile.timeLeft = 180;
-			projectile.penetrate = 3;
-			projectile.friendly = true;
-			projectile.width = 48;
-			projectile.height = 24;
+			Projectile.timeLeft = 180;
+			Projectile.penetrate = 3;
+			Projectile.friendly = true;
+			Projectile.width = 48;
+			Projectile.height = 24;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			Vector2 offset = projectile.velocity;
+			Vector2 offset = Projectile.velocity;
 			offset.Normalize();
 			offset *= 24;
 			for (int i = 0; i < 5; i++)
 			{
-				Vector2 velocity = -projectile.velocity / 8 + 4 * new Vector2(Main.rand.NextFloat(), Main.rand.NextFloat());
-				Dust.NewDust(projectile.Center + offset, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 0.9f);
+				Vector2 velocity = -Projectile.velocity / 8 + 4 * new Vector2(Main.rand.NextFloat(), Main.rand.NextFloat());
+				Dust.NewDust(Projectile.Center + offset, 1, 1, DustType<MovingWaypointDust>(), velocity.X, velocity.Y, newColor: Color.DeepSkyBlue, Scale: 0.9f);
 			}
 			return base.IdleBehavior();
 		}
@@ -176,7 +173,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		{
 			if (SelectedEnemyInRange(300f, maxRangeFromPlayer: false) is Vector2 closest)
 			{
-				return closest - projectile.position;
+				return closest - Projectile.position;
 			}
 			return null;
 		}
@@ -187,11 +184,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = 3;
-			projectile.penetrate = 3;
-			projectile.friendly = true;
-			projectile.width = 22;
-			projectile.height = 32;
+			Projectile.timeLeft = 3;
+			Projectile.penetrate = 3;
+			Projectile.friendly = true;
+			Projectile.width = 22;
+			Projectile.height = 32;
 		}
 	}
 
@@ -201,25 +198,25 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override void SetStaticDefaults()
 		{
-			Main.projFrames[projectile.type] = 3;
+			Main.projFrames[Projectile.type] = 3;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = 60;
-			projectile.penetrate = -1;
-			projectile.friendly = true;
-			projectile.width = 22;
-			projectile.height = 32;
+			Projectile.timeLeft = 60;
+			Projectile.penetrate = -1;
+			Projectile.friendly = true;
+			Projectile.width = 22;
+			Projectile.height = 32;
 			inertia = 16;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 vector2Idle = base.IdleBehavior();
-			projectile.rotation = projectile.velocity.X >= 0 ? 0 : (float)Math.PI;
-			projectile.spriteDirection = projectile.velocity.X >= 0 ? 1 : -1;
+			Projectile.rotation = Projectile.velocity.X >= 0 ? 0 : (float)Math.PI;
+			Projectile.spriteDirection = Projectile.velocity.X >= 0 ? 1 : -1;
 			return vector2Idle;
 		}
 
@@ -228,25 +225,25 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			return base.OnTileCollide(oldVelocity) && !hasFoundTarget || framesSinceHadTarget > 60;
 		}
 
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
 			if (!(vectorToTarget is Vector2 target) || target.Length() > 48)
 			{
 				return;
 			}
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 100);
-			Texture2D texture = Main.projectileTexture[ProjectileType<StarFistProjectile>()];
+			Texture2D texture = TextureAssets.Projectile[ProjectileType<StarFistProjectile>()].Value;
 			for (int i = 0; i < 3; i++)
 			{
-				Vector2 offset = projectile.velocity;
+				Vector2 offset = Projectile.velocity;
 				offset.Normalize();
 				offset *= Main.rand.Next(12, 18);
-				float rotation = projectile.rotation + (float)(Math.PI / 6 - Main.rand.NextDouble() * Math.PI / 3);
-				spriteBatch.Draw(texture, projectile.Center + offset - Main.screenPosition,
+				float rotation = Projectile.rotation + (float)(Math.PI / 6 - Main.rand.NextDouble() * Math.PI / 3);
+				Main.EntitySpriteDraw(texture, Projectile.Center + offset - Main.screenPosition,
 					texture.Bounds, translucentColor, rotation,
 					texture.Bounds.Center.ToVector2(), 1, 0, 0);
 			}
-			base.PostDraw(spriteBatch, lightColor);
+			base.PostDraw(lightColor);
 		}
 
 		public override Vector2? FindTarget()
@@ -256,9 +253,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				if (!hasFoundTarget)
 				{
 					hasFoundTarget = true;
-					projectile.timeLeft += 180; // give a bit of extra attack time if we actually find anything
+					Projectile.timeLeft += 180; // give a bit of extra attack time if we actually find anything
 				}
-				return closest - projectile.position;
+				return closest - Projectile.position;
 			}
 			return null;
 		}
@@ -274,7 +271,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		internal override int BuffId => BuffType<StardustSquireMinionBuff>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => null;
-		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.StardustDragonStaff;
+		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.StardustDragonStaff;
 
 		protected override float IdleDistanceMulitplier => 2.5f;
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
@@ -297,36 +294,36 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 32;
+			Projectile.width = 24;
+			Projectile.height = 32;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Lighting.AddLight(projectile.Center, Color.DeepSkyBlue.ToVector3());
+			Lighting.AddLight(Projectile.Center, Color.DeepSkyBlue.ToVector3());
 			int projType = ProjectileType<StardustGuardianProjectile>();
 			if (player.ownedProjectileCounts[projType] == 0)
 			{
 				Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 100);
-				Texture2D texture = Main.projectileTexture[projType];
+				Texture2D texture = TextureAssets.Projectile[projType].Value;
 
-				Rectangle bounds = new Rectangle(0, projectile.frame * texture.Height / Main.projFrames[projType], 22, 36);
+				Rectangle bounds = new Rectangle(0, Projectile.frame * texture.Height / Main.projFrames[projType], 22, 36);
 				Vector2 origin = new Vector2(11, 18);
 
 				Vector2 guardianOffset = new Vector2(-16, -8);
-				guardianOffset.X *= projectile.spriteDirection;
-				SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-				spriteBatch.Draw(texture, projectile.Center + guardianOffset - Main.screenPosition,
-					bounds, translucentColor, projectile.rotation,
+				guardianOffset.X *= Projectile.spriteDirection;
+				SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+				Main.EntitySpriteDraw(texture, Projectile.Center + guardianOffset - Main.screenPosition,
+					bounds, translucentColor, Projectile.rotation,
 					origin, 1, effects, 0);
 			}
-			return base.PreDraw(spriteBatch, lightColor);
+			return base.PreDraw(ref lightColor);
 		}
 
 
@@ -349,11 +346,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					{
 						angleVector *= ModifiedProjectileVelocity() * 0.75f;
 						Projectile.NewProjectile(
-							projectile.Center,
+							Projectile.GetProjectileSource_FromThis(),
+							Projectile.Center,
 							angleVector,
 							ProjectileType<StardustGuardianProjectile>(),
-							projectile.damage,
-							projectile.knockBack,
+							Projectile.damage,
+							Projectile.knockBack,
 							Main.myPlayer);
 					}
 				}
@@ -363,11 +361,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					{
 						angleVector *= ModifiedProjectileVelocity();
 						Projectile.NewProjectile(
-							projectile.Center,
+							Projectile.GetProjectileSource_FromThis(),
+							Projectile.Center,
 							angleVector,
 							ProjectileType<StardustBeastProjectile>(),
-							projectile.damage,
-							projectile.knockBack,
+							Projectile.damage,
+							Projectile.knockBack,
 							Main.myPlayer);
 					}
 				}
@@ -391,15 +390,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				Vector2 target = Main.MouseWorld - projectile.Center;
+				Vector2 target = Main.MouseWorld - Projectile.Center;
 				target.SafeNormalize();
 				target *= 2 * projectileVelocity;
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					target,
 					ProjectileType<ConstellationSeed>(),
-					projectile.damage / 2,
-					projectile.knockBack / 2,
+					Projectile.damage / 2,
+					Projectile.knockBack / 2,
 					player.whoAmI,
 					ai0: Main.MouseWorld.X,
 					ai1: Main.MouseWorld.Y);

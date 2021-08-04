@@ -17,13 +17,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal abstract int VanillaItemID { get;  }
 		internal abstract string VanillaItemName { get;  }
 		static string BadgeTexture = "AmuletOfManyMinions/Projectiles/Minions/VanillaClones/AoMMBadge";
-		public override string Texture => "Terraria/Item_" + VanillaItemID;
+		public override string Texture => "Terraria/Images/Item_" + VanillaItemID;
 		public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 		{
 			//Texture2D itemTexture = Main.itemTexture[item.type];
-			//Texture2D texture = GetTexture(BadgeTexture);
+			//Texture2D texture = Request<Texture2D>(BadgeTexture);
 			//Vector2 positionOffset = new Vector2(itemTexture.Width - texture.Width, itemTexture.Height - texture.Height) * scale;
-			//spriteBatch.Draw(texture, position + positionOffset, texture.Bounds, drawColor, 0, origin, scale, SpriteEffects.None, 0f);
+			//Main.EntitySpriteDraw(texture, position + positionOffset, texture.Bounds, drawColor, 0, origin, scale, SpriteEffects.None, 0f);
 		}
 
 		public override void SetStaticDefaults()
@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void SetDefaults()
 		{
-			item.CloneDefaults(VanillaItemID);
+			Item.CloneDefaults(VanillaItemID);
 			base.SetDefaults();
 		}
 	}

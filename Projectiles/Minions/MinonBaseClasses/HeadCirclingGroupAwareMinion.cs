@@ -19,13 +19,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.tileCollide = false;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.tileCollide = false;
 			attackState = AttackState.IDLE;
 			attackFrames = 30;
-			projectile.localNPCHitCooldown = 20;
-			projectile.frame = (2 * projectile.minionPos) % 6;
+			Projectile.localNPCHitCooldown = 20;
+			Projectile.frame = (2 * Projectile.minionPos) % 6;
 			circleHelper = new HeadCirclingHelper(this);
 		}
 
@@ -43,39 +43,39 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override Vector2? FindTarget()
 		{
-			if (FindTargetInTurnOrder(targetSearchDistance, projectile.Center) is Vector2 target)
+			if (FindTargetInTurnOrder(targetSearchDistance, Projectile.Center) is Vector2 target)
 			{
-				projectile.friendly = true;
+				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				projectile.friendly = false;
+				Projectile.friendly = false;
 				return null;
 			}
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 			if (vectorToIdlePosition.Length() < maxSpeed)
 			{
-				projectile.rotation = 0;
+				Projectile.rotation = 0;
 				if(circleHelper.idleBumble && player.velocity.Length() < 4)
 				{
-					projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(circleHelper.bumbleTarget.X);
+					Projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(circleHelper.bumbleTarget.X);
 				} else
 				{
-					projectile.spriteDirection = (circleHelper.idleAngle % (2 * PI)) > PI ? -1 : 1;
+					Projectile.spriteDirection = (circleHelper.idleAngle % (2 * PI)) > PI ? -1 : 1;
 				}
 			}
 			else
 			{
 				vectorToIdlePosition.SafeNormalize();
 				vectorToIdlePosition *= maxSpeed;
-				projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(vectorToIdlePosition.X);
+				Projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(vectorToIdlePosition.X);
 			}
-			projectile.velocity = (projectile.velocity * (idleInertia - 1) + vectorToIdlePosition) / idleInertia;
+			Projectile.velocity = (Projectile.velocity * (idleInertia - 1) + vectorToIdlePosition) / idleInertia;
 		}
 	}
 
@@ -83,7 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 	{
 		internal SimpleMinion minion;
 
-		internal Projectile projectile => minion.projectile;
+		internal Projectile projectile => minion.Projectile;
 
 		internal Player player => minion.player;
 

@@ -26,18 +26,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slime Train Passenger");
-			Main.projFrames[projectile.type] = 6;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
-			ProjectileID.Sets.MinionSacrificable[projectile.type] = false;
+			Main.projFrames[Projectile.type] = 6;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.minion = false;
-			projectile.minionSlots = 0;
-			projectile.width = 20;
-			projectile.height = 20;
+			Projectile.minion = false;
+			Projectile.minionSlots = 0;
+			Projectile.width = 20;
+			Projectile.height = 20;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -66,16 +66,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			}
 			if(parent == default)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			}
-			return parent.Center - projectile.Center;
+			return parent.Center - Projectile.Center;
 		}
 
 		protected override bool DoPreStuckCheckGroundedMovement()
 		{
 			if (!gHelper.didJustLand)
 			{
-				projectile.velocity.X = intendedX;
+				Projectile.velocity.X = intendedX;
 				// only path after landing
 				return false;
 			}
@@ -105,41 +105,41 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			{
 				// go fast enough to hit the enemy while chasing them
 				Vector2 targetVelocity = Main.npc[idx].velocity;
-				projectile.velocity.X = Math.Max(4, Math.Min(maxHorizontalSpeed, Math.Abs(targetVelocity.X) * 1.25f)) * Math.Sign(vector.X);
+				Projectile.velocity.X = Math.Max(4, Math.Min(maxHorizontalSpeed, Math.Abs(targetVelocity.X) * 1.25f)) * Math.Sign(vector.X);
 			} else
 			{
 				// try to match the player's speed while not chasing an enemy
-				projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
+				Projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
 			}
-			intendedX = projectile.velocity.X;
+			intendedX = Projectile.velocity.X;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// if we get too close to the parent, get back onto the train (die)
-			if(Vector2.DistanceSquared(parent.Center, projectile.Center) < 32 * 32)
+			if(Vector2.DistanceSquared(parent.Center, Projectile.Center) < 32 * 32)
 			{
-				projectile.Kill();
+				Projectile.Kill();
 			} else
 			{
 				base.IdleMovement(vectorToIdlePosition);
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			lightColor = Color.White * 0.85f;
 			lightColor.A = 128;
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.velocity.X < 0 ? 0 : SpriteEffects.FlipHorizontally;
-			Texture2D texture = GetTexture(Texture);
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.velocity.X < 0 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int nColors = 7;
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			int frameWidth = texture.Width / nColors;
-			Rectangle bounds = new Rectangle(frameWidth * (int)(projectile.ai[1] % nColors), projectile.frame * frameHeight, frameWidth, frameHeight);
+			Rectangle bounds = new Rectangle(frameWidth * (int)(Projectile.ai[1] % nColors), Projectile.frame * frameHeight, frameWidth, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
 			return false;

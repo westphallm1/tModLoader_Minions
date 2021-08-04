@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -15,9 +16,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 	public class RatsMinionBuff : MinionBuff
 	{
 		public RatsMinionBuff() : base(ProjectileType<RatsMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Aww, Rats!");
 			Description.SetDefault("A group of rats will fight for you!");
 		}
@@ -35,22 +36,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 6;
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 5, 0);
-			item.rare = ItemRarityID.Blue;
+			Item.damage = 6;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 0, 5, 0);
+			Item.rare = ItemRarityID.Blue;
 		}
 
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
-			// summon 3 rats at a time
-			for(int i = 0; i < 3; i++)
+			ApplyBuff(player);
+			//summon 3 rats at a time
+			for (int i = 0; i < 3; i++)
 			{
-				Projectile.NewProjectile(position, Vector2.Zero, ProjectileType<RatsMinion>(), damage, knockBack, player.whoAmI);
+				var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, ProjectileType<RatsMinion>(), damage, knockback, player.whoAmI);
+				p.originalDamage = Item.damage;
 			}
 			return false;
 		}
@@ -75,23 +77,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Rat (Friendly)");
-			Main.projFrames[projectile.type] = 9;
+			Main.projFrames[Projectile.type] = 9;
 		}
 
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			projectile.damage = (int)Math.Ceiling(projectile.damage / 3f);
+			Projectile.damage = (int)Math.Ceiling(Projectile.damage / 3f);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 8;
-			projectile.height = 16;
-			projectile.minionSlots = 0.333f;
-			drawOffsetX = -6;
-			drawOriginOffsetY = -6;
+			Projectile.width = 8;
+			Projectile.height = 16;
+			Projectile.minionSlots = 0.333f;
+			DrawOffsetX = -6;
+			DrawOriginOffsetY = -6;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -114,21 +116,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			{
 				gHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 7;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8 && Math.Abs(player.velocity.X) > 4)
 			{
-				projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			if (animationFrame - lastHitFrame > 15)
 			{
-				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
 			else
 			{
-				projectile.velocity.X = Math.Sign(projectile.velocity.X) * xMaxSpeed * 0.75f;
+				Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * xMaxSpeed * 0.75f;
 			}
 		}
 
@@ -139,10 +141,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			if(rats.Count == 0)
 			{
 				clusterIdx = 0;
-				head = projectile;
+				head = Projectile;
 			} else
 			{
-				clusterIdx = rats.IndexOf(projectile);
+				clusterIdx = rats.IndexOf(Projectile);
 				head = rats[0];
 			}
 			gHelper.SetIsOnGround();
@@ -155,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 				idlePosition = player.Center;
 			}
 			idlePosition.X += (12 + rats.Count/3 ) * (float)Math.Sin(2 * Math.PI * ((groupAnimationFrame % 60) / 60f + clusterIdx/(rats.Count + 1)));
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}

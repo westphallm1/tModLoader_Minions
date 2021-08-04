@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.UI.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -37,7 +38,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			TargetSelectionTacticHandler.GetDisplayName(ID) + "\n" +
 			TargetSelectionTacticHandler.GetDescription(ID);
 
-		internal override Texture2D OutlineTexture => TargetSelectionTacticHandler.GetOutlineTexture(ID);
+		internal override Asset<Texture2D> OutlineTexture => TargetSelectionTacticHandler.GetOutlineTexture(ID);
 
 		internal TacticButton(int index, byte id) : base(TargetSelectionTacticHandler.GetTexture(id)/*do not refactor this to Tactic*/)
 		{

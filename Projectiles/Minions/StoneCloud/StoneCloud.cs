@@ -12,9 +12,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 	public class StoneCloudMinionBuff : MinionBuff
 	{
 		public StoneCloudMinionBuff() : base(ProjectileType<StoneCloudMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Stonecloud");
 			Description.SetDefault("An extremely dense cloud will fight for you!");
 		}
@@ -32,13 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.damage = 34;
-			item.knockBack = 5f;
-			item.mana = 10;
-			item.width = 28;
-			item.height = 28;
-			item.value = Item.buyPrice(0, 0, 2, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.damage = 34;
+			Item.knockBack = 5f;
+			Item.mana = 10;
+			Item.width = 28;
+			Item.height = 28;
+			Item.value = Item.buyPrice(0, 0, 2, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 	}
 
@@ -69,8 +69,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Stone Cloud");
-			Main.projFrames[projectile.type] = 6;
-			IdleLocationSets.circlingHead.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 6;
+			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -99,9 +99,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 32;
-			drawOffsetX = (projectile.width - 40) / 2;
+			Projectile.width = 24;
+			Projectile.height = 32;
+			DrawOffsetX = (Projectile.width - 40) / 2;
 			circleHelper.idleBumbleFrames = 90;
 			circleHelper.idleBumbleRadius = 96;
 			bumbleSpriteDirection = -1;
@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			animationFrame = 0;
 			idleInertia = 8;
 			frameSpeed = 5;
-			projectile.localNPCHitCooldown = 10;
+			Projectile.localNPCHitCooldown = 10;
 			gHelper = new GroundAwarenessHelper(this);
 			pathfinder.modifyPath = gHelper.ModifyPathfinding;
 		}
@@ -118,21 +118,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		{
 			minFrame = isStone ? 3 : 0;
 			maxFrame = isStone ? 6 : 3;
-			if (!isStone && Math.Abs(projectile.velocity.X) > 1 && vectorToTarget != null)
+			if (!isStone && Math.Abs(Projectile.velocity.X) > 1 && vectorToTarget != null)
 			{
-				projectile.spriteDirection = -Math.Sign(projectile.velocity.X);
+				Projectile.spriteDirection = -Math.Sign(Projectile.velocity.X);
 			}
 			base.Animate(minFrame, maxFrame);
 		}
 
 		public override void OnSpawn()
 		{
-			defaultKnockback = projectile.knockBack;
+			defaultKnockback = Projectile.knockBack;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			projectile.friendly = isStone;
+			Projectile.friendly = isStone;
 			Vector2 vectorToIdle = base.IdleBehavior();
 			int framesAsStone = animationFrame - stoneStartFrame;
 			doShockwaveCalculations();
@@ -149,7 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		private void doShockwaveCalculations()
 		{
 			int shockwaveFramesElapsed = animationFrame - shockwaveStartFrame;
-			projectile.knockBack = shockwaveFramesElapsed < ShockwaveTotalFrames ? defaultKnockback + 2 : defaultKnockback;
+			Projectile.knockBack = shockwaveFramesElapsed < ShockwaveTotalFrames ? defaultKnockback + 2 : defaultKnockback;
 			if (shockwaveFramesElapsed > ShockwaveMaxSpeedFrames)
 			{
 				shockwaveHitboxSpeed *= ShockwaveDecay;
@@ -164,8 +164,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			}
 			if (isStone && animationFrame - shockwaveStartFrame == 3)
 			{
-				shockwaveStartPosition = projectile.Bottom;
-				SpawnShockwaveDust(projectile.Bottom + new Vector2(0, -2));
+				shockwaveStartPosition = Projectile.Bottom;
+				SpawnShockwaveDust(Projectile.Bottom + new Vector2(0, -2));
 				shockwaveHitboxRadius = ShockwaveInitialRadius;
 				shockwaveHitboxSpeed = ShockwaveSpeed;
 			}
@@ -184,14 +184,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if (isStone && Math.Abs(projectile.velocity.Y) < 1 && oldVelocity.Y > 0)
+			if (isStone && Math.Abs(Projectile.velocity.Y) < 1 && oldVelocity.Y > 0)
 			{
-				projectile.velocity.X = 0;
+				Projectile.velocity.X = 0;
 				if (!didHitGround)
 				{
 					didHitGround = true;
-					Collision.HitTiles(projectile.BottomLeft, oldVelocity, 40, 8);
-					Main.PlaySound(new LegacySoundStyle(3, 7), projectile.position);
+					Collision.HitTiles(Projectile.BottomLeft, oldVelocity, 40, 8);
+					SoundEngine.PlaySound(new LegacySoundStyle(3, 7), Projectile.position);
 				}
 			}
 			return false;
@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			// cleverly hide the lack of a transformation animation with some well placed dust
 			for (int i = 0; i < 10; i++)
 			{
-				int dustIdx = Dust.NewDust(projectile.Center, 8, 8, 192, newColor: Color.LightGray, Scale: 1.2f);
+				int dustIdx = Dust.NewDust(Projectile.Center, 8, 8, 192, newColor: Color.LightGray, Scale: 1.2f);
 				Main.dust[dustIdx].noLight = false;
 				Main.dust[dustIdx].noGravity = true;
 			}
@@ -245,8 +245,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		}
 		private void DoStoneMovement()
 		{
-			projectile.tileCollide = true;
-			projectile.velocity.Y = FallSpeed;
+			Projectile.tileCollide = true;
+			Projectile.velocity.Y = FallSpeed;
 		}
 
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
@@ -268,14 +268,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			}
 			int targetAbove = 80;
 			Vector2 vectorAbove = vectorToTargetPosition;
-			projectile.friendly = false;
+			Projectile.friendly = false;
 			// only check for exact position once close to target
 			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
 			{
 				for (int i = 16; i < targetAbove; i += 8)
 				{
 					vectorAbove = new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - i);
-					if (!Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorAbove, 1, 1))
+					if (!Collision.CanHit(Projectile.Center, 1, 1, Projectile.Center + vectorAbove, 1, 1))
 					{
 						break;
 					}
@@ -294,12 +294,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 					if (vectorToTargetPosition.Y > 16)
 					{
 						float xSpeed = FallSpeed * vectorToTargetPosition.X / vectorToTargetPosition.Y;
-						projectile.velocity.X = Math.Min(xSpeed, 8);
+						Projectile.velocity.X = Math.Min(xSpeed, 8);
 
 					}
 					else
 					{
-						projectile.velocity.X = 0;
+						Projectile.velocity.X = 0;
 					}
 				}
 				return;
@@ -313,12 +313,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			vectorAbove.SafeNormalize();
 			vectorAbove *= speed;
 			int inertia = 16;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorAbove) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorAbove) / inertia;
 		}
 
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			hitDirection = Math.Sign(target.Center.X - projectile.Center.X);
+			hitDirection = Math.Sign(target.Center.X - Projectile.Center.X);
 		}
 	}
 }

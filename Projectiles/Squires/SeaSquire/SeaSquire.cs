@@ -14,9 +14,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 	public class SeaSquireMinionBuff : MinionBuff
 	{
 		public SeaSquireMinionBuff() : base(ProjectileType<SeaSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Sea Squire");
 			Description.SetDefault("A flying fish will follow your fancies!");
 		}
@@ -35,44 +35,45 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 7f;
-			item.width = 28;
-			item.height = 32;
-			item.damage = 10;
-			item.value = Item.buyPrice(0, 2, 0, 0);
-			item.rare = ItemRarityID.Blue;
+			Item.knockBack = 7f;
+			Item.width = 28;
+			Item.height = 32;
+			Item.damage = 10;
+			Item.value = Item.buyPrice(0, 2, 0, 0);
+			Item.rare = ItemRarityID.Blue;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Coral, 3);
-			recipe.AddIngredient(ItemID.Starfish, 3);
-			recipe.AddIngredient(ItemID.Seashell, 3);
-			recipe.AddIngredient(ItemID.SharkFin, 1);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Coral, 3).AddIngredient(ItemID.Starfish, 3).AddIngredient(ItemID.Seashell, 3).AddIngredient(ItemID.SharkFin, 1).AddTile(TileID.Anvils).Register();
 		}
 	}
 
 	public class SeaSquireBubble : ModProjectile
 	{
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SeaSquire/SeaSquireBubble";
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
-			projectile.CloneDefaults(ProjectileID.Bubble);
-			projectile.alpha = 240;
-			projectile.timeLeft = 180;
-			projectile.penetrate = 1;
-			projectile.ignoreWater = true;
-			projectile.friendly = true;
-			projectile.width = 12;
-			projectile.height = 12;
-			projectile.magic = false; //Bandaid fix
-			projectile.minion = true;
+			Projectile.CloneDefaults(ProjectileID.Bubble);
+			Projectile.alpha = 240;
+			Projectile.timeLeft = 180;
+			Projectile.penetrate = 1;
+			Projectile.ignoreWater = true;
+			Projectile.friendly = true;
+			Projectile.width = 12;
+			Projectile.height = 12;
+			// projectile.magic = false; //Bandaid fix
+			//Projectile.minion = true; //TODO 1.4
+			Projectile.DamageType = DamageClass.Summon;
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -82,10 +83,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		public override void Kill(int timeLeft)
 		{
-			Main.PlaySound(new LegacySoundStyle(2, 54), projectile.position);
+			SoundEngine.PlaySound(new LegacySoundStyle(2, 54), Projectile.position);
 			for (int i = 0; i < 8; i++)
 			{
-				int dustCreated = Dust.NewDust(projectile.Center, 1, 1, 137, projectile.velocity.X, projectile.velocity.Y, 0, Scale: 1.4f);
+				int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, 137, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
 				Main.dust[dustCreated].noGravity = true;
 			}
 		}
@@ -103,16 +104,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Sea Squire Shark");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 2;
+			Main.projFrames[Projectile.type] = 2;
 		}
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 24;
+			Projectile.width = 24;
+			Projectile.height = 24;
 			frameSpeed = 10;
 			blurHelper = new MotionBlurDrawer(5);
-			projectile.minionSlots = 0;
+			Projectile.minionSlots = 0;
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -157,27 +158,27 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		public override void AfterMoving()
 		{
-			if(projectile.velocity.X > 1)
+			if(Projectile.velocity.X > 1)
 			{
-				projectile.spriteDirection = 1;
-				projectile.rotation = projectile.velocity.ToRotation();
-			} else if (projectile.velocity.X < -1)
+				Projectile.spriteDirection = 1;
+				Projectile.rotation = Projectile.velocity.ToRotation();
+			} else if (Projectile.velocity.X < -1)
 			{
-				projectile.spriteDirection = -1;
-				projectile.rotation = projectile.velocity.ToRotation() + MathHelper.Pi;
+				Projectile.spriteDirection = -1;
+				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.Pi;
 			}
 			// left shift old position
-			blurHelper.Update(projectile.Center, isDashing);
+			blurHelper.Update(Projectile.Center, isDashing);
 		}
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			// need to draw sprites manually for some reason
-			float r = projectile.rotation;
-			Vector2 pos = projectile.Center;
-			SpriteEffects effects = projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
-			Texture2D texture = Main.projectileTexture[projectile.type];
-			int frameHeight = texture.Height / Main.projFrames[projectile.type];
-			Rectangle bounds = new Rectangle(0, projectile.frame * frameHeight, texture.Width, frameHeight);
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			// motion blur
 			if(isDashing)
@@ -186,11 +187,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 				{
 					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
 					blurPos = blurPos - Main.screenPosition;
-					spriteBatch.Draw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
+					Main.EntitySpriteDraw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}
 			// regular version
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r, origin, 1, effects, 0);
 			return false;
 		}
@@ -203,7 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 
-		protected override string WeaponTexturePath => "Terraria/Item_" + ItemID.Trident;
+		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.Trident;
 
 		protected override Vector2 WingOffset => new Vector2(-4, 2);
 
@@ -220,14 +221,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Sea Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 30;
-			projectile.height = 32;
+			Projectile.width = 30;
+			Projectile.height = 32;
 		}
 
 		public override void OnSpawn()
@@ -235,14 +236,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.OnSpawn();
 			// the spear does half damage, this is re-multiplied by 2 to get the bubble damage
 			// maybe a little bit iffy
-			projectile.damage = projectile.damage / 2;
+			Projectile.damage = Projectile.damage / 2;
 		}
 
 		private void TransformBubbles()
 		{
 			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 			{
-				int goreIdx = Gore.NewGore(projectile.position, Vector2.Zero, mod.GetGoreSlot("Gores/SeaSquireBubbleGore"), 1f);
+				int goreIdx = Gore.NewGore(Projectile.position, Vector2.Zero, Mod.Find<ModGore>("SeaSquireBubbleGore").Type, 1f);
 				Main.gore[goreIdx].alpha = 128;
 				Main.gore[goreIdx].velocity *= 0.25f;
 				Main.gore[goreIdx].velocity += offset;
@@ -255,11 +256,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					projectile.Center, 
-					projectile.velocity, 
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center, 
+					Projectile.velocity, 
 					ProjectileType<SeaSquireSharkMinion>(), 
-					3 * projectile.damage, 
-					projectile.knockBack, 
+					3 * Projectile.damage, 
+					Projectile.knockBack, 
 					player.whoAmI);
 			}
 		}
@@ -285,7 +287,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		{
 			//All of this is based on the weapon sprite and AttackFrames above.
 			int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
-			int spearLength = GetTexture(WeaponTexturePath).Width; //A decent aproximation of how long the spear is.
+			int spearLength = Request<Texture2D>(WeaponTexturePath).Width(); //A decent aproximation of how long the spear is.
 			int spearStart = (spearLength / 3 - 10); //Two thirds of the spear starts behind by default. Subtract to start it further out since this one is puny.
 			float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
 			if (attackFrame <= reachFrames)
@@ -304,17 +306,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				Main.PlaySound(new LegacySoundStyle(2, 85), projectile.position);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 85), Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity() + bubbleVelOffset;
 					Projectile.NewProjectile(
-						projectile.Center,
+						Projectile.GetProjectileSource_FromThis(),
+						Projectile.Center,
 						angleVector,
 						ProjectileType<SeaSquireBubble>(),
-						projectile.damage * 2,
-						projectile.knockBack / 4,
+						Projectile.damage * 2,
+						Projectile.knockBack / 4,
 						Main.myPlayer);
 				}
 			}
@@ -327,22 +330,22 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 				Projectile p = Main.projectile[i];
 				if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SeaSquireSharkMinion>())
 				{
-					projectile.Center = p.Center;
+					Projectile.Center = p.Center;
 					break;
 				}
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			return !usingSpecial && base.PreDraw(spriteBatch, lightColor);
+			return !usingSpecial && base.PreDraw(ref lightColor);
 		}
 
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
 			if(!usingSpecial)
 			{
-				base.PostDraw(spriteBatch, lightColor);
+				base.PostDraw(lightColor);
 			}
 		}
 

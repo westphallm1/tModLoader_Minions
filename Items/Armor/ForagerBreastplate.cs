@@ -19,11 +19,11 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 18;
-			item.value = Item.sellPrice(silver: 2, copper: 50);
-			item.rare = ItemRarityID.White;
-			item.defense = 3;
+			Item.width = 30;
+			Item.height = 18;
+			Item.value = Item.sellPrice(silver: 2, copper: 50);
+			Item.rare = ItemRarityID.White;
+			Item.defense = 3;
 		}
 
 		public override void UpdateEquip(Player player)
@@ -33,13 +33,7 @@ namespace AmuletOfManyMinions.Items.Armor
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Daybloom, 1);
-			recipe.AddIngredient(ItemID.Mushroom, 2);
-			recipe.AddRecipeGroup(RecipeGroupID.Wood, 20);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Daybloom, 1).AddIngredient(ItemID.Mushroom, 2).AddRecipeGroup(RecipeGroupID.Wood, 20).AddTile(TileID.WorkBenches).Register();
 		}
 	}
 }

@@ -10,9 +10,9 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 {
 	class SquireBatBuff : ModBuff
 	{
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Feral Bite (Squire)");
 			Description.SetDefault("A Feral Bite is enhancing your squire's attack and movement speed!");
 			Main.debuff[Type] = true; // can't cancel it, even if it's a 'buff'
@@ -22,9 +22,9 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 	}
 	class SquireBatDebuff : ModBuff
 	{
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Feral Bite (Squire)");
 			Description.SetDefault("A Feral Bite is reducing your squire's damage!");
 			Main.debuff[Type] = true;
@@ -47,11 +47,11 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 
 		public override void SetDefaults()
 		{
-			item.width = 30;
-			item.height = 32;
-			item.accessory = true;
-			item.value = Item.sellPrice(gold: 5);
-			item.rare = ItemRarityID.LightRed;
+			Item.width = 30;
+			Item.height = 32;
+			Item.accessory = true;
+			Item.value = Item.sellPrice(gold: 5);
+			Item.rare = ItemRarityID.LightRed;
 
 		}
 
@@ -68,14 +68,14 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 
 		public override void SetStaticDefaults()
 		{
-			Main.projFrames[projectile.type] = 4;
+			Main.projFrames[Projectile.type] = 4;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 28;
-			projectile.height = 32;
+			Projectile.width = 28;
+			Projectile.height = 32;
 			frameSpeed = 5;
 		}
 
@@ -105,12 +105,12 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireBat
 				}
 			}
 			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-			return (squire.Center + angleVector) - projectile.Center;
+			return (squire.Center + angleVector) - Projectile.Center;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			projectile.spriteDirection = animationFrame % AnimationFrames < AnimationFrames / 2 ?
+			Projectile.spriteDirection = animationFrame % AnimationFrames < AnimationFrames / 2 ?
 				1 : -1;
 			base.Animate(minFrame, maxFrame);
 		}

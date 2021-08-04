@@ -33,8 +33,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.SetStaticDefaults();
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
-			IdleLocationSets.circlingBody.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 1;
+			IdleLocationSets.circlingBody.Add(Projectile.type);
 		}
 
 		public override Vector2 IdleBehavior()
@@ -45,27 +45,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (minions.Count > 0)
 			{
 				int minionCount = minions.Count;
-				int order = minions.IndexOf(projectile);
+				int order = minions.IndexOf(Projectile);
 				idleAngle = (float)(MathHelper.TwoPi * order) / minionCount;
 				idleAngle += (MathHelper.TwoPi * groupAnimationFrame) / groupAnimationFrames;
 				idlePosition.X += 2 + 30 * (float)Math.Cos(idleAngle);
 				idlePosition.Y += -12 + 5 * (float)Math.Sin(idleAngle);
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
 
 		public override Vector2? FindTarget()
 		{
-			if (FindTargetInTurnOrder(searchDistance, projectile.Center, noLOSSearchDistance) is Vector2 target)
+			if (FindTargetInTurnOrder(searchDistance, Projectile.Center, noLOSSearchDistance) is Vector2 target)
 			{
 				framesWithoutTarget = 0;
 				return target;
 			}
 			else
 			{
-				projectile.friendly = false;
+				Projectile.friendly = false;
 				return null;
 			}
 		}
@@ -101,14 +101,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			else if (phaseFrames > maxPhaseFrames / 2 && phaseFrames < maxPhaseFrames)
 			{
 				WindUpBehavior(ref vectorToTargetPosition);
-				projectile.friendly = false;
+				Projectile.friendly = false;
 			}
 			else
 			{
 				SwingBehavior(ref vectorToTargetPosition);
-				projectile.friendly = true;
+				Projectile.friendly = true;
 			}
-			Lighting.AddLight(projectile.Center, lightColor);
+			Lighting.AddLight(Projectile.Center, lightColor);
 		}
 
 		internal virtual void OnAcquireTarget(Vector2 vectorToTargetPosition)
@@ -135,28 +135,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				framesWithoutTarget++;
 				if (phaseFrames < maxPhaseFrames && targetNPC != null)
 				{
-					TargetedMovement(targetNPC.Center - projectile.Center);
+					TargetedMovement(targetNPC.Center - Projectile.Center);
 				}
 				else
 				{
-					TargetedMovement(projectile.velocity);
+					TargetedMovement(Projectile.velocity);
 				}
 				return;
 			}
-			projectile.rotation = (float)Math.PI;
+			Projectile.rotation = (float)Math.PI;
 			// alway clamp to the idle position
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 
 			if (vectorToIdlePosition.Length() > 32 && vectorToIdlePosition.Length() < 1000)
 			{
-				projectile.position += vectorToIdlePosition;
+				Projectile.position += vectorToIdlePosition;
 			}
 			else
 			{
 				attackState = AttackState.IDLE;
-				projectile.rotation = (player.Center - projectile.Center).X * -0.01f;
-				projectile.position += vectorToIdlePosition;
-				projectile.velocity = Vector2.Zero;
+				Projectile.rotation = (player.Center - Projectile.Center).X * -0.01f;
+				Projectile.position += vectorToIdlePosition;
+				Projectile.velocity = Vector2.Zero;
 			}
 		}
 	}

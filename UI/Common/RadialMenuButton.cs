@@ -7,13 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Audio;
+using ReLogic.Content;
 
 namespace AmuletOfManyMinions.UI.Common
 {
 	class RadialMenuButton
 	{
-		public Texture2D bgTexture;
-		public Texture2D fgTexture;
+		public Asset<Texture2D> bgTexture;
+		public Asset<Texture2D> fgTexture;
 		private Vector2 bgRelativeTopLeft;
 		private Vector2 fgRelativeTopLeft;
 		private Vector2 relativeCenter;
@@ -32,14 +34,14 @@ namespace AmuletOfManyMinions.UI.Common
 		private bool lastMouseLeft;
 		private bool lastMouseRight;
 
-		public RadialMenuButton(Texture2D bgTexture, Texture2D fgTexture, Vector2 relativeTopLeft)
+		public RadialMenuButton(Asset<Texture2D> bgTexture, Asset<Texture2D> fgTexture, Vector2 relativeTopLeft)
 		{
 			this.bgTexture = bgTexture;
 			this.fgTexture = fgTexture;
 			this.bgRelativeTopLeft = relativeTopLeft;
-			bounds = bgTexture.Bounds;
+			bounds = bgTexture.Frame(1, 1);
 			this.relativeCenter = relativeTopLeft + bounds.Center();
-			this.fgRelativeTopLeft = relativeCenter - fgTexture.Bounds.Center();
+			this.fgRelativeTopLeft = relativeCenter - fgTexture.Frame(1, 1).Center();
 		}
 
 		public void Update(Vector2 absoluteTopLeft)
@@ -54,12 +56,12 @@ namespace AmuletOfManyMinions.UI.Common
 			{
 				// this fixes so many issues...
 				Main.isMouseLeftConsumedByUI = true;
-				Main.PlaySound(SoundID.MenuTick);
+				SoundEngine.PlaySound(SoundID.MenuTick);
 				OnLeftClick?.Invoke();
 			}
 			if(RightClicked)
 			{
-				Main.PlaySound(SoundID.MenuTick);
+				SoundEngine.PlaySound(SoundID.MenuTick);
 				OnRightClick?.Invoke();
 			}
 			lastMouseLeft = Main.mouseLeft;
@@ -76,8 +78,8 @@ namespace AmuletOfManyMinions.UI.Common
 			{
 				color = Color.Multiply(color, 0.6f);
 			}
-			spriteBatch.Draw(bgTexture, bgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0f);
-			spriteBatch.Draw(fgTexture, fgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0f);
+			spriteBatch.Draw(bgTexture.Value, bgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0);
+			spriteBatch.Draw(fgTexture.Value, fgDrawPos, null, color, 0f, Vector2.Zero, 1, 0f, 0);
 		}
 	}
 }

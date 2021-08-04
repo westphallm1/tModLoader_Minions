@@ -13,9 +13,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 	public class WhackAMoleMinionBuff : MinionBuff
 	{
 		public WhackAMoleMinionBuff() : base(ProjectileType<WhackAMoleCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Jellybean Mole");
 			Description.SetDefault("A magic mole will fight for you!");
 		}
@@ -33,23 +33,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3f;
-			item.mana = 10;
-			item.width = 32;
-			item.height = 32;
-			item.damage = 34;
-			item.value = Item.buyPrice(0, 15, 0, 0);
-			item.rare = ItemRarityID.LightRed;
+			Item.knockBack = 3f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.height = 32;
+			Item.damage = 34;
+			Item.value = Item.buyPrice(0, 15, 0, 0);
+			Item.rare = ItemRarityID.LightRed;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.SoulofLight, 10);
-			recipe.AddIngredient(ItemID.PixieDust, 15);
-			recipe.AddIngredient(ItemID.StarinaBottle, 5);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.SoulofLight, 10).AddIngredient(ItemID.PixieDust, 15).AddIngredient(ItemID.StarinaBottle, 5).AddTile(TileID.Anvils).Register();
 		}
 	}
 
@@ -58,42 +52,42 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
-			ProjectileID.Sets.Homing[projectile.type] = true;
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
+			Main.projFrames[Projectile.type] = 1;
+			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.friendly = true;
-			projectile.penetrate = 2;
-			projectile.tileCollide = true;
-			projectile.timeLeft = 60;
-			projectile.usesLocalNPCImmunity = true;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.friendly = true;
+			Projectile.penetrate = 2;
+			Projectile.tileCollide = true;
+			Projectile.timeLeft = 60;
+			Projectile.usesLocalNPCImmunity = true;
 		}
 
 		public override void AI()
 		{
-			projectile.rotation += 0.25f;
+			Projectile.rotation += 0.25f;
 		}
 
 		public override void Kill(int timeLeft)
 		{
-			int dustIdx = Dust.NewDust(projectile.Center, 8, 8, 192, newColor: WhackAMoleMinion.shades[(int)projectile.ai[0]], Scale: 1.2f);
-			Main.dust[dustIdx].velocity = projectile.velocity / 2;
+			int dustIdx = Dust.NewDust(Projectile.Center, 8, 8, 192, newColor: WhackAMoleMinion.shades[(int)Projectile.ai[0]], Scale: 1.2f);
+			Main.dust[dustIdx].velocity = Projectile.velocity / 2;
 			Main.dust[dustIdx].noLight = false;
 			Main.dust[dustIdx].noGravity = true;
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = GetTexture(Texture);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				texture.Bounds, WhackAMoleMinion.shades[(int)projectile.ai[0]], projectile.rotation,
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				texture.Bounds, WhackAMoleMinion.shades[(int)Projectile.ai[0]], Projectile.rotation,
 				texture.Bounds.Center.ToVector2(), 1, 0, 0);
 			return false;
 		}
@@ -160,23 +154,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Goblin Gunner");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
-			IdleLocationSets.trailingOnGround.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 1;
+			IdleLocationSets.trailingOnGround.Add(Projectile.type);
 		}
 
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 24;
-			projectile.tileCollide = false;
-			projectile.friendly = true;
-			projectile.localNPCHitCooldown = 30;
+			Projectile.width = 24;
+			Projectile.height = 24;
+			Projectile.tileCollide = false;
+			Projectile.friendly = true;
+			Projectile.localNPCHitCooldown = 30;
 			attackThroughWalls = false;
 			frameSpeed = 5;
 			animationFrame = 0;
-			projectile.hide = true;
+			Projectile.hide = true;
 			projectileIndex = 0;
 			gHelper = new GroundAwarenessHelper(this)
 			{
@@ -198,15 +192,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		private int DrawIndex => Math.Max(0, Math.Min(shades.Length, EmpowerCount) - 1);
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = GetTexture(Texture);
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			// draw in reverse order for layering purposes
 			float headBobOffset = (float)(2 * Math.PI / Math.Max(DrawIndex, 1));
 			for (int i = DrawIndex; i >= 0; i--)
 			{
 				int offsetPixels;
-				Vector2 pos = projectile.Center;
+				Vector2 pos = Projectile.Center;
 				if (gHelper.teleportStartFrame is int teleportStart)
 				{
 					int teleportFrame = animationFrame - teleportStart;
@@ -231,22 +225,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				Rectangle bounds = new Rectangle(0, 0, 24, 24 + offsetPixels);
 				pos.Y += 4 - (offsetPixels / 2);
 				pos.X += xOffsets[DrawIndex];
-				SpriteEffects effects = projectile.velocity.X < 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-				spriteBatch.Draw(texture, pos - Main.screenPosition,
+				SpriteEffects effects = Projectile.velocity.X < 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 					bounds, shades[i], 0,
 					bounds.Center.ToVector2(), 1, effects, 0);
 			}
-			DrawPlatform(spriteBatch, lightColor);
+			DrawPlatform(ref lightColor);
 			return false;
 		}
 
-		private void DrawPlatform(SpriteBatch spriteBatch, Color lightColor)
+		private void DrawPlatform(ref Color lightColor)
 		{
-			Texture2D platform = GetTexture(Texture + "_Ground");
+			Texture2D platform = Request<Texture2D>(Texture + "_Ground").Value;
 			Rectangle bounds = platformBounds[DrawIndex];
-			Vector2 pos = projectile.Bottom + new Vector2(0, bounds.Height / 2);
+			Vector2 pos = Projectile.Bottom + new Vector2(0, bounds.Height / 2);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			spriteBatch.Draw(platform, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(platform, pos - Main.screenPosition,
 				bounds, lightColor, 0, origin, 1, 0, 0);
 
 		}
@@ -257,19 +251,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
 			Vector2 idlePosition = gHelper.isFlying ? player.Top : player.Bottom;
 			Vector2 idleHitLine = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, projectile);
+			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, Projectile);
 			if (!Collision.CanHitLine(idleHitLine, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition = player.Bottom;
 			}
-			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			gHelper.SetIsOnGround();
 			if (gHelper.offTheGroundFrames == 20 || (gHelper.offTheGroundFrames > 60 && Main.rand.Next(120) == 0) || (gHelper.isOnGround && gHelper.offTheGroundFrames > 20))
 			{
 				DrawPlatformDust();
 			}
-			Lighting.AddLight(projectile.Center, Color.PaleGreen.ToVector3() * 0.75f);
+			Lighting.AddLight(Projectile.Center, Color.PaleGreen.ToVector3() * 0.75f);
 			return vectorToIdlePosition;
 		}
 
@@ -277,7 +271,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.Bottom - new Vector2(8, 0), 16, 16, 47, -projectile.velocity.X / 2, -projectile.velocity.Y / 2);
+				Dust.NewDust(Projectile.Bottom - new Vector2(8, 0), 16, 16, 47, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
 			}
 		}
 
@@ -289,23 +283,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		public void IdleFlyingMovement(Vector2 vectorToIdlePosition)
 		{
-			projectile.tileCollide = false;
+			Projectile.tileCollide = false;
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
 		private void DoTeleport(Vector2 destination, int startFrame, ref bool done)
 		{
-			projectile.velocity = Vector2.Zero;
+			Projectile.velocity = Vector2.Zero;
 			int teleportFrame = animationFrame - startFrame;
 			int width = widths[DrawIndex];
 			if (teleportFrame == 1 || teleportFrame == 1 + TeleportFrames / 2)
 			{
-				Collision.HitTiles(projectile.Bottom + new Vector2(-width / 2, 8), new Vector2(0, 8), width, 8);
+				Collision.HitTiles(Projectile.Bottom + new Vector2(-width / 2, 8), new Vector2(0, 8), width, 8);
 			}
 			if (teleportFrame == TeleportFrames / 2)
 			{
 				// do the actual teleport
-				projectile.position = destination;
+				Projectile.position = destination;
 			}
 			else if (teleportFrame >= TeleportFrames)
 			{
@@ -313,9 +307,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			}
 		}
 
-		public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI)
+		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 		{
-			drawCacheProjsBehindNPCsAndTiles.Add(index);
+			behindNPCsAndTiles.Add(index);
 		}
 
 		public void IdleGroundedMovement(Vector2 vectorToIdlePosition)
@@ -326,15 +320,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				gHelper.GetUnstuckByTeleporting(info, vectorToIdlePosition);
 			}
 			gHelper.ApplyGravity();
-			if (vectorToIdlePosition.Y < -projectile.height && Math.Abs(vectorToIdlePosition.X) < 96)
+			if (vectorToIdlePosition.Y < -Projectile.height && Math.Abs(vectorToIdlePosition.X) < 96)
 			{
 				gHelper.DoJump(vectorToIdlePosition);
 			}
 			if (animationFrame - lastHitFrame > 10)
 			{
-				float intendedY = projectile.velocity.Y;
+				float intendedY = Projectile.velocity.Y;
 				base.IdleMovement(vectorToIdlePosition);
-				projectile.velocity.Y = intendedY;
+				Projectile.velocity.Y = intendedY;
 			}
 		}
 
@@ -353,7 +347,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		{
 			int attackRate = Math.Max(40, 65 - 5 * EmpowerCount);
 			bool isAttackFrame = player.whoAmI == Main.myPlayer && animationFrame % attackRate == 0;
-			bool canHitTarget = isAttackFrame && Collision.CanHit(projectile.Center, 1, 1, projectile.Center + vectorToTargetPosition, 1, 1);
+			bool canHitTarget = isAttackFrame && Collision.CanHit(Projectile.Center, 1, 1, Projectile.Center + vectorToTargetPosition, 1, 1);
 			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 160 && vectorToTargetPosition.Y < -24;
 			bool isAttackingFromAir = isAttackFrame && gHelper.isFlying;
 			if (player.whoAmI == Main.myPlayer && targetNPCIndex is int targetIdx && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
@@ -363,11 +357,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				velocity *= 12;
 				velocity.X += Main.npc[targetIdx].velocity.X;
 				Projectile.NewProjectile(
-					projectile.Center,
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
 					VaryLaunchVelocity(velocity),
 					ProjectileType<WhackAMoleMinionProjectile>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					player.whoAmI,
 					projectileIndex);
 				projectileIndex = (projectileIndex + 1) % (DrawIndex + 1);
@@ -390,11 +385,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			float searchDistance = ComputeSearchDistance();
 			if (PlayerTargetPosition(searchDistance, player.Center, noLOSRange: searchDistance) is Vector2 target)
 			{
-				return target - projectile.Center;
+				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance) is Vector2 target2)
 			{
-				return target2 - projectile.Center;
+				return target2 - Projectile.Center;
 			}
 			else
 			{
@@ -442,15 +437,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if (Math.Abs(projectile.velocity.X) > 4)
+			if (Math.Abs(Projectile.velocity.X) > 4)
 			{
-				projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
+				Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
 			}
 		}
 
 		public bool ScaleLedge(Vector2 vectorToIdlePosition)
 		{
-			projectile.velocity.Y = -4;
+			Projectile.velocity.Y = -4;
 			gHelper.isOnGround = false;
 			if (gHelper.offTheGroundFrames < 20)
 			{

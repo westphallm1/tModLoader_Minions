@@ -17,28 +17,22 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 18;
-			item.value = Item.sellPrice(silver: 2);
-			item.rare = ItemRarityID.Green;
-			item.defense = 6;
+			Item.width = 28;
+			Item.height = 18;
+			Item.value = Item.sellPrice(silver: 2);
+			Item.rare = ItemRarityID.Green;
+			Item.defense = 6;
 		}
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.06f;
+			player.GetDamage<SummonDamageClass>() += 0.06f;
 			player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier += 0.12f;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.AncientCloth, 4);
-			recipe.AddIngredient(ItemID.AntlionMandible, 4);
-			recipe.AddIngredient(ItemID.FossilOre, 12);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.AncientCloth, 4).AddIngredient(ItemID.AntlionMandible, 4).AddIngredient(ItemID.FossilOre, 12).AddTile(TileID.Anvils).Register();
 		}
 	}
 }

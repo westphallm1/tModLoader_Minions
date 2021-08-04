@@ -7,15 +7,16 @@ using System;
 using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 {
 	public class BoneSquireMinionBuff : MinionBuff
 	{
 		public BoneSquireMinionBuff() : base(ProjectileType<BoneSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bone Squire");
 			Description.SetDefault("A bone squire will follow your orders!");
 		}
@@ -34,12 +35,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 7.0f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 40;
-			item.value = Item.sellPrice(0, 0, 50, 0);
-			item.rare = ItemRarityID.Orange;
+			Item.knockBack = 7.0f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 40;
+			Item.value = Item.sellPrice(0, 0, 50, 0);
+			Item.rare = ItemRarityID.Orange;
 		}
 	}
 
@@ -51,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 
 		string BaseWeaponTexture = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailBall";
-		protected override string WeaponTexturePath => usingSpecial ? "Terraria/NPC_72" : BaseWeaponTexture;
+		protected override string WeaponTexturePath => usingSpecial ? "Terraria/Images/NPC_72" : BaseWeaponTexture;
 
 		string BaseChainPath = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailChain";
 		protected string ChainTexturePath => usingSpecial ? BaseChainPath + "_Flaming" : BaseChainPath;
@@ -70,9 +71,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 30;
-			projectile.localNPCHitCooldown = AttackFrames / 3;
+			Projectile.width = 22;
+			Projectile.height = 30;
+			Projectile.localNPCHitCooldown = AttackFrames / 3;
 		}
 
 		public override void SetStaticDefaults()
@@ -80,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bone Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 
@@ -101,25 +102,25 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		{
 			if(usingSpecial && attackFrame == 0)
 			{
-				Main.PlaySound(attackSound, projectile.Center);
+				SoundEngine.PlaySound(attackSound, Projectile.Center);
 			}
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
-		protected override void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
+		protected override void DrawWeapon(Color lightColor)
 		{
-			base.DrawWeapon(spriteBatch, usingSpecial ? Color.White : lightColor);
+			base.DrawWeapon(usingSpecial ? Color.White : lightColor);
 		}
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override void PostDraw(Color lightColor)
 		{
 			if (IsAttacking())
 			{
-				Texture2D chainTexture = GetTexture(ChainTexturePath);
+				Texture2D chainTexture = Request<Texture2D>(ChainTexturePath).Value;
 				ChainDrawer drawer = new ChainDrawer(chainTexture.Bounds);
-				Vector2 center = projectile.Center + WeaponCenterOfRotation;
+				Vector2 center = Projectile.Center + WeaponCenterOfRotation;
 				Vector2 chainVector = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
-				drawer.DrawChain(spriteBatch, chainTexture, center, center + chainVector, usingSpecial ? Color.White : default);
+				drawer.DrawChain(chainTexture, center, center + chainVector, usingSpecial ? Color.White : default);
 			}
-			base.PostDraw(spriteBatch, lightColor);
+			base.PostDraw(lightColor);
 		}
 
 		private void DrawFlailFlames(int iterations)
@@ -129,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 				int dustId = Dust.NewDust(
 					lastWeaponPos - new Vector2(16, 16), 
 					32, 32, 6, 
-					projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 
+					Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 
 					100, default, 2f);
 				Main.dust[dustId].noGravity = true;
 				Main.dust[dustId].velocity.X *= 0.3f;

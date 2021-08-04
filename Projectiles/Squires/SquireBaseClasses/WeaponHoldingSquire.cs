@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected virtual float SwingAngle0 => 5 * (float)Math.PI / 8;
 		protected virtual float SwingAngle1 => -(float)Math.PI / 4;
 		protected virtual string WingTexturePath => null;
-		protected abstract string WeaponTexturePath { get; }
+		protected abstract string WeaponTexturePath { get; } //TODO 1.4 cache this //Actually not possible since it is supposed to be dynamic :pensive:
 		protected virtual Vector2 WingOffset => Vector2.Zero;
 		protected virtual WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 		protected virtual WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.DIAGONAL;
@@ -52,18 +52,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.tileCollide = false;
-			projectile.friendly = true;
-			projectile.usesLocalNPCImmunity = true;
+			Projectile.tileCollide = false;
+			Projectile.friendly = true;
+			Projectile.usesLocalNPCImmunity = true;
 			// fixed angle weapons are really good at hitting enemies over and over again
 			// so give them a longer cooldown
 			if (aimMode == WeaponAimMode.FIXED)
 			{
-				projectile.localNPCHitCooldown = AttackFrames - 2;
+				Projectile.localNPCHitCooldown = AttackFrames - 2;
 			}
 			else
 			{
-				projectile.localNPCHitCooldown = AttackFrames / 2;
+				Projectile.localNPCHitCooldown = AttackFrames / 2;
 			}
 			useBeacon = false;
 		}
@@ -87,7 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			if (GetSpriteDirection() is int direction)
 			{
-				projectile.spriteDirection = direction;
+				Projectile.spriteDirection = direction;
 			}
 			if (IsAttacking())
 			{
@@ -110,13 +110,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			Vector2 unitAngle = UnitVectorFromWeaponAngle();
 			for (int i = WeaponHitboxStart(); i < WeaponHitboxEnd(); i += 8)
 			{
-				Vector2 tipCenter = projectile.Center + WeaponCenterOfRotation + i * unitAngle;
+				Vector2 tipCenter = Projectile.Center + WeaponCenterOfRotation + i * unitAngle;
 				Rectangle tipHitbox = new Rectangle((int)tipCenter.X - 8, (int)tipCenter.Y - 8, 16, 16);
 				if (tipHitbox.Intersects(targetHitbox))
 				{
 					return Collision.CanHitLine(
 						tipHitbox.Center.ToVector2(), 1, 1,
-						projectile.Center, 1, 1);
+						Projectile.Center, 1, 1);
 				}
 			}
 			return false;
@@ -124,7 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			hitDirection = projectile.spriteDirection; // always knock projectile away from player
+			hitDirection = Projectile.spriteDirection; // always knock projectile away from player
 		}
 
 		protected virtual float GetFixedWeaponAngle()
@@ -141,7 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			Vector2? _mouseWorld = player.GetModPlayer<MousePlayer>().GetMousePosition();
 			if (_mouseWorld is Vector2 mouseWorld)
 			{
-				if (Vector2.Distance(mouseWorld, projectile.Center) < 48)
+				if (Vector2.Distance(mouseWorld, Projectile.Center) < 48)
 				{
 					attackVector = mouseWorld - player.Center;
 				}
@@ -150,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 					//otherwise, attack along the mouse-squire line
 					attackVector = mouseWorld - WeaponCenter();
 				}
-				if (projectile.spriteDirection == 1)
+				if (Projectile.spriteDirection == 1)
 				{
 					return -attackVector.ToRotation();
 				}
@@ -186,31 +186,32 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
 			if (WingTexturePath != null)
 			{
-				Texture2D wingTexture = ModContent.GetTexture(WingTexturePath);
+				Texture2D wingTexture = ModContent.Request<Texture2D>(WingTexturePath).Value;
 				Vector2 wingOffset = WingOffset;
-				wingOffset.X *= projectile.spriteDirection;
-				Vector2 pos = projectile.Center + wingOffset;
+				wingOffset.X *= Projectile.spriteDirection;
+				Vector2 pos = Projectile.Center + wingOffset;
 				Rectangle bounds = new Rectangle(0, wingTexture.Height / 4 * (wingFrame % 4), wingTexture.Width, wingTexture.Height / 4);
 				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-				SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-				float r = projectile.rotation;
-				spriteBatch.Draw(wingTexture, pos - Main.screenPosition,
+				SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+				float r = Projectile.rotation;
+				Main.EntitySpriteDraw(wingTexture, pos - Main.screenPosition,
 					bounds, lightColor, r,
 					origin, 1, effects, 0);
 			}
 			return true;
 		}
-		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+
+		public override void PostDraw(Color lightColor)
 		{
-			Texture2D texture = Main.projectileTexture[projectile.type];
-			Vector2 origin = new Vector2(projectile.width / 2f, projectile.height / 2f);
-			Vector2 pos = projectile.Center;
-			float r = projectile.rotation;
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			Vector2 origin = new Vector2(Projectile.width / 2f, Projectile.height / 2f);
+			Vector2 pos = Projectile.Center;
+			float r = Projectile.rotation;
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			int armFrame;
 			if (!IsAttacking())
 			{
@@ -230,22 +231,22 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			}
 			if (IsAttacking())
 			{
-				DrawWeapon(spriteBatch, lightColor);
+				DrawWeapon(lightColor);
 			}
-			Rectangle bounds = new Rectangle(0, armFrame * SpaceBetweenFrames, projectile.width, projectile.height);
-			spriteBatch.Draw(texture, pos - Main.screenPosition,
+			Rectangle bounds = new Rectangle(0, armFrame * SpaceBetweenFrames, Projectile.width, Projectile.height);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
 		}
 
 		protected virtual Vector2 WeaponCenter()
 		{
-			return projectile.Center;
+			return Projectile.Center;
 		}
 
 		protected Vector2 UnitVectorFromWeaponAngle()
 		{
-			if (projectile.spriteDirection == 1)
+			if (Projectile.spriteDirection == 1)
 			{
 				return new Vector2((float)Math.Cos(-weaponAngle), (float)Math.Sin(-weaponAngle));
 			}
@@ -259,7 +260,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected virtual float SpriteRotationFromWeaponAngle()
 		{
 			float rotationBase = spriteOrientation == WeaponSpriteOrientation.DIAGONAL ? (float)Math.PI / 4 : 0;
-			return projectile.spriteDirection * (rotationBase - weaponAngle);
+			return Projectile.spriteDirection * (rotationBase - weaponAngle);
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -268,7 +269,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			weaponAngle = GetWeaponAngle();
 			if (attackFrame == 0 && attackSound != null && !usingSpecial)
 			{
-				Main.PlaySound(attackSound, projectile.Center);
+				SoundEngine.PlaySound(attackSound, Projectile.Center);
 			}
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
@@ -285,19 +286,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			return new Rectangle(0, 0, texture.Width, texture.Height);
 		}
 
-		protected virtual void DrawWeapon(SpriteBatch spriteBatch, Color lightColor)
+		protected virtual void DrawWeapon(Color lightColor)
 		{
 			if (WeaponTexturePath == null)
 			{
 				return;
 			}
-			Texture2D texture = ModContent.GetTexture(WeaponTexturePath);
+			Texture2D texture = ModContent.Request<Texture2D>(WeaponTexturePath).Value;
 			Rectangle bounds = GetWeaponTextureBounds(texture);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = SpriteRotationFromWeaponAngle();
 			lastWeaponPos = GetWeaponSpriteLocation();
-			SpriteEffects effects = projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			spriteBatch.Draw(texture, lastWeaponPos - Main.screenPosition,
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			Main.EntitySpriteDraw(texture, lastWeaponPos - Main.screenPosition,
 				bounds, lightColor, r,
 				origin, 1, effects, 0);
 		}
@@ -306,8 +307,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			Vector2 center = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
 			Vector2 weaponOffset = WeaponCenterOfRotation;
-			weaponOffset.X *= projectile.spriteDirection;
-			return projectile.Center + WeaponCenterOfRotation + center;
+			weaponOffset.X *= Projectile.spriteDirection;
+			return Projectile.Center + WeaponCenterOfRotation + center;
 		}
 
 		protected abstract float WeaponDistanceFromCenter();
@@ -328,11 +329,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			{
 				// don't change directions while weapon is still out
 			}
-			else if (projectile.velocity.X < -1)
+			else if (Projectile.velocity.X < -1)
 			{
 				return -1;
 			}
-			else if (projectile.velocity.X > 1)
+			else if (Projectile.velocity.X > 1)
 			{
 				return 1;
 			}
@@ -341,11 +342,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			projectile.rotation = projectile.velocity.X * 0.05f;
-			projectile.frameCounter++;
-			if (projectile.frameCounter == frameSpeed)
+			Projectile.rotation = Projectile.velocity.X * 0.05f;
+			Projectile.frameCounter++;
+			if (Projectile.frameCounter == frameSpeed)
 			{
-				projectile.frameCounter = 0;
+				Projectile.frameCounter = 0;
 				wingFrame += 1;
 			}
 		}

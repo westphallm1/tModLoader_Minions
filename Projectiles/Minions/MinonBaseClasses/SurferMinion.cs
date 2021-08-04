@@ -21,14 +21,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Paper Surfer");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 6;
-			IdleLocationSets.circlingHead.Add(projectile.type);
+			Main.projFrames[Projectile.type] = 6;
+			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override void OnHitTarget(NPC target)
 		{
-			projectile.velocity.SafeNormalize();
-			projectile.velocity *= 6; // "kick" it away from the enemy it just hit
+			Projectile.velocity.SafeNormalize();
+			Projectile.velocity *= 6; // "kick" it away from the enemy it just hit
 			framesSinceDiveBomb = 0;
 		}
 
@@ -40,35 +40,35 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (framesSinceDiveBomb++ < diveBombFrameRateLimit || Math.Abs(vectorToTargetPosition.X) > diveBombHorizontalRange)
 			{
 				// always aim for "above" while approaching, if it's in the line of sight
-				if (Collision.CanHitLine(projectile.Center, 1, 1,
+				if (Collision.CanHitLine(Projectile.Center, 1, 1,
 					new Vector2(vectorToTargetPosition.X, vectorToTargetPosition.Y - diveBombHeightTarget), 1, 1))
 				{
 					vectorToTargetPosition.Y -= diveBombHeightTarget;
 				}
-				projectile.rotation = 0;
+				Projectile.rotation = 0;
 			}
 			else if (vectorToTargetPosition.Y > diveBombHeightRequirement)
 			{
 				inertia = diveBombInertia;
 				speed = diveBombSpeed;
-				projectile.rotation = (projectile.velocity.X > 0 ? 7 : 5) * PI / 4;
+				Projectile.rotation = (Projectile.velocity.X > 0 ? 7 : 5) * PI / 4;
 			}
 			vectorToTargetPosition.SafeNormalize();
 			vectorToTargetPosition *= speed;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
-			projectile.spriteDirection = projectile.velocity.X > 0 ? -1 : 1;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+			Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 
 			// This is a simple "loop through all frames from top to bottom" animation
-			minFrame = (2 * projectile.minionPos) % 6;
+			minFrame = (2 * Projectile.minionPos) % 6;
 			int frameSpeed = 15;
-			projectile.frameCounter++;
-			if (projectile.frameCounter >= frameSpeed)
+			Projectile.frameCounter++;
+			if (Projectile.frameCounter >= frameSpeed)
 			{
-				projectile.frameCounter = 0;
-				projectile.frame = projectile.frame == minFrame ? minFrame + 1 : minFrame;
+				Projectile.frameCounter = 0;
+				Projectile.frame = Projectile.frame == minFrame ? minFrame + 1 : minFrame;
 			}
 		}
 	}

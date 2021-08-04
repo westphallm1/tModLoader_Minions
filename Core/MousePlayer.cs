@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Core
 		/// </summary>
 		public Vector2? GetMousePosition()
 		{
-			if (player.whoAmI == Main.myPlayer)
+			if (Player.whoAmI == Main.myPlayer)
 			{
 				return Main.MouseWorld;
 			}
@@ -89,7 +89,7 @@ namespace AmuletOfManyMinions.Core
 		/// </summary>
 		public void SetMousePosition()
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient && player.whoAmI == Main.myPlayer)
+			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
 			{
 				if (!sentThisTick && (NextMousePosition == null || Main.GameUpdateCount % updateRate == 0))
 				{
@@ -99,13 +99,13 @@ namespace AmuletOfManyMinions.Core
 					//Send packet
 					if (NextMousePosition != Main.MouseWorld)
 					{
-						new MousePacket(player, Main.MouseWorld).Send();
+						new MousePacket(Player, Main.MouseWorld).Send();
 					}
 					else
 					{
 						//If mouse position didn't change, reset timeout and send a packet that does the same
 						ResetTimeout();
-						new MouseResetTimeoutPacket(player).Send();
+						new MouseResetTimeoutPacket(Player).Send();
 					}
 
 					//Required so client also updates this variable even though its not used directly
@@ -119,7 +119,7 @@ namespace AmuletOfManyMinions.Core
 		/// </summary>
 		public void SetNextMousePosition(Vector2 position)
 		{
-			if (player.whoAmI != Main.myPlayer)
+			if (Player.whoAmI != Main.myPlayer)
 			{
 				NextMousePosition = position;
 			}

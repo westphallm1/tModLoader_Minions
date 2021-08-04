@@ -18,16 +18,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.penetrate = -1;
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 30;
+			Projectile.penetrate = -1;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 30;
 			attackThroughWalls = true;
 		}
 		public override Vector2 IdleBehavior()
 		{
 			if (squire != null)
 			{
-				projectile.damage = Math.Max(1, 5 * squire.damage / 6);
+				Projectile.damage = Math.Max(1, 5 * squire.damage / 6);
 			}
 			Vector2 crownOffset = new Vector2(0, -14);
 			crownOffset.Y += 2 * (float)Math.Sin(2 * Math.PI * animationFrame / 60f);
@@ -45,13 +45,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				vectorToIdlePosition.Normalize();
 				vectorToIdlePosition *= idleVelocity;
-				projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
 			}
 			else
 			{
 				returnedToHeadFrame = returnedToHeadFrame ?? animationFrame;
-				projectile.position += vectorToIdlePosition;
-				projectile.velocity = Vector2.Zero;
+				Projectile.position += vectorToIdlePosition;
+				Projectile.velocity = Vector2.Zero;
 				returning = false;
 			}
 		}
@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			vectorToTargetPosition.Normalize();
 			vectorToTargetPosition *= targetedVelocity;
-			projectile.velocity = (projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
 		}
 
 		public override Vector2? FindTarget()
@@ -71,12 +71,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				!returning &&
 				SelectedEnemyInRange(attackRange, maxRangeFromPlayer: false) is Vector2 target)
 			{
-				projectile.friendly = true;
-				projectile.tileCollide = true;
-				return target - projectile.Center;
+				Projectile.friendly = true;
+				Projectile.tileCollide = true;
+				return target - Projectile.Center;
 			}
-			projectile.friendly = false;
-			projectile.tileCollide = false;
+			Projectile.friendly = false;
+			Projectile.tileCollide = false;
 			return null;
 		}
 

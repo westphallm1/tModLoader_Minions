@@ -16,9 +16,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 	public class PumpkinSquireMinionBuff : MinionBuff
 	{
 		public PumpkinSquireMinionBuff() : base(ProjectileType<PumpkinSquireMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Pumpkin Squire");
 			Description.SetDefault("An pumpkin squire will follow your orders!");
 		}
@@ -37,21 +37,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 3.5f;
-			item.width = 24;
-			item.height = 38;
-			item.damage = 17;
-			item.value = Item.sellPrice(0, 0, 1, 0);
-			item.rare = ItemRarityID.Blue;
+			Item.knockBack = 3.5f;
+			Item.width = 24;
+			Item.height = 38;
+			Item.damage = 17;
+			Item.value = Item.sellPrice(0, 0, 1, 0);
+			Item.rare = ItemRarityID.Blue;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Pumpkin, 15);
-			recipe.AddRecipeGroup("AmuletOfManyMinions:EvilBars", 12);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
+			CreateRecipe(1).AddIngredient(ItemID.Pumpkin, 15).AddRecipeGroup("AmuletOfManyMinions:EvilBars", 12).AddTile(TileID.Anvils).Register();
 		}
 	}
 
@@ -65,30 +60,30 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.timeLeft = TimeToLive;
-			projectile.friendly = true;
-			projectile.tileCollide = true;
+			Projectile.timeLeft = TimeToLive;
+			Projectile.friendly = true;
+			Projectile.tileCollide = true;
 			startFalling = false;
 		}
 
 		public override void AI()
 		{
-			projectile.rotation += MathHelper.Pi / 16 * Math.Sign(projectile.velocity.X);
-			if (projectile.timeLeft < TimeToLive - FallAfterFrames)
+			Projectile.rotation += MathHelper.Pi / 16 * Math.Sign(Projectile.velocity.X);
+			if (Projectile.timeLeft < TimeToLive - FallAfterFrames)
 			{
 				startFalling = true;
 			}
 			if (startFalling)
 			{
-				if(projectile.velocity.Y < 16)
+				if(Projectile.velocity.Y < 16)
 				{
-					projectile.velocity.Y += 0.5f;
+					Projectile.velocity.Y += 0.5f;
 				}
 			}
 		}
@@ -98,17 +93,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if (oldVelocity.Y > 0 && projectile.velocity.Y == 0)
+			if (oldVelocity.Y > 0 && Projectile.velocity.Y == 0)
 			{
 				OnFloorBounce(bounces, oldVelocity);
 				bounces--;
-				Main.PlaySound(SoundID.Dig, (int)projectile.position.X, (int)projectile.position.Y, 1, 1f, Main.rand.Next(1));
+				SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y, 1, 1f, Main.rand.Next(1));
 			}
 			if (oldVelocity.Y < 0)
 			{
 				startFalling = true;
 			}
-			if (oldVelocity.X != 0 && projectile.velocity.X == 0)
+			if (oldVelocity.X != 0 && Projectile.velocity.X == 0)
 			{
 				OnWallBounce(bounces, oldVelocity);
 			}
@@ -118,12 +113,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void Kill(int timeLeft)
 		{
 			// don't explode
-			Main.PlaySound(new LegacySoundStyle(4, 1).WithPitchVariance(.5f), projectile.position);
-			Vector2 direction = -projectile.velocity;
+			SoundEngine.PlaySound(new LegacySoundStyle(4, 1).WithPitchVariance(.5f), Projectile.position);
+			Vector2 direction = -Projectile.velocity;
 			direction.Normalize();
 			for (int i = 0; i < dustCount; i++)
 			{
-				Dust.NewDust(projectile.position, 1, 1, DustType<PumpkinDust>(), -direction.X, -direction.Y, Alpha: 255, Scale: 2);
+				Dust.NewDust(Projectile.position, 1, 1, DustType<PumpkinDust>(), -direction.X, -direction.Y, Alpha: 255, Scale: 2);
 			}
 		}
 
@@ -135,10 +130,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 16;
-			projectile.height = 16;
+			Projectile.width = 16;
+			Projectile.height = 16;
 			bounces = 3;
-			projectile.penetrate = 3;
+			Projectile.penetrate = 3;
 			dustCount = 3;
 		}
 		protected override int TimeToLive => 120;
@@ -147,15 +142,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 		protected override void OnFloorBounce(int bouncesLeft, Vector2 oldVelocity)
 		{
-			projectile.velocity.Y = -3 * bouncesLeft;
+			Projectile.velocity.Y = -3 * bouncesLeft;
 			// make sure not to collide right away again
-			projectile.position.Y -= 8;
-			projectile.velocity.X *= 0.67f;
+			Projectile.position.Y -= 8;
+			Projectile.velocity.X *= 0.67f;
 		}
 
 		protected override void OnWallBounce(int bouncesLeft, Vector2 oldVelocity)
 		{
-			projectile.velocity.X = -Math.Sign(oldVelocity.X) * 1.5f * bouncesLeft;
+			Projectile.velocity.X = -Math.Sign(oldVelocity.X) * 1.5f * bouncesLeft;
 		}
 	}
 
@@ -164,10 +159,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 24;
-			projectile.height = 24;
+			Projectile.width = 24;
+			Projectile.height = 24;
 			bounces = 12;
-			projectile.penetrate = 20;
+			Projectile.penetrate = 20;
 			dustCount = 6;
 		}
 		int spawnFrames = 30;
@@ -177,40 +172,40 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 		public override void AI()
 		{
-			if(projectile.timeLeft < TimeToLive - spawnFrames)
+			if(Projectile.timeLeft < TimeToLive - spawnFrames)
 			{
-				projectile.friendly = true;
-				projectile.tileCollide = true;
-				projectile.ai[0] = -1;
+				Projectile.friendly = true;
+				Projectile.tileCollide = true;
+				Projectile.ai[0] = -1;
 				base.AI();
 			} else
 			{
-				projectile.friendly = false;
-				projectile.tileCollide = false;
+				Projectile.friendly = false;
+				Projectile.tileCollide = false;
 			}
 		}
 
-		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		public override bool PreDraw(ref Color lightColor)
 		{
-			float spawnFrame = Math.Min(spawnFrames, TimeToLive - projectile.timeLeft);
+			float spawnFrame = Math.Min(spawnFrames, TimeToLive - Projectile.timeLeft);
 			float scale = MathHelper.Lerp(0.25f, 1, spawnFrame / spawnFrames);
-			Texture2D texture = Main.projectileTexture[projectile.type];
-			spriteBatch.Draw(texture, projectile.Center - Main.screenPosition,
-				texture.Bounds, lightColor, projectile.rotation,
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				texture.Bounds, lightColor, Projectile.rotation,
 				texture.Bounds.Center.ToVector2(), scale, 0, 0);
 			return false;
 		}
 
 		protected override void OnFloorBounce(int bouncesLeft, Vector2 oldVelocity)
 		{
-			projectile.velocity.Y = -Math.Max(bouncesLeft / 2f, 2f);
+			Projectile.velocity.Y = -Math.Max(bouncesLeft / 2f, 2f);
 			// make sure not to collide right away again
-			projectile.position.Y -= 2;
+			Projectile.position.Y -= 2;
 		}
 
 		protected override void OnWallBounce(int bouncesLeft, Vector2 oldVelocity)
 		{
-			projectile.velocity.X = -Math.Sign(oldVelocity.X) * Math.Max(1.5f, bouncesLeft / 4f);
+			Projectile.velocity.X = -Math.Sign(oldVelocity.X) * Math.Max(1.5f, bouncesLeft / 4f);
 		}
 	}
 
@@ -244,14 +239,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Pumpkin Squire");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 5;
+			Main.projFrames[Projectile.type] = 5;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 22;
-			projectile.height = 32;
+			Projectile.width = 22;
+			Projectile.height = 32;
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -266,11 +261,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			{
 				Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 				vector2Mouse *= 1.5f *  ModifiedProjectileVelocity();
-				Projectile.NewProjectile(projectile.Center,
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<PumpkinBomb>(),
-					projectile.damage,
-					projectile.knockBack,
+					Projectile.damage,
+					Projectile.knockBack,
 					Main.myPlayer);
 			}
 		}
@@ -280,17 +277,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			int bigPumpkinType = ProjectileType<BigPumpkinBomb>();
 			Projectile bigPumpkin = Main.projectile.Where(p =>
-				p.active && p.owner == player.whoAmI && p.type == bigPumpkinType && p.ai[0] == projectile.whoAmI).FirstOrDefault();
+				p.active && p.owner == player.whoAmI && p.type == bigPumpkinType && p.ai[0] == Projectile.whoAmI).FirstOrDefault();
 			Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 			if (bigPumpkin == default && Main.myPlayer == player.whoAmI)
 			{
-				Projectile.NewProjectile(projectile.Center,
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.Center,
 					Vector2.Zero,
 					bigPumpkinType,
-					3 * projectile.damage / 2,
-					projectile.knockBack,
+					3 * Projectile.damage / 2,
+					Projectile.knockBack,
 					Main.myPlayer,
-					ai0: projectile.whoAmI);
+					ai0: Projectile.whoAmI);
 			} else if (bigPumpkin != default && specialFrame == SpecialDuration - 1)
 			{
 				vector2Mouse *= 1.5f * ModifiedProjectileVelocity();
@@ -298,7 +297,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			} else if(bigPumpkin != default)
 			{
 				vector2Mouse *= 32;
-				bigPumpkin.Center = projectile.Center + vector2Mouse;
+				bigPumpkin.Center = Projectile.Center + vector2Mouse;
 			}
 		}
 

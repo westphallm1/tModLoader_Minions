@@ -5,6 +5,7 @@ using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.UI.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -45,7 +46,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			TacticsGroup.Name + "\n" +
 			TacticsGroup.Description;
 
-		internal override Texture2D OutlineTexture => showOutline? null : TargetSelectionTacticHandler.GroupOutlineTextures[index];
+		internal override Asset<Texture2D> OutlineTexture => showOutline ? null : TargetSelectionTacticHandler.GroupOutlineTextures[index];
 
 		internal TacticsGroupButton(int index, bool quiet = false, bool radialHover = false) : base(TargetSelectionTacticHandler.GroupTextures[index])
 		{
@@ -60,7 +61,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			// draw a little icon in the bottem left corner the current tactic for the given group
 			MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
 			byte tacticsId = tacticsPlayer.TacticsIDs[index];
-			Texture2D tacticSmallTexture = TargetSelectionTacticHandler.SmallTextures[tacticsId];
+			Texture2D tacticSmallTexture = TargetSelectionTacticHandler.SmallTextures[tacticsId].Value;
 			CalculatedStyle dimensions = GetDimensions();
 			float scale = 0.75f;
 			Vector2 bottomLeft = new Vector2(dimensions.X, dimensions.Y + dimensions.Height);

@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.NPCs
 {
 	/// <summary>
 	/// A class containing sets of netIDs for NPCs
 	/// </summary>
-	public static class NPCSets
+	public class NPCSets : ModSystem
 	{
 		public static HashSet<int> hornets;
 
@@ -22,7 +23,7 @@ namespace AmuletOfManyMinions.NPCs
 
 		public static HashSet<int> necromancers;
 
-		public static void Load()
+		public override void OnModLoad()
 		{
 			hornets = new HashSet<int>();
 			angryBones = new HashSet<int>();
@@ -33,7 +34,7 @@ namespace AmuletOfManyMinions.NPCs
 			necromancers = new HashSet<int>();
 		}
 
-		public static void Populate()
+		public override void PostSetupContent()
 		{
 			hornets.Add(NPCID.Hornet);
 
@@ -88,7 +89,7 @@ namespace AmuletOfManyMinions.NPCs
 			necromancers.Add(NPCID.NecromancerArmored);
 		}
 
-		public static void Unload()
+		public override void Unload()
 		{
 			hornets = null;
 			angryBones = null;

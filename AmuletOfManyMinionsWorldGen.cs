@@ -64,11 +64,12 @@ namespace AmuletOfManyMinions
 			didPlace = false;
 		}
 	}
-	class AmuletOfManyMinionsWorld : ModWorld
+
+	class AmuletOfManyMinionsWorldGen : ModSystem
 	{
 		private static ChestLootInfo[] lootInfo;
 
-		public static void Load()
+		public override void OnModLoad()
 		{
 			lootInfo = new ChestLootInfo[]
 			{
@@ -87,7 +88,7 @@ namespace AmuletOfManyMinions
 			};
 		}
 
-		public static void Unload()
+		public override void Unload()
 		{
 			lootInfo = null;
 		}

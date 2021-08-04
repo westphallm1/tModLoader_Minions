@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	public class MinionPathfindingHelper
 	{
 		private Minion minion;
-		private Projectile projectile => minion.projectile;
+		private Projectile projectile => minion.Projectile;
 		internal BlockAwarePathfinder pathfinder;
 		// number of nodes to check against before starting from the beginning
 		static int HOMING_LOS_CHECKS = 8;
@@ -76,8 +76,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			Vector2 oldCenter = projectile.Center;
 			projectile.width = 16;
 			projectile.height = 16;
-			projectile.modProjectile.drawOffsetX -= xShrink / 2;
-			projectile.modProjectile.drawOriginOffsetY -= yShrink / 2;
+			projectile.ModProjectile.DrawOffsetX -= xShrink / 2;
+			projectile.ModProjectile.DrawOriginOffsetY -= yShrink / 2;
 			projectile.Center = oldCenter;
 			SetPathStartingPoint();
 
@@ -86,8 +86,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		{
 			realWidth = projectile.width;
 			realHeight = projectile.height;
-			realDrawOffsetX = projectile.modProjectile.drawOffsetX;
-			realDrawOffsetY = projectile.modProjectile.drawOriginOffsetY;
+			realDrawOffsetX = projectile.ModProjectile.DrawOffsetX;
+			realDrawOffsetY = projectile.ModProjectile.DrawOriginOffsetY;
 
 		}
 		
@@ -113,8 +113,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				Vector2 oldCenter = projectile.Center;
 				projectile.width = realWidth;
 				projectile.height= realHeight;
-				projectile.modProjectile.drawOffsetX = realDrawOffsetX;
-				projectile.modProjectile.drawOriginOffsetY = realDrawOffsetY;
+				projectile.ModProjectile.DrawOffsetX = realDrawOffsetX;
+				projectile.ModProjectile.DrawOriginOffsetY = realDrawOffsetY;
 				projectile.Center = oldCenter;
 			}
 			nodeIndex = -1;
