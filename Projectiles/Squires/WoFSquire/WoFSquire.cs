@@ -440,9 +440,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Vector2 goreVelocity = Projectile.velocity;
 			goreVelocity.Normalize();
 			goreVelocity *= 4f;
-			int gore1 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/WoFEyeGore").Type, 1f);
-			int gore2 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/WoFEyeGore").Type, 1f);
-			int gore3 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/WoFHammerGore").Type, 1f);
+			int gore1 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFEyeGore").Type, 1f);
+			int gore2 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFEyeGore").Type, 1f);
+			int gore3 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFHammerGore").Type, 1f);
 			foreach (int gore in new int[] { gore1, gore2, gore3 })
 			{
 				Main.gore[gore].timeLeft = 180; // make it last not as long
@@ -658,9 +658,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				Vector2 goreVelocity = Projectile.velocity;
 				goreVelocity.Normalize();
 				goreVelocity *= 4f;
-				int gore1 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/GuideGore").Type, 1f);
-				int gore2 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/GuideBodyGore").Type, 1f);
-				int gore3 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/GuideLegsGore").Type, 1f);
+				int gore1 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideGore").Type, 1f);
+				int gore2 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideBodyGore").Type, 1f);
+				int gore3 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideLegsGore").Type, 1f);
 				foreach (int gore in new int[] { gore1, gore2, gore3 })
 				{
 					Main.gore[gore].timeLeft = 180; // make it last not as long

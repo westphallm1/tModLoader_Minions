@@ -243,7 +243,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		{
 			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 			{
-				int goreIdx = Gore.NewGore(Projectile.position, Vector2.Zero, ModContent.Find<ModGore>("AmuletOfManyMinions/SeaSquireBubbleGore").Type, 1f);
+				int goreIdx = Gore.NewGore(Projectile.position, Vector2.Zero, Mod.Find<ModGore>("SeaSquireBubbleGore").Type, 1f);
 				Main.gore[goreIdx].alpha = 128;
 				Main.gore[goreIdx].velocity *= 0.25f;
 				Main.gore[goreIdx].velocity += offset;
