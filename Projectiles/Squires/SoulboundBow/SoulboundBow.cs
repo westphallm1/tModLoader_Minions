@@ -80,7 +80,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			base.SetDefaults();
 			Projectile.timeLeft = TimeToLive;
 			Projectile.friendly = true;
-			Projectile.minion = true;
 			Projectile.DamageType = DamageClass.Summon;
 			Projectile.tileCollide = false;
 			Projectile.penetrate = 2;

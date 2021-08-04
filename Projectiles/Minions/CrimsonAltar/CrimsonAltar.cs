@@ -145,6 +145,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		protected override int CounterType => ProjectileType<CrimsonAltarCounterMinion>();
 		protected override int dustType => DustID.Blood;
 
+		public override string GlowTexture => null; // have to manually choose when to draw glow
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

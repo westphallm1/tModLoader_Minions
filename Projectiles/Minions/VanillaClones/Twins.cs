@@ -36,7 +36,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			ApplyBuff(player);
 
 			var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, ProjectileType<MiniSpazmatismMinion>(), damage, knockback, player.whoAmI);
-			p.originalDamage = damage;
+			p.originalDamage = Item.damage;
+			var p2 = Projectile.NewProjectileDirect(source, position, Vector2.Zero, ProjectileType<MiniRetinazerMinion>(), damage, knockback, player.whoAmI);
+			p2.originalDamage = Item.damage;
 			return false;
 		}
 	}

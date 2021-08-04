@@ -112,9 +112,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class StardustDragonDrawer : WormDrawer
 	{
+
+		public StardustDragonDrawer() : base()
+		{
+			Main.instance.LoadProjectile(ProjectileID.StardustDragon1);
+			Main.instance.LoadProjectile(ProjectileID.StardustDragon2);
+			Main.instance.LoadProjectile(ProjectileID.StardustDragon3);
+			Main.instance.LoadProjectile(ProjectileID.StardustDragon4);
+		}
+
 		protected override void DrawHead()
 		{
-			texture = Main.Assets.Request<Texture2D>("Images/Images/Projectile_"+ProjectileID.StardustDragon1, AssetRequestMode.ImmediateLoad).Value;
+			texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon1].Value;
 			AddSprite(2, texture.Bounds);
 		}
 
@@ -124,11 +133,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				if (i % 2 == 0)
 				{
-					texture = Main.Assets.Request<Texture2D>("Images/Images/Projectile_"+ProjectileID.StardustDragon2, AssetRequestMode.ImmediateLoad).Value;
+					texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon2].Value;
 				}
 				else
 				{
-					texture = Main.Assets.Request<Texture2D>("Images/Images/Projectile_"+ProjectileID.StardustDragon3, AssetRequestMode.ImmediateLoad).Value;
+					texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon3].Value;
 				}
 				
 				AddSprite(22 + 16 * i, texture.Bounds);
@@ -138,7 +147,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		protected override void DrawTail()
 		{
 			int dist = 22 + 32 * SegmentCount;
-			texture = Main.Assets.Request<Texture2D>("Images/Images/Projectile_"+ProjectileID.StardustDragon4, AssetRequestMode.ImmediateLoad).Value;
+			texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon4].Value;
 			lightColor = Color.White;
 			lightColor.A = 128;
 			AddSprite(dist, texture.Bounds);

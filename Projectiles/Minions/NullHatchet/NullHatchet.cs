@@ -40,16 +40,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			Item.value = Item.sellPrice(0, 1, 0, 0);
 			Item.rare = ItemRarityID.LightRed;
 		}
-
-		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-		{
-			ApplyBuff(player);
-			var p1 = Projectile.NewProjectileDirect(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
-			p1.originalDamage = damage;
-			var p2 = Projectile.NewProjectileDirect(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
-			p2.originalDamage = damage;
-			return false;
-		}
 	}
 
 

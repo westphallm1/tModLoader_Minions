@@ -33,7 +33,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			} else
 			{
 				// do this to prevent NPC projectile reflections from insta-killing the player
-				Projectile.damage = 0;
 				Projectile.hostile = false;
 			}
 		}
@@ -106,9 +105,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override Vector2 IdleBehavior()
 		{
-			if (baseDamage == -1)
+			// need to manually fetch the base damage from the counter 
+			// minion each frame to keep up with player stat updates
+			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
-				baseDamage = Projectile.damage;
+				Projectile p = Main.projectile[i];
+				if(p.active && p.owner == player.whoAmI && p.type == CounterType)
+				{
+					baseDamage = p.damage;
+					break;
+				}
 			}
 			if (EmpowerCount > previousEmpowerCount)
 			{

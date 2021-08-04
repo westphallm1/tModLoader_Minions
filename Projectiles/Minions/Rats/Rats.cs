@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			for (int i = 0; i < 3; i++)
 			{
 				var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, ProjectileType<RatsMinion>(), damage, knockback, player.whoAmI);
-				p.originalDamage = damage;
+				p.originalDamage = Item.damage;
 			}
 			return false;
 		}

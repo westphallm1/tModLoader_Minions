@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 			int spawnCycle = projTypes.Select(v => player.ownedProjectileCounts[v]).Sum();
 			var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockback, player.whoAmI);
-			p.originalDamage = damage;
+			p.originalDamage = Item.damage;
 			return false;
 		}
 
@@ -208,7 +208,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
 					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-					blurPos = blurPos - Main.screenPosition + origin;
+					blurPos = blurPos - Main.screenPosition;
 					Main.EntitySpriteDraw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}

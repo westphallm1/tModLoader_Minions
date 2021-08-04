@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 			int spawnCycle = projTypes.Select(v => player.ownedProjectileCounts[v]).Sum();
 			var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockback, player.whoAmI);
-			p.originalDamage = damage;
+			p.originalDamage = Item.damage;
 			return false;
 		}
 

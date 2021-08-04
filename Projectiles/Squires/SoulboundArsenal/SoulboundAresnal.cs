@@ -325,7 +325,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		{
 			if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0)
 			{
-				Projectile.NewProjectile(
+				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetProjectileSource_FromThis(),
 					Projectile.position,
 					Projectile.velocity,
@@ -334,6 +334,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 					Projectile.knockBack,
 					Main.myPlayer,
 					Projectile.identity);
+				p.originalDamage = Projectile.originalDamage;
 			}
 			Lighting.AddLight(Projectile.Center, Color.Purple.ToVector3() * 0.5f);
 			return base.IdleBehavior();

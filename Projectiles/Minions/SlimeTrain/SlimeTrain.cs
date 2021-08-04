@@ -75,8 +75,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private int SubProjectileType; 
 		private Projectile currentMarker = null;
 
-		private Texture2D SlimeTexture;
-
 		private SlimeTrainRotationTracker rotationTracker;
 
 		private List<int> summonedSlimes = new List<int>();
@@ -95,13 +93,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Projectile.tileCollide = false;
 			attackThroughWalls = true;
 			frameSpeed = 8;
-			if(SlimeTexture == null)
-			{
-			}
 			SubProjectileType = ProjectileType<SlimeTrainMarkerProjectile>();
 			rotationTracker = new SlimeTrainRotationTracker();
-			wormDrawer = new SlimeTrainDrawer();
+			wormDrawer = new SlimeTrainDrawer()
+			{
+				SlimeTexture = Request<Texture2D>(Texture + "_Slimes").Value
+			};
 		}
+
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
@@ -301,7 +300,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private int FrameHeight => 34;
 
 		private int nSlimes = 7;
-		private Texture2D SlimeTexture;
+		internal Texture2D SlimeTexture;
 
 		private List<int> summonedSlimes = new List<int>();
 		private int YFrameTop => 40 * frame + 4;
@@ -314,7 +313,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		}
 		public override void Draw(Texture2D texture, Color lightColor)
 		{
-			SlimeTexture = Request<Texture2D>(texture + "_Slimes").Value;
 			base.Draw(texture, lightColor);
 		}
 		protected override void DrawHead()

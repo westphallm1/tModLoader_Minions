@@ -47,8 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			ApplyBuff(player);
 
 			var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
-			projectile.originalDamage = damage; //TODO 1.4 this might not be correct, vanilla uses Item.damage. But it takes damage changes from ModifyWeaponDamage etc which may be beneficial here)
-
+			projectile.originalDamage = Item.damage; // using damage directly appears to double-dip into damage multipliers
 			return false;
 		}
 

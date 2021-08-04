@@ -433,7 +433,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				Projectile.NewProjectile(
+				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetProjectileSource_FromThis(),
 					Projectile.Center, 
 					Projectile.velocity, 
@@ -441,6 +441,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 					Projectile.damage, 
 					Projectile.knockBack, 
 					player.whoAmI);
+				p.originalDamage = Projectile.originalDamage;
 			}
 		}
 

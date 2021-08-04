@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			{
 				return false;
 			}
-			return true;
+			return base.CanShoot(player);
 		}
 
 		public override bool CanUseItem(Player player)
@@ -440,9 +440,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Vector2 goreVelocity = Projectile.velocity;
 			goreVelocity.Normalize();
 			goreVelocity *= 4f;
-			int gore1 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/WoFEyeGore").Type, 1f);
-			int gore2 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/WoFEyeGore").Type, 1f);
-			int gore3 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/WoFHammerGore").Type, 1f);
+			int gore1 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/WoFEyeGore").Type, 1f);
+			int gore2 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/WoFEyeGore").Type, 1f);
+			int gore3 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/WoFHammerGore").Type, 1f);
 			foreach (int gore in new int[] { gore1, gore2, gore3 })
 			{
 				Main.gore[gore].timeLeft = 180; // make it last not as long
@@ -542,9 +542,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			baseDamage = Projectile.damage;
+			baseDamage = Projectile.originalDamage;
 			baseKnockback = Projectile.knockBack;
 			Projectile.damage = 1;
+			Projectile.originalDamage = 1;
 			Projectile.knockBack = 0;
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -657,9 +658,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				Vector2 goreVelocity = Projectile.velocity;
 				goreVelocity.Normalize();
 				goreVelocity *= 4f;
-				int gore1 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/GuideGore").Type, 1f);
-				int gore2 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/GuideBodyGore").Type, 1f);
-				int gore3 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("Gores/GuideLegsGore").Type, 1f);
+				int gore1 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/GuideGore").Type, 1f);
+				int gore2 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/GuideBodyGore").Type, 1f);
+				int gore3 = Gore.NewGore(Projectile.position, goreVelocity, ModContent.Find<ModGore>("AmuletOfManyMinions/GuideLegsGore").Type, 1f);
 				foreach (int gore in new int[] { gore1, gore2, gore3 })
 				{
 					Main.gore[gore].timeLeft = 180; // make it last not as long
@@ -673,10 +674,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				if (player.whoAmI == Main.myPlayer)
 				{
 					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.Center, Projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
+					Projectile p = Projectile.NewProjectileDirect(Projectile.GetProjectileSource_FromThis(), Projectile.Center, Projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
+					p.originalDamage = baseDamage;
 				}
 			}
 		}
+
 		protected override float WeaponDistanceFromCenter() => 6;
 
 		public override float ComputeIdleSpeed() => 15;

@@ -102,6 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		private int framesSinceLastHit;
 		protected override int dustType => DustID.Blood;
 		protected override int CounterType => ProjectileType<CorruptionAltarCounterMinion>();
+		public override string GlowTexture => null; // have to manually choose when to draw glow
 
 		public override void SetStaticDefaults()
 		{

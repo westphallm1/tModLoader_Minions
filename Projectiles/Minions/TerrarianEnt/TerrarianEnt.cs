@@ -10,6 +10,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using ReLogic.Content;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
@@ -97,6 +98,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			frameSpeed = 5;
 
 			subProjectiles = new List<LandChunkProjectile>();
+
+			if (foliageTexture == null || vinesTexture == null)
+			{
+				foliageTexture = Request<Texture2D>(Texture + "_Foliage", AssetRequestMode.ImmediateLoad).Value;
+				vinesTexture = Request<Texture2D>(Texture + "_Vines", AssetRequestMode.ImmediateLoad).Value;
+			}
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -165,12 +172,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				frameResolution = 1,
 				posResolution = 1
 			};
-
-			if (bodyTexture == null || foliageTexture == null || vinesTexture == null)
+			if(bodyTexture == null)
 			{
 				bodyTexture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-				foliageTexture = Request<Texture2D>(Texture + "_Foliage").Value;
-				vinesTexture = Request<Texture2D>(Texture + "_Vines").Value;
 			}
 			scHelper.Attach();
 		}

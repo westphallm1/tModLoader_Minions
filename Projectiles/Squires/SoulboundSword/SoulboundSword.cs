@@ -136,7 +136,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				Projectile.NewProjectile(
+				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetProjectileSource_FromThis(),
 					Projectile.Center, 
 					Projectile.velocity, 
@@ -144,6 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 					5 * Projectile.damage / 4, 
 					Projectile.knockBack, 
 					player.whoAmI);
+				p.originalDamage = Projectile.originalDamage;
 			}
 		}
 
