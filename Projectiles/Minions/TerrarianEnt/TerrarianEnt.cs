@@ -99,12 +99,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			frameSpeed = 5;
 
 			subProjectiles = new List<LandChunkProjectile>();
+		}
 
-			if (foliageTexture == null || vinesTexture == null)
-			{
-				foliageTexture = Request<Texture2D>(Texture + "_Foliage", AssetRequestMode.ImmediateLoad);
-				vinesTexture = Request<Texture2D>(Texture + "_Vines", AssetRequestMode.ImmediateLoad);
-			}
+		public override void Load()
+		{
+			foliageTexture = Request<Texture2D>(Texture + "_Foliage");
+			vinesTexture = Request<Texture2D>(Texture + "_Vines");
+		}
+
+		public override void Unload()
+		{
+			foliageTexture = null;
+			vinesTexture = null;
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
