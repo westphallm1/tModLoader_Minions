@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			rotationTracker = new SlimeTrainRotationTracker();
 			wormDrawer = new SlimeTrainDrawer()
 			{
-				SlimeTexture = Request<Texture2D>(Texture + "_Slimes")
+				SlimeTexture = Main.dedServ ? null : Request<Texture2D>(Texture + "_Slimes")
 			};
 		}
 

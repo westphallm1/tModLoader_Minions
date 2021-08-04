@@ -115,10 +115,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public StardustDragonDrawer() : base()
 		{
-			Main.instance.LoadProjectile(ProjectileID.StardustDragon1);
-			Main.instance.LoadProjectile(ProjectileID.StardustDragon2);
-			Main.instance.LoadProjectile(ProjectileID.StardustDragon3);
-			Main.instance.LoadProjectile(ProjectileID.StardustDragon4);
+			if(!Main.dedServ)
+			{
+				Main.instance.LoadProjectile(ProjectileID.StardustDragon1);
+				Main.instance.LoadProjectile(ProjectileID.StardustDragon2);
+				Main.instance.LoadProjectile(ProjectileID.StardustDragon3);
+				Main.instance.LoadProjectile(ProjectileID.StardustDragon4);
+			}
 		}
 
 		protected override void DrawHead()

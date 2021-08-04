@@ -103,8 +103,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public override void Load()
 		{
-			foliageTexture = Request<Texture2D>(Texture + "_Foliage");
-			vinesTexture = Request<Texture2D>(Texture + "_Vines");
+			if(!Main.dedServ)
+			{
+				foliageTexture = Request<Texture2D>(Texture + "_Foliage");
+				vinesTexture = Request<Texture2D>(Texture + "_Vines");
+			}
 		}
 
 		public override void Unload()
@@ -181,7 +184,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				frameResolution = 1,
 				posResolution = 1
 			};
-			if(bodyTexture == null)
+			if(bodyTexture == null && !Main.dedServ)
 			{
 				Main.instance.LoadProjectile(Projectile.type);
 				bodyTexture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type];
