@@ -12,6 +12,7 @@ using static AmuletOfManyMinions.Projectiles.Minions.SlimeTrain.SlimeTrainMarker
 using System.Collections.Generic;
 using AmuletOfManyMinions.Projectiles.Minions.Slimecart;
 using AmuletOfManyMinions.Core.Minions.Effects;
+using ReLogic.Content;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 {
@@ -97,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			rotationTracker = new SlimeTrainRotationTracker();
 			wormDrawer = new SlimeTrainDrawer()
 			{
-				SlimeTexture = Request<Texture2D>(Texture + "_Slimes").Value
+				SlimeTexture = Request<Texture2D>(Texture + "_Slimes")
 			};
 		}
 
@@ -300,7 +301,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private int FrameHeight => 34;
 
 		private int nSlimes = 7;
-		internal Texture2D SlimeTexture;
+		internal Asset<Texture2D> SlimeTexture;
 
 		private List<int> summonedSlimes = new List<int>();
 		private int YFrameTop => 40 * frame + 4;
@@ -311,14 +312,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			base.Update(frame);
 			this.summonedSlimes = summonedSlimes;
 		}
-		public override void Draw(Texture2D texture, Color lightColor)
+		public override void Draw(Asset<Texture2D> texture, Color lightColor)
 		{
 			base.Draw(texture, lightColor);
 		}
 		protected override void DrawHead()
 		{
 			Rectangle slime = new Rectangle(0, SlimeFrameTop(0), 52, FrameHeight);
-			Texture2D mainTexture = texture;
+			Asset<Texture2D> mainTexture = texture;
 			texture = SlimeTexture;
 			AddSprite(2, slime);
 			Rectangle head = new Rectangle(70, YFrameTop, 52, FrameHeight);
@@ -329,7 +330,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		protected override void DrawBody()
 		{
 			Rectangle body;
-			Texture2D mainTexture = texture;
+			Asset<Texture2D> mainTexture = texture;
 			for (int i = 0; i < SegmentCount + 1; i++)
 			{
 				if (i == 0)
@@ -364,7 +365,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
-			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r,
 				origin, 1, GetEffects(r), 0);
 			if (Main.rand.Next(20) == 0)

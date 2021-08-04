@@ -123,8 +123,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		protected override void DrawHead()
 		{
-			texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon1].Value;
-			AddSprite(2, texture.Bounds);
+			texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon1];
+			AddSprite(2, texture.Frame());
 		}
 
 		protected override void DrawBody()
@@ -133,24 +133,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				if (i % 2 == 0)
 				{
-					texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon2].Value;
+					texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon2];
 				}
 				else
 				{
-					texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon3].Value;
+					texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon3];
 				}
 				
-				AddSprite(22 + 16 * i, texture.Bounds);
+				AddSprite(22 + 16 * i, texture.Frame());
 			}
 		}
 
 		protected override void DrawTail()
 		{
 			int dist = 22 + 32 * SegmentCount;
-			texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon4].Value;
+			texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.StardustDragon4];
 			lightColor = Color.White;
 			lightColor.A = 128;
-			AddSprite(dist, texture.Bounds);
+			AddSprite(dist, texture.Frame());
 		}
 
 		protected override SpriteEffects GetEffects(float angle)
@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
-			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
+			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r + MathHelper.PiOver2,
 				origin, 1, GetEffects(r), 0);
 			if (Main.rand.Next(30) == 0)

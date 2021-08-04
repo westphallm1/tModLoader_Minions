@@ -270,7 +270,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-			wormDrawer.Draw(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, lightColor);
+			wormDrawer.Draw(Terraria.GameContent.TextureAssets.Projectile[Projectile.type], lightColor);
 			return false;
 		}
 

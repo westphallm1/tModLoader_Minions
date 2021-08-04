@@ -64,15 +64,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 	{
 		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
 		protected override int CounterType => ProjectileType<TerrarianEntCounterMinion>();
+		
+		private static Asset<Texture2D> foliageTexture;
+		private static Asset<Texture2D> vinesTexture;
 
 		private SpriteCompositionHelper scHelper;
 
 		protected override int dustType => 2;
 
-		private Texture2D bodyTexture;
+		private Asset<Texture2D> bodyTexture;
 
-		private Texture2D foliageTexture;
-		private Texture2D vinesTexture;
 		private List<LandChunkProjectile> subProjectiles;
 		private Projectile swingingProjectile;
 		private int nextTreeIndex;
@@ -101,8 +102,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 			if (foliageTexture == null || vinesTexture == null)
 			{
-				foliageTexture = Request<Texture2D>(Texture + "_Foliage", AssetRequestMode.ImmediateLoad).Value;
-				vinesTexture = Request<Texture2D>(Texture + "_Vines", AssetRequestMode.ImmediateLoad).Value;
+				foliageTexture = Request<Texture2D>(Texture + "_Foliage", AssetRequestMode.ImmediateLoad);
+				vinesTexture = Request<Texture2D>(Texture + "_Vines", AssetRequestMode.ImmediateLoad);
 			}
 		}
 
@@ -119,8 +120,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			Vector2 leftVine = new Vector2(-48, 78) + Vector2.One * 4 * sinAngle;
 			Vector2 rightVine = new Vector2(64, 74) + new Vector2(1, -1) * -2 * sinAngle;
 			// left vine
-			helper.AddSpriteToBatch(vinesTexture, (0, 2),  leftVine);
-			helper.AddSpriteToBatch(vinesTexture, (1, 2),  rightVine);
+			Texture2D value = vinesTexture.Value;
+			helper.AddSpriteToBatch(value, (0, 2),  leftVine);
+			helper.AddSpriteToBatch(value, (1, 2),  rightVine);
 		}
 
 		private void DrawFoliage(SpriteCompositionHelper helper, int frame, float cycleAngle)
@@ -130,17 +132,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			Vector2 middleLeaf = new Vector2(0, -100) + Vector2.UnitY * -3 * sinAngle;
 			Vector2 rightLeaf = new Vector2(56, -64)  + Vector2.One * -2 * sinAngle;
 			// left leaf
-			helper.AddSpriteToBatch(foliageTexture, (1, 3),  leftLeaf);
+			Texture2D value = foliageTexture.Value;
+			helper.AddSpriteToBatch(value, (1, 3),  leftLeaf);
 			// middle leaf
-			helper.AddSpriteToBatch(foliageTexture, (2, 3),  middleLeaf);
+			helper.AddSpriteToBatch(value, (2, 3),  middleLeaf);
 			// right leaf
-			helper.AddSpriteToBatch(foliageTexture, (0, 3),  rightLeaf);
+			helper.AddSpriteToBatch(value, (0, 3),  rightLeaf);
 		}
 
 		private void DrawBody(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
 			// body
-			helper.AddSpriteToBatch(bodyTexture, (Projectile.frame, 5),  Vector2.Zero);
+			helper.AddSpriteToBatch(bodyTexture.Value, (Projectile.frame, 5),  Vector2.Zero);
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -174,7 +177,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			};
 			if(bodyTexture == null)
 			{
-				bodyTexture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+				Main.instance.LoadProjectile(Projectile.type);
+				bodyTexture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type];
 			}
 			scHelper.Attach();
 		}
