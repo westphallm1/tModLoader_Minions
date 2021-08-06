@@ -183,6 +183,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Arms");
+			AddTexture(Texture + "_Gun");
+		}
 
 		public sealed override void SetDefaults()
 		{
@@ -223,7 +228,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D texture = Request<Texture2D>(Texture + "_Arms").Value;
+			Texture2D texture = ExtraTextures[0].Value;
 			int frame = 0;
 			float shootSlope = default;
 			if (framesSinceHadTarget < 30 && lastShotVector != default && framesSinceLastHit <= 30)
@@ -283,7 +288,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Vector2 offset = lastShotVector;
 			offset.Y *= -1;
 			offset.SafeNormalize();
-			Texture2D texture = Request<Texture2D>(Texture + "_Gun").Value;
+			Texture2D texture = ExtraTextures[1].Value;
 			Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = GetWeaponAngle(offset);

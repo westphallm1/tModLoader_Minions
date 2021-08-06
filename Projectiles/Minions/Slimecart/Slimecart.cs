@@ -60,6 +60,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			DisplayName.SetDefault("Slimecart");
 			Main.projFrames[Projectile.type] = 4;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Umbrella");
+			AddTexture(Texture + "_Slime");
+			AddTexture(Texture + "_Hat");
+		}
 
 		public override void SetDefaults()
 		{
@@ -84,18 +90,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			float brightness = (lightColor.R + lightColor.G + lightColor.B) / (3f * 255f);
 			if (gHelper.isFlying)
 			{
-				texture = Request<Texture2D>(Texture + "_Umbrella").Value;
+				texture = ExtraTextures[0].Value;
 				Main.EntitySpriteDraw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
 					texture.Bounds, lightColor, 0,
 					texture.Bounds.Center.ToVector2(), 1, effects, 0);
 			}
-			texture = Request<Texture2D>(Texture + "_Slime").Value;
+			texture = ExtraTextures[1].Value;
 			int frameHeight = texture.Height / 7;
 			Rectangle bounds = new Rectangle(0, slimeIndex * frameHeight, texture.Width, frameHeight);
 			Main.EntitySpriteDraw(texture, pos + new Vector2(0, -14) - Main.screenPosition,
 				bounds, lightColor, 0,
 				new Vector2(bounds.Width/2, bounds.Height/2), 1, effects, 0);
-			texture = Request<Texture2D>(Texture + "_Hat").Value;
+			texture = ExtraTextures[2].Value;
 			Main.EntitySpriteDraw(texture, pos + new Vector2(0, -23) - Main.screenPosition,
 				texture.Bounds, lightColor, 0,
 				texture.Bounds.Center.ToVector2(), 1, effects, 0);

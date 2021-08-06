@@ -212,6 +212,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			animationFrame = 0;
 		}
 
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Ribs");
+			AddTexture(Texture + "_Head");
+			AddTexture(Texture + "_Heart");
+		}
+
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
@@ -361,8 +368,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			float r = Projectile.rotation;
 			Vector2 pos = Projectile.Center;
 			Texture2D bodyTexture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-			Texture2D ribsTexture = Request<Texture2D>(Texture + "_Ribs").Value;
-			Texture2D headTexture = Request<Texture2D>(Texture + "_Head").Value;
+			Texture2D ribsTexture = ExtraTextures[0].Value;
+			Texture2D headTexture = ExtraTextures[1].Value;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			int frameHeight = bodyTexture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, bodyTexture.Width, frameHeight);
@@ -384,7 +391,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		private void DrawHeart(Color lightColor)
 		{
 			Vector2 heartCenter = Projectile.Center + new Vector2(16 * Projectile.spriteDirection, 0);
-			Texture2D heartTexture = Request<Texture2D>(Texture + "_Heart").Value;
+			Texture2D heartTexture = ExtraTextures[2].Value;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Rectangle bounds = heartTexture.Bounds;
 			Vector2 origin = bounds.Center.ToVector2();
@@ -400,7 +407,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
 		private void DrawHeads(Color lightColor)
 		{
-			Texture2D texture = Request<Texture2D>(Texture + "_Head").Value;
+			Texture2D texture = ExtraTextures[1].Value;
 			foreach (Projectile head in allHeads)
 			{
 				float r = head.rotation;

@@ -87,6 +87,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Slimes");
+		}
 
 		public sealed override void SetDefaults()
 		{
@@ -98,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			rotationTracker = new SlimeTrainRotationTracker();
 			wormDrawer = new SlimeTrainDrawer()
 			{
-				SlimeTexture = Main.dedServ ? null : Request<Texture2D>(Texture + "_Slimes")
+				SlimeTexture = Main.dedServ ? null : null // : ExtraTextures[0]
 			};
 		}
 

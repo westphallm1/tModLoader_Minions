@@ -246,6 +246,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Pot");
+		}
 
 		public sealed override void SetDefaults()
 		{
@@ -360,7 +364,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			float r;
 			Vector2 pos;
 			int wingFrame = (wingFrameCounter % 20) / 5;
-			Texture2D potTexture = Request<Texture2D>(Texture + "_Pot").Value;
+			Texture2D potTexture = ExtraTextures[0].Value;
 			int frameHeight = potTexture.Height / 4;
 			Rectangle bounds = new Rectangle(0, wingFrame * frameHeight, potTexture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);

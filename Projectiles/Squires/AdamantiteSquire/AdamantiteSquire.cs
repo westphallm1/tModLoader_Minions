@@ -52,7 +52,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
 	public class AdamantiteSquireMinion : WeaponHoldingSquire
 	{
-		private Texture2D horseTexture;
 
 		internal override int BuffId => BuffType<AdamantiteSquireMinionBuff>();
 		protected override int AttackFrames => 25;
@@ -84,13 +83,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Pegasus");
+		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
 			Projectile.width = 30;
 			Projectile.height = 32;
-			horseTexture = Request<Texture2D>(Texture + "_Pegasus").Value;
 			blurHelper = new MotionBlurDrawer(5);
 		}
 
@@ -113,7 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			//All of this is based on the weapon sprite and AttackFrames above.
 			int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
-			int spearLength = Request<Texture2D>(WeaponTexturePath).Width(); //A decent aproximation of how long the spear is.
+			int spearLength = ExtraTextures[1].Width(); //A decent aproximation of how long the spear is.
 			int spearStart = (spearLength / 3); //Two thirds of the spear starts behind by default.
 			float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
 
@@ -198,6 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			float r = 0;
 			Vector2 offset = new Vector2(4 * Projectile.spriteDirection, 12).RotatedBy(r);
+			Texture2D horseTexture = ExtraTextures[2].Value;
 			int frameHeight = horseTexture.Height / 4;
 			Rectangle bounds = new Rectangle(0, frameHeight * (wingFrame % 4), horseTexture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);

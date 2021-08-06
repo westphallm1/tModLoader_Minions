@@ -156,6 +156,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Glow");
+		}
+
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -176,7 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			{
 				return;
 			}
-			Texture2D texture = Request<Texture2D>(Texture + "_Glow").Value;
+			Texture2D texture = ExtraTextures[0].Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = bounds.Center.ToVector2();
 			Vector2 pos = Projectile.Center;

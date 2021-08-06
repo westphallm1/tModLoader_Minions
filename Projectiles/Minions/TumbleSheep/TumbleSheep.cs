@@ -66,6 +66,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.TumbleSheep"));
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Legs1");
+			AddTexture(Texture + "_Legs2");
+			AddTexture(Texture + "_Head");
+		}
 
 		public override void SetDefaults()
 		{
@@ -218,7 +224,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 				Vector2 legRotationAngle = (cycleAngle + i * MathHelper.Pi).ToRotationVector2();
 				legRotationAngle.X *= 4;
 				legRotationAngle.Y *= 1.5f;
-				helper.AddSpriteToBatch(Request<Texture2D>(Texture + "_Legs" + (i+1)).Value, legRotationAngle + new Vector2(0, 14));
+				helper.AddSpriteToBatch(ExtraTextures[i].Value, legRotationAngle + new Vector2(0, 14));
 			}
 		}
 
@@ -250,7 +256,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			helper.AddSpriteToBatch(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, (textureFrame, 3), offsetVector, r, 1);
 			// head
 			offsetVector = new Vector2(10, -2 + 1.5f * (float)Math.Sin(2 * cycleAngle));
-			helper.AddSpriteToBatch(Request<Texture2D>(Texture + "_Head").Value, offsetVector);
+			helper.AddSpriteToBatch(ExtraTextures[2].Value, offsetVector);
 		}
 
 		private void DrawBodyIdle(SpriteCompositionHelper helper, int frame, float cycleAngle)
@@ -261,7 +267,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			
 			// head
 			offsetVector = new Vector2(10, -2 + 1.5f * (float)Math.Sin(cycleAngle));
-			scHelper.AddSpriteToBatch(Request<Texture2D>(Texture + "_Head").Value, offsetVector);
+			scHelper.AddSpriteToBatch(ExtraTextures[2].Value, offsetVector);
 		}
 
 		public override bool PreDraw(ref Color lightColor)

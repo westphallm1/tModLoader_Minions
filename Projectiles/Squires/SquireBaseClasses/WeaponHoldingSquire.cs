@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -47,8 +48,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected int wingFrame = 0;
 		protected int attackFrame = 0;
 		protected float weaponAngle = 0;
+
+		protected virtual Asset<Texture2D> WeaponTexture => ExtraTextures[1];
 		public WeaponHoldingSquire(int itemID) : base(itemID) { }
 
+		public override void LoadAssets()
+		{
+			// these throw off the extra texture indices of subclasses, be careful
+			AddTexture(WingTexturePath);
+			AddTexture(WeaponTexturePath);
+		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -190,7 +199,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			if (WingTexturePath != null)
 			{
-				Texture2D wingTexture = ModContent.Request<Texture2D>(WingTexturePath).Value;
+				Texture2D wingTexture = ExtraTextures[0].Value;
 				Vector2 wingOffset = WingOffset;
 				wingOffset.X *= Projectile.spriteDirection;
 				Vector2 pos = Projectile.Center + wingOffset;
@@ -292,7 +301,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			{
 				return;
 			}
-			Texture2D texture = ModContent.Request<Texture2D>(WeaponTexturePath).Value;
+			Texture2D texture = WeaponTexture.Value;
 			Rectangle bounds = GetWeaponTextureBounds(texture);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = SpriteRotationFromWeaponAngle();

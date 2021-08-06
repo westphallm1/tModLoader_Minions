@@ -255,7 +255,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			TransformBubbles();
 			if(player.whoAmI == Main.myPlayer)
 			{
-				Projectile.NewProjectile(
+				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetProjectileSource_FromThis(),
 					Projectile.Center, 
 					Projectile.velocity, 
@@ -263,6 +263,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 					3 * Projectile.damage, 
 					Projectile.knockBack, 
 					player.whoAmI);
+				p.originalDamage = Projectile.originalDamage;
 			}
 		}
 
@@ -287,7 +288,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		{
 			//All of this is based on the weapon sprite and AttackFrames above.
 			int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
-			int spearLength = Request<Texture2D>(WeaponTexturePath).Width(); //A decent aproximation of how long the spear is.
+			int spearLength = WeaponTexture.Width(); //A decent aproximation of how long the spear is.
 			int spearStart = (spearLength / 3 - 10); //Two thirds of the spear starts behind by default. Subtract to start it further out since this one is puny.
 			float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
 			if (attackFrame <= reachFrames)

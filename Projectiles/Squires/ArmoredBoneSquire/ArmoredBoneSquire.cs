@@ -355,6 +355,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Glow");
+			AddTexture("AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailChain");
+		}
 
 		public sealed override void SetDefaults()
 		{
@@ -408,7 +413,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D glow = Request<Texture2D>(Texture + "_Glow").Value;
+			Texture2D glow = ExtraTextures[2].Value;
 			float glowR = Projectile.rotation;
 			Vector2 glowpos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
@@ -420,7 +425,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 			if (usingWeapon)
 			{
-				Texture2D chainTexture = Request<Texture2D>("AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailChain").Value;
+				Texture2D chainTexture = ExtraTextures[2].Value;
 				ChainDrawer drawer = new ChainDrawer(chainTexture.Bounds);
 				Vector2 center = Projectile.Center + WeaponCenterOfRotation;
 				Vector2 chainVector = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();

@@ -57,22 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 
 		private Vector2 swingCenter = default;
 
-		static Color[] BrushColors = new Color[]
-		{
-			Color.Red,
-			Color.LimeGreen,
-			Color.Blue,
-			Color.Orange,
-			Color.Indigo,
-			Color.Yellow,
-			Color.Violet,
-			Color.Crimson,
-			Color.Green,
-			Color.RoyalBlue,
-			Color.Aquamarine,
-			Color.Gold,
-			Color.Purple,
-		};
+		public override string GlowTexture => null;
 
 		protected Color brushColor;
 		protected override Vector3 lightColor => brushColor.ToVector3() * 0.75f;
@@ -81,6 +66,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Mystic Palette");
+		}
+
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Glow");
 		}
 
 
@@ -122,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, alpha);
 			Color glowColor = new Color(brushColor.R, brushColor.G, brushColor.B, alpha);
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-			Texture2D glowTexture = Request<Texture2D>(Texture + "_Glow").Value;
+			Texture2D glowTexture = ExtraTextures[0].Value;
 
 
 

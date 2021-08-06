@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Minions;
 using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Core.Minions.Tactics;
@@ -6,6 +7,8 @@ using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -45,10 +48,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal abstract int BuffId { get; }
 
+		// keep a local pointer to extra textures
+		// for faster retrieval
+		// Many unsafe gets to this
+		protected List<Asset<Texture2D>> ExtraTextures;
+
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
+			if(!Main.dedServ)
+			{
+				LoadAssets();
+			}
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			TextureCache.ExtraTextures.TryGetValue(Type, out ExtraTextures);
 		}
 		public override void AI()
 		{
@@ -228,6 +246,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 			}
 			return null;
+		}
+
+		public virtual void LoadAssets()
+		{
+			// todo load assets
+		}
+
+		internal void AddTexture(string texturePath)
+		{
+			if(!TextureCache.ExtraTextures.TryGetValue(Type, out List<Asset<Texture2D>> textures))
+			{
+				textures = new List<Asset<Texture2D>>();
+				TextureCache.ExtraTextures[Type] = textures;
+			}
+			if(texturePath == null)
+			{
+				textures.Add(null);
+			} else
+			{
+				textures.Add(Request<Texture2D>(texturePath));
+			}
 		}
 
 		public abstract void Behavior();

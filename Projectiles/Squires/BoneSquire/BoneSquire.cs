@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 using Terraria.Audio;
+using ReLogic.Content;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 {
@@ -51,11 +52,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		protected override int AttackFrames => usingSpecial ? 20 : 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 
-		string BaseWeaponTexture = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailBall";
-		protected override string WeaponTexturePath => usingSpecial ? "Terraria/Images/NPC_72" : BaseWeaponTexture;
+		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailBall";
+		protected string FlamingFlailPath = "Terraria/Images/NPC_72";
 
-		string BaseChainPath = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailChain";
-		protected string ChainTexturePath => usingSpecial ? BaseChainPath + "_Flaming" : BaseChainPath;
+		protected static string ChainTexturePath = "AmuletOfManyMinions/Projectiles/Squires/BoneSquire/BoneSquireFlailChain";
+		protected static string FlamingChainTexturePath = ChainTexturePath + "_Flaming";
 		// swing weapon in a full circle
 		protected override float SwingAngle1 => SwingAngle0 - 2 * (float)Math.PI;
 
@@ -66,6 +67,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
+
+		protected override Asset<Texture2D> WeaponTexture => usingSpecial ? ExtraTextures[3] : base.WeaponTexture;
 		public BoneSquireMinion() : base(ItemType<BoneSquireMinionItem>()) { }
 
 		public sealed override void SetDefaults()
@@ -74,6 +77,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			Projectile.width = 22;
 			Projectile.height = 30;
 			Projectile.localNPCHitCooldown = AttackFrames / 3;
+		}
+
+		public override void LoadAssets()
+		{
+			AddTexture(ChainTexturePath);
+			AddTexture(FlamingFlailPath);
+			AddTexture(FlamingChainTexturePath);
 		}
 
 		public override void SetStaticDefaults()
@@ -114,7 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		{
 			if (IsAttacking())
 			{
-				Texture2D chainTexture = Request<Texture2D>(ChainTexturePath).Value;
+				Texture2D chainTexture = ExtraTextures[usingSpecial ? 2 : 4].Value;
 				ChainDrawer drawer = new ChainDrawer(chainTexture.Bounds);
 				Vector2 center = Projectile.Center + WeaponCenterOfRotation;
 				Vector2 chainVector = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();

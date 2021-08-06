@@ -52,6 +52,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			DisplayName.SetDefault("ExciteSkull");
 			Main.projFrames[Projectile.type] = 4;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Rider");
+		}
 
 		public override void SetDefaults()
 		{
@@ -73,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			Texture2D texture;
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			texture = Request<Texture2D>(Texture + "_Rider").Value;
+			texture = ExtraTextures[0].Value;
 			int frameHeight = texture.Height / 8;
 			Rectangle bounds = new Rectangle(0, (Projectile.minionPos % 8) * frameHeight, texture.Width, frameHeight);
 			Main.EntitySpriteDraw(texture, pos + new Vector2(0, -10) - Main.screenPosition,

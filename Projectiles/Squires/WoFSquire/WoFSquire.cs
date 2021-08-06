@@ -133,8 +133,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		private MotionBlurDrawer blurDrawer;
 
-		private Asset<Texture2D> shockwaveTexture;
-
 		public WoFSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
@@ -144,6 +142,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Shockwave");
+			AddTexture(Texture + "_Eye");
+			AddTexture(Texture + "_Clingers");
+		}
+
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -154,7 +159,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			laserFrames = new int[2];
 			isDashing = false;
 			blurDrawer = new MotionBlurDrawer(5);
-			shockwaveTexture = Request<Texture2D>(Texture + "_Shockwave");
 		}
 
 		public override Vector2 IdleBehavior()
@@ -339,7 +343,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		private void DrawShockwave(Vector2 center, Color color, float scale)
 		{
 			float r = Projectile.rotation + Projectile.spriteDirection * MathHelper.PiOver2;
-			Main.EntitySpriteDraw(shockwaveTexture.Value, center - Main.screenPosition,
+			Texture2D shockwaveTexture = ExtraTextures[0].Value;
+			Main.EntitySpriteDraw(shockwaveTexture, center - Main.screenPosition,
 				shockwaveTexture.Frame(1, 1), color, r,
 				shockwaveTexture.Frame(1, 1).Center.ToVector2(), scale, 0, 0);
 		}
@@ -356,7 +361,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		private void DrawEyes(ref Color lightColor)
 		{
-			Texture2D texture = Request<Texture2D>(Texture + "_Eye").Value;
+			Texture2D texture = ExtraTextures[1].Value;
 			Rectangle bounds = texture.Bounds;
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			for (int i = 0; i < 2; i++)
@@ -404,7 +409,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		private void DrawClingers(ref Color lightColor)
 		{
-			Texture2D texture = Request<Texture2D>(Texture + "_Clingers").Value;
+			Texture2D texture = ExtraTextures[2].Value;
 			int nFrames = 2;
 			int frameHeight = texture.Height / nFrames;
 			float r = Projectile.spriteDirection == 1 ? MathHelper.PiOver2 : -MathHelper.PiOver2;
@@ -528,6 +533,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture("Terraria/Images/HealthBar1");
+			AddTexture("Terraria/Images/HealthBar2");
+		}
 
 		public sealed override void SetDefaults()
 		{
@@ -612,8 +622,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					b = getGradient(halfHealthColor.B, zeroHealthColor.B, weight);
 				}
 				Color drawColor = new Color(r, g, b);
-				Texture2D healthBar = Main.Assets.Request<Texture2D>("Images/HealthBar1").Value;
-				Texture2D healthBarBack = Main.Assets.Request<Texture2D>("Images/HealthBar2").Value;
+				Texture2D healthBar = ExtraTextures[0].Value;
+				Texture2D healthBarBack = ExtraTextures[1].Value;
 				Rectangle bounds = new Rectangle(0, 0, (int)(healthBar.Width * widthFraction), healthBar.Height);
 				Vector2 origin = healthBar.Bounds.Center.ToVector2();
 				Vector2 pos = Projectile.Bottom + new Vector2(0, 8);

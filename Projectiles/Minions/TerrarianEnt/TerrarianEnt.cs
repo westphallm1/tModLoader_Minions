@@ -65,9 +65,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
 		protected override int CounterType => ProjectileType<TerrarianEntCounterMinion>();
 		
-		private static Asset<Texture2D> foliageTexture;
-		private static Asset<Texture2D> vinesTexture;
-
 		private SpriteCompositionHelper scHelper;
 
 		protected override int dustType => 2;
@@ -100,20 +97,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 			subProjectiles = new List<LandChunkProjectile>();
 		}
-
-		public override void Load()
+		public override void LoadAssets()
 		{
-			if(!Main.dedServ)
-			{
-				foliageTexture = Request<Texture2D>(Texture + "_Foliage");
-				vinesTexture = Request<Texture2D>(Texture + "_Vines");
-			}
-		}
-
-		public override void Unload()
-		{
-			foliageTexture = null;
-			vinesTexture = null;
+			AddTexture(Texture + "_Foliage");
+			AddTexture(Texture + "_Vines");
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -129,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			Vector2 leftVine = new Vector2(-48, 78) + Vector2.One * 4 * sinAngle;
 			Vector2 rightVine = new Vector2(64, 74) + new Vector2(1, -1) * -2 * sinAngle;
 			// left vine
-			Texture2D value = vinesTexture.Value;
+			Texture2D value = ExtraTextures[1].Value;
 			helper.AddSpriteToBatch(value, (0, 2),  leftVine);
 			helper.AddSpriteToBatch(value, (1, 2),  rightVine);
 		}
@@ -141,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			Vector2 middleLeaf = new Vector2(0, -100) + Vector2.UnitY * -3 * sinAngle;
 			Vector2 rightLeaf = new Vector2(56, -64)  + Vector2.One * -2 * sinAngle;
 			// left leaf
-			Texture2D value = foliageTexture.Value;
+			Texture2D value = ExtraTextures[0].Value;
 			helper.AddSpriteToBatch(value, (1, 3),  leftLeaf);
 			// middle leaf
 			helper.AddSpriteToBatch(value, (2, 3),  middleLeaf);

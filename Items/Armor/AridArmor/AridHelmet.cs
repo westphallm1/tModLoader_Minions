@@ -78,6 +78,11 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 			Main.projFrames[Projectile.type] = 1;
 		}
 
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Eyes");
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -108,7 +113,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 				bounds, lightColor, r,
 				origin, 0.75f, 0, 0);
 			// draw the eyes
-			Texture2D eyesTexture = Request<Texture2D>(Texture + "_Eyes").Value;
+			Texture2D eyesTexture = ExtraTextures[0].Value;
 			SpriteEffects effects = animationFrame % AnimationFrames < AnimationFrames / 2 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(eyesTexture, pos - Main.screenPosition,
 				bounds, Color.White, 0,

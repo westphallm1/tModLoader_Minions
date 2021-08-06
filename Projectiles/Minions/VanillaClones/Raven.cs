@@ -80,6 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		private int cooldownAfterHitFrames = 16;
 		bool isDashing = false;
 		private MotionBlurDrawer blurHelper;
+		public override string GlowTexture => null;
 		internal override int BuffId => BuffType<RavenMinionBuff>();
 
 		public override void SetStaticDefaults()
@@ -88,6 +89,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Raven") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
+		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Glow");
 		}
 
 		public override void SetDefaults()
@@ -143,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-			Texture2D glowTexture = Request<Texture2D>(base.Texture + "_Glow").Value;
+			Texture2D glowTexture = ExtraTextures[0].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);

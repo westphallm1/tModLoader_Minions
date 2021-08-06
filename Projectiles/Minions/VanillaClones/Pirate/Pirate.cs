@@ -313,6 +313,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.OneEyedPirate") + " (AoMM Version)");
 		}
 
+		public override void LoadAssets()
+		{
+			AddTexture(base.Texture + "_Mask");
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -426,7 +431,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			Vector2 pos = Projectile.Center + new Vector2(DrawOriginOffsetX, DrawOriginOffsetY);
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-			Texture2D maskTexture= Request<Texture2D>(base.Texture+ "_Mask").Value;
+			Texture2D maskTexture= ExtraTextures[0].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);

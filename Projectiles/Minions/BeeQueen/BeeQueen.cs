@@ -186,6 +186,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Wings");
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -293,7 +298,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			Vector2 pos = Projectile.Center + new Vector2(8 * Projectile.spriteDirection, 0);
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			int wingFrame = (animationFrameCounter % 12) / 3;
-			Texture2D texture = Request<Texture2D>(Texture + "_Wings").Value;
+			Texture2D texture = ExtraTextures[0].Value;
 			int frameHeight = texture.Height / 4;
 			Rectangle bounds = new Rectangle(0, wingFrame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);

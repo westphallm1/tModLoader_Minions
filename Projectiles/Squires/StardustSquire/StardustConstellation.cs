@@ -6,6 +6,7 @@ using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -174,18 +175,23 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		internal List<ConstellationStar> bigStars;
 		internal List<ConstellationSmallStar> smallStars;
 		private SpriteCompositionHelper scHelper;
-		private Texture2D smallStarTexture;
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			return false;
 		}
 
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Small");
+			AddTexture("Terraria/Images/Misc/StarDustSky/Star 0");
+			AddTexture("Terraria/Images/Misc/StarDustSky/Star 1");
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			Projectile.timeLeft = TimeToLive;
-			smallStarTexture = Request<Texture2D>(Texture + "_Small").Value;
 		}
 		public override void OnSpawn()
 		{
@@ -207,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			Vector2 startPoint = Vector2.One * ConstellationSize / 2;
 			for (int i = 0; i < BigStarCount; i++)
 			{
-				bigStars.Add(new ConstellationStar(startPoint, i));
+				bigStars.Add(new ConstellationStar(ExtraTextures[Main.rand.Next(1, 2)], startPoint, i));
 			}
 			for (int i = 0; i < BigStarCount; i++)
 			{
@@ -232,7 +238,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			// could probably be accomplished with dust
 			for(int i = 0; i < smallStars.Count; i++)
 			{
-				smallStars[i].Draw(helper.spriteBatch, smallStarTexture, animationFrame);
+				smallStars[i].Draw(helper.spriteBatch, ExtraTextures[0].Value, animationFrame);
 			}
 		}
 
@@ -362,19 +368,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		Vector2 StartPoint;
 		internal Vector2 EndOffset { get; private set; }
 		internal Vector2 position => StartPoint + EndOffset;
-		Texture2D texture;
+		Asset<Texture2D> texture;
 		int idx;
 		int maxConnections;
 		Vector2[] connections;
 		
-		public ConstellationStar(Vector2 startPoint, int idx)
+		public ConstellationStar(Asset<Texture2D> texture, Vector2 startPoint, int idx)
 		{
 			this.idx = idx;
+			this.texture = texture;
 			StartPoint = startPoint;
 			int tier = idx / TierSize;
 			int radius = tier * TierRadius + Main.rand.Next(TierRadius);
 			EndOffset = Main.rand.NextFloat(MathHelper.TwoPi).ToRotationVector2() * radius;
-			texture = Main.Assets.Request<Texture2D>("Images/Misc/StarDustSky/Star " + Main.rand.Next(1)).Value;
 			maxConnections = Main.rand.Next(3) == 0 ? 2 : 1;
 			connections = new Vector2[maxConnections];
 		}
@@ -415,8 +421,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			float r = 0; // todo oscillate
 			float scale = 0.5f; // todo oscillate
 			Main.EntitySpriteDraw(
-				texture, pos, texture.Bounds, Color.White * brightness, r, 
-				texture.Bounds.Center.ToVector2(), scale, 0, 0);
+				texture.Value, pos, texture.Value.Bounds, Color.White * brightness, r, 
+				texture.Value.Bounds.Center.ToVector2(), scale, 0, 0);
 		}
 
 		public void SetConnections(List<ConstellationStar> others)

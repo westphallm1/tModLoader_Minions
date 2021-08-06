@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,12 +116,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		Vector2 travelOffset;
 		static int slimeIndex = 0;
 		int mySlimeIndex;
+		private Asset<Texture2D> slimeTexture;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 4;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+		}
+
+		public override void Load()
+		{
+			if(!Main.dedServ)
+			{
+				slimeTexture = ModContent.Request<Texture2D>(Texture + "_Slime");
+			}
 		}
 
 		public override void SetDefaults()
@@ -182,7 +192,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 
 			// slime
-			Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Slime").Value;
+			Texture2D texture = slimeTexture.Value;
 			int frameHeight = texture.Height / 7;
 			Rectangle bounds = new Rectangle(0, mySlimeIndex * frameHeight, texture.Width, frameHeight);
 			Vector2 tangent = travelOffset.X > 0 ? new Vector2(travelOffset.Y, -travelOffset.X) : new Vector2(-travelOffset.Y, travelOffset.X);

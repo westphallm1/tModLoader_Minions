@@ -218,7 +218,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		{
 			//All of this is based on the weapon sprite and AttackFrames above.
 			int reachFrames = AttackFrames / 2; //A spear should spend half the AttackFrames extending, and half retracting by default.
-			int spearLength = Request<Texture2D>(WeaponTexturePath).Width(); //A decent aproximation of how long the spear is.
+			int spearLength = WeaponTexture.Width(); //A decent aproximation of how long the spear is.
 			int spearStart = (spearLength / 3); //Two thirds of the spear starts behind by default.
 			float spearSpeed = spearLength / reachFrames; //A calculation of how quick the spear should be moving.
 			if (attackFrame <= reachFrames)

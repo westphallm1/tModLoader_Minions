@@ -122,6 +122,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			Main.projFrames[Projectile.type] = 17;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Water");
+			AddTexture(Texture + "_Bowl");
+			AddTexture(Texture + "_Wings");
+		}
 
 		public override void SetDefaults()
 		{
@@ -318,8 +324,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-			Texture2D waterTexture = Request<Texture2D>(base.Texture+ "_Water").Value;
-			Texture2D bowlTexture = Request<Texture2D>(base.Texture+ "_Bowl").Value;
+			Texture2D waterTexture = ExtraTextures[0].Value;
+			Texture2D bowlTexture = ExtraTextures[1].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
@@ -333,7 +339,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 
 		private void DrawWings(Color lightColor)
 		{
-			Texture2D texture = Request<Texture2D>(Texture + "_Wings").Value;
+			Texture2D texture = ExtraTextures[2].Value;
 			int frame = (animationFrame / 8) % 4;
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;

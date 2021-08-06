@@ -218,6 +218,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Glow");
+			AddTexture(Texture + "_Reticle");
+		}
 
 		public sealed override void SetDefaults()
 		{
@@ -270,7 +275,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D glow = Request<Texture2D>(Texture + "_Glow").Value;
+			Texture2D glow = ExtraTextures[2].Value;
 			float r = Projectile.rotation;
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
@@ -286,7 +291,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			// draw a spinning reticle as a visual indicator for the special
 			if(player.whoAmI == Main.myPlayer && usingSpecial)
 			{
-				Texture2D reticle = Request<Texture2D>(Texture + "_Reticle").Value;
+				Texture2D reticle = ExtraTextures[3].Value;
 				bounds = reticle.Bounds;
 				origin = bounds.Center.ToVector2();
 				r = MathHelper.TwoPi * animationFrame / 120;

@@ -152,10 +152,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Gunner");
+			DisplayName.SetDefault("Whack-a-mole");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingOnGround.Add(Projectile.type);
+		}
+		public override void LoadAssets()
+		{
+			AddTexture(Texture + "_Ground");
 		}
 
 
@@ -236,7 +240,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		private void DrawPlatform(ref Color lightColor)
 		{
-			Texture2D platform = Request<Texture2D>(Texture + "_Ground").Value;
+			Texture2D platform = ExtraTextures[0].Value;
 			Rectangle bounds = platformBounds[DrawIndex];
 			Vector2 pos = Projectile.Bottom + new Vector2(0, bounds.Height / 2);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
