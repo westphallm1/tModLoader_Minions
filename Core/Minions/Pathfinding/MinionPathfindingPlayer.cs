@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,13 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal float WaypointDamageFalloff = 0.25f;
 		// distance for minions to count as "at the waypoint"
 		internal static int WAYPOINT_PROXIMITY_THRESHOLD = 64;
+
+		// attempt to parse out whether or not the npc index was set by a whip or squire
+		// probably not foolproof
+		private int lastTargetNPC = -1;
+		private int targetNPCGroup = -1;
+
+		internal int TaggedWaypointGroup => Player.MinionAttackTargetNPC > -1 ? targetNPCGroup : -1;
 
 		internal BlockAwarePathfinder GetPathfinder(int idx) => pathfinderMetas[idx].pHelper;
 
@@ -136,9 +144,30 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 					pathfinderMetas[i].pHelper?.Update();
 				}
 			}
-			if(Player.ownedProjectileCounts[MinionWaypoint.Type] > 0)
+			// check if the waypoint was changed this frame, and if it was 
+			// set via a whip/Squire
+			if(Player.MinionAttackTargetNPC != lastTargetNPC)
 			{
-				Player.MinionAttackTargetNPC = -1;
+				bool usingWhip = ProjectileID.Sets.IsAWhip[Player.HeldItem.shoot];
+				bool usingSquire = SquireMinionTypes.Contains(Player.HeldItem.shoot);
+				targetNPCGroup = usingWhip || usingSquire ? CurrentTacticsGroup : -1;
+				if(targetNPCGroup > -1)
+				{
+					ToggleWaypoint(-1, true);
+				}
+			}
+			lastTargetNPC = Player.MinionAttackTargetNPC;
+		}
+
+		public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+		{
+			if(ProjectileID.Sets.IsAWhip[proj.type] || SquireMinionTypes.Contains(proj.type) ||
+				SquireGlobalProjectile.isSquireShot.Contains(proj.type))
+			{
+				// make sure a waypoint can still be used if it was previously
+				// set incorrectly
+				targetNPCGroup = CurrentTacticsGroup;
+				ToggleWaypoint(-1, true);
 			}
 		}
 
@@ -173,6 +202,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				if (p.active && p.owner == Player.whoAmI && p.type == MinionWaypoint.Type && (int)p.ai[0] == tacticsGroup)
 				{
 					p.position = newPos;
+					TurnOffVanillaWaypoint();
 				}
 			}
 		}
@@ -187,6 +217,14 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			offset.Normalize();
 			offset *= WaypointPlacementRange;
 			return Player.Center + offset;
+		}
+		
+		private void TurnOffVanillaWaypoint()
+		{
+			if(TaggedWaypointGroup == CurrentTacticsGroup)
+			{
+				Player.MinionAttackTargetNPC = -1;
+			}
 		}
 
 		private void ToggleWaypoint(int selectedItem, int tacticsGroupIdx, bool remove = false)
@@ -208,6 +246,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 						{
 							new WaypointMovementPacket(Player, waypointPosition, (byte)tacticsGroupIdx).Send();
 						}
+						TurnOffVanillaWaypoint();
 					}
 					return;
 				}

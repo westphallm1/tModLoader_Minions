@@ -210,6 +210,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal int lastPlayerMovementFrame = 0;
 		internal List<Vector2> orderedPath;
 		internal bool playerPlacedWaypoint = false;
+		internal bool IsTaggedWaypointGroup => modPlayer.TaggedWaypointGroup == tacticsGroup;
 
 		internal BlockAwarePathfinder(MinionPathfindingPlayer player, int tacticsGroup)
 		{
@@ -555,7 +556,9 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 
 			// if this path was generated automatically, don't allow it to exceed a certain length
-			if(!playerPlacedWaypoint && pathLength > 2 * modPlayer.PassivePathfindingRange)
+			int WHIP_SEARCH_RANGE = 800 * 800;
+			float autoSearchRange = IsTaggedWaypointGroup ? WHIP_SEARCH_RANGE : modPlayer.PassivePathfindingRange;
+			if(!playerPlacedWaypoint && pathLength > 2 * autoSearchRange)
 			{
 				// un-succeed the search
 				searchSucceeded = false;
@@ -574,10 +577,17 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			int pathAnimationLength = Math.Max(30, (int)pathLength / 10);
 			float desiredDistance = (Main.GameUpdateCount % pathAnimationLength) * 10;
 			float traversedDistance = 0;
-			Color dustColor = MinionPathfindingPlayer.WaypointColors[tacticsGroup];
-			if(modPlayer.CurrentTacticsGroup != tacticsGroup && modPlayer.CurrentTacticsGroup != 2)
+			Color dustColor;
+			if(playerPlacedWaypoint || IsTaggedWaypointGroup)
 			{
-				dustColor = Color.Multiply(dustColor, 0.5f);
+				dustColor = MinionPathfindingPlayer.WaypointColors[tacticsGroup];
+				if(modPlayer.CurrentTacticsGroup != tacticsGroup && modPlayer.CurrentTacticsGroup != 2)
+				{
+					dustColor = Color.Multiply(dustColor, 0.5f);
+				}
+			} else
+			{
+				dustColor = Color.MediumPurple;
 			}
 			for(int i = 0; i < orderedPath.Count -1; i++)
 			{
@@ -589,7 +599,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 					nextPathSegment.Normalize();
 					nextPathSegment *= remainingDistance;
 					Dust.NewDust(orderedPath[i] + nextPathSegment, 1, 1, DustType<MinionWaypointDust>(), 
-						newColor: playerPlacedWaypoint ?  dustColor : Color.MediumPurple, Scale: 1.2f);
+						newColor: dustColor, Scale: 1.2f);
 					break;
 				}
 				traversedDistance += nextDistance;
@@ -605,13 +615,18 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				playerPlacedWaypoint = true;
 				return waypointPos;
 			}
-			int searchRange = modPlayer.PassivePathfindingRange * modPlayer.PassivePathfindingRange;
+			// long boi
+			int WHIP_SEARCH_RANGE = 800 * 800;
+			int searchRange = IsTaggedWaypointGroup ? 
+				WHIP_SEARCH_RANGE : modPlayer.PassivePathfindingRange * modPlayer.PassivePathfindingRange;
 			if(searchRange == 0)
 			{
 				return default;
 			}
 			// second pass: look for any enemy
-			NPC closestNPC = Main.npc.Where(npc => npc.active && npc.CanBeChasedBy() &&
+			NPC closestNPC = IsTaggedWaypointGroup ?
+				Main.npc[modPlayer.Player.MinionAttackTargetNPC] : 
+				Main.npc.Where(npc => npc.active && npc.CanBeChasedBy() &&
 				Vector2.DistanceSquared(player.Center, npc.Center) < searchRange).OrderBy(npc =>
 				Vector2.DistanceSquared(player.Center, npc.Center)).FirstOrDefault();
 			if(closestNPC != default)

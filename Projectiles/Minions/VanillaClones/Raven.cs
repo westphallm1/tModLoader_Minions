@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		private int cooldownAfterHitFrames = 16;
 		bool isDashing = false;
 		private MotionBlurDrawer blurHelper;
-		public override string GlowTexture => null;
+		public override string GlowTexture => base.Texture + "_Glow";
 		internal override int BuffId => BuffType<RavenMinionBuff>();
 
 		public override void SetStaticDefaults()
