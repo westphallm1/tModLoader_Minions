@@ -29,8 +29,13 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		// dependency on Tactics player is unfortunate
 		internal MinionTacticsPlayer myTacticsPlayer;
-		internal int CurrentTacticsGroup => myTacticsPlayer.CurrentTacticGroup;
+		internal int CurrentTacticGroup => myTacticsPlayer.CurrentTacticGroup;
+		internal int TargetNPCGroup => myTacticsPlayer.TargetNPCGroup;
 
+		// set to a nonzero number whenever a waypoint is updated, causes
+		// DidUpdateWaypoint to be true for 1-2 frames after
+		private int waypointUpdateFrames;
+		internal bool DidUpdateWaypoint { get => waypointUpdateFrames > 0; set => waypointUpdateFrames = value ? 2 : 0; }
 
 		internal PathfinderMetadata[] pathfinderMetas;
 		internal int WaypointPlacementRange = 0;
@@ -39,14 +44,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal float WaypointDamageFalloff = 0.25f;
 		// distance for minions to count as "at the waypoint"
 		internal static int WAYPOINT_PROXIMITY_THRESHOLD = 64;
-
-		// attempt to parse out whether or not the npc index was set by a whip or squire
-		// probably not foolproof
-		private int lastTargetNPC = -1;
-		private int targetNPCGroup = -1;
-
-		internal int TaggedWaypointGroup => Player.MinionAttackTargetNPC > -1 ? targetNPCGroup : -1;
-
 		internal BlockAwarePathfinder GetPathfinder(int idx) => pathfinderMetas[idx].pHelper;
 
 		internal BlockAwarePathfinder GetPathfinder(Minion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].pHelper;
@@ -82,8 +79,8 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		{
 			// these values don't like being initialized in Initialize() for some reason
 			myTacticsPlayer = Player.GetModPlayer<MinionTacticsPlayer>();
-			pathfinderMetas = new PathfinderMetadata[MinionTacticsPlayer.TACTICS_GROUPS_COUNT];
-			for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			pathfinderMetas = new PathfinderMetadata[MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1];
+			for(int i = 0; i <pathfinderMetas.Length; i++)
 			{
 				pathfinderMetas[i] = new PathfinderMetadata(this, i);
 			}
@@ -107,7 +104,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		private void BuildMinionsAtWaypointList()
 		{
-			for(int j = 0; j < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; j++)
+			for(int j = 0; j < pathfinderMetas.Length; j++)
 			{
 				PathfinderMetadata meta = pathfinderMetas[j];
 				meta.MinionsAtWaypoint.Clear();
@@ -133,47 +130,27 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				return;
 			}
+			if(myTacticsPlayer.DidUpdateAttackTarget)
+			{
+				ToggleWaypoint(-1, true);
+			}
 			//Only send to other player if he's in visible range
 			Rectangle bounds = Utils.CenteredRectangle(Main.player[Main.myPlayer].Center, new Vector2(1920, 1080) * 1.5f);
 			Point myCenter = Player.Center.ToPoint();
 			bool doUpdate = bounds.Contains(myCenter);
+			waypointUpdateFrames--;
 			if(doUpdate)
 			{
-				for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+				for(int i = 0; i < pathfinderMetas.Length; i++)
 				{
 					pathfinderMetas[i].pHelper?.Update();
 				}
-			}
-			// check if the waypoint was changed this frame, and if it was 
-			// set via a whip/Squire
-			if(Player.MinionAttackTargetNPC != lastTargetNPC)
-			{
-				bool usingWhip = ProjectileID.Sets.IsAWhip[Player.HeldItem.shoot];
-				bool usingSquire = SquireMinionTypes.Contains(Player.HeldItem.shoot);
-				targetNPCGroup = usingWhip || usingSquire ? CurrentTacticsGroup : -1;
-				if(targetNPCGroup > -1)
-				{
-					ToggleWaypoint(-1, true);
-				}
-			}
-			lastTargetNPC = Player.MinionAttackTargetNPC;
-		}
-
-		public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-		{
-			if(ProjectileID.Sets.IsAWhip[proj.type] || SquireMinionTypes.Contains(proj.type) ||
-				SquireGlobalProjectile.isSquireShot.Contains(proj.type))
-			{
-				// make sure a waypoint can still be used if it was previously
-				// set incorrectly
-				targetNPCGroup = CurrentTacticsGroup;
-				ToggleWaypoint(-1, true);
 			}
 		}
 
 		private void FindWaypointPos()
 		{
-			for(int i= 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
+			for(int i= 0; i < pathfinderMetas.Length; i++)
 			{
 				pathfinderMetas[i].WaypointPosition = default;
 			}
@@ -195,6 +172,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 
 		internal void UpdateWaypointFromPacket(short xOffset, short yOffset, int tacticsGroup)
 		{
+			DidUpdateWaypoint = true;
 			Vector2 newPos = Player.Center + new Vector2(xOffset, yOffset);
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
@@ -221,16 +199,22 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		
 		private void TurnOffVanillaWaypoint()
 		{
-			if(TaggedWaypointGroup == CurrentTacticsGroup)
+			if(TargetNPCGroup == CurrentTacticGroup)
 			{
 				Player.MinionAttackTargetNPC = -1;
+				myTacticsPlayer.TargetNPCGroup = -1;
 			}
 		}
 
 		private void ToggleWaypoint(int selectedItem, int tacticsGroupIdx, bool remove = false)
 		{
+			DidUpdateWaypoint = true;
 			int type = MinionWaypoint.Type;
 			Vector2 waypointPosition = GetNewWaypointPosition();
+			if(!remove)
+			{
+				TurnOffVanillaWaypoint();
+			}
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
@@ -246,7 +230,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 						{
 							new WaypointMovementPacket(Player, waypointPosition, (byte)tacticsGroupIdx).Send();
 						}
-						TurnOffVanillaWaypoint();
 					}
 					return;
 				}
@@ -269,7 +252,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				}
 			} else
 			{
-				ToggleWaypoint(selectedItem, CurrentTacticsGroup, remove);
+				ToggleWaypoint(selectedItem, CurrentTacticGroup, remove);
 			}
 		}
 	}

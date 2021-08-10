@@ -53,6 +53,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 				int oldGroup = tacticsPlayer.CurrentTacticGroup;
 				tacticsPlayer.CurrentTacticGroup = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;
 				waypointPlayer.ToggleWaypoint(player.selectedItem, true);
+				player.MinionAttackTargetNPC = -1;
 				tacticsPlayer.CurrentTacticGroup = oldGroup;
 				for(int j = 0; j < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; j++)
 				{

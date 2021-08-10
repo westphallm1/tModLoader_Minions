@@ -58,6 +58,25 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics
 
 		public abstract NPC ChooseTargetFromList(Projectile projectile, List<NPC> possibleTargets);
 
+		/// <summary>
+		/// wrapper that calls ChooseTargetFromList if the whip target isn't sent,
+		/// or returns the whip target if it is set
+		/// This is definitely on the hacky side
+		/// </summary>
+		public NPC ChooseTargetNPC(Projectile projectile, int groupId, List<NPC> possibleTargets)
+		{
+			MinionTacticsPlayer modPlayer = Main.player[projectile.owner]
+				.GetModPlayer<MinionTacticsPlayer>();
+			bool attackTarget = modPlayer.TargetNPCGroup == groupId || modPlayer.TargetNPCGroup == MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;
+			if(attackTarget && !IgnoreWaypoint)
+			{
+				return possibleTargets.Where(npc => npc.whoAmI == modPlayer.Player.MinionAttackTargetNPC).FirstOrDefault();
+			} else
+			{
+				return ChooseTargetFromList(projectile, possibleTargets);
+			}
+		}
+
 		public virtual void PreUpdate()
 		{
 			// no-op by default

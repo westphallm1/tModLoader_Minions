@@ -209,8 +209,9 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal float pathLength;
 		internal int lastPlayerMovementFrame = 0;
 		internal List<Vector2> orderedPath;
-		internal bool playerPlacedWaypoint = false;
-		internal bool IsTaggedWaypointGroup => modPlayer.TaggedWaypointGroup == tacticsGroup;
+		internal bool stationaryWaypoint = false;
+		internal bool IsTaggedWaypointGroup => modPlayer.TargetNPCGroup == tacticsGroup ||
+			modPlayer.TargetNPCGroup == MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1 ;
 
 		internal BlockAwarePathfinder(MinionPathfindingPlayer player, int tacticsGroup)
 		{
@@ -558,7 +559,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			// if this path was generated automatically, don't allow it to exceed a certain length
 			int WHIP_SEARCH_RANGE = 800 * 800;
 			float autoSearchRange = IsTaggedWaypointGroup ? WHIP_SEARCH_RANGE : modPlayer.PassivePathfindingRange;
-			if(!playerPlacedWaypoint && pathLength > 2 * autoSearchRange)
+			if(!stationaryWaypoint && pathLength > 2 * autoSearchRange)
 			{
 				// un-succeed the search
 				searchSucceeded = false;
@@ -578,10 +579,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			float desiredDistance = (Main.GameUpdateCount % pathAnimationLength) * 10;
 			float traversedDistance = 0;
 			Color dustColor;
-			if(playerPlacedWaypoint || IsTaggedWaypointGroup)
+			if(stationaryWaypoint || IsTaggedWaypointGroup)
 			{
 				dustColor = MinionPathfindingPlayer.WaypointColors[tacticsGroup];
-				if(modPlayer.CurrentTacticsGroup != tacticsGroup && modPlayer.CurrentTacticsGroup != 2)
+				if(modPlayer.CurrentTacticGroup != tacticsGroup && modPlayer.CurrentTacticGroup != 2)
 				{
 					dustColor = Color.Multiply(dustColor, 0.5f);
 				}
@@ -612,7 +613,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			Vector2 waypointPos = modPlayer.GetWaypointPosition(tacticsGroup);
 			if(waypointPos != default && modPlayer.InWaypointRange(waypointPos))
 			{
-				playerPlacedWaypoint = true;
+				stationaryWaypoint = true;
 				return waypointPos;
 			}
 			// long boi
@@ -631,7 +632,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				Vector2.DistanceSquared(player.Center, npc.Center)).FirstOrDefault();
 			if(closestNPC != default)
 			{
-				playerPlacedWaypoint = false;
+				stationaryWaypoint = false;
 				if(Vector2.DistanceSquared(lastWaypointPosition, closestNPC.Center) < NPC_MOVEMENT_THRESHOLD * NPC_MOVEMENT_THRESHOLD)
 				{
 					// if the NPC hasn't moved that much, don't recalculate the path

@@ -40,18 +40,57 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			this.minion = minion;
 		}
 
-		internal bool InTransit => nodeIndex > -1 && nodeIndex < pathfinder.orderedPath.Count - 1;
+		// little bit verbose for a getter
+		internal bool InTransit {
+			get
+			{
+				if(nodeIndex == -1)
+				{
+					return false;
+				}
+				else if(pathfinder.stationaryWaypoint)
+				{
+					return nodeIndex < pathfinder.orderedPath.Count - 1;
+				} else if (minion.player.MinionAttackTargetNPC > -1)
+				{
+					NPC target = Main.npc[minion.player.MinionAttackTargetNPC];
+					return Vector2.DistanceSquared(projectile.Center, target.Center) > 600 * 600 ||
+						!Collision.CanHitLine(projectile.Center, 1, 1, target.Center, 1, 1);
+				} else
+				{
+					return false;
+				}
+			}
+		} 			
+
+		/// <summary>
+		/// short-circuit out of resetting the pathfinder if we're already at the new endpoint
+		/// less disruptive to minion ai. Expose directly so that it can be called
+		/// externally (probably not a good sign)
+		/// </summary>
+		/// <returns>true if already at new endpoint, false otherwise </returns>
+		internal bool PrecheckPathCompletion()
+		{
+			// Extra bounds checking
+			if(pathfinder is null)
+			{
+				SetPathfinder();
+			}
+			Vector2 target = pathfinder.waypointPosition;
+			return target != default && 
+				Vector2.DistanceSquared(target, projectile.Center) < 600 * 600 &&
+				Collision.CanHitLine(projectile.Center, 1, 1, target, 1, 1);
+		}
 
 		internal void SetPathStartingPoint()
 		{
-			// Extra bounds checking
 			List<Vector2> path = pathfinder.orderedPath;
 			if(path.Count == 0)
 			{
 				DetachFromPath();
 				return;
-			}
-			if (Collision.CanHitLine(projectile.Center, 1, 1, path.Last(), 1, 1)) {
+			} else if (Collision.CanHitLine(projectile.Center, 1, 1, path.Last(), 1, 1)) 
+			{
 				nodeIndex = pathfinder.orderedPath.Count - 1;
 				return;
 			}
@@ -203,7 +242,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				DetachFromPath();
 				// idle while the algorithm is still running
-				return pathfinder.playerPlacedWaypoint ? (Vector2?)Vector2.Zero : null;
+				return pathfinder.stationaryWaypoint ? (Vector2?)Vector2.Zero : null;
 			}
 			// simple approach: Go towards a node until you get close enough, then go to the next node
 			List<Vector2> path = pathfinder.orderedPath;

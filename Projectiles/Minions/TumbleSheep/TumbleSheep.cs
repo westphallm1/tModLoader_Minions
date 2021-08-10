@@ -145,6 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		// If your name is AG...
 		private void DoBounce()
 		{
+			Projectile.tileCollide = true;
 			if(animationFrame - lastFiredFrame > 10 && Projectile.velocity.Y < 16)
 			{
 				Projectile.velocity.Y += 0.5f;

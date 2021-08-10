@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+using AmuletOfManyMinions.Projectiles.Squires;
 using AmuletOfManyMinions.UI;
 using AmuletOfManyMinions.UI.TacticsUI;
 using System;
@@ -74,6 +75,15 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		internal bool TacticsUnlocked = false;
 
+		/// <summary>
+		/// attempt to parse out whether or not the npc index was set by a whip or squire
+		/// probably not foolproof
+		/// </summary>
+		private int lastTargetNPC = -1;
+		private int targetNPCGroup = -1;
+
+		internal int TargetNPCGroup { get => Player.MinionAttackTargetNPC > -1 ? targetNPCGroup : -1; set => targetNPCGroup = value; }
+
 		internal bool UsingGlobalTactics => CurrentTacticGroup == TACTICS_GROUPS_COUNT - 1;
 
 		// TODO localize
@@ -83,6 +93,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		/// Timer used for syncing TacticID when it is changed on the client, only registers the last change done within SyncTimerMax ticks
 		/// </summary>
 		private int SyncTimer { get; set; } = 0;
+		public bool DidUpdateAttackTarget { get; private set; }
 
 		private const int SyncTimerMax = 15;
 
@@ -320,12 +331,52 @@ namespace AmuletOfManyMinions.Core.Minions
 		public override void PostUpdate()
 		{
 			CheckForAoMMItem();
+			CheckPlayerAttackTarget();
 			// should do some pruning here
 			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{
 				PlayerTacticsGroups[i]?.PostUpdate();
 			}
 		}
+
+
+		internal void CheckPlayerAttackTarget()
+		{
+			// check if the waypoint was changed this frame, and if it was 
+			// set via a whip/Squire
+			// need to let other modplayers know, a bit clunky
+			DidUpdateAttackTarget = false;
+			if(Player.MinionAttackTargetNPC != lastTargetNPC)
+			{
+				bool usingWhip = ProjectileID.Sets.IsAWhip[Player.HeldItem.shoot];
+				bool usingSquire = SquireMinionTypes.Contains(Player.HeldItem.shoot);
+				targetNPCGroup = usingWhip || usingSquire ? CurrentTacticGroup : -1;
+				DidUpdateAttackTarget = targetNPCGroup > -1;
+			}
+			lastTargetNPC = Player.MinionAttackTargetNPC;
+		}
+
+		public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+		{
+			bool usingSquire = SquireMinionTypes.Contains(proj.type) || SquireGlobalProjectile.isSquireShot.Contains(proj.type);
+			bool usingWhip = ProjectileID.Sets.IsAWhip[proj.type];
+			if(usingSquire || usingWhip)
+			{
+				// make sure a waypoint can still be used if it was previously
+				// set incorrectly
+				if(targetNPCGroup != CurrentTacticGroup || target.whoAmI != Player.MinionAttackTargetNPC)
+				{
+					targetNPCGroup = CurrentTacticGroup;
+					DidUpdateAttackTarget = true;
+				}
+				// TODO gate via config
+				if(usingSquire && true)
+				{
+					Player.MinionAttackTargetNPC = target.whoAmI;
+				}
+			}
+		}
+
 
 		internal int GetGroupForBuff(int buffId)
 		{

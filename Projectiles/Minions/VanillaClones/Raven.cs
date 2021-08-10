@@ -92,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 		public override void LoadAssets()
 		{
-			AddTexture(Texture + "_Glow");
+			AddTexture(base.Texture + "_Glow");
 		}
 
 		public override void SetDefaults()
