@@ -70,7 +70,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		{
 			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
-				//player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(remove: true);
 				UserInterfaces.buffClickCapture.PlaceTacticSelectRadial(UserInterfaces.MousePositionUI);
 				return false;
 			}
@@ -204,6 +203,35 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 			Item.rare = ItemRarityID.Expert;
 			Item.useTime = 18;
 			Item.useAnimation = 18;
+		}
+	}
+
+	// GlobalItem to extendWaypointRod functionality to whips,
+	// if configured
+	public class WhipsWaypointRods : GlobalItem
+	{
+		public override bool AltFunctionUse(Item item, Player player)
+		{
+			bool isWhip = ProjectileID.Sets.IsAWhip[item.shoot];
+			if(isWhip && ClientConfig.Instance.WhipRightClickTacticsRadial)
+			{
+				return true;
+			} else
+			{
+				return base.AltFunctionUse(item, player);
+			}
+		}
+		public override bool CanUseItem(Item item, Player player)
+		{
+			bool isWhip = ProjectileID.Sets.IsAWhip[item.shoot];
+			if(player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI && isWhip && ClientConfig.Instance.WhipRightClickTacticsRadial)
+			{
+				UserInterfaces.buffClickCapture.PlaceTacticSelectRadial(UserInterfaces.MousePositionUI);
+				return false;
+			} else
+			{
+				return base.CanUseItem(item, player);
+			}
 		}
 	}
 }

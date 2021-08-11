@@ -44,10 +44,18 @@ namespace AmuletOfManyMinions
 		[DefaultValue(true)]
 		public bool ShowMinionVarietyBonus;
 
+		[Header("Tactics Configuration")]
 		[Label("Tactics Ignore Vanilla Minion Target Reticle")]
-		[Tooltip("If true, minions will ignore the vanilla minion target reticle in favor of the npc selected by the current tactic")]
+		[Tooltip("If true, minions will ignore the vanilla minion target reticle in favor of the npc selected by the current tactic\n" +
+			"Note: This does not apply to reticles placed by hitting enemies with a whip")]
 		[DefaultValue(false)]
 		public bool IgnoreVanillaTargetReticle;
+
+		[Label("Enable Whip Quick Tactics Menu")]
+		[Tooltip("If true, right clicking with a whip will bring up the Tactics Radial Menu\n" +
+			"Note: May interfere with the right click of modded whips.")]
+		[DefaultValue(false)]
+		public bool WhipRightClickTacticsRadial;
 
 		[JsonIgnore] //Hides it in UI and file
 		public bool AnchorToInventory => TacticsUIAnchorPos == AnchorInventory;
@@ -78,6 +86,22 @@ namespace AmuletOfManyMinions
 		public override ConfigScope Mode => ConfigScope.ServerSide;
 		public static ServerConfig Instance => ModContent.GetInstance<ServerConfig>();
 
+		// tactics config options
+		[Header("Tactics Configuration")]
+		[Label("Whips Set Tactics Waypoint")]
+		[Tooltip("If true, hitting an enemy with a whip will move the tactics waypoint to that enemy.")]
+		[DefaultValue(true)]
+		public bool WhipsSetWaypoint;
+
+		[Label("Melee Squires Set Tactics Waypoint")]
+		[Tooltip("If true, hitting an enemy directly with a squire will move the tactics waypoint to that enemy.")]
+		[DefaultValue(false)]
+		public bool SquiresSetWaypoint;
+
+		[Label("Ranged Squires Set Tactics Waypoint")]
+		[Tooltip("If true, hitting an enemy with a squire-shot projectile will move the tactics waypoint to that enemy.")]
+		[DefaultValue(false)]
+		public bool SquireProjSetWaypoint;
 		// balance config options
 		[Header("Balance Configuration")]
 

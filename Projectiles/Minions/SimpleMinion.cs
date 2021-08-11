@@ -144,6 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			var tacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
 			var waypointsPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
 			bool didChangePathfindingState = false;
+			bool isFollowingPath = false;
 			if(useBeacon && usesTactics)
 			{
 				currentTactic = tacticsPlayer.GetTacticForMinion(this);
@@ -170,10 +171,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				{
 					Projectile.netUpdate = true;
 				}
-				if (useBeacon)
-				{
-					pathfinder.DetachFromPath();
-				}
 				Projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
 				TargetedMovement(targetPosition);
@@ -182,10 +179,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < noLOSPursuitTime)
 			{
-				if (useBeacon)
-				{
-					pathfinder.DetachFromPath();
-				}
 				Projectile.tileCollide = !attackThroughWalls;
 				if (!Main.npc[previousIndex].active)
 				{
@@ -200,6 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			else if (useBeaconThisFrame && pathfinder.NextPathfindingTarget() is Vector2 pathNode)
 			{
+				isFollowingPath = true;
 				if(pathfinder.isStuck)
 				{
 					pathfinder.GetUnstuck();
@@ -227,6 +221,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 				oldVectorToTarget = null;
 				IdleMovement(vectorToIdle);
+			}
+			if(useBeacon && !isFollowingPath)
+			{
+				pathfinder.DetachFromPath();
 			}
 			if (targetNPCIndex is int idx &&
 				targetFrameCounter++ > Projectile.localNPCHitCooldown &&

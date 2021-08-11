@@ -119,6 +119,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		/// Set by the mod config on each player. Needs to be synced in multiplayer
 		/// </summary>
 		internal byte IgnoreVanillaMinionTarget = 0;
+		private int targetSyncCountdown;
 
 		/// <summary>
 		/// Update every tactic for the modplayer, and also their selected tactic.
@@ -352,6 +353,17 @@ namespace AmuletOfManyMinions.Core.Minions
 			}
 		}
 
+		private bool ProjectileSetsWaypoint(int projType)
+		{
+			bool usingWhip = ServerConfig.Instance.WhipsSetWaypoint &&
+				ProjectileID.Sets.IsAWhip[projType];
+			bool usingSquire = ServerConfig.Instance.SquiresSetWaypoint &&
+				SquireMinionTypes.Contains(projType);
+			bool usingSquireProj = ServerConfig.Instance.SquireProjSetWaypoint &&
+				SquireGlobalProjectile.isSquireShot.Contains(projType);
+			return usingWhip || usingSquire || usingSquireProj;
+		}
+
 
 		internal void CheckPlayerAttackTarget()
 		{
@@ -359,16 +371,12 @@ namespace AmuletOfManyMinions.Core.Minions
 			// set via a whip/Squire
 			// need to let other modplayers know, a bit clunky
 			_updateTargetCounter--;
+			targetSyncCountdown--;
 			// MP-safe code
-			if(Player.MinionAttackTargetNPC != lastTargetNPC)
+			if(Player.MinionAttackTargetNPC != lastTargetNPC && ProjectileSetsWaypoint(Player.HeldItem.shoot))
 			{
-				bool usingWhip = ProjectileID.Sets.IsAWhip[Player.HeldItem.shoot];
-				bool usingSquire = SquireMinionTypes.Contains(Player.HeldItem.shoot);
-				if(usingWhip || usingSquire)
-				{
-					AddPlayerAttackTarget();
-					DidUpdateAttackTarget = true;
-				}
+				AddPlayerAttackTarget();
+				DidUpdateAttackTarget = true;
 			}
 			lastTargetNPC = Player.MinionAttackTargetNPC;
 		}
@@ -398,9 +406,7 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
 		{
-			bool usingSquire = SquireMinionTypes.Contains(proj.type) || SquireGlobalProjectile.isSquireShot.Contains(proj.type);
-			bool usingWhip = ProjectileID.Sets.IsAWhip[proj.type];
-			if(usingSquire || usingWhip)
+			if(ProjectileSetsWaypoint(proj.type))
 			{
 				// make sure a waypoint can still be used if it was previously
 				// set incorrectly
@@ -409,14 +415,28 @@ namespace AmuletOfManyMinions.Core.Minions
 					AddPlayerAttackTarget();
 					DidUpdateAttackTarget = true;
 				}
-				// TODO gate via config
-				if(usingSquire && true)
+				// redundant for whips
+				Player.MinionAttackTargetNPC = target.whoAmI;
+				// should only call on main player, make sure not to spam
+				if(Player.whoAmI == Main.myPlayer && targetSyncCountdown < 0)
 				{
-					Player.MinionAttackTargetNPC = target.whoAmI;
+					targetSyncCountdown = 15;
+					new TargetNPCWaypointPacket(Player, target.whoAmI, (byte)CurrentTacticGroup).Send();
 				}
 			}
 		}
 
+		/// <summary>
+		/// Only called for other clients' players, sets the MinionAttackTargetNPC values in cases
+		/// where syncing is not done automatically (I have yet to determine when exactly these are)
+		/// </summary>
+		/// <param name="npcIdx"></param>
+		internal void UpdateTargetNPCFromPacket(int npcIdx, byte groupIdx)
+		{
+			Player.MinionAttackTargetNPC = npcIdx;
+			CurrentTacticGroup = groupIdx;
+			AddPlayerAttackTarget();
+		}
 
 		internal int GetGroupForBuff(int buffId)
 		{
@@ -557,5 +577,6 @@ namespace AmuletOfManyMinions.Core.Minions
 				StopQuickDefending();
 			}
 		}
+
 	}
 }
