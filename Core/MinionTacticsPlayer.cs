@@ -27,6 +27,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		//tag version, increment this if you do breaking changes to the way data is saved/loaded so backwards compat can be done. Write proper code in Load/Save to accomodate
 		private const byte LatestVersion = 1;
 		public static int TACTICS_GROUPS_COUNT = 3;
+		public static int MAX_TACTICS_GROUP = TACTICS_GROUPS_COUNT -1;
 
 		// The list of tactics "teams" belonging to the player
 		public PlayerTargetSelectionTactic[] PlayerTacticsGroups = new PlayerTargetSelectionTactic[TACTICS_GROUPS_COUNT];
@@ -84,7 +85,13 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		internal int TargetNPCGroup { get => Player.MinionAttackTargetNPC > -1 ? targetNPCGroup : -1; set => targetNPCGroup = value; }
 
-		internal bool UsingGlobalTactics => CurrentTacticGroup == TACTICS_GROUPS_COUNT - 1;
+		internal bool UsingGlobalTactics => CurrentTacticGroup == MAX_TACTICS_GROUP;
+
+		internal bool UsingGlobalNPCTarget => TargetNPCGroup == MAX_TACTICS_GROUP;
+
+		internal bool CurrentNPCGroupActive => TargetNPCGroup == CurrentTacticGroup || UsingGlobalNPCTarget;
+
+		internal bool IsNPCGroupActive(int groupIdx) => TargetNPCGroup == groupIdx || UsingGlobalNPCTarget;
 
 		// TODO localize
 		private static string TacticsUnlockedText = "Minions from the Amulet of Many Minions can now use Advanced Tactics!";
@@ -93,7 +100,13 @@ namespace AmuletOfManyMinions.Core.Minions
 		/// Timer used for syncing TacticID when it is changed on the client, only registers the last change done within SyncTimerMax ticks
 		/// </summary>
 		private int SyncTimer { get; set; } = 0;
-		public bool DidUpdateAttackTarget { get; private set; }
+		// set to true for 2 frames
+		private int _updateTargetCounter;
+		public bool DidUpdateAttackTarget 
+		{
+			get => _updateTargetCounter > 0;
+			private set => _updateTargetCounter = value ? 2 : 0;
+		}
 
 		private const int SyncTimerMax = 15;
 
@@ -345,15 +358,42 @@ namespace AmuletOfManyMinions.Core.Minions
 			// check if the waypoint was changed this frame, and if it was 
 			// set via a whip/Squire
 			// need to let other modplayers know, a bit clunky
-			DidUpdateAttackTarget = false;
+			_updateTargetCounter--;
+			// MP-safe code
 			if(Player.MinionAttackTargetNPC != lastTargetNPC)
 			{
 				bool usingWhip = ProjectileID.Sets.IsAWhip[Player.HeldItem.shoot];
 				bool usingSquire = SquireMinionTypes.Contains(Player.HeldItem.shoot);
-				targetNPCGroup = usingWhip || usingSquire ? CurrentTacticGroup : -1;
-				DidUpdateAttackTarget = targetNPCGroup > -1;
+				if(usingWhip || usingSquire)
+				{
+					AddPlayerAttackTarget();
+					DidUpdateAttackTarget = true;
+				}
 			}
 			lastTargetNPC = Player.MinionAttackTargetNPC;
+		}
+
+		internal void RemovePlayerAttackTarget(int groupIdx)
+		{
+			if(groupIdx == TargetNPCGroup)
+			{
+				Player.MinionAttackTargetNPC = -1;
+				TargetNPCGroup = -1;
+			} else if (UsingGlobalNPCTarget)
+			{
+				TargetNPCGroup = groupIdx == 0 ? 1 : 0;
+			}
+		}
+
+		internal void AddPlayerAttackTarget()
+		{
+			if(TargetNPCGroup == -1 || TargetNPCGroup == CurrentTacticGroup)
+			{
+				TargetNPCGroup = CurrentTacticGroup;
+			} else
+			{
+				TargetNPCGroup = MAX_TACTICS_GROUP;
+			}
 		}
 
 		public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
@@ -364,9 +404,9 @@ namespace AmuletOfManyMinions.Core.Minions
 			{
 				// make sure a waypoint can still be used if it was previously
 				// set incorrectly
-				if(targetNPCGroup != CurrentTacticGroup || target.whoAmI != Player.MinionAttackTargetNPC)
+				if(!CurrentNPCGroupActive || target.whoAmI != Player.MinionAttackTargetNPC)
 				{
-					targetNPCGroup = CurrentTacticGroup;
+					AddPlayerAttackTarget();
 					DidUpdateAttackTarget = true;
 				}
 				// TODO gate via config
@@ -417,7 +457,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			if(isQuickDefending || UsingGlobalTactics)
 			{
-				return PlayerTacticsGroups[TACTICS_GROUPS_COUNT - 1];
+				return PlayerTacticsGroups[MAX_TACTICS_GROUP];
 			}
 			return PlayerTacticsGroups[GetGroupForMinion(minion)];
 		}
@@ -465,7 +505,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			// switch to a consistent tactics group so that we don't get into any weird states
 			// while cycling through tactics groups during quick tactics
 			PreviousTacticID = TacticID;
-			SetTacticsGroup(TACTICS_GROUPS_COUNT - 1);
+			SetTacticsGroup(MAX_TACTICS_GROUP);
 			SetTactic(TargetSelectionTacticHandler.GetTactic<ClosestEnemyToPlayer>().ID);
 			UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 		}

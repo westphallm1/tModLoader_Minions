@@ -67,8 +67,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics
 		{
 			MinionTacticsPlayer modPlayer = Main.player[projectile.owner]
 				.GetModPlayer<MinionTacticsPlayer>();
-			bool attackTarget = modPlayer.TargetNPCGroup == groupId || modPlayer.TargetNPCGroup == MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;
-			if(attackTarget && !IgnoreWaypoint)
+			if(modPlayer.IsNPCGroupActive(groupId) && !IgnoreWaypoint)
 			{
 				return possibleTargets.Where(npc => npc.whoAmI == modPlayer.Player.MinionAttackTargetNPC).FirstOrDefault();
 			} else

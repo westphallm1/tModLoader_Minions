@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		{
 			// these values don't like being initialized in Initialize() for some reason
 			myTacticsPlayer = Player.GetModPlayer<MinionTacticsPlayer>();
-			pathfinderMetas = new PathfinderMetadata[MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1];
+			pathfinderMetas = new PathfinderMetadata[MinionTacticsPlayer.MAX_TACTICS_GROUP];
 			for(int i = 0; i <pathfinderMetas.Length; i++)
 			{
 				pathfinderMetas[i] = new PathfinderMetadata(this, i);
@@ -180,7 +180,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				if (p.active && p.owner == Player.whoAmI && p.type == MinionWaypoint.Type && (int)p.ai[0] == tacticsGroup)
 				{
 					p.position = newPos;
-					TurnOffVanillaWaypoint();
+					myTacticsPlayer.RemovePlayerAttackTarget(tacticsGroup);
 				}
 			}
 		}
@@ -213,7 +213,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			Vector2 waypointPosition = GetNewWaypointPosition();
 			if(!remove)
 			{
-				TurnOffVanillaWaypoint();
+				myTacticsPlayer.RemovePlayerAttackTarget(tacticsGroupIdx);
 			}
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
@@ -246,7 +246,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		{
 			if(myTacticsPlayer.UsingGlobalTactics)
 			{
-				for(int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT -1; i++)
+				for(int i = 0; i < MinionTacticsPlayer.MAX_TACTICS_GROUP; i++)
 				{
 					ToggleWaypoint(selectedItem, i, remove);
 				}

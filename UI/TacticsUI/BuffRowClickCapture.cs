@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		{
 			List<TacticsGroupButton> groupButtons = new List<TacticsGroupButton>();
 			int rows = 1;
-			int columns = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1; ;
+			int columns = MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1;
 
 			int width = 40;
 			int height = 40;

@@ -211,7 +211,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal List<Vector2> orderedPath;
 		internal bool stationaryWaypoint = false;
 		internal bool IsTaggedWaypointGroup => modPlayer.TargetNPCGroup == tacticsGroup ||
-			modPlayer.TargetNPCGroup == MinionTacticsPlayer.TACTICS_GROUPS_COUNT - 1 ;
+			modPlayer.TargetNPCGroup == MinionTacticsPlayer.MAX_TACTICS_GROUP;
 
 		internal BlockAwarePathfinder(MinionPathfindingPlayer player, int tacticsGroup)
 		{

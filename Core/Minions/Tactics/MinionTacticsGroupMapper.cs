@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 
 		public static void WriteBuffMap(BinaryWriter writer, Dictionary<int, int> tacticsMap)
 		{
-			List<uint>[] hashes = new List<uint>[TACTICS_GROUPS_COUNT - 1];
+			List<uint>[] hashes = new List<uint>[MAX_TACTICS_GROUP];
 			// a little bit verbose, but gets the job done
 			for(int i = 0; i < hashes.Length; i++)
 			{
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 
 		public static void ReadBuffMap(BinaryReader reader, Dictionary<int, int> outputMap)
 		{
-			byte[] buffCounts = new byte[TACTICS_GROUPS_COUNT - 1];
+			byte[] buffCounts = new byte[MAX_TACTICS_GROUP];
 			for(int i = 0; i < buffCounts.Length; i++)
 			{
 				buffCounts[i] = reader.ReadByte();
