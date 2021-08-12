@@ -509,7 +509,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal void ModifyPathfinding(ref Vector2 target)
 		{
-			isFlying = true;
+			_isFlying = true;
+			lastTransformedFrame = self.animationFrame;
 			if(target.Y > 16)
 			{
 				DropThroughPlatform();

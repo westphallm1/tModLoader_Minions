@@ -242,7 +242,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			{
 				DetachFromPath();
 				// idle while the algorithm is still running
-				return pathfinder.stationaryWaypoint ? (Vector2?)Vector2.Zero : null;
+				return pathfinder.stationaryWaypoint ? Vector2.Zero : null;
 			}
 			// simple approach: Go towards a node until you get close enough, then go to the next node
 			List<Vector2> path = pathfinder.orderedPath;

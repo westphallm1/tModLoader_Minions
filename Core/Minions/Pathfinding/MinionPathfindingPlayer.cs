@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		// set to a nonzero number whenever a waypoint is updated, causes
 		// DidUpdateWaypoint to be true for 1-2 frames after
 		private int waypointUpdateFrames;
-		internal bool DidUpdateWaypoint { get => waypointUpdateFrames > 0; set => waypointUpdateFrames = value ? 2 : 0; }
+		internal bool DidUpdateWaypoint { get => waypointUpdateFrames > 0; set => waypointUpdateFrames = value ? 10 : 0; }
 
 		internal PathfinderMetadata[] pathfinderMetas;
 		internal int WaypointPlacementRange = 0;

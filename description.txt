@@ -2,26 +2,23 @@ The Amulet of Many Minions is designed to add variety to the vanilla summoner pr
 in line with vanilla balance. It adds a new, directly controllable minion type called the Squire,
 over 30 new minions, and several armor sets and accessories for both Squires and minions. 
 
+Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-many-minions.97188/
+
+Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 
 === Version History ==
+v0.12.1 - Whip Support
+    - Rework AoMM Pathfinding AI to prioritize whip-marked NPCs
+    - Other tweaks to make player set pathing targets feel a bit more responsive
+    - General code cleanup for asset loading
+v0.12.0 - Alpha Port!
+    - Mod fully ported, feature-complete compared with v0.11.0
+    - Some minor cosmetic bugs known
 v0.11.0 - Squire Specials!
-       - Each squire now has a cooldown-based special, activated by right click
-       - Specials are unique for each squire, try them all!
-       - Add several config options for mod content balance
-         - Buff or nerf minion damage and AI for a more customized experience
-v0.10.0 - Tactics 2.0!
-       - Revamp Tactics UI 
-         - Menu can now be moved anywhere on screen
-         - Minions can be split into two teams 
-         - Each team follows its own tactic and waypoint target
-       - Add several new pre-hardmode minions as loot for most chest types
-       - Add two post-Moonlord minions!
-v0.9.0 - Vanilla-ish Update
-       - Add an AoMM Variant for every vanilla summoning item! 
-       - Crafted from regular vanilla item at a Demon Altar
-       - AoMM variants use advanced pathfinding and tactics, + other AI tweaks
-       - NOTE: Regular vanilla summon weapons will not use AoMM AI.
-         You must craft the AoMM Variant weapon at a Demon Altar to use AoMM AI.
+    - Each squire now has a cooldown-based special, activated by right click
+    - Specials are unique for each squire, try them all!
+    - Add several config options for mod content balance
+      - Buff or nerf minion damage and AI for a more customized experience
 ~~ See the Wiki for older changelogs ~~
 
 
