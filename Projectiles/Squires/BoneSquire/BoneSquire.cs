@@ -81,6 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 		public override void LoadAssets()
 		{
+			base.LoadAssets();
 			AddTexture(ChainTexturePath);
 			AddTexture(FlamingFlailPath);
 			AddTexture(FlamingChainTexturePath);
@@ -124,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		{
 			if (IsAttacking())
 			{
-				Texture2D chainTexture = ExtraTextures[usingSpecial ? 2 : 4].Value;
+				Texture2D chainTexture = ExtraTextures[usingSpecial ? 4 : 2].Value;
 				ChainDrawer drawer = new ChainDrawer(chainTexture.Bounds);
 				Vector2 center = Projectile.Center + WeaponCenterOfRotation;
 				Vector2 chainVector = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();

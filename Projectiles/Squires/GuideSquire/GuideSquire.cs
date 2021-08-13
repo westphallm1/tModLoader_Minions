@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public GuideSquireMinionBuff() : base(ProjectileType<GuideSquireMinion>()) { }
 		public override void SetStaticDefaults()
 		{
-			// base.SetStaticDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Guide Squire");
 			Description.SetDefault("You can guide the Guide!");
 		}

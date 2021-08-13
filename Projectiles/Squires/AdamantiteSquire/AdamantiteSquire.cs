@@ -85,6 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		}
 		public override void LoadAssets()
 		{
+			base.LoadAssets();
 			AddTexture(Texture + "_Pegasus");
 		}
 

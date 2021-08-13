@@ -220,6 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		}
 		public override void LoadAssets()
 		{
+			base.LoadAssets();
 			AddTexture(Texture + "_Glow");
 			AddTexture(Texture + "_Reticle");
 		}

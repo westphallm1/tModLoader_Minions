@@ -357,6 +357,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		}
 		public override void LoadAssets()
 		{
+			base.LoadAssets();
 			AddTexture(Texture + "_Glow");
 			AddTexture("AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailChain");
 		}
@@ -425,7 +426,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 			if (usingWeapon)
 			{
-				Texture2D chainTexture = ExtraTextures[2].Value;
+				Texture2D chainTexture = ExtraTextures[3].Value;
 				ChainDrawer drawer = new ChainDrawer(chainTexture.Bounds);
 				Vector2 center = Projectile.Center + WeaponCenterOfRotation;
 				Vector2 chainVector = UnitVectorFromWeaponAngle() * WeaponDistanceFromCenter();
