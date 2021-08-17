@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -216,6 +217,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
 		public override void PostDraw(Color lightColor)
 		{
+			PartyHatSystem.DrawManualHat(Projectile, lightColor);
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Vector2 origin = new Vector2(Projectile.width / 2f, Projectile.height / 2f);
 			Vector2 pos = Projectile.Center;
