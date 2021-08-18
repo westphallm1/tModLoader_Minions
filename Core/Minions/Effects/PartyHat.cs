@@ -1,4 +1,7 @@
-﻿using AmuletOfManyMinions.Projectiles.Squires.MushroomSquire;
+﻿using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
+using AmuletOfManyMinions.Projectiles.Squires.MushroomSquire;
+using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
+using AmuletOfManyMinions.Projectiles.Squires.VikingSquire;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -52,6 +55,9 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 			// squires
 			ManualHats[ModContent.ProjectileType<MushroomSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -16));
+			ManualHats[ModContent.ProjectileType<VikingSquireMinion>()] = new PartyHatConfig(new Vector2(-2, -22));
+			ManualHats[ModContent.ProjectileType<SeaSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -20));
+			ManualHats[ModContent.ProjectileType<AncientCobaltSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -16));
 		}
 
 		public override void Unload()
