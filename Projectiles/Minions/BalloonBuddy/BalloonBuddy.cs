@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 	{
 		protected override void DrawHead()
 		{
-			Rectangle head = new Rectangle(0, 0, 28, 44);
+			Rectangle head = new Rectangle(PartyHatSystem.IsParty ? 28 : 0, 0, 28, 44);
 			AddSprite(2, head);
 		}
 		protected override void DrawBody()

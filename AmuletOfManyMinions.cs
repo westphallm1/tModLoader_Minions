@@ -21,6 +21,7 @@ using Terraria.UI;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+using AmuletOfManyMinions.Core.Minions.Effects;
 
 namespace AmuletOfManyMinions
 {
@@ -54,9 +55,11 @@ namespace AmuletOfManyMinions
 			}
 		}
 
+
 		public override void PostSetupContent()
 		{
 			NPCSets.Populate();
+			PartyHatSystem.SetStaticDefaults();
 		}
 
 		public override void Unload()
@@ -74,6 +77,7 @@ namespace AmuletOfManyMinions
 			SpriteCompositionManager.Unload();
 			CritterConfigs.Unload();
 			AmuletOfManyMinionsWorld.Unload();
+			PartyHatSystem.Unload();
 
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;

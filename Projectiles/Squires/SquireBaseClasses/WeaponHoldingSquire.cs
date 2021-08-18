@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -206,6 +207,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		}
 		public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
+			PartyHatSystem.DrawManualHat(projectile, spriteBatch, lightColor);
 			Texture2D texture = Main.projectileTexture[projectile.type];
 			Vector2 origin = new Vector2(projectile.width / 2f, projectile.height / 2f);
 			Vector2 pos = projectile.Center;

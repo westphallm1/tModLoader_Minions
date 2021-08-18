@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
+﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -101,10 +102,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			spriteBatch.Draw(texture, pos + new Vector2(0, -14) - Main.screenPosition,
 				bounds, lightColor, 0,
 				new Vector2(bounds.Width/2, bounds.Height/2), 1, effects, 0);
-			texture = GetTexture(Texture + "_Hat");
-			spriteBatch.Draw(texture, pos + new Vector2(0, -23) - Main.screenPosition,
-				texture.Bounds, lightColor, 0,
-				texture.Bounds.Center.ToVector2(), 1, effects, 0);
+			if(!PartyHatSystem.IsParty)
+			{
+				texture = GetTexture(Texture + "_Hat");
+				spriteBatch.Draw(texture, pos + new Vector2(0, -23) - Main.screenPosition,
+					texture.Bounds, lightColor, 0,
+					texture.Bounds.Center.ToVector2(), 1, effects, 0);
+			}
 			return true;
 		}
 
