@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -67,6 +68,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 			projectile.tileCollide = false;
 			projectile.localNPCHitCooldown = 20;
 			wormDrawer = new BalloonBuddyDrawer();
+		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			if(PartyHatSystem.IsParty && Main.rand.Next(3) == 0)
+			{
+				Vector2 launchVector = projectile.velocity;
+				launchVector.SafeNormalize();
+				launchVector *= 4;
+				// only called for owner, no need to check ownership
+				Projectile.NewProjectile(
+					projectile.Center,
+					launchVector,
+					ProjectileType<BalloonMonkeyBalloon>(),
+					projectile.damage,
+					projectile.knockBack,
+					projectile.owner);
+			}
 		}
 
 
