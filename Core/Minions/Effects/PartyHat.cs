@@ -1,16 +1,20 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
+﻿using AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey;
+using AmuletOfManyMinions.Projectiles.Minions.BeeQueen;
 using AmuletOfManyMinions.Projectiles.Minions.BombBuddy;
 using AmuletOfManyMinions.Projectiles.Minions.CharredChimera;
 using AmuletOfManyMinions.Projectiles.Minions.CrystalFist;
 using AmuletOfManyMinions.Projectiles.Minions.EclipseHerald;
 using AmuletOfManyMinions.Projectiles.Minions.ExciteSkull;
+using AmuletOfManyMinions.Projectiles.Minions.FishBowl;
 using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
 using AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer;
 using AmuletOfManyMinions.Projectiles.Minions.MeteorFist;
 using AmuletOfManyMinions.Projectiles.Minions.Necromancer;
 using AmuletOfManyMinions.Projectiles.Minions.PaperSurfer;
 using AmuletOfManyMinions.Projectiles.Minions.PricklyPear;
+using AmuletOfManyMinions.Projectiles.Minions.Rats;
 using AmuletOfManyMinions.Projectiles.Minions.Slimecart;
+using AmuletOfManyMinions.Projectiles.Minions.StarSurfer;
 using AmuletOfManyMinions.Projectiles.Minions.TumbleSheep;
 using AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire;
 using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
@@ -97,9 +101,10 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			PostDrawHats[ModContent.ProjectileType<BombBuddyMinion>()] = new PartyHatConfig(new Vector2(-4, -14));
 			PostDrawHats[ModContent.ProjectileType<PricklyPearMinion>()] = new PartyHatConfig(new Vector2(6, -6), 0.75f);
 			PostDrawHats[ModContent.ProjectileType<SlimecartMinion>()] = new PartyHatConfig(new Vector2(-2, -28)) { doRotate = false };
-			PostDrawHats[ModContent.ProjectileType<TumbleSheepMinion>()] = new PartyHatConfig(new Vector2(8, -14));
-			// head moves in each frame
-			// PostDrawHats[ModContent.ProjectileType<PaperSurferMinion>()] = new PartyHatConfig(new Vector2(2, -16), 0.75f) { spriteDirection = -1 };
+			PostDrawHats[ModContent.ProjectileType<TumbleSheepMinion>()] = new PartyHatConfig(new Vector2(8, -13));
+			PostDrawHats[ModContent.ProjectileType<RatsMinion>()] = new PartyHatConfig(new Vector2(4, -4), 0.5f);
+			// doesn't flip appropriately on sprite direction change for some reason
+			// PostDrawHats[ModContent.ProjectileType<BalloonMonkeyMinion>()] = new PartyHatConfig(new Vector2(4, -20));
 			PostDrawHats[ModContent.ProjectileType<BeeQueenMinion>()] = new PartyHatConfig(new Vector2(-4, -22)) { spriteDirection = -1 };
 			PostDrawHats[ModContent.ProjectileType<ExciteSkullMinion>()] = new PartyHatConfig(new Vector2(-2, -28)) { doRotate = false };
 			PostDrawHats[ModContent.ProjectileType<GoblinGunnerMinion>()] = new PartyHatConfig(new Vector2(-4, -20)) { spriteDirection = -1 };
@@ -107,7 +112,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			PostDrawHats[ModContent.ProjectileType<NecromancerMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
 			PostDrawHats[ModContent.ProjectileType<GoblinTechnomancerMinion>()] = new PartyHatConfig(new Vector2(-2, -20));
 			PostDrawHats[ModContent.ProjectileType<EclipseHeraldMinion>()] = new PartyHatConfig(new Vector2(8, -24));
-			// manuall draw a hat on each head
+			// manually draw a hat on each head
 			ManualHats[ModContent.ProjectileType<CharredChimeraMinionHead>()] = new PartyHatConfig(new Vector2(-4, -16));
 
 			/////////////
@@ -140,13 +145,13 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			PostDrawHats = null;
 		}
 
-		public static void DrawHat(Projectile projectile, SpriteBatch spriteBatch, PartyHatConfig config, Color lightColor)
+		public static void DrawHat(Projectile projectile, SpriteBatch spriteBatch, PartyHatConfig config, Color lightColor, Vector2 extraOffset = default)
 		{
 			Texture2D hatTexture = Main.itemTexture[ItemID.PartyHat];
 			float r = config.doRotate ? projectile.rotation : 0;
 			SpriteEffects effects = projectile.spriteDirection * config.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
 			Vector2 baseOffset = effects == 0 ? config.offset : new Vector2(-config.offset.X, config.offset.Y);
-			Vector2 offset = baseOffset.RotatedBy(r);
+			Vector2 offset = (baseOffset + extraOffset).RotatedBy(r);
 			Vector2 position = projectile.Center + offset;
 			spriteBatch.Draw(hatTexture, position - Main.screenPosition,
 				hatTexture.Bounds, lightColor, r + config.rotation,
@@ -154,13 +159,13 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		}
 
 		// 
-		public static void DrawManualHat(Projectile projectile,  SpriteBatch spriteBatch, Color lightColor)
+		public static void DrawManualHat(Projectile projectile,  SpriteBatch spriteBatch, Color lightColor, Vector2 extraOffset = default)
 		{
 			if(!IsParty || !ManualHats.TryGetValue(projectile.type, out PartyHatConfig hatConfig))
 			{
 				return;
 			}
-			DrawHat(projectile, spriteBatch, hatConfig, lightColor);
+			DrawHat(projectile, spriteBatch, hatConfig, lightColor, extraOffset);
 		}
 
 		public override void PostDraw(Projectile projectile, SpriteBatch spriteBatch, Color lightColor)
