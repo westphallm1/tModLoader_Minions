@@ -4,6 +4,8 @@ over 30 new minions, and several armor sets and accessories for both Squires and
 
 
 === Version History ==
+v0.12.0.2 - Party Hats!
+       - Most squires, and ~half of the minions, now wear hats during a party
 v0.11.0 - Squire Specials!
        - Each squire now has a cooldown-based special, activated by right click
        - Specials are unique for each squire, try them all!

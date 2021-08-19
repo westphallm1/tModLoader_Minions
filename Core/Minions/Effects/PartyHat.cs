@@ -42,6 +42,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using static Terraria.ModLoader.ModContent;
 using Terraria.GameContent.Events;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -84,59 +85,63 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 
 		// Whenever there is a party, or on August 19th (mod's birthday)
-		public static bool IsParty => true || BirthdayParty.PartyIsUp || DateTime.Now.Month == 8 && DateTime.Now.Day == 19;
+		public static bool IsParty => BirthdayParty.PartyIsUp || DateTime.Now.Month == 8 && DateTime.Now.Day == 19;
 
 
 		public static void SetStaticDefaults()
 		{
 			Main.itemTexture[ItemID.PartyHat] = ModContent.GetTexture("Terraria/Item_" + ItemID.PartyHat);
 			// load all configurations in a single file to make backporting to 1.3 easier (ugh)
-			ManualHats = new Dictionary<int, PartyHatConfig>();
-			PostDrawHats = new Dictionary<int, PartyHatConfig>();
+			PostDrawHats = new Dictionary<int, PartyHatConfig>
+			{
 
-			/////////////
-			// minions //
-			/////////////
-			PostDrawHats[ModContent.ProjectileType<MeteorFistHead>()] = new PartyHatConfig(new Vector2(-2, -18)) { spriteDirection = -1 };
-			PostDrawHats[ModContent.ProjectileType<BombBuddyMinion>()] = new PartyHatConfig(new Vector2(-4, -14));
-			PostDrawHats[ModContent.ProjectileType<PricklyPearMinion>()] = new PartyHatConfig(new Vector2(6, -6), 0.75f);
-			PostDrawHats[ModContent.ProjectileType<SlimecartMinion>()] = new PartyHatConfig(new Vector2(-2, -28)) { doRotate = false };
-			PostDrawHats[ModContent.ProjectileType<TumbleSheepMinion>()] = new PartyHatConfig(new Vector2(8, -13));
-			PostDrawHats[ModContent.ProjectileType<RatsMinion>()] = new PartyHatConfig(new Vector2(4, -4), 0.5f);
-			// doesn't flip appropriately on sprite direction change for some reason
-			// PostDrawHats[ModContent.ProjectileType<BalloonMonkeyMinion>()] = new PartyHatConfig(new Vector2(4, -20));
-			PostDrawHats[ModContent.ProjectileType<BeeQueenMinion>()] = new PartyHatConfig(new Vector2(-4, -22)) { spriteDirection = -1 };
-			PostDrawHats[ModContent.ProjectileType<ExciteSkullMinion>()] = new PartyHatConfig(new Vector2(-2, -28)) { doRotate = false };
-			PostDrawHats[ModContent.ProjectileType<GoblinGunnerMinion>()] = new PartyHatConfig(new Vector2(-4, -20)) { spriteDirection = -1 };
-			PostDrawHats[ModContent.ProjectileType<CrystalFistHeadMinion>()] = new PartyHatConfig(new Vector2(-2, -26)) { spriteDirection = -1 };
-			PostDrawHats[ModContent.ProjectileType<NecromancerMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			PostDrawHats[ModContent.ProjectileType<GoblinTechnomancerMinion>()] = new PartyHatConfig(new Vector2(-2, -20));
-			PostDrawHats[ModContent.ProjectileType<EclipseHeraldMinion>()] = new PartyHatConfig(new Vector2(8, -24));
-			// manually draw a hat on each head
-			ManualHats[ModContent.ProjectileType<CharredChimeraMinionHead>()] = new PartyHatConfig(new Vector2(-4, -16));
+				/////////////
+				// minions //
+				/////////////
+				[ProjectileType<MeteorFistHead>()] = new PartyHatConfig(new Vector2(-2, -18)) { spriteDirection = -1 },
+				[ProjectileType<BombBuddyMinion>()] = new PartyHatConfig(new Vector2(-4, -14)),
+				[ProjectileType<PricklyPearMinion>()] = new PartyHatConfig(new Vector2(6, -6), 0.75f),
+				[ProjectileType<SlimecartMinion>()] = new PartyHatConfig(new Vector2(-2, -28)) { doRotate = false },
+				[ProjectileType<TumbleSheepMinion>()] = new PartyHatConfig(new Vector2(8, -13)),
+				[ProjectileType<RatsMinion>()] = new PartyHatConfig(new Vector2(4, -4), 0.5f),
+				// doesn't flip appropriately on sprite direction change for some reason
+				// PostDrawHats[ModContent.ProjectileType<BalloonMonkeyMinion>()] = new PartyHatConfig(new Vector2(4, -20));
+				[ProjectileType<BeeQueenMinion>()] = new PartyHatConfig(new Vector2(-4, -22)) { spriteDirection = -1 },
+				[ProjectileType<ExciteSkullMinion>()] = new PartyHatConfig(new Vector2(-2, -28)) { doRotate = false },
+				[ProjectileType<GoblinGunnerMinion>()] = new PartyHatConfig(new Vector2(-4, -20)) { spriteDirection = -1 },
+				[ProjectileType<CrystalFistHeadMinion>()] = new PartyHatConfig(new Vector2(-2, -26)) { spriteDirection = -1 },
+				[ProjectileType<NecromancerMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<GoblinTechnomancerMinion>()] = new PartyHatConfig(new Vector2(-2, -20)),
+				[ProjectileType<EclipseHeraldMinion>()] = new PartyHatConfig(new Vector2(8, -24))
+			};
+			ManualHats = new Dictionary<int, PartyHatConfig>
+			{
+				// manually draw a hat on each head
+				[ProjectileType<CharredChimeraMinionHead>()] = new PartyHatConfig(new Vector2(-4, -16)),
 
-			/////////////
-			// squires //
-			/////////////
-			ManualHats[ModContent.ProjectileType<MushroomSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -16));
-			ManualHats[ModContent.ProjectileType<VikingSquireMinion>()] = new PartyHatConfig(new Vector2(-2, -22));
-			ManualHats[ModContent.ProjectileType<SeaSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -20));
-			ManualHats[ModContent.ProjectileType<AncientCobaltSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<PumpkinSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<SkywareSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -16));
-			ManualHats[ModContent.ProjectileType<GuideSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -20));
-			ManualHats[ModContent.ProjectileType<GuideVoodooSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -20));
-			ManualHats[ModContent.ProjectileType<ShadowSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<CrimsonSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<BoneSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<DemonSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<AdamantiteSquireMinion>()] = new PartyHatConfig(new Vector2(0, -18));
-			ManualHats[ModContent.ProjectileType<TitaniumSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<SqueyereMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<ArmoredBoneSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			// glitchy, maybe debug later
-			// ManualHats[ModContent.ProjectileType<GoldenRogueSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
-			ManualHats[ModContent.ProjectileType<StardustSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -16));
+				/////////////
+				// squires //
+				/////////////
+				[ProjectileType<MushroomSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -16)),
+				[ProjectileType<VikingSquireMinion>()] = new PartyHatConfig(new Vector2(-2, -22)),
+				[ProjectileType<SeaSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -20)),
+				[ProjectileType<AncientCobaltSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<PumpkinSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<SkywareSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -16)),
+				[ProjectileType<GuideSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -20)),
+				[ProjectileType<GuideVoodooSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -20)),
+				[ProjectileType<ShadowSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<CrimsonSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<BoneSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<DemonSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<AdamantiteSquireMinion>()] = new PartyHatConfig(new Vector2(0, -18)),
+				[ProjectileType<TitaniumSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<SqueyereMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				[ProjectileType<ArmoredBoneSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18)),
+				// glitchy, maybe debug later
+				// ManualHats[ModContent.ProjectileType<GoldenRogueSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -18));
+				[ProjectileType<StardustSquireMinion>()] = new PartyHatConfig(new Vector2(-4, -16))
+			};
 		}
 
 		public static void Unload()
