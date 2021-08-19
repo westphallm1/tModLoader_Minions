@@ -419,6 +419,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 					bounds, lightColor, r,
 					origin, 1, effects, 0);
+				PartyHatSystem.DrawManualHat(head, lightColor);
 			}
 		}
 

@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -80,6 +81,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 			return Math.Max(18, 22 - GetSegmentCount());
 		}
 
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			if (PartyHatSystem.IsParty && Main.rand.Next(3) == 0)
+			{
+				Vector2 launchVector = Projectile.velocity;
+				launchVector.SafeNormalize();
+				launchVector *= 4;
+				// only called for owner, no need to check ownership
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
+					launchVector,
+					ProjectileType<BalloonMonkeyBalloon>(),
+					Projectile.damage,
+					Projectile.knockBack,
+					Projectile.owner);
+			}
+		}
+
 		protected override float ComputeTargetedSpeed()
 		{
 			return Math.Min(13, 3 + 2 * GetSegmentCount());
@@ -95,7 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 	{
 		protected override void DrawHead()
 		{
-			Rectangle head = new Rectangle(0, 0, 28, 44);
+			Rectangle head = new(PartyHatSystem.IsParty ? 28 : 0, 0, 28, 44);
 			AddSprite(2, head);
 		}
 		protected override void DrawBody()
