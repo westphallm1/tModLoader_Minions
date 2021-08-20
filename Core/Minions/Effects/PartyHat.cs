@@ -75,7 +75,10 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		public override void SetStaticDefaults()
 		{
 			// load all configurations in a single file to make backporting to 1.3 easier (ugh)
-			Main.instance.LoadItem(ItemID.PartyHat);
+			if(!Main.dedServ)
+			{
+				Main.instance.LoadItem(ItemID.PartyHat);
+			}
 			PostDrawHats = new Dictionary<int, PartyHatConfig>
 			{
 
