@@ -251,7 +251,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// utility methods
 		public void TeleportToPlayer(ref Vector2 vectorToIdlePosition, float maxDistance)
 		{
-			if (Main.myPlayer == player.whoAmI && vectorToIdlePosition.Length() > maxDistance)
+			if (Main.myPlayer == player.whoAmI && vectorToIdlePosition.LengthSquared() > maxDistance * maxDistance)
 			{
 				Projectile.position += vectorToIdlePosition;
 				Projectile.velocity = Vector2.Zero;
