@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			Projectile.rotation += Projectile.velocity.X * 0.05f;
 		}
 
-		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough)
+		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
 		{
 			fallThrough = false;
 			return true;
