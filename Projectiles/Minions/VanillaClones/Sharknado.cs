@@ -179,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(isBeingUsedAsToken)
 			{
 				Projectile.friendly = false;
-				Projectile.position = player.position;
+				Projectile.Center = player.Center;
 				CheckActive();
 				AfterMoving();
 			} else
@@ -192,7 +192,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			int minionType = ProjectileType<BigSharknadoMinion>();
 			bool lastBeingUsedAsToken = isBeingUsedAsToken;
-			isBeingUsedAsToken = player.ownedProjectileCounts[Projectile.type] > 3;
+			bool selfCountAboveThreshold = player.ownedProjectileCounts[Projectile.type] > 3;
+			isBeingUsedAsToken = selfCountAboveThreshold;
 			if(isBeingUsedAsToken != lastBeingUsedAsToken)
 			{
 				for(int i = 0; i < 3; i++)
@@ -203,7 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					Main.dust[dustId].noLight = true;
 				}
 			}
-			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[Projectile.type] > 3 && player.ownedProjectileCounts[minionType] == 0)
+			if (player.whoAmI == Main.myPlayer && selfCountAboveThreshold && player.ownedProjectileCounts[minionType] == 0)
 			{
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)

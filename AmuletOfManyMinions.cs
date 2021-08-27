@@ -23,6 +23,7 @@ using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using System.Linq;
 using System;
+using AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer;
 
 namespace AmuletOfManyMinions
 {
@@ -55,19 +56,32 @@ namespace AmuletOfManyMinions
 			{
 				if (summonersAssociation.Version >= new Version(0, 4, 6))
 				{
-					//1. Collect all "EmpoweredMinion" that have a valid CounterType
-					var empoweredMinionsWithCounterType = this.GetContent<ModProjectile>().OfType<EmpoweredMinion>().Where(e => e.CounterType > ProjectileID.None).ToList();
-					var counterTypes = empoweredMinionsWithCounterType.Select((e) => e.CounterType).ToHashSet();
+					//1. Collect all "EmpoweredMinion" that have a valid CounterType: WORKS FOR ALL EMPOWERED MINIONS (but also includes some "regular" minions which is unintended)
+					//var empoweredMinionsWithCounterType = this.GetContent<ModProjectile>().OfType<EmpoweredMinion>().Where(e => e.CounterType > ProjectileID.None).ToList();
+					//var counterTypes = empoweredMinionsWithCounterType.Select((e) => e.CounterType).ToHashSet();
 
-					//2. Collect all "CounterMinion": DOES NOT WORK, generates less types, not all EmpoweredMinions are covered by that
-					//var counterTypesTest = this.GetContent<ModProjectile>().OfType<CounterMinion>().ToList();
-					//var counterTypes2 = counterTypesTest.ToHashSet();
+					//2. Collect all "CounterMinion": DOES NOT WORK FOR ALL EMPOWERED MINIONS (those that use "regular" minions for counts), but covers all 100% safe ones
+					var counterMinions = this.GetContent<ModProjectile>().OfType<CounterMinion>().ToList();
+					var counterTypes = counterMinions.ToHashSet();
 
 					//Empowered minion "counter" projectiles should not teleport
 					foreach (var counterType in counterTypes)
 					{
-						summonersAssociation.Call("AddDoNotTeleportMinion", counterType);
+						summonersAssociation.Call("AddTeleportConditionMinion", counterType);
 					}
+
+					//Special non-counter projectiles that should not teleport
+
+					//Return false to prevent a teleport
+					//Not specifying one will default to "false"
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<SharknadoMinion>(), (Func<Projectile, bool>)SharknadoFunc);
+
+					//Static minions should not teleport
+
+					//Don't include the probes, those can move around
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<GoblinTechnomancerMinion>());
+
+					//TODO Add more static minions here
 				}
 
 				if (summonersAssociation.Version > new Version(0, 4, 1))
@@ -131,6 +145,11 @@ namespace AmuletOfManyMinions
 					);
 				}
 			}
+		}
+
+		private static bool SharknadoFunc(Projectile p)
+		{
+			return p.ModProjectile is SharknadoMinion minion && !minion.isBeingUsedAsToken;
 		}
 
 		public override void Unload()
