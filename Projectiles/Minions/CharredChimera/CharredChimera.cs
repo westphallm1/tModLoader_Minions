@@ -185,7 +185,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		protected int minDistanceToEnemy = 200;
 		protected int animationFrames = 120;
 		protected override int dustType => 54;
-		protected override int CounterType => ProjectileType<CharredChimeraCounterMinion>();
+		public override int CounterType => ProjectileType<CharredChimeraCounterMinion>();
 
 		protected List<Projectile> allHeads = default;
 

@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 	public class SlimeTrainMinion : WormMinion
 	{
 		internal override int BuffId => BuffType<SlimeTrainMinionBuff>();
-		protected override int CounterType => ProjectileType<SlimeTrainCounterMinion>();
+		public override int CounterType => ProjectileType<SlimeTrainCounterMinion>();
 		protected override int dustType => DustType<StarDust>();
 
 

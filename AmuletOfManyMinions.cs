@@ -21,6 +21,8 @@ using Terraria.UI;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+using System.Linq;
+using System;
 
 namespace AmuletOfManyMinions
 {
@@ -44,6 +46,29 @@ namespace AmuletOfManyMinions
 			{
 				//TODO 1.4
 				//AddEquipTexture(null, EquipType.Legs, "RoyalGown_Legs", "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
+			}
+		}
+
+		public override void PostSetupContent()
+		{
+			if (ModLoader.TryGetMod("SummonersAssociation", out Mod summonersAssociation))
+			{
+				if (summonersAssociation.Version >= new Version(0, 4, 6))
+				{
+					//1. Collect all "EmpoweredMinion" that have a valid CounterType
+					var empoweredMinionsWithCounterType = this.GetContent<ModProjectile>().OfType<EmpoweredMinion>().Where(e => e.CounterType > ProjectileID.None).ToList();
+					var counterTypes = empoweredMinionsWithCounterType.Select((e) => e.CounterType).ToHashSet();
+
+					//2. Collect all "CounterMinion": DOES NOT WORK, generates less types, not all EmpoweredMinions are covered by that
+					//var counterTypesTest = this.GetContent<ModProjectile>().OfType<CounterMinion>().ToList();
+					//var counterTypes2 = counterTypesTest.ToHashSet();
+
+					//Empowered minion "counter" projectiles should not teleport
+					foreach (var counterType in counterTypes)
+					{
+						summonersAssociation.Call("AddDoNotTeleportMinion", counterType);
+					}
+				}
 			}
 		}
 

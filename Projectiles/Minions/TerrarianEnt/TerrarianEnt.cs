@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 	public class TerrarianEntMinion : EmpoweredMinion
 	{
 		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
-		protected override int CounterType => ProjectileType<TerrarianEntCounterMinion>();
+		public override int CounterType => ProjectileType<TerrarianEntCounterMinion>();
 		
 		private SpriteCompositionHelper scHelper;
 

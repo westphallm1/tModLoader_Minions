@@ -209,7 +209,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 	public class NecromancerMinion : EmpoweredMinion
 	{
 		internal override int BuffId => BuffType<NecromancerMinionBuff>();
-		protected override int CounterType => ProjectileType<NecromancerSkeletonMinion>();
+		public override int CounterType => ProjectileType<NecromancerSkeletonMinion>();
 
 		private int framesSinceLastHit;
 		protected override int dustType => DustID.Shadowflame;

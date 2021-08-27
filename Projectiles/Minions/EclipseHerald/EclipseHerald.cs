@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;
 		protected override int dustType => DustID.GoldFlame;
-		protected override int CounterType => ProjectileType<EclipseHeraldCounterMinion>();
+		public override int CounterType => ProjectileType<EclipseHeraldCounterMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -217,7 +217,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class BigSharknadoMinion : EmpoweredMinion
 	{
 		internal override int BuffId => BuffType<SharknadoMinionBuff>();
-		protected override int CounterType => ProjectileType<SharknadoMinion>();
+		public override int CounterType => ProjectileType<SharknadoMinion>();
 		protected override int dustType => 135;
 
 		protected Vector2[] offsets = { };

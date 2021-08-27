@@ -41,7 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		public override string Texture => "Terraria/Images/Item_0";
 		internal override int BuffId => BuffType<StardustDragonMinionBuff>();
-		protected override int CounterType => ProjectileType<StardustDragonCounterMinion>();
+		public override int CounterType => ProjectileType<StardustDragonCounterMinion>();
 		protected override int dustType => 135;
 		protected override float baseDamageRatio => 1.6f;
 		protected override float damageGrowthRatio => 0.45f;
