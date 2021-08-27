@@ -36,6 +36,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Projectile.height = 8;
 		}
 
+		public override void ModifyDamageHitbox(ref Rectangle hitbox)
+		{
+			// make damage hitboxes four times as big area wise (e.g. 2x2 into 4x4)
+			hitbox.Inflate(Projectile.width / 2, Projectile.height / 2);
+		}
+
 		public override bool PreDraw(ref Color lightColor)
 		{
 			wormDrawer.Draw(Terraria.GameContent.TextureAssets.Projectile[Projectile.type], lightColor);
