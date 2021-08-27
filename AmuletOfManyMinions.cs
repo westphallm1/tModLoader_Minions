@@ -69,6 +69,67 @@ namespace AmuletOfManyMinions
 						summonersAssociation.Call("AddDoNotTeleportMinion", counterType);
 					}
 				}
+
+				if (summonersAssociation.Version > new Version(0, 4, 1))
+				{
+					//Minion weapons that summon more than one type
+
+					summonersAssociation.Call(
+						"AddMinionInfo",
+						ModContent.ItemType<SpiderMinionItem>(),
+						ModContent.BuffType<SpiderMinionBuff>(),
+						new List<int> {
+						ModContent.ProjectileType<JumperSpiderMinion>(),
+						ModContent.ProjectileType<VenomSpiderMinion>(),
+						ModContent.ProjectileType<DangerousSpiderMinion>()
+						}
+					);
+
+					summonersAssociation.Call(
+						"AddMinionInfo",
+						ModContent.ItemType<TwinsMinionItem>(),
+						ModContent.BuffType<TwinsMinionBuff>(),
+						new List<int> {
+						ModContent.ProjectileType<MiniRetinazerMinion>(),
+						ModContent.ProjectileType<MiniSpazmatismMinion>()
+						}
+					);
+
+					summonersAssociation.Call(
+						"AddMinionInfo",
+						ModContent.ItemType<PirateMinionItem>(),
+						ModContent.BuffType<PirateMinionBuff>(),
+						new List<int> {
+						ModContent.ProjectileType<PirateMinion>(),
+						ModContent.ProjectileType<PirateDeadeyeMinion>(),
+						ModContent.ProjectileType<ParrotMinion>(),
+						ModContent.ProjectileType<FlyingDutchmanMinion>(),
+						}
+					);
+
+					summonersAssociation.Call(
+						"AddMinionInfo",
+						ModContent.ItemType<PygmyMinionItem>(),
+						ModContent.BuffType<PygmyMinionBuff>(),
+						new List<int> {
+						ModContent.ProjectileType<Pygmy1Minion>(),
+						ModContent.ProjectileType<Pygmy2Minion>(),
+						ModContent.ProjectileType<Pygmy3Minion>(),
+						ModContent.ProjectileType<Pygmy4Minion>()
+						}
+					);
+
+					summonersAssociation.Call(
+						"AddMinionInfo",
+						ModContent.ItemType<DeadlySphereMinionItem>(),
+						ModContent.BuffType<DeadlySphereMinionBuff>(),
+						new List<int> {
+						ModContent.ProjectileType<DeadlySphereMinion>(),
+						ModContent.ProjectileType<DeadlySphereClingerMinion>(),
+						ModContent.ProjectileType<DeadlySphereFireMinion>()
+						}
+					);
+				}
 			}
 		}
 
