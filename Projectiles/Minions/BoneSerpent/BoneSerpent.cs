@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		private int framesInGround;
 		private GroundAwarenessHelper gHelper;
 		protected override int dustType => 30;
-		protected override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
+		public override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
 
 		public override void SetStaticDefaults()
 		{

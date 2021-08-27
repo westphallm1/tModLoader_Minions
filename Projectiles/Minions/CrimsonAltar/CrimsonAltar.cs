@@ -142,7 +142,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 	{
 		internal override int BuffId => BuffType<CrimsonAltarMinionBuff>();
 		private int framesSinceLastHit;
-		protected override int CounterType => ProjectileType<CrimsonAltarCounterMinion>();
+		public override int CounterType => ProjectileType<CrimsonAltarCounterMinion>();
 		protected override int dustType => DustID.Blood;
 
 		public override string GlowTexture => null; // have to manually choose when to draw glow

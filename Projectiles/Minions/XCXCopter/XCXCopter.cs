@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 	public class XCXCopterMinion : WormMinion
 	{
 		internal override int BuffId => BuffType<XCXCopterMinionBuff>();
-		protected override int CounterType => ProjectileType<XCXCopterCounterMinion>();
+		public override int CounterType => ProjectileType<XCXCopterCounterMinion>();
 		protected override int dustType => 72;
 
 		public override void SetStaticDefaults()

@@ -313,7 +313,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class ImpPortalMinion : EmpoweredMinion
 	{
 		internal override int BuffId => BuffType<ImpMinionBuff>();
-		protected override int CounterType => ProjectileType<ImpMinion>();
+		public override int CounterType => ProjectileType<ImpMinion>();
 		protected override int dustType => 6;
 
 

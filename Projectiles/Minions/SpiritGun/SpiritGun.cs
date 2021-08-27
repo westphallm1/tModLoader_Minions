@@ -72,7 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			set => Projectile.ai[1] = value;
 		}
 
-		protected override int CounterType => ProjectileType<SpiritGunCounterMinion>();
+		public override int CounterType => ProjectileType<SpiritGunCounterMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

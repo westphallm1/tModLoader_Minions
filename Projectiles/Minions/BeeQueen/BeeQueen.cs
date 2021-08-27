@@ -176,7 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		int reloadStartFrame = 0;
 		protected override int dustType => 153;
 
-		protected override int CounterType => ProjectileType<BeeQueenCounterMinion>();
+		public override int CounterType => ProjectileType<BeeQueenCounterMinion>();
 
 		public override void SetStaticDefaults()
 		{

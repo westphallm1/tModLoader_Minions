@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 	public class GoblinTechnomancerMinion : EmpoweredMinion
 	{
 		internal override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
-		protected override int CounterType => ProjectileType<GoblinTechnomancerProbeMinion>();
+		public override int CounterType => ProjectileType<GoblinTechnomancerProbeMinion>();
 
 		private int framesSinceLastHit;
 		protected override int dustType => DustID.Shadowflame;

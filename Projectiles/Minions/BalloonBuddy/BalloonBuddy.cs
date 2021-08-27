@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 	public class BalloonBuddyMinion : WormMinion
 	{
 		internal override int BuffId => BuffType<BalloonBuddyMinionBuff>();
-		protected override int CounterType => ProjectileType<BalloonBuddyCounterMinion>();
+		public override int CounterType => ProjectileType<BalloonBuddyCounterMinion>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
