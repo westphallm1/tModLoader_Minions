@@ -145,10 +145,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			var waypointsPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
 			bool didChangePathfindingState = false;
 			bool isFollowingPath = false;
+			bool tacticMissing = false;
 			if(useBeacon && usesTactics)
 			{
 				currentTactic = tacticsPlayer.GetTacticForMinion(this);
-				useBeaconThisFrame &= !currentTactic.IgnoreWaypoint;
+				tacticMissing = currentTactic == null;
+				useBeaconThisFrame &= !tacticMissing && !currentTactic.IgnoreWaypoint;
 				didChangePathfindingState = 
 					(tacticsPlayer.DidUpdateAttackTarget || waypointsPlayer.DidUpdateWaypoint) &&
 					!pathfinder.PrecheckPathCompletion();
