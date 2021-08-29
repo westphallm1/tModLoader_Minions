@@ -213,8 +213,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal void Process(SpriteBatch spriteBatch)
 		{
-			if (Main.dedServ) { return; }
-			if(minion.animationFrame % frameResolution != 0)
+			// don't draw if server, or not an update frame, or there are no drawers
+			if(Main.dedServ || minion.animationFrame % frameResolution != 0 || drawers == null || drawers.Length == 0)
 			{
 				return;
 			}

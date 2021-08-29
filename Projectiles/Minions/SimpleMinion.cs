@@ -138,13 +138,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			targetNPCIndex = null;
 			vectorToIdle = IdleBehavior();
 			bool useBeaconThisFrame = useBeacon;
+			bool tacticMissing = false;
 			if(useBeacon && usesTactics)
 			{
 				currentTactic = player.GetModPlayer<MinionTacticsPlayer>().GetTacticForMinion(this);
-				useBeaconThisFrame &= !currentTactic.IgnoreWaypoint;
+				tacticMissing = currentTactic == null;
+				useBeaconThisFrame &= !tacticMissing && !currentTactic.IgnoreWaypoint;
 			}
 			// don't allow finding the target while travelling along path
-			if(useBeaconThisFrame && pathfinder.InTransit)
+			if(tacticMissing || (useBeaconThisFrame && pathfinder.InTransit))
 			{
 				vectorToTarget = null;
 				framesSinceHadTarget = noLOSPursuitTime;
