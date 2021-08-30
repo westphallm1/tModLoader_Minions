@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Netcode.Packets;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires;
@@ -11,6 +12,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static AmuletOfManyMinions.AmuletOfManyMinions;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Items.Accessories
@@ -142,17 +144,23 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void PreUpdate()
 		{
 			// Get unique minion count for player
-			uniqueMinionTypes.Clear();
-			foreach (Projectile proj in Main.projectile)
+			if(SummonersAssociationLoaded)
 			{
-				// only count minions that take up slots (no squires, temporary projectiles that were lazily coded
-				// as minions, etc.)
-				if (proj.active && proj.owner == Player.whoAmI && proj.minionSlots > 0)
+				minionVarietyBonusCount = CrossMod.GetSAVarietyCount(Mod.Logger);
+			} else
+			{
+				uniqueMinionTypes.Clear();
+				foreach (Projectile proj in Main.projectile)
 				{
-					uniqueMinionTypes.Add(proj.type);
+					// only count minions that take up slots (no squires, temporary projectiles that were lazily coded
+					// as minions, etc.)
+					if (proj.active && proj.owner == Player.whoAmI && proj.minionSlots > 0)
+					{
+						uniqueMinionTypes.Add(proj.type);
+					}
 				}
+				minionVarietyBonusCount = uniqueMinionTypes.Count;
 			}
-			minionVarietyBonusCount = uniqueMinionTypes.Count;
 		}
 
 		public override void ModifyWeaponDamage(Item item, ref StatModifier modifier, ref float flat)

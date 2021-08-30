@@ -24,6 +24,13 @@ using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using System.Linq;
 using System;
 using AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer;
+using AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar;
+using AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar;
+using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
+using AmuletOfManyMinions.Projectiles.Minions.Necromancer;
+using AmuletOfManyMinions.Projectiles.Minions.SpiritGun;
+using AmuletOfManyMinions.Projectiles.Minions.EclipseHerald;
+using System.Reflection;
 
 namespace AmuletOfManyMinions
 {
@@ -32,6 +39,7 @@ namespace AmuletOfManyMinions
 		internal static ModKeybind CycleTacticHotKey;
 		internal static ModKeybind CycleTacticsGroupHotKey;
 		internal static ModKeybind QuickDefendHotKey;
+		internal static bool SummonersAssociationLoaded;
 		public override void Load()
 		{
 			NetHandler.Load();
@@ -56,6 +64,7 @@ namespace AmuletOfManyMinions
 			{
 				if (summonersAssociation.Version >= new Version(0, 4, 6))
 				{
+					SummonersAssociationLoaded = true;
 					//1. Collect all "EmpoweredMinion" that have a valid CounterType: WORKS FOR ALL EMPOWERED MINIONS (but also includes some "regular" minions which is unintended)
 					//var empoweredMinionsWithCounterType = this.GetContent<ModProjectile>().OfType<EmpoweredMinion>().Where(e => e.CounterType > ProjectileID.None).ToList();
 					//var counterTypes = empoweredMinionsWithCounterType.Select((e) => e.CounterType).ToHashSet();
@@ -67,7 +76,7 @@ namespace AmuletOfManyMinions
 					//Empowered minion "counter" projectiles should not teleport
 					foreach (var counterType in counterTypes)
 					{
-						summonersAssociation.Call("AddTeleportConditionMinion", counterType);
+						summonersAssociation.Call("AddTeleportConditionMinion", counterType.Type);
 					}
 
 					//Special non-counter projectiles that should not teleport
@@ -80,8 +89,13 @@ namespace AmuletOfManyMinions
 
 					//Don't include the probes, those can move around
 					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<GoblinTechnomancerMinion>());
-
-					//TODO Add more static minions here
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<CorruptionAltarMinion>());
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<CrimsonAltarMinion>());
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<GoblinGunnerMinion>());
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<NecromancerMinion>());
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<SpiritGunMinion>());
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<EclipseHeraldMinion>());
+					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<TerrarianEntMinion>());
 				}
 
 				if (summonersAssociation.Version > new Version(0, 4, 1))
