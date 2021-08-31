@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
@@ -33,10 +34,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			} else
 			{
 				// do this to prevent NPC projectile reflections from insta-killing the player
-				projectile.damage = 0;
 				projectile.hostile = false;
 			}
 		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			return false;
+		}
+
 		public override Vector2? FindTarget()
 		{
 			// no op
@@ -77,13 +83,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// the empowered minion is technically a sub-minion if its counter minion, not a main minion
-			ProjectileID.Sets.MinionShot[projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.minion = false;
 			projectile.minionSlots = 0;
 		}
 

@@ -22,6 +22,7 @@ using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Core.Minions.Effects;
+using System;
 
 namespace AmuletOfManyMinions
 {
@@ -60,6 +61,8 @@ namespace AmuletOfManyMinions
 		{
 			NPCSets.Populate();
 			PartyHatSystem.SetStaticDefaults();
+			// could do a finer partitioning of features, but for now just require the latest version
+			CrossMod.AddSummonersAssociationMetadata();
 		}
 
 		public override void Unload()
