@@ -154,6 +154,11 @@ namespace AmuletOfManyMinions
 			}
 		}
 
+		public override void PostAddRecipes()
+		{
+			CrossMod.PopulateSummonersAssociationBuffSet(this);
+		}
+
 		public override void UpdateUI(GameTime gameTime)
 		{
 			UserInterfaces.UpdateUI(gameTime);

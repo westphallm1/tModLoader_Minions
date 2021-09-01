@@ -80,8 +80,9 @@ namespace AmuletOfManyMinions.Items.Accessories
 			} else
 			{
 				uniqueMinionTypes.Clear();
-				foreach (Projectile proj in Main.projectile)
+				for(int i = 0; i < Main.maxProjectiles; i++)
 				{
+					Projectile proj = Main.projectile[i];
 					// only count minions that take up slots (no squires, temporary projectiles that were lazily coded
 					// as minions, etc.)
 					if (proj.active && proj.owner == player.whoAmI && proj.minionSlots > 0)
@@ -201,15 +202,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
 		{
 			new SyncIdleAnimationFramePacket(player, idleMinionSyncronizationFrame).Send(toWho, fromWho);
-		}
-
-		public override void OnEnterWorld(Player player)
-		{
-			// not sure this is the best time to call this
-			if(player.whoAmI == Main.myPlayer)
-			{
-				CrossMod.PopulateSummonersAssociationBuffSet(mod);
-			}
 		}
 	}
 

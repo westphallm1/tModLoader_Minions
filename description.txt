@@ -4,6 +4,12 @@ over 30 new minions, and several armor sets and accessories for both Squires and
 
 
 === Version History ==
+v0.12.2 - Summoners Association Support!
+       - (Very long overdue) proper integration with Summoner's Association
+       - Requires S. A. v0.4.7 to work fully
+       - Fix a bug that allowed the Slime Train to deal massive damage with a 
+         certain combination of config settings
+       - Attempt to fix a multiplayer cross-mod compatibility bug
 v0.12.0.2 - Party Hats!
        - Most squires, and ~half of the minions, now wear hats during a party
 v0.11.0 - Squire Specials!

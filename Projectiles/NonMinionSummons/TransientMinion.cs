@@ -30,9 +30,6 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			// These below are needed for a minion
 			// Denotes that this projectile is a pet or minion
 			Main.projPet[projectile.type] = false;
-			// This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
-			ProjectileID.Sets.MinionSacrificable[projectile.type] = false;
-			// Don't mistake this with "if this is true, then it will automatically home". It is just for damage reduction for certain NPCs
 		}
 
 		public override Vector2? FindTarget()

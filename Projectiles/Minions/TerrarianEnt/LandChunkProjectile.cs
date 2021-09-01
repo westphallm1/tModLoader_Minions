@@ -54,7 +54,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[projectile.type] = true;
-			ProjectileID.Sets.MinionSacrificable[projectile.type] = false;
 			Main.projFrames[projectile.type] = 2;
 		}
 

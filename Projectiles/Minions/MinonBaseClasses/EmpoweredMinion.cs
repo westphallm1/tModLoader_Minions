@@ -183,4 +183,53 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 		}
 	}
+
+	/// <summary>
+	/// This class, along with the globalItem below it, are used to conditionally
+	/// unset the minion flag from EmpoweredMinions in order to prevent them from
+	/// being sacrificed when the player uses a summon item. 
+	/// </summary>
+	public class EmpoweredMinionSacrificeCircumventionModPlayer : ModPlayer
+	{
+
+		internal bool ShouldResetMinionStatus { get; set; }
+
+		public override void PreUpdate()
+		{
+			// re-minionify all EmpoweredMinions
+			if(ShouldResetMinionStatus)
+			{
+				ShouldResetMinionStatus = true;
+				for (int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if (p.modProjectile is EmpoweredMinion em)
+					{
+						p.minion = true;
+					}
+				}
+			}
+		}
+	}
+
+	public class EmpoweredMinionSacrificeCircumventionGlobalItem : GlobalItem
+	{
+
+		public override bool CanUseItem(Item item, Player player)
+		{
+			if(item.summon && ProjectileID.Sets.MinionSacrificable[item.shoot])
+			{
+				for(int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if(p.owner == player.whoAmI && p.modProjectile is EmpoweredMinion em) {
+						player.GetModPlayer<EmpoweredMinionSacrificeCircumventionModPlayer>().ShouldResetMinionStatus = true;
+						p.minion = false; // temporarily de-minion it so that it doesn't get sacrificed
+					}
+				}
+			}
+			return base.CanUseItem(item, player);
+		}
+
+	}
 }

@@ -104,6 +104,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			if (player.HasMinionAttackTargetNPC)
 			{
 				NPC npc = Main.npc[player.MinionAttackTargetNPC];
+				// fix to prevent certain minions from continually stacking debuffs against
+				// a single enemy
+				if (ShouldIgnoreNPC(npc))
+				{
+					return null;
+				}
 				float distance = Vector2.Distance(npc.Center, center);
 				if (distance < noLOSRange || (distance < maxRange &&
 					Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height)))
