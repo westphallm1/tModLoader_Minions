@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions
 		public static void AddSummonersAssociationMetadata(Mod mod)
 		{
 			MinionBuffTypes = new HashSet<int>();
-			if (ModLoader.GetMod("SummonersAssociation") is Mod summonersAssociation)
+			if (ModLoader.TryGetMod("SummonersAssociation", out Mod summonersAssociation))
 			{
 				if(summonersAssociation.Version >= new Version(0, 4, 7))
 				{
@@ -145,7 +145,7 @@ namespace AmuletOfManyMinions
 		public static void PopulateSummonersAssociationBuffSet(Mod mod)
 		{
 			Version minSupportedVersion = new Version(0, 4, 7);
-			if (ModLoader.GetMod("SummonersAssociation") is Mod summonersAssociation && summonersAssociation.Version >= minSupportedVersion)
+			if (ModLoader.TryGetMod("SummonersAssociation", out Mod summonersAssociation) && summonersAssociation.Version >= minSupportedVersion)
 			{
 				object supportedMinionsData = summonersAssociation.Call("GetSupportedMinions", mod, minSupportedVersion.ToString());
 				if(supportedMinionsData is List<Dictionary<string, object>> minionsList)
