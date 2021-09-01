@@ -60,110 +60,7 @@ namespace AmuletOfManyMinions
 
 		public override void PostSetupContent()
 		{
-			if (ModLoader.TryGetMod("SummonersAssociation", out Mod summonersAssociation))
-			{
-				if (summonersAssociation.Version >= new Version(0, 4, 6))
-				{
-					SummonersAssociationLoaded = true;
-					//1. Collect all "EmpoweredMinion" that have a valid CounterType: WORKS FOR ALL EMPOWERED MINIONS (but also includes some "regular" minions which is unintended)
-					//var empoweredMinionsWithCounterType = this.GetContent<ModProjectile>().OfType<EmpoweredMinion>().Where(e => e.CounterType > ProjectileID.None).ToList();
-					//var counterTypes = empoweredMinionsWithCounterType.Select((e) => e.CounterType).ToHashSet();
-
-					//2. Collect all "CounterMinion": DOES NOT WORK FOR ALL EMPOWERED MINIONS (those that use "regular" minions for counts), but covers all 100% safe ones
-					var counterMinions = this.GetContent<ModProjectile>().OfType<CounterMinion>().ToList();
-					var counterTypes = counterMinions.ToHashSet();
-
-					//Empowered minion "counter" projectiles should not teleport
-					foreach (var counterType in counterTypes)
-					{
-						summonersAssociation.Call("AddTeleportConditionMinion", counterType.Type);
-					}
-
-					//Special non-counter projectiles that should not teleport
-
-					//Return false to prevent a teleport
-					//Not specifying one will default to "false"
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<SharknadoMinion>(), (Func<Projectile, bool>)SharknadoFunc);
-
-					//Static minions should not teleport
-
-					//Don't include the probes, those can move around
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<GoblinTechnomancerMinion>());
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<CorruptionAltarMinion>());
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<CrimsonAltarMinion>());
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<GoblinGunnerMinion>());
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<NecromancerMinion>());
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<SpiritGunMinion>());
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<EclipseHeraldMinion>());
-					summonersAssociation.Call("AddTeleportConditionMinion", ModContent.ProjectileType<TerrarianEntMinion>());
-				}
-
-				if (summonersAssociation.Version > new Version(0, 4, 1))
-				{
-					//Minion weapons that summon more than one type
-
-					summonersAssociation.Call(
-						"AddMinionInfo",
-						ModContent.ItemType<SpiderMinionItem>(),
-						ModContent.BuffType<SpiderMinionBuff>(),
-						new List<int> {
-						ModContent.ProjectileType<JumperSpiderMinion>(),
-						ModContent.ProjectileType<VenomSpiderMinion>(),
-						ModContent.ProjectileType<DangerousSpiderMinion>()
-						}
-					);
-
-					summonersAssociation.Call(
-						"AddMinionInfo",
-						ModContent.ItemType<TwinsMinionItem>(),
-						ModContent.BuffType<TwinsMinionBuff>(),
-						new List<int> {
-						ModContent.ProjectileType<MiniRetinazerMinion>(),
-						ModContent.ProjectileType<MiniSpazmatismMinion>()
-						}
-					);
-
-					summonersAssociation.Call(
-						"AddMinionInfo",
-						ModContent.ItemType<PirateMinionItem>(),
-						ModContent.BuffType<PirateMinionBuff>(),
-						new List<int> {
-						ModContent.ProjectileType<PirateMinion>(),
-						ModContent.ProjectileType<PirateDeadeyeMinion>(),
-						ModContent.ProjectileType<ParrotMinion>(),
-						ModContent.ProjectileType<FlyingDutchmanMinion>(),
-						}
-					);
-
-					summonersAssociation.Call(
-						"AddMinionInfo",
-						ModContent.ItemType<PygmyMinionItem>(),
-						ModContent.BuffType<PygmyMinionBuff>(),
-						new List<int> {
-						ModContent.ProjectileType<Pygmy1Minion>(),
-						ModContent.ProjectileType<Pygmy2Minion>(),
-						ModContent.ProjectileType<Pygmy3Minion>(),
-						ModContent.ProjectileType<Pygmy4Minion>()
-						}
-					);
-
-					summonersAssociation.Call(
-						"AddMinionInfo",
-						ModContent.ItemType<DeadlySphereMinionItem>(),
-						ModContent.BuffType<DeadlySphereMinionBuff>(),
-						new List<int> {
-						ModContent.ProjectileType<DeadlySphereMinion>(),
-						ModContent.ProjectileType<DeadlySphereClingerMinion>(),
-						ModContent.ProjectileType<DeadlySphereFireMinion>()
-						}
-					);
-				}
-			}
-		}
-
-		private static bool SharknadoFunc(Projectile p)
-		{
-			return p.ModProjectile is SharknadoMinion minion && !minion.isBeingUsedAsToken;
+			CrossMod.AddSummonersAssociationMetadata(this);
 		}
 
 		public override void Unload()
@@ -244,6 +141,11 @@ namespace AmuletOfManyMinions
 					recipe.Register();
 				}
 			}
+		}
+
+		public override void PostAddRecipes()
+		{
+			CrossMod.PopulateSummonersAssociationBuffSet(this);
 		}
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)

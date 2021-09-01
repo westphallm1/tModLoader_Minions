@@ -7,6 +7,12 @@ Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-many-minio
 Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 
 === Version History ==
+v0.12.2 - Summoners Association Support!
+    - (Very long overdue) proper integration with Summoner's Association
+    - Requires S. A. v0.4.7 to work fully
+    - Fix a bug that allowed the Slime Train to deal massive damage with a 
+      certain combination of config settings
+    - Attempt to fix a multiplayer cross-mod compatibility bug
 v0.12.1.2 - Party hats!
     - Most squires and ~half of modded minions wear party hats during parties!
 v0.12.1.1 - Bugfixes for squire asset loading

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
@@ -76,13 +77,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// the empowered minion is technically a sub-minion if its counter minion, not a main minion
-			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.minion = false;
 			Projectile.minionSlots = 0;
 		}
 
@@ -112,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				Projectile p = Main.projectile[i];
 				if(p.active && p.owner == player.whoAmI && p.type == CounterType)
 				{
-					baseDamage = p.damage;
+					baseDamage = p.originalDamage;
 					break;
 				}
 			}
@@ -121,7 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				OnEmpower();
 				previousEmpowerCount = EmpowerCount;
 			}
-			Projectile.damage = ComputeDamage();
+			Projectile.originalDamage = ComputeDamage();
 			return Vector2.Zero;
 		}
 
@@ -184,6 +182,53 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 					Projectile.frame = minFrame;
 				}
 			}
+		}
+	}
+
+	/// This class, along with the globalItem below it, are used to conditionally
+	/// unset the minion flag from EmpoweredMinions in order to prevent them from
+	/// being sacrificed when the player uses a summon item.
+	/// </summary>
+	public class EmpoweredMinionSacrificeCircumventionModPlayer : ModPlayer
+	{
+		internal bool ShouldResetMinionStatus { get; set; }
+
+		public override void PreUpdate()
+		{
+			// re-minionify all EmpoweredMinions
+			if (ShouldResetMinionStatus)
+			{
+				ShouldResetMinionStatus = true;
+				for (int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if (p.ModProjectile is EmpoweredMinion em)
+					{
+						p.minion = true;
+					}
+				}
+			}
+		}
+	}
+
+	public class EmpoweredMinionSacrificeCircumventionGlobalItem : GlobalItem
+	{
+
+		public override bool CanUseItem(Item item, Player player)
+		{
+			if (item.DamageType == DamageClass.Summon && ProjectileID.Sets.MinionSacrificable[item.shoot])
+			{
+				for (int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if (p.owner == player.whoAmI && p.ModProjectile is EmpoweredMinion em)
+					{
+						player.GetModPlayer<EmpoweredMinionSacrificeCircumventionModPlayer>().ShouldResetMinionStatus = true;
+						p.minion = false; // temporarily de-minion it so that it doesn't get sacrificed
+					}
+				}
+			}
+			return base.CanUseItem(item, player);
 		}
 	}
 }
