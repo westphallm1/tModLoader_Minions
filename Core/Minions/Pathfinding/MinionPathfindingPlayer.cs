@@ -287,21 +287,30 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	/// </summary>
 	internal class WaypointDispellingModItem : GlobalItem
 	{
-		public override bool? UseItem(Item item, Player player)
+		private void RemoveWaypointIfUsingNonSummonWeapon(Item item, Player player)
 		{
-			if(player.whoAmI == Main.myPlayer && item.damage > 0 && !item.CountsAsClass<SummonDamageClass>() && item.pick == 0 && item.axe == 0 && item.hammer == 0)
+			// only toggle the waypoint if it's already active, otherwise this triggers a bunch of weird
+			// AI state resetting stuff every frame
+			if(player.whoAmI != Main.myPlayer || player.ownedProjectileCounts[MinionWaypoint.Type] == 0)
+			{
+				return;
+			}
+			
+			// remove the waypoint if a damaging, non-summoner, non-tool weapon is used
+			if(item.damage > 0 && !item.CountsAsClass<SummonDamageClass>() && item.pick == 0 && item.axe == 0 && item.hammer == 0)
 			{
 				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(player.selectedItem, remove: true);
 			}
+		}
+		public override bool? UseItem(Item item, Player player)
+		{
+			RemoveWaypointIfUsingNonSummonWeapon(item, player);
 			return base.UseItem(item, player);
 		}
 
 		public override bool Shoot(Item item, Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			if (player.whoAmI == Main.myPlayer && item.damage > 0 && !item.CountsAsClass<SummonDamageClass>() && item.pick == 0 && item.axe == 0 && item.hammer == 0)
-			{
-				player.GetModPlayer<MinionPathfindingPlayer>().ToggleWaypoint(player.selectedItem, remove: true);
-			}
+			RemoveWaypointIfUsingNonSummonWeapon(item, player);
 			return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
 		}
 	}

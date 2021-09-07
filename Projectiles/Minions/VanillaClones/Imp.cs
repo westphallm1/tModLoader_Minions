@@ -389,7 +389,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.IdleBehavior();
 			hsHelper.attackFrames = Math.Max(12, 24 - EmpowerCount);
-			return player.Top - Projectile.Center;
+			Vector2 vectorToIdlePosition = player.Top - Projectile.Center;
+			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			return vectorToIdlePosition;
 		}
 
 
