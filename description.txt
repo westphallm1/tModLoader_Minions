@@ -4,6 +4,10 @@ over 30 new minions, and several armor sets and accessories for both Squires and
 
 
 === Version History ==
+v0.12.2.2 - Bugfixes
+    - Fix issue where using a non-summon weapon caused attack target to reset
+    - Fix issue where Imps wouldn't teleport if the player moved far away
+    - Fix issue where anyone could edit the server's mod config
 v0.12.2 - Summoners Association Support!
        - (Very long overdue) proper integration with Summoner's Association
        - Requires S. A. v0.4.7 to work fully
