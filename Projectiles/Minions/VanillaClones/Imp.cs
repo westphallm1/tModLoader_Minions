@@ -332,7 +332,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X");
+			DisplayName.SetDefault("Imp Portal");
 			Main.projFrames[projectile.type] = 5;
 		}
 
@@ -388,7 +388,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.IdleBehavior();
 			hsHelper.attackFrames = Math.Max(12, 24 - EmpowerCount);
-			return player.Top - projectile.Center;
+			Vector2 vectorToIdle = player.Top - projectile.Center;
+			TeleportToPlayer(ref vectorToIdle, 2000f);
+			return vectorToIdle;
 		}
 
 

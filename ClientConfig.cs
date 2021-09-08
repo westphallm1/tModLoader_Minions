@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
@@ -120,5 +122,34 @@ namespace AmuletOfManyMinions
 		[Label("Squires Occupy a Minion Slot")]
 		[Tooltip("If enabled, squires will occupy a minion slot")]
 		public bool SquireMinionSlot;
+
+		public static bool IsPlayerLocalServerOwner(int whoAmI)
+		{
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+			{
+				return Netplay.Connection.Socket.GetRemoteAddress().IsLocalHost();
+			}
+
+			for (int i = 0; i < Main.maxPlayers; i++)
+			{
+				RemoteClient client = Netplay.Clients[i];
+				if (client.State == 10 && i == whoAmI && client.Socket.GetRemoteAddress().IsLocalHost())
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message)
+		{
+			if (Main.netMode == NetmodeID.SinglePlayer) return true;
+			else if (!IsPlayerLocalServerOwner(whoAmI))
+			{
+				message = "You are not the server owner so you can not change this config";
+				return false;
+			}
+			return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);
+		}
 	}
 }

@@ -17,19 +17,6 @@ v0.11.0 - Squire Specials!
        - Specials are unique for each squire, try them all!
        - Add several config options for mod content balance
          - Buff or nerf minion damage and AI for a more customized experience
-v0.10.0 - Tactics 2.0!
-       - Revamp Tactics UI 
-         - Menu can now be moved anywhere on screen
-         - Minions can be split into two teams 
-         - Each team follows its own tactic and waypoint target
-       - Add several new pre-hardmode minions as loot for most chest types
-       - Add two post-Moonlord minions!
-v0.9.0 - Vanilla-ish Update
-       - Add an AoMM Variant for every vanilla summoning item! 
-       - Crafted from regular vanilla item at a Demon Altar
-       - AoMM variants use advanced pathfinding and tactics, + other AI tweaks
-       - NOTE: Regular vanilla summon weapons will not use AoMM AI.
-         You must craft the AoMM Variant weapon at a Demon Altar to use AoMM AI.
 ~~ See the Wiki for older changelogs ~~
 
 

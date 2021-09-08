@@ -36,6 +36,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			projectile.height = 8;
 		}
 
+		public override void ModifyDamageHitbox(ref Rectangle hitbox)
+		{
+			// make damage hitboxes four times as big area wise 
+			hitbox.Inflate(projectile.width / 2, projectile.height / 2);
+		}
+
 		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
 		{
 			wormDrawer.Draw(Main.projectileTexture[projectile.type], spriteBatch, lightColor);

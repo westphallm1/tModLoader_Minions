@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		public override void AI()
 		{
 			Vector2 move = Vector2.Zero;
-			float lockonDistance = 500f;
+			float lockonDistanceSq = 500f * 500f;
 			enemyNearby = false;
 			projectile.localAI[0] = 0;
 			for (int i = 0; i < 200; i++)
@@ -82,11 +82,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 				if (Main.npc[i].active && !Main.npc[i].dontTakeDamage && !Main.npc[i].friendly)
 				{
 					Vector2 newMove = Main.npc[i].Center - projectile.Center;
-					float distanceTo = (float)Math.Sqrt(newMove.X * newMove.X + newMove.Y * newMove.Y);
-					if (distanceTo < lockonDistance)
+					float distanceToSq = newMove.LengthSquared();
+					if (distanceToSq < lockonDistanceSq)
 					{
 						move = newMove;
-						lockonDistance = distanceTo;
+						lockonDistanceSq = distanceToSq;
 						enemyNearby = true;
 					}
 				}
