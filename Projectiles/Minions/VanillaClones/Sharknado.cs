@@ -215,14 +215,93 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
+	public class WhirlpoolDrawer
+	{
+		internal Vector2[] offsets = { };
+		internal float[] scales = { };
+
+		// parameters for drawing the whirlpool
+		internal int animationLength = 60;
+		internal float scale0 = 0.25f;
+		internal float scale1 = 1f;
+		internal int normalStackMax = 12;
+		internal int hardStackMax = 60;
+		internal float hardMaxScale = 1.75f;
+		internal float baseXOffset = 24f;
+		internal float cyclesPerStack = 1.5f;
+		internal float frameHeight; // set on spawn
+		internal float frameWidth; // set on spawn
+
+		internal void CalculateWhirlpoolPositions(Projectile projectile, int animationFrame, int currentStackHeight, out int calculatedHeight)
+		{
+			// parameters for whirlpool stack
+			int frame = animationFrame % animationLength;
+			float scalePerIdx = (scale1 - scale0) / normalStackMax;
+			int stackHeight = Math.Min(hardStackMax, currentStackHeight);
+			stackHeight = Math.Min(stackHeight, animationFrame / 10);
+			offsets = new Vector2[stackHeight];
+			scales = new float[stackHeight];
+			calculatedHeight = (int)(stackHeight * frameHeight * 0.67f);
+			float yPos = projectile.Bottom.Y;
+			float xCenter = projectile.Center.X;
+
+			// draw stacks
+			for(int i = 0; i < stackHeight; i++)
+			{
+				scales[i] = Math.Min(hardMaxScale, scale0 + i* scalePerIdx);
+				float angle = (i * cyclesPerStack * MathHelper.TwoPi / stackHeight) + MathHelper.TwoPi * frame / (float) animationLength;
+				float xOffset = scales[i] * baseXOffset * (float)Math.Cos(angle);
+				offsets[i] = new Vector2(xCenter + xOffset, yPos);
+				yPos -= frameHeight * scales[i] - 1;
+			}
+
+		}
+
+		internal Rectangle GetWhirlpoolBox(int i)
+		{
+			float width = frameWidth * scales[i];
+			float height = frameHeight * scales[i];
+			return new Rectangle((int)(offsets[i].X - width / 2), (int)(offsets[i].Y - height / 2), (int)width, (int)height);
+		}
+
+		internal void AddWhirlpoolEffects()
+		{
+			for(int i = 0; i < offsets.Length; i++)
+			{
+				Lighting.AddLight(offsets[i], Color.Aquamarine.ToVector3() * 0.25f);
+				if (Main.rand.Next(10) == 0)
+				{
+					Rectangle dustRect = GetWhirlpoolBox(i);
+					int dustId = Dust.NewDust(dustRect.TopLeft(), dustRect.Width, dustRect.Height, 217, 0f, 0f, 100, default, 2f);
+					Main.dust[dustId].velocity *= 0.3f;
+					Main.dust[dustId].noGravity = true;
+					Main.dust[dustId].noLight = true;
+				}
+			}
+		}
+
+		internal void DrawWhirlpoolStack(Texture2D texture, Color lightColor, int frame, int frameCount)
+		{
+			int frameHeight = texture.Height / frameCount;
+			Rectangle bounds = new Rectangle(0, frame * frameHeight, texture.Width, frameHeight);
+			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+
+			// draw stacks
+			for(int i = 0; i < offsets.Length; i++)
+			{
+				Main.EntitySpriteDraw(texture, offsets[i] - Main.screenPosition,
+					bounds, lightColor, 0, origin, scales[i], 0, 0);
+			}
+		}
+	}
+
 	public class BigSharknadoMinion : EmpoweredMinion
 	{
 		internal override int BuffId => BuffType<SharknadoMinionBuff>();
 		public override int CounterType => ProjectileType<SharknadoMinion>();
 		protected override int dustType => 135;
 
-		protected Vector2[] offsets = { };
-		protected float[] scales = { };
+		private WhirlpoolDrawer whirlpoolDrawer;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -240,6 +319,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			frameSpeed = 5;
 			// can hit many npcs at once, so give it a relatively high on hit cooldown
 			Projectile.localNPCHitCooldown = 20;
+			whirlpoolDrawer = new WhirlpoolDrawer();
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -304,9 +384,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			for(int i = 0; i < offsets.Length; i++)
+			for(int i = 0; i < whirlpoolDrawer.offsets.Length; i++)
 			{
-				if(GetWhirlpoolBox(i).Intersects(targetHitbox))
+				if(whirlpoolDrawer.GetWhirlpoolBox(i).Intersects(targetHitbox))
 				{
 					return true;
 				}
@@ -317,8 +397,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			frameHeight = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Height / Main.projFrames[Projectile.type];
-			frameWidth = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Width;
+			whirlpoolDrawer.frameHeight = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Height / Main.projFrames[Projectile.type];
+			whirlpoolDrawer.frameWidth = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Width;
 			// create some dust to show that we've spawned in
 			for(int i = 0; i < 6; i++)
 			{
@@ -332,8 +412,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			CalculateWhirlpoolPositions();
-			AddWhirlpoolEffects();
+			whirlpoolDrawer.CalculateWhirlpoolPositions(Projectile, animationFrame, EmpowerCount + 3, out int height);
+			Projectile.height = height;
+			whirlpoolDrawer.AddWhirlpoolEffects();
 			if(EmpowerCount > 0 && EmpowerCount < 4)
 			{
 				Projectile.Kill();
@@ -341,68 +422,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 
 
-		// parameters for drawing the whirlpool
-		static int animationLength = 60;
-		float scale0 = 0.25f;
-		float scale1 = 1f;
-		int normalStackMax = 12;
-		int hardStackMax = 60;
-		float hardMaxScale = 1.75f;
-		float baseXOffset = 24f;
-		float cyclesPerStack = 1.5f;
-		float frameHeight; // set on spawn
-		float frameWidth; // set on spawn
 		private int cooldownAfterHitFrames = 16;
 		private int framesSinceLastHit = 0;
 
-		private void CalculateWhirlpoolPositions()
-		{
-			// parameters for whirlpool stack
-			int frame = animationFrame % animationLength;
-			float scalePerIdx = (scale1 - scale0) / normalStackMax;
-			int stackHeight = Math.Min(hardStackMax, 3 + EmpowerCount);
-			stackHeight = Math.Min(stackHeight, animationFrame / 10);
-			offsets = new Vector2[stackHeight];
-			scales = new float[stackHeight];
-			Projectile.height = (int)(stackHeight * frameHeight * 0.67f);
-			float yPos = Projectile.Bottom.Y;
-			float xCenter = Projectile.Center.X;
-
-			// draw stacks
-			for(int i = 0; i < stackHeight; i++)
-			{
-				scales[i] = Math.Min(hardMaxScale, scale0 + i* scalePerIdx);
-				float angle = (i * cyclesPerStack * MathHelper.TwoPi / stackHeight) + MathHelper.TwoPi * frame / (float) animationLength;
-				float xOffset = scales[i] * baseXOffset * (float)Math.Cos(angle);
-				offsets[i] = new Vector2(xCenter + xOffset, yPos);
-				yPos -= frameHeight * scales[i] - 1;
-			}
-
-		}
-
-		private Rectangle GetWhirlpoolBox(int i)
-		{
-			float width = frameWidth * scales[i];
-			float height = frameHeight * scales[i];
-			return new Rectangle((int)(offsets[i].X - width / 2), (int)(offsets[i].Y - height / 2), (int)width, (int)height);
-		}
-
-		private void AddWhirlpoolEffects()
-		{
-			for(int i = 0; i < offsets.Length; i++)
-			{
-				Lighting.AddLight(offsets[i], Color.Aquamarine.ToVector3() * 0.25f);
-				if (Main.rand.Next(10) == 0)
-				{
-					Rectangle dustRect = GetWhirlpoolBox(i);
-					int dustId = Dust.NewDust(dustRect.TopLeft(), dustRect.Width, dustRect.Height, 217, 0f, 0f, 100, default, 2f);
-					Main.dust[dustId].velocity *= 0.3f;
-					Main.dust[dustId].noGravity = true;
-					Main.dust[dustId].noLight = true;
-				}
-			}
-
-		}
 
 		protected override int ComputeDamage()
 		{
@@ -418,20 +440,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override bool PreDraw(ref Color lightColor)
 		{
 			
-			lightColor = new Color(150, 150, 150, 128);
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-
-			// draw stacks
-			for(int i = 0; i < offsets.Length; i++)
-			{
-				Main.EntitySpriteDraw(texture, offsets[i] - Main.screenPosition,
-					bounds, lightColor, 0, origin, scales[i], 0, 0);
-			}
+			lightColor = new Color(150, 150, 150, 128);
+			whirlpoolDrawer.DrawWhirlpoolStack(texture, lightColor, Projectile.frame, Main.projFrames[Projectile.type]);
 			return false;
 		}
+
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			float inertia = 18;
