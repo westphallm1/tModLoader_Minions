@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -21,10 +22,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.HoneyBeeMinion") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.HoneyBeeMinion"));
+			Main.vanityPet[Type] = true;
+		}
+
+		public override void Update(Player player, ref int buffIndex)
+		{
+			base.Update(player, ref buffIndex);
+			CombatPetUtils.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 14);
 		}
 	}
 
-	public class HoneyBeeMinionItem : VanillaCloneMinionItem<HoneyBeeMinionBuff, HoneyBeeMinion>
+	public class HoneyBeeMinionItem : CombatPetMinionItem<HoneyBeeMinionBuff, HoneyBeeMinion>
 	{
 		internal override int VanillaItemID => ItemID.QueenBeePetItem;
 
@@ -33,10 +41,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 76);
 			Item.damage = 14;
 		}
 	}
+
 	public class HoneyPotProjectile : BasePumpkinBomb
 	{
 		public override void SetStaticDefaults()
@@ -93,12 +101,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.HoneyBee"));
 			Main.projFrames[Projectile.type] = 8;
+			Main.projPet[Projectile.type] = true;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			Projectile.minionSlots = 0;
 			Projectile.width = 32;
 			Projectile.height = 24;
 			targetSearchDistance = 700;

@@ -159,6 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			CheckSpecialUsage();
+			Main.NewText(Projectile.originalDamage);
 			return vectorToIdlePosition;
 		}
 

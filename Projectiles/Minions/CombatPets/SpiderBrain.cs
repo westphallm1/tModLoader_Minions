@@ -24,11 +24,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.Pygmies") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.Pygmies"));
+			Main.vanityPet[Type] = true;
+		}
+		public override void Update(Player player, ref int buffIndex)
+		{
+			base.Update(player, ref buffIndex);
+			CombatPetUtils.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 14);
 		}
 
 	}
 
-	public class SpiderBrainMinionItem : VanillaCloneMinionItem<SpiderBrainMinionBuff, SpiderBrainMinion>
+	public class SpiderBrainMinionItem : CombatPetMinionItem<SpiderBrainMinionBuff, SpiderBrainMinion>
 	{
 		internal override int VanillaItemID => ItemID.BrainOfCthulhuPetItem;
 
@@ -65,6 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			Projectile.minionSlots = 0;
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.timeLeft = TimeToLive;
@@ -102,12 +109,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 		}
 
-		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
-		{
-			fallThrough = false;
-			return true;
-		}
-
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			// don't collide if no LOS to brain
@@ -141,6 +142,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SpiderBrain"));
 			Main.projFrames[Projectile.type] = 14;
+			Main.projPet[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()

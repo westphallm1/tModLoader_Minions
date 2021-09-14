@@ -18,11 +18,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.KingSlimePet") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.KingSlimePet"));
+			Main.vanityPet[Type] = true;
 		}
 
+		public override void Update(Player player, ref int buffIndex)
+		{
+			base.Update(player, ref buffIndex);
+			CombatPetUtils.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 14);
+		}
 	}
 
-	public class SlimePrinceMinionItem : VanillaCloneMinionItem<SlimePrinceMinionBuff, SlimePrinceMinion>
+	public class SlimePrinceMinionItem : CombatPetMinionItem<SlimePrinceMinionBuff, SlimePrinceMinion>
 	{
 		internal override int VanillaItemID => ItemID.KingSlimePetItem;
 
@@ -48,6 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.KingSlimePet") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 12;
+			Main.projPet[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()

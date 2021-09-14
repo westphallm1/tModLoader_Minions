@@ -87,10 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
 
 		public virtual int CounterType => default;
-		protected int EmpowerCount
-		{
-			get => player == null ? 0 : player.ownedProjectileCounts[CounterType];
-		}
+		protected virtual int EmpowerCount => player == null ? 0 : player.ownedProjectileCounts[CounterType];
 
 		public virtual void OnEmpower()
 		{

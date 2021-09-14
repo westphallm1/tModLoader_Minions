@@ -23,10 +23,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.TwinEyesMinion") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.TwinEyesMinion"));
+			Main.vanityPet[Type] = true;
+		}
+		public override void Update(Player player, ref int buffIndex)
+		{
+			base.Update(player, ref buffIndex);
+			CombatPetUtils.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 14);
 		}
 	}
 
-	public class SuspiciousEyeMinionItem : VanillaCloneMinionItem<SuspiciousEyeMinionBuff, MiniRetinazerMinion>
+	public class SuspiciousEyeMinionItem : CombatPetMinionItem<SuspiciousEyeMinionBuff, MiniRetinazerMinion>
 	{
 		internal override int VanillaItemID => ItemID.EyeOfCthulhuPetItem;
 
@@ -37,14 +43,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetDefaults();
 			Item.damage = 10;
 			Item.knockBack = 0.5f;
-		}
-
-		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-		{
-			ApplyBuff(player);
-			var p = Projectile.NewProjectileDirect(source, position, Vector2.Zero, ProjectileType<SuspiciousEyeMinion>(), damage, knockback, player.whoAmI);
-			p.originalDamage = Item.damage;
-			return false;
 		}
 	}
 
@@ -66,12 +64,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spazmamini") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 20;
+			Main.projPet[Projectile.type] = true;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			Projectile.minionSlots = 0;
 			Projectile.width = 24;
 			Projectile.height = 24;
 			attackFrames = 90;
