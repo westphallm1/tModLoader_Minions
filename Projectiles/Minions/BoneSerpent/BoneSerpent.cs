@@ -48,33 +48,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override int MinionType => ProjectileType<BoneSerpentMinion>();
 	}
 
-	public class BoneSerpentMinion : WormMinion
+	public abstract class GroundTravellingWormMinion: WormMinion
 	{
-		internal override int BuffId => BuffType<BoneSerpentMinionBuff>();
-
-		private int framesInAir;
-		private int framesInGround;
-		private GroundAwarenessHelper gHelper;
-		protected override int dustType => 30;
-		public override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bone Serpent");
-			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[Projectile.type] = 1;
-		}
-
-
-		public sealed override void SetDefaults()
+		internal int framesInAir;
+		internal int framesInGround;
+		internal GroundAwarenessHelper gHelper;
+		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			attackThroughWalls = true;
 			framesInAir = 0;
 			framesInGround = 0;
 			gHelper = new GroundAwarenessHelper(this);
-			wormDrawer = new BoneSerpentDrawer();
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -118,6 +103,47 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			vectorToIdle.Y += 48; // circle under the player's feet
 			return vectorToIdle;
 		}
+
+		public override Vector2? FindTarget()
+		{
+			float searchDistance = ComputeSearchDistance();
+			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target)
+			{
+				return target - Projectile.Center;
+			}
+			else if (SelectedEnemyInRange(searchDistance, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target2)
+			{
+				return target2 - Projectile.Center;
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
+
+	public class BoneSerpentMinion : GroundTravellingWormMinion
+	{
+		internal override int BuffId => BuffType<BoneSerpentMinionBuff>();
+
+		protected override int dustType => 30;
+		public override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Bone Serpent");
+			// Sets the amount of frames this minion has on its spritesheet
+			Main.projFrames[Projectile.type] = 1;
+		}
+
+
+		public sealed override void SetDefaults()
+		{
+			base.SetDefaults();
+			wormDrawer = new BoneSerpentDrawer();
+		}
+
 		protected override float ComputeSearchDistance()
 		{
 			return 500 + 25 * GetSegmentCount();
@@ -145,23 +171,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		{
 			return ComputeTargetedSpeed() + 3;
 		}
-
-		public override Vector2? FindTarget()
-		{
-			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target)
-			{
-				return target - Projectile.Center;
-			}
-			else if (SelectedEnemyInRange(searchDistance, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target2)
-			{
-				return target2 - Projectile.Center;
-			}
-			else
-			{
-				return null;
-			}
-		}
 	}
 
 	internal class BoneSerpentDrawer : WormDrawer
@@ -169,20 +178,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override void DrawHead()
 		{
 			Rectangle head = new Rectangle(56, 0, 48, 36);
-			lightColor = new Color(
-				Math.Max(lightColor.R, (byte)25),
-				Math.Max(lightColor.G, (byte)25),
-				Math.Max(lightColor.B, (byte)25));
 			AddSprite(2, head);
 		}
 
 		protected override void DrawTail()
 		{
-			Rectangle tail = new Rectangle(0, 10, 24, 22);
 			lightColor = new Color(
 				Math.Max(lightColor.R, (byte)25),
 				Math.Max(lightColor.G, (byte)25),
 				Math.Max(lightColor.B, (byte)25));
+			Rectangle tail = new Rectangle(0, 10, 24, 22);
 			int dist = 32 + 20 * (SegmentCount + 1);
 			AddSprite(dist, tail);
 		}
@@ -190,10 +195,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override void DrawBody()
 		{
 			Rectangle body = new Rectangle(28, 6, 24, 30);
-			lightColor = new Color(
-				Math.Max(lightColor.R, (byte)25),
-				Math.Max(lightColor.G, (byte)25),
-				Math.Max(lightColor.B, (byte)25));
 			for (int i = 0; i < SegmentCount + 1; i++)
 			{
 				AddSprite(32 + 20 * i, body);

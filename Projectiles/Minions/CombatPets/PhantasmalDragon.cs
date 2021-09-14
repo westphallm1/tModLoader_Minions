@@ -124,21 +124,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal override string VanillaItemName => "LunaticCultistPetItem";
 	}
 
-	public class PhantasmalDragonCounterMinion : CounterMinion
-	{
-
-		internal override int BuffId => BuffType<PhantasmalDragonMinionBuff>();
-		protected override int MinionType => ProjectileType<PhantasmalDragonMinion>();
-	}
-
 	public class PhantasmalDragonMinion : WormMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.LunaticCultistPet;
 		internal override int BuffId => BuffType<PhantasmalDragonMinionBuff>();
 		public override int CounterType => -1;
 		protected override int dustType => 135;
-		protected override float baseDamageRatio => 1.6f;
-		protected override float damageGrowthRatio => 0.45f;
 
 		private int lastShootFrame;
 		private readonly int fireRate = 30;
