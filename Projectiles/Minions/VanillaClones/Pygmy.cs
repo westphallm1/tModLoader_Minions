@@ -191,6 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			defaultJumpVelocity = 4;
 			searchDistance = 900;
 			maxJumpVelocity = 12;
+			dealsContactDamage = false;
 		}
 
 		protected override void IdleFlyingMovement(Vector2 vector)
@@ -287,10 +288,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			base.TargetedMovement(vectorToTargetPosition);
 		}
 
-		public override void AfterMoving()
-		{
-			Projectile.friendly = false;
-		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			if (animationFrame - lastFiredFrame < 5)

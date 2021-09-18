@@ -27,6 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected int? oldTargetNpcIndex = null;
 		protected int framesSinceHadTarget = 0;
 		protected bool attackThroughWalls = false;
+		protected bool dealsContactDamage = true;
 		protected int frameSpeed = 5;
 		protected int proximityForOnHitTarget = 24;
 		protected int targetFrameCounter = 0;
@@ -175,6 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 				Projectile.tileCollide = !attackThroughWalls;
 				framesSinceHadTarget = 0;
+				Projectile.friendly = dealsContactDamage;
 				TargetedMovement(targetPosition);
 				oldVectorToTarget = vectorToTarget;
 				oldTargetNpcIndex = targetNPCIndex;
@@ -190,12 +192,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				else if (previousIndex < Main.maxNPCs)
 				{
 					vectorToTarget = Main.npc[previousIndex].Center - Projectile.Center;
+					Projectile.friendly = dealsContactDamage;
 					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
 				}
 			}
 			else if (useBeaconThisFrame && pathfinder.NextPathfindingTarget() is Vector2 pathNode)
 			{
 				isFollowingPath = true;
+				Projectile.friendly = false;
 				if(pathfinder.isStuck)
 				{
 					pathfinder.GetUnstuck();
@@ -222,6 +226,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 					Projectile.netUpdate = true;
 				}
 				oldVectorToTarget = null;
+				Projectile.friendly = false;
 				IdleMovement(vectorToIdle);
 			}
 			if(useBeacon && !isFollowingPath)

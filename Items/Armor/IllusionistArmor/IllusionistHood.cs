@@ -137,7 +137,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			if (targetNPCIdx != 0 && !isAttacking)
 			{
 				Projectile.netUpdate = true;
-				Projectile.friendly = true;
 				targetNPC = Main.npc[targetNPCIdx];
 				isAttacking = true;
 			}
@@ -172,7 +171,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			Projectile.position += vectorToIdlePosition;
 			Projectile.velocity = Vector2.Zero;
-			Projectile.friendly = false;
 		}
 
 		public override void Kill(int timeLeft)

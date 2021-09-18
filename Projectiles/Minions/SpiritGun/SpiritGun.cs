@@ -90,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			Projectile.tileCollide = false;
 			animationFrame = 0;
 			framesSinceLastHit = 0;
-			Projectile.friendly = true;
+			dealsContactDamage = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 			activeTargetVectors = new Queue<Vector2>();

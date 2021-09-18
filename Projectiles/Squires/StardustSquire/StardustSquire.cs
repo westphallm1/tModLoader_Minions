@@ -222,7 +222,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			return base.OnTileCollide(oldVelocity) && !hasFoundTarget || framesSinceHadTarget > 60;
+			return base.OnTileCollide(oldVelocity) && (!hasFoundTarget && Projectile.timeLeft < 30) 
+				|| framesSinceHadTarget > 60;
 		}
 
 		public override void PostDraw(Color lightColor)

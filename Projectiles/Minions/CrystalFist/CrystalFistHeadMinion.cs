@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			Projectile.width = 36;
 			Projectile.height = 60;
 			Projectile.tileCollide = false;
-			Projectile.friendly = false;
+			dealsContactDamage = false;
 			Projectile.minionSlots = 0f;
 			attackThroughWalls = false;
 		}

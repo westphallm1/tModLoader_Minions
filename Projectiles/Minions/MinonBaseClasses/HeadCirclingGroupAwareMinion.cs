@@ -45,12 +45,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			if (FindTargetInTurnOrder(targetSearchDistance, Projectile.Center) is Vector2 target)
 			{
-				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				Projectile.friendly = false;
 				return null;
 			}
 		}

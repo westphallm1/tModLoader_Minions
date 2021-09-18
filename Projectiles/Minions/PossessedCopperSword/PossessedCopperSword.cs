@@ -102,12 +102,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		{
 			if (FindTargetInTurnOrder(625f, Projectile.Top) is Vector2 target)
 			{
-				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				Projectile.friendly = false;
 				return null;
 			}
 		}

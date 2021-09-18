@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			Projectile.height = 40;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			Projectile.friendly = true;
+			dealsContactDamage = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 		}

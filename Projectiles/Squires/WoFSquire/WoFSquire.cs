@@ -171,7 +171,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			Projectile.friendly = false;
 			isDashing = false;
 			base.IdleMovement(vectorToIdlePosition);
 		}
@@ -182,7 +181,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			float dashCheckDistance = 1.25f * maxDashDistance;
 			float searchDistance = 2 * dashCheckDistance;
 			int collisionStep = 8;
-			Projectile.friendly = true;
 			isDashing = false;
 			Vector2? _nearestNPCVector = AnyEnemyInRange(searchDistance, Projectile.Center);
 			if (_nearestNPCVector is Vector2 nearestNPCVector)

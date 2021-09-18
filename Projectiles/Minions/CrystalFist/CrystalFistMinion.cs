@@ -135,12 +135,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			}
 			if (FindTargetInTurnOrder(600f, head.Center) is Vector2 target)
 			{
-				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				Projectile.friendly = false;
 				return null;
 			}
 		}

@@ -200,6 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 		public override void AfterMoving()
 		{
+			// manually set
 			Projectile.friendly = IsBouncing;
 			Projectile.tileCollide |= IsBouncing;
 			scHelper.UpdateMovement();

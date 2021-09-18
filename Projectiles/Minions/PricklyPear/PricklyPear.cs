@@ -194,6 +194,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
+			dealsContactDamage = false;
 			maxJumpVelocity = 12;
 		}
 
@@ -264,10 +265,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			base.TargetedMovement(vectorToTargetPosition);
 		}
 
-		public override void AfterMoving()
-		{
-			Projectile.friendly = false;
-		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);

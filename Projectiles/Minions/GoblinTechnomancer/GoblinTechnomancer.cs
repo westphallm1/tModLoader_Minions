@@ -75,6 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			maxSpeed = 14;
 			idleInertia = 1;
 			targetSearchDistance = 950;
+			dealsContactDamage = false;
 			circleHelper.idleCircle = 20;
 			circleHelper.idleCircleHeight = 8;
 			circleHelper.idleBumble = false;
@@ -101,7 +102,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void AfterMoving()
 		{
 			// Lifted from EmpoweredMinion.cs
-			Projectile.friendly = false;
 			int minionType = ProjectileType<GoblinTechnomancerMinion>();
 			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[minionType] == 0)
 			{
@@ -196,7 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Projectile.height = 42;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			Projectile.friendly = true;
+			dealsContactDamage = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 		}

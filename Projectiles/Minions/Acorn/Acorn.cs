@@ -101,6 +101,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			Projectile.height = 16;
 			DrawOffsetX = (Projectile.width - 44) / 2;
 			attackFrames = 60;
+			dealsContactDamage = false;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -122,7 +123,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 		{
 			int targetAbove = 80;
 			Vector2 vectorAbove = vectorToTargetPosition;
-			Projectile.friendly = false;
 			// only check for exact position once close to target
 			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
 			{

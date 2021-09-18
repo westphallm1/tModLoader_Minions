@@ -232,7 +232,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			Projectile.height = 46;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			Projectile.friendly = true;
+			dealsContactDamage = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 			frameSpeed = 15;

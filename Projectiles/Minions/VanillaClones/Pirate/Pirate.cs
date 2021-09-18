@@ -323,6 +323,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			base.SetDefaults();
 			attackFrames = 45;
 			DrawOriginOffsetY = -4;
+			dealsContactDamage = false;
 		}
 
 		protected override void IdleFlyingMovement(Vector2 vector)
@@ -393,10 +394,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			base.TargetedMovement(vectorToTargetPosition);
 		}
 
-		public override void AfterMoving()
-		{
-			Projectile.friendly = false;
-		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			if (animationFrame - lastFiredFrame < 20)

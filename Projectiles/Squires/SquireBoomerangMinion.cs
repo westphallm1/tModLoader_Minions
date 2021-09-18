@@ -71,11 +71,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				!returning &&
 				SelectedEnemyInRange(attackRange, maxRangeFromPlayer: false) is Vector2 target)
 			{
-				Projectile.friendly = true;
 				Projectile.tileCollide = true;
 				return target - Projectile.Center;
 			}
-			Projectile.friendly = false;
 			Projectile.tileCollide = false;
 			return null;
 		}

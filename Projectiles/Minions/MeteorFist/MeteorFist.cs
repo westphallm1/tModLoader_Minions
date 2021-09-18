@@ -134,12 +134,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			}
 			if (FindTargetInTurnOrder(400f, head.Center) is Vector2 target)
 			{
-				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				Projectile.friendly = false;
 				return null;
 			}
 		}
