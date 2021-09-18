@@ -111,6 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				PetLevel = newLevel;
 				if(!fromSync)
 				{
+					Main.NewText("Combat Pet base damage increased to " + PetLevelInfo.BaseDamage +"!");
 					// TODO MP packet
 				}
 			}
@@ -160,13 +161,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			if(CombatPetUtils.PetLevelTable.Where(pl=>pl.BossNPCIds.Contains(npc.type) && pl.ShouldUnlock(npc.type)).FirstOrDefault()
 				is CombatPetLevelInfo info)
 			{
-				for(int i = 0; i < Main.maxPlayers; i++)
+				Player p = Main.player[Main.myPlayer];
+				if(p.active && Vector2.DistanceSquared(p.Center, npc.Center) < 2000f * 2000f)
 				{
-					Player p = Main.player[i];
-					if(p.active && Vector2.DistanceSquared(p.Center, npc.Center) < 2000f * 2000f)
-					{
-						p.GetModPlayer<LeveledCombatPetModPlayer>().UpdatePetLevel(info.Level);
-					}
+					p.GetModPlayer<LeveledCombatPetModPlayer>().UpdatePetLevel(info.Level);
 				}
 			}
 		}
