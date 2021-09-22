@@ -13,6 +13,7 @@ using AmuletOfManyMinions.UI.Common;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using ReLogic.Content;
+using Terraria.Graphics.Capture;
 
 namespace AmuletOfManyMinions.UI.TacticsUI
 {
@@ -163,7 +164,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		public override void MouseDown(UIMouseEvent evt)
 		{
 			// another menu is open, so don't check
-			if(Main.ingameOptionsWindow || Main.playerInventory || 
+			if(Main.ingameOptionsWindow || Main.playerInventory || CaptureManager.Instance.Active ||
 			  (dropDown.framesUntilHide > 0 && dropDown.ContainsPoint(evt.MousePosition)))
 			{
 				return; 

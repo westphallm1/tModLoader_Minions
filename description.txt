@@ -6,7 +6,14 @@ Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-many-minio
 
 Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 
-=== Version History ==
+=== Bug Reports ===
+Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
+
+=== Version History ===
+v0.12.2.4 - Bugfixes
+    - Tactics menu can no longer be click-and-dragged while not shown
+    - Add missing teleportation AI to Xeno Staff and Stardust Cell Staff
+    - Update minion AI to adjust to changed tactics more quickly
 v0.12.2.3 - Bugfixes
     - Fix bug where most minions would always deal contact damage, even when
       not attacking

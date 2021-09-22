@@ -180,6 +180,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override string GlowTexture => "Terraria/Images/Glow_189";
 		internal override int? FiredProjectileId => ProjectileType<StardustCellClinger>();
 		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(4, 7).WithVolume(0.5f);
+
+		internal int baseSpeed = 14;
+		internal int baseInertia = 10;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -251,12 +255,38 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
+
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(animationFrame - hsHelper.lastShootFrame > 6)
+			if(animationFrame - hsHelper.lastShootFrame <= 6)
 			{
-				base.TargetedMovement(vectorToTargetPosition);
+				return;
 			}
+			// "teleport" functionality (but not really since it's just moving fast)
+			float teleportLength = 2.5f * hsHelper.targetOuterRadius;
+			if(vectorToTargetPosition.LengthSquared() > teleportLength * teleportLength)
+			{
+				int speedMult = 4;
+				hsHelper.travelSpeed = speedMult * baseSpeed;
+				hsHelper.inertia = 1;
+				Vector2 stepVector = vectorToTargetPosition;
+				stepVector.SafeNormalize();
+				for(int i = 0; i < hsHelper.travelSpeed; i += baseSpeed / 2)
+				{
+					Vector2 posVector = Projectile.Center + stepVector * i;
+					int dustId = Dust.NewDust(posVector, 8, 8, 229);
+					Main.dust[dustId].noGravity = true;
+					Main.dust[dustId].velocity *= 0.25f;
+				}
+			} else
+			{
+				hsHelper.travelSpeed = baseSpeed;
+				if(Projectile.velocity.LengthSquared() < baseSpeed)
+				{
+					hsHelper.inertia = baseInertia;
+				}
+			}
+			base.TargetedMovement(vectorToTargetPosition);
 		}
 
 		internal override void AfterFiringProjectile()

@@ -35,8 +35,10 @@ namespace AmuletOfManyMinions.UI
 				tacticsUI.Activate();
 				buffClickCapture.Activate();
 				UIState state = new UIState();
-				state.Append(tacticsUI);
 				state.Append(buffClickCapture);
+				// tacticsUI should take priority over buffClickCapture in the case that
+				// they're both active
+				state.Append(tacticsUI);
 
 				tacticsInterface.SetState(state);
 			}

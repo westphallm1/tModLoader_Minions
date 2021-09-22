@@ -53,6 +53,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override int BuffId => BuffType<UFOMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.UFOMinion;
+
+		internal int baseSpeed = 14;
+		internal int baseInertia = 10;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -67,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Projectile.width = 24;
 			Projectile.height = 24;
 			DrawOffsetX = (Projectile.width - 44) / 2;
-			attackFrames = 30;
+			attackFrames = 22;
 			targetSearchDistance = 900;
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 14;
@@ -90,7 +93,50 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					Projectile.frame = 0;
 				}
 			}
-			Projectile.rotation = Projectile.velocity.X * 0.05f;
+			float boundedX = Math.Sign(Projectile.velocity.X) * Math.Min(16, Math.Abs(Projectile.velocity.X));
+			Projectile.rotation = boundedX * 0.05f;
+		}
+
+		private void updateDust(int dustId)
+		{
+			if (Main.rand.Next(2) == 0)
+			{
+				Main.dust[dustId].color = Color.LimeGreen;
+			}
+			else
+			{
+				Main.dust[dustId].color = Color.CornflowerBlue;
+			}
+			Main.dust[dustId].scale = Main.rand.NextFloat(0.9f, 1.3f);
+			Main.dust[dustId].velocity *= 0.2f;
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			// "teleport" functionality (but not really since it's just moving fast)
+			float teleportLength = 1.5f * hsHelper.targetOuterRadius;
+			if(vectorToTargetPosition.LengthSquared() > teleportLength * teleportLength)
+			{
+				int speedMult = 4;
+				hsHelper.travelSpeed = speedMult * baseSpeed;
+				hsHelper.inertia = 1;
+				Vector2 stepVector = vectorToTargetPosition;
+				stepVector.SafeNormalize();
+				for(int i = 0; i < hsHelper.travelSpeed; i += baseSpeed / 2)
+				{
+					Vector2 posVector = Projectile.Center + stepVector * i;
+					int dustId = Dust.NewDust(posVector, 24, 24, 160);
+					updateDust(dustId);
+				}
+			} else
+			{
+				hsHelper.travelSpeed = baseSpeed;
+				if(Projectile.velocity.LengthSquared() < baseSpeed)
+				{
+					hsHelper.inertia = baseInertia;
+				}
+			}
+			base.TargetedMovement(vectorToTargetPosition);
 		}
 
 		internal override void AfterFiringProjectile()
@@ -118,16 +164,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				{
 					Vector2 posVector = Projectile.Center + stepVector * i;
 					int dustId = Dust.NewDust(posVector, 1, 1, 160);
-					if (Main.rand.Next(2) == 0)
-					{
-						Main.dust[dustId].color = Color.LimeGreen;
-					}
-					else
-					{
-						Main.dust[dustId].color = Color.CornflowerBlue;
-					}
-					Main.dust[dustId].scale = Main.rand.NextFloat(0.9f, 1.3f);
-					Main.dust[dustId].velocity *= 0.2f;
+					updateDust(dustId);
 				}
 
 				
