@@ -294,6 +294,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
+			((SlimeTrainDrawer)wormDrawer).SlimeTexture = ExtraTextures[0];
 			((SlimeTrainDrawer)wormDrawer).Update(Projectile.frame, summonedSlimes);
 		}
 	}

@@ -46,10 +46,11 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			player.setBonus = "A floating crown will assist your squire in combat!";
 			player.GetModPlayer<SquireModPlayer>().royalArmorSetEquipped = true;
 		}
-		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
-		{
-			drawAltHair = true;
-		}
+		
+		//public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
+		//{
+		//	drawAltHair = true;
+		//}
 
 		public override void AddRecipes()
 		{

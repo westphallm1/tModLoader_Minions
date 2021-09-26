@@ -180,10 +180,8 @@ namespace AmuletOfManyMinions.Core.Minions
 		}
 
 
-		public override TagCompound Save()
+		public override void SaveData(TagCompound tag)
 		{
-			TagCompound tag = new TagCompound();
-
 			string tacticsNameList = string.Join(",", TacticsIDs.Select(id => TargetSelectionTacticHandler.GetTactic(id).Name));
 			// 256 is probably generous enough to not require any resizing in most cases
 			MemoryStream stream = new MemoryStream(256);
@@ -199,11 +197,9 @@ namespace AmuletOfManyMinions.Core.Minions
 			};
 
 			tag.Add("tactic", tacticsTag);
-
-			return tag;
 		}
 
-		public override void Load(TagCompound tag)
+		public override void LoadData(TagCompound tag)
 		{
 			TagCompound tacticsTag = tag.Get<TagCompound>("tactic");
 
