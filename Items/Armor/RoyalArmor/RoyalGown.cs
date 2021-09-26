@@ -8,6 +8,16 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 	[AutoloadEquip(EquipType.Body)]
 	class RoyalGown : ModItem
 	{
+		private int legsSlot = -1;
+
+		public override void Load()
+		{
+			if (!Main.dedServ)
+			{
+				legsSlot = Mod.AddEquipTexture(this, EquipType.Legs, "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
+			}
+		}
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -35,8 +45,9 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		public override void SetMatch(bool male, ref int equipSlot, ref bool robes)
 		{
 			robes = true;
-			equipSlot = Mod.GetEquipSlot("RoyalGown_Legs", EquipType.Legs);
+			equipSlot = legsSlot;
 		}
+
 		public override void AddRecipes()
 		{
 			CreateRecipe(1).AddIngredient(ItemID.Gel, 30).AddRecipeGroup("AmuletOfManyMinions:Golds", 15).AddTile(TileID.Solidifier).Register();
