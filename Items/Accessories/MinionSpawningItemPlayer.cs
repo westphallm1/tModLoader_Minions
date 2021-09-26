@@ -5,12 +5,9 @@ using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static AmuletOfManyMinions.AmuletOfManyMinions;
@@ -118,44 +115,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 			flat += summonFlatDamage;
 		}
 
-		//TODO 1.4
-		/*
-		public static readonly PlayerLayer IllusionistRobeLegs = new PlayerLayer("AmuletOfManyMinions", "IllusionistRobeLegs", PlayerLayer.Legs, delegate (PlayerDrawInfo drawInfo)
-		{
-			Player drawPlayer = drawInfo.drawPlayer;
-			Mod mod = ModLoader.GetMod("AmuletOfManyMinions");
-			Texture2D texture;
-			// this may not be the most efficient
-			if (drawPlayer.armor[11].type == ItemType<IllusionistCorruptRobe>() || drawPlayer.armor[11].IsAir && drawPlayer.armor[1].type == ItemType<IllusionistCorruptRobe>())
-			{
-				texture = mod.Assets.Request<Texture2D>("Items/Armor/IllusionistArmor/IllusionistCorruptRobe_Legs");
-			}
-			else if (drawPlayer.armor[11].type == ItemType<IllusionistCrimsonRobe>() || drawPlayer.armor[11].IsAir && drawPlayer.armor[1].type == ItemType<IllusionistCrimsonRobe>())
-			{
-				texture = mod.Assets.Request<Texture2D>("Items/Armor/IllusionistArmor/IllusionistCrimsonRobe_Legs");
-			}
-			else
-			{
-				return;
-			}
-			Vector2 Position = drawInfo.position;
-			Position.Y += 14;
-			Color color = Lighting.GetColor((int)(drawPlayer.Center.X / 16), (int)(drawPlayer.Center.Y / 16));
-			Vector2 pos = new Vector2((float)((int)(Position.X - Main.screenPosition.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(Position.Y - Main.screenPosition.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2));
-			DrawData value = new DrawData(texture, pos, new Microsoft.Xna.Framework.Rectangle?(drawPlayer.legFrame), color, drawPlayer.legRotation, drawInfo.legOrigin, 1f, drawInfo.spriteEffects, 0);
-			value.shader = drawPlayer.cBody;
-			Main.playerDrawData.Add(value);
-		});
-
-		public override void ModifyDrawLayers(List<PlayerLayer> layers)
-		{
-			int legLayer = layers.FindIndex(layer => layer.Name.Equals("Legs"));
-			if (legLayer != -1)
-			{
-				IllusionistRobeLegs.visible = true;
-				layers.Insert(legLayer + 1, IllusionistRobeLegs);
-			}
-		*/
 		public List<Projectile> GetMinionsOfType(int projectileType)
 		{
 			var otherMinions = new List<Projectile>();
