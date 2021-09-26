@@ -17,7 +17,6 @@ namespace AmuletOfManyMinions.DrawLayers
 
 		public override void Load()
 		{
-			//The equip tex will be assigned to the legs slot
 			Texture = ModContent.Request<Texture2D>(TexturePath);
 		}
 
