@@ -23,11 +23,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			Item.defense = 7;
 		}
 
-		//public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
-		//{
-		//	drawAltHair = true;
-		//}
-
 		public override void UpdateEquip(Player player)
 		{
 			player.maxMinions += 1;
