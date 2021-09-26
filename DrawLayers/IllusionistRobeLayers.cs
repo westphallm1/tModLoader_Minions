@@ -9,9 +9,9 @@ namespace AmuletOfManyMinions.DrawLayers
 
 		public override string TexturePath => $"AmuletOfManyMinions/Items/Armor/IllusionistArmor/{ItemName}_Legs";
 
-		protected override bool VisibleWithBody(int bodySlot)
+		protected override int GetAssociatedBodySlot()
 		{
-			return bodySlot == Mod.GetEquipSlot(ItemName, EquipType.Body);
+			return Mod.GetEquipSlot(ItemName, EquipType.Body);
 		}
 	}
 

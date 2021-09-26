@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.DrawLayers
 
 		public Asset<Texture2D> Texture { get; protected set; }
 
-		protected abstract bool VisibleWithBody(int bodySlot);
+		protected abstract int GetAssociatedBodySlot();
 
 		public override void Load()
 		{
@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.DrawLayers
 			{
 				return false;
 			}
-			return VisibleWithBody(drawPlayer.body);
+			return drawPlayer.body == GetAssociatedBodySlot();
 		}
 
 		protected override void Draw(ref PlayerDrawSet drawInfo)
