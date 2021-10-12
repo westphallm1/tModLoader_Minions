@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void Update(Player player, ref int buffIndex)
 		{
 			base.Update(player, ref buffIndex);
-			CombatPetLevelTable.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 14);
+			// CombatPetLevelTable.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 14);
 		}
 	}
 

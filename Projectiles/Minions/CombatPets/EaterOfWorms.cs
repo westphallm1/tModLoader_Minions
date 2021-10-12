@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,23 +15,13 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 {
-	public class EaterOfWormsMinionBuff : MinionBuff
+	public class EaterOfWormsMinionBuff : CombatPetVanillaCloneBuff
 	{
 		public EaterOfWormsMinionBuff() : base(ProjectileType<EaterOfWormsMinion>()) { }
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.EaterOfWorldsPetBuff") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.EaterOfWorldsPetBuff"));
-			Main.vanityPet[Type] = true;
-		}
 
-		public override void Update(Player player, ref int buffIndex)
-		{
-			base.Update(player, ref buffIndex);
-			CombatPetLevelTable.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 12);
-		}
+		public override int VanillaBuffId => BuffID.EaterOfWorldsPet;
 
+		public override string VanillaBuffName => "EaterOfWorldsPet";
 	}
 
 	public class EaterOfWormsMinionItem : CombatPetMinionItem<EaterOfWormsMinionBuff, EaterOfWormsMinion>
@@ -40,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal override string VanillaItemName => "EaterOfWorldsPetItem";
 	}
 
-	public class EaterOfWormsMinion : GroundTravellingWormMinion
+	public class EaterOfWormsMinion : CombatPetGroundedWormMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EaterOfWorldsPet;
 		internal override int BuffId => BuffType<EaterOfWormsMinionBuff>();
@@ -51,34 +42,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.EaterOfWorms") + " (AoMM Version)");
-			Main.projPet[Projectile.type] = true;
 		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.minionSlots = 0;
-			Projectile.tileCollide = false;
-			attackThroughWalls = true;
 			wormDrawer = new EaterOfWormsDrawer();
-		}
-
-
-		// don't grow
-		protected override int EmpowerCount => 1;
-		protected override int GetSegmentCount() => 6;
-
-		protected override int ComputeDamage() => Projectile.originalDamage;
-
-		protected override float ComputeSearchDistance() => 600;
-
-		protected override float ComputeInertia() => 22;
-
-		protected override float ComputeTargetedSpeed() => 12;
-
-		protected override float ComputeIdleSpeed()
-		{
-			return ComputeTargetedSpeed() + 3;
 		}
 	}
 

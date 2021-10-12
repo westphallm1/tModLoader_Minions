@@ -39,12 +39,12 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 			player.GetModPlayer<SquireModPlayer>().squireDamageMultiplierBonus += 0.12f;
 		}
 
-		public override bool CanEquipAccessory(Player player, int slot)
-		{
-			// don't allow side by side with squire skull, so their debuffs don't overwrite each other
-			int skullType = ItemType<SquireSkullAccessory>();
-			return slot > 9 || !player.armor.Skip(3).Take(5 + player.GetAmountOfExtraAccessorySlotsToShow()).Any(a => !a.IsAir && a.type == skullType);
-		}
+		//public override bool CanEquipAccessory(Player player, int slot)
+		//{
+		//	// don't allow side by side with squire skull, so their debuffs don't overwrite each other
+		//	int skullType = ItemType<SquireSkullAccessory>();
+		//	return slot > 9 || !player.armor.Skip(3).Take(5 + player.GetAmountOfExtraAccessorySlotsToShow()).Any(a => !a.IsAir && a.type == skullType);
+		//}
 	}
 
 	class TechnoCharmProjectile : SquireAccessoryMinion
