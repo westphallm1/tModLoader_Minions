@@ -90,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			Projectile.width = 44;
 			Projectile.height = 44;
 			Projectile.tileCollide = false;
-			Projectile.friendly = true;
+			dealsContactDamage = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 			frameSpeed = 5;

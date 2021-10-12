@@ -26,6 +26,8 @@ namespace AmuletOfManyMinions.Items.Armor
 			DisplayName.SetDefault("Mildew Cap");
 			Tooltip.SetDefault(""
 				+ "Increases minion damage by 1");
+
+			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
 
 		public override void SetDefaults()
@@ -54,10 +56,6 @@ namespace AmuletOfManyMinions.Items.Armor
 			player.maxMinions++;
 			player.GetModPlayer<MinionSpawningItemPlayer>().foragerArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
-		}
-		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
-		{
-			drawAltHair = true;
 		}
 
 		public override void AddRecipes()

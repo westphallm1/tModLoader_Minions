@@ -125,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			Projectile.height = 50;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			Projectile.friendly = true;
+			dealsContactDamage = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 		}

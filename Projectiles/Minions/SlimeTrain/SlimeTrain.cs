@@ -100,6 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			frameSpeed = 8;
 			SubProjectileType = ProjectileType<SlimeTrainMarkerProjectile>();
 			rotationTracker = new SlimeTrainRotationTracker();
+			dealsContactDamage = false;
 			wormDrawer = new SlimeTrainDrawer()
 			{
 				SlimeTexture = Main.dedServ ? null : null // : ExtraTextures[0]
@@ -293,8 +294,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
+			((SlimeTrainDrawer)wormDrawer).SlimeTexture = ExtraTextures[0];
 			((SlimeTrainDrawer)wormDrawer).Update(Projectile.frame, summonedSlimes);
-			Projectile.friendly = false;
 		}
 	}
 

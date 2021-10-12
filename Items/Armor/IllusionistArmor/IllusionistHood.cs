@@ -19,6 +19,8 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			DisplayName.SetDefault("Illusionist Hood");
 			Tooltip.SetDefault("Increases your max number of minions by 1" +
 							   "\nIncreases minion damage by 4%");
+
+			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
 
 		public override void SetDefaults()
@@ -57,11 +59,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			player.maxMinions++;
 			player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
-		}
-
-		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
-		{
-			drawAltHair = true;
 		}
 	}
 
@@ -137,7 +134,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			if (targetNPCIdx != 0 && !isAttacking)
 			{
 				Projectile.netUpdate = true;
-				Projectile.friendly = true;
 				targetNPC = Main.npc[targetNPCIdx];
 				isAttacking = true;
 			}
@@ -172,7 +168,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			Projectile.position += vectorToIdlePosition;
 			Projectile.velocity = Vector2.Zero;
-			Projectile.friendly = false;
 		}
 
 		public override void Kill(int timeLeft)

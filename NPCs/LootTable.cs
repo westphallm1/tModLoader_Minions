@@ -27,6 +27,7 @@ using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
 using AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.BoneSquire;
+using AmuletOfManyMinions.Projectiles.Squires.DemonSquire;
 using AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire;
 using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
 using AmuletOfManyMinions.Projectiles.Squires.PottedPal;
@@ -425,22 +426,33 @@ namespace AmuletOfManyMinions.NPCs
 				// fishing crate chest loot
 				case ItemID.WoodenCrate:
 				case ItemID.IronCrate:
-					if(spawnChance < 0.02f) { player.QuickSpawnItem(ItemType<TumbleSheepMinionItem>()); }
-					else if(spawnChance < 0.04f) { player.QuickSpawnItem(ItemType<RatsMinionItem>()); }
-					else if(spawnChance < 0.06f) { player.QuickSpawnItem(ItemType<FishBowlMinionItem>()); }
+				case ItemID.WoodenCrateHard:
+				case ItemID.IronCrateHard:
+					if(spawnChance < 0.03f) { player.QuickSpawnItem(ItemType<TumbleSheepMinionItem>()); }
+					else if(spawnChance < 0.06f) { player.QuickSpawnItem(ItemType<RatsMinionItem>()); }
 					break;
 				case ItemID.JungleFishingCrate:
+				case ItemID.JungleFishingCrateHard:
 					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<BalloonMonkeyMinionItem>()); }
 					break;
 				case ItemID.FloatingIslandFishingCrate:
+				case ItemID.FloatingIslandFishingCrateHard:
+					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<SkywareSquireMinionItem>()); }
+					break;
+				case ItemID.OceanCrate:
+				case ItemID.OceanCrateHard:
 					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<SkywareSquireMinionItem>()); }
 					break;
 				default:
+					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<FishBowlMinionItem>()); }
 					break;
 			}
 			if(context == "lockBox" && spawnChance < 0.167f)
 			{
 				player.QuickSpawnItem(ItemType<ExciteSkullMinionItem>());
+			} else if (context == "obsidianLockBox" && spawnChance < 0.167f)
+			{
+				player.QuickSpawnItem(ItemType<DemonSquireMinionItem>());
 			}
 		}
 

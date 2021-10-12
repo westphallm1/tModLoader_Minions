@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			Projectile.width = 26;
 			Projectile.height = 28;
 			Projectile.tileCollide = false;
-			Projectile.friendly = false;
+			dealsContactDamage = false;
 			Projectile.minionSlots = 0f;
 		}
 

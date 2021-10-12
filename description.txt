@@ -6,7 +6,21 @@ Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-many-minio
 
 Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 
-=== Version History ==
+=== Bug Reports ===
+Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
+
+=== Version History ===
+v0.12.2.7 - Port hairstyles and extra armor player layers to 1.4 version
+v0.12.2.6 - Fix bug with slime train drawing
+v0.12.2.5 - Rebuild for tML API change
+v0.12.2.4 - Bugfixes
+    - Tactics menu can no longer be click-and-dragged while not shown
+    - Add missing teleportation AI to Xeno Staff and Stardust Cell Staff
+    - Speed up Tumblesheep attack cycle
+    - Update minion AI to adjust to changed tactics more quickly
+v0.12.2.3 - Bugfixes
+    - Fix bug where most minions would always deal contact damage, even when
+      not attacking
 v0.12.2.2 - Bugfixes
     - Fix issue where using a non-summon weapon caused attack target to reset
     - Fix issue where Imps wouldn't teleport if the player moved far away

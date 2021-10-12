@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override Vector2 IdleBehavior()
 		{
-			Projectile.friendly = isStone;
+			dealsContactDamage = isStone;
 			Vector2 vectorToIdle = base.IdleBehavior();
 			int framesAsStone = animationFrame - stoneStartFrame;
 			doShockwaveCalculations();
@@ -268,7 +268,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			}
 			int targetAbove = 80;
 			Vector2 vectorAbove = vectorToTargetPosition;
-			Projectile.friendly = false;
 			// only check for exact position once close to target
 			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
 			{

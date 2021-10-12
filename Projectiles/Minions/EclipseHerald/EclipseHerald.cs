@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			Projectile.height = 60;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			Projectile.friendly = true;
+			dealsContactDamage = false;
 			attackThroughWalls = true;
 			useBeacon = false;
 			frameSpeed = 5;

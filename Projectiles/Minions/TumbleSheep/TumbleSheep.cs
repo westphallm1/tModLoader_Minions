@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 	public class TumbleSheepMinion : SimpleGroundBasedMinion
 	{
 		internal override int BuffId => BuffType<TumbleSheepMinionBuff>();
-		static int bounceCycleLength = 60;
+		static int bounceCycleLength = 45;
 		int lastFiredFrame = -bounceCycleLength;
 		// don't get too close
 		int preferredDistanceFromTarget = 64;
@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			base.SetDefaults();
 			Projectile.width = 32;
 			Projectile.height = 32;
-			attackFrames = 90;
+			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
@@ -126,6 +126,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			lastFiredFrame = animationFrame;
 			launchPos = Projectile.position;
 			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
+			if(targetNPCIndex is int idx && Main.npc[idx].active)
+			{
+				vectorToTarget += 4 * Main.npc[idx].velocity; // track the target NPC a bit
+			}
 			if(gHelper.didJustLand && vectorToTarget.Y > -Math.Abs(vectorToTarget.X/4))
 			{
 				vectorToTarget.Y = -Math.Abs(vectorToTarget.X / 4);
@@ -135,9 +139,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			Projectile.velocity = vectorToTarget;
 			for(int i = 0; i < 3; i++)
 			{
-				int idx = Dust.NewDust(Projectile.BottomLeft - new Vector2(0, 16), 32, 16, 16, 0, 0);
-				Main.dust[idx].alpha = 112;
-				Main.dust[idx].scale = 1.2f;
+				int dustIdx = Dust.NewDust(Projectile.BottomLeft - new Vector2(0, 16), 32, 16, 16, 0, 0);
+				Main.dust[dustIdx].alpha = 112;
+				Main.dust[dustIdx].scale = 1.2f;
 			}
 			// TODO
 		}
@@ -191,7 +195,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			{
 				vectorToTargetPosition.X = 0;
 			}
-			if(Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget && Math.Abs(vectorToTargetPosition.Y) > 0.5 * preferredDistanceFromTarget)
+			if(Math.Abs(vectorToTargetPosition.Y) < preferredDistanceFromTarget && Math.Abs(vectorToTargetPosition.Y) > 0.5 * preferredDistanceFromTarget)
 			{
 				vectorToTargetPosition.Y = 0;
 			}
@@ -200,6 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 		public override void AfterMoving()
 		{
+			// manually set
 			Projectile.friendly = IsBouncing;
 			Projectile.tileCollide |= IsBouncing;
 			scHelper.UpdateMovement();

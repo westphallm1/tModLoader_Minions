@@ -116,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		Vector2 travelOffset;
 		static int slimeIndex = 0;
 		int mySlimeIndex;
-		private Asset<Texture2D> slimeTexture;
+		private static Asset<Texture2D> slimeTexture;
 
 		public override void SetStaticDefaults()
 		{
@@ -131,6 +131,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			{
 				slimeTexture = ModContent.Request<Texture2D>(Texture + "_Slime");
 			}
+		}
+
+		public override void Unload()
+		{
+			slimeTexture = null;
 		}
 
 		public override void SetDefaults()

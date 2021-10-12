@@ -231,6 +231,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
 			blurHelper = new MotionBlurDrawer(5);
+			dealsContactDamage = true;
 		}
 
 		public override void OnSpawn()

@@ -199,6 +199,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			frameSpeed = 15;
 			animationFrameCounter = 0;
 			reloadStartFrame = -reloadCycleLength;
+			dealsContactDamage = false;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -253,7 +254,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		{
 			int targetAbove = 80;
 			Vector2 vectorAbove = vectorToTargetPosition;
-			Projectile.friendly = false;
 			// only check for exact position once close to target
 			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
 			{

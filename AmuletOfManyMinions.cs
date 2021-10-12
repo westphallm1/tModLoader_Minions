@@ -51,11 +51,6 @@ namespace AmuletOfManyMinions
 			CycleTacticHotKey = KeybindLoader.RegisterKeybind(this, "Cycle Minion Tactic", "K");
 			CycleTacticsGroupHotKey = KeybindLoader.RegisterKeybind(this, "Cycle Tactics Group", "L");
 			QuickDefendHotKey = KeybindLoader.RegisterKeybind(this, "Minion Quick Defend", "V");
-			if (!Main.dedServ)
-			{
-				//TODO 1.4
-				//AddEquipTexture(null, EquipType.Legs, "RoyalGown_Legs", "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
-			}
 		}
 
 		public override void PostSetupContent()

@@ -98,7 +98,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			}
 			if (SelectedEnemyInRange(300f, 0f, maxRangeFromPlayer: false) is Vector2 target)
 			{
-				Projectile.friendly = true;
 				return target - Projectile.Center;
 			}
 			return null;
@@ -107,7 +106,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			framesSinceLastHit = 0;
-			Projectile.friendly = false;
 			Projectile.velocity = -Projectile.oldVelocity;
 			hitsSinceRetreat++;
 		}
@@ -206,7 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			DrawOriginOffsetX = (56 - 32) / 2;
 			DrawOriginOffsetY = (52 - 32) / 2;
 			Projectile.tileCollide = false;
-			Projectile.friendly = false;
+			dealsContactDamage = false;
 			attackThroughWalls = false;
 			frameSpeed = 5;
 			animationFrame = 0;

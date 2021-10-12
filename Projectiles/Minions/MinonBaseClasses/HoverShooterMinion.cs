@@ -23,7 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.friendly = false;
+			dealsContactDamage = false;
 			hsHelper = new HoverShooterHelper(this, FiredProjectileId)
 			{
 				AfterFiringProjectile = AfterFiringProjectile,

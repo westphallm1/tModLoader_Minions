@@ -43,6 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		protected bool usingBeacon = false;
 
 		protected PlayerTargetSelectionTactic currentTactic;
+		protected PlayerTargetSelectionTactic previousTactic;
 
 		public bool Spawned { get; private set; }
 
@@ -158,10 +159,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			Vector2 losCenterVector = losCenter ?? Projectile.Center;
 			MinionTacticsPlayer tacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
-			currentTactic = tacticsPlayer.GetTacticForMinion(this);
 			MinionPathfindingPlayer pathfindingPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
+
+			// Make sure not to cache the target if the target selection tactic changes
+			currentTactic = tacticsPlayer.GetTacticForMinion(this);
+			bool tacticDidChange = currentTactic != previousTactic;
+			previousTactic = currentTactic;
+			
 			// to cut back on Line-of-Sight computations, always chase the same NPC for some number of frames once one has been found
-			if(targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < currentTactic.TargetCacheFrames)
+			if(!tacticDidChange && targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < currentTactic.TargetCacheFrames)
 			{
 				return Main.npc[idx].Center;
 			}

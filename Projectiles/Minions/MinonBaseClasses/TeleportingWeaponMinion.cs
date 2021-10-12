@@ -37,6 +37,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			IdleLocationSets.circlingBody.Add(Projectile.type);
 		}
 
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			dealsContactDamage = false; // manually managed
+		}
+
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();

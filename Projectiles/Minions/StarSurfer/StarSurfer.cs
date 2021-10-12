@@ -121,12 +121,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		{
 			if (FindTargetInTurnOrder(900f, Projectile.Center) is Vector2 target)
 			{
-				Projectile.friendly = true;
 				return target;
 			}
 			else
 			{
-				Projectile.friendly = false;
 				return null;
 			}
 		}

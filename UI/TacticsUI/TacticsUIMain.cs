@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Graphics.Capture;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -256,6 +257,13 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		public override void MouseDown(UIMouseEvent evt)
 		{
 			base.MouseDown(evt);
+			// don't start click-and-dragging if the UI is hidden
+			// todo a better way to detect if the UI is hidden
+			// (these two booleans aren't complete coverage)
+			if(Main.ingameOptionsWindow || CaptureManager.Instance.Active)
+			{
+				return;
+			}
 			lastMousePos = evt.MousePosition;
 			clickAndDragging = true;
 		}

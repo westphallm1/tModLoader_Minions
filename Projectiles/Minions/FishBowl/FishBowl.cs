@@ -138,6 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			DrawOriginOffsetY = -2;
 			attackFrames = 30;
 			frameSpeed = 15;
+			dealsContactDamage = false;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -220,7 +221,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			float losCheckAngle = MathHelper.Pi / 6 + 2 * MathHelper.Pi * side / 3;
 
 			Vector2 losCheckVector = losCheckAngle.ToRotationVector2();
-			Projectile.friendly = false;
 
 			// only check for exact position once close to target
 			if (vectorToTargetPosition.LengthSquared() < 256 * 256)
