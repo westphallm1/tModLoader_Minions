@@ -13,6 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 	{
 
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
+		internal Dictionary<GroundAnimationState, (int, int?)> frameInfo;
 
 		public override void SetStaticDefaults()
 		{
@@ -72,9 +73,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		// don't get too close
 		internal int preferredDistanceFromTarget = 128;
 
+		internal int launchVelocity = 12;
+
 		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
 
-		public abstract void LaunchProjectile();
+		public abstract void LaunchProjectile(Vector2 launchVector);
 
 		public override void AfterMoving()
 		{
@@ -91,23 +94,46 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 
-			if (Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
-				Math.Abs(vectorToTargetPosition.Y) < 4 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= attackFrames)
+			bool inLaunchRange = 
+				Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
+				Math.Abs(vectorToTargetPosition.Y) < 4 * preferredDistanceFromTarget;
+			if (player.whoAmI == Main.myPlayer && inLaunchRange && animationFrame - lastFiredFrame >= attackFrames)
 			{
-				LaunchProjectile();
+				lastFiredFrame = animationFrame;
+				Vector2 launchVector = vectorToTargetPosition;
+				// todo lead shot
+				launchVector.SafeNormalize();
+				launchVector *= launchVelocity;
+				LaunchProjectile(launchVector);
 			}
 
 			// don't move if we're in range-ish of the target
-			if (Math.Abs(vectorToTargetPosition.X) < 2 * preferredDistanceFromTarget && Math.Abs(vectorToTargetPosition.X) > 0.5 * preferredDistanceFromTarget)
+			if (Math.Abs(vectorToTargetPosition.X) < 1.25f * preferredDistanceFromTarget && 
+				Math.Abs(vectorToTargetPosition.X) > 0.5 * preferredDistanceFromTarget)
 			{
 				vectorToTargetPosition.X = 0;
 			}
-			if(Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget && Math.Abs(vectorToTargetPosition.Y) > 0.5 * preferredDistanceFromTarget)
+			if(Math.Abs(vectorToTargetPosition.Y) < 1.25f * preferredDistanceFromTarget && 
+				Math.Abs(vectorToTargetPosition.Y) > 0.5 * preferredDistanceFromTarget)
 			{
 				vectorToTargetPosition.Y = 0;
 			}
 			base.TargetedMovement(vectorToTargetPosition);
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
+			{
+				Projectile.spriteDirection = Math.Sign(target.X);
+			} else if (Projectile.velocity.X > 1)
+			{
+				Projectile.spriteDirection = 1;
+			} else if (Projectile.velocity.X < -1)
+			{
+				Projectile.spriteDirection = -1;
+			}
 		}
 	}
 }

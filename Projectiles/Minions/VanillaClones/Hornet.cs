@@ -35,9 +35,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public class HornetStinger : ModProjectile
+	public abstract class StingerProjectile : ModProjectile
 	{
-		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.HornetStinger;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -63,6 +62,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			target.AddBuff(BuffID.Poisoned, 300);
 		}
+
+	}
+
+	public class HornetStinger : StingerProjectile
+	{
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.HornetStinger;
 	}
 
 	public class HornetMinion : HoverShooterMinion

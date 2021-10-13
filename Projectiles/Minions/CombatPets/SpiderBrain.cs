@@ -114,14 +114,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		// only fire every third projectile towards the actual enemy
 		int fireCount;
-		// don't get too close
-		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
-		{
-			[GroundAnimationState.FLYING] = (9, 14),
-			[GroundAnimationState.JUMPING] = (1, 1),
-			[GroundAnimationState.STANDING] = (0, 0),
-			[GroundAnimationState.WALKING] = (1, 8),
-		};
 
 		public override void SetStaticDefaults()
 		{
@@ -139,9 +131,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			// DrawOffsetX = -2;
 			DrawOriginOffsetY = -4;
 			attackFrames = 12;
+			preferredDistanceFromTarget = 64;
+			frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+			{
+				[GroundAnimationState.FLYING] = (9, 14),
+				[GroundAnimationState.JUMPING] = (1, 1),
+				[GroundAnimationState.STANDING] = (0, 0),
+				[GroundAnimationState.WALKING] = (1, 8),
+			};
 		}
 
-		public override void LaunchProjectile()
+		public override void LaunchProjectile(Vector2 launchVector)
 		{
 			int eyeVelocity = 10;
 			lastFiredFrame = animationFrame;
@@ -171,22 +171,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					Projectile.knockBack,
 					player.whoAmI,
 					ai0: Projectile.whoAmI);
-			}
-		}
-
-
-		public override void Animate(int minFrame = 0, int? maxFrame = null)
-		{
-			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
-			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
-			{
-				Projectile.spriteDirection = Math.Sign(target.X);
-			} else if (Projectile.velocity.X > 1)
-			{
-				Projectile.spriteDirection = 1;
-			} else if (Projectile.velocity.X < -1)
-			{
-				Projectile.spriteDirection = -1;
 			}
 		}
 	}
