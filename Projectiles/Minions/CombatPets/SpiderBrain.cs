@@ -13,25 +13,17 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 {
-	public class SpiderBrainMinionBuff : MinionBuff
+	public class SpiderBrainMinionBuff : CombatPetVanillaCloneBuff
 	{
 		public SpiderBrainMinionBuff() : base(ProjectileType<SpiderBrainMinion>()) { }
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.Pygmies") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.Pygmies"));
-			Main.vanityPet[Type] = true;
-		}
-		public override void Update(Player player, ref int buffIndex)
-		{
-			base.Update(player, ref buffIndex);
-			// CombatPetLevelTable.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 12);
-		}
 
+		public override int VanillaBuffId => BuffID.BrainOfCthulhuPet;
+
+		public override string VanillaBuffName => "BrainOfCthulhuPet";
 	}
 
 	public class SpiderBrainMinionItem : CombatPetMinionItem<SpiderBrainMinionBuff, SpiderBrainMinion>
@@ -39,13 +31,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal override int VanillaItemID => ItemID.BrainOfCthulhuPetItem;
 
 		internal override string VanillaItemName => "BrainOfCthulhuPetItem";
-		public int[] projTypes;	
-
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			Item.damage = 10;
-		}
 	}
 
 
@@ -120,15 +105,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		}
 	}
 
-	public class SpiderBrainMinion : SimpleGroundBasedMinion
+	public class SpiderBrainMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BrainOfCthulhuPet;
 		internal override int BuffId => BuffType<SpiderBrainMinionBuff>();
-		int lastFiredFrame = 0;
+
+		internal override int GetAttackFrames(CombatPetLevelInfo info) => base.GetAttackFrames(info) / 4;
+
 		// only fire every third projectile towards the actual enemy
 		int fireCount;
 		// don't get too close
-		int preferredDistanceFromTarget = 128;
 		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
 		{
 			[GroundAnimationState.FLYING] = (9, 14),
@@ -153,41 +139,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			// DrawOffsetX = -2;
 			DrawOriginOffsetY = -4;
 			attackFrames = 12;
-			noLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			searchDistance = 700;
-			maxJumpVelocity = 12;
 		}
 
-		protected override void DoGroundedMovement(Vector2 vector)
-		{
-
-			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
-			{
-				gHelper.DoJump(vector);
-			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
-			int xMaxSpeed = 11;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
-			{
-				Projectile.velocity.X = player.velocity.X;
-				return;
-			}
-			DistanceFromGroup(ref vector);
-			// only change speed if the target is a decent distance away
-			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
-			{
-				Projectile.velocity.X = Main.npc[idx].velocity.X;
-			}
-			else
-			{
-				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
-			}
-		}
-
-		private void FireEyeProjectile()
+		public override void LaunchProjectile()
 		{
 			int eyeVelocity = 10;
 			lastFiredFrame = animationFrame;
@@ -220,32 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
 
-			if (Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
-				Math.Abs(vectorToTargetPosition.Y) < 4 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= attackFrames)
-			{
-				FireEyeProjectile();
-			}
-
-			// don't move if we're in range-ish of the target
-			if (Math.Abs(vectorToTargetPosition.X) < 2 * preferredDistanceFromTarget && Math.Abs(vectorToTargetPosition.X) > 0.5 * preferredDistanceFromTarget)
-			{
-				vectorToTargetPosition.X = 0;
-			}
-			if(Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget && Math.Abs(vectorToTargetPosition.Y) > 0.5 * preferredDistanceFromTarget)
-			{
-				vectorToTargetPosition.Y = 0;
-			}
-			base.TargetedMovement(vectorToTargetPosition);
-		}
-
-		public override void AfterMoving()
-		{
-			Projectile.friendly = false;
-		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);

@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,23 +14,13 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 {
-	public class PhantasmalDragonMinionBuff : MinionBuff
+	public class PhantasmalDragonMinionBuff : CombatPetVanillaCloneBuff
 	{
 		public PhantasmalDragonMinionBuff() : base(ProjectileType<PhantasmalDragonMinion>()) { }
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.LunaticCultistPetBuff") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.LunaticCultistPetBuff"));
-			Main.vanityPet[Type] = true;
-		}
 
-		public override void Update(Player player, ref int buffIndex)
-		{
-			base.Update(player, ref buffIndex);
-			// CombatPetLevelTable.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 46);
-		}
+		public override int VanillaBuffId => BuffID.LunaticCultistPet;
 
+		public override string VanillaBuffName => "LunaticCultistPet";
 	}
 
 	/// <summary>
@@ -124,30 +115,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal override string VanillaItemName => "LunaticCultistPetItem";
 	}
 
-	public class PhantasmalDragonMinion : WormMinion
+	public class PhantasmalDragonMinion : CombatPetWormMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.LunaticCultistPet;
 		internal override int BuffId => BuffType<PhantasmalDragonMinionBuff>();
-		public override int CounterType => -1;
 		protected override int dustType => 135;
 
 		private int lastShootFrame;
 		private readonly int fireRate = 30;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.PhantasmalDragon") + " (AoMM Version)");
-			Main.projPet[Projectile.type] = true;
-		}
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.minionSlots = 0;
-			Projectile.tileCollide = false;
-			attackThroughWalls = true;
 			wormDrawer = new PhantasmalDragonDrawer();
 		}
+
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
@@ -159,24 +141,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
-		}
-
-
-		// don't grow
-		protected override int EmpowerCount => 1;
-		protected override int GetSegmentCount() => 6;
-
-		protected override int ComputeDamage() => Projectile.originalDamage;
-
-		protected override float ComputeSearchDistance() => 900;
-
-		protected override float ComputeInertia() => 18;
-
-		protected override float ComputeTargetedSpeed() => 15;
-
-		protected override float ComputeIdleSpeed()
-		{
-			return ComputeTargetedSpeed() + 3;
 		}
 
 		public override Vector2? FindTarget()

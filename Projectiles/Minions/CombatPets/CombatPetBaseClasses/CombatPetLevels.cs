@@ -96,19 +96,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		}
 	}
 
-	public abstract class CombatPetVanillaCloneBuff : MinionBuff
+	public abstract class CombatPetBuff : MinionBuff
 	{
-		public abstract int VanillaBuffId { get; }
-		public abstract string VanillaBuffName { get; }
+		public CombatPetBuff(params int[] projIds) : base(projIds) { }
 
-		public CombatPetVanillaCloneBuff(params int[] projIds) : base(projIds) { }
-
-		public override string Texture => "Terraria/Images/Buff_" + VanillaBuffId;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName." + VanillaBuffName) + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription." + VanillaBuffName));
 			Main.vanityPet[Type] = true;
 		}
 
@@ -126,6 +120,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				}
 			}
 		}
+	}
+	public abstract class CombatPetVanillaCloneBuff : CombatPetBuff
+	{
+		public abstract int VanillaBuffId { get; }
+		public abstract string VanillaBuffName { get; }
+
+		public CombatPetVanillaCloneBuff(params int[] projIds) : base(projIds) { }
+
+		public override string Texture => "Terraria/Images/Buff_" + VanillaBuffId;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault(Language.GetTextValue("BuffName." + VanillaBuffName) + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription." + VanillaBuffName));
+		}
+
 	}
 
 	public abstract class CombatPetMinionItem<TBuff, TProj> : VanillaCloneMinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion

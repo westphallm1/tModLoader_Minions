@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
@@ -14,22 +15,13 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 {
-	public class HoneyBeeMinionBuff : MinionBuff
+	public class HoneyBeeMinionBuff : CombatPetVanillaCloneBuff
 	{
 		public HoneyBeeMinionBuff() : base(ProjectileType<HoneyBeeMinion>()) { }
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.HoneyBeeMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.HoneyBeeMinion"));
-			Main.vanityPet[Type] = true;
-		}
 
-		public override void Update(Player player, ref int buffIndex)
-		{
-			base.Update(player, ref buffIndex);
-			// CombatPetLevelTable.SpawnIfAbsent(player, buffIndex, projectileTypes[0], 14);
-		}
+		public override int VanillaBuffId => BuffID.QueenBeePet;
+
+		public override string VanillaBuffName => "QueenBeePet";
 	}
 
 	public class HoneyBeeMinionItem : CombatPetMinionItem<HoneyBeeMinionBuff, HoneyBeeMinion>
@@ -37,12 +29,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal override int VanillaItemID => ItemID.QueenBeePetItem;
 
 		internal override string VanillaItemName => "QueenBeePetItem";
-
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			Item.damage = 14;
-		}
 	}
 
 	public class HoneyPotProjectile : BasePumpkinBomb
@@ -89,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 	}
 
 
-	public class HoneyBeeMinion : HoverShooterMinion
+	public class HoneyBeeMinion : CombatPetHoverShooterMinion
 	{
 		internal override int BuffId => BuffType<HoneyBeeMinionBuff>();
 
@@ -101,25 +87,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.HoneyBee"));
 			Main.projFrames[Projectile.type] = 8;
-			Main.projPet[Projectile.type] = true;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			Projectile.minionSlots = 0;
-			Projectile.width = 32;
-			Projectile.height = 24;
-			targetSearchDistance = 700;
-			attackFrames = 80;
-			hsHelper.attackFrames = attackFrames;
-			hsHelper.travelSpeed = 9;
-			hsHelper.projectileVelocity = 12;
-			hsHelper.targetInnerRadius = 148;
-			hsHelper.targetOuterRadius = 196;
-			hsHelper.targetShootProximityRadius = 96;
-		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);

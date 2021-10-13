@@ -43,7 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		protected override float ComputeSearchDistance() => leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 
-		protected override float ComputeInertia() => Math.Min(12, 22 - leveledPetPlayer.PetLevel);
+		protected override float ComputeInertia() => Math.Max(12, 22 - leveledPetPlayer.PetLevel);
 
 		protected override float ComputeTargetedSpeed() => leveledPetPlayer.PetLevelInfo.BaseSpeed + 2;
 
@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		protected override float ComputeSearchDistance() => leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 
-		protected override float ComputeInertia() => Math.Min(12, 22 - leveledPetPlayer.PetLevel);
+		protected override float ComputeInertia() => Math.Max(12, 22 - leveledPetPlayer.PetLevel);
 
 		protected override float ComputeTargetedSpeed() => leveledPetPlayer.PetLevelInfo.BaseSpeed + 2;
 
