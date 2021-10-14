@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -38,7 +39,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EyeOfCthulhuPet;
 
-		internal override int? FiredProjectileId => null;
 
 		public override void SetStaticDefaults()
 		{
@@ -77,13 +77,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 			base.Animate(minFrame, maxFrame);
 			Projectile.rotation = 0.05f * Projectile.velocity.X;
-			if(Projectile.velocity.X > 1)
-			{
-				Projectile.spriteDirection = 1;
-			} else if (Projectile.velocity.X < -1)
-			{
-				Projectile.spriteDirection = -1;
-			}
 		}
 	}
 }

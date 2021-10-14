@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

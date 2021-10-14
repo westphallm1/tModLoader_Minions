@@ -49,17 +49,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		}
 	}
 
-	public class SeaSquireBubble : ModProjectile
+	public abstract class BaseMinionBubble : ModProjectile
 	{
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SeaSquire/SeaSquireBubble";
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-
-			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -71,8 +63,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			Projectile.friendly = true;
 			Projectile.width = 12;
 			Projectile.height = 12;
-			// projectile.magic = false; //Bandaid fix
-			//Projectile.minion = true; //TODO 1.4
 			Projectile.DamageType = DamageClass.Summon;
 		}
 
@@ -89,6 +79,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 				int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, 137, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
 				Main.dust[dustCreated].noGravity = true;
 			}
+		}
+
+	}
+	public class SeaSquireBubble : BaseMinionBubble
+	{
+		public override void SetStaticDefaults()
+		{
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 	}
 

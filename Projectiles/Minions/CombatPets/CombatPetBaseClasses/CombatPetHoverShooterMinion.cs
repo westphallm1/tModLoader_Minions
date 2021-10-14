@@ -15,6 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 	{
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
 
+		internal int forwardDir = 1;
 		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
 		internal virtual int GetProjectileVelocity(CombatPetLevelInfo info) => (int)info.BaseSpeed + 3;
 
@@ -51,6 +52,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			hsHelper.projectileVelocity = GetProjectileVelocity(info);
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = (int)info.BaseSpeed;
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			base.Animate(minFrame, maxFrame);
+			if(vectorToTarget is Vector2 target)
+			{
+				Projectile.spriteDirection = forwardDir * Math.Sign(target.X);
+			}
+			else if(Projectile.velocity.X > 1)
+			{
+				Projectile.spriteDirection = forwardDir;
+			}
+			else if (Projectile.velocity.X < -1)
+			{
+				Projectile.spriteDirection = -forwardDir;
+			}
 		}
 	}
 
@@ -103,7 +121,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			// need to draw sprites manually for some reason
 			float r = Projectile.rotation;
 			Vector2 pos = Projectile.Center;
-			SpriteEffects effects = Projectile.velocity.X < 0 ? SpriteEffects.FlipHorizontally: 0;
+			SpriteEffects effects = Projectile.spriteDirection == 1  ? 0 : SpriteEffects.FlipHorizontally;
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
@@ -134,6 +152,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override void AfterMoving()
 		{
 			blurHelper.Update(Projectile.position, isDashing);
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			base.Animate(minFrame, maxFrame);
+            if(Projectile.velocity.X > 1)
+			{
+				Projectile.spriteDirection = forwardDir;
+			}
+			else if (Projectile.velocity.X < -1)
+			{
+				Projectile.spriteDirection = -forwardDir;
+			}
 		}
 	}
 }

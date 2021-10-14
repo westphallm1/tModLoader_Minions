@@ -11,7 +11,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
+namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 {
 	abstract class CombatPetEmblem : ModItem
 	{
@@ -22,9 +22,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		{
 			base.SetStaticDefaults();
 			Tooltip.SetDefault(
-				"A magical emblem that increases the power of your combat pets!\n" +
+				"An emblem that increases the power of your combat pets!\n" +
 				"As long as this item is in your inventory, your combat pet will deal\n" +
-				"its damage, and will receive a bonus to movement speed and attack range.");
+				"additional damage, and will receive a bonus to movement speed and attack range.");
 		}
 		public override void SetDefaults()
 		{
@@ -41,15 +41,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		}
 	}
 
-	class GoldenPetEmblem : CombatPetEmblem
+	class GoldenCombatPetEmblem : CombatPetEmblem
 	{
-		public override string Texture => "Terraria/Images/Item_" + ItemID.GoldBar;
 		internal override int PetLevel => 1;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Golden Pet Emblem");
+			DisplayName.SetDefault("Golden Combat Pet Emblem");
 		}
 	}
 }

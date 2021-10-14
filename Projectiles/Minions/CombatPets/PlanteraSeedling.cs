@@ -14,6 +14,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
+using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 {
@@ -47,6 +48,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		{
 			base.AI();
 			Projectile.frame = Projectile.timeLeft % 10 < 5 ? 0 : 1;
+		}
+	}
+	public class PlanteraSeedlingThornBall : WeakPumpkinBomb
+	{
+		public override void SetStaticDefaults()
+		{
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.width = 24;
+			Projectile.height = 24;
+			Projectile.penetrate = 5;
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			// TODO dust
 		}
 	}
 
@@ -84,13 +105,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override void LaunchProjectile(Vector2 launchVector)
 		{
-			int projId = ProjectileType<PlanteraSeedlingSeed>();
+			bool spawnThornBall = fireCount++ % 4 == 0;
+			int projId = spawnThornBall ? ProjectileType<PlanteraSeedlingThornBall>() : ProjectileType<PlanteraSeedlingSeed>();
+			float damageMult = spawnThornBall ? 1.5f : 1;
 			Projectile.NewProjectile(
 				Projectile.GetProjectileSource_FromThis(),
 				Projectile.Center,
 				VaryLaunchVelocity(launchVector),
 				projId,
-				Projectile.damage,
+				(int)(damageMult * Projectile.damage),
 				Projectile.knockBack,
 				player.whoAmI,
 				ai0: Projectile.whoAmI);

@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal override string VanillaItemName => "QueenBeePetItem";
 	}
 
-	public class HoneyPotProjectile : BasePumpkinBomb
+	public class HoneyPotProjectile : WeakPumpkinBomb
 	{
 		public override void SetStaticDefaults()
 		{
@@ -43,24 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.SetDefaults();
 			Projectile.width = 24;
 			Projectile.height = 24;
-			bounces = 3;
 			Projectile.penetrate = 2;
-		}
-		protected override int TimeToLive => 120;
-
-		protected override int FallAfterFrames => 15;
-
-		protected override void OnFloorBounce(int bouncesLeft, Vector2 oldVelocity)
-		{
-			Projectile.velocity.Y = -3 * bouncesLeft;
-			// make sure not to collide right away again
-			Projectile.position.Y -= 8;
-			Projectile.velocity.X *= 0.67f;
-		}
-
-		protected override void OnWallBounce(int bouncesLeft, Vector2 oldVelocity)
-		{
-			Projectile.velocity.X = -Math.Sign(oldVelocity.X) * 1.5f * bouncesLeft;
 		}
 
 		public override void Kill(int timeLeft)
@@ -89,22 +72,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			forwardDir = -1;
+		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if(vectorToTarget is Vector2 target)
-			{
-				Projectile.spriteDirection = -Math.Sign(target.X);
-			}
-			else if(Projectile.velocity.X > 1)
-			{
-				Projectile.spriteDirection = -1;
-			}
-			else if (Projectile.velocity.X < -1)
-			{
-				Projectile.spriteDirection = 1;
-			}
 			Projectile.rotation = Projectile.velocity.X * 0.05f;
 		}
 	}
