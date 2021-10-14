@@ -108,6 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
+			hsHelper.projectileVelocity = 6;
 			base.TargetedMovement(vectorToTargetPosition);
 			int attackCycleFrame = animationFrame - hsHelper.lastShootFrame;
 			if(attackCycleFrame < attackFrames / 2 && attackFrames % 6 == 0)

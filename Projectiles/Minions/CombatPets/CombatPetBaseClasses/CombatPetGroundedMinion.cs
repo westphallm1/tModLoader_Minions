@@ -55,14 +55,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			// only change speed if the target is a decent distance away
-			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
+			if (animationFrame - lastHitFrame > 10)
 			{
-				Projectile.velocity.X = Main.npc[idx].velocity.X;
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
 			else
 			{
-				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+				Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * xMaxSpeed * 0.75f;
+			}
+		}
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+            if (Projectile.velocity.X > 1)
+			{
+				Projectile.spriteDirection = 1;
+			} else if (Projectile.velocity.X < -1)
+			{
+				Projectile.spriteDirection = -1;
 			}
 		}
 	}
@@ -89,6 +99,31 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			Vector2 target = base.IdleBehavior();
 			attackFrames = GetAttackFrames(leveledPetPlayer.PetLevelInfo);
 			return target;
+		}
+		protected override void DoGroundedMovement(Vector2 vector)
+		{
+
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			{
+				gHelper.DoJump(vector);
+			}
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			int xMaxSpeed = (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;
+			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			{
+				Projectile.velocity.X = player.velocity.X;
+				return;
+			}
+			DistanceFromGroup(ref vector);
+			// only change speed if the target is a decent distance away
+			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
+			{
+				Projectile.velocity.X = Main.npc[idx].velocity.X;
+			}
+			else
+			{
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+			}
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -123,7 +158,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			base.Animate();
 			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
 				Projectile.spriteDirection = Math.Sign(target.X);
