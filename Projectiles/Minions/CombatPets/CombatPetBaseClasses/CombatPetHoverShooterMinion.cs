@@ -29,6 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		{
 			base.SetDefaults();
 			Projectile.minionSlots = 0;
+			Projectile.width = 32;
+			Projectile.height = 32;
 			// these are likely to be static
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 128;

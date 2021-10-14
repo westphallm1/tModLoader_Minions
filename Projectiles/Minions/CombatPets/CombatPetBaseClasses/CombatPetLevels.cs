@@ -122,6 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 		}
 	}
+
 	public abstract class CombatPetVanillaCloneBuff : CombatPetBuff
 	{
 		public abstract int VanillaBuffId { get; }
