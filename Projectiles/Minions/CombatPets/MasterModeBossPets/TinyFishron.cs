@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 
-namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
+namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class TinyFishronMinionBuff : CombatPetVanillaCloneBuff
 	{

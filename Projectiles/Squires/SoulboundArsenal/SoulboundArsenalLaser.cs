@@ -16,31 +16,23 @@ using static Terraria.ModLoader.ModContent;
 namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 {
 	// uses ai[0] to track firing angle
-	// angle and position manipulated by SoulboundArsenal
-	class SoulboundArsenalLaser : ModProjectile
+	// angle and position manipulated by parent projectile
+	public abstract class MovableLaser : ModProjectile
 	{
-		static int TimeToLive = 4 * 60;
-		static int ChargeTime = 2 * 60;
-		static int maxLength = 200 * 16;
+		protected int TimeToLive = 4 * 60;
+		protected int ChargeTime = 2 * 60;
+		protected int maxLength = 200 * 16;
 		protected Vector2 endPoint = Vector2.Zero;
-		private Vector2 tangent;
-		private float chargeScale;
+		internal Vector2 tangent;
+		internal float chargeScale;
+		internal int baseTangentSize = 12; // offset draw position of laser from center
 
 		protected float firingAngle => Projectile.ai[0];
 		protected int animationFrame => TimeToLive - Projectile.timeLeft;
 
 		protected virtual Color LightColor => Color.White;
 
-		protected Rectangle GoodFrame(int idx, bool isLast)
-		{
-			int Y = isLast ? 0 : idx == 0 ? 44 : 22;
-			return new Rectangle(0, Y, 22, 20);
-		}
-		protected Rectangle EvilFrame(int idx, bool isLast)
-		{
-			int Y = isLast ? 66 : idx == 0 ? 110 : 88;
-			return new Rectangle(0, Y, 22, 20);
-		}
+		protected virtual Rectangle GetFrame(int idx, bool isLast) => default;
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
@@ -57,12 +49,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				}
 			}
 			return false;
-		}
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
 		public override void SetDefaults()
@@ -124,7 +110,52 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			endPoint += travelVector * 16;
 		}
 
-		private void SpawnDust(Vector2 position, Vector2 velocity)
+		protected virtual void SpawnDust(Vector2 position, Vector2 velocity)
+		{
+			// spawn dust where the laser hits a tile to hide the inexact drawing length
+		}
+
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			if(chargeScale < 1)
+			{
+				damage = (int)(damage * chargeScale);
+			}
+		}
+		public override bool PreDraw(ref Color lightColor)
+		{
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			ChainDrawer drawer = new ChainDrawer(GetFrame);
+			// extremely arbitrary series of hardcoded ints to make the 
+			// beams line up with the tip of the sword
+			Vector2 baseTangent = baseTangentSize * this.tangent;
+			Vector2 center = Projectile.Center + baseTangent;
+			Vector2 end = endPoint + baseTangent;
+			drawer.DrawChain(texture, center, end, Color.White * chargeScale);
+			return false;
+		}
+	}
+
+	class SoulboundArsenalLaser : MovableLaser
+	{
+		protected Rectangle GoodFrame(int idx, bool isLast)
+		{
+			int Y = isLast ? 0 : idx == 0 ? 44 : 22;
+			return new Rectangle(0, Y, 22, 20);
+		}
+		protected Rectangle EvilFrame(int idx, bool isLast)
+		{
+			int Y = isLast ? 66 : idx == 0 ? 110 : 88;
+			return new Rectangle(0, Y, 22, 20);
+		}
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
+		}
+
+		protected override void SpawnDust(Vector2 position, Vector2 velocity)
 		{
 			int dustCreated = Dust.NewDust(position, 1, 1, 255, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
 			if (Main.rand.NextBool())
@@ -133,14 +164,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			}
 			Main.dust[dustCreated].noGravity = true;
 			Main.dust[dustCreated].velocity *= 0.8f;
-		}
-
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-		{
-			if(chargeScale < 1)
-			{
-				damage = (int)(damage * 0.25f * chargeScale);
-			}
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -152,7 +175,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			ChainDrawer evilDrawer = new ChainDrawer(EvilFrame);
 			// extremely arbitrary series of hardcoded ints to make the 
 			// beams line up with the tip of the sword
-			Vector2 baseTangent = 12 * this.tangent;
+			Vector2 baseTangent = baseTangentSize * this.tangent;
 			Vector2 tangent =  (6 * (0.25f + chargeScale) * (float)Math.Sin(angle)) * this.tangent;
 			Vector2 center = Projectile.Center + baseTangent;
 			Vector2 end = endPoint + baseTangent;

@@ -16,7 +16,7 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
+namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class BabyOgreMinionBuff : CombatPetVanillaCloneBuff
 	{

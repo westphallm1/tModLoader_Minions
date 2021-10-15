@@ -9,35 +9,35 @@ using Terraria.ID;
 using Terraria.Localization;
 using static Terraria.ModLoader.ModContent;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
+namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
-	public class SlimePrinceMinionBuff : CombatPetVanillaCloneBuff
+	public class SlimePrincessMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public SlimePrinceMinionBuff() : base(ProjectileType<SlimePrinceMinion>()) { }
+		public SlimePrincessMinionBuff() : base(ProjectileType<SlimePrincessMinion>()) { }
 
-		public override int VanillaBuffId => BuffID.KingSlimePet;
+		public override int VanillaBuffId => BuffID.QueenSlimePet;
 
-		public override string VanillaBuffName => "KingSlimePet";
+		public override string VanillaBuffName => "QueenSlimePet";
 	}
 
-	public class SlimePrinceMinionItem : CombatPetMinionItem<SlimePrinceMinionBuff, SlimePrinceMinion>
+	public class SlimePrincessMinionItem : CombatPetMinionItem<SlimePrincessMinionBuff, SlimePrincessMinion>
 	{
-		internal override int VanillaItemID => ItemID.KingSlimePetItem;
+		internal override int VanillaItemID => ItemID.QueenSlimePetItem;
 
-		internal override string VanillaItemName => "KingSlimePetItem";
+		internal override string VanillaItemName => "QueenSlimePetItem";
 	}
 
-	public class SlimePrinceMinion : CombatPetSlimeMinion
+	public class SlimePrincessMinion : CombatPetSlimeMinion
 	{
-		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.KingSlimePet;
-		internal override int BuffId => BuffType<SlimePrinceMinionBuff>();
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.QueenSlimePet;
+		internal override int BuffId => BuffType<SlimePrincessMinionBuff>();
 
 		private bool wasFlyingThisFrame = false;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.KingSlimePet") + " (AoMM Version)");
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.QueenSlimePet") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 12;
 			Main.projPet[Projectile.type] = true;
 		}
@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			base.AfterMoving();
 			if(!wasFlyingThisFrame && gHelper.isFlying)
 			{
-				Gore.NewGore(Projectile.Center, Vector2.Zero, GoreID.KingSlimePetCrown);
+				Gore.NewGore(Projectile.Center, Vector2.Zero, GoreID.QueenSlimePetCrown);
 			}
 			wasFlyingThisFrame = gHelper.isFlying;
 		}
@@ -64,9 +64,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		{
 			minFrame = gHelper.isFlying ? 6 : 0;
 			maxFrame = gHelper.isFlying ? 12 : 6;
-			if(gHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
+			if(gHelper.isFlying)
 			{
-				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+				Projectile.rotation = Projectile.velocity.X * 0.05f;
 			} else
 			{
 				Projectile.rotation = 0;

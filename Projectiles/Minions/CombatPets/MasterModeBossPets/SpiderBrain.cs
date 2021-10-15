@@ -15,7 +15,7 @@ using static Terraria.ModLoader.ModContent;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
+namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class SpiderBrainMinionBuff : CombatPetVanillaCloneBuff
 	{
