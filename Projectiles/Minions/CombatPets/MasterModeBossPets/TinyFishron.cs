@@ -42,6 +42,83 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		}
 	}
 
+	public class TinyFishronWhirlpool : ModProjectile
+	{
+		private WhirlpoolDrawer whirlpoolDrawer;
+		private int TimeLeft = 150;
+		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/VanillaClones/BigSharknadoMinion";
+
+		public override void SetStaticDefaults()
+		{
+			Main.projFrames[Projectile.type] = 6;
+		}
+		public sealed override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.tileCollide = false;
+			Projectile.width = 32;
+			Projectile.height = 32;
+			Projectile.friendly = true;
+			Projectile.penetrate = -1;
+			// can hit many npcs at once, so give it a relatively high on hit cooldown
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 20;
+			Projectile.timeLeft = TimeLeft;
+		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			if(TimeLeft - Projectile.timeLeft < 10)
+			{
+				return false;
+			}
+			for(int i = 0; i < whirlpoolDrawer.offsets.Length; i++)
+			{
+				if(whirlpoolDrawer.GetWhirlpoolBox(i).Intersects(targetHitbox))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public override void AI()
+		{
+			base.AI();
+			if(whirlpoolDrawer == null)
+			{
+				whirlpoolDrawer = new WhirlpoolDrawer();
+				whirlpoolDrawer.frameHeight = 
+					Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Height / Main.projFrames[Projectile.type];
+				whirlpoolDrawer.frameWidth = 
+					Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Width;
+				whirlpoolDrawer.AddSpawnDust(Projectile);
+			}
+			int animationFrame = TimeLeft - Projectile.timeLeft;
+			int whirlpoolHeight;
+			if(Projectile.timeLeft > 30)
+			{
+				whirlpoolHeight = Math.Min(6, 2 + animationFrame / 10);
+			} else
+			{
+				whirlpoolHeight = 3 + Projectile.timeLeft / 10;
+			}
+			whirlpoolDrawer.CalculateWhirlpoolPositions(Projectile, animationFrame, whirlpoolHeight, out int height);
+			int heightChange = height - Projectile.height;
+			Projectile.position.Y -= heightChange;
+			Projectile.height = height;
+			whirlpoolDrawer.AddWhirlpoolEffects();
+		}
+
+		public override bool PreDraw(ref Color lightColor)
+		{
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			lightColor = new Color(150, 150, 150, 128);
+			int frame = ((TimeLeft - Projectile.timeLeft) / 5) % 6;
+			whirlpoolDrawer.DrawWhirlpoolStack(texture, lightColor, frame, Main.projFrames[Projectile.type]);
+			return false;
+		}
+	}
 
 	public class TinyFishronMinion : CombatPetHoverDasherMinion
 	{
@@ -49,7 +126,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DukeFishronPet;
 
-		internal override int? FiredProjectileId => ProjectileType<TinyFishronBubble>();
+		int lastHitFrame;
 
 		public override void SetStaticDefaults()
 		{
@@ -63,7 +140,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.SetDefaults();
 			Projectile.width = 24;
 			Projectile.height = 24;
-			attackFrames = 90;
 			circleHelper.idleBumbleFrames = 90;
 			frameSpeed = 5;
 			forwardDir = -1;
@@ -74,19 +150,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			int framesSinceLastShot = animationFrame - hsHelper.lastShootFrame;
-			int bubbleFrequency = (int)Math.Ceiling(attackFrames / 3f);
-			hsHelper.projectileVelocity = 3;
-			base.TargetedMovement(vectorToTargetPosition);
-			if(player.whoAmI == Main.myPlayer && framesSinceLastShot > 0 && framesSinceLastShot % bubbleFrequency == 0)
+			base.OnHitNPC(target, damage, knockback, crit);
+			if(player.whoAmI == Main.myPlayer && animationFrame - lastHitFrame > attackFrames)
 			{
-				Vector2 launchVector = vectorToTargetPosition;
-				launchVector.SafeNormalize();
-				launchVector *= hsHelper.projectileVelocity;
-				hsHelper.FireProjectile(launchVector, (int)FiredProjectileId);
-			} 
+				lastHitFrame = animationFrame;
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
+					target.Center, 
+					Vector2.Zero, 
+					ProjectileType<TinyFishronWhirlpool>(), 
+					Projectile.damage, 
+					Projectile.knockBack, 
+					Main.myPlayer);
+			}
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

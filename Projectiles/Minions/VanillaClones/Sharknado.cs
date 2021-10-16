@@ -293,6 +293,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					bounds, lightColor, 0, origin, scales[i], 0, 0);
 			}
 		}
+
+		internal void AddSpawnDust(Projectile projectile)
+		{
+			// create some dust to show that we've spawned in
+			for(int i = 0; i < 6; i++)
+			{
+				int dustId = Dust.NewDust(projectile.position, projectile.width, projectile.height, 217, 0f, 0f, 100, default, 1.25f);
+				Main.dust[dustId].velocity = (i * MathHelper.TwoPi / 6).ToRotationVector2();
+				Main.dust[dustId].velocity *= 0.5f;
+				Main.dust[dustId].noGravity = true;
+				Main.dust[dustId].noLight = true;
+			}
+		}
 	}
 
 	public class BigSharknadoMinion : EmpoweredMinion
@@ -399,15 +412,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			base.OnSpawn();
 			whirlpoolDrawer.frameHeight = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Height / Main.projFrames[Projectile.type];
 			whirlpoolDrawer.frameWidth = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Width;
-			// create some dust to show that we've spawned in
-			for(int i = 0; i < 6; i++)
-			{
-				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 217, 0f, 0f, 100, default, 1.25f);
-				Main.dust[dustId].velocity = (i * MathHelper.TwoPi / 6).ToRotationVector2();
-				Main.dust[dustId].velocity *= 0.5f;
-				Main.dust[dustId].noGravity = true;
-				Main.dust[dustId].noLight = true;
-			}
+			whirlpoolDrawer.AddSpawnDust(Projectile);
 		}
 		public override void AfterMoving()
 		{
@@ -439,7 +444,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			lightColor = new Color(150, 150, 150, 128);
 			whirlpoolDrawer.DrawWhirlpoolStack(texture, lightColor, Projectile.frame, Main.projFrames[Projectile.type]);

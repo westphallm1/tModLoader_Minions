@@ -92,16 +92,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				target *= maxSpeed;
 				Projectile.velocity = (Projectile.velocity * (inertia - 1) + target) / inertia;
 			}
-		}
-
-		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-		{
-			// don't collide if no LOS to brain
-			if(projHitbox.Intersects(targetHitbox) && !Collision.CanHitLine(Projectile.Center, 1, 1, returnTarget.Center, 1,1))
-			{
-				return false;
-			}
-			return base.Colliding(projHitbox, targetHitbox);
+			// don't deal damage if we've phased through a tile
+			Vector2 pos = Projectile.Center;
+			Projectile.friendly &= !Framing.GetTileSafely((int)(pos.X / 16), (int)(pos.Y / 16)).IsActive;
 		}
 	}
 
@@ -109,6 +102,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BrainOfCthulhuPet;
 		internal override int BuffId => BuffType<SpiderBrainMinionBuff>();
+
+		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel > 4; 
 
 		internal override int GetAttackFrames(CombatPetLevelInfo info) => base.GetAttackFrames(info) / 4;
 

@@ -85,13 +85,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		internal int launchVelocity = 12;
 
+		internal virtual bool ShouldDoShootingMovement => true;
+
 		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
 
 		public abstract void LaunchProjectile(Vector2 launchVector);
 
 		public override void AfterMoving()
 		{
-			Projectile.friendly = false;
+			Projectile.friendly &= !ShouldDoShootingMovement;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -102,7 +104,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		}
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
-
+			if(!ShouldDoShootingMovement)
+			{
+				base.DoGroundedMovement(vector);
+				return;
+			}
 			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
@@ -128,7 +134,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-
+			if(!ShouldDoShootingMovement)
+			{
+				base.TargetedMovement(vectorToTargetPosition);
+				return;
+			}
 			bool inLaunchRange = 
 				Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 4 * preferredDistanceFromTarget;

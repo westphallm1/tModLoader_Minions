@@ -69,11 +69,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			chargeScale = Math.Min(1, MathHelper.Lerp(0, 1, animationFrame / (float)ChargeTime));
 			int i;
 			int step = 16;
+			bool shouldDust = false;
 			for(i = step; i < maxLength; i += step)
 			{
 				Vector2 next = Projectile.Center + travelVector * i;
 				if(!Collision.CanHitLine(endPoint, 1, 1, next, 1, 1))
 				{
+					shouldDust = true;
 					if(step < 2)
 					{
 						break;
@@ -85,6 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				} 
 				else
 				{
+					Lighting.AddLight(next, LightColor.ToVector3() * 0.5f);
 					endPoint = next;
 					if(Main.rand.Next((int)(20 * (3 - 2 * chargeScale))) == 0) {
 						SpawnDust(endPoint, Vector2.Zero);
@@ -96,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			direction.SafeNormalize();
 			tangent = new Vector2(direction.Y, -direction.X);
 			int dustFrequency = (int)(5 * (4 - 3 * chargeScale));
-			if(animationFrame % dustFrequency != 0)
+			if(shouldDust && animationFrame % dustFrequency != 0)
 			{
 				for (i = -8; i <= 8; i += 8)
 				{

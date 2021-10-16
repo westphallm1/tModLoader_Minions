@@ -56,9 +56,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		protected override void SpawnDust(Vector2 position, Vector2 velocity)
 		{
-			if(Main.rand.Next(2) == 0)
+			if(Main.rand.Next(5) == 0)
 			{
-				int dustCreated = Dust.NewDust(position, 1, 1, 255, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
+				int dustCreated = Dust.NewDust(position, 1, 1, 204, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
 				Main.dust[dustCreated].color = Color.Azure;
 				Main.dust[dustCreated].noGravity = true;
 				Main.dust[dustCreated].velocity *= 0.8f;
@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		float initialRotation = 0;
 		Vector2 lastValidTarget;
 
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(60, 90 - 6 * info.Level);
+		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(120, 180 - 6 * info.Level);
 
 		public override void SetStaticDefaults()
 		{
@@ -111,6 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				if(p.active && p.owner == Main.myPlayer && p.type == projType)
 				{
 					MoveLaser(p, vectorToTargetPosition);
+					p.damage = 2 * Projectile.damage;
 					break;
 				}
 			}
@@ -130,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			{
 				initialRotation = vectorToTargetPosition.ToRotation();
 			}
-			float rotation = - MathHelper.Pi / 4 + MathHelper.Pi / 2 * framesSinceFired / rotationFrames;
+			float rotation = - MathHelper.Pi / 4 + MathHelper.TwoPi * framesSinceFired / rotationFrames;
 			float currentRotation = rotation + initialRotation;
 			Vector2 offset = currentRotation.ToRotationVector2() * 32;
 			p.ai[0] = currentRotation;
