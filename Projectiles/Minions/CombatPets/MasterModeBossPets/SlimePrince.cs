@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -27,12 +28,89 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override string VanillaItemName => "KingSlimePetItem";
 	}
 
+	public class SlimePrinceNinjaMinion : CombatPetGroundedMeleeMinion
+	{
+		internal override int BuffId => BuffType<SlimePrinceMinionBuff>();
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[Projectile.type] = 11;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.width = 32;
+			Projectile.height = 26;
+			DrawOffsetX = -2;
+			DrawOriginOffsetY = -14;
+			frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+			{
+				[GroundAnimationState.STANDING] = (0, 0),
+				// other fields set dynamically
+			};
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			if(!gHelper.isFlying && vectorToTarget is Vector2 target && target.Length() < 48)
+			{
+				frameInfo[GroundAnimationState.WALKING] = (4, 7);
+				frameInfo[GroundAnimationState.JUMPING] = (7, 10);
+				frameInfo[GroundAnimationState.FLYING] = (7, 10);
+			} else
+			{
+				frameInfo[GroundAnimationState.WALKING] = (0, 4);
+				frameInfo[GroundAnimationState.JUMPING] = (10, 10);
+				frameInfo[GroundAnimationState.FLYING] = (10, 10);
+			}
+			base.Animate(minFrame, maxFrame);
+		}
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			if(animationFrame > 180)
+			{
+				Projectile.Kill();
+			}
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			float goreVel = 0.25f;
+			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+			{
+				if(Main.rand.Next(3) > 0)
+				{
+					continue;
+				}
+				int goreIdx = Gore.NewGore(Projectile.position, default, Main.rand.Next(61, 64));
+				Main.gore[goreIdx].velocity *= goreVel;
+				Main.gore[goreIdx].velocity += offset;
+			}
+			base.Kill(timeLeft);
+		}
+
+		public override void OnSpawn()
+		{
+			base.OnSpawn();
+			for(int i = 0; i < 3; i++)
+			{
+				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, newColor: Color.Blue, Alpha: 128);
+			}
+		}
+	}
+
 	public class SlimePrinceMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.KingSlimePet;
 		internal override int BuffId => BuffType<SlimePrinceMinionBuff>();
 
 		private bool wasFlyingThisFrame = false;
+
+		int lastSpawnedFrame;
 
 		public override void SetStaticDefaults()
 		{
@@ -72,6 +150,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Projectile.rotation = 0;
 			}
 			base.Animate(minFrame, maxFrame);
+		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			int projType = ProjectileType<SlimePrinceNinjaMinion>();
+			Vector2 launchVel = (-16 * Vector2.UnitY).RotatedByRandom(MathHelper.PiOver4);
+			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] == 0 && animationFrame - lastSpawnedFrame > 240)
+			{
+				lastSpawnedFrame = animationFrame;
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
+					launchVel,
+					projType,
+					Projectile.damage,
+					Projectile.knockBack,
+					Main.myPlayer);
+			}
 		}
 	}
 }

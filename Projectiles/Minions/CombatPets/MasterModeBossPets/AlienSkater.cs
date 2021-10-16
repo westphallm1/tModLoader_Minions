@@ -39,9 +39,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MartianPet;
 		internal override int BuffId => BuffType<AlienSkaterMinionBuff>();
 
-		// fire a spike ball instead every 4th projectile
-		int fireCount;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
