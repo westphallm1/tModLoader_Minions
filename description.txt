@@ -10,6 +10,7 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
+v0.12.2.8 - tML API update
 v0.12.2.7 - Port hairstyles and extra armor player layers to 1.4 version
 v0.12.2.6 - Fix bug with slime train drawing
 v0.12.2.5 - Rebuild for tML API change

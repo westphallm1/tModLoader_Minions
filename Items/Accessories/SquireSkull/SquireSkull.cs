@@ -34,14 +34,12 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 			player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier *= 0.95f;
 			player.GetModPlayer<SquireModPlayer>().squireDamageMultiplierBonus += 0.08f;
 		}
-
-		// TODO update to new API
-		//public override bool CanEquipAccessory(Player player, int slot)
-		//{
-		//	// don't allow side by side with squire skull, so their debuffs don't overwrite each other
-		//	int skullType = ItemType<TechnoCharmAccessory>();
-		//	return slot > 9 || !player.armor.Skip(3).Take(5 + player.GetAmountOfExtraAccessorySlotsToShow()).Any(a => !a.IsAir && a.type == skullType);
-		//}
+		public override bool CanEquipAccessory(Player player, int slot, bool modded)
+		{
+			// don't allow side by side with squire skull, so their debuffs don't overwrite each other
+			int skullType = ItemType<TechnoCharmAccessory>();
+			return !modded && slot > 9 || !player.armor.Skip(3).Take(5 + player.GetAmountOfExtraAccessorySlotsToShow()).Any(a => !a.IsAir && a.type == skullType);
+		}
 	}
 
 	class SquireSkullProjectile : SquireAccessoryMinion
