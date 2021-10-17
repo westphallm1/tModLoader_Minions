@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Projectile.penetrate = -1;
 			// can hit many npcs at once, so give it a relatively high on hit cooldown
 			Projectile.usesLocalNPCImmunity = true;
-			Projectile.localNPCHitCooldown = 20;
+			Projectile.localNPCHitCooldown = 30;
 			Projectile.timeLeft = TimeLeft;
 		}
 

@@ -59,10 +59,5 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				[GroundAnimationState.WALKING] = (2, 9),
 			};
 		}
-
-		public override void Animate(int minFrame = 0, int? maxFrame = null)
-		{
-			base.Animate(minFrame, maxFrame);
-		}
 	}
 }

@@ -52,13 +52,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			maxLength = 16 * 16;
 			TimeToLive = 120;
 			Projectile.timeLeft = TimeToLive;
+			Projectile.localNPCHitCooldown = 6; // only on enemy for a couple frames, let it hit twice
 		}
 
 		protected override void SpawnDust(Vector2 position, Vector2 velocity)
 		{
 			if(Main.rand.Next(5) == 0)
 			{
-				int dustCreated = Dust.NewDust(position, 1, 1, 204, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
+				int dustCreated = Dust.NewDust(position, 1, 1, DustID.UltraBrightTorch, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
 				Main.dust[dustCreated].color = Color.Azure;
 				Main.dust[dustCreated].noGravity = true;
 				Main.dust[dustCreated].velocity *= 0.8f;
@@ -129,9 +130,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			lastValidTarget = vectorToTargetPosition;
 			if(framesSinceFired == 0)
 			{
-				initialRotation = vectorToTargetPosition.ToRotation();
+				// start a bit behind the enemy for better visual effect
+				initialRotation = vectorToTargetPosition.ToRotation() - MathHelper.Pi/4;
 			}
-			float rotation = - MathHelper.Pi / 4 + MathHelper.TwoPi * framesSinceFired / rotationFrames;
+			float rotation;
+			if(framesSinceFired < rotationFrames/2)
+			{
+				rotation = MathHelper.TwoPi * framesSinceFired / rotationFrames;
+			} else
+			{
+				rotation = MathHelper.TwoPi - MathHelper.TwoPi * framesSinceFired / rotationFrames;
+			}
 			float currentRotation = rotation + initialRotation;
 			Vector2 offset = currentRotation.ToRotationVector2() * 32;
 			p.ai[0] = currentRotation;

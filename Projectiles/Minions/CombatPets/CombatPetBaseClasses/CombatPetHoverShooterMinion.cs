@@ -19,6 +19,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
 		internal virtual int GetProjectileVelocity(CombatPetLevelInfo info) => (int)info.BaseSpeed + 3;
 
+		internal virtual bool DoBumblingMovement => false;
+
+		// counters for bumbling movement
+		private int framesSinceLastHit;
+		private int cooldownAfterHitFrames = 16;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -44,6 +50,48 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			Projectile.originalDamage = leveledPetPlayer.PetDamage;
 			UpdateHsHelperWithPetLevel(leveledPetPlayer.PetLevel);
 			return base.IdleBehavior();
+		}
+
+		internal void BumblingMovement(Vector2 vectorToTargetPosition)
+		{
+
+			float inertia = Math.Max(12, 18 - 2 * leveledPetPlayer.PetLevel);
+			float speed = hsHelper.travelSpeed;
+			vectorToTargetPosition.SafeNormalize();
+			vectorToTargetPosition *= speed;
+			framesSinceLastHit++;
+			if (framesSinceLastHit < cooldownAfterHitFrames && framesSinceLastHit > cooldownAfterHitFrames / 2)
+			{
+				// start turning so we don't double directly back
+				Vector2 turnVelocity = new Vector2(-Projectile.velocity.Y, Projectile.velocity.X) / 8;
+				turnVelocity *= Math.Sign(Projectile.velocity.X);
+				Projectile.velocity += turnVelocity;
+			}
+			else if (framesSinceLastHit++ > cooldownAfterHitFrames)
+			{
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+			}
+			else
+			{
+				Projectile.velocity.SafeNormalize();
+				Projectile.velocity *= Math.Min(0.75f*speed, 10); // kick it away from enemies that it's just hit
+			}
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if(DoBumblingMovement)
+			{
+				BumblingMovement(vectorToTargetPosition);
+			} else
+			{
+				base.TargetedMovement(vectorToTargetPosition);
+			}
+		}
+
+		public override void OnHitTarget(NPC target)
+		{
+			framesSinceLastHit = 0;
 		}
 		
 		private void UpdateHsHelperWithPetLevel(int petLevel)
@@ -94,7 +142,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
+		{	
+			if(DoBumblingMovement)
+			{
+				BumblingMovement(vectorToTargetPosition);
+				return;
+			} 
 			int dashFrames = (int)(attackFrames * 0.75f);
 			int dashCyle = Math.Max(18, (int)(attackFrames * 0.25f));
 			int dashLength = 15; // this should probably be constant

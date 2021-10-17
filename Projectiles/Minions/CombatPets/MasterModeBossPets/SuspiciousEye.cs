@@ -39,6 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EyeOfCthulhuPet;
 
+		internal override bool DoBumblingMovement => leveledPetPlayer.PetLevel > 0;
 
 		public override void SetStaticDefaults()
 		{
@@ -66,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(isDashing)
+			if(isDashing && !DoBumblingMovement)
 			{
 				minFrame = 10;
 				maxFrame = 16;

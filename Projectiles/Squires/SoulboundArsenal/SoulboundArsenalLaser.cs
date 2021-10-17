@@ -60,6 +60,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			Projectile.friendly = true;
 			Projectile.width = 1;
 			Projectile.height = 1;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 10;
 		}
 
 		public override void AI()
