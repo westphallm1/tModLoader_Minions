@@ -46,6 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	{
 		private WhirlpoolDrawer whirlpoolDrawer;
 		private int TimeLeft = 150;
+		private NPC targetNPC;
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/VanillaClones/BigSharknadoMinion";
 
 		public override void SetStaticDefaults()
@@ -84,6 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void AI()
 		{
+			// visual effects
 			base.AI();
 			if(whirlpoolDrawer == null)
 			{
@@ -108,6 +110,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Projectile.position.Y -= heightChange;
 			Projectile.height = height;
 			whirlpoolDrawer.AddWhirlpoolEffects();
+			// Start moving towards a target eventually 
+			if(animationFrame < 30)
+			{
+				return;
+			}
+			if(targetNPC == null || !targetNPC.active)
+			{
+				targetNPC = Minion.GetClosestEnemyToPosition(Projectile.Center, 300);
+				return;
+			}
+			Vector2 target = targetNPC.Center - Projectile.Bottom;
+			target.SafeNormalize();
+			target *= 3; // slow
+			int inertia = 16;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + target) / inertia;
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -162,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					target.Center, 
 					Vector2.Zero, 
 					ProjectileType<TinyFishronWhirlpool>(), 
-					Projectile.damage, 
+					(int)(1.5f * Projectile.damage), 
 					Projectile.knockBack, 
 					Main.myPlayer);
 			}

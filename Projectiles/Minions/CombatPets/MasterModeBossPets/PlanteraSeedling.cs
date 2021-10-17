@@ -108,6 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			bool spawnThornBall = fireCount++ % 4 == 0;
 			int projId = spawnThornBall ? ProjectileType<PlanteraSeedlingThornBall>() : ProjectileType<PlanteraSeedlingSeed>();
 			float damageMult = spawnThornBall ? 1.5f : 1;
+			launchVector *= spawnThornBall ? 0.6f : 1;
 			Projectile.NewProjectile(
 				Projectile.GetProjectileSource_FromThis(),
 				Projectile.Center,

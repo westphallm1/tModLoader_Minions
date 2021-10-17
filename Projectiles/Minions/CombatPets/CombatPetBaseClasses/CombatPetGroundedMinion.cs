@@ -154,10 +154,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 			// don't move if we're in range-ish of the target
 			if (Math.Abs(vectorToTargetPosition.X) < 1.25f * preferredDistanceFromTarget && 
-				Math.Abs(vectorToTargetPosition.X) > 0.5 * preferredDistanceFromTarget)
+				Math.Abs(vectorToTargetPosition.X) > 0.5f * preferredDistanceFromTarget)
 			{
 				vectorToTargetPosition.X = 0;
+			} else if (Math.Abs(vectorToTargetPosition.X) < 0.5f * preferredDistanceFromTarget)
+			{
+				vectorToTargetPosition.X -= Math.Sign(vectorToTargetPosition.X) * 0.75f * preferredDistanceFromTarget;
 			}
+
 			if(Math.Abs(vectorToTargetPosition.Y) < 1.25f * preferredDistanceFromTarget && 
 				Math.Abs(vectorToTargetPosition.Y) > 0.5 * preferredDistanceFromTarget)
 			{

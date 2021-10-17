@@ -122,7 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		protected override int dustType => 135;
 
 		private int lastShootFrame;
-		private readonly int fireRate = 30;
+		private readonly int fireRate = 60;
 
 		public sealed override void SetDefaults()
 		{

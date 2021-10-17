@@ -96,9 +96,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < 2; i++)
 			{
-				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, newColor: Color.Blue, Alpha: 128);
+				int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime);
+				Main.dust[idx].color = Color.LightBlue * 0.75f;
 			}
 		}
 	}

@@ -103,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BrainOfCthulhuPet;
 		internal override int BuffId => BuffType<SpiderBrainMinionBuff>();
 
-		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel > 4; 
+		// internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel > 4; 
 
 		internal override int GetAttackFrames(CombatPetLevelInfo info) => base.GetAttackFrames(info) / 4;
 

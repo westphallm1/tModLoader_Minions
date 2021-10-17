@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.SetDefaults();
 			Projectile.width = 18;
 			Projectile.height = 18;
-			Projectile.timeLeft = 60;
+			Projectile.timeLeft = 90;
 			Projectile.tileCollide = true;
 			Projectile.friendly = false;
 		}
@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Vector2 target = targetNPC.Center - Projectile.Center;
 			Projectile.rotation = target.ToRotation() + MathHelper.PiOver2;
 			Projectile.velocity *= 0.95f; // gradually come to a halt
-			bool shouldShootThisFrame = Projectile.timeLeft == 20 || Projectile.timeLeft == 2;
+			bool shouldShootThisFrame = Projectile.timeLeft == 50 || Projectile.timeLeft == 30;
 			if(Projectile.owner == Main.myPlayer && shouldShootThisFrame)
 			{
 				target.SafeNormalize();

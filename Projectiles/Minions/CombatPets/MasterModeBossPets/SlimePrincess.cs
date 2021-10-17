@@ -27,6 +27,74 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override string VanillaItemName => "QueenSlimePetItem";
 	}
 
+	public class SlimePrincessHelperSlimeMinion : CombatPetSlimeMinion
+	{
+		internal override int BuffId => BuffType<SlimePrincessMinionBuff>();
+		internal int spriteType = 0;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[Projectile.type] = 12;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.width = 20;
+			Projectile.height = 20;
+			DrawOffsetX = (Projectile.width - 44) / 2;
+			DrawOriginOffsetY = 0;
+		}
+
+		public override void OnSpawn()
+		{
+			spriteType = Main.rand.Next(2);
+			SpawnDust();
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			minFrame = 6 * spriteType + (gHelper.isFlying ? 2 : 0);
+			maxFrame = 6 * spriteType + (gHelper.isFlying ? 6 : 2);
+			base.Animate(minFrame, maxFrame);
+		}
+
+		public override bool PreDraw(ref Color lightColor)
+		{
+			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 128);
+			float r = Projectile.rotation;
+			Vector2 pos = Projectile.Center;
+			SpriteEffects effects = Projectile.velocity.X < 0 ? 0 : SpriteEffects.FlipHorizontally;
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
+				bounds, translucentColor, r,
+				origin, 1, effects, 0);
+			return false;
+		}
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			if(animationFrame > 180)
+			{
+				Projectile.Kill();
+				SpawnDust();
+			}
+		}
+
+		private void SpawnDust()
+		{
+			for(int i = 0; i < 2; i++)
+			{
+				int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PinkSlime);
+			}
+		}
+	}
+
 	public class SlimePrincessMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.QueenSlimePet;
@@ -34,10 +102,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		private bool wasFlyingThisFrame = false;
 
+		int lastSpawnedFrame;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.QueenSlimePet") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 12;
 			Main.projPet[Projectile.type] = true;
 		}
@@ -72,6 +141,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Projectile.rotation = 0;
 			}
 			base.Animate(minFrame, maxFrame);
+		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			int projType = ProjectileType<SlimePrincessHelperSlimeMinion>();
+			Vector2 launchVel = (-16 * Vector2.UnitY).RotatedByRandom(MathHelper.PiOver4);
+			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] == 0 && animationFrame - lastSpawnedFrame > 240)
+			{
+				lastSpawnedFrame = animationFrame;
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
+					launchVel,
+					projType,
+					Projectile.damage,
+					Projectile.knockBack,
+					Main.myPlayer);
+			}
 		}
 	}
 }
