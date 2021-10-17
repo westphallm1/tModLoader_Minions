@@ -135,7 +135,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				for (int k = 0; k < blurHelper.BlurLength; k++)
 				{
 					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-					blurPos = blurPos - Main.screenPosition + origin;
+					blurPos = blurPos - Main.screenPosition;
 					Main.EntitySpriteDraw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
 				}
 			}
@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		public override void AfterMoving()
 		{
-			blurHelper.Update(Projectile.position, isDashing);
+			blurHelper.Update(Projectile.Center, isDashing);
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

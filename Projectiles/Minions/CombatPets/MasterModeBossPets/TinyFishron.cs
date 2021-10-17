@@ -179,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					target.Center, 
 					Vector2.Zero, 
 					ProjectileType<TinyFishronWhirlpool>(), 
-					(int)(1.5f * Projectile.damage), 
+					Projectile.damage, 
 					Projectile.knockBack, 
 					Main.myPlayer);
 			}
