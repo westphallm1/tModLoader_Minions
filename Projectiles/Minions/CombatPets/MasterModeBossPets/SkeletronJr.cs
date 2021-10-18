@@ -39,33 +39,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal Vector2 TargetPosition { get; set; }
 		internal int Frame { get; set; }
 		internal int SpriteDirection { get; set; }
+		internal float Rotation { get; set; }
 	}
-
-
-	public class SkeletronJrMinion : CombatPetHoverShooterMinion
+	
+	public abstract class SkeletronCombatPet : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<SkeletronJrMinionBuff>();
-
-		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SkeletronPet;
 		internal override int? FiredProjectileId => null;
 
 
 		internal SkeletronHand[] hands;
 
-		internal int handFrames = 4;
-		internal int firstHandFrame = 7;
-		int attackCycle;
+		internal int attackCycle;
 
 		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(20, 45 - 4 * info.Level);
 		internal override bool DoBumblingMovement => attackCycle > 4;
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SkeletronJr"));
-			Main.projFrames[Projectile.type] = 10;
-			IdleLocationSets.circlingHead.Add(Projectile.type);
-		}
 
 		public override void SetDefaults()
 		{
@@ -104,8 +91,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Vector2 handPosition = hands[i].Position + Projectile.Center;
 				effects = hands[i].SpriteDirection == 1  ? 0 : SpriteEffects.FlipHorizontally;
 				bounds = new Rectangle(0, hands[i].Frame * frameHeight, texture.Width, frameHeight);
+				r = hands[i].Rotation;
 				Main.EntitySpriteDraw(texture, handPosition - Main.screenPosition,
-					bounds, lightColor, 0, origin, 1, effects, 0);
+					bounds, lightColor, r, origin, 1, effects, 0);
 			}
 			
 			return false;
@@ -156,29 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 		}
 
-		internal virtual void UpdateHand(ref SkeletronHand hand, int handIdx)
-		{
-			// very hacky way to get -1 and 1
-			Vector2 offset;
-			int shootFrame = animationFrame - hsHelper.lastShootFrame;
-			if(attackCycle > 4 || handIdx != attackCycle % 2 || vectorToTarget is not Vector2 target || shootFrame > attackFrames)
-			{
-				Vector2 baseOffset = 32 * Vector2.UnitX * Math.Sign(handIdx - 0.5f);
-				float cycleAngle = MathHelper.TwoPi * animationFrame / 120 + handIdx * MathHelper.Pi;
-				Vector2 cycleOffset = 8 * cycleAngle.ToRotationVector2();
-				offset = baseOffset + cycleOffset;
-			} else
-			{
-				float attackFraction = MathF.Sin(MathHelper.Pi * shootFrame / attackFrames);
-				offset = target * attackFraction;
-			}
-			int handFrame = (handIdx + animationFrame / 10) % 4;
-			handFrame = handFrame == 3 ? 1 : handFrame;
-			handFrame += firstHandFrame;
-			hand.TargetPosition = offset;
-			hand.Frame = handFrame;
-			hand.SpriteDirection = handIdx == 0 ? 1 : -1;
-		}
+		internal abstract void UpdateHand(ref SkeletronHand hand, int handIdx);
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
@@ -210,6 +176,53 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				base.Animate(0, 6);
 				Projectile.rotation = Projectile.velocity.X * 0.05f;
 			}
+		}
+	}
+
+
+	public class SkeletronJrMinion : SkeletronCombatPet
+	{
+		internal override int BuffId => BuffType<SkeletronJrMinionBuff>();
+
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SkeletronPet;
+		internal override int? FiredProjectileId => null;
+
+
+		internal int handFrames = 4;
+		internal int firstHandFrame = 7;
+
+		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(20, 45 - 4 * info.Level);
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SkeletronJr"));
+			Main.projFrames[Projectile.type] = 10;
+			IdleLocationSets.circlingHead.Add(Projectile.type);
+		}
+
+		internal override void UpdateHand(ref SkeletronHand hand, int handIdx)
+		{
+			// very hacky way to get -1 and 1
+			Vector2 offset;
+			int shootFrame = animationFrame - hsHelper.lastShootFrame;
+			if(attackCycle > 4 || handIdx != attackCycle % 2 || vectorToTarget is not Vector2 target || shootFrame > attackFrames)
+			{
+				Vector2 baseOffset = 32 * Vector2.UnitX * Math.Sign(handIdx - 0.5f);
+				float cycleAngle = MathHelper.TwoPi * animationFrame / 120 + handIdx * MathHelper.Pi;
+				Vector2 cycleOffset = 8 * cycleAngle.ToRotationVector2();
+				offset = baseOffset + cycleOffset;
+			} else
+			{
+				float attackFraction = MathF.Sin(MathHelper.Pi * shootFrame / attackFrames);
+				offset = target * attackFraction;
+			}
+			int handFrame = (handIdx + animationFrame / 10) % 4;
+			handFrame = handFrame == 3 ? 1 : handFrame;
+			handFrame += firstHandFrame;
+			hand.TargetPosition = offset;
+			hand.Frame = handFrame;
+			hand.SpriteDirection = handIdx == 0 ? 1 : -1;
 		}
 	}
 }
