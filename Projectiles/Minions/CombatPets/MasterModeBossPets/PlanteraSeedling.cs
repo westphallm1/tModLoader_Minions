@@ -67,7 +67,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Kill(int timeLeft)
 		{
-			// TODO dust
+			for(int i = 0; i < 5; i++)
+			{
+				Dust.NewDust(Projectile.position, 32, 32, DustID.PinkCrystalShard);
+			}
 		}
 	}
 

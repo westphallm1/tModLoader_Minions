@@ -49,6 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
 			Projectile.originalDamage = leveledPetPlayer.PetDamage;
 			UpdateHsHelperWithPetLevel(leveledPetPlayer.PetLevel);
+			dealsContactDamage = DoBumblingMovement;
 			return base.IdleBehavior();
 		}
 
@@ -85,6 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				BumblingMovement(vectorToTargetPosition);
 			} else
 			{
+				framesSinceLastHit = cooldownAfterHitFrames;
 				base.TargetedMovement(vectorToTargetPosition);
 			}
 		}
@@ -142,7 +144,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{	
+		{
+			dealsContactDamage = true;
 			if(DoBumblingMovement)
 			{
 				BumblingMovement(vectorToTargetPosition);

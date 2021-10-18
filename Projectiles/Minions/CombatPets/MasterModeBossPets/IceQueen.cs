@@ -67,6 +67,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 		}
 
+		public override void Kill(int timeLeft)
+		{
+			SoundEngine.PlaySound(new LegacySoundStyle(2, 50).WithVolume(0.5f), Projectile.Center);
+			for(int i = 0; i < 5; i++)
+			{
+				int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BlueFairy);
+				Main.dust[idx].noGravity = true;
+				Main.dust[idx].velocity *= 0.75f;
+			}
+		}
+
 
 	}
 
@@ -79,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int? FiredProjectileId => ProjectileType<IceQueenIcicle>();
 		internal override LegacySoundStyle ShootSound => SoundID.Item17;
 
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(10, 20 - 2 * info.Level);
+		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(20, 40 - 4 * info.Level);
 		internal override int GetProjectileVelocity(CombatPetLevelInfo info) => 10;
 		public override void SetStaticDefaults()
 		{
@@ -99,23 +110,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			if(player.whoAmI == Main.myPlayer && targetNPCIndex is int idx)
 			{
-				int spawnCount = Main.rand.Next(2) + 1;
-				for(int i = 0; i < spawnCount; i++)
-				{
-					Vector2 spawnAngle = Vector2.UnitY.RotatedBy(
-						Main.rand.NextFloat(MathHelper.Pi / 4) - MathHelper.PiOver2 / 8);
-					Vector2 spawnPos = Main.npc[idx].Top;
-					float spawnY = spawnPos.Y;
-					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
-						spawnPos - 128 * spawnAngle,
-						VaryLaunchVelocity(hsHelper.projectileVelocity * spawnAngle),
-						projId,
-						Projectile.damage,
-						Projectile.knockBack,
-						Main.myPlayer,
-						ai0: spawnY);
-				}
+				Vector2 spawnAngle = Vector2.UnitY.RotatedBy(
+					Main.rand.NextFloat(MathHelper.Pi / 4) - MathHelper.PiOver2 / 8);
+				Vector2 spawnPos = Main.npc[idx].Top;
+				float spawnY = spawnPos.Y;
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
+					spawnPos - 128 * spawnAngle,
+					VaryLaunchVelocity(hsHelper.projectileVelocity * spawnAngle),
+					projId,
+					Projectile.damage,
+					Projectile.knockBack,
+					Main.myPlayer,
+					ai0: spawnY);
 			}
 		}
 

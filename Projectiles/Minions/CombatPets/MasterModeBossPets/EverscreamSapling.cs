@@ -54,6 +54,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void Kill(int timeLeft)
 		{
 			// TODO dust
+			SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
+			for (int i = 0; i < 10; i++)
+			{
+				int dustType = 90 - Projectile.frame;
+				int dustIdx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType);
+				Main.dust[dustIdx].noLight = true;
+				Main.dust[dustIdx].scale = 0.8f;
+			}
 		}
 	}
 
@@ -75,7 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Projectile.width = 32;
 			Projectile.height = 32;
 			// DrawOffsetX = -2;
-			DrawOriginOffsetY = -24;
+			DrawOriginOffsetY = -26;
 			attackFrames = 12;
 			frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
 			{
@@ -91,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			int projId = ProjectileType<EverscreamSaplingOrnament>();
 			Projectile.NewProjectile(
 				Projectile.GetProjectileSource_FromThis(),
-				Projectile.Center,
+				Projectile.Top,
 				VaryLaunchVelocity(launchVector),
 				projId,
 				Projectile.damage,
