@@ -9,6 +9,7 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -81,6 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					Projectile.damage,
 					Projectile.knockBack,
 					Main.myPlayer);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 11).WithVolume(0.5f), Projectile.position);
 			}
 		}
 
@@ -109,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		protected override int dustType => 135;
 
 		private int lastHitFrame = 0;
-		private int probeSpawnRate = 45;
+		private int ProbeSpawnRate => Math.Max(20, 60 - 6 * leveledPetPlayer.PetLevel);
 
 		public override void SetStaticDefaults()
 		{
@@ -124,10 +126,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if(player.whoAmI == Main.myPlayer && animationFrame - lastHitFrame > probeSpawnRate)
+			if(player.whoAmI == Main.myPlayer && animationFrame - lastHitFrame > ProbeSpawnRate)
 			{
 				lastHitFrame = animationFrame;
-				Vector2 launchVector = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * 6;
+				Vector2 launchVector = -Vector2.UnitY.RotatedByRandom(MathHelper.PiOver4) * 6;
 				Projectile.NewProjectile(
 					Projectile.GetProjectileSource_FromThis(),
 					target.Center,
