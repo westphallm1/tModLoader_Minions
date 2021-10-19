@@ -2,6 +2,7 @@
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -60,6 +61,44 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			hands = new SkeletronHand[4];
 		}
 
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.TargetedMovement(vectorToTargetPosition);
+			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
+			bool isLaserFrame = attackCycle == 2 && (framesSinceShoot == attackFrames / 4 || framesSinceShoot == 3 * attackFrames / 4);
+			bool isBombFrame = attackCycle == 4 && framesSinceShoot == attackFrames / 4;
+			bool shouldShoot = player.whoAmI == Main.myPlayer && (isLaserFrame || isBombFrame);
+			if(shouldShoot)
+			{
+				Vector2 target = vectorToTargetPosition;
+				target.SafeNormalize();
+				Vector2 spawnPos;
+				int damage;
+				int projId;
+				if(isLaserFrame)
+				{
+					target *= 12;
+					spawnPos = Projectile.Center + hands[1].Position;
+					damage = Projectile.damage;
+					projId = ProjectileType<MiniTwinsLaser>();
+				} else 
+				{
+					target *= 8;
+					spawnPos = Projectile.Center + hands[3].Position;
+					damage = 3 * Projectile.damage / 2;
+					projId = ProjectileType<PirateCannonball>();
+				}
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
+					spawnPos,
+					VaryLaunchVelocity(target),
+					projId,
+					damage,
+					Projectile.knockBack,
+					player.whoAmI);
+
+			}
+		}
 		internal override void UpdateHand(ref SkeletronHand hand, int handIdx)
 		{
 			// very hacky way to get -1 and 1
