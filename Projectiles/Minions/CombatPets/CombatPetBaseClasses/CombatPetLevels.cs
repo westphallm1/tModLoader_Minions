@@ -142,6 +142,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 	public abstract class CombatPetMinionItem<TBuff, TProj> : VanillaCloneMinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion
 	{
+
+		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		{
+			tooltips.Add(new TooltipLine(Mod, "CombatPetDescription", 
+				"This pet's fighting spirit has been awakened!\n" +
+				"It can be powered up by holding a Combat Pet Emblem.")
+			{
+				overrideColor = Color.LimeGreen
+			});
+		}
+
 		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			ApplyBuff(player);

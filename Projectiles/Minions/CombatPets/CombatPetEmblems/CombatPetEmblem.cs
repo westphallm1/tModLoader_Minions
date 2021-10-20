@@ -44,11 +44,101 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class GoldenCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 1;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Golden Combat Pet Emblem");
+		}
+	}
+
+	class PlatinumCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 1;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Platinum Combat Pet Emblem");
+		}
+	}
+
+	class CorruptCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 2;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Corrupt Combat Pet Emblem");
+		}
+	}
+
+	class CrimsonCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 2;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Crimson Combat Pet Emblem");
+		}
+	}
+
+	class SkeletalCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 3;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Skeletal Combat Pet Emblem");
+		}
+	}
+
+	class SoulfulCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 4;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Soulful Combat Pet Emblem");
+		}
+	}
+
+
+	class HallowedCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 5;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Spectre Combat Pet Emblem");
+		}
+	}
+
+	class SpectreCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 6;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Spectre Combat Pet Emblem");
+		}
+	}
+
+	class StardustCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 7;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Stardust Combat Pet Emblem");
+		}
+	}
+
+	class CelestialCombatPetEmblem : CombatPetEmblem
+	{
+		internal override int PetLevel => 8;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Stardust Combat Pet Emblem");
 		}
 	}
 }
