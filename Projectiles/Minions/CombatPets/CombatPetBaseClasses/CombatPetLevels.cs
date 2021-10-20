@@ -20,13 +20,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal int BaseDamage; // The base damage done by combat pets at this level of progression
 		internal int BaseSearchRange; // The base distance combat pets will seek from the player 
 		internal float BaseSpeed; // How the AI actually uses speed varies quite a bit from type to type ...
+		internal string Description; // Used in combat pet item tooltips referring to level up points
 
-		public CombatPetLevelInfo(int level, int damage, int searchRange, int baseSpeed)
+		public CombatPetLevelInfo(int level, int damage, int searchRange, int baseSpeed, string description)
 		{
 			Level = level;
 			BaseDamage = damage;
 			BaseSearchRange = searchRange;
 			BaseSpeed = baseSpeed;
+			Description = description;
 		}
 	}
 	class CombatPetLevelTable : ModSystem
@@ -36,15 +38,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void Load()
 		{
 			PetLevelTable = new CombatPetLevelInfo[]{
-				new(0, 6, 500, 8), // Base level
-				new(1, 8, 550, 8), // ore tier
-				new(2, 11, 575, 8), // EoC - tier
-				new(3, 16, 650, 9), // Dungeon Tier
-				new(4, 24, 750, 12), // Post WoF
-				new(5, 32, 800, 14), // Post Mech
-				new(6, 42, 900, 15), // Post Plantera
-				new(7, 48, 950, 15), // Post Pillars
-				new(8, 60, 1100, 16) // Post Moon Lord
+				new(0, 6, 500, 8, "Base"), // Base level
+				new(1, 8, 550, 8, "Golden"), // ore tier
+				new(2, 11, 575, 8, "Demonite"), // EoC - tier
+				new(3, 16, 650, 9, "Skeletal"), // Dungeon Tier
+				new(4, 24, 750, 12, "Soulful"), // Post WoF
+				new(5, 32, 800, 14, "Hallowed"), // Post Mech
+				new(6, 42, 900, 15, "Spectre"), // Post Plantera
+				new(7, 48, 950, 15, "Stardust"), // Post Pillars
+				new(8, 60, 1100, 16, "Celestial") // Post Moon Lord
 			};
 		}
 
@@ -142,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 	public abstract class CombatPetMinionItem<TBuff, TProj> : VanillaCloneMinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion
 	{
-
+		internal virtual int AttackPatternUpdateTier => 0;
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
 			tooltips.Add(new TooltipLine(Mod, "CombatPetDescription", 
@@ -151,6 +153,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			{
 				overrideColor = Color.LimeGreen
 			});
+
+
+			LeveledCombatPetModPlayer player = Main.player[Main.myPlayer].GetModPlayer<LeveledCombatPetModPlayer>();
+			if(AttackPatternUpdateTier == 0)
+			{
+				return;
+			} else if (AttackPatternUpdateTier > player.PetLevel)
+			{
+				tooltips.Add(new TooltipLine(Mod, "CombatPetNotLeveledUp", 
+					"This pet will gain a stronger attack pattern if you hold a\n" +
+					CombatPetLevelTable.PetLevelTable[AttackPatternUpdateTier].Description + 
+					" Combat Pet Emblem or better.")
+				{
+					overrideColor = Color.Gray
+				});
+			} else
+			{
+				tooltips.Add(new TooltipLine(Mod, "CombatPetLeveledUp", 
+					"Your emblem enables this pet's stronger attack pattern!")
+				{
+					overrideColor = Color.LimeGreen
+				});
+			}
 		}
 
 		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

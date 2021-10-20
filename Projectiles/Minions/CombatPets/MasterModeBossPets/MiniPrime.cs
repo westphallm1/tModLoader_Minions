@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Vector2 cycleOffset = 8 * cycleAngle.ToRotationVector2();
 				offset = baseOffset + cycleOffset;
 				hand.Rotation = 0;
-				hand.SpriteDirection = Projectile.spriteDirection;
+				hand.SpriteDirection = forwardDir * Math.Sign(Projectile.velocity.X);
 			} else
 			{
 				float attackFraction = MathF.Sin(MathHelper.Pi * shootFrame / attackFrames);

@@ -49,6 +49,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Golden Combat Pet Emblem");
 		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(silver: 50);
+		}
+		public override void AddRecipes() =>
+			CreateRecipe(1).AddIngredient(ItemID.GoldBar, 12).AddTile(TileID.Anvils).Register();
 	}
 
 	class PlatinumCombatPetEmblem : CombatPetEmblem
@@ -59,6 +66,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Platinum Combat Pet Emblem");
 		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(silver: 50);
+		}
+		public override void AddRecipes() =>
+			CreateRecipe(1).AddIngredient(ItemID.PlatinumBar, 12).AddTile(TileID.Anvils).Register();
 	}
 
 	class CorruptCombatPetEmblem : CombatPetEmblem
@@ -69,6 +83,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Corrupt Combat Pet Emblem");
 		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(gold: 1, silver: 50);
+			Item.rare = ItemRarityID.Blue;
+		}
+		public override void AddRecipes() =>
+			CreateRecipe(1).AddIngredient(ItemID.DemoniteBar, 12).AddTile(TileID.Anvils).Register();
 	}
 
 	class CrimsonCombatPetEmblem : CombatPetEmblem
@@ -79,6 +102,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crimson Combat Pet Emblem");
 		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(gold: 1, silver: 50);
+			Item.rare = ItemRarityID.Blue;
+		}
+		public override void AddRecipes() =>
+			CreateRecipe(1).AddIngredient(ItemID.CrimtaneBar, 12).AddTile(TileID.Anvils).Register();
 	}
 
 	class SkeletalCombatPetEmblem : CombatPetEmblem
@@ -89,6 +121,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Skeletal Combat Pet Emblem");
 		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(silver: 5);
+			Item.rare = ItemRarityID.Green;
+		}
+
+		public override void AddRecipes() =>
+			CreateRecipe(1).AddIngredient(ItemID.Bone, 50).AddTile(TileID.Anvils).Register();
 	}
 
 	class SoulfulCombatPetEmblem : CombatPetEmblem
@@ -99,6 +140,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulful Combat Pet Emblem");
 		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(silver: 50);
+			Item.rare = ItemRarityID.LightRed;
+		}
+
+		public override void AddRecipes() => CreateRecipe(1)
+			.AddIngredient(ItemID.SoulofLight, 8)
+			.AddIngredient(ItemID.SoulofNight, 8)
+			.AddTile(TileID.Anvils).Register();
 	}
 
 
@@ -108,8 +160,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spectre Combat Pet Emblem");
+			DisplayName.SetDefault("Hallowed Combat Pet Emblem");
 		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(gold: 4);
+			Item.rare = ItemRarityID.Pink;
+		}
+
+		public override void AddRecipes() => CreateRecipe(1)
+			.AddIngredient(ItemID.HallowedBar, 12)
+			.AddIngredient(ItemID.SoulofSight, 1)
+			.AddIngredient(ItemID.SoulofMight, 1)
+			.AddIngredient(ItemID.SoulofFright, 1)
+			.AddTile(TileID.MythrilAnvil).Register();
 	}
 
 	class SpectreCombatPetEmblem : CombatPetEmblem
@@ -120,6 +185,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Spectre Combat Pet Emblem");
 		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(gold: 11);
+			Item.rare = ItemRarityID.Yellow;
+		}
+
+		public override void AddRecipes() => CreateRecipe(1)
+			.AddIngredient(ItemID.SpectreBar, 12)
+			.AddTile(TileID.MythrilAnvil).Register();
 	}
 
 	class StardustCombatPetEmblem : CombatPetEmblem
@@ -130,6 +206,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Stardust Combat Pet Emblem");
 		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(gold: 8);
+			Item.rare = ItemRarityID.Red;
+		}
+
+		public override void AddRecipes() => CreateRecipe(1)
+			.AddIngredient(ItemID.FragmentStardust, 12)
+			.AddTile(TileID.LunarCraftingStation).Register();
 	}
 
 	class CelestialCombatPetEmblem : CombatPetEmblem
@@ -138,7 +224,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Stardust Combat Pet Emblem");
+			DisplayName.SetDefault("Celestial Combat Pet Emblem");
 		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Item.value = Item.sellPrice(gold: 16);
+			Item.rare = ItemRarityID.Red;
+		}
+
+		public override void AddRecipes() => CreateRecipe(1)
+			.AddIngredient(ItemID.LunarBar, 12)
+			.AddIngredient(ModContent.ItemType<StardustCombatPetEmblem>(), 1)
+			.AddTile(TileID.LunarCraftingStation).Register();
 	}
 }
