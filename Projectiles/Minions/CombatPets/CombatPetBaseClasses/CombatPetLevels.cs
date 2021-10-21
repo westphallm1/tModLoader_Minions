@@ -38,12 +38,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void Load()
 		{
 			PetLevelTable = new CombatPetLevelInfo[]{
-				new(0, 6, 500, 8, "Base"), // Base level
-				new(1, 8, 550, 8, "Golden"), // ore tier
-				new(2, 11, 575, 8, "Demonite"), // EoC - tier
-				new(3, 16, 650, 9, "Skeletal"), // Dungeon Tier
-				new(4, 24, 750, 12, "Soulful"), // Post WoF
-				new(5, 32, 800, 14, "Hallowed"), // Post Mech
+				new(0, 7, 500, 8, "Base"), // Base level
+				new(1, 9, 550, 8, "Golden"), // ore tier
+				new(2, 12, 575, 8, "Demonite"), // EoC - tier
+				new(3, 17, 650, 9, "Skeletal"), // Dungeon Tier
+				new(4, 30, 750, 12, "Soulful"), // Post WoF
+				new(5, 36, 800, 14, "Hallowed"), // Post Mech
 				new(6, 42, 900, 15, "Spectre"), // Post Plantera
 				new(7, 48, 950, 15, "Stardust"), // Post Pillars
 				new(8, 60, 1100, 16, "Celestial") // Post Moon Lord

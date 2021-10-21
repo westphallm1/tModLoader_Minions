@@ -34,6 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class RezAndSpazMinionItem : CombatPetMinionItem<RezAndSpazMinionBuff, RezMinion>
 	{
 		internal override int VanillaItemID => ItemID.TwinsPetItem;
+		internal override int AttackPatternUpdateTier => 5;
 
 		internal override string VanillaItemName => "TwinsPetItem";
 	}
@@ -46,6 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int? FiredProjectileId => ProjectileType<MiniTwinsLaser>();
 		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 10).WithVolume(.5f);
 
+		internal override bool DoBumblingMovement =>  leveledPetPlayer.PetLevel < 5;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

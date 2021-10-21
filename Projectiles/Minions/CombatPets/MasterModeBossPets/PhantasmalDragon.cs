@@ -23,6 +23,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override string VanillaBuffName => "LunaticCultistPet";
 	}
 
+	public class PhantasmalDragonMinionItem : CombatPetMinionItem<PhantasmalDragonMinionBuff, PhantasmalDragonMinion>
+	{
+		internal override int VanillaItemID => ItemID.LunaticCultistPetItem;
+		internal override int AttackPatternUpdateTier => 5;
+		internal override string VanillaItemName => "LunaticCultistPetItem";
+	}
+
 	/// <summary>
 	/// Uses ai[0] for projectile to return to 
 	/// </summary>
@@ -74,6 +81,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			target.Normalize();
 			target *= maxSpeed;
 			Projectile.velocity = (Projectile.velocity * (inertia - 1) + target) / inertia;
+
+			// dust effect while moving
+			Vector2 position = Projectile.position;
+			int width = 22;
+			int height = 22;
+			int dustIdx = Dust.NewDust(position, width, height, 87, 0f, 0f, 100, default, 1.5f);
+			Main.dust[dustIdx].velocity *= 0.75f;
+			Main.dust[dustIdx].noGravity = true;
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -107,12 +122,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Main.dust[dustIdx].noGravity = true;
 			}
 		}
-	}
-	public class PhantasmalDragonMinionItem : CombatPetMinionItem<PhantasmalDragonMinionBuff, PhantasmalDragonMinion>
-	{
-		internal override int VanillaItemID => ItemID.LunaticCultistPetItem;
-
-		internal override string VanillaItemName => "LunaticCultistPetItem";
 	}
 
 	public class PhantasmalDragonMinion : CombatPetWormMinion
@@ -172,7 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					p.ai[0] = target.whoAmI;
 				}
 			}
-			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > fireRate)
+			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > fireRate && leveledPetPlayer.PetLevel >= 5)
 			{
 				lastShootFrame = animationFrame;
 				// spawn projectile slightly off the top of the screen

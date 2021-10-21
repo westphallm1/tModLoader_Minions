@@ -30,6 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	{
 		internal override int VanillaItemID => ItemID.DestroyerPetItem;
 
+		internal override int AttackPatternUpdateTier => 5;
+
 		internal override string VanillaItemName => "DestroyerPetItem";
 	}
 
@@ -126,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if(player.whoAmI == Main.myPlayer && animationFrame - lastHitFrame > ProbeSpawnRate)
+			if(player.whoAmI == Main.myPlayer && animationFrame - lastHitFrame > ProbeSpawnRate && leveledPetPlayer.PetLevel >= 5)
 			{
 				lastHitFrame = animationFrame;
 				Vector2 launchVector = -Vector2.UnitY.RotatedByRandom(MathHelper.PiOver4) * 6;

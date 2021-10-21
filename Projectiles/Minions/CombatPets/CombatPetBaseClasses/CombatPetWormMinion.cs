@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 	public abstract class CombatPetWormMinion : WormMinion
 	{
 		public override int CounterType => -1;
-		private LeveledCombatPetModPlayer leveledPetPlayer;
+		internal LeveledCombatPetModPlayer leveledPetPlayer;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

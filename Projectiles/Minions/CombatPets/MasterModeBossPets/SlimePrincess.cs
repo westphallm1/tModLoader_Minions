@@ -23,6 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SlimePrincessMinionItem : CombatPetMinionItem<SlimePrincessMinionBuff, SlimePrincessMinion>
 	{
 		internal override int VanillaItemID => ItemID.QueenSlimePetItem;
+		internal override int AttackPatternUpdateTier => 4;
 
 		internal override string VanillaItemName => "QueenSlimePetItem";
 	}
@@ -147,7 +148,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			int projType = ProjectileType<SlimePrincessHelperSlimeMinion>();
 			Vector2 launchVel = (-16 * Vector2.UnitY).RotatedByRandom(MathHelper.PiOver4);
-			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] == 0 && animationFrame - lastSpawnedFrame > 240)
+			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] == 0 && 
+				animationFrame - lastSpawnedFrame > 240 && leveledPetPlayer.PetLevel >= 4)
 			{
 				lastSpawnedFrame = animationFrame;
 				Projectile.NewProjectile(
