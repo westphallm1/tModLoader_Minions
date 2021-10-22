@@ -67,7 +67,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(isDashing && !DoBumblingMovement)
+			if(!DoBumblingMovement && vectorToTarget != null && 
+				animationFrame - hsHelper.lastShootFrame <= attackFrames)
 			{
 				minFrame = 10;
 				maxFrame = 16;

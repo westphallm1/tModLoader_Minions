@@ -93,6 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TwinsPet;
 		internal override int? FiredProjectileId => ProjectileType<MiniEyeFire>();
 		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
+		internal override bool DoBumblingMovement =>  leveledPetPlayer.PetLevel < 5;
 
 		public override void SetStaticDefaults()
 		{

@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal void BumblingMovement(Vector2 vectorToTargetPosition)
 		{
 
-			float inertia = Math.Max(12, 18 - 2 * leveledPetPlayer.PetLevel);
+			float inertia = Math.Max(16, 30 - 3 * leveledPetPlayer.PetLevel);
 			float speed = hsHelper.travelSpeed;
 			vectorToTargetPosition.SafeNormalize();
 			vectorToTargetPosition *= speed;
@@ -145,17 +145,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			dealsContactDamage = true;
 			if(DoBumblingMovement)
 			{
 				BumblingMovement(vectorToTargetPosition);
 				return;
 			} 
-			int dashFrames = (int)(attackFrames * 0.75f);
-			int dashCyle = Math.Max(18, (int)(attackFrames * 0.25f));
-			int dashLength = 15; // this should probably be constant
 			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
-			if(framesSinceShoot % dashCyle < dashLength && framesSinceShoot < dashFrames)
+			if(framesSinceShoot > 20 && framesSinceShoot % 15 < 10)
 			{
 				// dash at the target
 				isDashing = true;
@@ -163,15 +159,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				{
 					dashVector = vectorToTargetPosition;
 					dashVector.SafeNormalize();
-					dashVector *= (hsHelper.travelSpeed);
-					Projectile.velocity = dashVector;
+					dashVector *= hsHelper.travelSpeed;
 				}
+				Projectile.velocity = dashVector;
 			} else
 			{
 				dashVector = default;
 				isDashing = false;
 				base.TargetedMovement(vectorToTargetPosition);
 			}
+		}
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			blurHelper.Update(Projectile.Center, isDashing);
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -207,9 +209,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			isDashing = false;
 		}
 
-		public override void AfterMoving()
+		public override Vector2 IdleBehavior()
 		{
-			blurHelper.Update(Projectile.Center, isDashing);
+			Vector2 target = base.IdleBehavior();
+			dealsContactDamage = true;
+			return target;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
