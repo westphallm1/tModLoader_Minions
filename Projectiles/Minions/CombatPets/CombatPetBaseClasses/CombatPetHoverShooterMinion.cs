@@ -138,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			base.SetDefaults();
 			dealsContactDamage = true;
 			hsHelper.targetInnerRadius = 96;
-			hsHelper.targetOuterRadius = 160;
+			hsHelper.targetOuterRadius = 128;
 			hsHelper.targetShootProximityRadius = 112;
 			blurHelper = new MotionBlurDrawer(5);
 		}
@@ -151,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				return;
 			} 
 			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
-			if(framesSinceShoot > 20 && framesSinceShoot % 15 < 10)
+			if(framesSinceShoot > 20 && framesSinceShoot % 15 < 10 && framesSinceShoot < attackFrames)
 			{
 				// dash at the target
 				isDashing = true;
@@ -159,7 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				{
 					dashVector = vectorToTargetPosition;
 					dashVector.SafeNormalize();
-					dashVector *= hsHelper.travelSpeed;
+					dashVector *= (hsHelper.travelSpeed + 1);
 				}
 				Projectile.velocity = dashVector;
 			} else
