@@ -18,6 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal int forwardDir = 1;
 		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
 		internal virtual int GetProjectileVelocity(CombatPetLevelInfo info) => (int)info.BaseSpeed + 3;
+		internal virtual float DamageMult => 1f;
 
 		internal virtual bool DoBumblingMovement => false;
 
@@ -47,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override Vector2 IdleBehavior()
 		{
 			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
-			Projectile.originalDamage = leveledPetPlayer.PetDamage;
+			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
 			UpdateHsHelperWithPetLevel(leveledPetPlayer.PetLevel);
 			dealsContactDamage = DoBumblingMovement;
 			return base.IdleBehavior();

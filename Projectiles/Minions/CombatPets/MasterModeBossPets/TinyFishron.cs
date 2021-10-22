@@ -122,8 +122,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 			Vector2 target = targetNPC.Center - Projectile.Bottom;
 			target.SafeNormalize();
-			target *= 3; // slow
-			int inertia = 16;
+			target *= 6; // slow
+			int inertia = 30;
 			Projectile.velocity = (Projectile.velocity * (inertia - 1) + target) / inertia;
 		}
 
@@ -142,6 +142,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int BuffId => BuffType<TinyFishronMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DukeFishronPet;
+
+		internal override float DamageMult => leveledPetPlayer.PetLevel >= 5 ? 0.75f : 1f;
 
 		int lastHitFrame;
 

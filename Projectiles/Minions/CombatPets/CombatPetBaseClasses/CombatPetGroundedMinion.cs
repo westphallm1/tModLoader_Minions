@@ -15,6 +15,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
 		internal Dictionary<GroundAnimationState, (int, int?)> frameInfo;
 
+		internal virtual float DamageMult => 1f;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -36,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		{
 			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
 			searchDistance = leveledPetPlayer.PetLevelInfo.BaseSearchRange;
-			Projectile.originalDamage = leveledPetPlayer.PetDamage;
+			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
 			return base.IdleBehavior();
 		}
 

@@ -48,6 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 10).WithVolume(.5f);
 
 		internal override bool DoBumblingMovement =>  leveledPetPlayer.PetLevel < 5;
+		internal override float DamageMult => leveledPetPlayer.PetLevel >= 5 ? 0.67f : 1f;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -94,6 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int? FiredProjectileId => ProjectileType<MiniEyeFire>();
 		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
 		internal override bool DoBumblingMovement =>  leveledPetPlayer.PetLevel < 5;
+		internal override float DamageMult => leveledPetPlayer.PetLevel >= 5 ? 0.67f : 1f;
 
 		public override void SetStaticDefaults()
 		{

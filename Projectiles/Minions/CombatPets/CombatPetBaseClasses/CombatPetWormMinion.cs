@@ -15,6 +15,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 	{
 		public override int CounterType => -1;
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
+		internal virtual float DamageMult => 1f;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -39,7 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		protected override int EmpowerCount => 1;
 		protected override int GetSegmentCount() => 6;
 
-		protected override int ComputeDamage() => leveledPetPlayer.PetDamage;
+		protected override int ComputeDamage() => (int)(DamageMult * leveledPetPlayer.PetDamage);
 
 		protected override float ComputeSearchDistance() => leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 
@@ -57,6 +59,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 	{
 		public override int CounterType => -1;
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
+		internal virtual float DamageMult => 1f;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -81,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		protected override int EmpowerCount => 1;
 		protected override int GetSegmentCount() => 6;
 
-		protected override int ComputeDamage() => leveledPetPlayer.PetDamage;
+		protected override int ComputeDamage() => (int)(DamageMult * leveledPetPlayer.PetDamage);
 
 		protected override float ComputeSearchDistance() => leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 
