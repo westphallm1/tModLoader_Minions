@@ -10,30 +10,19 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
-v0.12.2.8 - tML API update
-v0.12.2.7 - Port hairstyles and extra armor player layers to 1.4 version
-v0.12.2.6 - Fix bug with slime train drawing
-v0.12.2.5 - Rebuild for tML API change
-v0.12.2.4 - Bugfixes
-    - Tactics menu can no longer be click-and-dragged while not shown
-    - Add missing teleportation AI to Xeno Staff and Stardust Cell Staff
-    - Speed up Tumblesheep attack cycle
-    - Update minion AI to adjust to changed tactics more quickly
-v0.12.2.3 - Bugfixes
-    - Fix bug where most minions would always deal contact damage, even when
-      not attacking
-v0.12.2.2 - Bugfixes
-    - Fix issue where using a non-summon weapon caused attack target to reset
-    - Fix issue where Imps wouldn't teleport if the player moved far away
-    - Fix issue where anyone could edit the server's mod config
+v0.13.0 - Combat Pets!
+    - Crafted from vanilla pet items at a demon altar
+    - Cost 1 minion slot
+    - Deal low damage by default
+    - Powered up by new weapon class called "Combat Pet Emblem"
+      - Craftable from many ore tiers
+    - All combat pets scale with best emblem in inventory
 v0.12.2 - Summoners Association Support!
     - (Very long overdue) proper integration with Summoner's Association
     - Requires S. A. v0.4.7 to work fully
     - Fix a bug that allowed the Slime Train to deal massive damage with a 
       certain combination of config settings
     - Attempt to fix a multiplayer cross-mod compatibility bug
-v0.12.1.2 - Party hats!
-    - Most squires and ~half of modded minions wear party hats during parties!
 v0.12.1 - Whip Support
     - Rework AoMM Pathfinding AI to prioritize whip-marked NPCs
     - Other tweaks to make player set pathing targets feel a bit more responsive

@@ -64,6 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		internal CombatPetLevelInfo PetLevelInfo => CombatPetLevelTable.PetLevelTable[PetLevel];
 
+		public int PetSlots { get; internal set; }
 
 		public void UpdatePetLevel(int newLevel, int newDamage, bool fromSync = false)
 		{
@@ -75,6 +76,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				// TODO MP packet
 				new CombatPetLevelPacket(Player, (byte)PetLevel).Send();
 			}
+		}
+
+		public override void PreUpdate()
+		{
+			PetSlots = 0;
 		}
 
 		public override void PostUpdate()
@@ -98,12 +104,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				}
 			}
 			UpdatePetLevel(maxLevel, maxDamage);
+			Player.maxMinions = Math.Max(0, Player.maxMinions - PetSlots);
+			// subtract minion slots
 		}
 	}
 
 	public abstract class CombatPetBuff : MinionBuff
 	{
 		public CombatPetBuff(params int[] projIds) : base(projIds) { }
+
+		internal virtual int MinionSlotsUsed => 1;
 
 		public override void SetStaticDefaults()
 		{
@@ -114,6 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void Update(Player player, ref int buffIndex)
 		{
 			base.Update(player, ref buffIndex);
+			player.GetModPlayer<LeveledCombatPetModPlayer>().PetSlots += MinionSlotsUsed;
 			for(int i = 0; i < projectileTypes.Length; i++)
 			{
 				int projType = projectileTypes[i];

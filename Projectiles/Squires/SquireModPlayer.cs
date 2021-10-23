@@ -5,6 +5,7 @@ using AmuletOfManyMinions.Items.Accessories.TechnoCharm;
 using AmuletOfManyMinions.Items.Armor.AridArmor;
 using AmuletOfManyMinions.Items.Armor.RoyalArmor;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -210,7 +211,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				if( GetSquire() != default)
 				{
-					Player.maxMinions -= 1;
+					Player.maxMinions = Math.Max(0, Player.maxMinions - 1);
 				}
 			}
 		}
