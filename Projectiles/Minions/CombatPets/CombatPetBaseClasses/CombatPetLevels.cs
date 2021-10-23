@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
+﻿using AmuletOfManyMinions.Core.Netcode.Packets;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
 using System;
@@ -72,6 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			if(didUpdate && !fromSync)
 			{
 				// TODO MP packet
+				new CombatPetLevelPacket(Player, (byte)PetLevel).Send();
 			}
 		}
 
@@ -164,7 +166,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				tooltips.Add(new TooltipLine(Mod, "CombatPetNotLeveledUp", 
 					"This pet will gain a stronger attack pattern if you hold a\n" +
 					CombatPetLevelTable.PetLevelTable[AttackPatternUpdateTier].Description + 
-					" Combat Pet Emblem or better.")
+					" Combat Pet Emblem or stronger!")
 				{
 					overrideColor = Color.Gray
 				});
