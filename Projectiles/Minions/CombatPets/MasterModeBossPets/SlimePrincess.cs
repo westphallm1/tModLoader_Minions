@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetMultiItems;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
@@ -99,7 +100,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SlimePrincessMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.QueenSlimePet;
-		internal override int BuffId => BuffType<SlimePrincessMinionBuff>();
+		internal override int BuffId => leveledPetPlayer?.UsingMultiPets ?? false ?
+			BuffType<MasterModeSlimePetsBuff>() :BuffType<SlimePrincessMinionBuff>();
 
 		private bool wasFlyingThisFrame = false;
 
@@ -147,7 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			int projType = ProjectileType<SlimePrincessHelperSlimeMinion>();
-			Vector2 launchVel = (-16 * Vector2.UnitY).RotatedByRandom(MathHelper.PiOver4);
+			Vector2 launchVel = (-8 * Vector2.UnitY).RotatedByRandom(MathHelper.PiOver4);
 			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] == 0 && 
 				animationFrame - lastSpawnedFrame > 240 && leveledPetPlayer.PetLevel >= 4)
 			{

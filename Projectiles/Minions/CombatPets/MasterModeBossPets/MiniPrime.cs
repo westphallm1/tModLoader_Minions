@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetMultiItems;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
@@ -36,7 +37,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class MiniPrimeMinion : SkeletronCombatPet
 	{
-		internal override int BuffId => BuffType<MiniPrimeMinionBuff>();
+		internal override int BuffId => leveledPetPlayer?.UsingMultiPets ?? false ?
+			BuffType<MasterModeMechanicalBossPetsBuff>() :BuffType<MiniPrimeMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SkeletronPrimePet;
 		internal override int? FiredProjectileId => null;

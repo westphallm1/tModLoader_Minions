@@ -26,6 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			Projectile.minionSlots = 0;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;

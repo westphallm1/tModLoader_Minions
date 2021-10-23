@@ -66,6 +66,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public int PetSlots { get; internal set; }
 
+		// whether the player is using a buff that summons multiple pets
+		// this is basically just a boolean flag that changes which buffID a pet checks
+		// for its tactics group mapping
+		public bool UsingMultiPets { get; internal set; }
+
 		public void UpdatePetLevel(int newLevel, int newDamage, bool fromSync = false)
 		{
 			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage;
@@ -123,7 +128,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			base.Update(player, ref buffIndex);
 			player.GetModPlayer<LeveledCombatPetModPlayer>().PetSlots += MinionSlotsUsed;
 			for(int i = 0; i < projectileTypes.Length; i++)
 			{
@@ -135,6 +139,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					p.originalDamage = 0;
 				}
 			}
+			// base update should occur after this, since it might decrement the buffIndex
+			base.Update(player, ref buffIndex);
 		}
 	}
 

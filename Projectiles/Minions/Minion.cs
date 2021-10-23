@@ -94,6 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				player.ClearBuff(BuffId);
 			}
+			// give at least one AI cycle to live before killing off
 			if (player.HasBuff(BuffId))
 			{
 				Projectile.timeLeft = 2;
