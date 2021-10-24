@@ -1,18 +1,9 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
-using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
-using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
-using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets

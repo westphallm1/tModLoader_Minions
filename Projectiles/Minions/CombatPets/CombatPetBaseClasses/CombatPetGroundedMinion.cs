@@ -17,6 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		internal virtual float DamageMult => 1f;
 
+		internal int forwardDir = 1;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -43,6 +45,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			return base.IdleBehavior();
 		}
 
+		protected void ConfigureDrawBox(int width, int height, int xOffset, int yOffset, int forwardDir = 1)
+		{
+			Projectile.width = width;
+			Projectile.height = height;
+			// massive amount of whitespace around most frames
+			DrawOffsetX = xOffset; 
+			DrawOriginOffsetY = yOffset;
+			this.forwardDir = forwardDir;
+		}
+		protected void ConfigureFrames(int total, (int, int) idle, (int, int) walking, (int, int) jumping, (int, int) flying)
+		{
+			// this should really go into SetStaticDefaults, but we're trying to condense
+			// things as much as possible
+			Main.projFrames[Projectile.type] = total;
+			frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+			{
+				[GroundAnimationState.STANDING] = idle,
+				[GroundAnimationState.WALKING] = walking,
+				[GroundAnimationState.JUMPING] = jumping,
+				[GroundAnimationState.FLYING] = flying,
+			};
+		}
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
@@ -72,10 +96,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
             if (Projectile.velocity.X > 1)
 			{
-				Projectile.spriteDirection = 1;
+				Projectile.spriteDirection = forwardDir;
 			} else if (Projectile.velocity.X < -1)
 			{
-				Projectile.spriteDirection = -1;
+				Projectile.spriteDirection = -forwardDir;
 			}
 		}
 	}
@@ -92,7 +116,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
 
-		public abstract void LaunchProjectile(Vector2 launchVector);
+		internal virtual int? ProjId => null;
+		internal virtual Vector2 LaunchPos => Projectile.Center;
+		public virtual void LaunchProjectile(Vector2 launchVector)
+		{
+			if(ProjId is not int projId) { return; }
+			Projectile.NewProjectile(
+				Projectile.GetProjectileSource_FromThis(),
+				LaunchPos,
+				VaryLaunchVelocity(launchVector),
+				projId,
+				Projectile.damage,
+				Projectile.knockBack,
+				player.whoAmI,
+				ai0: Projectile.whoAmI);
+		}
 
 		public override void AfterMoving()
 		{
@@ -181,10 +219,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				Projectile.spriteDirection = Math.Sign(target.X);
 			} else if (Projectile.velocity.X > 1)
 			{
-				Projectile.spriteDirection = 1;
+				Projectile.spriteDirection = forwardDir;
 			} else if (Projectile.velocity.X < -1)
 			{
-				Projectile.spriteDirection = -1;
+				Projectile.spriteDirection = -forwardDir;
 			}
 		}
 	}

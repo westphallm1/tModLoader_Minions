@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 
 		public override void SetDefaults()
-		{
+			{
 			Projectile.CloneDefaults(ProjectileID.MiniRetinaLaser);
 			base.SetDefaults();
 			Projectile.penetrate = 1;

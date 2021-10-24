@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
@@ -17,15 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		internal abstract int VanillaItemID { get;  }
 		internal abstract string VanillaItemName { get;  }
-		static string BadgeTexture = "AmuletOfManyMinions/Projectiles/Minions/VanillaClones/AoMMBadge";
 		public override string Texture => "Terraria/Images/Item_" + VanillaItemID;
-		public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-		{
-			//Texture2D itemTexture = Main.itemTexture[item.type];
-			//Texture2D texture = Request<Texture2D>(BadgeTexture);
-			//Vector2 positionOffset = new Vector2(itemTexture.Width - texture.Width, itemTexture.Height - texture.Height) * scale;
-			//Main.EntitySpriteDraw(texture, position + positionOffset, texture.Bounds, drawColor, 0, origin, scale, SpriteEffects.None, 0f);
-		}
 
 		public override void SetStaticDefaults()
 		{

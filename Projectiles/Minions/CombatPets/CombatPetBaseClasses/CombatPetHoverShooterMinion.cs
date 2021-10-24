@@ -122,6 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			{
 				Projectile.spriteDirection = -forwardDir;
 			}
+			Projectile.rotation = Projectile.velocity.X * 0.05f;
 		}
 	}
 

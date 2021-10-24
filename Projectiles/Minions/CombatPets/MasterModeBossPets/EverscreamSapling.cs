@@ -70,6 +70,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EverscreamPet;
 		internal override int BuffId => BuffType<EverscreamSaplingMinionBuff>();
 
+		internal override int? ProjId => ProjectileType<EverscreamSaplingOrnament>();
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -92,20 +94,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				[GroundAnimationState.STANDING] = (0, 0),
 				[GroundAnimationState.WALKING] = (2, 8),
 			};
-		}
-
-		public override void LaunchProjectile(Vector2 launchVector)
-		{
-			int projId = ProjectileType<EverscreamSaplingOrnament>();
-			Projectile.NewProjectile(
-				Projectile.GetProjectileSource_FromThis(),
-				Projectile.Top,
-				VaryLaunchVelocity(launchVector),
-				projId,
-				Projectile.damage,
-				Projectile.knockBack,
-				player.whoAmI,
-				ai0: Projectile.whoAmI);
 		}
 	}
 }
