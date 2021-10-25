@@ -15,6 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
 		private float intendedX = 0;
 		internal virtual float DamageMult => 1f;
+		protected int forwardDir = 1;
 
 		public override void SetStaticDefaults()
 		{
@@ -81,6 +82,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				Projectile.velocity.X = Math.Max(1, Math.Min(maxHorizontalSpeed, Math.Abs(vector.X) / 16)) * Math.Sign(vector.X);
 			}
 			intendedX = Projectile.velocity.X;
+		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			base.Animate(minFrame, maxFrame);
+			if (Projectile.velocity.X > 1)
+			{
+				Projectile.spriteDirection = forwardDir;
+			}
+			else if (Projectile.velocity.X < -1)
+			{
+				Projectile.spriteDirection = -forwardDir;
+			}
 		}
 	}
 }

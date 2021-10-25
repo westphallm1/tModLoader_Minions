@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses
 {
@@ -47,11 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		protected void ConfigureDrawBox(int width, int height, int xOffset, int yOffset, int forwardDir = 1)
 		{
-			Projectile.width = width;
-			Projectile.height = height;
-			// massive amount of whitespace around most frames
-			DrawOffsetX = xOffset; 
-			DrawOriginOffsetY = yOffset;
+			CombatPetConvenienceMethods.ConfigureDrawBox(this, width, height, xOffset, yOffset);
 			this.forwardDir = forwardDir;
 		}
 		protected void ConfigureFrames(int total, (int, int) idle, (int, int) walking, (int, int) jumping, (int, int) flying)
