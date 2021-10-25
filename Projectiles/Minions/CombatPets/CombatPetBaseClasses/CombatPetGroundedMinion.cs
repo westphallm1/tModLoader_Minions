@@ -216,13 +216,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			base.Animate();
 			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
-				Projectile.spriteDirection = Math.Sign(target.X);
+				Projectile.spriteDirection = forwardDir * Math.Sign(target.X);
 			} else if (Projectile.velocity.X > 1)
 			{
 				Projectile.spriteDirection = forwardDir;
 			} else if (Projectile.velocity.X < -1)
 			{
 				Projectile.spriteDirection = -forwardDir;
+			}
+		}
+
+		protected void DoSimpleFlyingDust()
+		{
+			if(gHelper.isFlying)
+			{
+				Projectile.rotation = Projectile.velocity.X * 0.05f;
+				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
+				Main.dust[idx].alpha = 112;
+				Main.dust[idx].scale = .9f;
+			} else
+			{
+				Projectile.rotation = 0;
 			}
 		}
 	}
