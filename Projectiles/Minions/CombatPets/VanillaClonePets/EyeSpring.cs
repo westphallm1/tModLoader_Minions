@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			CombatPetConvenienceMethods.ConfigureDrawBox(this, 16, 30, 0, -16);
+			CombatPetConvenienceMethods.ConfigureDrawBox(this, 16, 30, 0, -32);
 			forwardDir = -1;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

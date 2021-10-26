@@ -58,13 +58,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			circleHelper.idleBumbleFrames = 90;
-			circleHelper.idleBumbleRadius = 96;
-		}
-
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
@@ -105,13 +98,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 36;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
-		}
-
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			circleHelper.idleBumbleFrames = 90;
-			circleHelper.idleBumbleRadius = 96;
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)

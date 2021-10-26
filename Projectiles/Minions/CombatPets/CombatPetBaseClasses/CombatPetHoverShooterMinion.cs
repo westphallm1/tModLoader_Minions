@@ -42,6 +42,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 128;
 			hsHelper.targetShootProximityRadius = 96;
+			// go slower and smaller circle than pets since it's a cute little pet
+			circleHelper.idleBumbleFrames = 90;
+			circleHelper.idleBumbleRadius = 96;
 			UpdateHsHelperWithPetLevel(0);
 		}
 
