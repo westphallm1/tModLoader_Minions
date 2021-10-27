@@ -143,7 +143,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 				Main.dust[dustIdx].alpha = 112;
 				Main.dust[dustIdx].scale = 1.2f;
 			}
-			// TODO
 		}
 
 		// If your name is AG...
@@ -307,6 +306,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 				return base.OnTileCollide(oldVelocity);
 			}
 		}
+
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			if(IsBouncing)

@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		{
 			base.SetDefaults();
 			wallFrames = (5, 10);
-			DrawOriginOffsetY = -8;
+			DrawOriginOffsetY = -24;
 			frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
 			{
 				[GroundAnimationState.FLYING] = (11, 11),
