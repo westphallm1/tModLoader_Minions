@@ -17,6 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal virtual float DamageMult => 1f;
 		protected int forwardDir = 1;
 
+		protected bool ShouldBounce => vectorToTarget != null || vectorToIdle.LengthSquared() > 32 * 32;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -62,6 +64,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
+			if(!ShouldBounce)
+			{
+				// slide to a halt
+				Projectile.velocity.X *= 0.75f;
+				return;
+			}
 			// always jump "long" if we're far away from the enemy
 			if (Math.Abs(vector.X) > startFlyingAtTargetDist && vector.Y < -32)
 			{

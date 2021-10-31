@@ -134,8 +134,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			minFrame = gHelper.isFlying ? 6 : 0;
-			maxFrame = gHelper.isFlying ? 12 : 6;
+			if(gHelper.isFlying) { base.Animate(6, 12); }
+			else if(ShouldBounce) { base.Animate(0, 6); }
+			else { Projectile.frame = 0; }
+
 			if(gHelper.isFlying)
 			{
 				Projectile.rotation = Projectile.velocity.X * 0.05f;
@@ -143,7 +145,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			{
 				Projectile.rotation = 0;
 			}
-			base.Animate(minFrame, maxFrame);
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
