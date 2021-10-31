@@ -4,6 +4,8 @@ using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
 using System;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
@@ -28,8 +30,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		internal NPC teleportTarget;
 		internal int teleportStartFrame;
 		internal float teleportStartAngle;
-		internal int teleportDuration = 90;
-		internal int teleportCycleFrames = 30;
+		internal int teleportDuration = 120;
+		internal int teleportCycleFrames = 20;
+		private int teleportRadius;
+		private float currentAngle;
+
 		internal int teleportFrame => animationFrame - teleportStartFrame;
 		internal bool IsTeleporting => teleportTarget != null && teleportTarget.active && teleportFrame < teleportDuration;
 
@@ -37,6 +42,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		{
 			base.SetDefaults();
 			CombatPetConvenienceMethods.ConfigureDrawBox(this, 30, 30, 0, 0);
+		}
+
+		public override void LoadAssets()
+		{
+			AddTexture(base.Texture + "Platform");
+			Main.instance.LoadProjectile(ProjectileID.PortalGunGate);
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -66,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		private void DoTeleportMovement()
 		{
 			int cycleFrame = teleportFrame % teleportCycleFrames;
-			float teleportRadius = 64 + (teleportTarget.width + teleportTarget.height) / 4;
+			teleportRadius = 64 + (teleportTarget.width + teleportTarget.height) / 4;
 			float teleportDistance;
 			if(cycleFrame < teleportCycleFrames / 2)
 			{
@@ -75,10 +86,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			{
 				teleportDistance = -teleportRadius + teleportRadius * (2f * cycleFrame / teleportCycleFrames - 1);
 			}
-			float currentAngle = teleportStartAngle + MathHelper.TwoPi * teleportFrame / teleportDuration;
+			currentAngle = teleportStartAngle + MathHelper.TwoPi * teleportFrame / teleportDuration;
 			Vector2 offset = currentAngle.ToRotationVector2() * teleportDistance;
 			Vector2 target = teleportTarget.Center + offset;
-			Projectile.velocity = target - Projectile.position;
+			// actually teleport rather than going backwards very fast, that has some
+			// unintended consequences
+			if(cycleFrame == teleportCycleFrames / 2)
+			{
+				Projectile.Center = target;
+			} else
+			{
+				Projectile.velocity = target - Projectile.Center;
+			}
 			Projectile.tileCollide = false;
 		}
 
@@ -94,5 +113,79 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			}
 		}
 
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			if(!IsTeleporting)
+			{
+				return;
+			}
+			Vector2 portalOffset = currentAngle.ToRotationVector2() * (teleportRadius - 14);
+			// always add an orange trail
+			Color trailColor = PortalHelper.GetPortalColor(1);
+			trailColor.A = byte.MaxValue;
+			int cycleFrame = teleportFrame % teleportCycleFrames;
+			for(int i = 0; i < 3; i++)
+			{
+				int dustIdx = Dust.NewDust(Projectile.position, 16, 16, DustID.PortalBoltTrail);
+				Main.dust[dustIdx].color = trailColor;
+				Main.dust[dustIdx].noLight = true;
+				Main.dust[dustIdx].noGravity = true;
+				Main.dust[dustIdx].velocity = Projectile.velocity/2f + Utils.RandomVector2(Main.rand, -0.25f, 0.25f);
+			}
+			for(int sign = -1; sign <= 1; sign++)
+			{
+				Vector2 portalPosition = teleportTarget.Center + portalOffset;
+				Color portalColor = PortalHelper.GetPortalColor(sign == 1 ? 0 : 1);
+				Lighting.AddLight(portalPosition, portalColor.ToVector3());
+				bool shouldAddDust =
+					(sign == 1 && cycleFrame == teleportCycleFrames / 2 - 1) ||
+					(sign == -1 && cycleFrame == teleportCycleFrames / 2 + 1);
+				if(shouldAddDust)
+				{
+					portalColor.A = byte.MaxValue;
+					for(int i = 0; i < 10; i++)
+					{
+						int dustIdx = Dust.NewDust(Projectile.position, 24, 24, DustID.PortalBolt);
+						Main.dust[dustIdx].color = portalColor;
+						Main.dust[dustIdx].noLight = true;
+						Main.dust[dustIdx].noGravity = true;
+					}
+				}
+			}
+		}
+
+		public override void PostDraw(Color lightColor)
+		{
+			if(!IsTeleporting)
+			{
+				return;
+			}
+			float r = currentAngle;
+			Texture2D texture = ExtraTextures[0].Value;
+			Texture2D portalTexture = TextureAssets.Projectile[ProjectileID.PortalGunGate].Value;
+			Vector2 offset = currentAngle.ToRotationVector2() * (teleportRadius + 14);
+			Vector2 portalOffset = currentAngle.ToRotationVector2() * teleportRadius;
+			int portalFrame = (animationFrame / 5) % 4;
+			int portalHeight = portalTexture.Height / 4;
+			Rectangle portalBounds = new Rectangle(0, portalHeight * portalFrame, portalTexture.Width, portalHeight);
+			Vector2 portalOrigin = new Vector2(portalBounds.Width / 2, portalBounds.Height / 2);
+			for(int sign = -1; sign <= 1; sign+= 2)
+			{
+				Vector2 pos = teleportTarget.Center + sign * offset;
+				Vector2 portalPos = teleportTarget.Center + sign * portalOffset;
+				Color portalColor = PortalHelper.GetPortalColor(sign == 1 ? 0 : 1);
+				portalColor.A = byte.MaxValue;
+				float portalR = sign == 1 ? r : r + MathHelper.Pi;
+				int fadeOutFrame = teleportDuration - teleportCycleFrames / 2;
+				float fadeFraction = 2f * (teleportFrame > fadeOutFrame ? teleportDuration - teleportFrame : teleportFrame) / teleportCycleFrames;
+				lightColor *= Math.Min(1f, fadeFraction);
+				portalColor *= Math.Min(1f, fadeFraction);
+				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
+					texture.Bounds, lightColor, r, texture.Bounds.Center.ToVector2(), 1, 0, 0);
+				Main.EntitySpriteDraw(portalTexture, portalPos - Main.screenPosition,
+					portalBounds, portalColor, portalR, portalOrigin, 1, 0, 0);
+			}
+		}
 	}
 }
