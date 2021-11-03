@@ -17,6 +17,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		internal int ForwardDir = 1;
 		internal int frame;
 		internal int lastAttackFrame;
+		internal float yOffsetScale = 1f;
 		internal Projectile Projectile;
 		internal WeaponSpriteOrientation spriteOrientation = WeaponSpriteOrientation.VERTICAL;
 
@@ -49,9 +50,10 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		// lifted from WeaponHoldingSquire
 		private float GetWeaponAngle(Vector2 attackVector)
 		{
+			float weaponAngle;
 			if (attackDir == 1)
 			{
-				return attackVector.ToRotation();
+				weaponAngle = attackVector.ToRotation();
 			}
 			else
 			{
@@ -62,8 +64,13 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 				{
 					angle += 2 * (float)Math.PI;
 				}
-				return angle;
+				weaponAngle = angle;
 			}
+			if(spriteOrientation == WeaponSpriteOrientation.DIAGONAL)
+			{
+				weaponAngle += attackDir * MathHelper.PiOver4;
+			}
+			return weaponAngle;
 		}
 
 		//protected virtual float SpriteRotationFromWeaponAngle(float weaponAngle)
@@ -74,12 +81,14 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 		private void DrawWeapon(Texture2D texture, Color lightColor)
 		{
-			Vector2 offset = lastAttackVector;
-			offset.SafeNormalize();
+			Vector2 holdOffset = lastAttackVector;
+			holdOffset.SafeNormalize();
+			holdOffset *= WeaponHoldDistance;
+			holdOffset.Y *= yOffsetScale;
 			Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
-			float r = GetWeaponAngle(offset);
-			Vector2 pos = Projectile.Center + WeaponOffset + WeaponHoldDistance * offset;
+			float r = GetWeaponAngle(holdOffset);
+			Vector2 pos = Projectile.Center + WeaponOffset + holdOffset;
 			SpriteEffects effects = attackDir == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
