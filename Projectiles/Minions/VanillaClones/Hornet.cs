@@ -51,6 +51,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void PostAI()
 		{
+			SpawnDust();
+		}
+
+		public virtual void SpawnDust()
+		{
 			if (Main.rand.Next(2) == 0)
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 18, 0f, 0f, 0, default, 0.9f);
