@@ -29,6 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 			base.SetDefaults();
 			ConfigureDrawBox(24, 30, -4, -12, -1);
 			ConfigureFrames(24, (0, 3), (5, 17), (4, 4), (18, 23));
+			frameSpeed = 8;
 		}
 	}
 }
