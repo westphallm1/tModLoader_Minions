@@ -23,6 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	{
 		internal override int VanillaItemID => ItemID.UnluckyYarn;
 		internal override string VanillaItemName => "UnluckyYarn";
+		internal override int AttackPatternUpdateTier => 6;
 	}
 
 	public abstract class BlackCatRicochetProjectile : ModProjectile

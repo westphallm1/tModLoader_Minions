@@ -20,6 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	{
 		internal override int VanillaItemID => ItemID.CompanionCube;
 		internal override string VanillaItemName => "CompanionCube";
+		internal override int AttackPatternUpdateTier => 6;
 	}
 
 	public class CompanionCubeMinion : CombatPetSlimeMinion
@@ -105,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		{
 			base.OnHitTarget(target);
 			// this is less accurate than OnHitNPC + MP sync, but it's easier to write
-			if(!IsTeleporting)
+			if(!IsTeleporting && leveledPetPlayer.PetLevel >= 6)
 			{
 				teleportTarget = target;
 				teleportStartFrame = animationFrame;
