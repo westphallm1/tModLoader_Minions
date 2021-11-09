@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using System.Linq;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets
+namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
 	public class BabyImpMinionBuff : CombatPetVanillaCloneBuff
 	{
@@ -63,13 +63,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 			Vector2 target = base.IdleBehavior();
 			if(flameRing != default && flameRing.localAI[0] > 0)
 			{
-				float rotationPeriod = 90;
-				float angle = -MathHelper.TwoPi * (animationFrame % rotationPeriod) / rotationPeriod;
-				Vector2 angleOffset = angle.ToRotationVector2() * 45;
-				angleOffset.X *= 0.75f;
-				return flameRing.Center + angleOffset - Projectile.Center;
+				return flameRing.Center - Projectile.Center;
+			} else
+			{
+				return target;
 			}
-			return target;
 		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
