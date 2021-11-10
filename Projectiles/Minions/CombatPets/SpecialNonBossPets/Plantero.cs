@@ -6,7 +6,7 @@ using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
 using Microsoft.Xna.Framework;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets
+namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
 	public class PlanteroMinionBuff : CombatPetVanillaCloneBuff
 	{
