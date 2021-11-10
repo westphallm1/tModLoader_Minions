@@ -40,6 +40,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal int Frame { get; set; }
 		internal int SpriteDirection { get; set; }
 		internal float Rotation { get; set; }
+
+		internal void UpdatePosition(int maxVelocity)
+		{
+			Vector2 target = TargetPosition - Position;
+			if(target.LengthSquared() > maxVelocity * maxVelocity)
+			{
+				target.Normalize();
+				target *= maxVelocity;
+			}
+			Position += target;
+		}
+
+		internal void Draw(Vector2 center, Texture2D texture, int frameHeight, Color lightColor)
+		{
+			Vector2 handPosition = Position + center;
+			SpriteEffects effects = SpriteDirection == 1  ? 0 : SpriteEffects.FlipHorizontally;
+			Rectangle bounds = new Rectangle(0, Frame * frameHeight, texture.Width, frameHeight);
+			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
+			Main.EntitySpriteDraw(texture, handPosition - Main.screenPosition,
+				bounds, lightColor, Rotation, origin, 1, effects, 0);
+		}
 	}
 	
 	public abstract class SkeletronCombatPet : CombatPetHoverShooterMinion
@@ -84,18 +105,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r, origin, 1, effects, 0);
 
-			// hands
 			for(int i = 0; i < hands.Length; i++)
 			{
-				// hands go back and forth, not a perfect loop :(
-				Vector2 handPosition = hands[i].Position + Projectile.Center;
-				effects = hands[i].SpriteDirection == 1  ? 0 : SpriteEffects.FlipHorizontally;
-				bounds = new Rectangle(0, hands[i].Frame * frameHeight, texture.Width, frameHeight);
-				r = hands[i].Rotation;
-				Main.EntitySpriteDraw(texture, handPosition - Main.screenPosition,
-					bounds, lightColor, r, origin, 1, effects, 0);
+				hands[i].Draw(Projectile.Center, texture, frameHeight, lightColor);
 			}
-			
 			return false;
 		}
 
@@ -130,17 +143,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			int maxHandSpeed = 8; // should probably be set dynamically
 			for(int i = 0; i < hands.Length; i++)
 			{
 				UpdateHand(ref hands[i], i);
-				Vector2 target = hands[i].TargetPosition - hands[i].Position;
-				if(target.LengthSquared() > maxHandSpeed * maxHandSpeed)
-				{
-					target.Normalize();
-					target *= maxHandSpeed;
-				}
-				hands[i].Position += target;
+				hands[i].UpdatePosition(8);
 			}
 		}
 
@@ -203,11 +209,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		internal override void UpdateHand(ref SkeletronHand hand, int handIdx)
 		{
-			// very hacky way to get -1 and 1
 			Vector2 offset;
 			int shootFrame = animationFrame - hsHelper.lastShootFrame;
 			if(attackCycle > 4 || handIdx != attackCycle % 2 || vectorToTarget is not Vector2 target || shootFrame > attackFrames)
 			{
+				// very hacky way to get -1 and 1
 				Vector2 baseOffset = 32 * Vector2.UnitX * Math.Sign(handIdx - 0.5f);
 				float cycleAngle = MathHelper.TwoPi * animationFrame / 120 + handIdx * MathHelper.Pi;
 				Vector2 cycleOffset = 8 * cycleAngle.ToRotationVector2();
