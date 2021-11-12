@@ -15,6 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal short bumbleSpriteDirection = 1;
 
 		internal HeadCirclingHelper circleHelper;
+		internal bool resetIdleRotation = true;
 
 		public override void SetDefaults()
 		{
@@ -58,7 +59,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Projectile.tileCollide = false;
 			if (vectorToIdlePosition.Length() < maxSpeed)
 			{
-				Projectile.rotation = 0;
+				if(resetIdleRotation)
+				{
+					Projectile.rotation = 0;
+				}
 				if(circleHelper.idleBumble && player.velocity.Length() < 4)
 				{
 					Projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(circleHelper.bumbleTarget.X);

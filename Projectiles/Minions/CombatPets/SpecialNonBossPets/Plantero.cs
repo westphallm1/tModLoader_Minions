@@ -105,7 +105,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			{
 				Texture2D texture = ExtraTextures[0].Value;
 				int frameHeight = texture.Height / 3;
-				ChainDrawer chainDrawer = new(new Rectangle(0, 2 * frameHeight, texture.Width, frameHeight - 2));
+				ChainDrawer chainDrawer = new(new Rectangle(0, 2 * frameHeight + 2, texture.Width, frameHeight -2));
 				Vector2 center = Projectile.Center;
 				for(int i = 0; i < hands.Length; i++)
 				{
