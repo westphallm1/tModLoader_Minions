@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	}
 
 	/// <summary>
-	/// Uses ai[0] for projectile to return to 
+	/// Uses ai[0] for NPC id to target
 	/// </summary>
 	public class AncientVisionProjectile : ModProjectile
 	{

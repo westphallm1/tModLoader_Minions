@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using System;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
@@ -77,6 +78,89 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			Main.EntitySpriteDraw(cometTexture, trailPos, cometBounds, drawColor * alphaAdjustment, 
 				drawRotation, cometOrigin, 0.5f, 0, 0);
 		}
+
+		public static void AddImpactEffects(Projectile projectile)
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				Vector2 launchVelocity = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(3f, 5f);
+				Gore.NewGore(projectile.Center, launchVelocity, Main.rand.Next(16, 18));
+				Dust dust = Dust.NewDustPerfect(projectile.Center, DustID.YellowStarDust, -launchVelocity * 1.25f);
+				dust.noGravity = true;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Uses ai[0] for NPC id to target
+	/// </summary>
+	public class EsteeFallenStarProjectile : ModProjectile
+	{
+		public override string Texture => "Terraria/Images/Item_"+ItemID.FallenStar;
+		private NPC targetNPC;
+		private float maxSpeed = 16;
+		private float cometRotation;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+			Main.projFrames[Projectile.type] = 15;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.timeLeft = 120;
+			Projectile.tileCollide = false;
+			Projectile.penetrate = 1;
+			Projectile.friendly = true;
+		}
+
+		public override void AI()
+		{
+			Projectile.rotation += MathHelper.Pi / 16f;
+			Projectile.frameCounter++;
+			Projectile.frame = (Projectile.frameCounter / 5) % 15;
+			if(targetNPC == null)
+			{
+				targetNPC = Main.npc[(int)Projectile.ai[0]];
+			}
+			if(targetNPC.active && targetNPC.Center.Y > Projectile.Center.Y)
+			{
+				int inertia = 4;
+				Vector2 target = targetNPC.Center - Projectile.Center;
+				target.Normalize();
+				target *= maxSpeed;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + target) / inertia;
+			} else
+			{
+				Projectile.tileCollide = true;
+			}
+		}
+
+		public override bool PreDraw(ref Color lightColor)
+		{
+			Texture2D starTexture = TextureAssets.Item[ItemID.FallenStar].Value;
+			Texture2D cometTexture = TextureAssets.Extra[ExtrasID.FallingStar].Value;
+			CometTrailDrawer.DrawCometTrail(Projectile, cometTexture, Projectile.timeLeft, ref cometRotation);
+			int starFrames = 8;
+			int starFrame = Projectile.frame < starFrames ? Projectile.frame : 2 * starFrames - 1 - Projectile.frame;
+			int starHeight = starTexture.Height / 8;
+			Rectangle starBounds = new Rectangle(0, starFrame * starHeight, starTexture.Width, starHeight);
+			Vector2 starOrigin = new Vector2(starBounds.Width, starBounds.Height) / 2;
+			Vector2 pos = Projectile.Center - Main.screenPosition;
+			Main.EntitySpriteDraw(starTexture, pos, starBounds, Color.White, 
+				Projectile.rotation, starOrigin, 1, 0, 0);
+			return false;
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			CometTrailDrawer.AddImpactEffects(Projectile);
+		}
 	}
 
 	public class EsteeMinion : CombatPetHoverDasherMinion
@@ -87,6 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		internal override bool DoBumblingMovement => true;
 
 		internal float cometRotation;
+		private int lastShootFrame;
 
 		public override void LoadAssets()
 		{
@@ -151,13 +236,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			base.OnHitNPC(target, damage, knockback, crit);
-			for(int i = 0; i < 3; i++)
+			CometTrailDrawer.AddImpactEffects(Projectile);
+			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > attackFrames / 2 && leveledPetPlayer.PetLevel >= 4)
 			{
-				Vector2 launchVelocity = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(3f, 5f);
-				Gore.NewGore(Projectile.Center, launchVelocity, Main.rand.Next(16, 18));
-				Dust dust = Dust.NewDustPerfect(Projectile.position, DustID.YellowStarDust, -launchVelocity * 1.25f);
-				dust.noGravity = true;
+				lastShootFrame = animationFrame;
+				// spawn projectile slightly off the top of the screen
+				Vector2 spawnPos = Main.screenPosition + new Vector2(Main.rand.Next(0, Main.screenWidth), -16);
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
+					spawnPos,
+					Projectile.velocity,
+					ProjectileType<EsteeFallenStarProjectile>(),
+					Projectile.damage,
+					Projectile.knockBack,
+					Main.myPlayer,
+					ai0: target.whoAmI);
 			}
 		}
 	}
