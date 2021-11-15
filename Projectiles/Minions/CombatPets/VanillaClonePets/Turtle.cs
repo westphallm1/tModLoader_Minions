@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			Projectile.velocity = vectorToTarget;
 		}
 
-		public override void LaunchProjectile(Vector2 launchVector)
+		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			LaunchBounce((Vector2)vectorToTarget);
 		}

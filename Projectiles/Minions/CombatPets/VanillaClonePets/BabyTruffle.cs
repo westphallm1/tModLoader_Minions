@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			DoSimpleFlyingDust();
 		}
 
-		public override void LaunchProjectile(Vector2 launchVector)
+		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			Vector2 launchVel = new Vector2(0.25f * launchVector.X, -Main.rand.Next(8, 12));
 			base.LaunchProjectile(launchVel);

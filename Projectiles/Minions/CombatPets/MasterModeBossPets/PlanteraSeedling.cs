@@ -106,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			};
 		}
 
-		public override void LaunchProjectile(Vector2 launchVector)
+		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			bool spawnThornBall =  leveledPetPlayer.PetLevel >= 5 && fireCount++ % 4 == 0;
 			int projId = spawnThornBall ? ProjectileType<PlanteraSeedlingThornBall>() : ProjectileType<PlanteraSeedlingSeed>();

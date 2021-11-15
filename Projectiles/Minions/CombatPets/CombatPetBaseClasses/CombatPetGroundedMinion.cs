@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		internal virtual int? ProjId => null;
 		internal virtual Vector2 LaunchPos => Projectile.Center;
-		public virtual void LaunchProjectile(Vector2 launchVector)
+		public virtual void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			if(ProjId is not int projId) { return; }
 			Projectile.NewProjectile(
@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 				Projectile.knockBack,
 				player.whoAmI,
-				ai0: Projectile.whoAmI);
+				ai0: ai0 ?? Projectile.whoAmI);
 		}
 
 		public override void AfterMoving()

@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			}
 		}
 
-		public override void LaunchProjectile(Vector2 launchVector)
+		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			base.LaunchProjectile(launchVector);
 			attackCycle++;

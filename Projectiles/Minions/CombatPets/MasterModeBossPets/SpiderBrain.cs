@@ -139,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			};
 		}
 
-		public override void LaunchProjectile(Vector2 launchVector)
+		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			int eyeVelocity = 10;
 			lastFiredFrame = animationFrame;

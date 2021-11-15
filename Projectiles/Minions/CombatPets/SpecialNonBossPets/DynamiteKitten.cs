@@ -81,6 +81,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		{
 			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 		}
+
+		public override bool PreDraw(ref Color lightColor)
+		{
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
+				texture.Bounds, Color.White, Projectile.rotation, texture.Bounds.Center.ToVector2(), 1, 0, 0);
+			return false;
+		}
 	}
 
 	public class DynamiteKittenRocket : ModProjectile
@@ -184,10 +192,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			ConfigureDrawBox(30, 24, -12, -14, -1);
 			ConfigureFrames(14, (0, 0), (2, 9), (1, 1), (10, 13));
 			weaponDrawer.WeaponHoldDistance = 24;
-			weaponDrawer.WeaponOffset = new Vector2(0, 6);
 		}
 
-		public override void LaunchProjectile(Vector2 launchVector)
+		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			// move flames along with the minion's velocity
 			if(levelInfo.ItemId == ItemID.Flamethrower)
@@ -197,17 +204,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			{
 				for(int i = 0; i < 2; i++)
 				{
-					base.LaunchProjectile(launchVector.RotatedByRandom(MathHelper.Pi/8));
+					base.LaunchProjectile(launchVector.RotatedByRandom(MathHelper.Pi/8), ai0);
 				}
 			}
-			base.LaunchProjectile(launchVector);
+			base.LaunchProjectile(launchVector, ai0);
 		}
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
 			int attackCycleFrame = animationFrame - lastFiredFrame;
+			weaponDrawer.AttackDuration = 30;
+			weaponDrawer.WeaponOffset = new Vector2(0, 6);
 			if(levelInfo.ItemId == ItemID.Flamethrower)
 			{
+				weaponDrawer.AttackDuration = attackFrames;
 				if(weaponDrawer.lastAttackVector != default)
 				{
 					weaponDrawer.lastAttackVector = vectorToTargetPosition;
@@ -220,8 +230,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 					// todo lead shot
 					launchVector.SafeNormalize();
 					launchVector *= launchVelocity;
-					LaunchProjectile(launchVector);
+					LaunchProjectile(launchVector, attackCycleFrame % 18);
 				}
+			} else if (levelInfo.ItemId == ItemID.RocketLauncher)
+			{
+				weaponDrawer.WeaponOffset = Vector2.Zero;
 			}
 		}
 	}
