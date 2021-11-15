@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	}
 
 
-	class BlackCatLevelInfo : ModSystem
+	class CatPetLevelInfo : ModSystem
 	{
 		internal int MinLevel;
 		internal int ItemId;
@@ -176,9 +176,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		internal int ProjectileVelocity;
 		internal WeaponSpriteOrientation Orientation;
 
-		public static BlackCatLevelInfo[] CatLevelInfo;
 
-		public BlackCatLevelInfo(int minLevel, int itemId, int projId, int projVelocity, WeaponSpriteOrientation orientation = WeaponSpriteOrientation.VERTICAL)
+		public CatPetLevelInfo(int minLevel, int itemId, int projId, int projVelocity, WeaponSpriteOrientation orientation = WeaponSpriteOrientation.VERTICAL)
 		{
 			MinLevel = minLevel;
 			ItemId = itemId;
@@ -186,43 +185,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			ProjectileVelocity = projVelocity;
 			Orientation = orientation;
 		}
-
-		public override void Unload()
-		{
-			CatLevelInfo = null;
-		}
 	}
 
-	public class BlackCatMinion : CombatPetGroundedRangedMinion
+	public abstract class WeaponHoldingCatMinion : CombatPetGroundedRangedMinion
 	{
-		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BlackCat;
-		internal override int BuffId => BuffType<BlackCatMinionBuff>();
-
-		// scale attack type rather than attack speed
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(45, 60 - 4 * info.Level);
-
 		internal override int? ProjId => levelInfo?.ProjectileId ?? 0;
 
 		internal WeaponHoldingDrawer weaponDrawer;
-		internal BlackCatLevelInfo levelInfo;
-		public override void LoadAssets()
-		{
-			Main.instance.LoadItem(ItemID.WandofSparking);
-			Main.instance.LoadItem(ItemID.WaterBolt);
-			Main.instance.LoadItem(ItemID.MagicalHarp);
-			Main.instance.LoadItem(ItemID.ShadowbeamStaff);
-			Main.instance.LoadProjectile(ProjectileID.QuarterNote);
-			Main.instance.LoadProjectile(ProjectileID.EighthNote);
-			Main.instance.LoadProjectile(ProjectileID.TiedEighthNote);
-			BlackCatLevelInfo.CatLevelInfo = new BlackCatLevelInfo[]
-			{
-				new(-1, ItemID.WandofSparking, 0, 8, WeaponSpriteOrientation.DIAGONAL),
-				new(0, ItemID.WaterBolt, ProjectileType<BlackCatWaterBolt>(), 6),
-				new(5, ItemID.MagicalHarp, ProjectileType<BlackCatMeowsicalNote>(), 8),
-				// lots of extra updates
-				new(6, ItemID.ShadowbeamStaff, ProjectileType<BlackCatShadowBeam>(), 6, WeaponSpriteOrientation.DIAGONAL),
-			};
-		}
+		internal CatPetLevelInfo levelInfo;
+		internal abstract CatPetLevelInfo[] CatPetLevels { get; }
 
 		public override Vector2 IdleBehavior()
 		{
@@ -234,9 +205,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 		private void SetAttackStyleSpecificBehaviors()
 		{
-			for(int i = BlackCatLevelInfo.CatLevelInfo.Length -1; i >= 0; i--)
+			for(int i = CatPetLevels.Length -1; i >= 0; i--)
 			{
-				BlackCatLevelInfo levelInfo = BlackCatLevelInfo.CatLevelInfo[i];
+				CatPetLevelInfo levelInfo = CatPetLevels[i];
 				if(levelInfo.MinLevel <= leveledPetPlayer.PetLevel)
 				{
 					this.levelInfo = levelInfo; 
@@ -250,8 +221,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			ConfigureDrawBox(24, 24, -20, -16, -1);
-			ConfigureFrames(11, (0, 0), (1, 5), (1, 1), (6, 10));
 			weaponDrawer = new WeaponHoldingDrawer()
 			{
 				WeaponOffset = Vector2.Zero,
@@ -272,9 +241,58 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = TextureAssets.Item[levelInfo?.ItemId ?? 0].Value;
+			if(levelInfo?.ItemId is not int itemId || itemId == 0)
+			{
+				return true;
+			}
+			Texture2D texture = TextureAssets.Item[itemId].Value;
 			weaponDrawer.Draw(texture, lightColor);
 			return true;
+		}
+	}
+
+	public class BlackCatMinion : WeaponHoldingCatMinion
+	{
+		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BlackCat;
+		internal override int BuffId => BuffType<BlackCatMinionBuff>();
+
+		// scale attack type rather than attack speed
+		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(45, 60 - 4 * info.Level);
+
+		internal override int? ProjId => levelInfo?.ProjectileId ?? 0;
+
+		private static CatPetLevelInfo[] BlackCatLevelInfo;
+		internal override CatPetLevelInfo[] CatPetLevels => BlackCatLevelInfo;
+
+		public override void LoadAssets()
+		{
+			Main.instance.LoadItem(ItemID.WandofSparking);
+			Main.instance.LoadItem(ItemID.WaterBolt);
+			Main.instance.LoadItem(ItemID.MagicalHarp);
+			Main.instance.LoadItem(ItemID.ShadowbeamStaff);
+			Main.instance.LoadProjectile(ProjectileID.QuarterNote);
+			Main.instance.LoadProjectile(ProjectileID.EighthNote);
+			Main.instance.LoadProjectile(ProjectileID.TiedEighthNote);
+			BlackCatLevelInfo = new CatPetLevelInfo[]
+			{
+				new(-1, ItemID.WandofSparking, 0, 8, WeaponSpriteOrientation.DIAGONAL),
+				new(0, ItemID.WaterBolt, ProjectileType<BlackCatWaterBolt>(), 6),
+				new(5, ItemID.MagicalHarp, ProjectileType<BlackCatMeowsicalNote>(), 8),
+				// lots of extra updates
+				new(6, ItemID.ShadowbeamStaff, ProjectileType<BlackCatShadowBeam>(), 6, WeaponSpriteOrientation.DIAGONAL),
+			};
+		}
+
+		public override void Unload()
+		{
+			BlackCatLevelInfo = null;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			ConfigureDrawBox(24, 24, -20, -16, -1);
+			ConfigureFrames(11, (0, 0), (1, 5), (1, 1), (6, 10));
 		}
 	}
 }

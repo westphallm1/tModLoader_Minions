@@ -113,6 +113,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
 
+		internal virtual float ModifyProjectileDamage(CombatPetLevelInfo info) => 1f;
+
 		internal virtual int? ProjId => null;
 		internal virtual Vector2 LaunchPos => Projectile.Center;
 		public virtual void LaunchProjectile(Vector2 launchVector)
@@ -123,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				LaunchPos,
 				VaryLaunchVelocity(launchVector),
 				projId,
-				Projectile.damage,
+				(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 				Projectile.knockBack,
 				player.whoAmI,
 				ai0: Projectile.whoAmI);

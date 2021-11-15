@@ -48,7 +48,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			Vector2 target = base.IdleBehavior();
 			if(gHelper.isFlying)
 			{
-				target.Y += 24 * MathF.Sin(MathHelper.TwoPi * animationFrame / 60f);
+				float idleAngle = MathHelper.TwoPi * animationFrame / 120f;
+				target += 36 * idleAngle.ToRotationVector2();
 			}
 			return target;
 		}
@@ -62,12 +63,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				dashVector.SafeNormalize();
 				dashVector *= dashVelocity;
 			}
-			gHelper.DropThroughPlatform();
-			Projectile.tileCollide = false;
-			Projectile.velocity = dashVector;
+			bool isIdling = vectorToTarget is null && vector.LengthSquared() < 128 * 128;
+			if(isIdling)
+			{
+				base.IdleFlyingMovement(vector);
+			} else
+			{
+				gHelper.DropThroughPlatform();
+				Projectile.tileCollide = false;
+				Projectile.velocity = dashVector;
+			}
 
 			// visual effects
-			if(Main.rand.Next(4) == 0)
+			if(Main.rand.Next(isIdling? 8 : 4) == 0)
 			{
 				int dustIdx = Dust.NewDust(
 					Projectile.position, Projectile.width, Projectile.height, DustID.t_Martian,
@@ -75,7 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				Main.dust[dustIdx].noLight = true;
 				Main.dust[dustIdx].scale *= 0.75f;
 			}
-			if(Main.rand.Next(2) == 0)
+			if(Main.rand.Next(isIdling? 6: 2) == 0)
 			{
 				int goreIdx = Gore.NewGore(Projectile.Center, Vector2.Zero, GoreID.LightningBunnySparks);
 				Main.gore[goreIdx].position = Projectile.position;

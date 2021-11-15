@@ -9,7 +9,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 {
 	class WeaponHoldingDrawer
 	{
-		Vector2 lastAttackVector;
+		internal Vector2 lastAttackVector;
 		internal Vector2 WeaponOffset;
 		internal float WeaponHoldDistance;
 
