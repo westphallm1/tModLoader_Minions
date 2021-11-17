@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				offset = baseOffset + cycleOffset;
 			} else
 			{
-				float attackFraction = MathF.Sin(MathHelper.Pi * shootFrame / attackFrames);
+				float attackFraction = 1.1f * MathF.Sin(MathHelper.Pi * shootFrame / attackFrames);
 				offset = target * attackFraction;
 			}
 			hand.Rotation = offset.ToRotation() + MathHelper.PiOver2;
@@ -144,6 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			{
 				return base.Colliding(projHitbox, targetHitbox);
 			}
+			targetHitbox.Inflate(16, 16);
 			for(int i = 0; i < hands.Length; i++)
 			{
 				Vector2 handPos = hands[i].Position + Projectile.Center;
