@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		// counters for bumbling movement
 		private int framesSinceLastHit;
-		private int cooldownAfterHitFrames = 16;
+		private int cooldownAfterHitFrames => 144/ (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;
 
 		public override void SetStaticDefaults()
 		{

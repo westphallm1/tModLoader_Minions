@@ -140,8 +140,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					p.originalDamage = 0;
 				}
 			}
-			// base update should occur after this, since it might decrement the buffIndex
-			base.Update(player, ref buffIndex);
+			if (projectileTypes.Select(p => player.ownedProjectileCounts[p]).Sum() > 0)
+			{
+				player.buffTime[buffIndex] = 18000;
+			}
+			else
+			{
+				player.buffTime[buffIndex] = Math.Min(player.buffTime[buffIndex], 2);
+			}
 		}
 	}
 

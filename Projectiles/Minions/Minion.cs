@@ -98,6 +98,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			if (player.HasBuff(BuffId))
 			{
 				Projectile.timeLeft = 2;
+			} else if (Main.projPet[Projectile.type])
+			{
+				Projectile.Kill(); // pets don't die naturally for some reason
 			}
 		}
 

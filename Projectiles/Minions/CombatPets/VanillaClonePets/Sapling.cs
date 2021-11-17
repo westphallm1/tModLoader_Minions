@@ -56,11 +56,5 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			ConfigureDrawBox(24, 24, -16, -8, -1);
 			ConfigureFrames(12, (0, 0), (1, 6), (4, 4), (7, 11));
 		}
-
-		public override void Animate(int minFrame = 0, int? maxFrame = null)
-		{
-			base.Animate(minFrame, maxFrame);
-			DoSimpleFlyingDust();
-		}
 	}
 }

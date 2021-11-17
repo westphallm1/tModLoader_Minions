@@ -34,6 +34,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			forwardDir = -1;
+		}
+
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(1, 5);

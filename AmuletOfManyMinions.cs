@@ -1,36 +1,18 @@
-using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Netcode;
-using AmuletOfManyMinions.Items.Accessories;
-using AmuletOfManyMinions.NPCs;
-using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
-using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
-using AmuletOfManyMinions.Projectiles.Squires;
-using AmuletOfManyMinions.UI;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.UI;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent.Creative;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
-using System.Linq;
-using System;
-using AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer;
-using AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar;
-using AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar;
-using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
-using AmuletOfManyMinions.Projectiles.Minions.Necromancer;
-using AmuletOfManyMinions.Projectiles.Minions.SpiritGun;
-using AmuletOfManyMinions.Projectiles.Minions.EclipseHerald;
-using System.Reflection;
 
 namespace AmuletOfManyMinions
 {
@@ -56,6 +38,14 @@ namespace AmuletOfManyMinions
 		public override void PostSetupContent()
 		{
 			CrossMod.AddSummonersAssociationMetadata(this);
+			// add Journey Mode support to any item which doesn't explicitly reference it
+			var catalog = CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId;
+			IEnumerable<ModItem> items = GetContent<ModItem>().Where(i=>!catalog.ContainsKey(i.Type));
+			foreach(var item in items)
+			{
+				catalog[item.Type] = 1;
+			}
+			
 		}
 
 		public override void Unload()
