@@ -43,6 +43,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
 			searchDistance = leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
+			int petLevel = leveledPetPlayer.PetLevel;
+			idleInertia = petLevel < 4 ? 15 : 18 - petLevel;
 			return base.IdleBehavior();
 		}
 

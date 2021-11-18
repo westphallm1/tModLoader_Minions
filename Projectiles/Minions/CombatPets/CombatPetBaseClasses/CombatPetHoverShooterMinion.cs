@@ -108,6 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			hsHelper.projectileVelocity = GetProjectileVelocity(info);
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = (int)info.BaseSpeed;
+			hsHelper.inertia = info.Level < 6 ? 10 : 15 - info.Level;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

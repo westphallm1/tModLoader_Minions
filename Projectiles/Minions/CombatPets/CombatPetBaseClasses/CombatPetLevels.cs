@@ -45,10 +45,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				new(2, 14, 650, 9, "Demonite"), // EoC - tier
 				new(3, 17, 750, 10, "Skeletal"), // Dungeon Tier
 				new(4, 30, 900, 12, "Soulful"), // Post WoF
-				new(5, 36, 950, 13, "Hallowed"), // Post Mech
-				new(6, 42, 1000, 14, "Spectre"), // Post Plantera
-				new(7, 48, 1050, 15, "Stardust"), // Post Pillars
-				new(8, 60, 1100, 16, "Celestial") // Post Moon Lord
+				new(5, 36, 950, 14, "Hallowed"), // Post Mech
+				new(6, 42, 1000, 15, "Spectre"), // Post Plantera
+				new(7, 52, 1050, 16, "Stardust"), // Post Pillars
+				new(8, 80, 1100, 18, "Celestial") // Post Moon Lord
 			};
 		}
 
