@@ -127,6 +127,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				p.Kill();
 				return;
 			}
+			if(framesSinceFired % 30 == 0)
+			{
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 15).WithVolume(0.5f), Projectile.Center);
+			}
 			lastValidTarget = vectorToTargetPosition;
 			if(framesSinceFired == 0)
 			{

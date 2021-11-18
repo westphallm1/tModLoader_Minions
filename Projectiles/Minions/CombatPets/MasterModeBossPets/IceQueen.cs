@@ -77,8 +77,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Main.dust[idx].velocity *= 0.75f;
 			}
 		}
-
-
 	}
 
 

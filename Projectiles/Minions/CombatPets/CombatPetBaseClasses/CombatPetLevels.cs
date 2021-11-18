@@ -93,12 +93,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		{
 			// look for the best Combat Pet Emblem in the player's inventory, use that
 			// to set the player's combat pet's damage
-			// TODO maybe don't run every frame
+			// don't run every frame
+			if(Main.GameUpdateCount % 10 != 0)
+			{
+				return;
+			}
 			int maxLevel = 0;
 			int maxDamage = CombatPetLevelTable.PetLevelTable[0].BaseDamage;
 			for(int i = 0; i < Player.inventory.Length; i++)
 			{
 				Item item = Player.inventory[i];
+				if(item.ModItem != null && item.ModItem is CombatPetEmblem petEmblem)
+				{
+					// choose max tier rather than max damage
+					if(petEmblem.PetLevel > maxLevel)
+					{
+						maxLevel = petEmblem.PetLevel;
+						maxDamage = item.damage;
+					}
+				}
+			}
+			for(int i = 0; i < Player.bank.item.Length; i++)
+			{
+				Item item = Player.bank.item[i];
 				if(item.ModItem != null && item.ModItem is CombatPetEmblem petEmblem)
 				{
 					// choose max tier rather than max damage

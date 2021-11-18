@@ -158,6 +158,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			{
 				return base.Colliding(projHitbox, targetHitbox);
 			}
+			targetHitbox.Inflate(16, 16);
 			for(int i = 0; i < hands.Length; i++)
 			{
 				Vector2 handPos = hands[i].Position + Projectile.Center;

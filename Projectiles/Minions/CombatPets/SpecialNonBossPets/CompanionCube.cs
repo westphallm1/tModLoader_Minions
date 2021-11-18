@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
+using Terraria.Audio;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
@@ -42,7 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			CombatPetConvenienceMethods.ConfigureDrawBox(this, 30, 30, 0, 0);
+			CombatPetConvenienceMethods.ConfigureDrawBox(this, 30, 30, 0, -2);
 		}
 
 		public override void LoadAssets()
@@ -95,6 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			if(cycleFrame == teleportCycleFrames / 2)
 			{
 				Projectile.Center = target;
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 8).WithVolume(0.5f), Projectile.Center);
 			} else
 			{
 				Projectile.velocity = target - Projectile.Center;

@@ -129,6 +129,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
+			if(TimeToLive - Projectile.timeLeft < 2)
+			{
+				return false;
+			}
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			ChainDrawer drawer = new ChainDrawer(GetFrame);
 			// extremely arbitrary series of hardcoded ints to make the 

@@ -24,6 +24,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	{
 		internal override string VanillaItemName => "CelestialWand";
 		internal override int VanillaItemID => ItemID.CelestialWand;
+
+		internal override int AttackPatternUpdateTier => 4;
 	}
 
 	public struct CometTrailDrawer
@@ -251,6 +253,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 					Projectile.knockBack,
 					Main.myPlayer,
 					ai0: target.whoAmI);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 9), spawnPos);
 			}
 		}
 	}

@@ -34,6 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override Vector2 IdleBehavior()
 		{
 			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			maxFramesInAir = 50 + 8 * leveledPetPlayer.PetLevel;
 			return base.IdleBehavior();
 		}
 
