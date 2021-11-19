@@ -54,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		{
 			// this is a bit sneaky, doesn't set any of the SimpleMinion defaults
 			Main.projFrames[Projectile.type] = 1;
-			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		{
 			// this is a bit sneaky, doesn't set any of the SimpleMinion defaults
 			Main.projFrames[Projectile.type] = 1;
-			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 		public override void SetDefaults()
