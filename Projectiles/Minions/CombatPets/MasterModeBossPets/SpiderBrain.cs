@@ -49,14 +49,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		private float maxSpeed;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.minionSlots = 0;
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.timeLeft = TimeToLive;
