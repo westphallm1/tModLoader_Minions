@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// This is needed so your minion can properly spawn when summoned and replaced when other minions are summoned
 			ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
 			// Don't mistake this with "if this is true, then it will automatically home". It is just for damage reduction for certain NPCs
-			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()

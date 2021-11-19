@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			// This is necessary for right-click targeting
 			ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = false;
 
-			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 
 			// These below are needed for a minion

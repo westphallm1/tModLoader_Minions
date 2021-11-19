@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 1;
-			ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
