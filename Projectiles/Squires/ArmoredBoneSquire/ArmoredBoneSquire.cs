@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		public override void SetStaticDefaults()
 		{
-			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 		}
 
 		public override void SetDefaults()
