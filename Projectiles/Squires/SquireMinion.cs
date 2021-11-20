@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			SquireMinionTypes.Add(Projectile.type);
 			ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = false;
 
-			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 

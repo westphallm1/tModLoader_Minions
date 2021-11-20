@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		{
 			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 6;
-			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 		public override void SetDefaults()

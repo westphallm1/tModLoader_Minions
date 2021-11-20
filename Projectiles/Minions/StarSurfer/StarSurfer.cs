@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		public override void SetStaticDefaults()
 		{
 			Main.projFrames[Projectile.type] = 3;
-			// ProjectileID.Sets.CountsAsHoming[Projectile.type] = true;
+			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
