@@ -101,6 +101,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				Projectile.spriteDirection = -forwardDir;
 			}
 		}
+
+		protected void DoSimpleFlyingDust()
+		{
+			if(gHelper.isFlying)
+			{
+				Projectile.rotation = Projectile.velocity.X * 0.05f;
+				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
+				Main.dust[idx].alpha = 112;
+				Main.dust[idx].scale = .9f;
+			} else
+			{
+				Projectile.rotation = 0;
+			}
+		}
 	}
 
 	public abstract class CombatPetGroundedRangedMinion : CombatPetGroundedMeleeMinion
@@ -227,18 +241,5 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			}
 		}
 
-		protected void DoSimpleFlyingDust()
-		{
-			if(gHelper.isFlying)
-			{
-				Projectile.rotation = Projectile.velocity.X * 0.05f;
-				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
-				Main.dust[idx].alpha = 112;
-				Main.dust[idx].scale = .9f;
-			} else
-			{
-				Projectile.rotation = 0;
-			}
-		}
 	}
 }

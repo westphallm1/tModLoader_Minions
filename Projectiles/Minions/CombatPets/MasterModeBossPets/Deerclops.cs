@@ -22,14 +22,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	{
 		internal override string VanillaItemName => "DeerclopsPetItem";
 		internal override int VanillaItemID => ItemID.DeerclopsPetItem;
-
-		public override void AddRecipes()
-		{
-			Recipe reciprocal = Mod.CreateRecipe(Type);
-			reciprocal.AddIngredient(ItemID.DirtBlock, 1);
-			reciprocal.AddTile(TileID.WorkBenches);
-			reciprocal.Register();
-		}
 	}
 
 	public class DeerclopsShadowHand : ModProjectile
@@ -149,8 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.timeLeft = TimeToLive;
-			Projectile.tileCollide = true;
-			Projectile.penetrate = -1;
+			Projectile.penetrate = 1;
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 30;
 			Projectile.friendly = true;
@@ -167,6 +158,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				frame = Main.rand.Next(5);
 			}
 			Projectile.rotation += Math.Sign(Projectile.velocity.X) * MathHelper.TwoPi / 30;
+			Projectile.tileCollide = Projectile.velocity.Y > 0;
 		}
 
 		public override void ModifyDamageHitbox(ref Rectangle hitbox)
