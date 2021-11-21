@@ -163,17 +163,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int AttackPatternUpdateTier => 4;
 		internal override string VanillaItemName => "BrainOfCthulhuPetItem";
 	}
-	public class SuspiciousEyeReplicaMinionItem : ReplicaCombatPetMinionItem<SuspiciousEyeMinionBuff, MiniRetinazerMinion>
+	public class SuspiciousEyeReplicaMinionItem : ReplicaCombatPetMinionItem<SuspiciousEyeMinionBuff, SuspiciousEyeMinion>
 	{
 		internal override int VanillaItemID => ItemID.EyeOfCthulhuPetItem;
 		internal override int AttackPatternUpdateTier => 4;
 		internal override string VanillaItemName => "EyeOfCthulhuPetItem";
 	}
-	public class TinyFishronReplicaMinionItem : ReplicaCombatPetMinionItem<TinyFishronMinionBuff, MiniRetinazerMinion>
+	public class TinyFishronReplicaMinionItem : ReplicaCombatPetMinionItem<TinyFishronMinionBuff, TinyFishronMinion>
 	{
 		internal override int VanillaItemID => ItemID.DukeFishronPetItem;
 		internal override int AttackPatternUpdateTier => 5;
 		internal override string VanillaItemName => "DukeFishronPetItem";
+	}
+
+	public class DeerclopsReplicaMinionItem : ReplicaCombatPetMinionItem<DeerclopsMinionBuff, DeerclopsMinion>
+	{
+		internal override int VanillaItemID => ItemID.DeerclopsPetItem;
+		internal override string VanillaItemName => "DeerclopsPetItem";
 	}
 
 	public class ReplicaMinionItemTravellingMerchantNPC: GlobalNPC
@@ -190,6 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				(ItemType<EaterOfWormsReplicaMinionItem>(), ()=>NPC.downedBoss2 && !WorldGen.crimson),
 				(ItemType<SpiderBrainReplicaMinionItem>(), ()=>NPC.downedBoss2 && WorldGen.crimson),
 				(ItemType<HoneyBeeReplicaMinionItem>(), ()=>NPC.downedQueenBee),
+				(ItemType<DeerclopsReplicaMinionItem>(), ()=>NPC.downedDeerclops),
 				(ItemType<SkeletronJrReplicaMinionItem>(), ()=>NPC.downedBoss3),
 				(ItemType<SlimePrincessReplicaMinionItem>(), ()=>NPC.downedQueenSlime),
 				(ItemType<DestroyerLiteReplicaMinionItem>(), ()=>NPC.downedMechBoss1),
@@ -217,17 +224,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetupTravelShop(int[] shop, ref int nextSlot)
 		{
 			base.SetupTravelShop(shop, ref nextSlot);
-			// 20% chance to spawn one item
-			if(Main.rand.NextFloat() < 0.2f)
+			List<int> possibleItemIds = ReplicaSellConditions.Where(sc => sc.Item2.Invoke()).Select(sc => sc.Item1).ToList();
+			if(possibleItemIds.Count == 0)
 			{
-				List<int> possibleItemIds = ReplicaSellConditions.Where(sc => sc.Item2.Invoke()).Select(sc => sc.Item1).ToList();
+				return;
+			}
+			// 15% chance to spawn one item, + 3% for each additional defeated boss, max 45%
+			float spawnChance = Math.Min(0.45f, 0.15f + 0.03f * possibleItemIds.Count);
+			if(Main.rand.NextFloat() < spawnChance)
+			{
 				if(possibleItemIds.Count == 0)
 				{
 					return;
 				}
 				int index = Main.rand.Next(possibleItemIds.Count - 1);
 				shop[nextSlot++] = possibleItemIds[index];
-				// also spawn a second one to be nice maybe
+				// also occassionally spawn a second one to be nice
 				if(Main.rand.NextBool())
 				{
 					possibleItemIds.RemoveAt(index);
