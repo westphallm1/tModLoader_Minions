@@ -11,9 +11,8 @@ Please report any bugs to the #bug-reports channel of the mod discord: https://d
 
 === Version History ===
 v0.13.0 - Combat Pets!
-    - Crafted from vanilla pet items at a demon altar
-    - Cost 1 minion slot
-    - Deal low damage by default
+    - Available for every vanilla pet, crafted from vanilla pet items at a demon altar
+    - Cost 1 minion slot per pet
     - Powered up by new weapon class called "Combat Pet Emblem"
       - Craftable from many ore tiers
     - All combat pets scale with best emblem in inventory
