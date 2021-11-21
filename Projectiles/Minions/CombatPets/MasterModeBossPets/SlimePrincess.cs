@@ -1,5 +1,4 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetMultiItems;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
@@ -100,8 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SlimePrincessMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.QueenSlimePet;
-		internal override int BuffId => leveledPetPlayer?.UsingMultiPets ?? false ?
-			BuffType<MasterModeSlimePetsBuff>() :BuffType<SlimePrincessMinionBuff>();
+		internal override int BuffId => BuffType<SlimePrincessMinionBuff>();
 
 		private bool wasFlyingThisFrame = false;
 

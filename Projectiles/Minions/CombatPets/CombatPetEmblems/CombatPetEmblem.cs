@@ -26,6 +26,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 				"As long as this item is in your inventory, your combat pet will deal\n" +
 				"additional damage, and will receive a bonus to movement speed and attack range.");
 		}
+
+		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		{
+			int maxCombatPets = CombatPetLevelTable.PetLevelTable[PetLevel].MaxPets;
+			if(ServerConfig.Instance.AllowMultipleCombatPets &&  maxCombatPets > 1)
+			{
+			tooltips.Add(new TooltipLine(Mod, "MaxCombatPets", 
+				"In addition, you can have up to " + maxCombatPets + " active at once." )
+			{
+				overrideColor = Color.LimeGreen
+			});
+			}
+		}
+
 		public override void SetDefaults()
 		{
 			// These below are needed for a minion weapon
@@ -33,6 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			Item.DamageType = DamageClass.Summon;
 			Item.shoot = ProjectileID.WoodenArrowFriendly; // don't actually shoot anything
 			Item.damage = CombatPetLevelTable.PetLevelTable[PetLevel].BaseDamage;
+			Item.knockBack = 1f; // make nonzero to allow more modifiers
 		}
 
 		public override bool CanUseItem(Player player)

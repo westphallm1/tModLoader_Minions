@@ -147,6 +147,16 @@ namespace AmuletOfManyMinions
 		[Tooltip("If enabled, squires will occupy a minion slot")]
 		public bool SquireMinionSlot;
 
+		[DefaultValue(true)]
+		[Label("Combat Pets Occupy a Minion Slot")]
+		[Tooltip("If enabled, combat pets will occupy a minion slot")]
+		public bool CombatPetsMinionSlot;
+
+		[DefaultValue(true)]
+		[Label("Allow Mulltiple Combat Pets")]
+		[Tooltip("If enabled, higher level combat pet emblems will increase the number of pets you can control")]
+		public bool AllowMultipleCombatPets;
+
 		// courtesy of direwolf420
 		public static bool IsPlayerLocalServerOwner(int whoAmI)
 		{

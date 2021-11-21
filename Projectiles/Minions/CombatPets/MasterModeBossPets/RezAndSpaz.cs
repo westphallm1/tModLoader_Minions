@@ -1,7 +1,6 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetMultiItems;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
@@ -42,8 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class RezMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => leveledPetPlayer?.UsingMultiPets ?? false ?
-			BuffType<MasterModeMechanicalBossPetsBuff>() : BuffType<RezAndSpazMinionBuff>();
+		internal override int BuffId => BuffType<RezAndSpazMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TwinsPet;
 		internal override int? FiredProjectileId => ProjectileType<MiniTwinsLaser>();
@@ -84,8 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class SpazMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => leveledPetPlayer?.UsingMultiPets ?? false ?
-			BuffType<MasterModeMechanicalBossPetsBuff>() : BuffType<RezAndSpazMinionBuff>();
+		internal override int BuffId => BuffType<RezAndSpazMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TwinsPet;
 		internal override int? FiredProjectileId => ProjectileType<MiniEyeFire>();

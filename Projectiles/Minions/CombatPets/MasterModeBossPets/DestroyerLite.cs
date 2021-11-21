@@ -1,7 +1,6 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetMultiItems;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
@@ -109,8 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class DestroyerLiteMinion : CombatPetGroundedWormMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DestroyerPet;
-		internal override int BuffId => leveledPetPlayer?.UsingMultiPets ?? false ?
-			BuffType<MasterModeMechanicalBossPetsBuff>() : BuffType<DestroyerLiteMinionBuff>();
+		internal override int BuffId => BuffType<DestroyerLiteMinionBuff>();
 		public override int CounterType => -1;
 		protected override int dustType => 135;
 
