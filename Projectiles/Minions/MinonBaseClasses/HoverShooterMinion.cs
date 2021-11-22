@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				projId,
 				projectile.damage,
 				projectile.knockBack,
-				Main.myPlayer,
+				projectile.owner,
 				ai0: ai0);
 		}
 

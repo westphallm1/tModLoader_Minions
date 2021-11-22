@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == Main.myPlayer && p.type == projType)
+				if(p.active && p.owner == player.whoAmI && p.type == projType)
 				{
 					MoveLaser(p, vectorToTargetPosition);
 					p.damage = 2 * Projectile.damage;

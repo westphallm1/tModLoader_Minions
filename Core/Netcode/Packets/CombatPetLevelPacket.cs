@@ -14,27 +14,31 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 	{
 		// pet level is bounded to (0, 255)
 		readonly byte petLevel;
+		readonly short petDamage;
 
 		public CombatPetLevelPacket() { }
 
-		public CombatPetLevelPacket(Player player, byte petLevel) : base(player)
+		public CombatPetLevelPacket(Player player, byte petLevel, short petDamage) : base(player)
 		{
 			this.petLevel = petLevel;
+			this.petDamage = petDamage;
 		}
 
 		protected override void PostSend(BinaryWriter writer, Player player)
 		{
 			writer.Write(petLevel);
+			writer.Write(petDamage);
 		}
 
 		protected override void PostReceive(BinaryReader reader, int sender, Player player)
 		{
 			byte newLevel = reader.ReadByte();
+			short petDamage = reader.ReadInt16();
 			// there may be unintended consequences to setting damage to zero
-			player.GetModPlayer<LeveledCombatPetModPlayer>().UpdatePetLevel(newLevel, 0, fromSync: true);
+			player.GetModPlayer<LeveledCombatPetModPlayer>().UpdatePetLevel(newLevel, petDamage, fromSync: true);
 			if (Main.netMode == NetmodeID.Server)
 			{
-				new CombatPetLevelPacket(player, newLevel).Send(from: sender);
+				new CombatPetLevelPacket(player, newLevel, petDamage).Send(from: sender);
 			}
 		}
 	}

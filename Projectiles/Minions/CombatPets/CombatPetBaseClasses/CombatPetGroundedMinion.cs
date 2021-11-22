@@ -53,6 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			CombatPetConvenienceMethods.ConfigureDrawBox(this, width, height, xOffset, yOffset);
 			this.forwardDir = forwardDir;
 		}
+
 		protected void ConfigureFrames(int total, (int, int) idle, (int, int) walking, (int, int) jumping, (int, int) flying)
 		{
 			// this should really go into SetStaticDefaults, but we're trying to condense

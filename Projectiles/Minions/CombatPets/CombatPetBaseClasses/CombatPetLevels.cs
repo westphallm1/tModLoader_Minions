@@ -87,7 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			if(didUpdate && !fromSync)
 			{
 				// TODO MP packet
-				new CombatPetLevelPacket(Player, (byte)PetLevel).Send();
+				new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage).Send();
 			}
 		}
 
