@@ -225,13 +225,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			damage = 1;
+			if(leveledPetPlayer.PetLevel >= 4)
+			{
+				damage = 1;
+			}
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			int projType = ProjectileType<BabyRedPandaBambooSpikeController>();
-			if(player.whoAmI == Main.myPlayer && animationFrame - lastSpawnedFrame > spawnRate && !markedNPCs.Contains(target.whoAmI))
+			if(leveledPetPlayer.PetLevel >= 4 && player.whoAmI == Main.myPlayer && 
+				animationFrame - lastSpawnedFrame > spawnRate && !markedNPCs.Contains(target.whoAmI))
 			{
 				lastSpawnedFrame = animationFrame;
 				Projectile.NewProjectile(

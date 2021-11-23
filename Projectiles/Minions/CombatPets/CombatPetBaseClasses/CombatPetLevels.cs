@@ -109,10 +109,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					PetSlotsUsed += 1;
 				}
 			}
-			if(ServerConfig.Instance.CombatPetsMinionSlot)
+			if(PetSlotsUsed > 0 && !ServerConfig.Instance.CombatPetsMinionSlots)
 			{
-				Player.maxMinions = Math.Max(0, Player.maxMinions - PetSlotsUsed);
+				PetSlotsUsed -= 1;
 			}
+			Player.maxMinions = Math.Max(0, Player.maxMinions - PetSlotsUsed);
 		}
 
 		// look for the best Combat Pet Emblem in the player's inventory, use that

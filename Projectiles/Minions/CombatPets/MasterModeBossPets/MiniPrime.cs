@@ -133,5 +133,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			hand.TargetPosition = offset;
 			hand.Frame = handFrame;
 		}
+
+		public override void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			base.Animate(minFrame, maxFrame);
+			for(int i = 0; i < hands.Length; i++)
+			{
+				hands[i].SpriteDirection = Projectile.spriteDirection;
+			}
+		}
 	}
+
 }

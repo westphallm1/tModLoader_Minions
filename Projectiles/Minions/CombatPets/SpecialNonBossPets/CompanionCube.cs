@@ -76,6 +76,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			}
 		}
 
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			if(IsTeleporting)
+			{
+				damage = (int)(1.25f * damage); // slight damage boost while teleporting
+			}
+		}
+
 		private void DoTeleportMovement()
 		{
 			int cycleFrame = teleportFrame % teleportCycleFrames;
