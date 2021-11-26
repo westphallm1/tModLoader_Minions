@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Tactics;
+﻿using AmuletOfManyMinions.Core.BackportUtils;
+using AmuletOfManyMinions.Core.Minions.Tactics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
-	public abstract class MinionBuff : ModBuff
+	public abstract class MinionBuff : BackportModBuff
 	{
 
 		internal int[] projectileTypes;
@@ -19,6 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public override void SetDefaults()
 		{
+			base.SetDefaults();
 			Main.buffNoSave[Type] = true;
 			Main.buffNoTimeDisplay[Type] = true;
 			MinionTacticsGroupMapper.AddBuffMapping(this);

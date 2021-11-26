@@ -7,6 +7,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.DataStructures;
 using Terraria.Localization;
 using static Terraria.ModLoader.ModContent;
 
@@ -19,9 +20,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			ProjectileType<VenomSpiderMinion>(),
 			ProjectileType<DangerousSpiderMinion>()
 			) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("BuffName.SpiderMinion") + " (AoMM Version)");
 			Description.SetDefault(Language.GetTextValue("BuffDescription.SpiderMinion"));
 		}
@@ -56,8 +57,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			base.Shoot(player, ref position, ref speedX, ref speedY, ref type, ref damage, ref knockBack);
-			if(projTypes == null)
+			player.AddBuff(item.buffType, 3);
+
+			if (projTypes == null)
 			{
 				projTypes = new int[]
 				{
@@ -67,25 +69,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				};
 			}
 			int spawnCycle = projTypes.Select(v => player.ownedProjectileCounts[v]).Sum();
-			Projectile.NewProjectile(position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockBack, player.whoAmI);
+			var p = Projectile.NewProjectileDirect(position, Vector2.Zero, projTypes[spawnCycle % 3], damage, knockBack, player.whoAmI);
 			return false;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.UseSound = new LegacySoundStyle(2, 83);
+			Item.UseSound = new LegacySoundStyle(2, 83);
 		}
 	}
 	public abstract class BaseSpiderMinion : SimpleGroundBasedMinion
 	{
 		internal override int BuffId => BuffType<SpiderMinionBuff>();
 
-		bool isClinging = false;
-		bool onWall = false;
+		internal bool isClinging = false;
+		internal bool onWall = false;
+		internal int xMaxSpeed = 10;
+		internal (int, int) wallFrames = (4, 8);
+
 		float clingDistanceTolerance = 24f;
 		Vector2 targetOffset = default;
-		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+
+		internal Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
 		{
 			[GroundAnimationState.FLYING] = (8, 11),
 			[GroundAnimationState.JUMPING] = (0, 0),
@@ -93,20 +99,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			[GroundAnimationState.WALKING] = (0, 4),
 		};
 
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spider") + " (AoMM Version)");
-			Main.projFrames[projectile.type] = 11;
+			Main.projFrames[Projectile.type] = 11;
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			projectile.width = 26;
-			projectile.height = 26;
-			drawOffsetX = -2;
-			drawOriginOffsetY = -6;
+			Projectile.width = 26;
+			Projectile.height = 26;
+			DrawOffsetX = -2;
+			DrawOriginOffsetY = -6;
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
@@ -120,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.OnSpawn();
 			// AI is much more consistent than vanilla, so drop base damage down a bit
-			projectile.damage = (int)(0.9f * projectile.damage);
+			Projectile.damage = (int)(0.9f * Projectile.damage);
 		}
 
 		// Use flying movement if we're on a wall
@@ -141,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			if(onWall && vectorToTarget is null && vector.Length() < 4)
 			{
-				projectile.velocity = Vector2.Zero;
+				Projectile.velocity = Vector2.Zero;
 			} else
 			{
 				base.IdleFlyingMovement(vector);
@@ -151,31 +158,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
 			{
 				gHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(projectile.velocity.X) < 2 ? 1.25f : 7;
-			int xMaxSpeed = 10;
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			if (animationFrame - lastHitFrame > 10)
 			{
-				projectile.velocity.X = (projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
 			else
 			{
-				projectile.velocity.X = Math.Sign(projectile.velocity.X) * xMaxSpeed * 0.75f;
+				Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * xMaxSpeed * 0.75f;
 			}
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			Tile tile = Framing.GetTileSafely((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16);
+			Tile tile = Framing.GetTileSafely((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
 			onWall = (tile.active() && tile.collisionType == 1) || tile.wall > 0;
 			return base.IdleBehavior();
 		}
@@ -191,8 +197,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				}
 				onWall = true;
 				isClinging = true;
-				projectile.Center += vectorToTargetPosition;
-				projectile.velocity = Vector2.Zero;
+				Projectile.Center += vectorToTargetPosition;
+				Projectile.velocity = Vector2.Zero;
 			} else
 			{
 				isClinging = false;
@@ -232,34 +238,34 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			if(onWall)
 			{
-				base.Animate(4, 8);
+				base.Animate(wallFrames.Item1, wallFrames.Item2);
 				if(vectorToTarget != null && isClinging)
 				{
 					if(animationFrame % 60 > 30)
 					{
-						projectile.rotation = MathHelper.PiOver2 + MathHelper.Pi / 8 - (MathHelper.PiOver4 * (animationFrame % 60) / 60f);
+						Projectile.rotation = MathHelper.PiOver2 + MathHelper.Pi / 8 - (MathHelper.PiOver4 * (animationFrame % 60) / 60f);
 					} else
 					{
-						projectile.rotation = MathHelper.PiOver2 - MathHelper.Pi / 8 + (MathHelper.PiOver4 * (animationFrame % 60) / 60f);
+						Projectile.rotation = MathHelper.PiOver2 - MathHelper.Pi / 8 + (MathHelper.PiOver4 * (animationFrame % 60) / 60f);
 					}
-				} else if (projectile.velocity.Length() > 0)
+				} else if (Projectile.velocity.Length() > 0)
 				{
-					projectile.rotation = projectile.velocity.ToRotation() + MathHelper.PiOver2;
+					Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 				} else
 				{
-					projectile.frame = 4;
+					Projectile.frame = 4;
 				}
 			} else
 			{
-				projectile.rotation = 0;
+				Projectile.rotation = 0;
 				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
-			if (projectile.velocity.X > 1)
+			if (Projectile.velocity.X > 1)
 			{
-				projectile.spriteDirection = -1;
-			} else if (projectile.velocity.X < -1)
+				Projectile.spriteDirection = -1;
+			} else if (Projectile.velocity.X < -1)
 			{
-				projectile.spriteDirection = 1;
+				Projectile.spriteDirection = 1;
 			}
 
 		}
@@ -282,7 +288,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			drawOriginOffsetY = -2;
+			DrawOriginOffsetY = -2;
 		}
 	}
 }

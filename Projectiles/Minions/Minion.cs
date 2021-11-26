@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.BackportUtils;
 using AmuletOfManyMinions.Core.Minions;
 using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Core.Minions.Tactics;
@@ -25,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 	}
-	public abstract class Minion : ModProjectile
+	public abstract class Minion : BackportModProjectile
 	{
 		public readonly float PI = (float)Math.PI;
 

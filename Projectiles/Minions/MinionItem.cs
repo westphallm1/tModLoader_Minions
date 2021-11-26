@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+﻿using AmuletOfManyMinions.Core.BackportUtils;
+using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.UI;
 using AmuletOfManyMinions.UI.TacticsUI;
 using Microsoft.Xna.Framework;
@@ -9,7 +10,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
-	public abstract class MinionItem<TBuff, TProj> : ModItem where TBuff : ModBuff where TProj : Minion
+	public abstract class MinionItem<TBuff, TProj> : BackportModItem where TBuff : ModBuff where TProj : Minion
 	{
 		public override void SetStaticDefaults()
 		{

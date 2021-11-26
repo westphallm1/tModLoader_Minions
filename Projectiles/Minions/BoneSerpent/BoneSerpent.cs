@@ -11,9 +11,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 	public class BoneSerpentMinionBuff : MinionBuff
 	{
 		public BoneSerpentMinionBuff() : base(ProjectileType<BoneSerpentCounterMinion>()) { }
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
-			base.SetDefaults();
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bone Serpent");
 			Description.SetDefault("A skeletal dragon will fight for you!");
 		}
@@ -32,13 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			item.knockBack = 0.5f;
-			item.mana = 10;
-			item.width = 32;
-			item.damage = 30;
-			item.height = 32;
-			item.value = Item.buyPrice(0, 1, 0, 0);
-			item.rare = ItemRarityID.Orange;
+			Item.knockBack = 0.5f;
+			Item.mana = 10;
+			Item.width = 32;
+			Item.damage = 30;
+			Item.height = 32;
+			Item.value = Item.buyPrice(0, 1, 0, 0);
+			Item.rare = ItemRarityID.Orange;
 		}
 	}
 
@@ -48,13 +48,85 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override int MinionType => ProjectileType<BoneSerpentMinion>();
 	}
 
-	public class BoneSerpentMinion : WormMinion
+	public abstract class GroundTravellingWormMinion: WormMinion
+	{
+		internal int framesInAir;
+		internal int framesInGround;
+		internal GroundAwarenessHelper gHelper;
+		internal int maxFramesInAir = 60;
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			attackThroughWalls = true;
+			framesInAir = 0;
+			framesInGround = 0;
+			gHelper = new GroundAwarenessHelper(this);
+		}
+
+		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		{
+			if (framesInAir < 2 * maxFramesInAir + 10 || Vector2.Distance(player.Center, Projectile.Center) > 300f || Math.Abs(player.Center.Y - Projectile.Center.Y) > 80f)
+			{
+				base.IdleMovement(vectorToIdlePosition);
+			}
+		}
+
+		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			if (framesInAir > maxFramesInAir && vectorToTargetPosition.Y < 0)
+			{
+				vectorToTargetPosition.Y = 0;
+			}
+			if (framesInAir < 2 * maxFramesInAir + 10)
+			{
+				base.TargetedMovement(vectorToTargetPosition);
+			}
+		}
+
+		public override Vector2 IdleBehavior()
+		{
+			if (!gHelper.InTheGround(Projectile.Center))
+			{
+				framesInAir++;
+				framesInGround = 0;
+				Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.25f);
+			}
+			else
+			{
+				framesInGround++;
+				framesInAir = 0;
+			}
+			if (framesInAir > 60 && Projectile.velocity.Y < 16)
+			{
+				Projectile.velocity.Y += 0.5f;
+			}
+			Vector2 vectorToIdle = base.IdleBehavior();
+			vectorToIdle.Y += 48; // circle under the player's feet
+			return vectorToIdle;
+		}
+
+		public override Vector2? FindTarget()
+		{
+			float searchDistance = ComputeSearchDistance();
+			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target)
+			{
+				return target - Projectile.Center;
+			}
+			else if (SelectedEnemyInRange(searchDistance, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target2)
+			{
+				return target2 - Projectile.Center;
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
+
+	public class BoneSerpentMinion : GroundTravellingWormMinion
 	{
 		internal override int BuffId => BuffType<BoneSerpentMinionBuff>();
 
-		private int framesInAir;
-		private int framesInGround;
-		private GroundAwarenessHelper gHelper;
 		protected override int dustType => 30;
 		protected override int CounterType => ProjectileType<BoneSerpentCounterMinion>();
 
@@ -63,61 +135,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bone Serpent");
 			// Sets the amount of frames this minion has on its spritesheet
-			Main.projFrames[projectile.type] = 1;
+			Main.projFrames[Projectile.type] = 1;
 		}
 
 
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
-			attackThroughWalls = true;
-			framesInAir = 0;
-			framesInGround = 0;
-			gHelper = new GroundAwarenessHelper(this);
 			wormDrawer = new BoneSerpentDrawer();
 		}
 
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
-		{
-			if (framesInAir < 130 || Vector2.Distance(player.Center, projectile.Center) > 300f || Math.Abs(player.Center.Y - projectile.Center.Y) > 80f)
-			{
-				base.IdleMovement(vectorToIdlePosition);
-			}
-		}
-
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
-		{
-			if (framesInAir > 60 && vectorToTargetPosition.Y < 0)
-			{
-				vectorToTargetPosition.Y = 0;
-			}
-			if (framesInAir < 130)
-			{
-				base.TargetedMovement(vectorToTargetPosition);
-			}
-		}
-
-		public override Vector2 IdleBehavior()
-		{
-			if (!gHelper.InTheGround(projectile.Center))
-			{
-				framesInAir++;
-				framesInGround = 0;
-				Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.25f);
-			}
-			else
-			{
-				framesInGround++;
-				framesInAir = 0;
-			}
-			if (framesInAir > 60 && projectile.velocity.Y < 16)
-			{
-				projectile.velocity.Y += 0.5f;
-			}
-			Vector2 vectorToIdle = base.IdleBehavior();
-			vectorToIdle.Y += 48; // circle under the player's feet
-			return vectorToIdle;
-		}
 		protected override float ComputeSearchDistance()
 		{
 			return 500 + 25 * GetSegmentCount();
@@ -145,23 +172,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		{
 			return ComputeTargetedSpeed() + 3;
 		}
-
-		public override Vector2? FindTarget()
-		{
-			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target)
-			{
-				return target - projectile.Center;
-			}
-			else if (SelectedEnemyInRange(searchDistance, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target2)
-			{
-				return target2 - projectile.Center;
-			}
-			else
-			{
-				return null;
-			}
-		}
 	}
 
 	internal class BoneSerpentDrawer : WormDrawer
@@ -169,20 +179,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override void DrawHead()
 		{
 			Rectangle head = new Rectangle(56, 0, 48, 36);
-			lightColor = new Color(
-				Math.Max(lightColor.R, (byte)25),
-				Math.Max(lightColor.G, (byte)25),
-				Math.Max(lightColor.B, (byte)25));
 			AddSprite(2, head);
 		}
 
 		protected override void DrawTail()
 		{
-			Rectangle tail = new Rectangle(0, 10, 24, 22);
 			lightColor = new Color(
 				Math.Max(lightColor.R, (byte)25),
 				Math.Max(lightColor.G, (byte)25),
 				Math.Max(lightColor.B, (byte)25));
+			Rectangle tail = new Rectangle(0, 10, 24, 22);
 			int dist = 32 + 20 * (SegmentCount + 1);
 			AddSprite(dist, tail);
 		}
@@ -190,10 +196,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		protected override void DrawBody()
 		{
 			Rectangle body = new Rectangle(28, 6, 24, 30);
-			lightColor = new Color(
-				Math.Max(lightColor.R, (byte)25),
-				Math.Max(lightColor.G, (byte)25),
-				Math.Max(lightColor.B, (byte)25));
 			for (int i = 0; i < SegmentCount + 1; i++)
 			{
 				AddSprite(32 + 20 * i, body);

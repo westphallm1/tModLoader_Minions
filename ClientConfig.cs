@@ -123,6 +123,16 @@ namespace AmuletOfManyMinions
 		[Tooltip("If enabled, squires will occupy a minion slot")]
 		public bool SquireMinionSlot;
 
+	    [DefaultValue(true)]
+	    [Label("All Combat Pets Occupy a Minion Slot")]
+	    [Tooltip("If enabled, every combat pet will occupy a minion slot. Otherwise, the first summoned is free.")]
+	    public bool CombatPetsMinionSlots;
+
+	    [DefaultValue(true)]
+	    [Label("Allow Mulltiple Combat Pets")]
+	    [Tooltip("If enabled, higher level combat pet emblems will increase the number of pets you can control.")]
+	    public bool AllowMultipleCombatPets;
+
 		public static bool IsPlayerLocalServerOwner(int whoAmI)
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient)

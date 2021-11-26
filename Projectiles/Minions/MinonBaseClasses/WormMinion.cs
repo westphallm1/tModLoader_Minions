@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			return false;
 		}
 
-		protected int GetSegmentCount()
+		protected virtual int GetSegmentCount()
 		{
 			return Math.Min(EmpowerCount, MAX_SEGMENT_COUNT);
 		}

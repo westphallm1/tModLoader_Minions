@@ -23,6 +23,8 @@ using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using System;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets;
 
 namespace AmuletOfManyMinions
 {
@@ -46,6 +48,8 @@ namespace AmuletOfManyMinions
 			SpriteCompositionManager.Load();
 			CritterConfigs.Load();
 			AmuletOfManyMinionsWorld.Load();
+			CombatPetLevelTable.Load();
+			CombatPetBuff.Load();
 
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
 			CycleTacticsGroupHotKey = RegisterHotKey("Cycle Tactics Group", "L");
@@ -81,6 +85,9 @@ namespace AmuletOfManyMinions
 			CritterConfigs.Unload();
 			AmuletOfManyMinionsWorld.Unload();
 			PartyHatSystem.Unload();
+			CombatPetLevelTable.Unload();
+			CombatPetBuff.Unload();
+			BlackCatMinion.Unload();
 
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;

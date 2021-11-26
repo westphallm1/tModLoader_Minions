@@ -55,10 +55,6 @@ namespace AmuletOfManyMinions.Items.Armor
 			player.GetModPlayer<MinionSpawningItemPlayer>().foragerArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}
-		public override void DrawHair(ref bool drawHair, ref bool drawAltHair)
-		{
-			drawAltHair = true;
-		}
 
 		public override void AddRecipes()
 		{
@@ -75,7 +71,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			return player.foragerArmorSetEquipped;
 		}
 	}
-	public class ForagerMushroom : BumblingTransientMinion
+	public abstract class BaseTrackingMushroom : BumblingTransientMinion
 	{
 		protected override int timeToLive => 60 * 3; // 3 seconds;
 		protected override float inertia => 12;
@@ -86,54 +82,52 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.projFrames[projectile.type] = 1;
+			Main.projFrames[Projectile.type] = 1;
 		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			frameSpeed = 15;
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.tileCollide = true;
-			projectile.penetrate = 1;
-			projectile.friendly = false;
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = 1;
+			Projectile.friendly = false;
 		}
 
 		public override void Kill(int timeLeft)
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
+				Dust.NewDust(Projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);
 			}
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			return oldVelocity.Y > 0 && projectile.velocity.X == oldVelocity.X;
+			return oldVelocity.Y > 0 && Projectile.velocity.X == oldVelocity.X;
 		}
 
 		protected override void Move(Vector2 vector2Target, bool isIdle = false)
 		{
-			if (projectile.timeLeft < timeToLive - 30)
+			if (Projectile.timeLeft < timeToLive - 30)
 			{
 				// enforce drifting left and right
-				float lifeFraction = projectile.timeLeft / (float)timeToLive;
+				float lifeFraction = Projectile.timeLeft / (float)timeToLive;
 				vector2Target.X += 12 * (1 - lifeFraction) * (float)Math.Sin(10 * PI * lifeFraction);
 			}
 			base.Move(vector2Target, isIdle);
-			if (projectile.timeLeft > timeToLive - 30)
+			if (Projectile.timeLeft > timeToLive - 30)
 			{
-				projectile.friendly = false;
-				projectile.velocity.Y = -3;
+				Projectile.friendly = false;
+				Projectile.velocity.Y = -3;
 			}
 			else
 			{
-				projectile.friendly = true;
-				projectile.velocity.Y = 1.5f;
+				Projectile.friendly = true;
+				Projectile.velocity.Y = 1.5f;
 			}
 		}
-
-
-
 	}
+	public class ForagerMushroom : BaseTrackingMushroom { }
 }
