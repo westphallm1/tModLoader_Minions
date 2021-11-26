@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Core.BackportUtils
 		public void SetOriginalDamage(int damage)
 		{
 			Player owner = Main.player[Projectile.owner];
-			Projectile.damage = (int)(damage * owner.minionDamageMult);
+			Projectile.damage = (int)(damage * (owner.minionDamageMult + owner.minionDamage - 1f));
 		}
 	}
 
