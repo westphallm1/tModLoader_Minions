@@ -94,9 +94,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				player.ClearBuff(BuffId);
 			}
+			// give at least one AI cycle to live before killing off
 			if (player.HasBuff(BuffId))
 			{
 				Projectile.timeLeft = 2;
+			} else if (Main.projPet[Projectile.type])
+			{
+				Projectile.Kill(); // pets don't die naturally for some reason
 			}
 		}
 
@@ -217,12 +221,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// A simpler version of SelectedEnemyInRange that doesn't require any tactics/teams stuff
 		public NPC GetClosestEnemyToPosition(Vector2 position, float searchRange, bool requireLOS = true)
 		{
+			return GetClosestEnemyToPosition(position, searchRange, ShouldIgnoreNPC, requireLOS);
+		}
+
+		public static bool GenericIgnoreNPC(NPC npc) => !npc.CanBeChasedBy();
+
+		public static NPC GetClosestEnemyToPosition(Vector2 position, float searchRange,  Func<NPC, bool> shouldIgnore = null, bool requireLOS = true)
+		{
 			float minDist = float.MaxValue;
 			NPC closest = null;
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
-				if (ShouldIgnoreNPC(npc))
+				if (shouldIgnore?.Invoke(npc) ?? (!npc.active || !npc.CanBeChasedBy()))
 				{
 					continue;
 				}

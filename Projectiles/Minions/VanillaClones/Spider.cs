@@ -84,17 +84,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		internal override int BuffId => BuffType<SpiderMinionBuff>();
 
-		bool isClinging = false;
-		bool onWall = false;
+		internal bool isClinging = false;
+		internal bool onWall = false;
+		internal int xMaxSpeed = 10;
+		internal (int, int) wallFrames = (4, 8);
+
 		float clingDistanceTolerance = 24f;
 		Vector2 targetOffset = default;
-		private Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+
+		internal Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
 		{
 			[GroundAnimationState.FLYING] = (8, 11),
 			[GroundAnimationState.JUMPING] = (0, 0),
 			[GroundAnimationState.STANDING] = (0, 0),
 			[GroundAnimationState.WALKING] = (0, 4),
 		};
+
 
 		public override void SetStaticDefaults()
 		{
@@ -159,7 +164,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				gHelper.DoJump(vector);
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
-			int xMaxSpeed = 10;
 			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
 				Projectile.velocity.X = player.velocity.X;
@@ -235,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			if(onWall)
 			{
-				base.Animate(4, 8);
+				base.Animate(wallFrames.Item1, wallFrames.Item2);
 				if(vectorToTarget != null && isClinging)
 				{
 					if(animationFrame % 60 > 30)

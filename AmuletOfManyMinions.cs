@@ -1,36 +1,18 @@
-using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Netcode;
-using AmuletOfManyMinions.Items.Accessories;
-using AmuletOfManyMinions.NPCs;
-using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
-using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Minions.NullHatchet;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
-using AmuletOfManyMinions.Projectiles.Squires;
-using AmuletOfManyMinions.UI;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.UI;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent.Creative;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
-using System.Linq;
-using System;
-using AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer;
-using AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar;
-using AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar;
-using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
-using AmuletOfManyMinions.Projectiles.Minions.Necromancer;
-using AmuletOfManyMinions.Projectiles.Minions.SpiritGun;
-using AmuletOfManyMinions.Projectiles.Minions.EclipseHerald;
-using System.Reflection;
 
 namespace AmuletOfManyMinions
 {
@@ -56,6 +38,14 @@ namespace AmuletOfManyMinions
 		public override void PostSetupContent()
 		{
 			CrossMod.AddSummonersAssociationMetadata(this);
+			// add Journey Mode support to any item which doesn't explicitly reference it
+			var catalog = CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId;
+			IEnumerable<ModItem> items = GetContent<ModItem>().Where(i=>!catalog.ContainsKey(i.Type));
+			foreach(var item in items)
+			{
+				catalog[item.Type] = 1;
+			}
+			
 		}
 
 		public override void Unload()
@@ -102,40 +92,6 @@ namespace AmuletOfManyMinions
 				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.StardustDragonStaff"),
 				new int[] { ItemID.StardustDragonStaff, ModContent.ItemType<StardustDragonMinionItem>()});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:StardustDragons", stardustDragonGroup);
-		}
-
-		public override void AddRecipes()
-		{
-			// make vanilla minion items craftable from AoMM version and vice versa
-			// there is probably a more elegant approach to this
-			(int, int)[] pairs = new (int, int)[]
-			{
-				(ItemID.SlimeStaff,          ModContent.ItemType<BabySlimeMinionItem>()),
-				(ItemID.HornetStaff,         ModContent.ItemType<HornetMinionItem>()),
-				(ItemID.ImpStaff,            ModContent.ItemType<ImpMinionItem>()),
-				(ItemID.SpiderStaff,         ModContent.ItemType<SpiderMinionItem>()),
-				(ItemID.PirateStaff,         ModContent.ItemType<PirateMinionItem>()),
-				(ItemID.OpticStaff,          ModContent.ItemType<TwinsMinionItem>()),
-				(ItemID.PygmyStaff,          ModContent.ItemType<PygmyMinionItem>()),
-				(ItemID.RavenStaff,          ModContent.ItemType<RavenMinionItem>()),
-				(ItemID.DeadlySphereStaff,   ModContent.ItemType<DeadlySphereMinionItem>()),
-				(ItemID.TempestStaff,        ModContent.ItemType<SharknadoMinionItem>()),
-				(ItemID.XenoStaff,           ModContent.ItemType<UFOMinionItem>()),
-				(ItemID.StardustDragonStaff, ModContent.ItemType<StardustDragonMinionItem>()),
-				(ItemID.StardustCellStaff,   ModContent.ItemType<StardustCellMinionItem>()),
-			};
-			foreach ((int, int) itemPair in pairs)
-			{
-				for (int i = 0; i < 2; i++)
-				{
-					int src = i == 0 ? itemPair.Item1 : itemPair.Item2;
-					int dst = i == 0 ? itemPair.Item2 : itemPair.Item1;
-					Recipe recipe = this.CreateRecipe(dst);
-					recipe.AddIngredient(src, 1);
-					recipe.AddTile(TileID.DemonAltar);
-					recipe.Register();
-				}
-			}
 		}
 
 		public override void PostAddRecipes()

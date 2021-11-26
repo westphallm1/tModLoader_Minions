@@ -83,6 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = false;
 
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 
 			// These below are needed for a minion

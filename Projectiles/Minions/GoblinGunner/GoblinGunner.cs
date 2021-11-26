@@ -176,7 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 						Projectile.knockBack,
 						Main.myPlayer);
 				}
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 11), pos);
+				SoundEngine.PlaySound(new LegacySoundStyle(2, 11).WithVolume(0.5f), pos);
 			}
 		}
 

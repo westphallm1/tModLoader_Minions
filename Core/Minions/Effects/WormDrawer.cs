@@ -69,4 +69,33 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			this.frame = frame;
 		}
 	}
+
+	/// <summary>
+	/// Used for drawing worms with vertically oriented spritesheets, mostly vanilla clones
+	/// </summary>
+	public abstract class VerticalWormDrawer : WormDrawer
+	{
+		protected override SpriteEffects GetEffects(float angle)
+		{
+			SpriteEffects effects = SpriteEffects.FlipVertically;
+			angle = (angle + 2 * (float)Math.PI) % (2 * (float)Math.PI); // get to (0, 2PI) range
+			if (angle > Math.PI / 2 && angle < 3 * Math.PI / 2)
+			{
+				effects |= SpriteEffects.FlipHorizontally;
+			}
+			return effects;
+		}
+
+		protected override void AddSprite(float dist, Rectangle bounds, Color c = default)
+		{
+			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
+			Vector2 angle = new Vector2();
+			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
+			float r = angle.ToRotation();
+			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
+				bounds, c == default ? lightColor : c, r + MathHelper.PiOver2,
+				origin, 1, GetEffects(r), 0);
+		}
+
+	}
 }

@@ -1,4 +1,6 @@
 ﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -41,6 +43,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public abstract class BaseImpFireball : ModProjectile
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.ImpFireball;
+
+		internal virtual int DustType => 6;
+		internal virtual float DustScale => 2f;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -61,9 +66,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				int dustId = Dust.NewDust(
 					Projectile.position, 
-					Projectile.width, Projectile.height, 6, 
+					Projectile.width, Projectile.height, DustType, 
 					Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 
-					100, default, 2f);
+					100, default, DustScale);
 				Main.dust[dustId].noGravity = true;
 				Main.dust[dustId].velocity.X *= 0.3f;
 				Main.dust[dustId].velocity.Y *= 0.3f;
@@ -316,6 +321,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override int CounterType => ProjectileType<ImpMinion>();
 		protected override int dustType => 6;
 
+		protected int BabyImpCount => player.ownedProjectileCounts[ProjectileType<BabyImpMinion>()];
+		protected override int EmpowerCount => base.EmpowerCount + BabyImpCount;
 
 		public override string Texture => "Terraria/Images/NPC_" + NPCID.RedDevil;
 
@@ -362,6 +369,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			int fireCount = 1 + Main.rand.Next(3);
 			int fireRadius = Main.rand.Next(8, 24);
+			bool hasBaby = BabyImpCount > 0;
 			for(int i = 0; i < fireCount; i ++)
 			{
 				float startAngle = -2f * (float)Math.PI * animationFrame / 120;
@@ -373,12 +381,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					fireOffset = Vector2.Zero;
 				}
 				Vector2 randomShoot = lineOfFire + Main.rand.NextFloatDirection().ToRotationVector2();
+				int damage = Projectile.damage;
+				if(hasBaby && Main.rand.Next(EmpowerCount) == 0)
+				{
+					projId = ProjectileType<BabyImpFireBall>();
+					damage = player.GetModPlayer<LeveledCombatPetModPlayer>().PetDamage;
+				}
 				Projectile.NewProjectile(
 					Projectile.GetProjectileSource_FromThis(),
 					Projectile.Center + fireOffset,
 					VaryLaunchVelocity(randomShoot),
 					projId,
-					Projectile.damage,
+					damage,
 					Projectile.knockBack,
 					Main.myPlayer,
 					ai0: ai0);
@@ -470,13 +484,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				return;
 			}
 			float startAngle = -2f * (float)Math.PI * animationFrame / 120;
+			bool hasBaby = BabyImpCount > 0;
 			for (int i = 0; i < 20; i++)
 			{
 				float angle = startAngle + i * 2 * (float)Math.PI / 20;
 				Vector2 rotation = angle.ToRotationVector2();
 				rotation.X *= 0.75f;
 				Vector2 pos = Projectile.Center + 28 * rotation;
-				Dust dust = Dust.NewDustDirect(pos, 1, 1, 6, 0f, 0f, 100, default, 1.25f);
+				Dust dust;
+				if(Main.rand.NextBool() || !hasBaby)
+				{
+					dust = Dust.NewDustDirect(pos, 1, 1, 6, 0f, 0f, 100, default, 1.25f);
+				} else
+				{
+					dust = Dust.NewDustDirect(pos, 1, 1, DustID.Shadowflame, 0f, 0f, 100, default, 1f);
+				}
 				dust.noGravity = Main.rand.Next(120) > 0;
 				dust.noLight = true;
 			}

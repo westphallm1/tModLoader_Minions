@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.dust[dustId].noGravity = true;
 			if (Main.rand.Next(3) == 0)
 			{
-				Main.dust[dustId].scale *= 3f;
+				Main.dust[dustId].scale *= 1.25f;
 				Main.dust[dustId].velocity.X *= 2f;
 				Main.dust[dustId].velocity.Y *= 2f;
 			}
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 
 		public override void SetDefaults()
-		{
+			{
 			Projectile.CloneDefaults(ProjectileID.MiniRetinaLaser);
 			base.SetDefaults();
 			Projectile.penetrate = 1;

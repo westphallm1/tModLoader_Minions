@@ -126,7 +126,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 		public override void Kill(int timeLeft)
 		{
-			Vector2 position = Projectile.Center;
+			SpawnSmallExplosionOnProjDeath(Projectile);
+		}
+
+		public static void SpawnSmallExplosionOnProjDeath(Projectile projectile)
+		{
+			Vector2 position = projectile.Center;
 			int width = 22;
 			int height = 22;
 			for (int i = 0; i < 20; i++)
@@ -150,20 +155,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					Main.gore[goreIdx].velocity += offset;
 				}
 			}
-			if(Projectile.owner == Main.myPlayer)
+			if(projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
-					Projectile.Center,
+					projectile.GetProjectileSource_FromThis(),
+					projectile.Center,
 					Vector2.Zero,
 					ProjectileType<PirateCannonballExplosion>(),
-					Projectile.damage,
-					Projectile.knockBack,
-					Projectile.owner);
+					projectile.damage,
+					projectile.knockBack,
+					projectile.owner);
 			}
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 14)?.WithVolume(0.5f) ?? null, Projectile.position);
+			SoundEngine.PlaySound(new LegacySoundStyle(2, 14)?.WithVolume(0.5f) ?? null, projectile.position);
 		}
 	}
+
+
 
 	public class PirateCannonballExplosion: ModProjectile
 	{

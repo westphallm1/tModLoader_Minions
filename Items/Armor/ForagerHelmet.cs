@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			return player.foragerArmorSetEquipped;
 		}
 	}
-	public class ForagerMushroom : BumblingTransientMinion
+	public abstract class BaseTrackingMushroom : BumblingTransientMinion
 	{
 		protected override int timeToLive => 60 * 3; // 3 seconds;
 		protected override float inertia => 12;
@@ -125,8 +125,6 @@ namespace AmuletOfManyMinions.Items.Armor
 				Projectile.velocity.Y = 1.5f;
 			}
 		}
-
-
-
 	}
+	public class ForagerMushroom : BaseTrackingMushroom { }
 }

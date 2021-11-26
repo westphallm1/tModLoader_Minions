@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -26,7 +27,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void UpdateEquip(Player player)
 		{
 			player.GetDamage<SummonDamageClass>() += 0.25f;
-			player.maxMinions -= 1;
+			player.maxMinions = Math.Max(0, player.maxMinions - 1);
 			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus -= 0.02f;
 		}
 

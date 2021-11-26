@@ -125,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 	}
 
 
-	public class PumpkinBomb : BasePumpkinBomb
+	public abstract class WeakPumpkinBomb : BasePumpkinBomb
 	{
 		public override void SetDefaults()
 		{
@@ -152,6 +152,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		{
 			Projectile.velocity.X = -Math.Sign(oldVelocity.X) * 1.5f * bouncesLeft;
 		}
+	}
+
+	public class PumpkinBomb : WeakPumpkinBomb
+	{
+		// no op
 	}
 
 	public class BigPumpkinBomb : BasePumpkinBomb
