@@ -47,14 +47,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Main.instance.LoadProjectile(ProjectileID.PortalGunGate);
+			if(!Main.dedServ)
+			{
+				Main.instance.LoadProjectile(ProjectileID.PortalGunGate);
+			}
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			CombatPetConvenienceMethods.ConfigureDrawBox(this, 30, 30, 0, -2);
-			ExtraTexture = GetTexture(base.Texture + "Platform");
+			if(!Main.dedServ)
+			{
+				ExtraTexture = GetTexture(base.Texture + "Platform");
+			}
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

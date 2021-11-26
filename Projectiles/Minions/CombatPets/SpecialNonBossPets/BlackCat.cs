@@ -278,9 +278,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			//Main.instance.LoadItem(ItemID.WaterBolt);
 			//Main.instance.LoadItem(ItemID.MagicalHarp);
 			//Main.instance.LoadItem(ItemID.ShadowbeamStaff);
-			Main.instance.LoadProjectile(ProjectileID.QuarterNote);
-			Main.instance.LoadProjectile(ProjectileID.EighthNote);
-			Main.instance.LoadProjectile(ProjectileID.TiedEighthNote);
+			if(!Main.dedServ)
+			{
+				Main.instance.LoadProjectile(ProjectileID.QuarterNote);
+				Main.instance.LoadProjectile(ProjectileID.EighthNote);
+				Main.instance.LoadProjectile(ProjectileID.TiedEighthNote);
+			}
 			BlackCatLevelInfo = new CatPetLevelInfo[]
 			{
 				new CatPetLevelInfo(-1, ItemID.WandofSparking, 0, 8, WeaponSpriteOrientation.DIAGONAL),
