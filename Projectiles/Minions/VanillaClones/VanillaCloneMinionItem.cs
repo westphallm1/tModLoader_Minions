@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -38,5 +39,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			item.CloneDefaults(VanillaItemID);
 			base.SetDefaults();
 		}
-	}
+
+	    public override void AddRecipes()
+	    {
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(item.type, 1);
+			recipe.AddTile(TileID.DemonAltar);
+			recipe.SetResult(VanillaItemID);
+			recipe.AddRecipe();
+
+			ModRecipe reciprocal = new ModRecipe(mod);
+			reciprocal.AddIngredient(VanillaItemID, 1);
+			reciprocal.AddTile(TileID.DemonAltar);
+			reciprocal.SetResult(this);
+			reciprocal.AddRecipe();
+	    }
+
+}
 }

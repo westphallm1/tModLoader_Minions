@@ -4,6 +4,9 @@ over 30 new minions, and several armor sets and accessories for both Squires and
 
 
 === Version History ==
+v0.13.0.2 - Bugfixes
+       - Multiplayer loading fix
+       - Add missing recipes
 v0.13.0 - Combat Pets!
        - Available for every vanilla pet, crafted from vanilla pet items at a demon altar
        - Cost 1 minion slot per pet
