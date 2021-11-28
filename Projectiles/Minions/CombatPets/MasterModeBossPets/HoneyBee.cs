@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class HoneyBeeMinionItem : CombatPetMinionItem<HoneyBeeMinionBuff, HoneyBeeMinion>
 	{
 		internal override int VanillaItemID => ItemID.QueenBeePetItem;
-		internal override int AttackPatternUpdateTier => 4;
+		internal override int AttackPatternUpdateTier => 6;
 		internal override string VanillaItemName => "QueenBeePetItem";
 	}
 
@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		protected override float distanceToBumbleBack => 2000f; // don't bumble back
 		protected override float searchDistance => 220f;
 
-		public override string Texture => "Terraria/Images/NPC_" + NPCID.Bee;
+		public override string Texture => "Terraria/Images/NPC_" + NPCID.BeeSmall;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -91,7 +91,32 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		protected override void Move(Vector2 vector2Target, bool isIdle = false)
 		{
 			base.Move(vector2Target, isIdle);
-			Projectile.rotation = Projectile.velocity.ToRotation();
+			Projectile.rotation = 0.05f * Projectile.velocity.X;
+			Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
+		}
+
+		public override bool OnTileCollide(Vector2 oldVelocity)
+		{
+			if (Math.Abs(Projectile.velocity.Y) < Math.Abs(oldVelocity.Y))
+			{
+				Projectile.velocity.Y = -oldVelocity.Y;
+			} else if (Math.Abs(Projectile.velocity.X) < Math.Abs(oldVelocity.X))
+			{
+				Projectile.velocity.X = -oldVelocity.X;
+			} else
+			{
+				// don't really understand what's going on in this case but that's ok
+				return false; 
+			}
+			return false;
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			for(int i = 0; i < 6; i++)
+			{
+				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Honey);
+			}
 		}
 	}
 
@@ -102,6 +127,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.QueenBeePet;
 		internal override int? FiredProjectileId => ProjectileType<HoneyPotProjectile>();
+		internal bool UsingKnightAI => (leveledPetPlayer?.PetLevel ?? 0) >= 6;
+
+		internal override int GetAttackFrames(CombatPetLevelInfo info) => UsingKnightAI ?
+			Math.Max(16, 32 - 2 * info.Level) : base.GetAttackFrames(info);
+
+		internal override float DamageMult => UsingKnightAI ? 0.75f : 1f;
 		internal override LegacySoundStyle ShootSound => SoundID.Item17;
 
 		internal WeaponHoldingDrawer weaponDrawer;
@@ -141,12 +172,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			Vector2 target = base.IdleBehavior();
 			weaponDrawer.Update(Projectile, animationFrame);
-			if(leveledPetPlayer.PetLevel >= 4)
-			{
-			} else
-			{
-				hsHelper.AfterFiringProjectile = null;
-			}
+			hsHelper.firedProjectileId = UsingKnightAI ? null : FiredProjectileId;
 			return target;
 		}
 
@@ -165,9 +191,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 		}
 
+		internal override void AfterFiringProjectile()
+		{
+			if(UsingKnightAI && player.whoAmI == Main.myPlayer && vectorToTarget is Vector2 target) 
+			{
+				int projId = ProjectileType<HoneyBeeBee>();
+				int extraCount = 1 + Main.rand.Next(2);
+				for(int i = 0; i < extraCount; i++)
+				{
+					Vector2 launchTarget = target.RotatedByRandom(MathHelper.Pi / 3);
+					launchTarget.SafeNormalize();
+					launchTarget *= hsHelper.projectileVelocity / 2;
+					hsHelper.FireProjectile(launchTarget, projId);
+				}
+				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+			}
+		}
+
 		public override bool PreDraw(ref Color lightColor)
 		{
-			if(leveledPetPlayer.PetLevel >= 4)
+			if(UsingKnightAI)
 			{
 				Texture2D texture = TextureAssets.Item[ItemID.BeeKeeper].Value;
 				weaponDrawer.Draw(texture, lightColor);
@@ -177,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void PostDraw(Color lightColor)
 		{
-			if(vectorToTarget is not null && leveledPetPlayer.PetLevel >= 4)
+			if(vectorToTarget is not null && UsingKnightAI)
 			{
 				Texture2D texture = TextureAssets.Item[ItemID.AnkhShield].Value;
 				Vector2 holdOffset = new(-forwardDir * Projectile.spriteDirection * 12, 4);

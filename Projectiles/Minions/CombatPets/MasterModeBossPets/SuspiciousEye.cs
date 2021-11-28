@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SuspiciousEyeMinionItem : CombatPetMinionItem<SuspiciousEyeMinionBuff, MiniRetinazerMinion>
 	{
 		internal override int VanillaItemID => ItemID.EyeOfCthulhuPetItem;
-		internal override int AttackPatternUpdateTier => 4;
+		internal override int AttackPatternUpdateTier => 3;
 		internal override string VanillaItemName => "EyeOfCthulhuPetItem";
 	}
 
@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EyeOfCthulhuPet;
 
-		internal override bool DoBumblingMovement => leveledPetPlayer.PetLevel < 4;
+		internal override bool DoBumblingMovement => leveledPetPlayer.PetLevel < 3;
 
 		public override void SetStaticDefaults()
 		{

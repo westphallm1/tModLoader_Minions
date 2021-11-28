@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 				} else
 				{
 					spawnOffset.Y = Math.Sign(Main.rand.NextFloat() - 0.5f) * (32 + Main.screenHeight/ 2);
-					spawnOffset.Y = Main.rand.Next(Main.screenWidth) - Main.screenWidth/2;
+					spawnOffset.X = Main.rand.Next(Main.screenWidth) - Main.screenWidth/2;
 				}
 				fallStartFrame = animationFrame - FallDuration - 1;
 				Projectile.position = player.Center + spawnOffset;
@@ -121,7 +121,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		{
 			 // lots more knockback and damage, but applied after initial damage reduction from defense
 			knockback += 5;
-			damage *= 5;
+			damage *= 8;
 			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 		}
 

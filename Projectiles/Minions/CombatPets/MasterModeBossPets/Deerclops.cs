@@ -203,26 +203,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
-			if(ProjId is not int projId || targetNPCIndex is not int targetIdx) {
-				Main.NewText("Bailing on spawning a hand case #1!");
-				return;
-			}
-			if(attackCycle % 5 < 3)
+			if(attackCycle % 5 != 3)
 			{
-				NPC target = Main.npc[targetIdx];
+				NPC target;
+				if(targetNPCIndex is int idx)
+				{
+					 target = Main.npc[idx];
+				} else if (GetClosestEnemyToPosition(Projectile.Center, 2.5f * preferredDistanceFromTarget, false) is NPC anyTarget)
+				{
+					// manually re-find the nearby enemy if needed, do not know why this is needed
+					target = anyTarget;
+				} else
+				{
+					return;
+				}
 				float offsetRadius = Main.rand.Next(48, 64) + (target.width + target.height) / 4;
 				Projectile.NewProjectile(
 					Projectile.GetProjectileSource_FromThis(),
 					target.Center + Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * offsetRadius,
 					Vector2.Zero,
-					projId,
+					(int)ProjId,
 					(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 					Projectile.knockBack,
 					player.whoAmI,
-					ai0: targetIdx);
-			} else
-			{
-				Main.NewText("Bailing on spawning a hand case #2!");
+					ai0: target.whoAmI);
 			}
 		}
 
@@ -261,7 +265,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			{
 				Vector2 launchPos = rockStormStart - new Vector2(0, 6);
 				launchPos.X += rockStormDirection * 1.25f * framesSinceShoot + Main.rand.Next(-4, 4);
-				Vector2 launchVelocity = new Vector2(rockStormDirection * (0.5f + framesSinceShoot / 8), -6);
+				Vector2 launchVelocity = new Vector2(rockStormDirection * (0.5f + framesSinceShoot / 8) + Projectile.velocity.X, -6);
 				if(Main.rand.Next(4) == 0)
 				{
 					launchVelocity.Y -= Main.rand.Next(2);

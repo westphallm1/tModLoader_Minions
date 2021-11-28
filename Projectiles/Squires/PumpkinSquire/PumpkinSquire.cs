@@ -152,6 +152,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		{
 			Projectile.velocity.X = -Math.Sign(oldVelocity.X) * 1.5f * bouncesLeft;
 		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			Projectile.damage = (int)(Projectile.damage * 0.9f);
+		}
 	}
 
 	public class PumpkinBomb : WeakPumpkinBomb

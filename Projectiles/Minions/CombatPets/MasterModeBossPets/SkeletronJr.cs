@@ -89,8 +89,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			Vector2 vectorToIdle = base.IdleBehavior();
 			dealsContactDamage = true;
+			// can't attack as far as other hover shooters due to limited hand range, so search a bit farther
+			targetSearchDistance = leveledPetPlayer.PetLevelInfo.BaseSearchRange + 96;
 			return vectorToIdle;
 		}
+
 		public override bool PreDraw(ref Color lightColor)
 		{
 			// need to draw sprites manually for some reason
