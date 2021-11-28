@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,22 +13,31 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		internal Vector2 lastAttackVector;
 		internal Vector2 WeaponOffset;
 		internal float WeaponHoldDistance;
+		internal WeaponAimMode AimMode = WeaponAimMode.TOWARDS_MOUSE;
+		internal WeaponSpriteOrientation SpriteOrientation = WeaponSpriteOrientation.VERTICAL;
 
 		internal int AttackDuration = 30;
 		internal int ForwardDir = 1;
 		internal int frame;
 		internal int lastAttackFrame;
+		internal float lastAttackAngle;
 		internal float yOffsetScale = 1f;
 		internal Projectile Projectile;
-		internal WeaponSpriteOrientation spriteOrientation = WeaponSpriteOrientation.VERTICAL;
 
 		internal int attackFrame => frame - lastAttackFrame;
 		internal int attackDir => Math.Sign(lastAttackVector.X);
+
+		internal bool IsAttacking => lastAttackVector != default && attackFrame <= AttackDuration;
 		
 		public void Update(Projectile projectile, int animationFrame)
 		{
 			frame = animationFrame;
 			Projectile = projectile;
+			if(IsAttacking && AimMode == WeaponAimMode.FIXED)
+			{
+				lastAttackAngle += attackDir * MathHelper.Pi / 2f / AttackDuration;
+				lastAttackVector = lastAttackAngle.ToRotationVector2();
+			}
 		}
 
 		public void StartAttack(Vector2 target)
@@ -35,13 +45,26 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			if(attackFrame > AttackDuration)
 			{
 				lastAttackFrame = frame;
-				lastAttackVector = target;
+				if(AimMode == WeaponAimMode.TOWARDS_MOUSE)
+				{
+					lastAttackVector = target;
+				} else
+				{
+					if(Math.Sign(target.X) == 1)
+					{
+						lastAttackAngle = -MathHelper.PiOver4;
+					} else
+					{
+						lastAttackAngle = -3 * MathHelper.PiOver4;
+					}
+					lastAttackVector = lastAttackAngle.ToRotationVector2();
+				}
 			}
 		}
 
 		public void Draw(Texture2D texture, Color lightColor)
 		{
-			if (lastAttackVector != default && attackFrame <= AttackDuration)
+			if (IsAttacking)
 			{
 				DrawWeapon(texture, lightColor);
 			}
@@ -66,7 +89,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 				}
 				weaponAngle = angle;
 			}
-			if(spriteOrientation == WeaponSpriteOrientation.DIAGONAL)
+			if(SpriteOrientation == WeaponSpriteOrientation.DIAGONAL)
 			{
 				weaponAngle += attackDir * MathHelper.PiOver4;
 			}

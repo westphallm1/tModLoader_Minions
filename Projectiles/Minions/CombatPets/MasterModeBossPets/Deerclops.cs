@@ -203,7 +203,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
-			if(ProjId is not int projId || targetNPCIndex is not int targetIdx) { return; }
+			if(ProjId is not int projId || targetNPCIndex is not int targetIdx) {
+				Main.NewText("Bailing on spawning a hand case #1!");
+				return;
+			}
 			if(attackCycle % 5 < 3)
 			{
 				NPC target = Main.npc[targetIdx];
@@ -217,6 +220,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					Projectile.knockBack,
 					player.whoAmI,
 					ai0: targetIdx);
+			} else
+			{
+				Main.NewText("Bailing on spawning a hand case #2!");
 			}
 		}
 

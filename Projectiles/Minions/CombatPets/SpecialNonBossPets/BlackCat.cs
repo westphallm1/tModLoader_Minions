@@ -215,7 +215,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 				}
 			}
 			launchVelocity = levelInfo.ProjectileVelocity;
-			weaponDrawer.spriteOrientation = levelInfo.Orientation;
+			weaponDrawer.SpriteOrientation = levelInfo.Orientation;
 		}
 
 		public override void SetDefaults()
