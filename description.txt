@@ -4,6 +4,8 @@ over 30 new minions, and several armor sets and accessories for both Squires and
 
 
 === Version History ==
+v0.13.0.3 - Minor AI change
+       - Rework Dungeon Guardian Pet AI to behave more like real Dungeon Guardian
 v0.13.0.2 - Bugfixes
        - Multiplayer loading fix
        - Add missing recipes
