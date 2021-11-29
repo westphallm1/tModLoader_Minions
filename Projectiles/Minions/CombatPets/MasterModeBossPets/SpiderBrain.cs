@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SpiderBrainMinionItem : CombatPetMinionItem<SpiderBrainMinionBuff, SpiderBrainMinion>
 	{
 		internal override int VanillaItemID => ItemID.BrainOfCthulhuPetItem;
-		internal override int AttackPatternUpdateTier => 3;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Skeletal;
 		internal override string VanillaItemName => "BrainOfCthulhuPetItem";
 	}
 
@@ -108,8 +108,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		// only fire every third projectile towards the actual enemy
 		int fireCount;
 
-		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= 3;
-		internal override float DamageMult => leveledPetPlayer.PetLevel >= 3 ? 0.7f : 1f;
+		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
+		internal override float DamageMult => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal ? 0.7f : 1f;
 
 		public override void SetStaticDefaults()
 		{

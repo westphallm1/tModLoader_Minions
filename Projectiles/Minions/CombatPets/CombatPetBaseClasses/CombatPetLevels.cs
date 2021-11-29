@@ -16,6 +16,19 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 {
+	internal enum CombatPetTier: int
+	{
+		Base = 0,
+		Golden = 1,
+		Demonite = 2,
+		Skeletal = 3,
+		Soulful = 4,
+		Hallowed = 5,
+		Spectre = 6,
+		Stardust = 7,
+		Celestial = 8
+	}
+
 	internal struct CombatPetLevelInfo
 	{
 		internal int Level;

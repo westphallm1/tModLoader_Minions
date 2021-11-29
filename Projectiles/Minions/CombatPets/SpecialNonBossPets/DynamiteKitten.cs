@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	{
 		internal override int VanillaItemID => ItemID.BallOfFuseWire;
 		internal override string VanillaItemName => "BallOfFuseWire";
-		internal override int AttackPatternUpdateTier => 6;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Spectre;
 	}
 
 

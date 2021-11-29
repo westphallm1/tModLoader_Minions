@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class HoneyBeeMinionItem : CombatPetMinionItem<HoneyBeeMinionBuff, HoneyBeeMinion>
 	{
 		internal override int VanillaItemID => ItemID.QueenBeePetItem;
-		internal override int AttackPatternUpdateTier => 6;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Spectre;
 		internal override string VanillaItemName => "QueenBeePetItem";
 	}
 
@@ -127,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.QueenBeePet;
 		internal override int? FiredProjectileId => ProjectileType<HoneyPotProjectile>();
-		internal bool UsingKnightAI => (leveledPetPlayer?.PetLevel ?? 0) >= 6;
+		internal bool UsingKnightAI => (leveledPetPlayer?.PetLevel ?? 0) >= (int)CombatPetTier.Spectre;
 
 		internal override int GetAttackFrames(CombatPetLevelInfo info) => UsingKnightAI ?
 			Math.Max(16, 32 - 2 * info.Level) : base.GetAttackFrames(info);

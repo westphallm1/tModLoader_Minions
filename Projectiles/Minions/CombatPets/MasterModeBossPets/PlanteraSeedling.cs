@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class PlanteraSeedlingMinionItem : CombatPetMinionItem<PlanteraSeedlingMinionBuff, PlanteraSeedlingMinion>
 	{
 		internal override int VanillaItemID => ItemID.PlanteraPetItem;
-		internal override int AttackPatternUpdateTier => 5;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Hallowed;
 		internal override string VanillaItemName => "PlanteraPetItem";
 	}
 
@@ -108,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
-			bool spawnThornBall =  leveledPetPlayer.PetLevel >= 5 && fireCount++ % 4 == 0;
+			bool spawnThornBall =  leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed && fireCount++ % 4 == 0;
 			int projId = spawnThornBall ? ProjectileType<PlanteraSeedlingThornBall>() : ProjectileType<PlanteraSeedlingSeed>();
 			float damageMult = spawnThornBall ? 1.5f : 1;
 			launchVector *= spawnThornBall ? 0.6f : 1;

@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class PhantasmalDragonMinionItem : CombatPetMinionItem<PhantasmalDragonMinionBuff, PhantasmalDragonMinion>
 	{
 		internal override int VanillaItemID => ItemID.LunaticCultistPetItem;
-		internal override int AttackPatternUpdateTier => 5;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Hallowed;
 		internal override string VanillaItemName => "LunaticCultistPetItem";
 	}
 
@@ -181,7 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					p.ai[0] = target.whoAmI;
 				}
 			}
-			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > fireRate && leveledPetPlayer.PetLevel >= 5)
+			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > fireRate && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
 			{
 				lastShootFrame = animationFrame;
 				// spawn projectile slightly off the top of the screen

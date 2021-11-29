@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		internal override string VanillaItemName => "CelestialWand";
 		internal override int VanillaItemID => ItemID.CelestialWand;
 
-		internal override int AttackPatternUpdateTier => 4;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Soulful;
 	}
 
 	public struct CometTrailDrawer
@@ -239,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			CometTrailDrawer.AddImpactEffects(Projectile);
-			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > attackFrames / 2 && leveledPetPlayer.PetLevel >= 4)
+			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > attackFrames / 2 && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful)
 			{
 				lastShootFrame = animationFrame;
 				// spawn projectile slightly off the top of the screen

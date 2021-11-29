@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class TinyFishronMinionItem : CombatPetMinionItem<TinyFishronMinionBuff, MiniRetinazerMinion>
 	{
 		internal override int VanillaItemID => ItemID.DukeFishronPetItem;
-		internal override int AttackPatternUpdateTier => 5;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Hallowed;
 		internal override string VanillaItemName => "DukeFishronPetItem";
 	}
 
@@ -143,7 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DukeFishronPet;
 
-		internal override float DamageMult => leveledPetPlayer.PetLevel >= 5 ? 0.75f : 1f;
+		internal override float DamageMult => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed ? 0.75f : 1f;
 
 		int lastHitFrame;
 
@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			base.OnHitNPC(target, damage, knockback, crit);
 			if(player.whoAmI == Main.myPlayer && animationFrame - lastHitFrame > attackFrames && 
-			   leveledPetPlayer.PetLevel >= 5)
+			   leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
 			{
 				lastHitFrame = animationFrame;
 				Projectile.NewProjectile(

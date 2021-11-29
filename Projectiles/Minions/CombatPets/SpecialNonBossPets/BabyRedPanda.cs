@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		internal override string VanillaItemName => "BambooLeaf";
 		internal override int VanillaItemID => ItemID.BambooLeaf;
 
-		internal override int AttackPatternUpdateTier => 4;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Soulful;
 	}
 
 	/// <summary>
@@ -225,7 +225,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			if(leveledPetPlayer.PetLevel >= 4)
+			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful)
 			{
 				damage = 1;
 			}
@@ -234,7 +234,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			int projType = ProjectileType<BabyRedPandaBambooSpikeController>();
-			if(leveledPetPlayer.PetLevel >= 4 && player.whoAmI == Main.myPlayer && 
+			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful && player.whoAmI == Main.myPlayer && 
 				animationFrame - lastSpawnedFrame > spawnRate && !markedNPCs.Contains(target.whoAmI))
 			{
 				lastSpawnedFrame = animationFrame;
