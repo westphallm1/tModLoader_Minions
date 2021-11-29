@@ -10,6 +10,15 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
+v0.13.1 - Combat Pets Balance
+    - Nerf EoW Pet's Pre-HM AI by making it return to the player and briefly recharge after hitting an enemy.
+    - Nerf Honey Bee's Pre-HM AI by making its pots deal 10% less damage with each pierce
+    - Buff Skeletron Jr.'s AI by giving it a slightly larger search range to compensate for its smaller attack range
+    - Buff other Pre-HM Master Mode Boss Pets by giving them their secondary AI at Dungeon Tier instead of Early HM tier
+    - Rework the Dungeon Guardian Pet's AI to behave more like the real Dungeon Guardian
+    - Give Honey Bee new sword-based secondary AI pattern
+    - Give Surgar Glider new lock-on based secondary AI pattern
+    - Fix bug where Deerclops wouldn't fire hands as frequently as it was supposed to
 v0.13.0 - Combat Pets!
     - Available for every vanilla pet, crafted from vanilla pet items at a demon altar
     - Cost 1 minion slot per pet
