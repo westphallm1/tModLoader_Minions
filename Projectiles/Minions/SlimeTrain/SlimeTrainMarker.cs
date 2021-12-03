@@ -158,7 +158,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			base.AI();
 			Projectile.localAI[0]++;
 			// failsafe in case we got a bad NPC index
-			if (Projectile.ai[0] == 0)
+			if (Projectile.ai[0] < 0)
 			{
 				Projectile.Kill();
 				return; 
@@ -437,7 +437,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			base.AI();
 			Projectile.localAI[0]++;
 			// failsafe in case we got a bad NPC index
-			if (Projectile.ai[0] == 0)
+			if (Projectile.ai[0] < 0)
 			{
 				Projectile.Kill();
 				return; 

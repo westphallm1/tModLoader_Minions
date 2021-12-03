@@ -2,6 +2,7 @@
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
@@ -55,6 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		internal GroundAwarenessHelper gHelper;
 		internal int maxFramesInAir = 60;
 		internal int idlingFrames;
+		internal int idleRadius = 80;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -107,8 +109,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			{
 				Projectile.velocity.Y += 0.5f;
 			}
-			Vector2 vectorToIdle = base.IdleBehavior();
-			vectorToIdle.Y += 48; // circle under the player's feet
+			base.IdleBehavior();
+			vectorToIdle.Y += 64; // circle around the player
+			Vector2 idlePosition = player.Top;
+			int radius = Math.Abs(player.velocity.X) < 4 ? idleRadius : 24;
+			float angleOffset = 0;
+			List<Projectile> others = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingHead, player.whoAmI);
+			if(others.Count > 0)
+			{
+				int myPos = others.FindIndex(o => o.whoAmI == Projectile.whoAmI);
+				angleOffset = MathHelper.TwoPi * myPos / others.Count;
+			}
+			float idleAngle = angleOffset + 2 * PI * groupAnimationFrame / groupAnimationFrames;
+			idlePosition.X += radius * (float)Math.Cos(idleAngle);
+			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
+			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
+			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			return vectorToIdlePosition;
 			return vectorToIdle;
 		}
 

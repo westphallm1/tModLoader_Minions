@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Items.Armor.FlinxHood
 			Item.height = 18;
 			Item.value = Item.sellPrice(silver: 3);
 			Item.rare = ItemRarityID.Green;
-			Item.defense = 2;
+			Item.defense = 3;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)

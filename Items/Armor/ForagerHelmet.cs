@@ -24,8 +24,6 @@ namespace AmuletOfManyMinions.Items.Armor
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Mildew Cap");
-			Tooltip.SetDefault(""
-				+ "Increases minion damage by 1");
 
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
@@ -42,11 +40,6 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
 			return body.type == ItemType<ForagerBreastplate>() && legs.type == ItemType<ForagerLeggings>();
-		}
-
-		public override void UpdateEquip(Player player)
-		{
-			player.GetModPlayer<MinionSpawningItemPlayer>().summonFlatDamage += 1;
 		}
 
 		public override void UpdateArmorSet(Player player)
