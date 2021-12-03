@@ -112,7 +112,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			base.IdleBehavior();
 			Vector2 idlePosition = player.Top;
 			int radius = Math.Abs(player.velocity.X) < 4 ? 120 : 24;
-			float idleAngle = 2 * PI * groupAnimationFrame / groupAnimationFrames;
+			float idleAngle = IdleLocationSets.GetAngleOffsetInSet(IdleLocationSets.circlingHead, Projectile)
+				+ 2 * PI * groupAnimationFrame / groupAnimationFrames;
 			idlePosition.X += radius * (float)Math.Cos(idleAngle);
 			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;

@@ -113,14 +113,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			vectorToIdle.Y += 64; // circle around the player
 			Vector2 idlePosition = player.Top;
 			int radius = Math.Abs(player.velocity.X) < 4 ? idleRadius : 24;
-			float angleOffset = 0;
-			List<Projectile> others = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingHead, player.whoAmI);
-			if(others.Count > 0)
-			{
-				int myPos = others.FindIndex(o => o.whoAmI == Projectile.whoAmI);
-				angleOffset = MathHelper.TwoPi * myPos / others.Count;
-			}
-			float idleAngle = angleOffset + 2 * PI * groupAnimationFrame / groupAnimationFrames;
+			float idleAngle = IdleLocationSets.GetAngleOffsetInSet(IdleLocationSets.circlingHead, Projectile)
+				+ 2 * PI * groupAnimationFrame / groupAnimationFrames;
 			idlePosition.X += radius * (float)Math.Cos(idleAngle);
 			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;

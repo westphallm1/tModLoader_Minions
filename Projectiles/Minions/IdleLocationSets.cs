@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -64,6 +65,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public static int GetXOffsetInSet(HashSet<int> matchingSet, Projectile self, int spacing = 4)
 		{
 			return GetXOffsetInSet(GetProjectilesInSet(matchingSet, self.owner), self, spacing);
+		}
+
+		public static float GetAngleOffsetInSet(HashSet<int> matchingSet, Projectile self)
+		{
+			List<Projectile> others = IdleLocationSets.GetProjectilesInSet(matchingSet, self.owner);
+			if(others.Count > 0)
+			{
+				int myPos = others.FindIndex(o => o.whoAmI == self.whoAmI);
+				return MathHelper.TwoPi * myPos / others.Count;
+			} else
+			{
+				return 0;
+			}
 		}
 	}
 }
