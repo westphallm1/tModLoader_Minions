@@ -14,7 +14,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 	{
 
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
-		internal Dictionary<GroundAnimationState, (int, int?)> frameInfo;
 
 		internal virtual float DamageMult => 1f;
 
@@ -30,12 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		{
 			base.SetDefaults();
 			Projectile.minionSlots = 0;
-			noLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
 			searchDistance = 700;
-			maxJumpVelocity = 12;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -54,43 +48,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			this.forwardDir = forwardDir;
 		}
 
-		protected void ConfigureFrames(int total, (int, int) idle, (int, int) walking, (int, int) jumping, (int, int) flying)
-		{
-			// this should really go into SetStaticDefaults, but we're trying to condense
-			// things as much as possible
-			Main.projFrames[Projectile.type] = total;
-			frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
-			{
-				[GroundAnimationState.STANDING] = idle,
-				[GroundAnimationState.WALKING] = walking,
-				[GroundAnimationState.JUMPING] = jumping,
-				[GroundAnimationState.FLYING] = flying,
-			};
-		}
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
-
-			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
-			{
-				gHelper.DoJump(vector);
-			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
-			int xMaxSpeed = (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
-			{
-				Projectile.velocity.X = player.velocity.X;
-				return;
-			}
-			DistanceFromGroup(ref vector);
-			if (animationFrame - lastHitFrame > Math.Max(6, 90 / xMaxSpeed))
-			{
-				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
-			}
-			else
-			{
-				Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * xMaxSpeed * 0.75f;
-			}
+			xMaxSpeed = (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;
+			DoDefaultGroundedMovement(vector);
 		}
+
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
@@ -103,19 +66,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			}
 		}
 
-		protected void DoSimpleFlyingDust()
-		{
-			if(gHelper.isFlying)
-			{
-				Projectile.rotation = Projectile.velocity.X * 0.05f;
-				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
-				Main.dust[idx].alpha = 112;
-				Main.dust[idx].scale = .9f;
-			} else
-			{
-				Projectile.rotation = 0;
-			}
-		}
 	}
 
 	public abstract class CombatPetGroundedRangedMinion : CombatPetGroundedMeleeMinion

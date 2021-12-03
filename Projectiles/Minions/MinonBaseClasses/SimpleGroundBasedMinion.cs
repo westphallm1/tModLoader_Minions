@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 using Terraria;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
@@ -13,6 +14,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected float startFlyingAtTargetDist;
 		protected int defaultJumpVelocity;
 		protected int maxJumpVelocity;
+		protected int xMaxSpeed;
+		internal Dictionary<GroundAnimationState, (int, int?)> frameInfo;
 
 		public override void SetStaticDefaults()
 		{
@@ -26,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			attackFrames = 60;
 			noLOSPursuitTime = 300;
 			lastHitFrame = -1;
+			startFlyingAtTargetHeight = 96;
+			startFlyingAtTargetDist = 64;
+			defaultJumpVelocity = 4;
+			maxJumpVelocity = 12;
 			gHelper = new GroundAwarenessHelper(this)
 			{
 				ScaleLedge = ScaleLedge,
@@ -126,6 +133,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected abstract void DoGroundedMovement(Vector2 vector);
 
+		internal void DoDefaultGroundedMovement(Vector2 vector)
+		{
+
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			{
+				gHelper.DoJump(vector);
+			}
+			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			{
+				Projectile.velocity.X = player.velocity.X;
+				return;
+			}
+			DistanceFromGroup(ref vector);
+			if (animationFrame - lastHitFrame > Math.Max(6, 90 / xMaxSpeed))
+			{
+				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
+			}
+			else
+			{
+				Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * xMaxSpeed * 0.75f;
+			}
+		}
+
 		protected virtual void IdleFlyingMovement(Vector2 vector)
 		{
 			if (!gHelper.DropThroughPlatform() && animationFrame - lastHitFrame > 15)
@@ -218,6 +249,35 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				return null;
 			}
 		}
+
+		protected void DoSimpleFlyingDust()
+		{
+			if(gHelper.isFlying)
+			{
+				Projectile.rotation = Projectile.velocity.X * 0.05f;
+				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
+				Main.dust[idx].alpha = 112;
+				Main.dust[idx].scale = .9f;
+			} else
+			{
+				Projectile.rotation = 0;
+			}
+		}
+
+		protected void ConfigureFrames(int total, (int, int) idle, (int, int) walking, (int, int) jumping, (int, int) flying)
+		{
+			// this should really go into SetStaticDefaults, but we're trying to condense
+			// things as much as possible
+			Main.projFrames[Projectile.type] = total;
+			frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
+			{
+				[GroundAnimationState.STANDING] = idle,
+				[GroundAnimationState.WALKING] = walking,
+				[GroundAnimationState.JUMPING] = jumping,
+				[GroundAnimationState.FLYING] = flying,
+			};
+		}
+
 
 	}
 }

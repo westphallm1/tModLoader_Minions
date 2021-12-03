@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public bool spiritCallerCharmEquipped = false;
 		public bool techromancerAccessoryEquipped = false;
 		internal bool foragerArmorSetEquipped;
+		internal bool flinxArmorSetEquipped;
 		internal int summonFlatDamage;
 		internal bool illusionistArmorSetEquipped;
 		internal int idleMinionSyncronizationFrame = 0;
@@ -65,6 +67,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			spiritCallerCharmEquipped = false;
 			techromancerAccessoryEquipped = false;
 			foragerArmorSetEquipped = false;
+			flinxArmorSetEquipped = false;
 			illusionistArmorSetEquipped = false;
 			summonFlatDamage = 0;
 			minionVarietyDamageBonus = 0.03f;
@@ -150,8 +153,16 @@ namespace AmuletOfManyMinions.Items.Accessories
 				}
 				else if (Player.buffTime[Player.FindBuffIndex(buffType)] == 1)
 				{
-					Projectile.NewProjectile(Player.GetProjectileSource_SetBonus(-1), Player.Center, Vector2.Zero, projectileType, (int)(20 * Player.GetDamage<SummonDamageClass>()), 0.1f, Player.whoAmI, ai0: isCorrupt ? 0 : 1);
+					Projectile.NewProjectile(Player.GetProjectileSource_SetBonus(-1), Player.Center, Vector2.Zero, projectileType, 
+						(int)(20 * Player.GetDamage<SummonDamageClass>()), 0.1f, Player.whoAmI, ai0: isCorrupt ? 0 : 1);
 				}
+			}
+			int flinxType = ProjectileType<BonusFlinxMinion>();
+			if(flinxArmorSetEquipped && Player.ownedProjectileCounts[flinxType] == 0)
+			{
+				Player.AddBuff(BuffType<FlinxMinionBuff>(), 3);
+				int projId = Projectile.NewProjectile(Player.GetProjectileSource_SetBonus(-1), Player.Center, Vector2.Zero, flinxType, 8, 2, Player.whoAmI);
+				Main.projectile[projId].originalDamage = 8;
 			}
 			if (minionVarietyBonusCount > 1 && ClientConfig.Instance.ShowMinionVarietyBonus)
 			{

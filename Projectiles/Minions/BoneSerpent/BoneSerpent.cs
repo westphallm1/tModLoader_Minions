@@ -54,6 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		internal int framesInGround;
 		internal GroundAwarenessHelper gHelper;
 		internal int maxFramesInAir = 60;
+		internal int idlingFrames;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -65,7 +66,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if (framesInAir < 2 * maxFramesInAir + 10 || Vector2.Distance(player.Center, Projectile.Center) > 300f || Math.Abs(player.Center.Y - Projectile.Center.Y) > 80f)
+			idlingFrames++;
+			if(idlingFrames > 240)
+			{
+				framesInAir = 0; // reset poor air movement after spending long enough in the air
+			}
+			if (framesInAir < 2 * maxFramesInAir + 10 || Vector2.Distance(player.Center, Projectile.Center) > 300f ||
+				Math.Abs(player.Center.Y - Projectile.Center.Y) > 80f)
 			{
 				base.IdleMovement(vectorToIdlePosition);
 			}
