@@ -33,16 +33,9 @@ namespace AmuletOfManyMinions.Items.Armor.FlinxHood
 			return body.type == ItemID.FlinxFurCoat;
 		}
 
-		public override void UpdateEquip(Player player)
-		{
-			player.GetDamage<SummonDamageClass>() += 0.08f;
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 48;
-		}
-
 		public override void UpdateArmorSet(Player player)
 		{
 			player.setBonus = "Grants a free Flinx minion, but slightly reduces your minion damage.";
-			player.maxMinions += 1;
 			player.GetDamage<SummonDamageClass>() -= 0.15f;
 			player.GetModPlayer<MinionSpawningItemPlayer>().flinxArmorSetEquipped = true;
 		}
