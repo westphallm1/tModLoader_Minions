@@ -160,6 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
+			idleRadius = 90;
 			wormDrawer = new BoneSerpentDrawer();
 		}
 

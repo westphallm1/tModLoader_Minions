@@ -47,6 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
+			idleRadius = 70;
 			wormDrawer = new EaterOfWormsDrawer();
 		}
 	}

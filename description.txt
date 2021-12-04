@@ -10,6 +10,10 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
+v0.13.1.1 - Prehardmode Armor Balance
+    - Add Flinx Fur Hood + Set bonus for Flinx Fur Coat to differentiate from Mildew Armor
+    - Slightly nerf Mildew Armor damage bonus
+    - Fix bug in grounded worm idle behavior
 v0.13.1 - Combat Pets Balance
     - Nerf EoW Pet's Pre-HM AI by making it return to the player and briefly recharge after hitting an enemy.
     - Nerf Honey Bee's Pre-HM AI by making its pots deal 10% less damage with each pierce

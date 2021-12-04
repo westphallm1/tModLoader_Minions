@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Localization;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
+using AmuletOfManyMinions.Items.Accessories;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 {
@@ -62,6 +63,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			base.SetDefaults();
 			Projectile.minionSlots = 0;
+		}
+
+		public override void CheckActive()
+		{
+			base.CheckActive();
+			if(!player.GetModPlayer<MinionSpawningItemPlayer>().flinxArmorSetEquipped)
+			{
+				Projectile.Kill();
+			}
 		}
 
 	}
