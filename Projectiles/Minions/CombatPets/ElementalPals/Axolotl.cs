@@ -7,14 +7,14 @@ using Terraria;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
-	public class LilGatorMinionBuff : CombatPetVanillaCloneBuff
+	public class AxolotlMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public LilGatorMinionBuff() : base(ProjectileType<LilGatorMinion>()) { }
+		public AxolotlMinionBuff() : base(ProjectileType<AxolotlMinion>()) { }
 		public override string VanillaBuffName => "BabyWerewolf";
 		public override int VanillaBuffId => BuffID.BabyWerewolf;
 	}
 
-	public class LilGatorMinionItem : CombatPetMinionItem<LilGatorMinionBuff, LilGatorMinion>
+	public class AxolotlMinionItem : CombatPetMinionItem<AxolotlMinionBuff, AxolotlMinion>
 	{
 		internal override string VanillaItemName => "FullMoonSqueakyToy";
 		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
@@ -22,18 +22,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("LilGator");
+			DisplayName.SetDefault("Axolotl");
 		}
 	}
 
-	public class LilGatorMinion : CombatPetGroundedMeleeMinion
+	public class AxolotlMinion : CombatPetGroundedMeleeMinion
 	{
-		internal override int BuffId => BuffType<LilGatorMinionBuff>();
+		internal override int BuffId => BuffType<AxolotlMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			ConfigureDrawBox(30, 30, -6, -8, -1);
-			ConfigureFrames(11, (0, 1), (2, 6), (2, 2), (7, 10));
+			ConfigureDrawBox(30, 24, -6, -2, -1);
+			ConfigureFrames(12, (0, 1), (2, 6), (2, 2), (7, 11));
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
