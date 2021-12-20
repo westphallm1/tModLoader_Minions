@@ -4,6 +4,7 @@ using Terraria.ID;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
+using AmuletOfManyMinions.Items.Armor;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -26,9 +27,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		}
 	}
 
-	public class TruffleTurtleMinion : CombatPetGroundedMeleeMinion
+	public class TruffleTurtleMinion : CombatPetGroundedRangedMinion
 	{
 		internal override int BuffId => BuffType<TruffleTurtleMinionBuff>();
+
+		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
+
+		internal override int? ProjId => ProjectileType<ForagerMushroom>();
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

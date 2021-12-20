@@ -4,6 +4,7 @@ using Terraria.ID;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -20,9 +21,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
 	}
 
-	public class CinderHenMinion : CombatPetGroundedMeleeMinion
+	public class CinderHenMinion : CombatPetGroundedRangedMinion
 	{
 		internal override int BuffId => BuffType<CinderHenMinionBuff>();
+		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
+
+		internal override int? ProjId => ProjectileType<ImpFireball>();
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

@@ -6,6 +6,7 @@ using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -28,9 +29,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		}
 	}
 
-	public class SmolederMinion : CombatPetGroundedMeleeMinion
+	public class SmolederMinion : CombatPetGroundedRangedMinion
 	{
 		internal override int BuffId => BuffType<SmolederMinionBuff>();
+
+		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
+
+		internal override int? ProjId => ProjectileType<ImpFireball>();
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

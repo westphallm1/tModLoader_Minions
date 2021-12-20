@@ -4,6 +4,7 @@ using Terraria.ID;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -26,9 +27,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		}
 	}
 
-	public class LilGatorMinion : CombatPetGroundedMeleeMinion
+	public class LilGatorMinion : CombatPetGroundedRangedMinion
 	{
 		internal override int BuffId => BuffType<LilGatorMinionBuff>();
+		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
+
+		internal override int? ProjId => ProjectileType<SharkPupBubble>();
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

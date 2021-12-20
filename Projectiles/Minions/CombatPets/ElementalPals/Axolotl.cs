@@ -4,6 +4,7 @@ using Terraria.ID;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -26,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		}
 	}
 
-	public class AxolotlMinion : CombatPetGroundedMeleeMinion
+	public class AxolotlMinion : CombatPetGroundedRangedMinion
 	{
 		internal override int BuffId => BuffType<AxolotlMinionBuff>();
 		public override void SetDefaults()
@@ -35,6 +36,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			ConfigureDrawBox(30, 24, -6, -2, -1);
 			ConfigureFrames(12, (0, 1), (2, 6), (2, 2), (7, 11));
 		}
+
+		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
+
+		internal override int? ProjId => ProjectileType<SharkPupBubble>();
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
