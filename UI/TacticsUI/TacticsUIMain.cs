@@ -303,44 +303,17 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			if (ClientConfig.Instance.AnchorToHealth)
 			{
 				//Code copied from minimap button code
-				bool flag = false;
-				int num9 = Main.screenWidth - 440;
-				int leftEdgeOfMap = num9;
-				int num10 = 40;
-				if (Main.screenWidth < 940)
-					flag = true;
+				int leftEdgeOfMap = Main.screenWidth - 440;
 
-				if (flag || !Main.playerInventory || !Main.mapEnabled)
+				if (Main.screenWidth < 940 || !Main.playerInventory || !Main.mapEnabled)
 				{
 					//Additional conditions and code added here
 					leftEdgeOfMap += 4 * 32;
-					num9 = Main.screenWidth - 40;
-					num10 = Main.screenHeight - 200;
 				}
-
-				for (int k = 0; k < 4; k++)
-				{
-					int num12 = num9 + k * 32;
-					int num13 = num10;
-					if (flag)
-					{
-						num12 = num9;
-						num13 = num10 + k * 32;
-					}
-
-					int num14 = k;
-					int num11 = 120;
-					if (k > 0 && Main.mapStyle == k - 1)
-						num11 = 200;
-
-					//Main.Main.EntitySpriteDraw(Main.mapIconTexture[num14], new Vector2(num12, num13), new Microsoft.Xna.Framework.Rectangle(0, 0, Main.mapIconTexture[num14].Width, Main.mapIconTexture[num14].Height), new Microsoft.Xna.Framework.Color(num11, num11, num11, num11), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-				}
-
 				return leftEdgeOfMap - this.Width.Pixels;
 			}
 			else/* if (ClientConfig.Instance.AnchorToInventory)*/
 			{
-				int leftEdgeOfAmmoSlot = 534;
 				int leftEdgeOfCoinSlot = 497;
 
 				return leftEdgeOfCoinSlot;
