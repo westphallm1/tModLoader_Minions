@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.ModLoader;
 using static AmuletOfManyMinions.Core.Minions.CombatPetsQuiz.PersonalityType;
 
@@ -35,7 +36,23 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		public static CombatPetsQuiz MakeQuizWithDominantTrait(PersonalityType personalityType, int questionCount)
 		{
+			var quiz = new CombatPetsQuiz();
+			// first, make half of the quiz the questions that can give points to the dominant type
+			var questionsWithPoints =
+				DefaultQuestions.Questions.OrderBy(q => q.CanGivePointsForType(personalityType) ? 0 : 1).Take(questionCount / 2);
 
+			// Then, select the rest of the quiz from the remaining questions at random
+			var otherQuestions = 
+				DefaultQuestions.Questions
+				.OrderBy(q => (q.CanGivePointsForType(personalityType) ? 0 : 1))
+				.ThenBy(q=>Main.rand.Next())
+				.Skip(questionCount/2)
+				.Take(questionCount);
+
+			quiz.Questions = Enumerable.Concat(questionsWithPoints, otherQuestions)
+				.OrderBy(q => Main.rand.Next())
+				.ToList();
+			return quiz;
 		}
 	}
 

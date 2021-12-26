@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Core.Minions.CombatPetsQuiz;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System;
@@ -7,8 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.UI;
 using static AmuletOfManyMinions.UI.CombatPetsQuizUI.CombatPetsQuizUIMain;
 
@@ -33,30 +37,28 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 		private CombatPetsQuizUIPanel questionPanel;
 		private CombatPetsQuizUIPanel answerPanel;
 
-		// Todo populate dynamically
-		private List<string> questionLines;
-		private List<string> answerLines;
-
-		// TODO ModPlayer to store game state for this
-		public bool IsActive => false;
+		public CombatPetsQuizModPlayer ModPlayer => Main.player[Main.myPlayer].GetModPlayer<CombatPetsQuizModPlayer>();
+		public bool IsActive => ModPlayer.IsTakingQuiz;
 		public override void OnInitialize()
 		{
 			base.OnInitialize();
 			LineHeight = TextFont.MeasureString(" ").Y;
 			questionPanel = new CombatPetsQuizUIPanel();
-			answerPanel = new CombatPetsQuizUIPanel();
+			answerPanel = new CombatPetsQuizUIPanel() { AllowClickText = true };
 			Append(questionPanel);
 			Append(answerPanel);
-			questionLines = new List<string>
+			answerPanel.OnMouseUp += this.AnswerPanel_OnMouseUp;
+
+			
+		}
+
+		private void AnswerPanel_OnMouseUp(UIMouseEvent evt, UIElement listeningElement)
+		{
+			if(answerPanel.HighlightedLine > -1)
 			{
-				"What is your favorite color?"
-			};
-			answerLines = new List<string>
-			{
-				"Red.",
-				"Green.",
-				"Blue."
-			};
+				ModPlayer.CurrentQuiz.AnswerQuestion(answerPanel.HighlightedLine);
+				SoundEngine.PlaySound(SoundID.MenuTick);
+			}
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -73,15 +75,25 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
-			questionPanel.TextLines = questionLines;
-			answerPanel.TextLines = answerLines;
-			AnchorToScreenPosition();
+			if(IsActive)
+			{
+				CombatPetsQuizQuestion currentQuestion = ModPlayer.CurrentQuiz.CurrentQuestion;
+				questionPanel.TextLines = TextFont.CreateWrappedText(
+					currentQuestion.QuestionText, MaxTextboxWidth - 4 * MarginSize).Split('\n');
+				answerPanel.TextLines = currentQuestion.AnswerTexts;
+				AnchorToScreenPosition();
+			} else
+			{
+				// shove off of the bottom of the screen
+				Top.Pixels = Main.screenHeight;
+				return;
+			}
 		}
 
 		private void AnchorToScreenPosition()
 		{
 			Vector2 answerPanelSize = answerPanel.MeasureLines();
-			answerPanelSize.X = Math.Max(answerPanelSize.X, MinTextboxWidth);
+			answerPanelSize.X = Math.Max(answerPanelSize.X + 4 * MarginSize, MinTextboxWidth);
 			// No real reason to do this all in one method, but...
 
 			// Set the size of the parent container
@@ -104,7 +116,6 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 			answerPanel.Height.Pixels = answerPanelSize.Y + 2 * MarginSize;
 			answerPanel.Left.Pixels = MaxTextboxWidth - answerPanelSize.X - 2 * MarginSize;
 			answerPanel.Width.Pixels = answerPanelSize.X + 2 * MarginSize;
-
 		}
 
 
@@ -114,13 +125,22 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 	{
 
 		// todo change this dynamically
-		internal List<string> TextLines = new List<string>();
+		internal string[] TextLines;
 
+		internal bool AllowClickText;
+
+		internal int HighlightedLine { get; private set; } = -1;
+
+		public override void OnInitialize()
+		{
+			base.OnInitialize();
+			IgnoresMouseInteraction = false;
+		}
 
 		protected override void DrawChildren(SpriteBatch spriteBatch)
 		{
 			base.DrawChildren(spriteBatch);
-			for(int i = 0; i < TextLines.Count; i++)
+			for(int i = 0; i < TextLines.Length; i++)
 			{
 				DrawText(spriteBatch, TextLines[i], i);
 			}
@@ -128,17 +148,29 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 
 		public Vector2 MeasureLines()
 		{
-			float ySum = LineHeight * TextLines.Count;
+			float ySum = LineHeight * TextLines.Length;
 			float xMax = TextLines.Select(tl => TextFont.MeasureString(tl).X).Max();
 			return new(xMax, ySum);
 		}
 
+		public override void Update(GameTime gameTime)
+		{
+			base.Update(gameTime);
+			if(AllowClickText && TextLines != default && ContainsPoint(Main.MouseScreen))
+			{
+				float top = Parent.Top.Pixels + Top.Pixels + MarginSize;
+				HighlightedLine = (int)((Main.MouseScreen.Y - top) / LineHeight);
+			} else
+			{
+				HighlightedLine = -1;
+			}
+		}
 
 		private void DrawText(SpriteBatch spriteBatch, string text, int line)
 		{
 			// TODO line wrap? Maybe?
 			DynamicSpriteFont font = FontAssets.MouseText.Value;
-			float xPos = Parent.Left.Pixels + Left.Pixels + MarginSize;
+			float xPos = Parent.Left.Pixels + Left.Pixels + 2 * MarginSize;
 			float yPos = Parent.Top.Pixels + Top.Pixels + line * LineHeight + MarginSize;
 			// budget text outline
 			Vector2 pos = new Vector2(xPos, yPos);
@@ -149,7 +181,22 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 					spriteBatch.DrawString(font, text, pos + new Vector2(i, j), Color.Black);
 				}
 			}
-			spriteBatch.DrawString(font, text, pos, Color.White);
+			Color textColor = line == HighlightedLine ? Color.Yellow : Color.White;
+			spriteBatch.DrawString(font, text, pos, textColor);
 		}
+	}
+
+	public class CombatQuizClickSuppressor: GlobalItem
+	{
+		// TODO figure out why this needs to be manually suppressed
+		public override bool CanUseItem(Item item, Player player)
+		{
+			if(player.whoAmI == Main.myPlayer && UserInterfaces.quizUI.IsMouseHovering)
+			{
+				return false;
+			}
+			return base.CanUseItem(item, player);
+		}
+
 	}
 }
