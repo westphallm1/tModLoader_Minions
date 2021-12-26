@@ -441,10 +441,9 @@ namespace AmuletOfManyMinions.NPCs
 					break;
 				case ItemID.OceanCrate:
 				case ItemID.OceanCrateHard:
-					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<SkywareSquireMinionItem>()); }
+					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<FishBowlMinionItem>()); }
 					break;
 				default:
-					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<FishBowlMinionItem>()); }
 					break;
 			}
 			if(context == "lockBox" && spawnChance < 0.167f)
