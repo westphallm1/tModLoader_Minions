@@ -8,11 +8,10 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
-	public class CinderHenMinionBuff : CombatPetVanillaCloneBuff
+	public class CinderHenMinionBuff : CombatPetBuff
 	{
 		public CinderHenMinionBuff() : base(ProjectileType<CinderHenMinion>()) { }
-		public override string VanillaBuffName => "BabyWerewolf";
-		public override int VanillaBuffId => BuffID.BabyWerewolf;
+
 	}
 
 	public class CinderHenMinionItem : CombatPetMinionItem<CinderHenMinionBuff, CinderHenMinion>

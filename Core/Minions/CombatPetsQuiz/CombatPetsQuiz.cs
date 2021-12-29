@@ -1,10 +1,14 @@
-﻿using System;
+﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.Core.Minions.CombatPetsQuiz.PersonalityType;
 
 namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
@@ -13,7 +17,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 	{
 		public List<CombatPetsQuizQuestion> Questions { get; private set; } = new();
 
-		private readonly List<PersonalityType> GivenAnswers = new();
+		public readonly List<PersonalityType> GivenAnswers = new();
 
 		private int currentIdx = 0;
 
@@ -21,36 +25,27 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		public void AnswerQuestion(int answerIdx)
 		{
-			if(answerIdx < Questions.Count)
-			{
-				GivenAnswers.Add(CurrentQuestion.AnswerValues[answerIdx]);
-				currentIdx++;
-			}
+			GivenAnswers.Add(CurrentQuestion.AnswerValues[answerIdx]);
+			currentIdx++;
 		}
 
 		public bool IsComplete() => GivenAnswers.Count == Questions.Count;
 
 		// Not quite sure how this will resolve in the case of a tie
 		public PersonalityType GetResultType() =>
-			GivenAnswers.GroupBy(a => a).OrderByDescending(g => g.Count()).Select(g=>g.Key).FirstOrDefault();
+			GivenAnswers
+				.Select(Type => (Type, GivenAnswers.Where(t => t == Type).Count()))
+				.OrderByDescending(t => t.Item2)
+				.Select(t => t.Type)
+				.FirstOrDefault();
 
 		public static CombatPetsQuiz MakeQuizWithDominantTrait(PersonalityType personalityType, int questionCount)
 		{
 			var quiz = new CombatPetsQuiz();
-			// first, make half of the quiz the questions that can give points to the dominant type
-			var questionsWithPoints =
-				DefaultQuestions.Questions.OrderBy(q => q.CanGivePointsForType(personalityType) ? 0 : 1).Take(questionCount / 2);
-
-			// Then, select the rest of the quiz from the remaining questions at random
-			var otherQuestions = 
-				DefaultQuestions.Questions
-				.OrderBy(q => (q.CanGivePointsForType(personalityType) ? 0 : 1))
-				.ThenBy(q=>Main.rand.Next())
-				.Skip(questionCount/2)
-				.Take(questionCount);
-
-			quiz.Questions = Enumerable.Concat(questionsWithPoints, otherQuestions)
-				.OrderBy(q => Main.rand.Next())
+			quiz.Questions = DefaultQuestions.Questions
+				.OrderBy(q => q.CanGivePointsForType(personalityType) ? 0 : 1)
+				.ThenBy(q => Main.rand.Next())
+				.Take(questionCount)
 				.ToList();
 			return quiz;
 		}
@@ -65,7 +60,38 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		QUIRKY, // Axolotl
 		JOLLY, // Lil Gator
 		QUIET, // Smoleder
-		BOLD, // Cinder Chicken
+		BOLD, // Cinder Hen
+	}
+
+	internal class QuizResult : ModSystem
+	{
+		internal string Description { get; private set; }
+		// TODO these should probably be drawn directly from the ModItem. Not sure what the best way to reverse-lookup is
+		internal Asset<Texture2D> PortraitTexture { get; set; }
+		internal string PetName { get; private set; }
+
+		internal int ItemType { get; private set; }
+		internal int BuffType { get; private set; }
+
+		internal QuizResult(string description, string petName, int itemType, int buffType)
+		{
+			Description = description;
+			PetName = petName;
+			ItemType = itemType;
+			BuffType = buffType;
+		}
+
+
+		// TODO mod load hook
+		internal static Dictionary<PersonalityType, QuizResult> ResultsMap = new Dictionary<PersonalityType, QuizResult>
+		{
+			[CALM] = new QuizResult("calm", "Plant Pup", ItemType<PlantPupMinionItem>(), BuffType<PlantPupMinionBuff>()),
+			[HARDY] = new QuizResult("hardy", "Truffle Turtle", ItemType<TruffleTurtleMinionItem>(), BuffType<TruffleTurtleMinionBuff>()),
+			[QUIRKY] = new QuizResult("quirky", "Axolittl", ItemType<AxolotlMinionItem>(), BuffType<AxolotlMinionBuff>()),
+			[JOLLY] = new QuizResult("jolly", "Lil Gator", ItemType<LilGatorMinionItem>(), BuffType<LilGatorMinionBuff>()),
+			[QUIET] = new QuizResult("quiet", "Smoleder", ItemType<SmolederMinionItem>(), BuffType<SmolederMinionBuff>()),
+			[BOLD] = new QuizResult("bold", "Cinder Hen", ItemType<CinderHenMinionItem>(), BuffType<CinderHenMinionBuff>()),
+		};
 	}
 
 	internal class CombatPetsQuizQuestion
@@ -153,4 +179,5 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				("Not at all.", BOLD), ("A little bit.", QUIRKY), ("Well organized.", QUIET)),
 		};
 	}
+
 }

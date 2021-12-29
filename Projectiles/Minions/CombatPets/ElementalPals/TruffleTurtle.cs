@@ -8,11 +8,9 @@ using AmuletOfManyMinions.Items.Armor;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
-	public class TruffleTurtleMinionBuff : CombatPetVanillaCloneBuff
-	{
-		public TruffleTurtleMinionBuff() : base(ProjectileType<TruffleTurtleMinion>()) { }
-		public override string VanillaBuffName => "BabyWerewolf";
-		public override int VanillaBuffId => BuffID.BabyWerewolf;
+	public class TruffleTurtleMinionBuff : CombatPetBuff
+    {
+        public TruffleTurtleMinionBuff() : base(ProjectileType<TruffleTurtleMinion>()) { }
 	}
 
 	public class TruffleTurtleMinionItem : CombatPetMinionItem<TruffleTurtleMinionBuff, TruffleTurtleMinion>

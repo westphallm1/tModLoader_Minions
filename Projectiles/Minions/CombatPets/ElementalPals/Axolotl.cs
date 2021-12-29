@@ -8,11 +8,9 @@ using AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClone
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
-	public class AxolotlMinionBuff : CombatPetVanillaCloneBuff
+	public class AxolotlMinionBuff : CombatPetBuff
 	{
 		public AxolotlMinionBuff() : base(ProjectileType<AxolotlMinion>()) { }
-		public override string VanillaBuffName => "BabyWerewolf";
-		public override int VanillaBuffId => BuffID.BabyWerewolf;
 	}
 
 	public class AxolotlMinionItem : CombatPetMinionItem<AxolotlMinionBuff, AxolotlMinion>

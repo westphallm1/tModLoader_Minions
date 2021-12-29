@@ -10,11 +10,9 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
-	public class SmolederMinionBuff : CombatPetVanillaCloneBuff
-	{
-		public SmolederMinionBuff() : base(ProjectileType<SmolederMinion>()) { }
-		public override string VanillaBuffName => "BabyWerewolf";
-		public override int VanillaBuffId => BuffID.BabyWerewolf;
+	public class SmolederMinionBuff : CombatPetBuff
+    {
+        public SmolederMinionBuff() : base(ProjectileType<SmolederMinion>()) { }
 	}
 
 	public class SmolederMinionItem : CombatPetMinionItem<SmolederMinionBuff, SmolederMinion>

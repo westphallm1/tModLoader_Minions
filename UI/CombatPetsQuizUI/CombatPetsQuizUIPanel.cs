@@ -37,26 +37,40 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 		private CombatPetsQuizUIPanel questionPanel;
 		private CombatPetsQuizUIPanel answerPanel;
 
+		private TextButton nextButton;
+
 		public CombatPetsQuizModPlayer ModPlayer => Main.player[Main.myPlayer].GetModPlayer<CombatPetsQuizModPlayer>();
 		public bool IsActive => ModPlayer.IsTakingQuiz;
+
+		// this is a very hacky way to implement text scrolling
+		private string lastDisplayedText = default;
+		private int textSwitchTime = 0;
+
 		public override void OnInitialize()
 		{
 			base.OnInitialize();
 			LineHeight = TextFont.MeasureString(" ").Y;
 			questionPanel = new CombatPetsQuizUIPanel();
 			answerPanel = new CombatPetsQuizUIPanel() { AllowClickText = true };
+			nextButton = new TextButton() { Text = "Next" };
 			Append(questionPanel);
 			Append(answerPanel);
+			Append(nextButton);
 			answerPanel.OnMouseUp += this.AnswerPanel_OnMouseUp;
+			nextButton.OnMouseUp += this.NextButton_OnMouseUp;
+		}
 
-			
+		private void NextButton_OnMouseUp(UIMouseEvent evt, UIElement listeningElement)
+		{
+			ModPlayer.AdvanceDialog();
+			SoundEngine.PlaySound(SoundID.MenuTick);
 		}
 
 		private void AnswerPanel_OnMouseUp(UIMouseEvent evt, UIElement listeningElement)
 		{
 			if(answerPanel.HighlightedLine > -1)
 			{
-				ModPlayer.CurrentQuiz.AnswerQuestion(answerPanel.HighlightedLine);
+				ModPlayer.AnswerQuestion(answerPanel.HighlightedLine);
 				SoundEngine.PlaySound(SoundID.MenuTick);
 			}
 		}
@@ -65,6 +79,10 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 		{
 			if(!IsActive) { return; }
 			base.DrawSelf(spriteBatch);
+			if(ModPlayer.ShouldShowPortrait)
+			{
+				DrawPortrait(spriteBatch);
+			}
 		}
 		protected override void DrawChildren(SpriteBatch spriteBatch)
 		{
@@ -77,10 +95,22 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 			base.Update(gameTime);
 			if(IsActive)
 			{
-				CombatPetsQuizQuestion currentQuestion = ModPlayer.CurrentQuiz.CurrentQuestion;
+				var currentText = ModPlayer.CurrentDialogText();
+				if(lastDisplayedText != currentText)
+				{
+					textSwitchTime = (int)Main.GameUpdateCount;
+					lastDisplayedText = currentText;
+				}
+				int charactersToDisplay = Math.Min(currentText.Length, 2 * (int)(Main.GameUpdateCount - textSwitchTime));
 				questionPanel.TextLines = TextFont.CreateWrappedText(
-					currentQuestion.QuestionText, MaxTextboxWidth - 4 * MarginSize).Split('\n');
-				answerPanel.TextLines = currentQuestion.AnswerTexts;
+					currentText.Substring(0, charactersToDisplay), MaxTextboxWidth - 4 * MarginSize).Split('\n');
+				if(charactersToDisplay == currentText.Length && ModPlayer.QuizState == QuizState.QUIZ)
+				{
+					answerPanel.TextLines = ModPlayer.CurrentQuiz.CurrentQuestion.AnswerTexts;
+				} else
+				{
+					answerPanel.TextLines = default;
+				}
 				AnchorToScreenPosition();
 			} else
 			{
@@ -92,32 +122,102 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 
 		private void AnchorToScreenPosition()
 		{
-			Vector2 answerPanelSize = answerPanel.MeasureLines();
-			answerPanelSize.X = Math.Max(answerPanelSize.X + 4 * MarginSize, MinTextboxWidth);
-			// No real reason to do this all in one method, but...
 
 			// Set the size of the parent container
+			float answerPanelHeight = answerPanel.MeasureLines().Y;
 			float screenCenterX = Main.screenWidth / 2;
-			float totalHeight = QuestionPanelHeight + answerPanelSize.Y + 5 * MarginSize;
+			float totalHeight = QuestionPanelHeight + answerPanelHeight + 5 * MarginSize;
 			// fudge factor for margins
 			Top.Pixels = Main.screenHeight - totalHeight;
 			Height.Pixels = totalHeight;
 			Left.Pixels = screenCenterX - MaxTextboxWidth / 2;
 			Width.Pixels = MaxTextboxWidth;
 
+			// No real reason to do this all in one method, but...
+			AnchorQuestionPanel();
+			AnchorAnswerPanel();
+			AnchorNextButton();
+
+		}
+
+		internal void AnchorQuestionPanel()
+		{
 			// Set the size of the narration text box (fixed)
 			questionPanel.Top.Pixels = Height.Pixels - QuestionPanelHeight - 2 * MarginSize;
 			questionPanel.Height.Pixels = QuestionPanelHeight;
 			questionPanel.Left.Pixels = 0;
 			questionPanel.Width.Pixels = MaxTextboxWidth;
-
-			// Set the size of the answer options text box dynamic based on text
-			answerPanel.Top.Pixels = 0;
-			answerPanel.Height.Pixels = answerPanelSize.Y + 2 * MarginSize;
-			answerPanel.Left.Pixels = MaxTextboxWidth - answerPanelSize.X - 2 * MarginSize;
-			answerPanel.Width.Pixels = answerPanelSize.X + 2 * MarginSize;
 		}
 
+		internal void AnchorAnswerPanel()
+		{
+			// Set the size of the answer options text box dynamically based on text
+			Vector2 answerPanelSize = answerPanel.MeasureLines();
+			answerPanelSize.X = Math.Max(answerPanelSize.X + 4 * MarginSize, MinTextboxWidth);
+			if(answerPanel.IsEmpty)
+			{
+				// shove off of the bottom of the screen
+				answerPanel.Top.Pixels = Main.screenHeight;
+			} else
+			{
+				answerPanel.Top.Pixels = 0;
+				answerPanel.Height.Pixels = answerPanelSize.Y + 2 * MarginSize;
+				answerPanel.Left.Pixels = MaxTextboxWidth - answerPanelSize.X - 2 * MarginSize;
+				answerPanel.Width.Pixels = answerPanelSize.X + 2 * MarginSize;
+			}
+		}
+
+		internal void AnchorNextButton()
+		{
+			if(ModPlayer.QuizState == QuizState.QUIZ)
+			{
+				nextButton.Top.Pixels = Main.screenHeight;
+				return;
+			} 
+
+			// Set the size of the next button dynamically based on text
+			if(ModPlayer.EndOfIntro)
+			{
+				nextButton.Text = "Start Quiz!";
+			} else if (ModPlayer.OnLastLine)
+			{
+				nextButton.Text = "Done";
+			} else
+			{
+				nextButton.Text = "Next";
+			}
+			Vector2 nextButtonSize = nextButton.MeasureText();
+			nextButton.Top.Pixels = questionPanel.Top.Pixels + QuestionPanelHeight - MarginSize - nextButtonSize.Y;
+			nextButton.Left.Pixels = questionPanel.Left.Pixels + MaxTextboxWidth - 2 * MarginSize - nextButtonSize.X;
+			nextButton.Width.Pixels = nextButtonSize.X;
+			nextButton.Height.Pixels = nextButtonSize.Y;
+		}
+
+		internal void DrawPortrait(SpriteBatch spriteBatch)
+		{
+			Texture2D texture = ModPlayer.PortraitTexture.Value;
+			float xPos = Left.Pixels + Width.Pixels - texture.Width;
+			float yPos = Top.Pixels + questionPanel.Top.Pixels - texture.Height - MarginSize;
+			spriteBatch.Draw(texture, new Vector2(xPos, yPos), texture.Bounds, Color.White, 0, default, 1, SpriteEffects.FlipHorizontally, 0);
+		}
+	}
+	
+	class TextButton : UIElement
+	{
+		internal string Text { get; set; }
+
+		protected override void DrawSelf(SpriteBatch spriteBatch)
+		{
+			base.DrawSelf(spriteBatch);
+			float xPos = Parent.Left.Pixels + Left.Pixels;
+			float yPos = Parent.Top.Pixels + Top.Pixels;
+			Vector2 pos = new(xPos, yPos);
+			// budget text outline
+			Color textColor = IsMouseHovering ? Color.Yellow : Color.White;
+			CombatPetsQuizUIPanel.DrawText(spriteBatch, Text, pos, textColor);
+		}
+
+		internal Vector2 MeasureText() => TextFont.MeasureString(Text);
 
 	}
 
@@ -131,6 +231,8 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 
 		internal int HighlightedLine { get; private set; } = -1;
 
+		internal bool IsEmpty => (TextLines?.Length ?? 0) == 0;
+		
 		public override void OnInitialize()
 		{
 			base.OnInitialize();
@@ -139,6 +241,10 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 
 		protected override void DrawChildren(SpriteBatch spriteBatch)
 		{
+			if(IsEmpty)
+			{
+				return;
+			}
 			base.DrawChildren(spriteBatch);
 			for(int i = 0; i < TextLines.Length; i++)
 			{
@@ -148,6 +254,10 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 
 		public Vector2 MeasureLines()
 		{
+			if(IsEmpty)
+			{
+				return default;
+			}
 			float ySum = LineHeight * TextLines.Length;
 			float xMax = TextLines.Select(tl => TextFont.MeasureString(tl).X).Max();
 			return new(xMax, ySum);
@@ -168,35 +278,38 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 
 		private void DrawText(SpriteBatch spriteBatch, string text, int line)
 		{
-			// TODO line wrap? Maybe?
-			DynamicSpriteFont font = FontAssets.MouseText.Value;
 			float xPos = Parent.Left.Pixels + Left.Pixels + 2 * MarginSize;
 			float yPos = Parent.Top.Pixels + Top.Pixels + line * LineHeight + MarginSize;
+			Vector2 pos = new(xPos, yPos);
 			// budget text outline
-			Vector2 pos = new Vector2(xPos, yPos);
+			Color textColor = line == HighlightedLine ? Color.Yellow : Color.White;
+			DrawText(spriteBatch, text, pos, textColor);
+		}
+
+
+		public static void DrawText(SpriteBatch spriteBatch, string text, Vector2 pos, Color textColor)
+		{
 			for(int i = -1; i < 2; i += 2)
 			{
 				for(int j = -1; j < 2; j += 2)
 				{
-					spriteBatch.DrawString(font, text, pos + new Vector2(i, j), Color.Black);
+					spriteBatch.DrawString(TextFont, text, pos + new Vector2(i, j), Color.Black);
 				}
 			}
-			Color textColor = line == HighlightedLine ? Color.Yellow : Color.White;
-			spriteBatch.DrawString(font, text, pos, textColor);
+			spriteBatch.DrawString(TextFont, text, pos, textColor);
 		}
 	}
 
 	public class CombatQuizClickSuppressor: GlobalItem
 	{
-		// TODO figure out why this needs to be manually suppressed
+		// TODO figure out why item usage needs to be manually suppressed
 		public override bool CanUseItem(Item item, Player player)
 		{
-			if(player.whoAmI == Main.myPlayer && UserInterfaces.quizUI.IsMouseHovering)
+			if(player.whoAmI == Main.myPlayer && UserInterfaces.quizUI.Children.Any(e=>e.IsMouseHovering))
 			{
 				return false;
 			}
 			return base.CanUseItem(item, player);
 		}
-
 	}
 }
