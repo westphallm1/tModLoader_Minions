@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		{
 			IsTakingQuiz = true;
 			// CurrentQuiz = CombatPetsQuiz.MakeQuizWithDominantTrait(preferredType, 6);
-			CurrentQuiz = CombatPetsQuiz.MakeClassSpecificQuiz(PersonalityType.QUIRKY);
+			CurrentQuiz = DefaultPetsQuizData.MakeClassSpecificQuiz(PersonalityType.QUIRKY);
 		}
 
 		internal void AdvanceDialog()
