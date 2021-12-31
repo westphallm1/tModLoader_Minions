@@ -80,12 +80,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			Main.projFrames[Projectile.type] = 9;
 		}
 
-		public override void OnSpawn()
-		{
-			base.OnSpawn();
-			Projectile.damage = (int)Math.Ceiling(Projectile.damage / 3f);
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -164,10 +158,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
+			// each rat deals 1/3 damage, and ignores 10 defense
 			// manually bypass defense
 			// this may not be wholly correct
 			int defenseBypass = 10;
 			int defense = Math.Min(target.defense, defenseBypass);
+			damage = (int)Math.Ceiling(damage / 3f);
 			damage += defense / 2;
 		}
 
