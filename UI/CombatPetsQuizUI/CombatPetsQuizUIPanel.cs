@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 			base.Update(gameTime);
 			if(IsActive)
 			{
-				var currentText = ModPlayer.CurrentDialogText();
+				var currentText = ModPlayer.CurrentQuiz.CurrentDialogText;
 				if(lastDisplayedText != currentText)
 				{
 					textSwitchTime = (int)Main.GameUpdateCount;
@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 				int charactersToDisplay = Math.Min(currentText.Length, 2 * (int)(Main.GameUpdateCount - textSwitchTime));
 				questionPanel.TextLines = TextFont.CreateWrappedText(
 					currentText.Substring(0, charactersToDisplay), MaxTextboxWidth - 4 * MarginSize).Split('\n');
-				if(charactersToDisplay == currentText.Length && ModPlayer.QuizState == QuizState.QUIZ)
+				if(charactersToDisplay == currentText.Length && ModPlayer.CurrentQuiz.CurrentState == QuizState.QUIZ)
 				{
 					answerPanel.TextLines = ModPlayer.CurrentQuiz.CurrentQuestion.AnswerTexts;
 				} else
@@ -169,23 +169,11 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 
 		internal void AnchorNextButton()
 		{
-			if(ModPlayer.QuizState == QuizState.QUIZ)
+			if(ModPlayer.CurrentQuiz.CurrentState == QuizState.QUIZ)
 			{
 				nextButton.Top.Pixels = Main.screenHeight;
 				return;
 			} 
-
-			// Set the size of the next button dynamically based on text
-			if(ModPlayer.EndOfIntro)
-			{
-				nextButton.Text = "Start Quiz!";
-			} else if (ModPlayer.OnLastLine)
-			{
-				nextButton.Text = "Done";
-			} else
-			{
-				nextButton.Text = "Next";
-			}
 			Vector2 nextButtonSize = nextButton.MeasureText();
 			nextButton.Top.Pixels = questionPanel.Top.Pixels + QuestionPanelHeight - MarginSize - nextButtonSize.Y;
 			nextButton.Left.Pixels = questionPanel.Left.Pixels + MaxTextboxWidth - 2 * MarginSize - nextButtonSize.X;
