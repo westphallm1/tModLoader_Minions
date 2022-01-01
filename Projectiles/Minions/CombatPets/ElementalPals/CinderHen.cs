@@ -5,6 +5,10 @@ using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
+using System;
+using AmuletOfManyMinions.NPCs;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -20,12 +24,69 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
 	}
 
+	internal class FlareVortexDebuff : ModBuff
+	{
+		public override string Texture => "Terraria/Images/Buff_" + BuffID.OnFire;
+		public override void SetStaticDefaults()
+		{
+			Main.debuff[Type] = true;
+		}
+	}
+
+	public class FlareVortexProjectile : BaseImpFireball
+	{
+		internal static int TimeToLive = 180;
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.timeLeft = TimeToLive;
+		}
+
+		public override void PostAI()
+		{
+			int frame = TimeToLive - Projectile.timeLeft;
+			float baseAngle = -MathHelper.TwoPi * frame / 30f;
+			int radius = Math.Min(20, frame);
+			for(float offset = 0; offset < MathHelper.TwoPi; offset += 2 * MathHelper.Pi / 3f)
+			{
+				float angle = baseAngle + offset;
+				Vector2 dustPos = Projectile.Center + radius * angle.ToRotationVector2();
+				AddDust(dustPos, Projectile.width, Projectile.height);
+			}
+		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			target.AddBuff(BuffType<FlareVortexDebuff>(), 240);
+			DebuffGlobalNPC debuffNPC = target.GetGlobalNPC<DebuffGlobalNPC>();
+			debuffNPC.flameVortexStack = (short)Math.Min(debuffNPC.flameVortexStack + 1, 5);
+		}
+
+		public override void ModifyDamageHitbox(ref Rectangle hitbox)
+		{
+			hitbox.Inflate(16, 16);
+		}
+
+	}
+
 	public class CinderHenMinion : CombatPetGroundedRangedMinion
 	{
 		internal override int BuffId => BuffType<CinderHenMinionBuff>();
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
 
-		internal override int? ProjId => ProjectileType<ImpFireball>();
+		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
+		{
+			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre)
+			{
+				launchVector *= 0.6f; // slow down for nicer visual effect, might make it slightly worse
+			}
+			base.LaunchProjectile(launchVector, ai0);
+		}
+
+		internal override int? ProjId => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre ? 
+			ProjectileType<FlareVortexProjectile>() :
+			ProjectileType<ImpFireball>();
 
 		public override void SetDefaults()
 		{

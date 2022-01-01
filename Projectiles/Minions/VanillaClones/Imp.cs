@@ -46,6 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		internal virtual int DustType => 6;
 		internal virtual float DustScale => 2f;
+		
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -54,30 +55,42 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void SetDefaults()
 		{
-			Projectile.CloneDefaults(ProjectileID.ImpFireball);
+			// Projectile.CloneDefaults(ProjectileID.ImpFireball);
 			base.SetDefaults();
-			Projectile.localNPCHitCooldown = 30;
+			Projectile.penetrate = 3;
+			Projectile.friendly = true;
 			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 30;
 		}
 
 		public override void PostAI()
 		{
 			for (int i = 0; i < 2; i++)
 			{
+				AddDust(Projectile.position, Projectile.width, Projectile.height);
+			}
+		}
+
+		internal void AddDust(Vector2 position, int width, int height)
+		{
 				int dustId = Dust.NewDust(
-					Projectile.position, 
-					Projectile.width, Projectile.height, DustType, 
+					position - new Vector2(width, height) /2 , width, height, DustType, 
 					Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 
 					100, default, DustScale);
 				Main.dust[dustId].noGravity = true;
 				Main.dust[dustId].velocity.X *= 0.3f;
 				Main.dust[dustId].velocity.Y *= 0.3f;
 				Main.dust[dustId].noLight = true;
-			}
 		}
+
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			target.AddBuff(BuffID.OnFire, 240);
+		}
+
+		public override bool PreDraw(ref Color lightColor)
+		{
+			return false;
 		}
 	}
 

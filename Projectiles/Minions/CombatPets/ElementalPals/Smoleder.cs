@@ -33,13 +33,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
 
-		internal override int? ProjId => ProjectileType<ImpFireball>();
+		internal override int? ProjId => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre ? 
+			ProjectileType<FlareVortexProjectile>() :
+			ProjectileType<ImpFireball>();
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			ConfigureDrawBox(30, 24, -6, -6, -1);
 			ConfigureFrames(8, (0, 1), (2, 6), (2, 2), (7, 7));
+		}
+
+		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
+		{
+			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre)
+			{
+				launchVector *= 0.6f; // slow down for nicer visual effect, might make it slightly worse
+			}
+			base.LaunchProjectile(launchVector, ai0);
 		}
 
 		public override void LoadAssets()
