@@ -5,6 +5,7 @@ using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
 using AmuletOfManyMinions.Items.Armor;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -31,7 +32,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
 
-		internal override int? ProjId => ProjectileType<ForagerMushroom>();
+		internal override int? ProjId => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre ?
+			ProjectileType<LeafBlade>() :
+			ProjectileType<SaplingMinionLeafProjectile>();
 
 		public override void SetDefaults()
 		{

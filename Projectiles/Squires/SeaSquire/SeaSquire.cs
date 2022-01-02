@@ -261,7 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 					3 * Projectile.damage, 
 					Projectile.knockBack, 
 					player.whoAmI);
-				p.originalDamage = Projectile.originalDamage;
+				p.originalDamage = 3 * Projectile.originalDamage;
 			}
 		}
 

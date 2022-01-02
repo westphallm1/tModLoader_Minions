@@ -26,6 +26,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		internal Vector2 tangent;
 		internal float chargeScale;
 		internal int baseTangentSize = 12; // offset draw position of laser from center
+		internal bool StopAfterFirstCollision;
+		internal int collisionDuration;
+		internal int collisionLength;
 
 		protected float firingAngle => Projectile.ai[0];
 		protected int animationFrame => TimeToLive - Projectile.timeLeft;
@@ -45,6 +48,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				Vector2 checkPoint = Projectile.Center + direction * i;
 				if(targetHitbox.Contains(checkPoint.ToPoint())) 
 				{
+					if(StopAfterFirstCollision)
+					{
+						collisionLength = i;
+						collisionDuration = Projectile.localNPCHitCooldown + 2;
+					}
 					return true;
 				}
 			}
@@ -72,6 +80,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			int i;
 			int step = 16;
 			bool shouldDust = false;
+			int checkLength = maxLength;
+			if(StopAfterFirstCollision && collisionDuration > 0)
+			{
+				collisionDuration -= 1;
+				maxLength = collisionLength;
+				shouldDust = true;
+			}
 			for(i = step; i < maxLength; i += step)
 			{
 				Vector2 next = Projectile.Center + travelVector * i;
