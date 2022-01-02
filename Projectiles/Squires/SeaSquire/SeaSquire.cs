@@ -51,7 +51,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 	public abstract class BaseMinionBubble : ModProjectile
 	{
-		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SeaSquire/SeaSquireBubble";
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -234,7 +233,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.OnSpawn();
 			// the spear does half damage, this is re-multiplied by 2 to get the bubble damage
 			// maybe a little bit iffy
-			Projectile.damage = Projectile.damage / 2;
+			Projectile.originalDamage = Projectile.originalDamage / 2;
 		}
 
 		private void TransformBubbles()

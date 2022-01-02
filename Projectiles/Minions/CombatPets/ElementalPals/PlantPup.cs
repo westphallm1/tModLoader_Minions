@@ -1,8 +1,6 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
-using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets;
 using Terraria.ModLoader;
@@ -22,6 +20,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	{
 		internal override string VanillaItemName => "FullMoonSqueakyToy";
 		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Perennial Pup");
+		}
 	}
 
 	public class LeafBlade : ModProjectile
@@ -91,8 +95,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			{
 				Projectile.Kill();
 			}
-
 			Projectile.rotation = Projectile.velocity.ToRotation();
+			ModProjectileExtensions.ClientSideNPCHitCheck(this);
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -104,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 				currentVelocity = Projectile.velocity;
 				this.target = target;
 			}
-			Projectile.damage = (int) (Projectile.damage * 0.95f);
+			Projectile.damage = (int) (Projectile.damage * 0.90f);
 		}
 
 		public override void PostAI()

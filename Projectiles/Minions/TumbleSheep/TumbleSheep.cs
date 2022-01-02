@@ -91,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		{
 			base.OnSpawn();
 			scHelper = new SpriteCompositionHelper(this, new Rectangle(0, 0, 48, 48));
-			Projectile.damage = (int)(1.5f * Projectile.damage);
+			Projectile.originalDamage = (int)(1.5f * Projectile.originalDamage);
 			scHelper.Attach();
 		}
 

@@ -22,6 +22,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	{
 		internal override string VanillaItemName => "FullMoonSqueakyToy";
 		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			DisplayName.SetDefault("Cinder Hen");
+		}
 	}
 
 	internal class FlareVortexDebuff : ModBuff

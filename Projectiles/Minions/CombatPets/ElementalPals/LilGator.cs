@@ -21,16 +21,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("LilGator");
+			DisplayName.SetDefault("Lil' Gator");
 		}
 	}
 
-	public class LilGatorMinion : CombatPetGroundedRangedMinion
+	public class LilGatorMinion : WaterBeamLaserCombatPet
 	{
 		internal override int BuffId => BuffType<LilGatorMinionBuff>();
-		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
-
-		internal override int? ProjId => ProjectileType<SharkPupBubble>();
 
 		public override void SetDefaults()
 		{

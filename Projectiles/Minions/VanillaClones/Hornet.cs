@@ -89,12 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.projFrames[Projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
-
-		public override void OnSpawn()
-		{
-			// vanilla version is a bit weak, so buff it
-			Projectile.damage = (int)(Projectile.damage * 1.25f);
-		}
+		
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

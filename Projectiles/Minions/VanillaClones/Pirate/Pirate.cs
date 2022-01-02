@@ -244,7 +244,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			Projectile.damage = (int)(Projectile.damage * 0.8f);
+			Projectile.originalDamage = (int)(Projectile.originalDamage * 0.8f);
 		}
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
@@ -473,7 +473,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void OnSpawn()
 		{
 			base.OnSpawn();
-			Projectile.damage = (int)(Projectile.damage * 0.8f);
+			Projectile.originalDamage = (int)(Projectile.originalDamage * 0.8f);
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

@@ -34,14 +34,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override string VanillaItemName => "DukeFishronPetItem";
 	}
 
-	public class TinyFishronBubble : BaseMinionBubble
-	{
-		public override void SetStaticDefaults()
-		{
-			ProjectileID.Sets.MinionShot[Projectile.type] = true;
-		}
-	}
-
 	public class TinyFishronWhirlpool : ModProjectile
 	{
 		private WhirlpoolDrawer whirlpoolDrawer;

@@ -266,7 +266,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void OnSpawn()
 		{
 			// cut down damage since it's got such a high rate of fire
-			Projectile.damage = (int)(Projectile.damage * 0.67f);
+			Projectile.originalDamage = (int)(Projectile.originalDamage * 0.67f);
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -379,7 +379,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void OnSpawn()
 		{
 			// cut down damage since it's got such a high rate of fire
-			Projectile.damage = (int)(Projectile.damage * 0.5f);
+			Projectile.originalDamage = (int)(Projectile.originalDamage * 0.5f);
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

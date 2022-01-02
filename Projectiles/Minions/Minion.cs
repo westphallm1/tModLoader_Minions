@@ -28,6 +28,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 	}
+
+	public static class ModProjectileExtensions
+	{
+		public static void ClientSideNPCHitCheck(this ModProjectile modProjectile)
+		{
+			if(modProjectile.Projectile.owner == Main.myPlayer || 
+				Minion.GetClosestEnemyToPosition(modProjectile.Projectile.Center, 128, requireLOS: false) is not NPC npc)
+			{
+				return;
+			}
+			if(modProjectile.Projectile.Hitbox.Intersects(npc.Hitbox))
+			{
+				modProjectile.OnHitNPC(npc, 0, 0, false);
+			}
+		}
+	}
+
 	public abstract class Minion : ModProjectile
 	{
 		public readonly float PI = (float)Math.PI;

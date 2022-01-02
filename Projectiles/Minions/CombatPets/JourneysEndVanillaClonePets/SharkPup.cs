@@ -25,6 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 
 	public class SharkPupBubble : BaseMinionBubble
 	{
+		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SeaSquire/SeaSquireBubble";
 		public override void SetStaticDefaults()
 		{
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;

@@ -122,20 +122,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	}
 
-	public class AxolotlMinion : CombatPetGroundedRangedMinion
+	public abstract class WaterBeamLaserCombatPet : CombatPetGroundedRangedMinion
 	{
-		internal override int BuffId => BuffType<AxolotlMinionBuff>();
 
 		internal override Vector2 LaunchPos => Projectile.Top;
 
 		private Projectile laser;
-
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			ConfigureDrawBox(30, 24, -16, -2, -1);
-			ConfigureFrames(12, (0, 1), (2, 6), (2, 2), (7, 11));
-		}
 
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
 
@@ -199,6 +191,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			{
 				laser.Kill();
 			}
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			base.Kill(timeLeft);
+			if(laser != default)
+			{
+				laser.Kill();
+			}
+		}
+	}
+
+	public class AxolotlMinion : WaterBeamLaserCombatPet
+	{
+		internal override int BuffId => BuffType<AxolotlMinionBuff>();
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			ConfigureDrawBox(30, 24, -16, -2, -1);
+			ConfigureFrames(12, (0, 1), (2, 6), (2, 2), (7, 11));
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

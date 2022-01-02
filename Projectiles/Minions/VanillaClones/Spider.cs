@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.OnSpawn();
 			// AI is much more consistent than vanilla, so drop base damage down a bit
-			Projectile.damage = (int)(0.9f * Projectile.damage);
+			Projectile.originalDamage = (int)(0.9f * Projectile.originalDamage);
 		}
 
 		// Use flying movement if we're on a wall
