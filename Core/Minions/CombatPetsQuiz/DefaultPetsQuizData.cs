@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 					("Summoner.", CALM), ("Summoner?", QUIRKY), ("Summoner!", BOLD)),
 			},
 
-			new("You accidentally clicked Reforge one too many times, now your Legendary Terra Blade is Broken! What do you do?",
+			new("You accidentally clicked Reforge one too many times, now your Legendary Zenith is Broken! What do you do?",
 				("Cry.", QUIET), 
 				("Keep mashing 'Reforge'.", JOLLY), 
 				("Install Consistent Reforging!", QUIRKY)),
@@ -56,28 +56,61 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				("Chase the bunny too!", JOLLY)),
 
 			new ("You just started a new world. How do you build a house for the Guide?",
-				("A lovely cabin.", HARDY),
-				("Prison cube.", QUIET),
-				("No house at all.", QUIRKY)),
+				("A lovely cabin.", CALM),
+				("A prison cube.", QUIET),
+				("No house at all.", HASTY)),
 
 
 			new ("Re-Logic just nerfed your favorite weapon! How do you adapt?",
 				("Keep using it.", HARDY), ("Try a new one!", JOLLY)),
 
 			new ("Do you prefer building or adventuring?",
-				("Building.", QUIET), ("Adventuring.", BOLD), ("Fishing!", QUIRKY)),
+				("Building.", RELAXED), ("Adventuring.", BOLD), ("Fishing!", QUIRKY)),
 
 			new ("After looting a chest, do you take the chest with you?",
 				("Yes.", HARDY), ("No.", QUIRKY)),
 
 			new ("While exploring a cave, you see a treasure chest sitting out in the open.",
-				("Yay, treasure!", JOLLY), ("It's a mimic!", HARDY), ("It's a trapped chest!", QUIET)),
+				("Yay, treasure!", QUIRKY), ("It's a mimic!", HARDY), ("It's a trapped chest!", QUIET)),
 
 			new ("What's your favorite color?",
 				("Red.", BOLD), ("Green.", CALM), ("Blue.", JOLLY)),
 
 			new ("How well organized are your chests?",
-				("Not at all.", BOLD), ("A little bit.", QUIRKY), ("Well organized.", QUIET)),
+				("Not at all.", HASTY), ("A little bit.", QUIRKY), ("Well organized.", QUIET)),
+
+			new ("You've just arrived at the dungeon's entrance, but the night is already half way over! What do you do?",
+				("Fight skeletron right away!", HASTY), 
+				("Build a makeshift arena first.", HARDY), 
+				("Wait until the next night", RELAXED)),
+
+			new ("A Martian probe has caught you off guard and is now flying away! How do you respond?",
+				("Quickly save and quit.", QUIET), 
+				("Chase after it!", HASTY), 
+				("Yay! Martian Invasion!", QUIRKY)),
+
+			new ("Do you prefer sweet foods or savory foods?",
+				("Sweet!", JOLLY),
+				("Savory.", RELAXED)),
+
+			new ("What's your favorite difficulty to play on?",
+				("Normal.", RELAXED),
+				("Expert.", HARDY),
+				("Master.", BOLD)),
+
+			new ("You're playing multiplayer and just found a one-of-a-kind chest item! How do you handle sharing it?",
+				("First come, first serve.", HASTY),
+				("Divide the loot evenly.", RELAXED)),
+
+			new ("Do you prefer Squires or whips?",
+				("Squires.", CALM),
+				("Squires?", QUIET),
+				("Squires!", JOLLY)),
+
+			new ("Do you replant trees after chopping them down?",
+				("Never!", HASTY),
+				("Right away.", CALM),
+				("After a while.", RELAXED))
 		};
 
 		private static CombatPetsQuizQuestion[] MakeClassSpecificQuestions() => new CombatPetsQuizQuestion[]
@@ -90,13 +123,16 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 			new ("A down to earth friend is a great choice! How should their disposition be?",
 				("Hardy and resillient!", HARDY), ("Calm and collected.", CALM)),
+
+			new ("A lofty friend is a great choice! How should their disposition be?",
+				("Easygoing and relaxed!", RELAXED), ("Hasty and ambitious.", HASTY)),
 		};
 
-		public static CombatPetsQuiz MakeQuizWithDominantTrait(PersonalityType personalityType, int questionCount)
+		public static CombatPetsQuiz MakeQuizWithDominantTraits(PersonalityType [] personalityTypes, int questionCount)
 		{
 			var quiz = new CombatPetsQuiz();
 			quiz.Questions = BasicQuestions
-				.OrderBy(q => q.CanGivePointsForType(personalityType) ? 0 : 1)
+				.OrderBy(q => personalityTypes.Select(pt=>Convert.ToInt32(q.CanGivePointsForType(pt))).Sum())
 				.ThenBy(q => Main.rand.Next())
 				.Take(questionCount)
 				.ToList();
@@ -126,17 +162,18 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			{
 				"A friend with a fiery passion!",
 				"A friend who can go with the flow!",
-				"A friend who's down to earth!"
+				"A friend who's down to earth!",
+				"A friend with their head in the clouds!",
 			};
-			List<int> usedIndices = DefaultPetsQuizData.ClassSpecificQuestions
+			List<int> usedIndices = ClassSpecificQuestions
 				.Select((q, idx) => (Question: q, Idx: idx))
-				.Where(q => !q.Question.AnswerValues.Any(a => disallowedTypes.Contains(a)))
+				.Where(q => !disallowedTypes.Any(t=>q.Question.CanGivePointsForType(t)))
 				.Select(q => q.Idx)
 				.ToList();
 
 
 			CombatPetsQuizQuestion question = new (
-				"What sort of friend would you like to have join you on your journey",
+				"What sort of friend would you like to have join you on your journey?",
 				usedIndices.Select(idx => (allAnswerTexts[idx], NONE)).ToArray())
 			{
 				AddFollowUpQuestion = idx => DefaultPetsQuizData.ClassSpecificQuestions[usedIndices[idx]]
@@ -148,7 +185,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			{
 				"Welcome back, to the world of Terraria!",
 				"I hope you and your friends have been enjoying your adventures!",
-				"Your exploits are known far and wide, and a new friend wants to join you!",
+				"Do you know what the only thing better than having friends is? Having more friends!",
 			};
 
 			quiz.OutroLines = new string[]
@@ -158,6 +195,15 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				"May you and your new friend enjoy many adventures!",
 			};
 			return quiz;
+		}
+
+		internal static void DebugPrintAnswerCounts()
+		{
+			foreach(var key in QuizResult.ResultsMap.Keys)
+			{
+				int answerCount = BasicQuestions.Where(q => q.CanGivePointsForType(key)).Count();
+				Main.NewText(Enum.GetName(key) + ": " + answerCount);
+			}
 		}
 	}
 }

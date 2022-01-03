@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Perennial Pup");
+			DisplayName.SetDefault("Plant Pup");
 		}
 	}
 

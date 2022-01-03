@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 {
@@ -17,18 +19,20 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		internal CombatPetsQuiz CurrentQuiz { get; private set; }
 
+		const int UsedTypeCacheSize = 3;
+		internal PersonalityType[] LastUsedTypes = new PersonalityType[UsedTypeCacheSize];
+
 		private QuizResult result;
 
-		public override void OnEnterWorld(Player player)
-		{
-			base.OnEnterWorld(player);
-			StartQuiz((PersonalityType)Main.rand.Next((int)PersonalityType.BOLD));
-		}
+		internal int LatestVersion = 0;
 
+		internal bool HasTakenQuiz => LastUsedTypes.Any(t => t != PersonalityType.NONE);
+
+		// TODO can't seem to get the SetStaticDefaults hook on ModSystem working, do it here instead
 		public override void SetStaticDefaults()
 		{
-			// TODO this is an odd place to autoload portrait textures
 			base.SetStaticDefaults();
+			QuizResult.ResultsMap = QuizResult.MakeResultsMap();
 			if(Main.dedServ)
 			{
 				return;
@@ -39,15 +43,24 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				string TexturePath = TextureBasePath + Enum.GetName(personalityType);
 				QuizResult.ResultsMap[personalityType].PortraitTexture = ModContent.Request<Texture2D>(TexturePath);
 			}
-
-
 		}
 
-		internal void StartQuiz(PersonalityType preferredType)
+		internal void StartPersonalityQuiz()
 		{
 			IsTakingQuiz = true;
-			// CurrentQuiz = CombatPetsQuiz.MakeQuizWithDominantTrait(preferredType, 6);
-			CurrentQuiz = DefaultPetsQuizData.MakeClassSpecificQuiz(PersonalityType.QUIRKY);
+			CurrentQuiz = DefaultPetsQuizData.MakeQuizWithDominantTraits(new[] { PersonalityType.CALM }, 6);
+		}
+
+		internal void StartPartnerQuiz()
+		{
+			IsTakingQuiz = true;
+			CurrentQuiz = DefaultPetsQuizData.MakeClassSpecificQuiz(LastUsedTypes);
+		}
+
+		internal void StartAnyPartnerQuiz()
+		{
+			IsTakingQuiz = true;
+			CurrentQuiz = DefaultPetsQuizData.MakeClassSpecificQuiz();
 		}
 
 		internal void AdvanceDialog()
@@ -62,11 +75,39 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		internal void FinishQuiz()
 		{
 			IsTakingQuiz = false;
+			LeveledCombatPetModPlayer petPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
+			petPlayer.TemporarilyUnflagPetBuff(result.BuffType);
 			Player.QuickSpawnItem(result.ItemType);
 			Player.AddBuff(result.BuffType, 2);
+			// shift out the oldest personality quiz result, then save this answer
+			for(int i = LastUsedTypes.Length -2; i >= 0; i--)
+			{
+				LastUsedTypes[i + 1] = LastUsedTypes[i];
+			}
+			LastUsedTypes[0] = CurrentQuiz.GetResultType();
 		}
 
-		// very hardcoded
+		public override void SaveData(TagCompound tag)
+		{
+			TagCompound quizTag = new TagCompound
+			{
+				["v"] = LatestVersion,
+				["lastUsedTypes"] = LastUsedTypes.Select(t => (int)t).ToArray()
+			};
+			tag.Add("quiz", quizTag);
+		}
+
+		public override void LoadData(TagCompound tag)
+		{
+			TagCompound quizTag = tag.Get<TagCompound>("quiz");
+			int version = quizTag.GetInt("v");
+			if(version == 0 && quizTag.ContainsKey("lastUsedTypes"))
+			{
+				LastUsedTypes = quizTag.GetIntArray("lastUsedTypes").Select(v=>(PersonalityType)v).ToArray();
+			}
+			base.LoadData(tag);
+		}
+
 		internal bool ShouldShowPortrait => CurrentQuiz.ShouldShowPortrait;
 
 		// TODO maybe unique texture instead of resuing the buff

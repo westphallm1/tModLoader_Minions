@@ -103,6 +103,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		JOLLY, // Lil Gator
 		QUIET, // Smoleder
 		BOLD, // Cinder Hen
+		HASTY, // Wyvernfly
+		RELAXED // Cloudiphant
 	}
 
 	internal class QuizResult : ModSystem
@@ -123,9 +125,18 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			BuffType = buffType;
 		}
 
+		public override void Unload()
+		{
+			base.Unload();
+			ResultsMap = null;
+		}
+
 
 		// TODO mod load hook
-		internal static Dictionary<PersonalityType, QuizResult> ResultsMap = new Dictionary<PersonalityType, QuizResult>
+		internal static Dictionary<PersonalityType, QuizResult> ResultsMap;
+		
+		
+		internal static Dictionary<PersonalityType, QuizResult> MakeResultsMap() => new()
 		{
 			[CALM] = new QuizResult("calm", "Plant Pup", ItemType<PlantPupMinionItem>(), BuffType<PlantPupMinionBuff>()),
 			[HARDY] = new QuizResult("hardy", "Truffle Turtle", ItemType<TruffleTurtleMinionItem>(), BuffType<TruffleTurtleMinionBuff>()),
@@ -133,6 +144,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			[JOLLY] = new QuizResult("jolly", "Lil Gator", ItemType<LilGatorMinionItem>(), BuffType<LilGatorMinionBuff>()),
 			[QUIET] = new QuizResult("quiet", "Smoleder", ItemType<SmolederMinionItem>(), BuffType<SmolederMinionBuff>()),
 			[BOLD] = new QuizResult("bold", "Cinder Hen", ItemType<CinderHenMinionItem>(), BuffType<CinderHenMinionBuff>()),
+			[HASTY] = new QuizResult("hasty", "Wyvernfly", ItemType<WyvernFlyMinionItem>(), BuffType<WyvernFlyMinionBuff>()),
+			[RELAXED] = new QuizResult("relaxed", "Cloudiphant", ItemType<CloudiphantMinionItem>(), BuffType<CloudiphantMinionBuff>()),
 		};
 	}
 
