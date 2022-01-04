@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AmuletOfManyMinions.Items.Materials;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -128,36 +129,38 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				("Easygoing and relaxed!", RELAXED), ("Hasty and ambitious.", HASTY)),
 		};
 
-		public static CombatPetsQuiz MakeQuizWithDominantTraits(PersonalityType [] personalityTypes, int questionCount)
+		public static CombatPetsQuiz MakeQuizWithDominantTraits(Player player, int questionCount)
 		{
-			var quiz = new CombatPetsQuiz();
-			quiz.Questions = BasicQuestions
-				.OrderBy(q => personalityTypes.Select(pt=>Convert.ToInt32(q.CanGivePointsForType(pt))).Sum())
-				.ThenBy(q => Main.rand.Next())
-				.Take(questionCount)
-				.ToList();
-
-			quiz.IntroLines = new string[]
+			PersonalityType[] personalityTypes = GetPersonalityTypesForPlayerLocation(player);
+			var quiz = new CombatPetsQuiz
 			{
-				"Welcome, to the world of Terraria!",
-				"Terraria can be a dangerous place, but having a good friend at your side always makes it better!",
-				"To help you and your new friend get to know each other better, here's a few questions!",
-				"Be sure to answer sincerely. Let's begin!",
-			};
+				Questions = BasicQuestions
+					.OrderByDescending(q => personalityTypes.Select(pt => Convert.ToInt32(q.CanGivePointsForType(pt))).Sum())
+					.ThenBy(q => Main.rand.Next())
+					.Take(questionCount)
+					.ToList(),
+				ExtraResultItemID = ModContent.ItemType<InertCombatPetFriendshipBow>(),
+				IntroLines = new string[]
+				{
+					"Welcome, to the world of Terraria!",
+					"Terraria can be a dangerous place, but having a good friend at your side always makes it better!",
+					"To help you and your new friend get to know each other better, here's a few questions!",
+					"Be sure to answer sincerely. Let's begin!",
+				},
 
-			quiz.OutroLines = new string[]
-			{
-				"Thank you for answering those questions!",
-				"Based on your answers, you appear to be... the {0} type!",
-				"A {0} person like yourself would be great friends with... the {1}!",
-				"May you and your new friend enjoy many adventures!",
+				OutroLines = new string[]
+				{
+					"Thank you for answering those questions!",
+					"Based on your answers, you appear to be... the {0} type!",
+					"A {0} person like yourself would be great friends with... the {1}!",
+					"May you and your new friend enjoy many adventures!",
+				}
 			};
 			return quiz;
 		}
 
 		public static CombatPetsQuiz MakeClassSpecificQuiz(params PersonalityType[] disallowedTypes)
 		{
-			var quiz = new CombatPetsQuiz();
 			string[] allAnswerTexts =
 			{
 				"A friend with a fiery passion!",
@@ -178,21 +181,21 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			{
 				AddFollowUpQuestion = idx => DefaultPetsQuizData.ClassSpecificQuestions[usedIndices[idx]]
 			};
-
-			quiz.Questions = new List<CombatPetsQuizQuestion>() { question };
-
-			quiz.IntroLines = new string[]
+			var quiz = new CombatPetsQuiz
 			{
-				"Welcome back, to the world of Terraria!",
-				"I hope you and your friends have been enjoying your adventures!",
-				"Do you know what the only thing better than having friends is? Having more friends!",
-			};
-
-			quiz.OutroLines = new string[]
-			{
-				"Ah, a {0} friend will be great to have!",
-				"The {0} {1} is excited to join your team!",
-				"May you and your new friend enjoy many adventures!",
+				Questions = new List<CombatPetsQuizQuestion>() { question },
+				IntroLines = new string[]
+				{
+					"Welcome back, to the world of Terraria!",
+					"I hope you and your friends have been enjoying your adventures!",
+					"Do you know what the only thing better than having friends is? Having more friends!",
+				},
+					OutroLines = new string[]
+				{
+					"Ah, a {0} friend will be great to have!",
+					"The {0} {1} is excited to join your team!",
+					"May you and your new friend enjoy many adventures!",
+				}
 			};
 			return quiz;
 		}
@@ -203,6 +206,36 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			{
 				int answerCount = BasicQuestions.Where(q => q.CanGivePointsForType(key)).Count();
 				Main.NewText(Enum.GetName(key) + ": " + answerCount);
+			}
+		}
+
+		public static PersonalityType[] GetPersonalityTypesForPlayerLocation(Player player)
+		{
+			if(player.ZoneJungle)
+			{
+				// jungle - plant elemental pals
+				return new[] { CALM, HARDY };
+			} else if (player.ZoneDesert || player.ZoneUndergroundDesert)
+			{
+				// desert - fire elemental pals
+				return new[] { BOLD, QUIET };
+			} else if (player.ZoneBeach)
+			{
+				// beach - water elemental pals
+				return new[] { QUIRKY, JOLLY };
+			} else if (player.ZoneSkyHeight)
+			{
+				// beach - water elemental pals
+				return new[] { HASTY, RELAXED };
+			} else
+			{
+				// two random types for funsies
+				int maxPersonality = Enum.GetValues(typeof(PersonalityType)).Cast<int>().Max();
+				return new[]
+				{
+					(PersonalityType)Main.rand.Next(1, maxPersonality),
+					(PersonalityType)Main.rand.Next(1, maxPersonality)
+				};
 			}
 		}
 	}

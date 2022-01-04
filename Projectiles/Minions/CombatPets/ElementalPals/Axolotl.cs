@@ -17,15 +17,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public AxolotlMinionBuff() : base(ProjectileType<AxolotlMinion>()) { }
 	}
 
-	public class AxolotlMinionItem : CombatPetMinionItem<AxolotlMinionBuff, AxolotlMinion>
+	public class AxolotlMinionItem : CombatPetCustomMinionItem<AxolotlMinionBuff, AxolotlMinion>
 	{
-		internal override string VanillaItemName => "FullMoonSqueakyToy";
-		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Axolotl");
+			DisplayName.SetDefault("Quirky Bow of Friendship");
+			Tooltip.SetDefault("Summons a pet Axolittl!");
 		}
 	}
 

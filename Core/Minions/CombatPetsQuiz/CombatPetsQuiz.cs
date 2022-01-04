@@ -10,6 +10,7 @@ using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.Core.Minions.CombatPetsQuiz.PersonalityType;
+using Terraria.ID;
 
 namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 {
@@ -34,6 +35,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		internal QuizState CurrentState { get; private set; } = QuizState.INTRO;
 		internal QuizResult Result { get; private set; }
+
+		internal int ExtraResultItemID { get; set; } = ItemID.None;
 
 
 		public CombatPetsQuizQuestion CurrentQuestion => Questions[currentQuestionIdx];

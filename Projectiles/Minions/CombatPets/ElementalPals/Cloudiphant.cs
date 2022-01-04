@@ -18,15 +18,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public CloudiphantMinionBuff() : base(ProjectileType<CloudiphantMinion>()) { }
 	}
 
-	public class CloudiphantMinionItem : CombatPetMinionItem<CloudiphantMinionBuff, CloudiphantMinion>
+	public class CloudiphantMinionItem : CombatPetCustomMinionItem<CloudiphantMinionBuff, CloudiphantMinion>
 	{
-		internal override string VanillaItemName => "FullMoonSqueakyToy";
-		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Cloudiphant");
+			DisplayName.SetDefault("Relaxed Bow of Friendship");
+			Tooltip.SetDefault("Summons a pet Cloudiphant!");
 		}
 	}
 

@@ -14,15 +14,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
         public TruffleTurtleMinionBuff() : base(ProjectileType<TruffleTurtleMinion>()) { }
 	}
 
-	public class TruffleTurtleMinionItem : CombatPetMinionItem<TruffleTurtleMinionBuff, TruffleTurtleMinion>
+	public class TruffleTurtleMinionItem : CombatPetCustomMinionItem<TruffleTurtleMinionBuff, TruffleTurtleMinion>
 	{
-		internal override string VanillaItemName => "FullMoonSqueakyToy";
-		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Truffle Turtle");
+			DisplayName.SetDefault("Hardy Bow of Friendship");
+			Tooltip.SetDefault("Summons a pet Truffle Turtle!");
 		}
 	}
 

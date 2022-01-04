@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -48,7 +49,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		internal void StartPersonalityQuiz()
 		{
 			IsTakingQuiz = true;
-			CurrentQuiz = DefaultPetsQuizData.MakeQuizWithDominantTraits(new[] { PersonalityType.CALM }, 6);
+			CurrentQuiz = DefaultPetsQuizData.MakeQuizWithDominantTraits(Player, 6);
 		}
 
 		internal void StartPartnerQuiz()
@@ -77,6 +78,10 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			IsTakingQuiz = false;
 			LeveledCombatPetModPlayer petPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			petPlayer.TemporarilyUnflagPetBuff(result.BuffType);
+			if(CurrentQuiz.ExtraResultItemID != ItemID.None)
+			{
+				Player.QuickSpawnItem(CurrentQuiz.ExtraResultItemID);
+			}
 			Player.QuickSpawnItem(result.ItemType);
 			Player.AddBuff(result.BuffType, 2);
 			// shift out the oldest personality quiz result, then save this answer

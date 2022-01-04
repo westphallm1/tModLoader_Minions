@@ -3,6 +3,7 @@ using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
@@ -94,6 +95,15 @@ namespace AmuletOfManyMinions.Items.Accessories
 					}
 				}
 				minionVarietyBonusCount = uniqueMinionTypes.Count;
+			}
+
+			// add bonus for unique combat pets
+			for(int i = 0; i < Player.CountBuffs(); i++)
+			{
+				if(CombatPetBuff.CombatPetBuffTypes.Contains(Player.buffType[i]))
+				{
+					minionVarietyBonusCount += 1;
+				}
 			}
 		}
 

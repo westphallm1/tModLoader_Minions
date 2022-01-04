@@ -15,15 +15,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public WyvernFlyMinionBuff() : base(ProjectileType<WyvernFlyMinion>()) { }
 	}
 
-	public class WyvernFlyMinionItem : CombatPetMinionItem<WyvernFlyMinionBuff, WyvernFlyMinion>
+	public class WyvernFlyMinionItem : CombatPetCustomMinionItem<WyvernFlyMinionBuff, WyvernFlyMinion>
 	{
-		internal override string VanillaItemName => "FullMoonSqueakyToy";
-		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("WyvernFly");
+			DisplayName.SetDefault("Hasty Bow of Friendship");
+			Tooltip.SetDefault("Summons a pet WyvernFly!");
 		}
 	}
 

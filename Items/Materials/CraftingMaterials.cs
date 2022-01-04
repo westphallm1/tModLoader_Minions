@@ -39,4 +39,24 @@ namespace AmuletOfManyMinions.Items.Materials
 			Item.rare = ItemRarityID.White;
 		}
 	}
+
+	public class InertCombatPetFriendshipBow: ModItem
+	{
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Inert Bow of Friendship");
+			Tooltip.SetDefault(
+				"A Bow of Friendship that's lost its magical powers.\n" +
+				"It can be restored when combined with ingredients from various biomes.");
+		}
+
+		public override void SetDefaults()
+		{
+			Item.width = 30;
+			Item.height = 32;
+			Item.maxStack = 999;
+			Item.value = Item.sellPrice(copper: 50);
+			Item.rare = ItemRarityID.Orange;
+		}
+	}
 }

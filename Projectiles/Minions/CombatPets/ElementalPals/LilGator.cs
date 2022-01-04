@@ -13,15 +13,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public LilGatorMinionBuff() : base(ProjectileType<LilGatorMinion>()) { }
 	}
 
-	public class LilGatorMinionItem : CombatPetMinionItem<LilGatorMinionBuff, LilGatorMinion>
+	public class LilGatorMinionItem : CombatPetCustomMinionItem<LilGatorMinionBuff, LilGatorMinion>
 	{
-		internal override string VanillaItemName => "FullMoonSqueakyToy";
-		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Lil' Gator");
+			DisplayName.SetDefault("Jolly Bow of Friendship");
+			Tooltip.SetDefault("Summons a pet Lil' Gator!");
 		}
 	}
 

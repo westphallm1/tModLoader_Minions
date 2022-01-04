@@ -199,7 +199,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if (p.ModProjectile is EmpoweredMinion em)
+					if (p.active && p.ModProjectile is EmpoweredMinion em)
 					{
 						p.minion = true;
 					}
@@ -218,7 +218,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if (p.owner == player.whoAmI && p.ModProjectile is EmpoweredMinion em)
+					if (p.active && p.owner == player.whoAmI && p.ModProjectile is EmpoweredMinion em)
 					{
 						player.GetModPlayer<EmpoweredMinionSacrificeCircumventionModPlayer>().ShouldResetMinionStatus = true;
 						p.minion = false; // temporarily de-minion it so that it doesn't get sacrificed

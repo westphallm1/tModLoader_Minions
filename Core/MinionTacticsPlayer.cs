@@ -487,7 +487,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			}
 			foreach(Item item in Player.inventory)
 			{
-				if(item.type == ItemID.None || item.ModItem == null)
+				if(item.IsAir || item.ModItem == null)
 				{
 					continue;
 				}

@@ -15,15 +15,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
         public SmolederMinionBuff() : base(ProjectileType<SmolederMinion>()) { }
 	}
 
-	public class SmolederMinionItem : CombatPetMinionItem<SmolederMinionBuff, SmolederMinion>
+	public class SmolederMinionItem : CombatPetCustomMinionItem<SmolederMinionBuff, SmolederMinion>
 	{
-		internal override string VanillaItemName => "FullMoonSqueakyToy";
-		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Smoleder");
+			DisplayName.SetDefault("Quiet Bow of Friendship");
+			Tooltip.SetDefault("Summons a pet Smoleder!");
 		}
 	}
 

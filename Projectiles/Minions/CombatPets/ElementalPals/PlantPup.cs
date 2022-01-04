@@ -16,15 +16,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
         public PlantPupMinionBuff() : base(ProjectileType<PlantPupMinion>()) { }
 	}
 
-	public class PlantPupMinionItem : CombatPetMinionItem<PlantPupMinionBuff, PlantPupMinion>
+	public class PlantPupMinionItem : CombatPetCustomMinionItem<PlantPupMinionBuff, PlantPupMinion>
 	{
-		internal override string VanillaItemName => "FullMoonSqueakyToy";
-		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Plant Pup");
+			DisplayName.SetDefault("Calm Bow of Friendship");
+			Tooltip.SetDefault("Summons a pet Plant Pup!");
 		}
 	}
 

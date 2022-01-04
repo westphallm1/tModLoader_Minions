@@ -18,14 +18,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	}
 
-	public class CinderHenMinionItem : CombatPetMinionItem<CinderHenMinionBuff, CinderHenMinion>
+	public class CinderHenMinionItem : CombatPetCustomMinionItem<CinderHenMinionBuff, CinderHenMinion>
 	{
-		internal override string VanillaItemName => "FullMoonSqueakyToy";
-		internal override int VanillaItemID => ItemID.FullMoonSqueakyToy;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Cinder Hen");
+			DisplayName.SetDefault("Bold Bow of Friendship");
+			Tooltip.SetDefault("Summons a pet Cinder Hen!");
 		}
 	}
 
