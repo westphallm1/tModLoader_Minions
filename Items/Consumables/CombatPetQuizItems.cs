@@ -49,8 +49,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				player.GetModPlayer<CombatPetsQuizModPlayer>().StartPersonalityQuiz();
-				Item.stack--;
+				player.GetModPlayer<CombatPetsQuizModPlayer>().StartPersonalityQuiz(Type);
 			}
 			return null;
 		}
@@ -69,7 +68,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 		}
 	}
 
-	public abstract class CombatPetBaseTeamworkBow: ModItem
+	public class CombatPetTeamworkBow: ModItem
 	{
 		internal static string FriendshipBowRequirement =
 			"You must use the Bow of Friendship before using this item.\n" +
@@ -105,12 +104,6 @@ namespace AmuletOfManyMinions.Items.Consumables
 			}
 			return true;
 		} 
-
-	}
-
-
-	public class CombatPetTeamworkBow: CombatPetBaseTeamworkBow
-	{
 		public override void SetStaticDefaults()
 		{
 			Tooltip.SetDefault(
@@ -123,8 +116,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				player.GetModPlayer<CombatPetsQuizModPlayer>().StartPartnerQuiz();
-				Item.stack--;
+				player.GetModPlayer<CombatPetsQuizModPlayer>().StartPartnerQuiz(Type);
 			}
 			return null;
 		}
@@ -141,7 +133,9 @@ namespace AmuletOfManyMinions.Items.Consumables
 
 	}
 
-	public class CombatPetAncientFriendshipBow: CombatPetBaseTeamworkBow
+
+
+	public class CombatPetAncientFriendshipBow: ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -155,15 +149,24 @@ namespace AmuletOfManyMinions.Items.Consumables
 			Item.rare = ItemRarityID.Yellow;
 		}
 
+		public override bool CanUseItem(Player player) => !player.GetModPlayer<CombatPetsQuizModPlayer>().IsTakingQuiz;
+
 		public override bool? UseItem(Player player)
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				player.GetModPlayer<CombatPetsQuizModPlayer>().StartAnyPartnerQuiz();
-				Item.stack--;
+				CombatPetsQuizModPlayer modPlayer = player.GetModPlayer<CombatPetsQuizModPlayer>();
+				if(modPlayer.HasTakenQuiz)
+				{
+					modPlayer.StartAnyPartnerQuiz(Type);
+				} else
+				{
+					modPlayer.StartPersonalityQuiz(Type);
+				}
 			}
 			return null;
 		}
+
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ItemID.LunarTabletFragment, 12)
 			.AddTile(TileID.MythrilAnvil)

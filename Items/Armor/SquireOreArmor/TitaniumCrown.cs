@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 				"Increases squire travel range by 5 blocks\n" +
 				"Increases squire travel speed by 20%";
 			player.GetDamage<SummonDamageClass>() += 0.10f;
-			player.onHitDodge = true; // titanium armor effect
+			player.onHitTitaniumStorm = true;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squirePlayer.squireRangeFlatBonus += 80f;
 			squirePlayer.squireTravelSpeedMultiplier += 0.20f;

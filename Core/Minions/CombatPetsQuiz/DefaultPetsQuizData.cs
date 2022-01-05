@@ -1,10 +1,12 @@
-﻿using AmuletOfManyMinions.Items.Materials;
+﻿using AmuletOfManyMinions.Items.Accessories.CombatPetAccessories;
+using AmuletOfManyMinions.Items.Materials;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static AmuletOfManyMinions.Core.Minions.CombatPetsQuiz.PersonalityType;
 
@@ -184,6 +186,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			var quiz = new CombatPetsQuiz
 			{
 				Questions = new List<CombatPetsQuizQuestion>() { question },
+				ExtraResultItemID = disallowedTypes.Length > 0 ? 
+					ModContent.ItemType<CombatPetStylishTeamworkBow>() : ItemID.None,
 				IntroLines = new string[]
 				{
 					"Welcome back, to the world of Terraria!",

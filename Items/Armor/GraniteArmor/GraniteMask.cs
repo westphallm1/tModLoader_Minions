@@ -54,11 +54,11 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 		}
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases minion damage by 14%\n"
-				+ "Increases squire travel range by 2 blocks\n"
-				+ "Increases movement speed by 10%";
+			player.setBonus = "Become immune after striking an enemy\n"
+				+ "Increases minion damage by 14%\n"
+				+ "Increases squire travel range by 2 blocks";
 			player.GetDamage<SummonDamageClass>() += 0.14f;
-			player.moveSpeed += 0.1f;
+			player.onHitDodge = true;
 			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 16f;
 			player.GetModPlayer<SquireModPlayer>().graniteArmorEquipped = true;
 		}

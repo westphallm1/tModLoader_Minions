@@ -25,6 +25,10 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		private QuizResult result;
 
+		// Make sure this is in the player's inventory at all times while the quiz is active
+		// otherwise cancel the quiz
+		private int QuizActivatingItemType;
+
 		internal int LatestVersion = 0;
 
 		internal bool HasTakenQuiz => LastUsedTypes.Any(t => t != PersonalityType.NONE);
@@ -46,22 +50,63 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			}
 		}
 
-		internal void StartPersonalityQuiz()
+		internal void StartPersonalityQuiz(int itemType)
 		{
 			IsTakingQuiz = true;
+			QuizActivatingItemType = itemType;
 			CurrentQuiz = DefaultPetsQuizData.MakeQuizWithDominantTraits(Player, 6);
 		}
 
-		internal void StartPartnerQuiz()
+		internal void StartPartnerQuiz(int itemType)
 		{
 			IsTakingQuiz = true;
+			QuizActivatingItemType = itemType;
 			CurrentQuiz = DefaultPetsQuizData.MakeClassSpecificQuiz(LastUsedTypes);
 		}
 
-		internal void StartAnyPartnerQuiz()
+		internal void StartAnyPartnerQuiz(int itemType)
 		{
 			IsTakingQuiz = true;
+			QuizActivatingItemType = itemType;
 			CurrentQuiz = DefaultPetsQuizData.MakeClassSpecificQuiz();
+		}
+
+		public override void PostUpdate()
+		{
+			if(IsTakingQuiz && !HasQuizItemInInventory())
+			{
+				IsTakingQuiz = false;
+			}
+		}
+
+		/**
+		 * Ensure the player has kept the quiz item in their inventory
+		 * (to prevent duplication). Cancel the quiz otherwise
+		 */
+		private bool HasQuizItemInInventory()
+		{
+			for(int i = 0; i < Player.inventory.Length; i++)
+			{
+				Item item = Player.inventory[i];
+				if(!item.IsAir && item.type == QuizActivatingItemType)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private void ConsumeQuizActivatingItem()
+		{
+			for(int i = 0; i < Player.inventory.Length; i++)
+			{
+				Item item = Player.inventory[i];
+				if(!item.IsAir && item.type == QuizActivatingItemType)
+				{
+					item.stack--;
+					return;
+				}
+			}
 		}
 
 		internal void AdvanceDialog()
@@ -90,6 +135,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				LastUsedTypes[i + 1] = LastUsedTypes[i];
 			}
 			LastUsedTypes[0] = CurrentQuiz.GetResultType();
+			ConsumeQuizActivatingItem();
 		}
 
 		public override void SaveData(TagCompound tag)
