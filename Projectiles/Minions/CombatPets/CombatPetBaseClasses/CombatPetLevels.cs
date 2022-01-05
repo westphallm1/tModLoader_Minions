@@ -55,10 +55,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void Load()
 		{
 			PetLevelTable = new CombatPetLevelInfo[]{
-				new(0, 7, 500, 8, 1, "Base"), // Base level
-				new(1, 11, 550, 8, 1, "Golden"), // ore tier
-				new(2, 14, 650, 9, 1, "Demonite"), // EoC - tier
-				new(3, 17, 750, 10, 2, "Skeletal"), // Dungeon Tier
+				new(0, 7, 550, 8, 1, "Base"), // Base level
+				new(1, 12, 600, 8, 1, "Golden"), // ore tier
+				new(2, 16, 700, 9, 1, "Demonite"), // EoC - tier
+				new(3, 18, 750, 10, 2, "Skeletal"), // Dungeon Tier
 				new(4, 30, 900, 12, 2, "Soulful"), // Post WoF
 				new(5, 36, 950, 14, 2, "Hallowed"), // Post Mech
 				new(6, 42, 1000, 15, 3, "Spectre"), // Post Plantera
@@ -84,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public int ExtraPetSlots { get; internal set; } = 0;
 
-		internal int MaxPetSlots => PetLevelInfo.MaxPets + ExtraPetSlots;
+		internal int AvailablePetSlots { get; private set; }
 
 		// whether the player is using a buff that summons multiple pets
 		// this is basically just a boolean flag that changes which buffID a pet checks
@@ -120,13 +120,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		private void UpdateCombatPetCount()
 		{
+			AvailablePetSlots = Math.Min(Player.maxMinions, PetLevelInfo.MaxPets) + ExtraPetSlots;
 			PetSlotsUsed = 0;
 			int buffCount = Player.CountBuffs();
 			for(int i = 0; i < buffCount; i++)
 			{
 				if(CombatPetBuff.CombatPetBuffTypes.Contains(Player.buffType[i])) 
 				{
-					PetSlotsUsed += 1;
+					if(PetSlotsUsed < AvailablePetSlots)
+					{
+						PetSlotsUsed += 1;
+					} else
+					{
+						Player.ClearBuff(Player.buffType[i]);
+					}
 				}
 			}
 			if(PetSlotsUsed > 0 && !ServerConfig.Instance.CombatPetsMinionSlots)
@@ -196,13 +203,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				return;
 			}
 
-			if(PetSlotsUsed < MaxPetSlots)
+			if(PetSlotsUsed < AvailablePetSlots)
 			{
 				Main.vanityPet[buffId] = false;
 				BuffFlagsToReset.Add(buffId);
 				buffResetCountdown = 4;
 			} 
-			else if (PetSlotsUsed == MaxPetSlots && MaxPetSlots > 1)
+			else if (PetSlotsUsed == AvailablePetSlots && AvailablePetSlots > 1)
 			{
 				// unmark all but the most recent buff, so that only one pet gets deleted
 				int unmarkCount = 0;

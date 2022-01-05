@@ -56,7 +56,9 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 		{
 			player.GetDamage<SummonDamageClass>() += 0.2f;
 			player.maxMinions = Math.Max(0, player.maxMinions - 1);
-			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += 1;
+			// Reducing max minions by one also decreases max combat pets by one,
+			// So increase max combat pets by 2 for a total increase of 1 combat pet (a bit confusing)
+			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += 2;
 		}
 
 		public override void AddRecipes() => CreateRecipe(1)

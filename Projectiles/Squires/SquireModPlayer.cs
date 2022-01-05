@@ -175,6 +175,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		}
 
+		public override void PostUpdateEquips()
+		{
+			// Make sure this runs before PostUpdate()
+			// LeveledCombatPetPlayer does some wacky stuff with Player.maxMinions there
+			// so any other minion count altering code should run before then
+			if (ServerConfig.Instance.SquireMinionSlot && GetSquire() != default)
+			{
+				Player.maxMinions = Math.Max(0, Player.maxMinions - 1);
+			}
+		}
 		public override void PostUpdate()
 		{
 
@@ -206,13 +216,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				float damageReduction = ServerConfig.Instance.SquireDamageMinionNerf / 100f;
 				squireDamageMultiplierBonus -= damageReduction;
-			}
-			if (ServerConfig.Instance.SquireMinionSlot && GetSquire() != default)
-			{
-				if( GetSquire() != default)
-				{
-					Player.maxMinions = Math.Max(0, Player.maxMinions - 1);
-				}
 			}
 		}
 
