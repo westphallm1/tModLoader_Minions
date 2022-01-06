@@ -195,7 +195,11 @@ namespace AmuletOfManyMinions
 			}
 			for(int i = 0; i < chestCriteria.Length; i++)
 			{
+
+				Chest chosen = chestCriteria[i].SelectChests(chestCriteria[i].CandidateChests)[0];
+				Mod.Logger.Info($"Chosen chest {i}: {chosen.x} {chosen.y} ({Main.maxTilesX})");
 				chestCriteria[i].PlaceItemInChests();
+				chestCriteria[i].CandidateChests.Clear();
 			}
 		}
 	}

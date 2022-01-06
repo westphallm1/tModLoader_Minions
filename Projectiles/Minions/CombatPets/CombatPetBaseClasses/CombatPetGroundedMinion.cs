@@ -153,7 +153,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			{
 				lastFiredFrame = animationFrame;
 				Vector2 launchVector = vectorToTargetPosition;
-				// todo lead shot
+				// lead shot a little bit
+				if(targetNPCIndex is int idx && Main.npc[idx] is NPC target)
+				{
+					launchVector += target.velocity * 0.167f;
+				}
 				launchVector.SafeNormalize();
 				launchVector *= launchVelocity;
 				LaunchProjectile(launchVector);

@@ -129,6 +129,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			Main.projFrames[Type] = 4;
 		}
 
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 30;
+			Projectile.penetrate = 2;
+		}
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
@@ -154,6 +161,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			}
 			Projectile.rotation += MathHelper.Pi/30 * Math.Sign(Projectile.velocity.X);
 			Projectile.frame++;
+			int speed = 12;
+			int inertia = 30;
+			if(Projectile.penetrate > 1 && Projectile.timeLeft < 150 && 
+				Minion.GetClosestEnemyToPosition(Projectile.Center, 200f, requireLOS: true) is NPC target)
+			{
+				Vector2 targetVector = target.Center - Projectile.Center;
+				targetVector.SafeNormalize();
+				targetVector *= speed;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + targetVector) / inertia;
+			}
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{

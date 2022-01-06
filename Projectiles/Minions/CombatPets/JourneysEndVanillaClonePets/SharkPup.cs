@@ -7,6 +7,7 @@ using Terraria;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
 using System;
+using Microsoft.Xna.Framework;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets
 {
@@ -29,6 +30,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 		public override void SetStaticDefaults()
 		{
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+		}
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 30;
+			Projectile.penetrate = 2;
+		}
+
+		public override void AI()
+		{
+			base.AI();
+			int speed = 12;
+			int inertia = 30;
+			if(Projectile.penetrate > 1 && Projectile.timeLeft < 150 && 
+				Minion.GetClosestEnemyToPosition(Projectile.Center, 200f, requireLOS: true) is NPC target)
+			{
+				Vector2 targetVector = target.Center - Projectile.Center;
+				targetVector.SafeNormalize();
+				targetVector *= speed;
+				Projectile.velocity = (Projectile.velocity * (inertia - 1) + targetVector) / inertia;
+			}
 		}
 	}
 
