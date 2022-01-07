@@ -88,8 +88,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int? FiredProjectileId => ProjectileType<IceQueenIcicle>();
 		internal override LegacySoundStyle ShootSound => SoundID.Item17;
 
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(20, 40 - 4 * info.Level);
-		internal override int GetProjectileVelocity(CombatPetLevelInfo info) => 10;
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(20, 40 - 4 * info.Level);
+		internal override int GetProjectileVelocity(ICombatPetLevelInfo info) => 10;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -29,14 +29,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		Celestial = 8
 	}
 
-	internal struct CombatPetLevelInfo
+	internal interface ICombatPetLevelInfo
 	{
-		internal int Level;
-		internal int BaseDamage; // The base damage done by combat pets at this level of progression
-		internal int BaseSearchRange; // The base distance combat pets will seek from the player 
-		internal float BaseSpeed; // How the AI actually uses speed varies quite a bit from type to type ...
-		internal int MaxPets; // Maximum # of unique combat pets available
-		internal string Description; // Used in combat pet item tooltips referring to level up points
+		public int Level { get; }
+		public int BaseDamage { get; } // The base damage done by combat pets at this level of progression
+		public int BaseSearchRange { get; } // The base distance combat pets will seek from the player 
+		public float BaseSpeed { get; } // How the AI actually uses speed varies quite a bit from type to type ...
+		public int MaxPets { get; } // Maximum # of unique combat pets available
+		public string Description { get; }  // Used in combat pet item tooltips referring to level up points
+	}
+	internal struct CombatPetLevelInfo : ICombatPetLevelInfo
+	{
+		public int Level { get; private set;  }
+		public int BaseDamage { get; private set; } // The base damage done by combat pets at this level of progression
+		public int BaseSearchRange { get; private set; } // The base distance combat pets will seek from the player 
+		public float BaseSpeed { get; private set; } // How the AI actually uses speed varies quite a bit from type to type ...
+		public int MaxPets { get; private set; } // Maximum # of unique combat pets available
+		public string Description { get; private set; }  // Used in combat pet item tooltips referring to level up points
 
 		public CombatPetLevelInfo(int level, int damage, int searchRange, int baseSpeed, int maxPets, string description)
 		{
@@ -48,22 +57,46 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			Description = description;
 		}
 	}
+
+	internal class PlayerCombatPetLevelInfo : ICombatPetLevelInfo
+	{
+		public int Level { get; private set; } = 0;
+		public int BaseDamage => RawInfo.BaseDamage + Player.PetDamageBonus;
+		public int BaseSearchRange => RawInfo.BaseSearchRange + Player.SearchRangeBonus;
+		public float BaseSpeed => RawInfo.BaseSpeed + Player.PetSpeedBonus;
+		public int MaxPets => RawInfo.MaxPets;
+		public string Description => RawInfo.Description;
+
+		private readonly LeveledCombatPetModPlayer Player;
+		private ICombatPetLevelInfo RawInfo => CombatPetLevelTable.PetLevelTable[Level];
+
+		public PlayerCombatPetLevelInfo(LeveledCombatPetModPlayer player)
+		{
+			Player = player;
+		}
+
+		public PlayerCombatPetLevelInfo WithLevel(int level)
+		{
+			Level = level;
+			return this;
+		}
+	}
 	class CombatPetLevelTable : ModSystem
 	{
-		internal static CombatPetLevelInfo[] PetLevelTable;
+		internal static ICombatPetLevelInfo[] PetLevelTable;
 
 		public override void Load()
 		{
-			PetLevelTable = new CombatPetLevelInfo[]{
-				new(0, 7, 550, 8, 1, "Base"), // Base level
-				new(1, 12, 600, 8, 1, "Golden"), // ore tier
-				new(2, 16, 700, 9, 1, "Demonite"), // EoC - tier
-				new(3, 18, 750, 10, 2, "Skeletal"), // Dungeon Tier
-				new(4, 30, 900, 12, 2, "Soulful"), // Post WoF
-				new(5, 36, 950, 14, 2, "Hallowed"), // Post Mech
-				new(6, 42, 1000, 15, 3, "Spectre"), // Post Plantera
-				new(7, 52, 1050, 16, 4, "Stardust"), // Post Pillars
-				new(8, 80, 1100, 18, 6, "Celestial") // Post Moon Lord
+			PetLevelTable = new ICombatPetLevelInfo[]{
+				new CombatPetLevelInfo(0, 7, 550, 8, 1, "Base"), // Base level
+				new CombatPetLevelInfo(1, 12, 600, 8, 1, "Golden"), // ore tier
+				new CombatPetLevelInfo(2, 16, 700, 9, 1, "Demonite"), // EoC - tier
+				new CombatPetLevelInfo(3, 18, 750, 10, 2, "Skeletal"), // Dungeon Tier
+				new CombatPetLevelInfo(4, 30, 900, 12, 2, "Soulful"), // Post WoF
+				new CombatPetLevelInfo(5, 36, 950, 14, 2, "Hallowed"), // Post Mech
+				new CombatPetLevelInfo(6, 42, 1000, 15, 3, "Spectre"), // Post Plantera
+				new CombatPetLevelInfo(7, 52, 1050, 16, 4, "Stardust"), // Post Pillars
+				new CombatPetLevelInfo(8, 80, 1100, 18, 6, "Celestial") // Post Moon Lord
 			};
 		}
 
@@ -78,7 +111,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal int PetLevel { get; set; }
 		internal int PetDamage { get; set; }
 
-		internal CombatPetLevelInfo PetLevelInfo => CombatPetLevelTable.PetLevelTable[PetLevel];
+		// todo this may be too many constructors, but it's a struct so I think it's ok
+		private PlayerCombatPetLevelInfo CustomInfo;
+		internal ICombatPetLevelInfo PetLevelInfo => CustomInfo.WithLevel(PetLevel);
+
+		public int PetDamageBonus { get; internal set; }
+		public int SearchRangeBonus { get; internal set; }
+		public int PetSpeedBonus { get; internal set; }
 
 		public int PetSlotsUsed { get; internal set; }
 
@@ -86,12 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		internal int AvailablePetSlots { get; private set; }
 
-		// whether the player is using a buff that summons multiple pets
-		// this is basically just a boolean flag that changes which buffID a pet checks
-		// for its tactics group mapping
-		public bool UsingMultiPets { get; internal set; }
-
-		private List<int> BuffFlagsToReset = new List<int>();
+		private readonly List<int> BuffFlagsToReset = new();
 		private int buffResetCountdown;
 
 		public void UpdatePetLevel(int newLevel, int newDamage, bool fromSync = false)
@@ -108,6 +142,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override void PreUpdate()
 		{
+			CustomInfo ??= new PlayerCombatPetLevelInfo(this);
+			PetDamageBonus = 0;
+			PetSpeedBonus = 0;
+			SearchRangeBonus = 0;
 			ExtraPetSlots = 0;
 		}
 

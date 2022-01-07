@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		float initialRotation = 0;
 		Vector2 lastValidTarget;
 
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(120, 180 - 6 * info.Level);
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(120, 180 - 6 * info.Level);
 
 		public override void SetStaticDefaults()
 		{

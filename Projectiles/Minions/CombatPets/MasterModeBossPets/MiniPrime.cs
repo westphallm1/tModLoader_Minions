@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal int handFrames = 4;
 		internal int firstHandFrame = 7;
 
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(20, 45 - 4 * info.Level);
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(20, 45 - 4 * info.Level);
 
 		public override void SetStaticDefaults()
 		{

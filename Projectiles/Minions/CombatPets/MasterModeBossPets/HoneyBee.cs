@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int? FiredProjectileId => ProjectileType<HoneyPotProjectile>();
 		internal bool UsingKnightAI => (leveledPetPlayer?.PetLevel ?? 0) >= (int)CombatPetTier.Spectre;
 
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => UsingKnightAI ?
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => UsingKnightAI ?
 			Math.Max(16, 32 - 2 * info.Level) : base.GetAttackFrames(info);
 
 		internal override float DamageMult => UsingKnightAI ? 0.75f : 1f;

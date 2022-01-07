@@ -103,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int BuffId => BuffType<SpiderBrainMinionBuff>();
 
 
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => base.GetAttackFrames(info) / 4;
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => base.GetAttackFrames(info) / 4;
 
 		// only fire every third projectile towards the actual enemy
 		int fireCount;

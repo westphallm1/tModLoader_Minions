@@ -257,7 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		internal override int BuffId => BuffType<BlackCatMinionBuff>();
 
 		// scale attack type rather than attack speed
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(45, 60 - 4 * info.Level);
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(45, 60 - 4 * info.Level);
 
 		internal override int? ProjId => levelInfo?.ProjectileId ?? 0;
 

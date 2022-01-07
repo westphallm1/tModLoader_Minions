@@ -13,6 +13,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent.Creative;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+using AmuletOfManyMinions.Items.Accessories.CombatPetAccessories;
 
 namespace AmuletOfManyMinions
 {
@@ -92,6 +93,11 @@ namespace AmuletOfManyMinions
 				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.StardustDragonStaff"),
 				new int[] { ItemID.StardustDragonStaff, ModContent.ItemType<StardustDragonMinionItem>()});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:StardustDragons", stardustDragonGroup);
+
+			RecipeGroup combatPetChewToyGroup = new RecipeGroup(
+				() => Language.GetTextValue("LegacyMisc.37") + " " + "Chaotic Chew Toy",
+				new int[] { ModContent.ItemType<CombatPetChaoticChewToy>(),ModContent.ItemType<CombatPetCrimsonChewToy>()  });
+			RecipeGroup.RegisterGroup("AmuletOfManyMinions:CombatPetChewToys", combatPetChewToyGroup);
 		}
 
 		public override void PostAddRecipes()

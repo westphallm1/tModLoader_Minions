@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	{
 		internal override int BuffId => BuffType<WyvernFlyMinionBuff>();
 		internal override bool DoBumblingMovement => leveledPetPlayer.PetLevel < (int)CombatPetTier.Skeletal;
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => 
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => 
 			(int)(base.GetAttackFrames(info) * (info.Level >= (int)CombatPetTier.Spectre ? 1.5f : 1f));
 
 		public override void SetStaticDefaults()

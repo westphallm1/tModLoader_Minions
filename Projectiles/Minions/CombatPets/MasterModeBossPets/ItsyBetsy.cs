@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DD2BetsyPet;
 		internal override int? FiredProjectileId => ProjectileType<ItsyBetsyFire>();
 
-		internal override int GetProjectileVelocity(CombatPetLevelInfo info) => 6;
+		internal override int GetProjectileVelocity(ICombatPetLevelInfo info) => 6;
 		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
 
 		public override void SetStaticDefaults()

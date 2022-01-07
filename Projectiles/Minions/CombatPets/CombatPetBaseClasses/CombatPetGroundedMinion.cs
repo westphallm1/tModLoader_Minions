@@ -78,9 +78,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		internal virtual bool ShouldDoShootingMovement => true;
 
-		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
+		internal virtual int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
 
-		internal virtual float ModifyProjectileDamage(CombatPetLevelInfo info) => 1f;
+		internal virtual float ModifyProjectileDamage(ICombatPetLevelInfo info) => 1f;
 
 		internal virtual int? ProjId => null;
 		internal virtual Vector2 LaunchPos => Projectile.Center;

@@ -370,7 +370,7 @@ namespace AmuletOfManyMinions.NPCs
 
 		public override void SetupShop(int type, Chest shop, ref int nextSlot)
 		{
-			if (type == NPCID.PartyGirl)
+			if (type == NPCID.PartyGirl && NPC.downedBoss3)
 			{
 				shop.item[nextSlot].SetDefaults(ItemType<BalloonBuddyMinionItem>());
 				nextSlot++;

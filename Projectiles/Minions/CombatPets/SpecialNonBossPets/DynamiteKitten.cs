@@ -154,14 +154,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		internal override int BuffId => BuffType<DynamiteKittenMinionBuff>();
 
 		// scale attack type rather than attack speed
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(45, 60 - 4 * info.Level);
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(45, 60 - 4 * info.Level);
 
 		internal override int? ProjId => levelInfo?.ProjectileId ?? 0;
 
 		private static CatPetLevelInfo[] DynamiteKittenLevelInfo;
 		internal override CatPetLevelInfo[] CatPetLevels => DynamiteKittenLevelInfo;
 
-		internal override float ModifyProjectileDamage(CombatPetLevelInfo info)
+		internal override float ModifyProjectileDamage(ICombatPetLevelInfo info)
 		{
 			return info.Level >= 3 && info.Level <= 5 ? 0.75f : 1.25f;
 		}
