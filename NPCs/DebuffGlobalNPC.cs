@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.NPCs
 				{
 					npc.lifeRegen = 0;
 				}
-				npc.lifeRegen -= 2 * 15 * flameVortexStack;
+				npc.lifeRegen -= 2 * 10 * flameVortexStack;
 				if(damage < 5 * flameVortexStack)
 				{
 					damage = 5 * flameVortexStack;

@@ -89,8 +89,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		{
 			PetLevelTable = new ICombatPetLevelInfo[]{
 				new CombatPetLevelInfo(0, 7, 550, 8, 1, "Base"), // Base level
-				new CombatPetLevelInfo(1, 12, 600, 8, 1, "Golden"), // ore tier
-				new CombatPetLevelInfo(2, 16, 700, 9, 1, "Demonite"), // EoC - tier
+				new CombatPetLevelInfo(1, 11, 600, 8, 1, "Golden"), // ore tier
+				new CombatPetLevelInfo(2, 15, 700, 9, 1, "Demonite"), // EoC - tier
 				new CombatPetLevelInfo(3, 18, 750, 10, 2, "Skeletal"), // Dungeon Tier
 				new CombatPetLevelInfo(4, 30, 900, 12, 2, "Soulful"), // Post WoF
 				new CombatPetLevelInfo(5, 36, 950, 14, 2, "Hallowed"), // Post Mech

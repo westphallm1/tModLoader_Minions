@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System;
 using AmuletOfManyMinions.NPCs;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -45,13 +46,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		{
 			base.SetDefaults();
 			Projectile.timeLeft = TimeToLive;
+			Projectile.penetrate = 1;
 		}
 
 		public override void PostAI()
 		{
 			int frame = TimeToLive - Projectile.timeLeft;
 			float baseAngle = -MathHelper.TwoPi * frame / 30f;
-			int radius = Math.Min(20, frame);
+			int radius = Math.Min(20, frame/ 2);
 			for(float offset = 0; offset < MathHelper.TwoPi; offset += 2 * MathHelper.Pi / 3f)
 			{
 				float angle = baseAngle + offset;
@@ -67,6 +69,35 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			debuffNPC.flameVortexStack = (short)Math.Min(debuffNPC.flameVortexStack + 1, 5);
 		}
 
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			damage = 1;
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			// just a flame effect
+			for (int i = 0; i < 10; i++)
+			{
+				int dustIdx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 2f);
+				Main.dust[dustIdx].noGravity = true;
+				Main.dust[dustIdx].velocity *= 5f;
+				dustIdx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 1.25f);
+				Main.dust[dustIdx].velocity *= 2.5f;
+			}
+			if(Projectile.owner == Main.myPlayer)
+			{
+				Projectile.NewProjectile(
+					Projectile.GetProjectileSource_FromThis(),
+					Projectile.Center,
+					Vector2.Zero,
+					ProjectileType<PirateCannonballExplosion>(),
+					Projectile.damage,
+					Projectile.knockBack,
+					Projectile.owner);
+			}
+		}
+
 		public override void ModifyDamageHitbox(ref Rectangle hitbox)
 		{
 			hitbox.Inflate(16, 16);
@@ -78,15 +109,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	{
 		internal override int BuffId => BuffType<CinderHenMinionBuff>();
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
-
-		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
-		{
-			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre)
-			{
-				launchVector *= 0.6f; // slow down for nicer visual effect, might make it slightly worse
-			}
-			base.LaunchProjectile(launchVector, ai0);
-		}
 
 		internal override int? ProjId => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre ? 
 			ProjectileType<FlareVortexProjectile>() :

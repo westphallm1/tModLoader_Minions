@@ -35,9 +35,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.usesLocalNPCImmunity = true;
-			Projectile.localNPCHitCooldown = 30;
-			Projectile.penetrate = 2;
 		}
 
 		public override void AI()
@@ -45,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 			base.AI();
 			int speed = 12;
 			int inertia = 30;
-			if(Projectile.penetrate > 1 && Projectile.timeLeft < 150 && 
+			if(Projectile.timeLeft < 150 && 
 				Minion.GetClosestEnemyToPosition(Projectile.Center, 200f, requireLOS: true) is NPC target)
 			{
 				Vector2 targetVector = target.Center - Projectile.Center;
