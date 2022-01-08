@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Granite Mask");
 			Tooltip.SetDefault(""
-				+ "Increases minion damage by 12%\n"
+				+ "Increases minion damage by 10%\n"
 				+ "Increases your max number of minions by 1\n"
 				+ "Increases squire travel range by 4 blocks");
 		}
@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.12f;
+			player.GetDamage<SummonDamageClass>() += 0.10f;
 			player.maxMinions += 1;
 			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 64;
 		}
@@ -55,9 +55,9 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 		public override void UpdateArmorSet(Player player)
 		{
 			player.setBonus = "Become immune after striking an enemy\n"
-				+ "Increases minion damage by 14%\n"
+				+ "Increases minion damage by 12%\n"
 				+ "Increases squire travel range by 2 blocks";
-			player.GetDamage<SummonDamageClass>() += 0.14f;
+			player.GetDamage<SummonDamageClass>() += 0.12f;
 			player.onHitDodge = true;
 			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 16f;
 			player.GetModPlayer<SquireModPlayer>().graniteArmorEquipped = true;
