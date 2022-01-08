@@ -13,6 +13,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class SmolederMinionBuff : CombatPetBuff
     {
         public SmolederMinionBuff() : base(ProjectileType<SmolederMinion>()) { }
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Smoleder");
+			Description.SetDefault("A shy mole has joined your adventure!");
+		}
 	}
 
 	public class SmolederMinionItem : CombatPetCustomMinionItem<SmolederMinionBuff, SmolederMinion>

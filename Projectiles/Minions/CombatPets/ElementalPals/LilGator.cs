@@ -11,6 +11,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class LilGatorMinionBuff : CombatPetBuff
 	{
 		public LilGatorMinionBuff() : base(ProjectileType<LilGatorMinion>()) { }
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Lil' Gator");
+			Description.SetDefault("A surfing gator has joined your adventure!");
+		}
 	}
 
 	public class LilGatorMinionItem : CombatPetCustomMinionItem<LilGatorMinionBuff, LilGatorMinion>

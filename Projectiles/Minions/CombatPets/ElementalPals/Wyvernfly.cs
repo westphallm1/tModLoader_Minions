@@ -13,6 +13,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class WyvernFlyMinionBuff : CombatPetBuff
 	{
 		public WyvernFlyMinionBuff() : base(ProjectileType<WyvernFlyMinion>()) { }
+
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Axolittl");
+			Description.SetDefault("A wyvern hatchling has joined your adventure!");
+		}
 	}
 
 	public class WyvernFlyMinionItem : CombatPetCustomMinionItem<WyvernFlyMinionBuff, WyvernFlyMinion>

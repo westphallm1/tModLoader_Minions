@@ -12,6 +12,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class TruffleTurtleMinionBuff : CombatPetBuff
     {
         public TruffleTurtleMinionBuff() : base(ProjectileType<TruffleTurtleMinion>()) { }
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Axolittl");
+			Description.SetDefault("A mushroom-shelled turtle has joined your adventure!");
+		}
 	}
 
 	public class TruffleTurtleMinionItem : CombatPetCustomMinionItem<TruffleTurtleMinionBuff, TruffleTurtleMinion>

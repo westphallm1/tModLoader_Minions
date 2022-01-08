@@ -16,6 +16,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class CinderHenMinionBuff : CombatPetBuff
 	{
 		public CinderHenMinionBuff() : base(ProjectileType<CinderHenMinion>()) { }
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Cinder Hen");
+			Description.SetDefault("A tiny phoenix has joined your adventure!");
+		}
 
 	}
 

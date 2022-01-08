@@ -16,6 +16,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class CloudiphantMinionBuff : CombatPetBuff
 	{
 		public CloudiphantMinionBuff() : base(ProjectileType<CloudiphantMinion>()) { }
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Cloudiphant");
+			Description.SetDefault("An ethereal elephant has joined your adventure!");
+		}
 	}
 
 	public class CloudiphantMinionItem : CombatPetCustomMinionItem<CloudiphantMinionBuff, CloudiphantMinion>
