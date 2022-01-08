@@ -39,10 +39,10 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases minion damage by 25%\n" +
+			player.setBonus = "Increases minion damage by 20%\n" +
 				"Increases squire travel range by 5 blocks\n" +
 				"Increases squire travel speed by 25%";
-			player.GetDamage<SummonDamageClass>() += 0.25f;
+			player.GetDamage<SummonDamageClass>() += 0.2f;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squirePlayer.squireRangeFlatBonus += 60f;
 			squirePlayer.squireTravelSpeedMultiplier += 0.25f;

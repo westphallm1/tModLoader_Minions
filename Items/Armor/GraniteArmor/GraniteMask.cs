@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 			Item.height = 18;
 			Item.value = Item.sellPrice(gold: 5);
 			Item.rare = ItemRarityID.Pink;
-			Item.defense = 8;
+			Item.defense = 9;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
