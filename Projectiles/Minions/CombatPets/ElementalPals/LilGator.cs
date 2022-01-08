@@ -13,6 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public LilGatorMinionBuff() : base(ProjectileType<LilGatorMinion>()) { }
 		public override void SetStaticDefaults()
 		{
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Lil' Gator");
 			Description.SetDefault("A surfing gator has joined your adventure!");
 		}

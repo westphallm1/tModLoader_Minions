@@ -18,6 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 		public override void SetStaticDefaults()
 		{
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Axolittl");
 			Description.SetDefault("An amphibious friend has joined your adventure!");
 		}

@@ -16,6 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 		public override void SetStaticDefaults()
 		{
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Axolittl");
 			Description.SetDefault("A wyvern hatchling has joined your adventure!");
 		}

@@ -16,6 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
         public PlantPupMinionBuff() : base(ProjectileType<PlantPupMinion>()) { }
 		public override void SetStaticDefaults()
 		{
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Plant Pup");
 			Description.SetDefault("A playful plant has joined your adventure!");
 		}

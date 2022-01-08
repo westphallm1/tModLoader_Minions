@@ -106,6 +106,15 @@ namespace AmuletOfManyMinions.Items.Accessories
 				}
 			}
 		}
+		public override void PostUpdateEquips()
+		{
+			// 1.4 allows us to place the minion variety bonus directly on the player, since summon
+			// damage updates dynamically
+			if (minionVarietyBonusCount > 1)
+			{
+				Player.GetDamage<SummonDamageClass>() += minionVarietyBonusCount * minionVarietyDamageBonus;
+			}
+		}
 
 		public override void ModifyWeaponDamage(Item item, ref StatModifier modifier, ref float flat)
 		{
@@ -256,10 +265,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			// require multiple minion types for any bonus
 			float damageMult = 1;
-			if (modPlayer.minionVarietyBonusCount > 1)
-			{
-				damageMult += modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus;
-			}
 			if(squirePlayer.GetSquire() != default)
 			{
 				damageMult -= ServerConfig.Instance.MinionDamageSquireNerf / 100f;

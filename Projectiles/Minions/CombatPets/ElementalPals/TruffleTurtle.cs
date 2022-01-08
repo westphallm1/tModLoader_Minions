@@ -14,6 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
         public TruffleTurtleMinionBuff() : base(ProjectileType<TruffleTurtleMinion>()) { }
 		public override void SetStaticDefaults()
 		{
+			base.SetStaticDefaults();
 			DisplayName.SetDefault("Axolittl");
 			Description.SetDefault("A mushroom-shelled turtle has joined your adventure!");
 		}
