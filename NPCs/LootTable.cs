@@ -133,11 +133,11 @@ namespace AmuletOfManyMinions.NPCs
 			}
 			else if (npc.type == NPCID.ManEater)
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 25, chanceNumerator: 3);
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 75, chanceNumerator: 3);
 			}
 			else if (NPCSets.hornets.Contains(npc.netID))
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 25);
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 75);
 			}
 			else if (NPCSets.angryBones.Contains(npc.netID))
 			{
