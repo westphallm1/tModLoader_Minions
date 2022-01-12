@@ -20,6 +20,7 @@ v0.14.0 - Combat Pets: Part 2!
         - Obtained after second use of a Bow of Friendship
       - Chaotic Chew Toy: Increases Combat Pet movement speed
         - Crafted from evil boss drops
+    - More sprite updates from SkyanUltra and Frogpage
     - Slightly Buff Pre-Skeletron Combat Pet Tiers
     - Combat Pets now count for Minion Variety Bonus
     - Nerf Damage Bonuses from Hardmode Squire Armors
