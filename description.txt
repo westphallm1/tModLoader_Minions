@@ -10,21 +10,24 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
-v0.13.1.3 - Rats Nerf
-    - Fix bug where each rat did full item damage
-v0.13.1.1 - Prehardmode Armor Balance
-    - Add Flinx Fur Hood + Set bonus for Flinx Fur Coat to differentiate from Mildew Armor
-    - Slightly nerf Mildew Armor damage bonus
-    - Fix bug in grounded worm idle behavior
-v0.13.1 - Combat Pets Balance
-    - Nerf EoW Pet's Pre-HM AI by making it return to the player and briefly recharge after hitting an enemy.
-    - Nerf Honey Bee's Pre-HM AI by making its pots deal 10% less damage with each pierce
-    - Buff Skeletron Jr.'s AI by giving it a slightly larger search range to compensate for its smaller attack range
-    - Buff other Pre-HM Master Mode Boss Pets by giving them their secondary AI at Dungeon Tier instead of Early HM tier
-    - Rework the Dungeon Guardian Pet's AI to behave more like the real Dungeon Guardian
-    - Give Honey Bee new sword-based secondary AI pattern
-    - Give Surgar Glider new lock-on based secondary AI pattern
-    - Fix bug where Deerclops wouldn't fire hands as frequently as it was supposed to
+v0.14.0 - Combat Pets: Part 2!
+    - Add the Elemental Pals, a group of 8 consistently obtainable combat pets
+      - Obtained via Bows of Friendship found in wooden + shadow chests
+      - One random Elemental Pal given per bow
+      - Bows can be crafted renewably post-Plantera with Solar Tablet Fragments
+    - Add a series of accessories to enhance Combat Pet Stats
+      - Stylish Teamwork Bow: increases max Combat Pet slots by 1
+        - Obtained after second use of a Bow of Friendship
+      - Chaotic Chew Toy: Increases Combat Pet movement speed
+        - Crafted from evil boss drops
+    - Slightly Buff Pre-Skeletron Combat Pet Tiers
+    - Combat Pets now count for Minion Variety Bonus
+    - Nerf Damage Bonuses from Hardmode Squire Armors
+    - Fix number of bugs related to 1.4 port
+      - Titanium and Granite (Hallowed) Squire Armors now give correct 1.4 buff
+      - Minions that dealt a multiple of the listed damage now correctly deal that multiple
+        - Buffs Tumblesheep, Squire Specials
+        - Nerfs Rat Staff, Optic Staff
 v0.13.0 - Combat Pets!
     - Available for every vanilla pet, crafted from vanilla pet items at a demon altar
     - Cost 1 minion slot per pet
