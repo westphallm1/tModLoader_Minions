@@ -17,14 +17,36 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 {
-	internal struct CombatPetLevelInfo
+	internal enum CombatPetTier: int
 	{
-		internal int Level;
-		internal int BaseDamage; // The base damage done by combat pets at this level of progression
-		internal int BaseSearchRange; // The base distance combat pets will seek from the player 
-		internal float BaseSpeed; // How the AI actually uses speed varies quite a bit from type to type ...
-		internal int MaxPets; // Maximum # of unique combat pets available
-		internal string Description; // Used in combat pet item tooltips referring to level up points
+		Base = 0,
+		Golden = 1,
+		Demonite = 2,
+		Skeletal = 3,
+		Soulful = 4,
+		Hallowed = 5,
+		Spectre = 6,
+		Stardust = 7,
+		Celestial = 8
+	}
+
+	internal interface ICombatPetLevelInfo
+	{
+		int Level { get; }
+		int BaseDamage { get; } // The base damage done by combat pets at this level of progression
+		int BaseSearchRange { get; } // The base distance combat pets will seek from the player 
+		float BaseSpeed { get; } // How the AI actually uses speed varies quite a bit from type to type ...
+		int MaxPets { get; } // Maximum # of unique combat pets available
+		string Description { get; }  // Used in combat pet item tooltips referring to level up points
+	}
+	internal struct CombatPetLevelInfo : ICombatPetLevelInfo
+	{
+		public int Level { get; private set;  }
+		public int BaseDamage { get; private set; } // The base damage done by combat pets at this level of progression
+		public int BaseSearchRange { get; private set; } // The base distance combat pets will seek from the player 
+		public float BaseSpeed { get; private set; } // How the AI actually uses speed varies quite a bit from type to type ...
+		public int MaxPets { get; private set; } // Maximum # of unique combat pets available
+		public string Description { get; private set; }  // Used in combat pet item tooltips referring to level up points
 
 		public CombatPetLevelInfo(int level, int damage, int searchRange, int baseSpeed, int maxPets, string description)
 		{
@@ -36,28 +58,51 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			Description = description;
 		}
 	}
+
+	internal class PlayerCombatPetLevelInfo : ICombatPetLevelInfo
+	{
+		public int Level { get; private set; } = 0;
+		public int BaseDamage => RawInfo.BaseDamage + Player.PetDamageBonus;
+		public int BaseSearchRange => RawInfo.BaseSearchRange + Player.SearchRangeBonus;
+		public float BaseSpeed => RawInfo.BaseSpeed + Player.PetSpeedBonus;
+		public int MaxPets => RawInfo.MaxPets;
+		public string Description => RawInfo.Description;
+
+		private readonly LeveledCombatPetModPlayer Player;
+		private ICombatPetLevelInfo RawInfo => CombatPetLevelTable.PetLevelTable[Level];
+
+		public PlayerCombatPetLevelInfo(LeveledCombatPetModPlayer player)
+		{
+			Player = player;
+		}
+
+		public PlayerCombatPetLevelInfo WithLevel(int level)
+		{
+			Level = level;
+			return this;
+		}
+	}
 	class CombatPetLevelTable
 	{
-		internal static CombatPetLevelInfo[] PetLevelTable;
+		internal static ICombatPetLevelInfo[] PetLevelTable;
 
 		public static void Load()
 		{
-			PetLevelTable = new CombatPetLevelInfo[]{
-				new CombatPetLevelInfo(0, 7, 500, 8, 1, "Base"), // Base level
-				new CombatPetLevelInfo(1, 9, 550, 8, 1, "Golden"), // ore tier
-				new CombatPetLevelInfo(2, 14, 650, 9, 1, "Demonite"), // EoC - tier
-				new CombatPetLevelInfo(3, 17, 750, 10, 2, "Skeletal"), // Dungeon Tier
+			PetLevelTable = new ICombatPetLevelInfo[]{
+				new CombatPetLevelInfo(0, 7, 550, 8, 1, "Base"), // Base level
+				new CombatPetLevelInfo(1, 11, 600, 8, 1, "Golden"), // ore tier
+				new CombatPetLevelInfo(2, 15, 700, 9, 1, "Demonite"), // EoC - tier
+				new CombatPetLevelInfo(3, 18, 750, 10, 2, "Skeletal"), // Dungeon Tier
 				new CombatPetLevelInfo(4, 30, 900, 12, 2, "Soulful"), // Post WoF
 				new CombatPetLevelInfo(5, 36, 950, 14, 2, "Hallowed"), // Post Mech
 				new CombatPetLevelInfo(6, 42, 1000, 15, 3, "Spectre"), // Post Plantera
-				new CombatPetLevelInfo(7, 52, 1050, 16, 3, "Stardust"), // Post Pillars
-				new CombatPetLevelInfo(8, 80, 1100, 18, 4, "Celestial") // Post Moon Lord
+				new CombatPetLevelInfo(7, 52, 1050, 16, 4, "Stardust"), // Post Pillars
+				new CombatPetLevelInfo(8, 80, 1100, 18, 6, "Celestial") // Post Moon Lord
 			};
 		}
 
 		public static void Unload()
 		{
-			PetLevelTable = null;
 		}
 	}
 
@@ -66,18 +111,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal int PetLevel { get; set; }
 		internal int PetDamage { get; set; }
 
-		internal CombatPetLevelInfo PetLevelInfo => CombatPetLevelTable.PetLevelTable[PetLevel];
+		// todo this may be too many constructors, but it's a struct so I think it's ok
+		private PlayerCombatPetLevelInfo CustomInfo;
+		internal ICombatPetLevelInfo PetLevelInfo => CustomInfo.WithLevel(PetLevel);
+
+		public int PetDamageBonus { get; internal set; }
+		public int SearchRangeBonus { get; internal set; }
+		public int PetSpeedBonus { get; internal set; }
 
 		public int PetSlotsUsed { get; internal set; }
 
-		public int MaxPetSlots { get; internal set; } = 1;
+		public int ExtraPetSlots { get; internal set; } = 0;
 
-		// whether the player is using a buff that summons multiple pets
-		// this is basically just a boolean flag that changes which buffID a pet checks
-		// for its tactics group mapping
-		public bool UsingMultiPets { get; internal set; }
+		internal int AvailablePetSlots { get; private set; }
 
-		private List<int> BuffFlagsToReset = new List<int>();
+		private readonly List<int> BuffFlagsToReset = new List<int>();
 		private int buffResetCountdown;
 
 		public void UpdatePetLevel(int newLevel, int newDamage, bool fromSync = false)
@@ -92,6 +140,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 		}
 
+		public override void PreUpdate()
+		{
+			CustomInfo = CustomInfo ?? new PlayerCombatPetLevelInfo(this);
+			PetDamageBonus = 0;
+			PetSpeedBonus = 0;
+			SearchRangeBonus = 0;
+			ExtraPetSlots = 0;
+		}
+
 		public override void PostUpdate()
 		{
 			CheckForCombatPetEmblem();
@@ -101,13 +158,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		private void UpdateCombatPetCount()
 		{
+			AvailablePetSlots = Math.Min(Player.maxMinions, PetLevelInfo.MaxPets) + ExtraPetSlots;
 			PetSlotsUsed = 0;
 			int buffCount = Player.CountBuffs();
 			for(int i = 0; i < buffCount; i++)
 			{
 				if(CombatPetBuff.CombatPetBuffTypes.Contains(Player.buffType[i])) 
 				{
-					PetSlotsUsed += 1;
+					if(PetSlotsUsed < AvailablePetSlots)
+					{
+						PetSlotsUsed += 1;
+					} else
+					{
+						Player.ClearBuff(Player.buffType[i]);
+					}
 				}
 			}
 			if(PetSlotsUsed > 0 && !ServerConfig.Instance.CombatPetsMinionSlots)
@@ -131,7 +195,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			for(int i = 0; i < Player.inventory.Length; i++)
 			{
 				Item item = Player.inventory[i];
-				if(item.modItem != null && item.modItem is CombatPetEmblem petEmblem)
+				if(!item.IsAir && item.modItem != null && item.modItem is CombatPetEmblem petEmblem)
 				{
 					// choose max tier rather than max damage
 					if(petEmblem.PetLevel > maxLevel)
@@ -144,7 +208,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			for(int i = 0; i < Player.bank.item.Length; i++)
 			{
 				Item item = Player.bank.item[i];
-				if(item.modItem != null && item.modItem is CombatPetEmblem petEmblem)
+				if(!item.IsAir && item.modItem != null && item.modItem is CombatPetEmblem petEmblem)
 				{
 					// choose max tier rather than max damage
 					if(petEmblem.PetLevel > maxLevel)
@@ -177,13 +241,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				return;
 			}
 
-			if(PetSlotsUsed < PetLevelInfo.MaxPets)
+			if(PetSlotsUsed < AvailablePetSlots)
 			{
 				Main.vanityPet[buffId] = false;
 				BuffFlagsToReset.Add(buffId);
 				buffResetCountdown = 4;
 			} 
-			else if (PetSlotsUsed == PetLevelInfo.MaxPets && PetLevelInfo.MaxPets > 1)
+			else if (PetSlotsUsed == AvailablePetSlots && AvailablePetSlots > 1)
 			{
 				// unmark all but the most recent buff, so that only one pet gets deleted
 				int unmarkCount = 0;
@@ -240,6 +304,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] <= 0)
 				{
 					var p = Projectile.NewProjectileDirect(player.Center, Vector2.Zero, projType, 0, 0, player.whoAmI);
+					// p.originalDamage is updated in each frame by the minion itself
 				}
 			}
 			if (projectileTypes.Select(p => player.ownedProjectileCounts[p]).Sum() > 0)
@@ -260,7 +325,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public CombatPetVanillaCloneBuff(params int[] projIds) : base(projIds) { }
 
-		public override string Texture => "Terraria/Buff_" + VanillaBuffId;
+		public override string Texture => "Terraria/Images/Buff_" + VanillaBuffId;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -270,11 +335,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 	}
 
-	public abstract class CombatPetMinionItem<TBuff, TProj> : VanillaCloneMinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion
+	internal static class CombatPetItemUtils
 	{
-		internal virtual int AttackPatternUpdateTier => 0;
-
-		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		public static void AddCombatPetTooltip(Mod mod,int attackPatternUpdateTier, List<TooltipLine> tooltips)
 		{
 			tooltips.Add(new TooltipLine(mod, "CombatPetDescription", 
 				"This pet's fighting spirit has been awakened!\n" +
@@ -285,14 +348,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 
 			LeveledCombatPetModPlayer player = Main.player[Main.myPlayer].GetModPlayer<LeveledCombatPetModPlayer>();
-			if(AttackPatternUpdateTier == 0)
+			if(attackPatternUpdateTier == 0)
 			{
 				return;
-			} else if (AttackPatternUpdateTier > player.PetLevel)
+			} else if (attackPatternUpdateTier > player.PetLevel)
 			{
 				tooltips.Add(new TooltipLine(mod, "CombatPetNotLeveledUp", 
 					"This pet will gain a stronger attack pattern if you hold a\n" +
-					CombatPetLevelTable.PetLevelTable[AttackPatternUpdateTier].Description + 
+					CombatPetLevelTable.PetLevelTable[attackPatternUpdateTier].Description + 
 					" Combat Pet Emblem or stronger!")
 				{
 					overrideColor = Color.Gray
@@ -307,19 +370,54 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 		}
 
+		// hack to temporarily un-flag buffs as pet type to prevent vanilla removal code from running
+		// depending on how many open combat pet slots the player has
+		public static bool CanUseItem(Player player, Item item)
+		{
+			LeveledCombatPetModPlayer petPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			petPlayer.TemporarilyUnflagPetBuff(item.buffType);
+			return true;
+		}
+	}
+
+	/**
+	 * Bit of a roundabout naming scheme, non-vanilla-clone combat pets came second
+	 */
+	public abstract class CombatPetCustomMinionItem<TBuff, TProj> : MinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion
+	{
+		internal virtual int AttackPatternUpdateTier => 0;
+
+		public override void SetDefaults()
+		{
+			Item.CloneDefaults(ItemID.ZephyrFish); // via ExampleMod
+			base.SetDefaults();
+		}
+		public override void ModifyTooltips(List<TooltipLine> tooltips) =>
+			CombatPetItemUtils.AddCombatPetTooltip(mod, AttackPatternUpdateTier, tooltips);
+
 		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
 			player.AddBuff(item.buffType, 3);
 			return false;
 		}
 
-		// hack to temporarily un-flag buffs as pet type to prevent vanilla removal code from running
-		// depending on how many open combat pet slots the player has
-		public override bool CanUseItem(Player player)
+		public override bool CanUseItem(Player player) => CombatPetItemUtils.CanUseItem(player, Item);
+
+	}
+
+	public abstract class CombatPetMinionItem<TBuff, TProj> : VanillaCloneMinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion
+	{
+		internal virtual int AttackPatternUpdateTier => 0;
+
+		public override void ModifyTooltips(List<TooltipLine> tooltips) =>
+			CombatPetItemUtils.AddCombatPetTooltip(mod, AttackPatternUpdateTier, tooltips);
+
+		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			LeveledCombatPetModPlayer petPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
-			petPlayer.TemporarilyUnflagPetBuff(Item.buffType);
-			return base.CanUseItem(player);
+			player.AddBuff(item.buffType, 3);
+			return false;
 		}
+
+		public override bool CanUseItem(Player player) => CombatPetItemUtils.CanUseItem(player, Item);
 	}
 }

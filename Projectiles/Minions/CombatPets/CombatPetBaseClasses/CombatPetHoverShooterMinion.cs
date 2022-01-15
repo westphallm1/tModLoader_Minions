@@ -16,8 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
 
 		internal int forwardDir = 1;
-		internal virtual int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
-		internal virtual int GetProjectileVelocity(CombatPetLevelInfo info) => (int)info.BaseSpeed + 3;
+		internal virtual int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(30, 60 - 6 * info.Level);
+		internal virtual int GetProjectileVelocity(ICombatPetLevelInfo info) => (int)info.BaseSpeed + 3;
 		internal virtual float DamageMult => 1f;
 
 		internal virtual bool DoBumblingMovement => false;
@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		
 		private void UpdateHsHelperWithPetLevel(int petLevel)
 		{
-			CombatPetLevelInfo info = CombatPetLevelTable.PetLevelTable[petLevel];
+			ICombatPetLevelInfo info = CombatPetLevelTable.PetLevelTable[petLevel];
 			targetSearchDistance = info.BaseSearchRange;
 			attackFrames = GetAttackFrames(info);
 			hsHelper.projectileVelocity = GetProjectileVelocity(info);
@@ -137,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal MotionBlurDrawer blurHelper;
 
 		internal override int? FiredProjectileId => null;
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => 90;
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => 90;
 
 		public override void SetDefaults()
 		{

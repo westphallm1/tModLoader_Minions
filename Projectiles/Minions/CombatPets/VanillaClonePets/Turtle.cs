@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		internal override int BuffId => BuffType<TurtleMinionBuff>();
 		internal override int? ProjId => null;
 
-		internal override int GetAttackFrames(CombatPetLevelInfo info) => Math.Max(50, 65 - 3 * info.Level);
+		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(50, 65 - 3 * info.Level);
 
 		private Vector2 launchPos;
 		private int bounceCycleLength => (int)(0.75f * attackFrames);
