@@ -325,7 +325,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public CombatPetVanillaCloneBuff(params int[] projIds) : base(projIds) { }
 
-		public override string Texture => "Terraria/Images/Buff_" + VanillaBuffId;
+		public override string Texture => "Terraria/Buff_" + VanillaBuffId;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

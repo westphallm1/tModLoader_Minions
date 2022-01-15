@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 					oldest.Kill();
 				}
 			}
-			Projectile.NewProjectile(target.Center, spawnVelocity, projType, (int)(baseDamage * player.minionDamageMult), 2, player.whoAmI);
+			Projectile.NewProjectile(target.Center, spawnVelocity, projType, (int)(baseDamage * player.minionDamage), 2, player.whoAmI);
 			return true;
 		}
 

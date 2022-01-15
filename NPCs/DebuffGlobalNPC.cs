@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.NPCs
 		public override void PostAI(NPC npc)
 		{
 			base.PostAI(npc);
-			if(flameVortexStack > 0 && !npc.HasBuff<FlareVortexDebuff>())
+			if(flameVortexStack > 0 && !npc.HasBuff(ModContent.BuffType<FlareVortexDebuff>()))
 			{
 				flameVortexStack = 0;
 			} else if (flameVortexStack > 0)
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.NPCs
 			float xFraction = (frame % xCycle) / xCycle;
 
 			float radius = 1.25f * npc.width * yFraction;
-			float offset = radius * MathF.Sin(MathHelper.TwoPi * xFraction);
+			float offset = radius * (float)Math.Sin(MathHelper.TwoPi * xFraction);
 			float yPos = npc.Bottom.Y - npc.Hitbox.Height * yFraction;
 			int width = 16;
 			int height = 16;

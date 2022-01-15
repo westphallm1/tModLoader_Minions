@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 			{
 				player.GetModPlayer<CombatPetsQuizModPlayer>().StartPersonalityQuiz(Type);
 			}
-			return true;
+			return false;
 		}
 		public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 		{
@@ -119,7 +119,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 			{
 				player.GetModPlayer<CombatPetsQuizModPlayer>().StartPartnerQuiz(Type);
 			}
-			return true;
+			return false;
 		}
 
 		public override void AddRecipes() => CreateRecipe(1)

@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.2f;
+			player.minionDamage += 0.2f;
 			player.maxMinions += 2;
 			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus += 0.02f;
 		}

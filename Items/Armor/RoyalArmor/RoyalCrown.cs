@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier *= 0.9f;
-			player.minionDamageMult += 0.08f;
+			player.minionDamage += 0.08f;
 		}
 
 		public override void UpdateArmorSet(Player player)

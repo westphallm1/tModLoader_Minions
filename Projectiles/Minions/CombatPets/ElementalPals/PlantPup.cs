@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class LeafBlade : BackportModProjectile
 	{
 		private MotionBlurDrawer blurDrawer;
-		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Leaf;
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.Leaf;
 		private int TimeToLive = 180;
 		private int CircleRadius = 32;
 		private int CircleDuration = 40;

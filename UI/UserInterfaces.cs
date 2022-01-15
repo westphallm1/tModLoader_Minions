@@ -40,9 +40,9 @@ namespace AmuletOfManyMinions.UI
 				quizUI.Activate();
 
 				UIState state = new UIState();
-				state.Append(quizUI);
 				state.Append(tacticsUI);
 				state.Append(buffClickCapture);
+				state.Append(quizUI);
 
 				tacticsInterface.SetState(state);
 			}

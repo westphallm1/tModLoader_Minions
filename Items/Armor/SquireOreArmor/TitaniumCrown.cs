@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.15f;
+			player.minionDamage += 0.15f;
 			player.maxMinions += 1;
 		}
 
@@ -43,7 +43,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 				"Increases minion damage by 10%\n" +
 				"Increases squire travel range by 5 blocks\n" +
 				"Increases squire travel speed by 20%";
-			player.minionDamageMult += 0.10f;
+			player.minionDamage += 0.10f;
 			player.onHitDodge = true; // titanium armor effect
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squirePlayer.squireRangeFlatBonus += 80f;

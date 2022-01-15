@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+﻿using AmuletOfManyMinions.Core.BackportUtils;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 {
-	class CombatPetStylishTeamworkBow : ModItem
+	class CombatPetStylishTeamworkBow : BackportModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -33,7 +34,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 		}
 	}
 
-	class CombatPetMightyTeamworkBow : ModItem
+	class CombatPetMightyTeamworkBow : BackportModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -56,7 +57,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.2f;
+			player.minionDamage += 0.2f;
 			player.maxMinions = Math.Max(0, player.maxMinions - 1);
 			// Reducing max minions by one also decreases max combat pets by one,
 			// So increase max combat pets by 2 for a total increase of 1 combat pet (a bit confusing)
@@ -71,7 +72,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 			.AddTile(TileID.TinkerersWorkbench)
 			.Register();
 	}
-	class CombatPetSpookyTeamworkBow : ModItem
+	class CombatPetSpookyTeamworkBow : BackportModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -93,7 +94,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.2f;
+			player.minionDamage += 0.2f;
 			player.GetModPlayer<LeveledCombatPetModPlayer>().PetSpeedBonus += 2;
 			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += 2;
 		}
@@ -105,7 +106,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 			.Register();
 	}
 
-	abstract class CombatPetChewToy: ModItem
+	abstract class CombatPetChewToy: BackportModItem
 	{
 		public override void SetStaticDefaults()
 		{

@@ -25,6 +25,8 @@ using AmuletOfManyMinions.Core.Minions.Effects;
 using System;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets;
+using AmuletOfManyMinions.Core.Minions.CombatPetsQuiz;
+using AmuletOfManyMinions.Items.Accessories.CombatPetAccessories;
 
 namespace AmuletOfManyMinions
 {
@@ -50,6 +52,7 @@ namespace AmuletOfManyMinions
 			AmuletOfManyMinionsWorld.Load();
 			CombatPetLevelTable.Load();
 			CombatPetBuff.Load();
+			DefaultPetsQuizData.Load();
 
 			CycleTacticHotKey = RegisterHotKey("Cycle Minion Tactic", "K");
 			CycleTacticsGroupHotKey = RegisterHotKey("Cycle Tactics Group", "L");
@@ -65,6 +68,7 @@ namespace AmuletOfManyMinions
 		{
 			NPCSets.Populate();
 			PartyHatSystem.SetStaticDefaults();
+			CombatPetsQuizModPlayer.SetStaticDefaults();
 			// could do a finer partitioning of features, but for now just require the latest version
 			CrossMod.AddSummonersAssociationMetadata();
 		}
@@ -88,6 +92,8 @@ namespace AmuletOfManyMinions
 			CombatPetLevelTable.Unload();
 			CombatPetBuff.Unload();
 			BlackCatMinion.Unload();
+			QuizResult.Unload();
+			DefaultPetsQuizData.Unload();
 
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;
@@ -125,6 +131,11 @@ namespace AmuletOfManyMinions
 				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.StardustDragonStaff"),
 				new int[] { ItemID.StardustDragonStaff, ModContent.ItemType<StardustDragonMinionItem>()});
 			RecipeGroup.RegisterGroup("AmuletOfManyMinions:StardustDragons", stardustDragonGroup);
+
+			RecipeGroup combatPetChewToyGroup = new RecipeGroup(
+				() => Language.GetTextValue("LegacyMisc.37") + " " + "Chaotic Chew Toy",
+				new int[] { ModContent.ItemType<CombatPetChaoticChewToy>(), ModContent.ItemType<CombatPetCrimsonChewToy>() });
+			RecipeGroup.RegisterGroup("AmuletOfManyMinions:CombatPetChewToys", combatPetChewToyGroup);
 		}
 
 		public override void PostAddRecipes()

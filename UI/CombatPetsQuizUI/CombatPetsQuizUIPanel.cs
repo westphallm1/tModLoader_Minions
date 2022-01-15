@@ -59,7 +59,18 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 			Append(nextButton);
 			answerPanel.OnMouseUp += this.AnswerPanel_OnMouseUp;
 			nextButton.OnMouseUp += this.NextButton_OnMouseUp;
+			OnMouseUp += CombatPetsQuizUIMain_OnMouseUp;
 		}
+
+		private void CombatPetsQuizUIMain_OnMouseUp(UIMouseEvent evt, UIElement listeningElement)
+		{
+			if(nextButton.ContainsPoint(Main.MouseScreen))
+			{
+				NextButton_OnMouseUp(evt, listeningElement);
+			} 
+		}
+
+		internal bool HoveringClickableElement() => answerPanel.ContainsPoint(Main.MouseScreen) || nextButton.ContainsPoint(Main.MouseScreen);
 
 		private void NextButton_OnMouseUp(UIMouseEvent evt, UIElement listeningElement)
 		{
@@ -202,7 +213,7 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 			float yPos = Parent.Top.Pixels + Top.Pixels;
 			Vector2 pos = new Vector2(xPos, yPos);
 			// budget text outline
-			Color textColor = IsMouseHovering ? Color.Yellow : Color.White;
+			Color textColor = ContainsPoint(Main.MouseScreen) ? Color.Yellow : Color.White;
 			CombatPetsQuizUIPanel.DrawText(spriteBatch, Text, pos, textColor);
 		}
 
@@ -291,13 +302,13 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 	public class CombatQuizClickSuppressor: GlobalItem
 	{
 		// TODO figure out why item usage needs to be manually suppressed
-		//public override bool CanUseItem(Item item, Player player)
-		//{
-		//	if(player.whoAmI == Main.myPlayer && UserInterfaces.quizUI.Children.Any(e=>e.IsMouseHovering))
-		//	{
-		//		return false;
-		//	}
-		//	return base.CanUseItem(item, player);
-		//}
+		public override bool CanUseItem(Item item, Player player)
+		{
+			if (player.whoAmI == Main.myPlayer && UserInterfaces.quizUI.HoveringClickableElement())
+			{
+				return false;
+			}
+			return base.CanUseItem(item, player);
+		}
 	}
 }

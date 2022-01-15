@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -186,9 +187,19 @@ namespace AmuletOfManyMinions.Items.Accessories
 				}
 				else if (player.buffTime[player.FindBuffIndex(buffType)] == 1)
 				{
-					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamageMult), 0.1f, player.whoAmI, ai0: isCorrupt ? 0 : 1);
+					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamage), 0.1f, player.whoAmI, ai0: isCorrupt ? 0 : 1);
 				}
 			}
+
+			// add bonus for unique combat pets
+			for (int i = 0; i < player.CountBuffs(); i++)
+			{
+				if (CombatPetBuff.CombatPetBuffTypes.Contains(player.buffType[i]))
+				{
+					minionVarietyBonusCount += 1;
+				}
+			}
+
 			if (minionVarietyBonusCount > 1 && ClientConfig.Instance.ShowMinionVarietyBonus)
 			{
 				int buffType = BuffType<MinionVarietyBuff>();

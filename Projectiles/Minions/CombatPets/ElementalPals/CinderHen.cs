@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	internal class FlareVortexDebuff : BackportModBuff
 	{
-		public override string Texture => "Terraria/Images/Buff_" + BuffID.OnFire;
+		public override string Texture => "Terraria/Buff_" + BuffID.OnFire;
 		public override void SetStaticDefaults()
 		{
 			Main.debuff[Type] = true;

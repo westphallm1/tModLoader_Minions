@@ -1,10 +1,8 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -50,8 +48,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		{
 			base.SetDefaults();
 			forwardDir = -1;
-			resetIdleRotation = false;
-			DrawOriginOffsetX = -16;
+			// resetIdleRotation = false;
+			drawOriginOffsetX = -16;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -62,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			float idleAngle = (MathHelper.TwoPi * animationFrame % 240) / 240;
 			Vector2 idlePosition = player.Center;
 			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
-			idlePosition.Y += -35 + 5 * MathF.Sin(idleAngle);
+			idlePosition.Y += -35 + 5 * (float)Math.Sin(idleAngle);
 			if (!Collision.CanHit(idlePosition, 1, 1, player.Center, 1, 1))
 			{
 				idlePosition = player.Center;

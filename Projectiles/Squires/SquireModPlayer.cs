@@ -5,6 +5,7 @@ using AmuletOfManyMinions.Items.Accessories.TechnoCharm;
 using AmuletOfManyMinions.Items.Armor.AridArmor;
 using AmuletOfManyMinions.Items.Armor.RoyalArmor;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -131,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		private int modifiedFixedDamage(int damage)
 		{
-			return (int)(damage * player.minionDamageMult * squireDamageMultiplierBonus);
+			return (int)(damage * player.minionDamage * squireDamageMultiplierBonus);
 		}
 
 		private void SummonSquireSubMinions()
@@ -167,6 +168,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		}
 
+		public override void PostUpdateEquips()
+		{
+			if (ServerConfig.Instance.SquireMinionSlot && GetSquire() != default)
+			{
+				if( GetSquire() != default)
+				{
+					player.maxMinions = Math.Max(0, player.maxMinions - 1);
+				}
+			}
+		}
 		public override void PostUpdate()
 		{
 
@@ -198,13 +209,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			{
 				float damageReduction = ServerConfig.Instance.SquireDamageMinionNerf / 100f;
 				squireDamageMultiplierBonus -= damageReduction;
-			}
-			if (ServerConfig.Instance.SquireMinionSlot && GetSquire() != default)
-			{
-				if( GetSquire() != default)
-				{
-					player.maxMinions -= 1;
-				}
 			}
 		}
 

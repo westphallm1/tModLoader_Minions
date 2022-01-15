@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	public class WaterBeam : MovableLaser
 	{
-		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Typhoon;
+		public override string Texture => "Terraria/Projectile_" + ProjectileID.Typhoon;
 
 		public override void SetStaticDefaults()
 		{

@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		}
 		private void AddDust()
 		{
-			int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, DustID.Cloud, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
+			int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, 16, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
 			Main.dust[dustCreated].noGravity = true;
 		}
 
@@ -181,7 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 		private void AddDust()
 		{
-			int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, DustID.Cloud, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
+			int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, 16, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
 			Main.dust[dustCreated].noGravity = true;
 		}
 

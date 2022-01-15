@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 32f;
-			player.minionDamageMult += 0.12f;
+			player.minionDamage += 0.12f;
 		}
 
 		public override void SetMatch(bool male, ref int equipSlot, ref bool robes)

@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.Core.BackportUtils
 		public void SetOriginalDamage(int damage)
 		{
 			Player owner = Main.player[Projectile.owner];
-			Projectile.damage = (int)(damage * (owner.minionDamageMult + owner.minionDamage - 1f));
+			Projectile.damage = (int)(damage * (owner.minionDamage + owner.minionDamage - 1f));
 		}
 	}
 
@@ -121,9 +121,16 @@ namespace AmuletOfManyMinions.Core.BackportUtils
 			return this;
 		}
 
+		public RecipeChain AddRecipeGroup(string groupName)
+		{
+			Recipe.AddRecipeGroup(groupName, 1);
+			return this;
+		}
+
 		public void Register()
 		{
 			Recipe.AddRecipe();
 		}
+
 	}
 }

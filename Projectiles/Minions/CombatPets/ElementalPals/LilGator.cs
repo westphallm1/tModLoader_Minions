@@ -1,10 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
-using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {

@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Granite Chestguard");
 			Tooltip.SetDefault(""
-				+ "Increases minion damage by 12%\n"
+				+ "Increases minion damage by 10%\n"
 				+ "Increases squire attack speed by 15%");
 		}
 
@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.12f;
+			player.minionDamage += 0.1f;
 			player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier *= 0.85f;
 		}
 

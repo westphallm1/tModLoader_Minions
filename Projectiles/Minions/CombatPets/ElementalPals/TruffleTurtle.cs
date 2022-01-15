@@ -1,7 +1,6 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
-using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
 using AmuletOfManyMinions.Items.Armor;

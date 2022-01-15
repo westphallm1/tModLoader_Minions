@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 
 			new CombatPetsQuizQuestion ("Re-Logic just nerfed your favorite weapon! How do you adapt?",
-				("Keep using it.", HARDY), ("Try a new CombatPetsQuizQuestion one!", JOLLY)),
+				("Keep using it.", HARDY), ("Try a new one!", JOLLY)),
 
 			new CombatPetsQuizQuestion ("Do you prefer building or adventuring?",
 				("Building.", RELAXED), ("Adventuring.", BOLD), ("Fishing!", QUIRKY)),

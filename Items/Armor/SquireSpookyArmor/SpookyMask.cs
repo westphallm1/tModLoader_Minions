@@ -12,7 +12,8 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Spooky Mask");
-			Tooltip.SetDefault("Increases minion damage by 11%");
+			Tooltip.SetDefault("Increases minion damage by 12%,\n" +
+				"but decreases max minions by 1");
 		}
 
 		public override void SetDefaults()
@@ -31,17 +32,17 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.minionDamageMult += 0.15f;
-			player.maxMinions += 1;
+			player.minionDamage += 0.12f;
+			player.maxMinions -= 1;
 		}
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases minion damage by 35%\n" +
+			player.setBonus = "Increases minion damage by 30%\n" +
 				"Increases squire travel range by 7 blocks\n" +
 				"Increases squire travel speed by 30%\n" +
 				"Increases squire attack speed by 20%\n";
-			player.minionDamageMult += 0.35f;
+			player.minionDamage += 0.3f;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squirePlayer.squireRangeFlatBonus += 112f;
 			squirePlayer.squireTravelSpeedMultiplier += 0.30f;

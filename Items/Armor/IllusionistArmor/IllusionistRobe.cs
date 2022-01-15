@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.maxMinions += 1;
-			player.minionDamageMult += 0.04f;
+			player.minionDamage += 0.04f;
 		}
 	}
 
