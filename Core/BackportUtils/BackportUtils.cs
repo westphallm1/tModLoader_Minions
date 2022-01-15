@@ -17,6 +17,8 @@ namespace AmuletOfManyMinions.Core.BackportUtils
 		public int DrawOffsetX { get => drawOffsetX; set => drawOffsetX = value; }
 		public int DrawOriginOffsetY { get => drawOriginOffsetY; set => drawOriginOffsetY = value; }
 
+		public int Type => projectile.type;
+
 
 		// no choice but a loose approximation here
 		public void SetOriginalDamage(int damage)
@@ -29,6 +31,10 @@ namespace AmuletOfManyMinions.Core.BackportUtils
 	public abstract class BackportModItem : ModItem
 	{
 		public Item Item { get => item; }
+
+		public int Type => item.type;
+
+		public Mod Mod => mod;
 
 
 		public RecipeChain CreateRecipe(int resultCount)
@@ -71,6 +77,11 @@ namespace AmuletOfManyMinions.Core.BackportUtils
 
 	public class SoundEngine
 	{
+		public static void PlaySound(int type)
+		{
+			Main.PlaySound(type);
+		}
+
 		public static void PlaySound(LegacySoundStyle type, Vector2 position)
 		{
 			Main.PlaySound(type, position);

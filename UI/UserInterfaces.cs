@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.UI.Common;
+﻿using AmuletOfManyMinions.UI.CombatPetsQuizUI;
+using AmuletOfManyMinions.UI.Common;
 using AmuletOfManyMinions.UI.TacticsUI;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -21,6 +22,7 @@ namespace AmuletOfManyMinions.UI
 		internal static UserInterface tacticsInterface;
 		internal static TacticsUIMain tacticsUI;
 		internal static BuffRowClickCapture buffClickCapture;
+		internal static CombatPetsQuizUIMain quizUI;
 
 		private static GameTime _lastUpdateUiGameTime;
 
@@ -32,9 +34,13 @@ namespace AmuletOfManyMinions.UI
 
 				tacticsUI = new TacticsUIMain();
 				buffClickCapture = new BuffRowClickCapture();
+				quizUI = new CombatPetsQuizUIMain();
 				tacticsUI.Activate();
 				buffClickCapture.Activate();
+				quizUI.Activate();
+
 				UIState state = new UIState();
+				state.Append(quizUI);
 				state.Append(tacticsUI);
 				state.Append(buffClickCapture);
 

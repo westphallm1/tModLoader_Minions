@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.BackportUtils;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
@@ -56,23 +57,21 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		}
 	}
 
-	public class SeaSquireBubble : ModProjectile
+
+	public abstract class BaseMinionBubble : BackportModProjectile
 	{
-		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SeaSquire/SeaSquireBubble";
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			SquireGlobalProjectile.isSquireShot.Add(projectile.type);
-			projectile.CloneDefaults(ProjectileID.Bubble);
-			projectile.alpha = 240;
-			projectile.timeLeft = 180;
-			projectile.penetrate = 1;
-			projectile.ignoreWater = true;
-			projectile.friendly = true;
-			projectile.width = 12;
-			projectile.height = 12;
-			projectile.magic = false; //Bandaid fix
-			projectile.minion = true;
+			Projectile.CloneDefaults(ProjectileID.Bubble);
+			Projectile.alpha = 240;
+			Projectile.timeLeft = 180;
+			Projectile.penetrate = 1;
+			Projectile.ignoreWater = true;
+			Projectile.friendly = true;
+			Projectile.width = 12;
+			Projectile.height = 12;
+			Projectile.magic = false;
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -82,14 +81,23 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		public override void Kill(int timeLeft)
 		{
-			Main.PlaySound(new LegacySoundStyle(2, 54), projectile.position);
+			SoundEngine.PlaySound(new LegacySoundStyle(2, 54), Projectile.position);
 			for (int i = 0; i < 8; i++)
 			{
-				int dustCreated = Dust.NewDust(projectile.Center, 1, 1, 137, projectile.velocity.X, projectile.velocity.Y, 0, Scale: 1.4f);
+				int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, 137, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
 				Main.dust[dustCreated].noGravity = true;
 			}
 		}
+
 	}
+	public class SeaSquireBubble : BaseMinionBubble
+	{
+		public override void SetStaticDefaults()
+		{
+			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
+		}
+	}
+
 
 	public class SeaSquireSharkMinion : SquireMinion
 	{

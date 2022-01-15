@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core.BackportUtils;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -38,9 +39,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 	}
 
-	public abstract class BaseImpFireball : ModProjectile
+	public abstract class BaseImpFireball : BackportModProjectile
 	{
 		public override string Texture => "Terraria/Projectile_" + ProjectileID.ImpFireball;
+
+		internal virtual int DustType => 6;
+		internal virtual float DustScale => 2f;
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -49,30 +54,41 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void SetDefaults()
 		{
-			projectile.CloneDefaults(ProjectileID.ImpFireball);
 			base.SetDefaults();
-			projectile.localNPCHitCooldown = 30;
-			projectile.usesLocalNPCImmunity = true;
+			Projectile.penetrate = 3;
+			Projectile.friendly = true;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 30;
 		}
 
 		public override void PostAI()
 		{
 			for (int i = 0; i < 2; i++)
 			{
-				int dustId = Dust.NewDust(
-					projectile.position, 
-					projectile.width, projectile.height, 6, 
-					projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 
-					100, default, 2f);
-				Main.dust[dustId].noGravity = true;
-				Main.dust[dustId].velocity.X *= 0.3f;
-				Main.dust[dustId].velocity.Y *= 0.3f;
-				Main.dust[dustId].noLight = true;
+				AddDust(Projectile.position, Projectile.width, Projectile.height);
 			}
 		}
+
+		internal void AddDust(Vector2 position, int width, int height)
+		{
+			int dustId = Dust.NewDust(
+				position - new Vector2(width, height) / 2, width, height, DustType,
+				Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f,
+				100, default, DustScale);
+			Main.dust[dustId].noGravity = true;
+			Main.dust[dustId].velocity.X *= 0.3f;
+			Main.dust[dustId].velocity.Y *= 0.3f;
+			Main.dust[dustId].noLight = true;
+		}
+
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			target.AddBuff(BuffID.OnFire, 240);
+		}
+
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			return false;
 		}
 	}
 

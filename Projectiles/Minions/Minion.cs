@@ -26,6 +26,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 	}
+
+	public static class ModProjectileExtensions
+	{
+		public static void ClientSideNPCHitCheck(this BackportModProjectile modProjectile)
+		{
+			if (modProjectile.Projectile.owner == Main.myPlayer ||
+				!(Minion.GetClosestEnemyToPosition(modProjectile.Projectile.Center, 128, requireLOS: false) is NPC npc))
+			{
+				return;
+			}
+			if (modProjectile.Projectile.Hitbox.Intersects(npc.Hitbox))
+			{
+				modProjectile.OnHitNPC(npc, 0, 0, false);
+			}
+		}
+	}
+
+
 	public abstract class Minion : BackportModProjectile
 	{
 		public readonly float PI = (float)Math.PI;
@@ -194,17 +212,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// A simpler version of SelectedEnemyInRange that doesn't require any tactics/teams stuff
 		public NPC GetClosestEnemyToPosition(Vector2 position, float searchRange, bool requireLOS = true)
 		{
+			return GetClosestEnemyToPosition(position, searchRange, ShouldIgnoreNPC, requireLOS);
+		}
+
+		public static bool GenericIgnoreNPC(NPC npc) => !npc.CanBeChasedBy();
+
+		public static NPC GetClosestEnemyToPosition(Vector2 position, float searchRange, Func<NPC, bool> shouldIgnore = null, bool requireLOS = true)
+		{
 			float minDist = float.MaxValue;
 			NPC closest = null;
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
-				if (ShouldIgnoreNPC(npc))
+				if (shouldIgnore?.Invoke(npc) ?? (!npc.active || !npc.CanBeChasedBy()))
 				{
 					continue;
 				}
 				float distanceSq = Vector2.DistanceSquared(npc.Center, position);
-				bool inRange =  distanceSq < searchRange * searchRange;
+				bool inRange = distanceSq < searchRange * searchRange;
 				bool lineOfSight = (!requireLOS) || (inRange && Collision.CanHitLine(position, 1, 1, npc.position, npc.width, npc.height));
 				if (lineOfSight && inRange && distanceSq < minDist)
 				{
