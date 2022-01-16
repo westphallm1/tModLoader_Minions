@@ -4,11 +4,21 @@ over 30 new minions, and several armor sets and accessories for both Squires and
 
 
 === Version History ==
-v0.13.0.3 - Minor AI change
-       - Rework Dungeon Guardian Pet AI to behave more like real Dungeon Guardian
-v0.13.0.2 - Bugfixes
-       - Multiplayer loading fix
-       - Add missing recipes
+v0.14.0 - Combat Pets: Part 2!
+    - Add the Elemental Pals, a group of 8 consistently obtainable combat pets
+      - Obtained via Bows of Friendship found in wooden + shadow chests
+      - One random Elemental Pal given per bow
+      - Bows can be crafted renewably post-Plantera with Solar Tablet Fragments
+    - Add a series of accessories to enhance Combat Pet Stats
+      - Stylish Teamwork Bow: increases max Combat Pet slots by 1
+        - Obtained after second use of a Bow of Friendship
+      - Chaotic Chew Toy: Increases Combat Pet movement speed
+        - Crafted from evil boss drops
+    - More sprite updates from SkyanUltra and Frogpage
+    - Slightly Buff Pre-Skeletron Combat Pet Tiers
+    - Combat Pets now count for Minion Variety Bonus
+    - Nerf Damage Bonuses from Hardmode Squire Armors
+    - Change several multiplicative damage bonuses to additive
 v0.13.0 - Combat Pets!
        - Available for every vanilla pet, crafted from vanilla pet items at a demon altar
        - Cost 1 minion slot per pet
