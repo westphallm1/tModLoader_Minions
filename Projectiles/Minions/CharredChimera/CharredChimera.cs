@@ -117,14 +117,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			body = GetMinionsOfType(ProjectileType<CharredChimeraMinion>()).FirstOrDefault();
 			framesSinceLastHit++;
 			projectile.ai[0] = (projectile.ai[0] + 1) % attackFrames;
+			Vector2 target;
 			if (body == default)
 			{
-				return Vector2.Zero;
+				target = Vector2.Zero;
 			}
 			else
 			{
-				return body.Center - projectile.Center;
+				target = body.Center - projectile.Center;
 			}
+			TeleportToPlayer(ref target, 2000f);
+			return target;
+
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
