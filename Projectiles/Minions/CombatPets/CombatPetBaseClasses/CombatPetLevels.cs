@@ -128,6 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		private readonly List<int> BuffFlagsToReset = new();
 		private int buffResetCountdown;
 
+		private List<int> BuffsToAddOnRespawn = new();
 		public void UpdatePetLevel(int newLevel, int newDamage, bool fromSync = false)
 		{
 			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage;
@@ -268,6 +269,38 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					}
 				}
 			}
+		}
+
+		public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+		{
+			if(Player.whoAmI != Main.myPlayer)
+			{
+				return true;
+			}
+			int buffCount = Player.CountBuffs();
+			for(int i = 0; i < buffCount; i++)
+			{
+				int buffId = Player.buffType[i];
+				if(CombatPetBuff.CombatPetBuffTypes.Contains(buffId))
+				{
+					BuffsToAddOnRespawn.Add(buffId);
+				}
+			}
+			return true;
+		}
+
+		public override void OnRespawn(Player player)
+		{
+			if(Player.whoAmI != Main.myPlayer || BuffsToAddOnRespawn.Count == 0)
+			{
+				return;
+			}
+			foreach(int buffId in BuffsToAddOnRespawn)
+			{
+				TemporarilyUnflagPetBuff(buffId);
+				player.AddBuff(buffId, 2);
+			}
+			BuffsToAddOnRespawn.Clear();
 		}
 	}
 
