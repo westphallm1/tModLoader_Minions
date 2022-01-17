@@ -4,6 +4,8 @@ over 30 new minions, and several armor sets and accessories for both Squires and
 
 
 === Version History ==
+v0.14.0.1 - Port fixes
+    - Add missing world gen changes from 1.4 port to 1.3 version
 v0.14.0 - Combat Pets: Part 2!
     - Add the Elemental Pals, a group of 8 consistently obtainable combat pets
       - Obtained via Bows of Friendship found in wooden + shadow chests
