@@ -39,10 +39,10 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 		{
 			DisplayName.SetDefault("Mighty Bow of Teamwork");
 			Tooltip.SetDefault(
-				"Increases max number of combat pets by 1\n" +
+				"Increases max number of combat pets by 2,\n" +
+				"but decreases max number of non-combat pet minions by 1\n" +
 				"Increases combat pet movement speed\n" +
-				"Increases minion damage\n" +
-				"Decreases max number of non-combat pet minions by 1");
+				"Increases minion damage\n");
 		}
 
 		public override void SetDefaults()
