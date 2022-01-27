@@ -93,6 +93,15 @@ namespace AmuletOfManyMinions.Items.Accessories
 				}
 				minionVarietyBonusCount = uniqueMinionTypes.Count;
 			}
+
+			// add bonus for unique combat pets
+			for (int i = 0; i < player.CountBuffs(); i++)
+			{
+				if (CombatPetBuff.CombatPetBuffTypes.Contains(player.buffType[i]))
+				{
+					minionVarietyBonusCount += 1;
+				}
+			}
 		}
 
 		public override void ModifyWeaponDamage(Item item, ref float add, ref float mult, ref float flat)
@@ -188,15 +197,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 				else if (player.buffTime[player.FindBuffIndex(buffType)] == 1)
 				{
 					Projectile.NewProjectile(player.Center, Vector2.Zero, projectileType, (int)(20 * player.minionDamage), 0.1f, player.whoAmI, ai0: isCorrupt ? 0 : 1);
-				}
-			}
-
-			// add bonus for unique combat pets
-			for (int i = 0; i < player.CountBuffs(); i++)
-			{
-				if (CombatPetBuff.CombatPetBuffTypes.Contains(player.buffType[i]))
-				{
-					minionVarietyBonusCount += 1;
 				}
 			}
 

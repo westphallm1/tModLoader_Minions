@@ -263,7 +263,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 						BuffFlagsToReset.Add(buffId);
 						buffResetCountdown = 4;
 						unmarkCount++;
-						if(unmarkCount >= PetLevelInfo.MaxPets - 1)
+						if(unmarkCount >= AvailablePetSlots - 1)
 						{
 							break;
 						}
