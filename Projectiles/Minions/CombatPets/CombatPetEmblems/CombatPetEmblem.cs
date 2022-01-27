@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			if(ServerConfig.Instance.AllowMultipleCombatPets &&  maxCombatPets > 1)
 			{
 			tooltips.Add(new TooltipLine(mod, "MaxCombatPets", 
-				"In addition, you can have up to " + maxCombatPets + " combat pets active at once." )
+				"In addition, you can have use up to " + maxCombatPets + " of your minion slots on combat pets." )
 			{
 				overrideColor = Color.LimeGreen
 			});

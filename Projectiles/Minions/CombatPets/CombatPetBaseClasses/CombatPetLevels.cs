@@ -174,11 +174,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					}
 				}
 			}
-			if(PetSlotsUsed > 0 && !ServerConfig.Instance.CombatPetsMinionSlots)
+			// extra pet slots don't count against minions
+			int minionSlotsUsed = Math.Max(0, PetSlotsUsed - ExtraPetSlots);
+			if(minionSlotsUsed > 0 && !ServerConfig.Instance.CombatPetsMinionSlots)
 			{
-				PetSlotsUsed -= 1;
+				minionSlotsUsed -= 1;
 			}
-			Player.maxMinions = Math.Max(0, Player.maxMinions - PetSlotsUsed);
+			Player.maxMinions = Math.Max(0, Player.maxMinions - minionSlotsUsed);
 		}
 
 		// look for the best Combat Pet Emblem in the player's inventory, use that

@@ -235,6 +235,15 @@ namespace AmuletOfManyMinions.Items.Accessories
 			float varietyBonus = modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus * 100;
 			tip = varietyBonus.ToString("0") + "% Minion Variety Damage Bonus";
 		}
+
+		public override void Update(Player player, ref int buffIndex)
+		{
+			if(player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyBonusCount > 1 
+				&& ClientConfig.Instance.ShowMinionVarietyBonus)
+			{
+				player.buffTime[buffIndex] = 2;
+			}
+		}
 	}
 
 	class MinionSpawningItemGlobalProjectile : GlobalProjectile
