@@ -52,9 +52,9 @@ namespace AmuletOfManyMinions
 		{
 			int? itemType = null;
 			Tile chestTile = Main.tile[chest.x, chest.y];
-			if (chestTile.type == TileID.Containers)
+			if (chestTile.TileType == TileID.Containers)
 			{
-				int tileFrame = chestTile.frameX / 36;
+				int tileFrame = chestTile.TileFrameX / 36;
 				if (tileFrame == (int)chestFrame && (!didPlace || Main.rand.Next(frequency) == 0))
 				{
 					didPlace = true;
@@ -90,7 +90,7 @@ namespace AmuletOfManyMinions
 		public void AddChestIfMatches(Chest chest)
 		{
 			Tile chestTile = Main.tile[chest.x, chest.y];
-			if (chestTile.type == TileID.Containers && (chestTile.frameX / 36) == (int)ChestFrame)
+			if (chestTile.TileType == TileID.Containers && (chestTile.TileFrameX / 36) == (int)ChestFrame)
 			{
 				CandidateChests.Add(chest);
 			}

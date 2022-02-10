@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions.StoneCloud;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Dusts
@@ -38,7 +39,7 @@ namespace AmuletOfManyMinions.Dusts
 			int x = (int)dust.position.X / 16;
 			int y = (int)dust.position.Y / 16;
 			Tile tile = Framing.GetTileSafely(x, y);
-			if (tile.CollisionType == 1)
+			if (tile.HasTile && tile.BlockType == BlockType.Solid)
 			{
 				dust.active = false;
 			}

@@ -139,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private void SpawnReinforcements()
 		{
 			Tile tile = Framing.GetTileSafely(new Point((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16));
-			inOpenAir = !tile.IsActive;
+			inOpenAir = !tile.HasTile;
 			int slimeType = ProjectileType<SlimeTrainSlimeMinion>();
 			int currentSlimeCount = player.ownedProjectileCounts[slimeType];
 			summonedSlimes.Clear();

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Terraria;
+using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 
 /// <summary>
@@ -93,7 +94,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				return true;
 			}
 			Tile tile = Framing.GetTileSafely(x, y);
-			return tile.IsActive && !tile.HasActuator && tile.CollisionType == 1;
+			return tile.HasTile && !tile.HasActuator && tile.BlockType == BlockType.Solid;
 		}
 		public bool UpdateGroundProbe()
 		{

@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 			if(position.Y >= collideCutoff)
 			{
 				Tile tile = Framing.GetTileSafely((int)position.X / 16, (int)position.Y / 16);
-				if(!tile.IsActive || position.Y > Main.player[Projectile.owner].position.Y)
+				if(!tile.HasTile || position.Y > Main.player[Projectile.owner].position.Y)
 				{
 					Projectile.tileCollide = true;
 				}

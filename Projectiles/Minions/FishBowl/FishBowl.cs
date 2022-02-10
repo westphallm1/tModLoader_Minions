@@ -299,7 +299,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 				catchVelocity.SafeNormalize();
 				catchVelocity.X *= 3;
 				catchVelocity.Y *= 6;
-				if(Framing.GetTileSafely((int)Projectile.Center.X/16, (int)Projectile.Center.Y/16).IsActive)
+				if(Framing.GetTileSafely((int)Projectile.Center.X/16, (int)Projectile.Center.Y/16).HasTile)
 				{
 					Projectile.Bottom = launchedFish.Bottom;
 				} else

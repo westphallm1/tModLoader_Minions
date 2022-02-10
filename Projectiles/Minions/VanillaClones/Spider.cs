@@ -183,7 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override Vector2 IdleBehavior()
 		{
 			Tile tile = Framing.GetTileSafely((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
-			onWall = (tile.IsActive && tile.CollisionType == 1) || tile.wall > 0;
+			onWall = (tile.HasTile && tile.BlockType == BlockType.Solid) || tile.WallType > 0;
 			return base.IdleBehavior();
 		}
 

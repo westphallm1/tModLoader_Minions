@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			// don't deal damage if we've phased through a tile
 			Vector2 pos = Projectile.Center;
 			Tile tile = Framing.GetTileSafely((int)(pos.X / 16), (int)(pos.Y / 16));
-			Projectile.friendly &= !(tile.IsActive && tile.CollisionType == 1);
+			Projectile.friendly &= !(tile.HasTile && tile.BlockType == BlockType.Solid);
 		}
 	}
 

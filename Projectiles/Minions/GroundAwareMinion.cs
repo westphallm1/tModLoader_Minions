@@ -108,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal bool InTheGround(Vector2 position)
 		{
 			Tile tile = TileAtLocation(position);
-			return tile.CollisionType == 1 || Main.tileSolidTop[tile.type];
+			return tile.HasTile && tile.BlockType == BlockType.Solid || Main.tileSolidTop[tile.TileType];
 		}
 
 		internal bool StandingOnPlatform()
@@ -120,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			Vector2 bottomOfProjectile = projectile.Bottom;
 			bottomOfProjectile.Y += 8; // go to the next block down
 			Tile tileUnderfoot = TileAtLocation(bottomOfProjectile);
-			return Main.tileSolidTop[tileUnderfoot.type];
+			return Main.tileSolidTop[tileUnderfoot.TileType];
 		}
 		internal bool StandingOnSlope()
 		{
