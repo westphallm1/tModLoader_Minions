@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.GetDamage<SummonDamageClass>() += 0.08f;
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 48;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 48;
 		}
 
 		public override void UpdateArmorSet(Player player)
@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 				+ "Increases squire travel range by 1 block\n"
 				+ "An Angry Tumbler will assist your squire in combat!";
 			player.GetDamage<SummonDamageClass>() += 0.15f;
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 16f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 16f;
 			player.GetModPlayer<SquireModPlayer>().aridArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}

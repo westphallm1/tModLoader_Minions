@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected override int ComputeDamage()
 		{
-			return (int)(baseDamage * baseDamageRatio + baseDamage * damageGrowthRatio * GetSegmentCount());
+			return (int)(baseDamage * baseDamageRatio + baseDamage * damageGrowthRatio * EmpowerCountWithFalloff());
 		}
 
 		protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)

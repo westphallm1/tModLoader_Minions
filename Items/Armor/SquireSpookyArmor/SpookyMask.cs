@@ -44,9 +44,9 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 				"Decreases max minions";
 			player.GetDamage<SummonDamageClass>() += 0.32f;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
-			squirePlayer.squireRangeFlatBonus += 112f;
-			squirePlayer.squireTravelSpeedMultiplier += 0.30f;
-			squirePlayer.squireAttackSpeedMultiplier *= 0.80f;
+			squirePlayer.SquireRangeFlatBonus += 112f;
+			squirePlayer.SquireTravelSpeedMultiplier += 0.30f;
+			squirePlayer.SquireAttackSpeedMultiplier *= 0.80f;
 			squirePlayer.spookyArmorSetEquipped = true;
 			player.maxMinions -= 1;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.

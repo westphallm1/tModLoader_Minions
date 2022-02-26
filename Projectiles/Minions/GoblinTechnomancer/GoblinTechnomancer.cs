@@ -351,7 +351,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage / 2 + (baseDamage / 8) * EmpowerCount; // only scale up damage a little bit
+			return (int)(baseDamage / 2 + (baseDamage / 8) * EmpowerCountWithFalloff()); // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()

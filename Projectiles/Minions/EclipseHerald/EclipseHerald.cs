@@ -185,7 +185,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage / 2 + (baseDamage / 2) * (int)EmpowerCount;
+			return (int)(baseDamage / 2 + (baseDamage / 2) * EmpowerCountWithFalloff());
 		}
 
 		private Vector2? GetTargetVector()

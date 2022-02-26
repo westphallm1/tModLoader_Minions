@@ -392,10 +392,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		// 'spawn' animation time
 		public static int SetupTime = 90;
 		// frames to run attack for after spawning in
-		public static int BaseAttackTime = 240;
+		public static int BaseAttackTime = 180;
 
 		// extra empower time for each power up
-		int PerEmpowerTime = 30;
+		int PerEmpowerTime = 60;
 
 		private SlimeTrainRotationTracker rotationTracker;
 

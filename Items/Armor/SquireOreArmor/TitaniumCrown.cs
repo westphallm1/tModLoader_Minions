@@ -46,8 +46,8 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 			player.GetDamage<SummonDamageClass>() += 0.10f;
 			player.onHitTitaniumStorm = true;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
-			squirePlayer.squireRangeFlatBonus += 80f;
-			squirePlayer.squireTravelSpeedMultiplier += 0.20f;
+			squirePlayer.SquireRangeFlatBonus += 80f;
+			squirePlayer.SquireTravelSpeedMultiplier += 0.20f;
 			squirePlayer.hardmodeOreSquireArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}

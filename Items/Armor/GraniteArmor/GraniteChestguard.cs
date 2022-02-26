@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.GetDamage<SummonDamageClass>() += 0.10f;
-			player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier *= 0.85f;
+			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= 0.85f;
 		}
 
 		public override void AddRecipes()

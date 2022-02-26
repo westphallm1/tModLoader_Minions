@@ -252,7 +252,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 8) * (int)EmpowerCount; // only scale up damage a little bit
+			return (int)(baseDamage + (baseDamage / 8) * EmpowerCountWithFalloff()); // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()

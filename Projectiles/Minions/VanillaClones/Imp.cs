@@ -461,7 +461,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage * ( 2 + EmpowerCount) / 5;
+			return (int)(baseDamage * ( 1 + EmpowerCountWithFalloff()) / 5);
 		}
 
 		protected override float ComputeSearchDistance()

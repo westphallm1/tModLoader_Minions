@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddRecipeGroup(RecipeGroupID.Wood, 18).AddIngredient(ItemID.Mushroom, 8).AddTile(TileID.Anvils).Register();
+			CreateRecipe(1).AddRecipeGroup(RecipeGroupID.Wood, 18).AddIngredient(ItemID.Mushroom, 8).AddTile(TileID.WorkBenches).Register();
 		}
 	}
 

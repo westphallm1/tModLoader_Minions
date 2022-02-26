@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
@@ -10,9 +11,9 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 {
-	public class BeeQueenMinionBuff : MinionBuff
+	public class BeeQueenMinionBuff : CombatPetBuff
 	{
-		public BeeQueenMinionBuff() : base(ProjectileType<BeeQueenCounterMinion>()) { }
+		public BeeQueenMinionBuff() : base(ProjectileType<BeeQueenMinion>()) { }
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -21,25 +22,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		}
 	}
 
-	public class BeeQueenMinionItem : MinionItem<BeeQueenMinionBuff, BeeQueenCounterMinion>
+	public class BeeQueenMinionItem : CombatPetCustomMinionItem<BeeQueenMinionBuff, BeeQueenMinion>
 	{
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Bee Queen's Crown");
 			Tooltip.SetDefault("Summons a bee assistant to fight for you!");
-		}
-
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-			Item.damage = 20;
-			Item.knockBack = 0.5f;
-			Item.mana = 10;
-			Item.width = 28;
-			Item.height = 28;
-			Item.value = Item.buyPrice(0, 0, 2, 0);
-			Item.rare = ItemRarityID.Green;
 		}
 	}
 
@@ -160,23 +149,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			}
 		}
 	}
-	public class BeeQueenCounterMinion : CounterMinion
-	{
-
-		internal override int BuffId => BuffType<BeeQueenMinionBuff>();
-		protected override int MinionType => ProjectileType<BeeQueenMinion>();
-	}
 
 	public class BeeQueenMinion : EmpoweredMinion
 	{
+		public override int CounterType => -1;
+		internal LeveledCombatPetModPlayer leveledPetPlayer;
 		internal override int BuffId => BuffType<BeeQueenMinionBuff>();
 		int animationFrameCounter = 0;
 		int reloadCycleLength => Math.Max(120, 300 - 20 * EmpowerCount);
 
 		int reloadStartFrame = 0;
 		protected override int dustType => 153;
-
-		public override int CounterType => ProjectileType<BeeQueenCounterMinion>();
+		protected override int EmpowerCount => leveledPetPlayer?.PetLevel ?? 1;
 
 		public override void SetStaticDefaults()
 		{
@@ -217,6 +201,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 
 		public override Vector2 IdleBehavior()
 		{
+			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
 			base.IdleBehavior();
 			float idleAngle = (float)(2 * Math.PI * animationFrameCounter % 240) / 240;
 			Vector2 idlePosition = player.Center;
@@ -320,30 +305,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				origin, 0.75f, effects, 0);
 		}
 
-		protected override int ComputeDamage()
-		{
-			return baseDamage + (int)(baseDamage * EmpowerCount / 4);
-		}
+		protected override int ComputeDamage() => leveledPetPlayer.PetDamage;
 
-		protected override float ComputeSearchDistance()
-		{
-			return 550f + 20f * EmpowerCount;
-		}
+		protected override float ComputeSearchDistance() => leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 
-		protected override float ComputeInertia()
-		{
-			return 14;
-		}
+		protected override float ComputeInertia() => 14;
 
-		protected override float ComputeTargetedSpeed()
-		{
-			return Math.Min(11.5f, 8f + 0.5f * EmpowerCount);
-		}
+		protected override float ComputeTargetedSpeed() => leveledPetPlayer.PetLevelInfo.BaseSpeed;
 
-		protected override float ComputeIdleSpeed()
-		{
-			return ComputeTargetedSpeed() + 3;
-		}
+		protected override float ComputeIdleSpeed() => ComputeTargetedSpeed() + 3;
 
 		protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)
 		{

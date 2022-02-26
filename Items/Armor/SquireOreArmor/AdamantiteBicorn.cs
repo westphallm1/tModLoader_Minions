@@ -44,8 +44,8 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 				"Increases squire travel speed by 25%";
 			player.GetDamage<SummonDamageClass>() += 0.2f;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
-			squirePlayer.squireRangeFlatBonus += 60f;
-			squirePlayer.squireTravelSpeedMultiplier += 0.25f;
+			squirePlayer.SquireRangeFlatBonus += 60f;
+			squirePlayer.SquireTravelSpeedMultiplier += 0.25f;
 			squirePlayer.hardmodeOreSquireArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}

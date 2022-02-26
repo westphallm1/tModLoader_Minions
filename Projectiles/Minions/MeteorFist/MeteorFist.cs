@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.damage = 12;
+			Item.damage = 13;
 			Item.knockBack = 0.5f;
 			Item.mana = 10;
 			Item.width = 26;

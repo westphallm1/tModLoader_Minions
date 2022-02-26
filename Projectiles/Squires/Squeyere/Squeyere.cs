@@ -119,7 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			player.GetSquire().type == ProjectileType<SqueyereMinion>();
 		private static int AnimationFrames = 80;
 
-		private int attackRate => (int)Math.Max(30, 60f / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
+		private int attackRate => (int)Math.Max(30, 60f / player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier);
 
 		private int shootOnFrame => Projectile.ai[0] == 0 ? 0 : 10;
 

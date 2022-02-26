@@ -1,5 +1,4 @@
-﻿using AmuletOfManyMinions.Items.Accessories.SquireBat;
-using AmuletOfManyMinions.Items.Accessories.SquireSkull;
+﻿using AmuletOfManyMinions.Items.Accessories.SquireSkull;
 using AmuletOfManyMinions.Items.Materials;
 using AmuletOfManyMinions.Items.WaypointRods;
 using AmuletOfManyMinions.NPCs.DropConditions;
@@ -146,10 +145,6 @@ namespace AmuletOfManyMinions.NPCs
 			else if (npc.type == NPCID.AngryNimbus)
 			{
 				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<StoneCloudMinionItem>(), 25, chanceNumerator: 3);
-			}
-			else if (npc.type == NPCID.GiantBat)
-			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<SquireBatAccessory>(), 20);
 			}
 			else if (npc.type == NPCID.BigMimicHallow)
 			{

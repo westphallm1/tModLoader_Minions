@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 		{
 			player.GetDamage<SummonDamageClass>() += 0.10f;
 			player.moveSpeed += 0.1f;
-			player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier += 0.28f;
+			player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier += 0.28f;
 		}
 
 		public override void AddRecipes()

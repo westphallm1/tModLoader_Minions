@@ -275,7 +275,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 6) * EmpowerCount; // only scale up damage a little bit
+			return (int)(baseDamage + (baseDamage / 6) * EmpowerCountWithFalloff()); // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()

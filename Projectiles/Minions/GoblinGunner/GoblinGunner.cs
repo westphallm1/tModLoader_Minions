@@ -182,7 +182,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 12) * (int)EmpowerCount; // only scale up damage a little bit
+			return (int)(baseDamage + (baseDamage / 12) * EmpowerCountWithFalloff()); // only scale up damage a little bit
 		}
 
 		private Vector2? GetTargetVector()

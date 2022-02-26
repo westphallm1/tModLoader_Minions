@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -69,6 +70,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected abstract float ComputeTargetedSpeed();
 		protected abstract float ComputeIdleSpeed();
 
+		// drop off damage 
+		internal readonly static int MAX_VANILLA_MINIONS = 11;
+
 		protected int baseDamage = -1;
 		protected int previousEmpowerCount = 0;
 		protected virtual int dustType => DustID.Confetti;
@@ -118,6 +122,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 			Projectile.originalDamage = ComputeDamage();
 			return Vector2.Zero;
+		}
+
+		// If the player has more than the max vanilla minion slots (eg. using post-ML mods),
+		// reduce the amount of extra damage that minions get
+		internal float EmpowerCountWithFalloff()
+		{
+			if(EmpowerCount <= MAX_VANILLA_MINIONS)
+			{
+				return EmpowerCount;
+			} else
+			{
+				return MAX_VANILLA_MINIONS + MathF.Sqrt(EmpowerCount - MAX_VANILLA_MINIONS);
+			}
 		}
 
 		public override Vector2? FindTarget()

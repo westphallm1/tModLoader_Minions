@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 		public override void UpdateEquip(Player player)
 		{
 			player.GetModPlayer<SquireModPlayer>().squireTechnoSkullAccessory = true;
-			player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier *= 0.90f;
+			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= 0.90f;
 			player.GetModPlayer<SquireModPlayer>().squireDamageMultiplierBonus += 0.12f;
 		}
 

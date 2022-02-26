@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			player.GetSquire().type == ProjectileType<TitaniumSquireMinion>();
 		private static int AnimationFrames = 80;
 
-		private int attackRate => (int)Math.Max(15f, 30f / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
+		private int attackRate => (int)Math.Max(15f, 30f / player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier);
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

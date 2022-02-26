@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 128;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 128;
 			if (SquireMinionTypes.Contains(player.HeldItem.shoot))
 			{
 				player.scope = true;

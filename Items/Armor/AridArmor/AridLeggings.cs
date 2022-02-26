@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.GetDamage<SummonDamageClass>() += 0.06f;
-			player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier += 0.12f;
+			player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier += 0.12f;
 		}
 
 		public override void AddRecipes()

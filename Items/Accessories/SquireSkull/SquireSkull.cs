@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 		public override void UpdateEquip(Player player)
 		{
 			player.GetModPlayer<SquireModPlayer>().squireSkullAccessory = true;
-			player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier *= 0.95f;
+			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= 0.95f;
 			player.GetModPlayer<SquireModPlayer>().squireDamageMultiplierBonus += 0.08f;
 		}
 		public override bool CanEquipAccessory(Player player, int slot, bool modded)

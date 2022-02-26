@@ -43,7 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		}
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemID.PinkPricklyPear, 1).AddIngredient(ItemID.Cactus, 25).AddIngredient(ItemID.Amber, 3).AddTile(TileID.Anvils).Register();
+			CreateRecipe(1).AddIngredient(ItemID.PinkPricklyPear, 1).AddIngredient(ItemID.Cactus, 25).AddTile(TileID.Anvils).Register();
 		}
 	}
 	public class PricklyPearSeedProjectile : ModProjectile

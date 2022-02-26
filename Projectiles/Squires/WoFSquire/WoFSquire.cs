@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Item.knockBack = 5f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 130;
+			Item.damage = 140;
 			Item.value = Item.sellPrice(0, 0, 1, 0);
 			Item.rare = ItemRarityID.Red;
 		}
@@ -487,7 +487,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override float ComputeIdleSpeed() => 18;
 
 		// needs to slow down a little so dash is visible
-		public override float ComputeTargetedSpeed() => isDashing ? 16 / player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier : 18;
+		public override float ComputeTargetedSpeed() => isDashing ? 16 / player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier : 18;
 
 		public override float ComputeInertia() => isDashing ? 4 : base.ComputeInertia();
 
@@ -512,7 +512,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		protected int baseDamage;
 		protected float baseKnockback;
 
-		protected static int MockMaxHealth = 4;
+		protected static int MockMaxHealth = 3;
 
 		protected int knockbackCounter = 0;
 
@@ -593,13 +593,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		{
 			if (mockHealth != MockMaxHealth)
 			{
-				float widthFraction = new Dictionary<int, float>
-				{
-					[0] = 0.05f,
-					[1] = 0.1f,
-					[2] = 0.5f,
-					[3] = 0.9f
-				}[mockHealth];
+				float widthFraction = (new float[] { 0.05f, 0.33f, 0.67f })[mockHealth];
 
 				Color maxHealthColor = new Color(77, 230, 0);
 				Color halfHealthColor = new Color(230, 230, 0);
@@ -681,7 +675,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 				if (player.whoAmI == Main.myPlayer)
 				{
-					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
+					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 45); // evolved form lasts 20 seconds
 					Projectile p = Projectile.NewProjectileDirect(Projectile.GetProjectileSource_FromThis(), Projectile.Center, Projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
 					p.originalDamage = baseDamage;
 				}

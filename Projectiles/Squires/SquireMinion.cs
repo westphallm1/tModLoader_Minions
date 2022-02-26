@@ -150,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			// not sure what side effects changing this each frame might have
 			if (attackSpeedCanBeModified)
 			{
-				Projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().squireAttackSpeedMultiplier);
+				Projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier);
 			}
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{
@@ -292,15 +292,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			StandardTargetedMovement(vectorToTargetPosition);
 		}
 
-		public float ModifiedTargetedSpeed() => ComputeTargetedSpeed() * player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier;
-		public float ModifiedIdleSpeed() => ComputeIdleSpeed() * player.GetModPlayer<SquireModPlayer>().squireTravelSpeedMultiplier;
+		public float ModifiedTargetedSpeed() => ComputeTargetedSpeed() * player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier;
+		public float ModifiedIdleSpeed() => ComputeIdleSpeed() * player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier;
 
-		public float ModifiedMaxDistance() => MaxDistanceFromPlayer() + (travelRangeCanBeModified ? player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus : 0);
+		public float ModifiedMaxDistance() => MaxDistanceFromPlayer() + (travelRangeCanBeModified ? player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus : 0);
 
 		// increase projectile velocity based on max travel distance, since projectile shooting squires
 		// can't take advantage of it
 		// 15 blocks extra range doubles projectile speed
-		protected float ModifiedProjectileVelocity() => projectileVelocity * (1 + player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus / 240f);
+		protected float ModifiedProjectileVelocity() => projectileVelocity * (1 + player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus / 240f);
 
 		public virtual float ComputeInertia() => 12;
 

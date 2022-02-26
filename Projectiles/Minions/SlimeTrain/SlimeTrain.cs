@@ -43,7 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Item.knockBack = 0.5f;
 			Item.mana = 10;
 			Item.width = 32;
-			Item.damage = 120;
+			Item.damage = 110;
 			Item.height = 34;
 			Item.value = Item.sellPrice(0, 15, 0, 0);
 			Item.rare = ItemRarityID.Red;
@@ -71,7 +71,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		private int lastSpawnedSlimeFrame;
 		private int nextSlimeIndex;
 		private bool inOpenAir;
-		
+
+
+		protected override float baseDamageRatio => 0.9f;
+		protected override float damageGrowthRatio => 0.1f;
 
 		private int SubProjectileType; 
 		private Projectile currentMarker = null;

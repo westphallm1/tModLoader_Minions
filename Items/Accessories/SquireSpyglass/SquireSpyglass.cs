@@ -23,7 +23,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSpyglass
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 48f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 48f;
 		}
 
 		public override void AddRecipes()

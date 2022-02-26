@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			Item.knockBack = 3f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 92;
+			Item.damage = 84;
 			Item.value = Item.sellPrice(0, 10, 0, 0);
 			Item.rare = ItemRarityID.Red;
 		}
@@ -270,7 +270,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 	public class StardustSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<StardustSquireMinionBuff>();
-		protected override int AttackFrames => 30;
+		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => null;
 		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.StardustDragonStaff;
 

@@ -257,7 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 5) * (int)EmpowerCount;
+			return (int)(baseDamage + (baseDamage / 5) * EmpowerCountWithFalloff());
 		}
 
 

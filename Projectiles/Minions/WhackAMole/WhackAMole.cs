@@ -381,7 +381,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		protected override int ComputeDamage()
 		{
-			return baseDamage + (baseDamage / 3) * EmpowerCount;
+			return (int)(baseDamage + (baseDamage / 3) * EmpowerCountWithFalloff());
 		}
 
 		private Vector2? GetTargetVector()

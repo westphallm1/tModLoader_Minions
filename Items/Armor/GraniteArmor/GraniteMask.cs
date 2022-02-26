@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 		{
 			player.GetDamage<SummonDamageClass>() += 0.10f;
 			player.maxMinions += 1;
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 64;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 64;
 		}
 
 		public override void ArmorSetShadows(Player player)
@@ -59,7 +59,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 				+ "Increases squire travel range by 2 blocks";
 			player.GetDamage<SummonDamageClass>() += 0.12f;
 			player.onHitDodge = true;
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 16f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 16f;
 			player.GetModPlayer<SquireModPlayer>().graniteArmorEquipped = true;
 		}
 

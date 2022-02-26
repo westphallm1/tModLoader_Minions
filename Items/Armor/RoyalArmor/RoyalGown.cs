@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().squireRangeFlatBonus += 32f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 32f;
 			player.GetDamage<SummonDamageClass>() += 0.12f;
 		}
 

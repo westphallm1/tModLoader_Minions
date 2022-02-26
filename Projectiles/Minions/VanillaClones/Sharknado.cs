@@ -433,7 +433,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		protected override int ComputeDamage()
 		{
-			return (baseDamage * EmpowerCount) / 2;
+			return (int)(baseDamage * EmpowerCountWithFalloff()) / 2;
 		}
 
 		protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)
