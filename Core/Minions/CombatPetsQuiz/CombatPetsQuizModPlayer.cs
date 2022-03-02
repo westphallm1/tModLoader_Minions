@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -125,9 +126,11 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			petPlayer.TemporarilyUnflagPetBuff(result.BuffType);
 			if(CurrentQuiz.ExtraResultItemID != ItemID.None)
 			{
-				Player.QuickSpawnItem(CurrentQuiz.ExtraResultItemID);
+				var extraSource = Player.GetItemSource_Misc(CurrentQuiz.ExtraResultItemID);
+				Player.QuickSpawnItem(extraSource, CurrentQuiz.ExtraResultItemID);
 			}
-			Player.QuickSpawnItem(result.ItemType);
+			var source = Player.GetItemSource_Misc(result.ItemType);
+			Player.QuickSpawnItem(source, result.ItemType);
 			Player.AddBuff(result.BuffType, 2);
 			// shift out the oldest personality quiz result, then save this answer
 			for(int i = LastUsedTypes.Length -2; i >= 0; i--)

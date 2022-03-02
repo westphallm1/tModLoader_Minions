@@ -308,7 +308,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			return base.UseItem(item, player);
 		}
 
-		public override bool Shoot(Item item, Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			RemoveWaypointIfUsingNonSummonWeapon(item, player);
 			return base.Shoot(item, player, source, position, velocity, type, damage, knockback);

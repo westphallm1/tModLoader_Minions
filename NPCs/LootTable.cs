@@ -402,56 +402,57 @@ namespace AmuletOfManyMinions.NPCs
 		public override void OpenVanillaBag(string context, Player player, int arg)
 		{
 			float spawnChance = Main.rand.NextFloat();
+			var source = player.GetItemSource_OpenItem(arg);
 			switch (arg)
 			{
 				case ItemID.QueenBeeBossBag:
 					if (spawnChance < 0.67f)
 					{
-						player.QuickSpawnItem(ItemType<BeeQueenMinionItem>());
+						player.QuickSpawnItem(source, ItemType<BeeQueenMinionItem>());
 					}
 					break;
 				case ItemID.SkeletronBossBag:
-					player.QuickSpawnItem(ItemType<SquireSkullAccessory>());
-					player.QuickSpawnItem(ItemType<BoneWaypointRod>());
+					player.QuickSpawnItem(source, ItemType<SquireSkullAccessory>());
+					player.QuickSpawnItem(source, ItemType<BoneWaypointRod>());
 					break;
 				case ItemID.WallOfFleshBossBag:
-					if (spawnChance < 0.67f) { player.QuickSpawnItem(ItemType<BoneSerpentMinionItem>()); }
+					if (spawnChance < 0.67f) { player.QuickSpawnItem(source, ItemType<BoneSerpentMinionItem>()); }
 					break;
 				case ItemID.PlanteraBossBag:
-					if (spawnChance < 0.67f) { player.QuickSpawnItem(ItemType<PottedPalMinionItem>()); }
+					if (spawnChance < 0.67f) { player.QuickSpawnItem(source, ItemType<PottedPalMinionItem>()); }
 					break;
 				case ItemID.MoonLordBossBag:
-					player.QuickSpawnItem(ItemType<TrueEyeWaypointRod>());
+					player.QuickSpawnItem(source, ItemType<TrueEyeWaypointRod>());
 					break;
 				// fishing crate chest loot
 				case ItemID.WoodenCrate:
 				case ItemID.IronCrate:
 				case ItemID.WoodenCrateHard:
 				case ItemID.IronCrateHard:
-					if(spawnChance < 0.03f) { player.QuickSpawnItem(ItemType<TumbleSheepMinionItem>()); }
-					else if(spawnChance < 0.06f) { player.QuickSpawnItem(ItemType<RatsMinionItem>()); }
+					if(spawnChance < 0.03f) { player.QuickSpawnItem(source, ItemType<TumbleSheepMinionItem>()); }
+					else if(spawnChance < 0.06f) { player.QuickSpawnItem(source, ItemType<RatsMinionItem>()); }
 					break;
 				case ItemID.JungleFishingCrate:
 				case ItemID.JungleFishingCrateHard:
-					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<BalloonMonkeyMinionItem>()); }
+					if(spawnChance < 0.167f) { player.QuickSpawnItem(source, ItemType<BalloonMonkeyMinionItem>()); }
 					break;
 				case ItemID.FloatingIslandFishingCrate:
 				case ItemID.FloatingIslandFishingCrateHard:
-					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<SkywareSquireMinionItem>()); }
+					if(spawnChance < 0.167f) { player.QuickSpawnItem(source, ItemType<SkywareSquireMinionItem>()); }
 					break;
 				case ItemID.OceanCrate:
 				case ItemID.OceanCrateHard:
-					if(spawnChance < 0.167f) { player.QuickSpawnItem(ItemType<FishBowlMinionItem>()); }
+					if(spawnChance < 0.167f) { player.QuickSpawnItem(source, ItemType<FishBowlMinionItem>()); }
 					break;
 				default:
 					break;
 			}
 			if(context == "lockBox" && spawnChance < 0.167f)
 			{
-				player.QuickSpawnItem(ItemType<ExciteSkullMinionItem>());
+				player.QuickSpawnItem(source, ItemType<ExciteSkullMinionItem>());
 			} else if (context == "obsidianLockBox" && spawnChance < 0.167f)
 			{
-				player.QuickSpawnItem(ItemType<DemonSquireMinionItem>());
+				player.QuickSpawnItem(source, ItemType<DemonSquireMinionItem>());
 			}
 		}
 
