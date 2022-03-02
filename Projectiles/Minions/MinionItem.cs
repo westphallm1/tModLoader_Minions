@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			player.AddBuff(Item.buffType, 3);
 		}
 
-		public override bool Shoot(Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			ApplyBuff(player);
 
