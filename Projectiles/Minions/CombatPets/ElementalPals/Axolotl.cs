@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 		protected override void SpawnDust(Vector2 position, Vector2 velocity)
 		{
-			if (Main.rand.Next(20) == 0)
+			if (Main.rand.NextBool(20))
 			{
 				int dustCreated = Dust.NewDust(position, 1, 1, 137, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
 				Main.dust[dustCreated].noGravity = true;
@@ -167,7 +167,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			} else if (laser == default)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					LaunchPos,
 					Vector2.Zero,
 					(int)ProjId,

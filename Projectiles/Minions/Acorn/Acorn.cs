@@ -139,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			{
 				lastFiredFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					new Vector2(vectorAbove.X / 8 + Projectile.velocity.X, 2),
 					ProjectileType<AcornBomb>(),

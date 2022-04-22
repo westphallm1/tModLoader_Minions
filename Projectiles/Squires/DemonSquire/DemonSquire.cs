@@ -140,7 +140,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				angleVector.SafeNormalize();
 				angleVector *= 24f;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					angleVector,
 					ProjectileType<DemonSquireImpFireball>(),
@@ -225,7 +225,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<DemonSquireUnholyTrident>(),
@@ -243,7 +243,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				for(int i = 0; i < 2; i++)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						Vector2.Zero,
 						ProjectileType<DemonSquireImpMinion>(),

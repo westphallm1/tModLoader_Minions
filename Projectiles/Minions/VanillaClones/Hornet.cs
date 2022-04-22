@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public virtual void SpawnDust()
 		{
-			if (Main.rand.Next(2) == 0)
+			if (Main.rand.NextBool(2))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 18, 0f, 0f, 0, default, 0.9f);
 				Main.dust[dustId].noGravity = true;

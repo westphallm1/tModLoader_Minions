@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			if (Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					-Projectile.velocity,
 					ProjectileType<PottedPalJrMinion>(),
@@ -339,7 +339,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<PottedPalSeedProjectile>(),

@@ -251,7 +251,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					}
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					player.Center,
 					Vector2.Zero,
 					subProjType,

@@ -203,6 +203,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			int effectsIdx = 0;
 			int smokeStep = Main.rand.Next(10, 14);
 			int smokeStart = Main.rand.Next(4);
+			var source = Projectile.GetSource_FromThis();
 			for (float i = -0; i < MathHelper.TwoPi; i += MathHelper.Pi / 32)
 			{
 				effectsIdx++;
@@ -215,7 +216,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 				Main.dust[dustIdx].alpha = ShockwaveDustAlpha;
 				if (effectsIdx % smokeStep == smokeStart)
 				{
-					int goreIdx = Gore.NewGore(pos, angle, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, pos, angle, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].scale = 0.5f;
 				}
 

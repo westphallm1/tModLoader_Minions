@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.AI();
 			Projectile.friendly = Projectile.ai[0] == 0;
 			Projectile.localAI[0]++;
-			if(Projectile.localAI[0] < 8 || Main.rand.Next(2) != 0)
+			if(Projectile.localAI[0] < 8 || !Main.rand.NextBool(2))
 			{
 				return;
 			}
@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Main.dust[dustId].velocity.X *= 1.2f;
 			Main.dust[dustId].velocity.Y *= 1.2f;
 			Main.dust[dustId].noGravity = true;
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				Main.dust[dustId].scale *= 1.25f;
 				Main.dust[dustId].velocity.X *= 2f;

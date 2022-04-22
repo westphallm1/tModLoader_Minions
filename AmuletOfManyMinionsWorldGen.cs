@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions
 			if (chestTile.TileType == TileID.Containers)
 			{
 				int tileFrame = chestTile.TileFrameX / 36;
-				if (tileFrame == (int)chestFrame && (!didPlace || Main.rand.Next(frequency) == 0))
+				if (tileFrame == (int)chestFrame && (!didPlace || Main.rand.NextBool(frequency)))
 				{
 					didPlace = true;
 					itemType = this.itemType;

@@ -220,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						angleVector,
 						ProjectileType<SkywareArrow>(),
@@ -241,7 +241,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						angleVector,
 						ProjectileType<SkywareLargeArrow>(),

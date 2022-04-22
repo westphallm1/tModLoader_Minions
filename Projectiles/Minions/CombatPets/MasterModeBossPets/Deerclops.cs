@@ -219,7 +219,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				}
 				float offsetRadius = Main.rand.Next(48, 64) + (target.width + target.height) / 4;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					target.Center + Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * offsetRadius,
 					Vector2.Zero,
 					(int)ProjId,
@@ -266,12 +266,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Vector2 launchPos = rockStormStart - new Vector2(0, 6);
 				launchPos.X += rockStormDirection * 1.25f * framesSinceShoot + Main.rand.Next(-4, 4);
 				Vector2 launchVelocity = new Vector2(rockStormDirection * (0.5f + framesSinceShoot / 8) + Projectile.velocity.X, -6);
-				if(Main.rand.Next(4) == 0)
+				if(Main.rand.NextBool(4))
 				{
 					launchVelocity.Y -= Main.rand.Next(2);
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					launchPos,
 					launchVelocity,
 					ProjectileType<DeerclopsIceBlock>(),

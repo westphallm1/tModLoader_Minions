@@ -211,7 +211,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center + flailPosition,
 						Vector2.Zero,
 						ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
@@ -394,7 +394,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						flailPosition,
 						Vector2.Zero,
 						ProjectileType<ArmoredBoneSquireSpiritProjectile>(),
@@ -440,7 +440,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center, 
 					Projectile.velocity, 
 					ProjectileType<SpiritFlailWormMinion>(), 

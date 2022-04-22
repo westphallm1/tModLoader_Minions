@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			int speed = 8;
 			vectorToTargetPosition.SafeNormalize();
 			vectorToTargetPosition *= speed;
-			if (Main.rand.Next(5) == 0)
+			if (Main.rand.NextBool(5))
 			{
 				Dust.NewDust(Projectile.Center,
 					Projectile.width / 2,

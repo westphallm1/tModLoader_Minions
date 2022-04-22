@@ -66,7 +66,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			base.AfterMoving();
 			if(!wasFlyingThisFrame && gHelper.isFlying)
 			{
-				Gore.NewGore(Projectile.Center, Vector2.Zero, GoreID.PlanteroSombrero);
+				var source = Projectile.GetSource_FromThis();
+				Gore.NewGore(source, Projectile.Center, Vector2.Zero, GoreID.PlanteroSombrero);
 			}
 			wasFlyingThisFrame = gHelper.isFlying;
 

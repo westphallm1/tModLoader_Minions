@@ -108,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
@@ -146,7 +146,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				lineOfFire *= projectileVelocity;
 				lastShootFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(lineOfFire),
 					ProjectileType<GoblinGunnerBullet>(),
@@ -337,7 +337,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						pos,
 						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<GoblinGunnerBullet>(),

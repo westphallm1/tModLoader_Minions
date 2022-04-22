@@ -103,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (Main.myPlayer == player.whoAmI)
 			{
 				int projId = Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					launchVelocity,
 					bladeType,

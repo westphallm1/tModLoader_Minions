@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				target.SafeNormalize();
 				target *= 12;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					target,
 					ProjectileType<MiniTwinsLaser>(),
@@ -133,7 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				lastHitFrame = animationFrame;
 				Vector2 launchVector = -Vector2.UnitY.RotatedByRandom(MathHelper.PiOver4) * 6;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					target.Center,
 					launchVector,
 					ProjectileType<DestroyerLiteProbeProjectile>(),

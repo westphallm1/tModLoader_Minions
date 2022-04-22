@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 				launchOffset *= 6 + Main.rand.Next(-2, 2);
 				Vector2 launchPos = hoverPos + Vector2.One * Main.rand.NextFloat(-12, 12) + launchOffset;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					launchPos,
 					launchAngle,
 					ProjectileType<SoulboundDescendingArrow>(),

@@ -238,7 +238,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			if (!remove)
 			{
 				// uses AI[0] to indicate tactic group
-				Projectile.NewProjectile(Player.GetProjectileSource_Item(Player.inventory[selectedItem]), waypointPosition, Vector2.Zero, type, 0, 0, Owner: Player.whoAmI, ai0: tacticsGroupIdx);
+				Projectile.NewProjectile(Player.GetSource_ItemUse(Player.inventory[selectedItem]), waypointPosition, Vector2.Zero, type, 0, 0, Owner: Player.whoAmI, ai0: tacticsGroupIdx);
 			}
 
 		}

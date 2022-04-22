@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.AI();
 			Projectile.localAI[0]++;
-			if(Projectile.localAI[0] < 4 || Main.rand.Next(2) != 0)
+			if(Projectile.localAI[0] < 4 || !Main.rand.NextBool(2))
 			{
 				return;
 			}
@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.dust[dustId].velocity.X *= 1.2f;
 			Main.dust[dustId].velocity.Y *= 1.2f;
 			Main.dust[dustId].noGravity = true;
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				Main.dust[dustId].scale *= 2f;
 				Main.dust[dustId].velocity.X *= 2f;
@@ -388,11 +388,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(vectorToTarget == null || animationFrame - hsHelper.lastShootFrame > 60)
 			{
 				Projectile.rotation += MathHelper.TwoPi/60;
-				if (Main.rand.Next(2) == 0)
+				if (Main.rand.NextBool(2))
 				{
 					for (float angle = 0; angle < MathHelper.TwoPi; angle += MathHelper.PiOver2)
 					{
-						if (Main.rand.Next(2) != 0)
+						if (!Main.rand.NextBool(2))
 						{
 							int dustType = new int[] { 226, 228, 75 }[Main.rand.Next(3)];
 							Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, dustType);

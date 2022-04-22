@@ -53,10 +53,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Kill(int timeLeft)
 		{
+			if (Main.netMode != NetmodeID.Server)
+			{
+				var source = Projectile.GetSource_Death();
+				Gore.NewGore(source, Projectile.position, Vector2.Zero, Mod.Find<ModGore>("HoneyPotBottomGore").Type);
+				Gore.NewGore(source, Projectile.position, Vector2.Zero, Mod.Find<ModGore>("HoneyPotLidGore").Type);
+			}
+
 			SoundEngine.PlaySound(new LegacySoundStyle(13, 0).WithVolume(0.5f), Projectile.Center);
-			Gore.NewGore(Projectile.position, Vector2.Zero, Mod.Find<ModGore>("HoneyPotBottomGore").Type);
-			Gore.NewGore(Projectile.position, Vector2.Zero, Mod.Find<ModGore>("HoneyPotLidGore").Type);
-			for(int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				Dust.NewDust(Projectile.position, 32, 32, DustID.Honey2);
 			}

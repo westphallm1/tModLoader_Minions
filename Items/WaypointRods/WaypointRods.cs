@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		{
 			tooltips.Add(new TooltipLine(Mod, "MinionWaypointRange", placementRangeInBlocks + " block range.")
 			{
-				overrideColor = Color.LimeGreen
+				OverrideColor = Color.LimeGreen
 			});
 		}
 	}

@@ -66,7 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			if(Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					targetPos,
 					Vector2.Zero,
 					ProjectileType<StardustConstellation>(),
@@ -258,7 +258,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				Vector2 launchVel = vectorToTargetPosition.RotatedBy(Main.rand.NextFloat(MathHelper.Pi / 8) - MathHelper.Pi / 16);
 
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					launchPos,
 					launchVel,
 					ProjectileType<StardustHomingStar>(),
@@ -381,7 +381,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			int tier = idx / TierSize;
 			int radius = tier * TierRadius + Main.rand.Next(TierRadius);
 			EndOffset = Main.rand.NextFloat(MathHelper.TwoPi).ToRotationVector2() * radius;
-			maxConnections = Main.rand.Next(3) == 0 ? 2 : 1;
+			maxConnections = Main.rand.NextBool(3)? 2 : 1;
 			connections = new Vector2[maxConnections];
 		}
 

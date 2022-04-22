@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, MinionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, MinionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			} else
 			{

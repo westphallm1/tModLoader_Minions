@@ -159,7 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				}
 				Vector2 fireDirection = angleToTarget.RotatedBy(2 * (MathHelper.Pi * fireCount++) / 5);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(fireDirection),
 					ProjectileType<SpiderBrainEyeProjectile>(),

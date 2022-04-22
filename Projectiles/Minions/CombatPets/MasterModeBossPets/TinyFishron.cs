@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			{
 				lastHitFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					target.Center, 
 					Vector2.Zero, 
 					ProjectileType<TinyFishronWhirlpool>(), 

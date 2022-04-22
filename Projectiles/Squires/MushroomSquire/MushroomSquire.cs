@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			{
 				Vector2 launcVel = new Vector2(0.25f * Projectile.velocity.X, -Main.rand.Next(5, 8));
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					launcVel,
 					ProjectileType<ForagerMushroom>(),
@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 				vector2Mouse *= ModifiedProjectileVelocity();
 				vector2Mouse = vector2Mouse.RotatedBy(Main.rand.NextFloat(MathHelper.Pi / 8) - MathHelper.Pi/16);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<MushroomSquireMushroomProjectile>(),

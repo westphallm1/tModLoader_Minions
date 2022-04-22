@@ -95,18 +95,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			Projectile.Center = playRoughTarget.Center + playRoughOffset;
 
 			// smoke
-			if(Main.rand.Next(8) == 0)
+			var source = Projectile.GetSource_FromThis();
+			if (Main.rand.NextBool(8))
 			{
 				float goreVel = 0.25f;
-				int goreIdx = Gore.NewGore(Projectile.Center, default, Main.rand.Next(61, 64));
+				int goreIdx = Gore.NewGore(source, Projectile.Center, default, Main.rand.Next(61, 64));
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += playRoughTarget.velocity;
 			}
 			// stars
-			if(Main.rand.Next(12) == 0)
+			if(Main.rand.NextBool(12))
 			{
 				Vector2 launchVelocity = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f, 4f);
-				Gore.NewGore(Projectile.Center, launchVelocity, Main.rand.Next(16, 18));
+				Gore.NewGore(source, Projectile.Center, launchVelocity, Main.rand.Next(16, 18));
 				Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.YellowStarDust, -launchVelocity * 1.25f);
 				dust.noGravity = true;
 			}

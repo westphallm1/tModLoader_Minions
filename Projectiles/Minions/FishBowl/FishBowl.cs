@@ -251,7 +251,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 					targetTop *= 4;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					targetTop,
 					ProjectileType<FishBowlFish>(),

@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.SpecialTargetedMovement(vectorToTargetPosition);
-			if (Main.rand.Next(8) == 0)
+			if (Main.rand.NextBool(8))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<SnowDust>(), 0f, 0f, 100, default, 1f);
 				Main.dust[dustId].velocity *= 0.3f;

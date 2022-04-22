@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		{
 			if(ProjId is not int projId) { return; }
 			Projectile.NewProjectile(
-				Projectile.GetProjectileSource_FromThis(),
+				Projectile.GetSource_FromThis(),
 				LaunchPos,
 				VaryLaunchVelocity(launchVector),
 				projId,

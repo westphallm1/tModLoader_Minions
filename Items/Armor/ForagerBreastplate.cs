@@ -28,9 +28,10 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<MinionSpawningItemPlayer>().summonFlatDamage += 1;
-			player.minionKB += 1;
+			player.GetDamage<SummonDamageClass>().Flat += 1;
+			player.GetKnockback<SummonDamageClass>().Base += 1;
 		}
+
 		public override void AddRecipes()
 		{
 			CreateRecipe(1).AddIngredient(ItemID.Daybloom, 1).AddIngredient(ItemID.Mushroom, 2).AddRecipeGroup(RecipeGroupID.Wood, 20).AddTile(TileID.WorkBenches).Register();

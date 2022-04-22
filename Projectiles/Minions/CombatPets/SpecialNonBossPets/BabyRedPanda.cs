@@ -154,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				int npcSize = (targetNPC.width + targetNPC.height) / 4;
 				Vector2 offset = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * (64 + npcSize);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					targetNPC.Center + offset,
 					offset, 
 					ProjectileType<BabyRedPandaBambooSpike>(),
@@ -239,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			{
 				lastSpawnedFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					target.Center,
 					Vector2.Zero,
 					projType,

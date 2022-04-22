@@ -105,7 +105,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 				leader.minionPos == Projectile.minionPos &&
 				player.ownedProjectileCounts[ProjectileType<CrystalFistHeadMinion>()] == 0)
 			{
-				Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<CrystalFistHeadMinion>(), 0, 0, Main.myPlayer);
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<CrystalFistHeadMinion>(), 0, 0, Main.myPlayer);
 			}
 			Projectile head = GetHead(ProjectileType<CrystalFistHeadMinion>());
 			if (head == default)

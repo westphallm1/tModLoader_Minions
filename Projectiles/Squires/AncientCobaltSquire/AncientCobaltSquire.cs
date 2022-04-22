@@ -167,7 +167,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						angleVector,
 						ProjectileType<AncientCobaltStream>(),
@@ -190,7 +190,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						angleVector,
 						ProjectileType<AncientCobaltBolt>(),

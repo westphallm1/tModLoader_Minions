@@ -124,12 +124,11 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			IsTakingQuiz = false;
 			LeveledCombatPetModPlayer petPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			petPlayer.TemporarilyUnflagPetBuff(result.BuffType);
-			if(CurrentQuiz.ExtraResultItemID != ItemID.None)
+			var source = Player.GetSource_Misc("PlayerDropItemCheck");
+			if (CurrentQuiz.ExtraResultItemID != ItemID.None)
 			{
-				var extraSource = Player.GetItemSource_Misc(CurrentQuiz.ExtraResultItemID);
-				Player.QuickSpawnItem(extraSource, CurrentQuiz.ExtraResultItemID);
+				Player.QuickSpawnItem(source, CurrentQuiz.ExtraResultItemID);
 			}
-			var source = Player.GetItemSource_Misc(result.ItemType);
 			Player.QuickSpawnItem(source, result.ItemType);
 			Player.AddBuff(result.BuffType, 2);
 			// shift out the oldest personality quiz result, then save this answer

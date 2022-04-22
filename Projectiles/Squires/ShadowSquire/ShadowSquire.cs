@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<CorruptFlaskProjectile>(),

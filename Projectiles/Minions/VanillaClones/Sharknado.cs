@@ -72,11 +72,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				int dustId = Dust.NewDust(Projectile.Center - Vector2.One * 10f, 50, 50, 5, 0f, -2f);
 				Main.dust[dustId].velocity /= 2f;
 			}
-			int goreId = Gore.NewGore(Projectile.Center, Projectile.velocity * 0.8f, 584);
+			var source = Projectile.GetSource_Death();
+			int goreId = Gore.NewGore(source, Projectile.Center, Projectile.velocity * 0.8f, 584);
 			Main.gore[goreId].timeLeft /= 4;
-			goreId = Gore.NewGore(Projectile.Center, Projectile.velocity * 0.9f, 585);
+			goreId = Gore.NewGore(source, Projectile.Center, Projectile.velocity * 0.9f, 585);
 			Main.gore[goreId].timeLeft /= 4;
-			goreId = Gore.NewGore(Projectile.Center, Projectile.velocity, 586);
+			goreId = Gore.NewGore(source, Projectile.Center, Projectile.velocity, 586);
 			Main.gore[goreId].timeLeft /= 4;
 		}
 
@@ -160,7 +161,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 			Projectile.rotation = Projectile.velocity.X * 0.05f;
 
-			if (Main.rand.Next(5) == 0)
+			if (Main.rand.NextBool(5))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 217, 0f, 0f, 100, default, 2f);
 				Main.dust[dustId].velocity *= 0.3f;
@@ -209,7 +210,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
@@ -269,7 +270,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			for(int i = 0; i < offsets.Length; i++)
 			{
 				Lighting.AddLight(offsets[i], Color.Aquamarine.ToVector3() * 0.25f);
-				if (Main.rand.Next(10) == 0)
+				if (Main.rand.NextBool(10))
 				{
 					Rectangle dustRect = GetWhirlpoolBox(i);
 					int dustId = Dust.NewDust(dustRect.TopLeft(), dustRect.Width, dustRect.Height, 217, 0f, 0f, 100, default, 2f);

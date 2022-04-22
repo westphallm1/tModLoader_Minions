@@ -85,10 +85,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			// only spawn 1ish cactus per volley
 			// this can spawn cacti upon hitting walls/ceilings/enemies , but that's ok
-			if (Projectile.owner == Main.myPlayer && Main.rand.Next(3) == 0)
+			if (Projectile.owner == Main.myPlayer && Main.rand.NextBool(3))
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.position,
 					Vector2.Zero,
 					ProjectileType<PricklyPearCactusProjectile>(),
@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 					velocity.Y *= -1;
 					velocity.X += Projectile.velocity.X;
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						VaryLaunchVelocity(velocity),
 						ProjectileType<PricklyPearSeedProjectile>(),

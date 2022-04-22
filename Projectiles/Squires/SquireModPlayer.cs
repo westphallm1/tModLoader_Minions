@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			return null;
 		}
 
-		public override void ModifyWeaponDamage(Item item, ref StatModifier modifier, ref float flat)
+		public override void ModifyWeaponDamage(Item item, ref StatModifier modifier)
 		{
 			if(!item.CountsAsClass<SummonDamageClass>() && usedMinionSlots > 0)
 			{
@@ -133,7 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		private int modifiedFixedDamage(int damage)
 		{
-			return (int)(damage * Player.GetDamage<SummonDamageClass>() * squireDamageMultiplierBonus);
+			return (int)(Player.GetDamage<SummonDamageClass>().ApplyTo(damage * squireDamageMultiplierBonus));
 		}
 
 		private void SummonSquireSubMinions()
@@ -149,7 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			int crownType = ProjectileType<RoyalCrownProjectile>();
 			int batType = ProjectileType<SquireBatProjectile>();
 			int tumblerType = ProjectileType<AridTumblerProjectile>();
-			var source = mySquire.GetProjectileSource_FromThis();
+			var source = mySquire.GetSource_FromThis();
 			bool canSummonAccessory = Player.whoAmI == Main.myPlayer;
 			// summon the appropriate squire orbiter(s)
 			if (canSummonAccessory && squireSkullAccessory && Player.ownedProjectileCounts[skullType] == 0)

@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 			}
 			tooltips.Add(new TooltipLine(Mod, "FriendshipBowRequirement", FriendshipBowRequirement)
 			{
-				overrideColor = Color.Gray
+				OverrideColor = Color.Gray
 			});
 		}
 

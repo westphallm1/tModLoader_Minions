@@ -83,14 +83,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if (PartyHatSystem.IsParty && Main.rand.Next(3) == 0)
+			if (PartyHatSystem.IsParty && Main.rand.NextBool(3))
 			{
 				Vector2 launchVector = Projectile.velocity;
 				launchVector.SafeNormalize();
 				launchVector *= 4;
 				// only called for owner, no need to check ownership
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					launchVector,
 					ProjectileType<BalloonMonkeyBalloon>(),
