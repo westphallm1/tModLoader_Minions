@@ -395,7 +395,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				}
 				Vector2 randomShoot = lineOfFire + Main.rand.NextFloatDirection().ToRotationVector2();
 				int damage = Projectile.damage;
-				if(hasBaby && Main.rand.Next(EmpowerCount) == 0)
+				if(hasBaby && Main.rand.NextBool(EmpowerCount))
 				{
 					projId = ProjectileType<BabyImpFireBall>();
 					damage = player.GetModPlayer<LeveledCombatPetModPlayer>().PetDamage;

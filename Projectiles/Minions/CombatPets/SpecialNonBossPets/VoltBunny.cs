@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			}
 
 			// visual effects
-			if(Main.rand.Next(isIdling? 8 : 4) == 0)
+			if(Main.rand.NextBool(isIdling? 8 : 4))
 			{
 				int dustIdx = Dust.NewDust(
 					Projectile.position, Projectile.width, Projectile.height, DustID.t_Martian,
@@ -83,7 +83,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				Main.dust[dustIdx].noLight = true;
 				Main.dust[dustIdx].scale *= 0.75f;
 			}
-			if(Main.rand.Next(isIdling? 6: 2) == 0)
+			if(Main.rand.NextBool(isIdling? 6: 2))
 			{
 				var source = Projectile.GetSource_FromThis();
 				int goreIdx = Gore.NewGore(source, Projectile.Center, Vector2.Zero, GoreID.LightningBunnySparks);

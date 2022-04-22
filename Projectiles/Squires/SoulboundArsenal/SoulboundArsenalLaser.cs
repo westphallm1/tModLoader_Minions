@@ -106,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 				{
 					Lighting.AddLight(next, LightColor.ToVector3() * 0.5f);
 					endPoint = next;
-					if(Main.rand.Next((int)(20 * (3 - 2 * chargeScale))) == 0) {
+					if(Main.rand.NextBool((int)(20 * (3 - 2 * chargeScale)))) {
 						SpawnDust(endPoint, Vector2.Zero);
 					}
 				}

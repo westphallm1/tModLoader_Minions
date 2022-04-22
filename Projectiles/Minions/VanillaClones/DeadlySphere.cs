@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.AI();
 			Projectile.localAI[0]++;
-			if(Projectile.localAI[0] < 4 || Main.rand.Next(2) != 0)
+			if(Projectile.localAI[0] < 4 || !Main.rand.NextBool(2))
 			{
 				return;
 			}
@@ -392,7 +392,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				{
 					for (float angle = 0; angle < MathHelper.TwoPi; angle += MathHelper.PiOver2)
 					{
-						if (Main.rand.Next(2) != 0)
+						if (!Main.rand.NextBool(2))
 						{
 							int dustType = new int[] { 226, 228, 75 }[Main.rand.Next(3)];
 							Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, dustType);

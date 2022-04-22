@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.AI();
 			Projectile.friendly = Projectile.ai[0] == 0;
 			Projectile.localAI[0]++;
-			if(Projectile.localAI[0] < 8 || Main.rand.Next(2) != 0)
+			if(Projectile.localAI[0] < 8 || !Main.rand.NextBool(2))
 			{
 				return;
 			}

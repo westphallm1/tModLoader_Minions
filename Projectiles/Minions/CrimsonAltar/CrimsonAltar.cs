@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		{
 			base.Move(vector2Target, isIdle);
 			Projectile.rotation = Projectile.velocity.ToRotation() + 3 * (float)Math.PI / 2;
-			if (Main.rand.Next(dustFrequency) == 0)
+			if (Main.rand.NextBool(dustFrequency))
 			{
 				Dust.NewDust(Projectile.Center, 1, 1, dustType, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
 			}
