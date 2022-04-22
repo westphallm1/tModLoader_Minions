@@ -138,7 +138,7 @@ namespace AmuletOfManyMinions
 		public int SquireDamageMinionNerf;
 
 		[Label("Minions Are Less Accurate")]
-		[Tooltip("If enabled, minions will shoot less acurately and turn less sharply while chasing enemies")]
+		[Tooltip("If enabled, minions will shoot less accurately and turn less sharply while chasing enemies")]
 		[DefaultValue(false)]
 		public bool MinionsInnacurate;
 
