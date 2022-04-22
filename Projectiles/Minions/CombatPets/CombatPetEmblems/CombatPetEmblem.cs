@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			tooltips.Add(new TooltipLine(Mod, "MaxCombatPets", 
 				"In addition, you can use up to " + maxCombatPets + " of your minion slots on combat pets." )
 			{
-				overrideColor = Color.LimeGreen
+				OverrideColor = Color.LimeGreen
 			});
 			}
 		}

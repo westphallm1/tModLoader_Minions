@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.dust[dustId].scale += Main.rand.NextFloat(0.5f);
 			Main.dust[dustId].noGravity = true;
 			Main.dust[dustId].velocity.Y -= 2f;
-			if (Main.rand.Next(2) == 0)
+			if (Main.rand.NextBool(2))
 			{
 				dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100);
 				Main.dust[dustId].position.X -= 2f;
@@ -212,11 +212,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<RavenGreekFire>()] < 8 && Main.rand.Next(5) == 0)
+			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<RavenGreekFire>()] < 8 && Main.rand.NextBool(5))
 			{
 				Vector2 lineOfFire = (Main.rand.NextFloat(MathHelper.Pi) + MathHelper.Pi).ToRotationVector2() * Main.rand.NextFloat(6, 8);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					lineOfFire,
 					ProjectileType<RavenGreekFire>(),

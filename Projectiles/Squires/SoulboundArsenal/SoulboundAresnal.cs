@@ -279,7 +279,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 					for (int i = 0; i < 2; i++)
 					{
 						Projectile.NewProjectile(
-							Projectile.GetProjectileSource_FromThis(),
+							Projectile.GetSource_FromThis(),
 							Projectile.Center,
 							angleVector,
 							type,
@@ -326,7 +326,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.position,
 					Projectile.velocity,
 					ProjectileType<SoulboundArsenalBowMinion>(),
@@ -362,7 +362,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 					vector2Mouse.Normalize();
 					vector2Mouse *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						vector2Mouse,
 						ProjectileType<SoulboundArsenalSwordProjectile>(),
@@ -414,7 +414,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center, 
 					Vector2.Zero, 
 					ProjectileType<SoulboundArsenalLaser>(), 

@@ -202,7 +202,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				angleVector.SafeNormalize();
 				angleVector *= 24f;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					angleVector,
 					ProjectileType<SqueyereEyeLaser>(),
@@ -270,7 +270,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 					weaponCenter.X *= Projectile.spriteDirection;
 					Vector2 tipCenter = Projectile.Center + weaponCenter;
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						tipCenter,
 						angleVector,
 						ProjectileType<SqueyereLaser>(),
@@ -290,7 +290,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				for(int i = 0; i < 2; i++)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						Vector2.Zero,
 						ProjectileType<SqueyereEyeMinion>(),

@@ -347,7 +347,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					{
 						angleVector *= ModifiedProjectileVelocity() * 0.75f;
 						Projectile.NewProjectile(
-							Projectile.GetProjectileSource_FromThis(),
+							Projectile.GetSource_FromThis(),
 							Projectile.Center,
 							angleVector,
 							ProjectileType<StardustGuardianProjectile>(),
@@ -362,7 +362,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					{
 						angleVector *= ModifiedProjectileVelocity();
 						Projectile.NewProjectile(
-							Projectile.GetProjectileSource_FromThis(),
+							Projectile.GetSource_FromThis(),
 							Projectile.Center,
 							angleVector,
 							ProjectileType<StardustBeastProjectile>(),
@@ -395,7 +395,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				target.SafeNormalize();
 				target *= 2 * projectileVelocity;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					target,
 					ProjectileType<ConstellationSeed>(),

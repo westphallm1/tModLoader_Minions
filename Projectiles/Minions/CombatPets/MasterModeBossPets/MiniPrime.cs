@@ -91,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					SoundEngine.PlaySound(new LegacySoundStyle(2, 11).WithVolume(0.5f), Projectile.Center);
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					spawnPos,
 					VaryLaunchVelocity(target),
 					projId,

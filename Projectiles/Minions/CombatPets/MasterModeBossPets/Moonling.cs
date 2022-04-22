@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		protected override void SpawnDust(Vector2 position, Vector2 velocity)
 		{
-			if(Main.rand.Next(5) == 0)
+			if(Main.rand.NextBool(5))
 			{
 				int dustCreated = Dust.NewDust(position, 1, 1, DustID.UltraBrightTorch, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
 				Main.dust[dustCreated].color = Color.Azure;

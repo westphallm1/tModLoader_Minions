@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			tooltips.Add(new TooltipLine(Mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
 			{
-				overrideColor = Color.LimeGreen
+				OverrideColor = Color.LimeGreen
 			});
 			if(SpecialDescription != null)
 			{

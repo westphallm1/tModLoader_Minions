@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Main.dust[dustId].velocity.X *= 1.2f;
 			Main.dust[dustId].velocity.Y *= 1.2f;
 			Main.dust[dustId].noGravity = true;
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				Main.dust[dustId].scale *= 1.25f;
 				Main.dust[dustId].velocity.X *= 2f;

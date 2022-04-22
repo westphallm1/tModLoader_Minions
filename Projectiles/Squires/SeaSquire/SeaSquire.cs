@@ -238,12 +238,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		private void TransformBubbles()
 		{
-			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+			if (Main.netMode != NetmodeID.Server)
 			{
-				int goreIdx = Gore.NewGore(Projectile.position, Vector2.Zero, Mod.Find<ModGore>("SeaSquireBubbleGore").Type, 1f);
-				Main.gore[goreIdx].alpha = 128;
-				Main.gore[goreIdx].velocity *= 0.25f;
-				Main.gore[goreIdx].velocity += offset;
+				var source = Projectile.GetSource_FromThis();
+				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+				{
+					int goreIdx = Gore.NewGore(source, Projectile.position, Vector2.Zero, Mod.Find<ModGore>("SeaSquireBubbleGore").Type, 1f);
+					Main.gore[goreIdx].alpha = 128;
+					Main.gore[goreIdx].velocity *= 0.25f;
+					Main.gore[goreIdx].velocity += offset;
+				}
 			}
 		}
 
@@ -253,7 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center, 
 					Projectile.velocity, 
 					ProjectileType<SeaSquireSharkMinion>(), 
@@ -310,7 +314,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity() + bubbleVelOffset;
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						angleVector,
 						ProjectileType<SeaSquireBubble>(),

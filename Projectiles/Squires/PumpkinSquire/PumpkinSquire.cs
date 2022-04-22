@@ -272,7 +272,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 				Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 				vector2Mouse *= 1.5f *  ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<PumpkinBomb>(),
@@ -292,7 +292,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			if (bigPumpkin == default && Main.myPlayer == player.whoAmI)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					Vector2.Zero,
 					bigPumpkinType,

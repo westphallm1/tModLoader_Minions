@@ -244,7 +244,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						angleVector,
 						ProjectileType<SoulboundArrow>(),
@@ -269,7 +269,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 				Vector2 spawnPos = center + offset * spawnRadius;
 				Vector2 spawnVelocity = -offset * travelSpeed;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					spawnPos,
 					spawnVelocity,
 					ProjectileType<SoulboundSpecialSword>(),

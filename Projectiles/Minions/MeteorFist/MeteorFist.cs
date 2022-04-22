@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 				leader.minionPos == Projectile.minionPos &&
 				player.ownedProjectileCounts[ProjectileType<MeteorFistHead>()] == 0)
 			{
-				Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<MeteorFistHead>(), 0, 0, Main.myPlayer);
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<MeteorFistHead>(), 0, 0, Main.myPlayer);
 			}
 			Projectile head = GetHead(ProjectileType<MeteorFistHead>());
 			if (head == default)

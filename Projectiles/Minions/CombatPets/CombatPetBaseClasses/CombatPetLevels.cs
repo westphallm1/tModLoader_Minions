@@ -338,7 +338,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				int projType = projectileTypes[i];
 				if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] <= 0)
 				{
-					var p = Projectile.NewProjectileDirect(player.GetProjectileSource_Buff(buffIndex), player.Center, Vector2.Zero, projType, 0, 0, player.whoAmI);
+					var p = Projectile.NewProjectileDirect(player.GetSource_Buff(buffIndex), player.Center, Vector2.Zero, projType, 0, 0, player.whoAmI);
 					// p.originalDamage is updated in each frame by the minion itself
 					p.originalDamage = 0;
 				}
@@ -379,7 +379,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				"This pet's fighting spirit has been awakened!\n" +
 				"It can be powered up by holding a Combat Pet Emblem.")
 			{
-				overrideColor = Color.LimeGreen
+				OverrideColor = Color.LimeGreen
 			});
 
 
@@ -394,14 +394,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					CombatPetLevelTable.PetLevelTable[attackPatternUpdateTier].Description + 
 					" Combat Pet Emblem or stronger!")
 				{
-					overrideColor = Color.Gray
+					OverrideColor = Color.Gray
 				});
 			} else
 			{
 				tooltips.Add(new TooltipLine(mod, "CombatPetLeveledUp", 
 					"Your emblem enables this pet's stronger attack pattern!")
 				{
-					overrideColor = Color.LimeGreen
+					OverrideColor = Color.LimeGreen
 				});
 			}
 		}

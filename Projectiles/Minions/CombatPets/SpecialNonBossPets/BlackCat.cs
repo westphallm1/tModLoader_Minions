@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			}
 			Projectile.rotation = Projectile.velocity.X * 0.05f;
 			Projectile.spriteDirection = -Math.Sign(Projectile.velocity.X);
-			if(Main.rand.Next(3) == 0)
+			if(Main.rand.NextBool(3))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Shadowflame, Alpha: 80);
 				Main.dust[dustId].noGravity = true;

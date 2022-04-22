@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		{
 			Projectile.frame++;
 			Projectile.rotation = 0.02f * Projectile.velocity.X;
-			if(Main.rand.Next(3) == 0)
+			if(Main.rand.NextBool(3))
 			{
 				AddDust();
 			}
@@ -158,7 +158,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void AI()
 		{
 			base.AI();
-			if(Main.rand.Next(5) == 0)
+			if(Main.rand.NextBool(5))
 			{
 				AddDust();
 			}

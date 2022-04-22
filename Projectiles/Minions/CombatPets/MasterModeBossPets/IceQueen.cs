@@ -113,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Vector2 spawnPos = Main.npc[idx].Top;
 				float spawnY = spawnPos.Y;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					spawnPos - 128 * spawnAngle,
 					VaryLaunchVelocity(hsHelper.projectileVelocity * spawnAngle),
 					projId,

@@ -240,7 +240,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			{
 				for (int i = currentHeadCount; i < EmpowerCount + 1; i++)
 				{
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.Center, Projectile.velocity, headType, Projectile.damage, Projectile.knockBack, player.whoAmI);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, headType, Projectile.damage, Projectile.knockBack, player.whoAmI);
 				}
 
 				if (currentHeadCount > EmpowerCount + 1)

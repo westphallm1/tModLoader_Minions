@@ -85,7 +85,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			}
 			if(Main.rand.Next(isIdling? 6: 2) == 0)
 			{
-				int goreIdx = Gore.NewGore(Projectile.Center, Vector2.Zero, GoreID.LightningBunnySparks);
+				var source = Projectile.GetSource_FromThis();
+				int goreIdx = Gore.NewGore(source, Projectile.Center, Vector2.Zero, GoreID.LightningBunnySparks);
 				Main.gore[goreIdx].position = Projectile.position;
 				Main.gore[goreIdx].velocity = Vector2.Zero;
 				Main.gore[goreIdx].scale = Main.rand.NextFloat(0.8f, 1.2f);

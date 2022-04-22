@@ -80,13 +80,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void Kill(int timeLeft)
 		{
 			float goreVel = 0.25f;
+			var source = Projectile.GetSource_Death();
 			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 			{
 				if(Main.rand.Next(3) > 0)
 				{
 					continue;
 				}
-				int goreIdx = Gore.NewGore(Projectile.position, default, Main.rand.Next(61, 64));
+				int goreIdx = Gore.NewGore(source, Projectile.position, default, Main.rand.Next(61, 64));
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += offset;
 			}
@@ -134,7 +135,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.AfterMoving();
 			if(!wasFlyingThisFrame && gHelper.isFlying)
 			{
-				Gore.NewGore(Projectile.Center, Vector2.Zero, GoreID.KingSlimePetCrown);
+				var source = Projectile.GetSource_FromThis();
+				Gore.NewGore(source, Projectile.Center, Vector2.Zero, GoreID.KingSlimePetCrown);
 			}
 			wasFlyingThisFrame = gHelper.isFlying;
 		}
@@ -163,7 +165,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			{
 				lastSpawnedFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					launchVel,
 					projType,

@@ -255,7 +255,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					angleToTarget += targetVelocity / 4;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<PygmySpear>(),

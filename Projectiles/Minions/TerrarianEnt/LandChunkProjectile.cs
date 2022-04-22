@@ -352,7 +352,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			{
 				hasSpawnedSwarm = true;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					target.Center,
 					Vector2.Zero,
 					projType,

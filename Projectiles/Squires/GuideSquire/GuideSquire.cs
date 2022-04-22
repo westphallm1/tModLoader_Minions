@@ -103,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				target.AddBuff(BuffID.OnFire, 180);
 			}
@@ -215,7 +215,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						angleVector,
 						ProjectileType<GuideArrow>(),
@@ -235,7 +235,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				float launchAngle = -(7 * MathHelper.Pi / 16 + Main.rand.NextFloat(MathHelper.Pi / 8));
 				Vector2 launchVec = launchAngle.ToRotationVector2() * 20;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					launchVec,
 					ProjectileType<AscendingGuideArrow>(),
@@ -261,7 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				launchAngle.SafeNormalize();
 				launchAngle *= 20;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					spawnPos,
 					launchAngle,
 					ProjectileType<DescendingGuideArrow>(),

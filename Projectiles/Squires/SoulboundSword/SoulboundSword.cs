@@ -137,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center, 
 					Projectile.velocity, 
 					ProjectileType<SoulboundSpecialBow>(), 

@@ -244,7 +244,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(targetNPCIndex is int idx)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(lineOfFire),
 					projId,

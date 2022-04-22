@@ -140,7 +140,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 				if(player.whoAmI == Main.myPlayer)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center + vectorToTargetPosition,
 						Vector2.Zero,
 						ProjectileType<TitaniumDroneDamageHitbox>(),
@@ -236,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					Vector2.Zero,
 					ProjectileType<TitaniumSquireDrone>(),

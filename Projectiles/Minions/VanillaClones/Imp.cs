@@ -227,7 +227,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Projectile.rotation = Projectile.velocity.X * 0.05f;
 
 			// vanilla code for sparkly dust
-			if (Main.rand.Next(6) == 0)
+			if (Main.rand.NextBool(6))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 2f);
 				Main.dust[dustId].velocity *= 0.3f;
@@ -319,7 +319,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
@@ -401,7 +401,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					damage = player.GetModPlayer<LeveledCombatPetModPlayer>().PetDamage;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center + fireOffset,
 					VaryLaunchVelocity(randomShoot),
 					projId,

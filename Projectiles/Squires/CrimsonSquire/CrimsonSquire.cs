@@ -147,16 +147,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 				dustIdx = Dust.NewDust(position, width, height, DustId, 0f, 0f, 100, default, 1.5f);
 				Main.dust[dustIdx].velocity *= 1.5f;
 			}
+			var source = Projectile.GetSource_Death();
 			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 			{
-				int goreIdx = Gore.NewGore(position, default, Main.rand.Next(61, 64));
+				int goreIdx = Gore.NewGore(source, position, default, Main.rand.Next(61, 64));
 				Main.gore[goreIdx].velocity *= 0.25f;
 				Main.gore[goreIdx].velocity += offset;
 			}
 			if(Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					Vector2.Zero,
 					ProjectileType<EvilSquireExplosion>(),
@@ -222,7 +223,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<IchorFlaskProjectile>(),

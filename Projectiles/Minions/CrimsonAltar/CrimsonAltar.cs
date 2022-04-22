@@ -225,7 +225,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 				framesSinceLastHit = 0;
 				for (int i = 0; i < EmpowerCount; i++)
 				{
-					bool summonBig = EmpowerCount >= 4 && Main.rand.Next(4) == 0;
+					bool summonBig = EmpowerCount >= 4 && Main.rand.NextBool(4);
 					int projType = summonBig ? ProjectileType<CrimsonAltarBigCrimera>() : ProjectileType<CrimsonAltarCrimera>();
 					float rangeSquare = Math.Min(120, vectorToTargetPosition.Length() / 2);
 					vectorToTargetPosition.X += Main.rand.NextFloat() * rangeSquare - rangeSquare / 2;
@@ -238,7 +238,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 					if (Main.myPlayer == player.whoAmI)
 					{
 						Projectile.NewProjectile(
-							Projectile.GetProjectileSource_FromThis(),
+							Projectile.GetSource_FromThis(),
 							pos,
 							VaryLaunchVelocity(vectorToTargetPosition),
 							projType,
@@ -308,7 +308,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			Projectile.spriteDirection = 1;
 			Projectile.frame = Math.Min(4, (int)EmpowerCount) - 1;
 			Projectile.rotation += player.direction / 32f;
-			if (Main.rand.Next(120) == 0)
+			if (Main.rand.NextBool(120))
 			{
 				for (int i = 0; i < 3; i++)
 				{

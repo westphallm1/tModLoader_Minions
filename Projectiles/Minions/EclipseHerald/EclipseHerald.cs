@@ -169,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						pos,
 						vectorToTargetPosition,
 						ProjectileType<EclipseSphere>(),

@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
 		{
 			Projectile.NewProjectile(
-				projectile.GetProjectileSource_FromThis(),
+				projectile.GetSource_FromThis(),
 				projectile.Center,
 				minion.VaryLaunchVelocity(lineOfFire),
 				projId,

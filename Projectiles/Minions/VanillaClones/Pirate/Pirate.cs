@@ -146,11 +146,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 				dustIdx = Dust.NewDust(position, width, height, 6, 0f, 0f, 100, default, 1.5f);
 				Main.dust[dustIdx].velocity *= 1.5f;
 			}
+			var source = projectile.GetSource_FromThis();
 			for (float goreVel = 0.25f; goreVel < 0.5f; goreVel += 0.25f)
 			{
 				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 				{
-					int goreIdx = Gore.NewGore(position, default, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, position, default, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].velocity *= goreVel;
 					Main.gore[goreIdx].velocity += offset;
 				}
@@ -158,7 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			if(projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					projectile.GetProjectileSource_FromThis(),
+					projectile.GetSource_FromThis(),
 					projectile.Center,
 					Vector2.Zero,
 					ProjectileType<PirateCannonballExplosion>(),
@@ -369,7 +370,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					angleToTarget += targetVelocity / 4;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<PirateDeadeyeBullet>(),
@@ -602,11 +603,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 				int dustIdx = Dust.NewDust(Projectile.Center - new Vector2(8, 8), 16, 16, 31, 0f, 0f, 100, default, 1.5f);
 				Main.dust[dustIdx].velocity *= 0.25f;
 			}
+			var source = Projectile.GetSource_FromThis();
 			for (float goreVel = 0.2f; goreVel < 0.4f; goreVel += 0.2f)
 			{
 				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 				{
-					int goreIdx = Gore.NewGore(Projectile.Center, default, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, Projectile.Center, default, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].velocity *= goreVel;
 					Main.gore[goreIdx].velocity += offset;
 					Main.gore[goreIdx].scale *= Main.rand.NextFloat(0.25f, 0.4f);

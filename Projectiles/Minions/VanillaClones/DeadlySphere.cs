@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.dust[dustId].velocity.X *= 1.2f;
 			Main.dust[dustId].velocity.Y *= 1.2f;
 			Main.dust[dustId].noGravity = true;
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				Main.dust[dustId].scale *= 2f;
 				Main.dust[dustId].velocity.X *= 2f;
@@ -388,7 +388,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(vectorToTarget == null || animationFrame - hsHelper.lastShootFrame > 60)
 			{
 				Projectile.rotation += MathHelper.TwoPi/60;
-				if (Main.rand.Next(2) == 0)
+				if (Main.rand.NextBool(2))
 				{
 					for (float angle = 0; angle < MathHelper.TwoPi; angle += MathHelper.PiOver2)
 					{
