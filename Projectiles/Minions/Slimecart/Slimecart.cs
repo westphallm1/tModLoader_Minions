@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 {
 	public class SlimecartMinionBuff : MinionBuff
 	{
-		public SlimecartMinionBuff() : base(ProjectileType<SlimecartMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimecartMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

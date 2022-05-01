@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 {
 	public class NullHatchetMinionBuff : MinionBuff
 	{
-		public NullHatchetMinionBuff() : base(ProjectileType<NullHatchetMinion>(), ProjectileType<NullHatchetMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<NullHatchetMinion>(), ProjectileType<NullHatchetMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 {
 	public class CrimsonAltarMinionBuff : MinionBuff
 	{
-		public CrimsonAltarMinionBuff() : base(ProjectileType<CrimsonAltarCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CrimsonAltarCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

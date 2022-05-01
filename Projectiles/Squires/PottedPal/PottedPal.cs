@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 {
 	public class PottedPalMinionBuff : MinionBuff
 	{
-		public PottedPalMinionBuff() : base(ProjectileType<PottedPalMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PottedPalMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

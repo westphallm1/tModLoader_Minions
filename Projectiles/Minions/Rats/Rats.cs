@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 {
 	public class RatsMinionBuff : MinionBuff
 	{
-		public RatsMinionBuff() : base(ProjectileType<RatsMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<RatsMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

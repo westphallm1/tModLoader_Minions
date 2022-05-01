@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 {
 	public class CorruptionAltarMinionBuff : MinionBuff
 	{
-		public CorruptionAltarMinionBuff() : base(ProjectileType<CorruptionAltarCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CorruptionAltarCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

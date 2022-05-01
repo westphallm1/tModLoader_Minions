@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
 	public class SugarGliderMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public SugarGliderMinionBuff() : base(ProjectileType<SugarGliderMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SugarGliderMinion>() };
 		public override string VanillaBuffName => "SugarGlider";
 		public override int VanillaBuffId => BuffID.SugarGlider;
 	}

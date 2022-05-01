@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 {
 	public class SqueyereMinionBuff : MinionBuff
 	{
-		public SqueyereMinionBuff() : base(ProjectileType<SqueyereMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SqueyereMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

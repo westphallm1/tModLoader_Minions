@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class UFOMinionBuff : MinionBuff
 	{
-		public UFOMinionBuff() : base(ProjectileType<UFOMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<UFOMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

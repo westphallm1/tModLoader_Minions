@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 {
 	public class StarSurferMinionBuff : MinionBuff
 	{
-		public StarSurferMinionBuff() : base(ProjectileType<StarSurferMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StarSurferMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

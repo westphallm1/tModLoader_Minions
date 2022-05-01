@@ -12,15 +12,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	{
 
 		internal int[] projectileTypes;
-		public MinionBuff(params int[] projectileTypes)
-		{
-			this.projectileTypes = projectileTypes;
-		}
+		internal abstract int[] ProjectileTypes { get; }
 
 		public override void SetStaticDefaults()
 		{
 			Main.buffNoSave[Type] = true;
 			Main.buffNoTimeDisplay[Type] = true;
+			projectileTypes = ProjectileTypes;
 			MinionTacticsGroupMapper.AddBuffMapping(this);
 		}
 

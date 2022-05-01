@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 {
 	public class PumpkinSquireMinionBuff : MinionBuff
 	{
-		public PumpkinSquireMinionBuff() : base(ProjectileType<PumpkinSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PumpkinSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 {
 	public class GoblinGunnerMinionBuff : MinionBuff
 	{
-		public GoblinGunnerMinionBuff() : base(ProjectileType<GoblinGunnerCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<GoblinGunnerCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

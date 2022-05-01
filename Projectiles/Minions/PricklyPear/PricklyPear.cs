@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 {
 	public class PricklyPearMinionBuff : MinionBuff
 	{
-		public PricklyPearMinionBuff() : base(ProjectileType<PricklyPearMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PricklyPearMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

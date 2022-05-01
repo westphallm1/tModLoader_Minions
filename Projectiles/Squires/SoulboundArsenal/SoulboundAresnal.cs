@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 {
 	public class SoulboundArsenalMinionBuff : MinionBuff
 	{
-		public SoulboundArsenalMinionBuff() : base(ProjectileType<SoulboundArsenalMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SoulboundArsenalMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

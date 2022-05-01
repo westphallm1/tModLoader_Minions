@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 {
 	public class NecromancerMinionBuff : MinionBuff
 	{
-		public NecromancerMinionBuff() : base(ProjectileType<NecromancerMinion>(), ProjectileType<NecromancerSkeletonMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<NecromancerMinion>(), ProjectileType<NecromancerSkeletonMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

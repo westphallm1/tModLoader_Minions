@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
 	public class SmolederMinionBuff : CombatPetBuff
     {
-        public SmolederMinionBuff() : base(ProjectileType<SmolederMinion>()) { }
+        internal override int[] ProjectileTypes => new int[] { ProjectileType<SmolederMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

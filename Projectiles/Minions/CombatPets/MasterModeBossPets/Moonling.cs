@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class MoonlingMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public MoonlingMinionBuff() : base(ProjectileType<MoonlingMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<MoonlingMinion>() };
 
 		public override int VanillaBuffId => BuffID.MoonLordPet;
 

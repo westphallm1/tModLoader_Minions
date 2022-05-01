@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 {
 	public class ArmoredBoneSquireMinionBuff : MinionBuff
 	{
-		public ArmoredBoneSquireMinionBuff() : base(ProjectileType<ArmoredBoneSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<ArmoredBoneSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -292,7 +292,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 	public class SpiritFlailDrawer : WormDrawer
 	{
 
-		public SpiritFlailDrawer() : base(128, 48, 200)
+		public SpiritFlailDrawer()
 		{
 			SegmentCount = 3; 
 		}

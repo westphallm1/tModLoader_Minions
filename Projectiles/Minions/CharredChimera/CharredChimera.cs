@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 {
 	public class CharredChimeraMinionBuff : MinionBuff
 	{
-		public CharredChimeraMinionBuff() : base(ProjectileType<CharredChimeraCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CharredChimeraCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

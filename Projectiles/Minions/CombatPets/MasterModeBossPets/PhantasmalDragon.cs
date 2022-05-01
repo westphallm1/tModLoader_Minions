@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class PhantasmalDragonMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public PhantasmalDragonMinionBuff() : base(ProjectileType<PhantasmalDragonMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PhantasmalDragonMinion>() };
 
 		public override int VanillaBuffId => BuffID.LunaticCultistPet;
 

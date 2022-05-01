@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 	public class TumbleSheepMinionBuff : MinionBuff
 	{
-		public TumbleSheepMinionBuff() : base(ProjectileType<TumbleSheepMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<TumbleSheepMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

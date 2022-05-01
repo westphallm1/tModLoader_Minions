@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 {
 	public class CrystalFistMinionBuff : MinionBuff
 	{
-		public CrystalFistMinionBuff() : base(ProjectileType<CrystalFistMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CrystalFistMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

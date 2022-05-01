@@ -321,8 +321,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			CombatPetBuffTypes = null;
 		}
 
-		public CombatPetBuff(params int[] projIds) : base(projIds) { }
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -358,8 +356,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 	{
 		public abstract int VanillaBuffId { get; }
 		public abstract string VanillaBuffName { get; }
-
-		public CombatPetVanillaCloneBuff(params int[] projIds) : base(projIds) { }
 
 		public override string Texture => "Terraria/Images/Buff_" + VanillaBuffId;
 		public override void SetStaticDefaults()

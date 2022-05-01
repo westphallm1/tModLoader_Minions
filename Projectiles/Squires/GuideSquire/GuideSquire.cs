@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 {
 	public class GuideSquireMinionBuff : MinionBuff
 	{
-		public GuideSquireMinionBuff() : base(ProjectileType<GuideSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<GuideSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

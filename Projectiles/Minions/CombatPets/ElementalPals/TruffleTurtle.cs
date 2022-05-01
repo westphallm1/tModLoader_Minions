@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
 	public class TruffleTurtleMinionBuff : CombatPetBuff
     {
-        public TruffleTurtleMinionBuff() : base(ProjectileType<TruffleTurtleMinion>()) { }
+        internal override int[] ProjectileTypes => new int[] { ProjectileType<TruffleTurtleMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

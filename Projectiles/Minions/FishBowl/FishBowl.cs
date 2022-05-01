@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 {
 	public class FishBowlMinionBuff : MinionBuff
 	{
-		public FishBowlMinionBuff() : base(ProjectileType<FishBowlMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<FishBowlMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

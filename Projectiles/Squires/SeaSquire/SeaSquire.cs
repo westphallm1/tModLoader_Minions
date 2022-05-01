@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 {
 	public class SeaSquireMinionBuff : MinionBuff
 	{
-		public SeaSquireMinionBuff() : base(ProjectileType<SeaSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SeaSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

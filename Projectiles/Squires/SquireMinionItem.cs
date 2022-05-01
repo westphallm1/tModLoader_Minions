@@ -62,7 +62,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override bool CanUseItem(Player player)
 		{
-			Main.NewText("Bonk!");
 			if (player.ownedProjectileCounts[Item.shoot] > 0)
 			{
 				Item.UseSound = null;

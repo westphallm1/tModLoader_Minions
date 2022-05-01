@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 {
 	public class MysticPaintbrushMinionBuff : MinionBuff
 	{
-		public MysticPaintbrushMinionBuff() : base(ProjectileType<MysticPaintbrushMinion>(), ProjectileType<MysticPaintbrushMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<MysticPaintbrushMinion>(), ProjectileType<MysticPaintbrushMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
 	public class BabyRedPandaMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public BabyRedPandaMinionBuff() : base(ProjectileType<BabyRedPandaMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BabyRedPandaMinion>() };
 		public override string VanillaBuffName => "BabyRedPanda";
 		public override int VanillaBuffId => BuffID.BabyRedPanda;
 	}

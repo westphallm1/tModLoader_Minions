@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 {
 	public class StardustSquireMinionBuff : MinionBuff
 	{
-		public StardustSquireMinionBuff() : base(ProjectileType<StardustSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

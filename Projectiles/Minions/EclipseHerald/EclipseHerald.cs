@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 {
 	public class EclipseHeraldMinionBuff : MinionBuff
 	{
-		public EclipseHeraldMinionBuff() : base(ProjectileType<EclipseHeraldCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<EclipseHeraldCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

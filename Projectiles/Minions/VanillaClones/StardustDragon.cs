@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class StardustDragonMinionBuff : MinionBuff
 	{
-		public StardustDragonMinionBuff() : base(ProjectileType<StardustDragonCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustDragonCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -114,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class StardustDragonDrawer : WormDrawer
 	{
 
-		public StardustDragonDrawer() : base()
+		public StardustDragonDrawer()
 		{
 			if(!Main.dedServ)
 			{

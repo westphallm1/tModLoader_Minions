@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class StardustCellMinionBuff : MinionBuff
 	{
-		public StardustCellMinionBuff() : base(ProjectileType<StardustCellMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustCellMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 {
 	public class VoidKnifeMinionBuff : MinionBuff
 	{
-		public VoidKnifeMinionBuff() : base(ProjectileType<VoidKnifeMinion>(), ProjectileType<VoidKnifeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<VoidKnifeMinion>(), ProjectileType<VoidKnifeMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

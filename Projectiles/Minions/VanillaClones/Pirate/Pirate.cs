@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 {
 	public class PirateMinionBuff : MinionBuff
 	{
-		public PirateMinionBuff() : base(ProjectileType<PirateMinion>(), ProjectileType<ParrotMinion>(), ProjectileType<PirateDeadeyeMinion>(), ProjectileType<FlyingDutchmanMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PirateMinion>(), ProjectileType<ParrotMinion>(), ProjectileType<PirateDeadeyeMinion>(), ProjectileType<FlyingDutchmanMinion>() };
 			
 		public override void SetStaticDefaults()
 		{

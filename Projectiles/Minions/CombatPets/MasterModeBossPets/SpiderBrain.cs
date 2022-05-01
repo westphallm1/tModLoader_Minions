@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class SpiderBrainMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public SpiderBrainMinionBuff() : base(ProjectileType<SpiderBrainMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SpiderBrainMinion>() };
 
 		public override int VanillaBuffId => BuffID.BrainOfCthulhuPet;
 

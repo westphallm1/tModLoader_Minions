@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 {
 	public class AncientCobaltSquireMinionBuff : MinionBuff
 	{
-		public AncientCobaltSquireMinionBuff() : base(ProjectileType<AncientCobaltSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<AncientCobaltSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

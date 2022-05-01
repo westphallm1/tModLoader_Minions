@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 {
 	public class BombBuddyMinionBuff : MinionBuff
 	{
-		public BombBuddyMinionBuff() : base(ProjectileType<BombBuddyMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BombBuddyMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
 	public class CinderHenMinionBuff : CombatPetBuff
 	{
-		public CinderHenMinionBuff() : base(ProjectileType<CinderHenMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CinderHenMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

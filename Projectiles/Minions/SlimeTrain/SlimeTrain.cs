@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 {
 	public class SlimeTrainMinionBuff : MinionBuff
 	{
-		public SlimeTrainMinionBuff() : base(ProjectileType<SlimeTrainCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimeTrainCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class TwinsMinionBuff : MinionBuff
 	{
-		public TwinsMinionBuff() : base(ProjectileType<MiniRetinazerMinion>(), ProjectileType<MiniSpazmatismMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<MiniRetinazerMinion>(), ProjectileType<MiniSpazmatismMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class IceQueenMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public IceQueenMinionBuff() : base(ProjectileType<IceQueenMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<IceQueenMinion>() };
 
 		public override int VanillaBuffId => BuffID.IceQueenPet;
 

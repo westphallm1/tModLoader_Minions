@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 {
 	public class BeeQueenMinionBuff : MinionBuff
 	{
-		public BeeQueenMinionBuff() : base(ProjectileType<BeeQueenCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BeeQueenCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

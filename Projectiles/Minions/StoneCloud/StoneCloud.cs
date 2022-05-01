@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 {
 	public class StoneCloudMinionBuff : MinionBuff
 	{
-		public StoneCloudMinionBuff() : base(ProjectileType<StoneCloudMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StoneCloudMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

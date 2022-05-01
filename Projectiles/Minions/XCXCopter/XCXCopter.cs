@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 {
 	public class XCXCopterMinionBuff : MinionBuff
 	{
-		public XCXCopterMinionBuff() : base(ProjectileType<XCXCopterCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<XCXCopterCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

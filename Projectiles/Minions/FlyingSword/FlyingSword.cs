@@ -10,7 +10,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 {
 	public class FlyingSwordMinionBuff : MinionBuff
 	{
-		public FlyingSwordMinionBuff() : base(ProjectileType<FlyingSwordMinion>(), ProjectileType<FlyingSwordMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<FlyingSwordMinion>(), ProjectileType<FlyingSwordMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

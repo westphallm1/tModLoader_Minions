@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 {
 	public class BalloonBuddyMinionBuff : MinionBuff
 	{
-		public BalloonBuddyMinionBuff() : base(ProjectileType<BalloonBuddyCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BalloonBuddyCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

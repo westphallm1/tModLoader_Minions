@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class EverscreamSaplingMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public EverscreamSaplingMinionBuff() : base(ProjectileType<EverscreamSaplingMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<EverscreamSaplingMinion>() };
 
 		public override int VanillaBuffId => BuffID.EverscreamPet;
 

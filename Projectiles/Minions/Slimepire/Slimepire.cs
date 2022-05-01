@@ -9,7 +9,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 {
 	public class SlimepireMinionBuff : MinionBuff
 	{
-		public SlimepireMinionBuff() : base(ProjectileType<SlimepireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimepireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

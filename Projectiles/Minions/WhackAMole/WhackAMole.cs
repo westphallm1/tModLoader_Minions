@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 {
 	public class WhackAMoleMinionBuff : MinionBuff
 	{
-		public WhackAMoleMinionBuff() : base(ProjectileType<WhackAMoleCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<WhackAMoleCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

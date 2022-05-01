@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 {
 	public class AcornMinionBuff : MinionBuff
 	{
-		public AcornMinionBuff() : base(ProjectileType<AcornMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<AcornMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

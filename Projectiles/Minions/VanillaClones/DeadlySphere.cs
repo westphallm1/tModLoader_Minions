@@ -17,10 +17,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class DeadlySphereMinionBuff : MinionBuff
 	{
-		public DeadlySphereMinionBuff() : base(
-			ProjectileType<DeadlySphereMinion>(), 
+		internal override int[] ProjectileTypes => new int[] {
+			ProjectileType<DeadlySphereMinion>(),
 			ProjectileType<DeadlySphereClingerMinion>(),
-			ProjectileType<DeadlySphereFireMinion>()) { }
+			ProjectileType<DeadlySphereFireMinion>()
+		};
+		
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

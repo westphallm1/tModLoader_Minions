@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 {
 	public class GoblinTechnomancerMinionBuff : MinionBuff
 	{
-		public GoblinTechnomancerMinionBuff() : base(ProjectileType<GoblinTechnomancerMinion>(), ProjectileType<GoblinTechnomancerProbeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<GoblinTechnomancerMinion>(), ProjectileType<GoblinTechnomancerProbeMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

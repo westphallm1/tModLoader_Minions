@@ -15,11 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class SpiderMinionBuff : MinionBuff
 	{
-		public SpiderMinionBuff() : base(
-			ProjectileType<JumperSpiderMinion>(),
-			ProjectileType<VenomSpiderMinion>(),
-			ProjectileType<DangerousSpiderMinion>()
-			) { }
+		internal override int[] ProjectileTypes => new int[] {  ProjectileType<JumperSpiderMinion>(), ProjectileType<VenomSpiderMinion>(), ProjectileType<DangerousSpiderMinion>()  };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -29,12 +25,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			projectileTypes = new int[]
-			{
-				ProjectileType<JumperSpiderMinion>(),
-				ProjectileType<VenomSpiderMinion>(),
-				ProjectileType<DangerousSpiderMinion>()
-			};
 			if (projectileTypes.Select(p => player.ownedProjectileCounts[p]).Sum() > 0)
 			{
 				player.buffTime[buffIndex] = 18000;

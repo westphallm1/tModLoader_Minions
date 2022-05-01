@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 {
 	public class MeteorFistMinionBuff : MinionBuff
 	{
-		public MeteorFistMinionBuff() : base(ProjectileType<MeteorFistMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<MeteorFistMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class HoneyBeeMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public HoneyBeeMinionBuff() : base(ProjectileType<HoneyBeeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<HoneyBeeMinion>() };
 
 		public override int VanillaBuffId => BuffID.QueenBeePet;
 

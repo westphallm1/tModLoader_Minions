@@ -10,7 +10,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 {
 	public class CopperSwordMinionBuff : MinionBuff
 	{
-		public CopperSwordMinionBuff() : base(ProjectileType<CopperSwordMinion>(), ProjectileType<CopperSwordMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CopperSwordMinion>(), ProjectileType<CopperSwordMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 {
 	public class SharkPupMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public SharkPupMinionBuff() : base(ProjectileType<SharkPupMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SharkPupMinion>() };
 		public override string VanillaBuffName => "SharkPup";
 		public override int VanillaBuffId => BuffID.SharkPup;
 	}

@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 {
 	public class BoneSerpentMinionBuff : MinionBuff
 	{
-		public BoneSerpentMinionBuff() : base(ProjectileType<BoneSerpentCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BoneSerpentCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

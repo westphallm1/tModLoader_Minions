@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 {
 	public class ExciteSkullMinionBuff : MinionBuff
 	{
-		public ExciteSkullMinionBuff() : base(ProjectileType<ExciteSkullMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<ExciteSkullMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

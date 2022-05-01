@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class DestroyerLiteMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public DestroyerLiteMinionBuff() : base(ProjectileType<DestroyerLiteMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<DestroyerLiteMinion>() };
 
 		public override int VanillaBuffId => BuffID.DestroyerPet;
 

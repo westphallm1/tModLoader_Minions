@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
 	public class SpiritGunMinionBuff : MinionBuff
 	{
-		public SpiritGunMinionBuff() : base(ProjectileType<SpiritGunCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SpiritGunCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
 	public class CompanionCubeMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public CompanionCubeMinionBuff() : base(ProjectileType<CompanionCubeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CompanionCubeMinion>() };
 		public override int VanillaBuffId => BuffID.CompanionCube;
 		public override string VanillaBuffName => "CompanionCube";
 	}

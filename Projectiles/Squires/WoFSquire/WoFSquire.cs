@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 {
 	public class GuideVoodooSquireMinionBuff : MinionBuff
 	{
-		public GuideVoodooSquireMinionBuff() : base(ProjectileType<GuideVoodooSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<GuideVoodooSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 	}
 	public class WoFSquireMinionBuff : MinionBuff
 	{
-		public WoFSquireMinionBuff() : base(ProjectileType<WoFSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<WoFSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			//TODO 1.4 did not call base before

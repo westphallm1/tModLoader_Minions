@@ -19,12 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class RezAndSpazMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// the occasional case where it doesn't work on load
-			projectileTypes = new int[] { ProjectileType<RezMinion>(), ProjectileType<SpazMinion>() };
-		}
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<RezMinion>(), ProjectileType<SpazMinion>() };
 
 		public override int VanillaBuffId => BuffID.TwinsPet;
 
