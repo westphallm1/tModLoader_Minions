@@ -166,7 +166,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 	public abstract class SoulboundArsenalBaseMinion : CoordinatedWeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SoulboundArsenalMinionBuff>();
-		protected SoulboundArsenalBaseMinion(int itemID) : base(itemID) { }
+		protected override int ItemType => ItemType<SoulboundArsenalMinionItem>();
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => null;
 
@@ -226,7 +226,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		protected override WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.VERTICAL;
 
-		public SoulboundArsenalBowMinion() : base(ItemType<SoulboundArsenalMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -304,7 +303,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override bool IsBoss => true;
 
-		public SoulboundArsenalMinion() : base(ItemType<SoulboundArsenalMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

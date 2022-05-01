@@ -216,6 +216,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 	public class SqueyereMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SqueyereMinionBuff>();
+		protected override int ItemType => ItemType<SqueyereMinionItem>();
 		protected override int AttackFrames => 60;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => null;
@@ -233,8 +234,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
-
-		public SqueyereMinion() : base(ItemType<SqueyereMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

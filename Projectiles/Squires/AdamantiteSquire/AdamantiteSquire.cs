@@ -54,6 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 	{
 
 		internal override int BuffId => BuffType<AdamantiteSquireMinionBuff>();
+		protected override int ItemType => ItemType<AdamantiteSquireMinionItem>();
 		protected override int AttackFrames => 25;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -73,8 +74,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		private MotionBlurDrawer blurHelper;
 		private int dashDirection = 1;
 		private bool isDashing = false;
-
-		public AdamantiteSquireMinion() : base(ItemType<AdamantiteSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

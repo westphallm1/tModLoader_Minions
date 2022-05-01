@@ -86,8 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 	{
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundBow";
 		internal override int BuffId => BuffType<SoulboundSwordMinionBuff>();
-
-		public SoulboundSpecialBow() : base(ItemType<SoulboundSwordMinionItem>()) { }
+		protected override int ItemType => ItemType<SoulboundSwordMinionItem>();
 
 		public override void SetDefaults()
 		{

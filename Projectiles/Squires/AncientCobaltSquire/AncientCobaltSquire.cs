@@ -110,6 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 	public class AncientCobaltSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<AncientCobaltSquireMinionBuff>();
+		protected override int ItemType => ItemType<AncientCobaltSquireMinionItem>();
 		protected override int AttackFrames => 8;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AncientCobaltSquire/AncientCobaltStaff";
@@ -133,8 +134,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		protected override int SpecialDuration => 60;
 
 		private float weaponAngleOverride = -1;
-
-		public AncientCobaltSquireMinion() : base(ItemType<AncientCobaltSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

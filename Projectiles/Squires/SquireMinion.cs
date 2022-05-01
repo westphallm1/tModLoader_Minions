@@ -71,10 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		protected virtual LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 43);
 
-		public SquireMinion(int itemID)
-		{
-			itemType = itemID;
-		}
+		protected abstract int ItemType { get; }
 
 		public override void SetStaticDefaults()
 		{
@@ -105,6 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			base.OnSpawn();
 			baseLocalIFrames = Projectile.localNPCHitCooldown;
+			itemType = ItemType;
 		}
 
 		public override bool? CanCutTiles()

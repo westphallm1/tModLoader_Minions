@@ -112,6 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 	public class MushroomSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<MushroomSquireMinionBuff>();
+		protected override int ItemType => ItemType<MushroomSquireMinionItem>();
 		protected override int AttackFrames => 20;
 
 		protected override int SpecialDuration => 30;
@@ -125,7 +126,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		protected override Vector2 WingOffset => new Vector2(-4, 4);
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
-		public MushroomSquireMinion() : base(ItemType<MushroomSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

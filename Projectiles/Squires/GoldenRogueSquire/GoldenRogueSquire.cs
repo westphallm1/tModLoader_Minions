@@ -181,6 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	public class GoldenRogueSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<GoldenRogueSquireMinionBuff>();
+		protected override int ItemType => ItemType<GoldenRogueSquireMinionItem>();
 		protected override int AttackFrames => 12;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/GoldenWings";
@@ -208,8 +209,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		private float npcRadius;
 		private int maxKnifeCount = 8;
 		private int knivesPerRow = 8;
-
-		public GoldenRogueSquireMinion() : base(ItemType<GoldenRogueSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

@@ -109,6 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 	public class WoFSquireMinion : SquireMinion
 	{
 		internal override int BuffId => BuffType<WoFSquireMinionBuff>();
+		protected override int ItemType => ItemType<GuideVoodooSquireMinionItem>();
 		int dashDirection = 1;
 		bool isDashing;
 
@@ -132,8 +133,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		protected override int SpecialCooldown => 6 * 60;
 
 		private MotionBlurDrawer blurDrawer;
-
-		public WoFSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -501,6 +500,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 	public class GuideVoodooSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<GuideVoodooSquireMinionBuff>();
+		protected override int ItemType => ItemType<GuideVoodooSquireMinionItem>();
 		protected override int AttackFrames => 40;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => null;
@@ -524,9 +524,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 
 		protected override LegacySoundStyle attackSound => null;
-
-
-		public GuideVoodooSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

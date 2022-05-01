@@ -228,7 +228,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 	public class PottedPalMinion : SquireMinion
 	{
 		internal override int BuffId => BuffType<PottedPalMinionBuff>();
-		public PottedPalMinion() : base(ItemType<PottedPalMinionItem>()) { }
+		protected override int ItemType => ItemType<PottedPalMinionItem>();
+
 		protected int wingFrameCounter = 0;
 
 		protected override float projectileVelocity => 12;

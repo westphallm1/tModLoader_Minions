@@ -181,6 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 	public class CrimsonSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<CrimsonSquireMinionBuff>();
+		protected override int ItemType => ItemType<CrimsonSquireMinionItem>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.BloodLustCluster;
@@ -196,7 +197,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 106);
 
 		protected override int SpecialCooldown => 8 * 60;
-		public CrimsonSquireMinion() : base(ItemType<CrimsonSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

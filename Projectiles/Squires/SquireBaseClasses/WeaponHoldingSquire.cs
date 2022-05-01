@@ -51,7 +51,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected float weaponAngle = 0;
 
 		protected virtual Asset<Texture2D> WeaponTexture => ExtraTextures[1];
-		public WeaponHoldingSquire(int itemID) : base(itemID) { }
 
 		public override void LoadAssets()
 		{

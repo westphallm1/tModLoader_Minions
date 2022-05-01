@@ -61,6 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 	public class SoulboundSwordMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SoulboundSwordMinionBuff>();
+		protected override int ItemType => ItemType<SoulboundSwordMinionItem>();
 		protected override int AttackFrames => 15;
 		protected override string WingTexturePath => null;
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/SoulboundSword/SoulboundSword";
@@ -75,8 +76,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 		protected override int SpecialDuration => 2 * 60;
 		protected override int SpecialCooldown => 9 * 60;
-
-		public SoulboundSwordMinion() : base(ItemType<SoulboundSwordMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		private bool isDashing;
 		private MotionBlurDrawer blurHelper;
 		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
-		public SeaSquireSharkMinion() : base(ItemType<SeaSquireMinionItem>()) { }
+		protected override int ItemType => ItemType<SeaSquireMinionItem>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -197,6 +197,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 	public class SeaSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
+		protected override int ItemType => ItemType<SeaSquireMinionItem>();
 		protected override int AttackFrames => 35;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -211,7 +212,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
-		public SeaSquireMinion() : base(ItemType<SeaSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

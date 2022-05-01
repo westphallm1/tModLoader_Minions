@@ -155,6 +155,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 	public class SkywareSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SkywareSquireMinionBuff>();
+		protected override int ItemType => ItemType<SkywareSquireMinionItem>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => base.Texture + "_Bow";
@@ -174,9 +175,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 
 		protected override int SpecialDuration => 45;
 		protected override bool travelRangeCanBeModified => false;
-
-
-		public SkywareSquireMinion() : base(ItemType<SkywareSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

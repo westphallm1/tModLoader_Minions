@@ -47,6 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 	public class VikingSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<VikingSquireMinionBuff>();
+		protected override int ItemType => ItemType<VikingSquireMinionItem>();
 		protected override int AttackFrames => 18;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 
@@ -63,7 +64,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		protected override int SpecialCooldown => 10 * 60;
 
 		protected int swingDirection = 1;
-		public VikingSquireMinion() : base(ItemType<VikingSquireMinionItem>()) { }
 
 		public override bool PreDraw(ref Color lightColor)
 		{

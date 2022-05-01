@@ -60,6 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 	public class ShadowSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<ShadowSquireMinionBuff>();
+		protected override int ItemType => ItemType<ShadowSquireMinionItem>();
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.WarAxeoftheNight;
@@ -71,8 +72,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		protected override Vector2 WingOffset => new Vector2(-4, 0);
 
 		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 106);
-
-		public ShadowSquireMinion() : base(ItemType<ShadowSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

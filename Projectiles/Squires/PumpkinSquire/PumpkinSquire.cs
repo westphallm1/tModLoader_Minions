@@ -222,6 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 	public class PumpkinSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<PumpkinSquireMinionBuff>();
+		protected override int ItemType => ItemType<PumpkinSquireMinionItem>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/SpookyWings";
 		protected override string WeaponTexturePath => null;
@@ -241,8 +242,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		protected override bool travelRangeCanBeModified => false;
 
 		protected override int SpecialDuration => 30;
-
-		public PumpkinSquireMinion() : base(ItemType<PumpkinSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

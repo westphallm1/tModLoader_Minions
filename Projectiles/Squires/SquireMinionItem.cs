@@ -36,6 +36,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			ApplyBuff(player);
 
+			if (player.ownedProjectileCounts[Item.shoot] > 0 || player.altFunctionUse == 2)
+			{
+				return false;
+			}
+
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
@@ -57,6 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override bool CanUseItem(Player player)
 		{
+			Main.NewText("Bonk!");
 			if (player.ownedProjectileCounts[Item.shoot] > 0)
 			{
 				Item.UseSound = null;

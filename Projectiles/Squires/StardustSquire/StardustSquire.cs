@@ -270,6 +270,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 	public class StardustSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<StardustSquireMinionBuff>();
+		protected override int ItemType => ItemType<StardustSquireMinionItem>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => null;
 		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.StardustDragonStaff;
@@ -287,8 +288,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		protected override float projectileVelocity => 14;
 		private int attackSequence = 0; // kinda replicate CoordinatedWeaponHoldingSquire but not quire
 		protected override bool travelRangeCanBeModified => false;
-
-		public StardustSquireMinion() : base(ItemType<StardustSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

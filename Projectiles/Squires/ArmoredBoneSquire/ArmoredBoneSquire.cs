@@ -132,8 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 	public class SpiritFlailWormMinion : SquireMinion
 	{
-		public SpiritFlailWormMinion() : base(ItemType<ArmoredBoneSquireMinionItem>()) { }
-
+		protected override int ItemType => ItemType<ArmoredBoneSquireMinionItem>();
 		internal override int BuffId => BuffType<ArmoredBoneSquireMinionBuff>();
 
 		// used to allow the flail itself to move through walls a bit while the "center"
@@ -324,6 +323,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 	public class ArmoredBoneSquireMinion : WeaponHoldingSquire
 	{
+
+		protected override int ItemType => ItemType<ArmoredBoneSquireMinionItem>();
 		internal override int BuffId => BuffType<ArmoredBoneSquireMinionBuff>();
 		protected override int AttackFrames => 27;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
@@ -346,7 +347,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		private int firingFrame1 = 0;
 		private int firingFrame2 = 15;
-		public ArmoredBoneSquireMinion() : base(ItemType<ArmoredBoneSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

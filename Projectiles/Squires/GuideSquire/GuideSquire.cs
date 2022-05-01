@@ -160,6 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 	public class GuideSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<GuideSquireMinionBuff>();
+		protected override int ItemType => ItemType<GuideSquireMinionItem>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.WoodenBow;
@@ -180,9 +181,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		protected override int SpecialDuration => 2 * 60;
 		protected override int SpecialCooldown => 9 * 60;
 		protected override bool travelRangeCanBeModified => false;
-
-
-		public GuideSquireMinion() : base(ItemType<GuideSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{

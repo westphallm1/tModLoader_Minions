@@ -186,6 +186,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 	public class DemonSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<DemonSquireMinionBuff>();
+		protected override int ItemType => ItemType<DemonSquireMinionItem>();
 		protected override int AttackFrames => 25;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => null;
@@ -199,7 +200,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		protected override int SpecialCooldown => 10 * 60;
 
 		protected override float projectileVelocity => 12;
-		public DemonSquireMinion() : base(ItemType<DemonSquireMinionItem>()) { }
 
 		public sealed override void SetDefaults()
 		{
