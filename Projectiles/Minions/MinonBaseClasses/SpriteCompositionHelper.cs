@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal float WalkCycleAngle => MathHelper.TwoPi * walkFrame / walkCycleFrames;
 		internal float IdleCycleAngle => MathHelper.TwoPi * idleFrame / idleCycleFrames;
-		internal bool IsWalking => Math.Abs(projectile.velocity.X) > walkVelocityThreshold;
+		internal bool IsWalking => !Main.dedServ && Math.Abs(projectile.velocity.X) > walkVelocityThreshold;
 
 		internal int snapToGrid(float val) => Math.Sign(val) * (int)(Math.Abs(val) / posResolution) *  posResolution;
 
