@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.DrawLayers
 
 		protected override int GetAssociatedBodySlot()
 		{
-			return Mod.GetEquipSlot(ItemName, EquipType.Body);
+			return EquipLoader.GetEquipSlot(Mod, ItemName, EquipType.Body);
 		}
 	}
 
