@@ -39,6 +39,7 @@ namespace AmuletOfManyMinions
 		public override void PostSetupContent()
 		{
 			CrossMod.AddSummonersAssociationMetadata(this);
+			CrossMod.AddSummonersShineMetadata(this);
 			// add Journey Mode support to any item which doesn't explicitly reference it
 			var catalog = CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId;
 			IEnumerable<ModItem> items = GetContent<ModItem>().Where(i=>!catalog.ContainsKey(i.Type));

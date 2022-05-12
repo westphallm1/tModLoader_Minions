@@ -157,6 +157,13 @@ namespace AmuletOfManyMinions
 		[Tooltip("If enabled, higher level combat pet emblems will increase the number of pets you can control.")]
 		public bool AllowMultipleCombatPets;
 
+		[Header("Cross-Mod Compatibility")]
+		[Label("Disable Summoner's Shine AI Changes")]
+		[Tooltip("If true, disable AI changes to minions from this mod made by Summoner's Shine.")]
+		[DefaultValue(false)]
+		[ReloadRequired]
+		public bool DisableSummonersShineAI;
+
 		// courtesy of direwolf420
 		public static bool IsPlayerLocalServerOwner(int whoAmI)
 		{

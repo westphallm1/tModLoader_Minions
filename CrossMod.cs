@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar;
+﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar;
 using AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar;
 using AmuletOfManyMinions.Projectiles.Minions.EclipseHerald;
 using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
@@ -24,6 +25,8 @@ namespace AmuletOfManyMinions
 	class CrossMod : ModSystem
 	{
 		public static bool SummonersAssociationLoaded { get; private set; }
+
+		public static bool SummonersShineLoaded { get; private set; }
 
 		public static HashSet<int> MinionBuffTypes;
 
@@ -165,6 +168,35 @@ namespace AmuletOfManyMinions
 				varietyCount += MinionBuffTypes.Contains(buffTypes[i]) ? 1 : 0;
 			}
 			return varietyCount;
+		}
+
+
+		/// <summary>
+		/// Blacklist problem projectiles from summoner's shine's globalitems
+		/// </summary>
+		public static void AddSummonersShineMetadata(Mod mod)
+		{
+			const int ADD_FILTER = 0;
+			const int BLACKLIST_PROJECTILE = 1;
+			const int DONT_COUNT_AS_MINION = 4;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				int projType = MinionWaypoint.Type;
+				summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, projType);
+				summonersShine.Call(ADD_FILTER, DONT_COUNT_AS_MINION, projType);
+				// there are some weird speed/behavior inconsistencies
+				// with most minions, especially while following the waypoint,
+				// so give the option of disabling them all
+				if(ServerConfig.Instance.DisableSummonersShineAI)
+				{
+					IEnumerable<ModProjectile> minions = mod.GetContent<ModProjectile>().Where(p => p is Minion);
+					foreach(var minion in minions)
+					{
+						summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, minion.Type);
+						summonersShine.Call(ADD_FILTER, DONT_COUNT_AS_MINION, minion.Type);
+					}
+				}
+			}
 		}
 
 	}
