@@ -391,7 +391,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Vector2 flailPosition = Projectile.Center +
 				WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
 
-			int workingAttackFrames = (int)(attackFrames * 100 / CrossMod.ReplaceValueWithSummonersShineMinionPower(100, Projectile, 0));
+			int workingAttackFrames = (int)(AttackFrames * 100 / CrossMod.ReplaceValueWithSummonersShineMinionPower(100, Projectile, 0));
 			int attackFrame = animationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
