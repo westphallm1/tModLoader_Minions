@@ -280,7 +280,7 @@ namespace AmuletOfManyMinions
 			const int HOOKPROJECTILEMAXENERGY = 0;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				SummonersShine.Call(HOOKPROJECTILE, ProjectileType, HOOKPROJECTILEMAXENERGY, maxEnergy);
+				summonersShine.Call(HOOKPROJECTILE, ProjectileType, HOOKPROJECTILEMAXENERGY, maxEnergy);
 				return;
 			}
 			return;
