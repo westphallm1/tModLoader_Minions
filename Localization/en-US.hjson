@@ -1,10 +1,9 @@
 Mods: {
 	AmuletOfManyMinions: {
-
 		SummonSpecial: {
 			AdamantiteSquireMinionItem:
 				'''
-				While jousting, hold up the lance {1}% further
+				While jousting, the Adamantite Squire deals {1}x damage!
 				'''
 		}
 	}
