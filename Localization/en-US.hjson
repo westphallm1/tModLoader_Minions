@@ -1,0 +1,11 @@
+Mods: {
+	AmuletOfManyMinions: {
+
+		SummonSpecial: {
+			AdamantiteSquireMinionItem:
+				'''
+				While jousting, hold up the lance {1}% further
+				'''
+		}
+	}
+}
