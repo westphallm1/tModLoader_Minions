@@ -269,7 +269,7 @@ namespace AmuletOfManyMinions
 			const int GET_CURRENTTICK = 17;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				return (float)SummonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_CURRENTTICK) == 1;
+				return (float)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_CURRENTTICK) == 1;
 			}
 			return true;
 		}
