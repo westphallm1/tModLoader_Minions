@@ -31,6 +31,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of Armored Bones");
 			Tooltip.SetDefault("Summons a squire\nAn armored bone squire will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
 			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(100);
 			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
@@ -156,8 +160,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			DisplayName.SetDefault("Spirit Flail Chain");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 3;
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
 			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
+		
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -203,7 +212,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		private void SpawnWisps()
 		{
-			int workingAttackFrames = (int)(attackFrames * 100 / CrossMod.ReplaceValueWithSummonersShineMinionPower(100, Projectile, 0));
+			int workingAttackFrames = (int)(attackFrames * 100 / CrossMod.ApplyCrossModScaling(100, Projectile, 0));
 			int attackFrame = animationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
@@ -359,8 +368,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			DisplayName.SetDefault("Armored Bone Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
 			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
+		
 		public override void LoadAssets()
 		{
 			base.LoadAssets();
@@ -391,7 +405,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Vector2 flailPosition = Projectile.Center +
 				WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
 
-			int workingAttackFrames = (int)(AttackFrames * 100 / CrossMod.ReplaceValueWithSummonersShineMinionPower(100, Projectile, 0));
+			int workingAttackFrames = (int)(AttackFrames * 100 / CrossMod.ApplyCrossModScaling(100, Projectile, 0));
 			int attackFrame = animationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
