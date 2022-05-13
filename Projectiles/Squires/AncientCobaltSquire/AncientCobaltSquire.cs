@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetSource_FromThis(), 
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						angleVector,
 						ProjectileType<AncientCobaltStream>(),
@@ -185,15 +185,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		{
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			// special frame is 1-indexed because it's a bug and I can't be bothered to fix it
-			if(specialFrame % 5 == 1 && specialFrame <= 46 && Main.myPlayer == player.whoAmI)
+			if (specialFrame % 5 == 1 && specialFrame <= 46 && Main.myPlayer == player.whoAmI)
 			{
 				float angleOffset = Main.rand.NextFloat(MathHelper.Pi / 16) - MathHelper.Pi / 32;
 				Vector2 angleVector = UnitVectorFromWeaponAngle().RotatedBy(angleOffset);
-				angleVector *= ModifiedProjectileVelocity() * 2 * CrossMod.ReplaceValueWithSummonersShineMinionPower(100, Projectile, 0)) * 0.01f;
+				angleVector *= ModifiedProjectileVelocity() * 2 * CrossMod.ReplaceValueWithSummonersShineMinionPower(100, Projectile, 0) * 0.01f;
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetSource_FromThis(), 
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						angleVector,
 						ProjectileType<AncientCobaltBolt>(),
@@ -203,9 +203,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				}
 				weaponAngle += 2 * angleOffset;
 				weaponAngleOverride = weaponAngle;
-			} else if (weaponAngleOverride != -1)
+			}
+			else if (weaponAngleOverride != -1)
 			{
-				weaponAngle = weaponAngleOverride ;
+				weaponAngle = weaponAngleOverride;
 			}
 		}
 
