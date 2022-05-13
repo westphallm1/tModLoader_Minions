@@ -79,6 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				LoadAssets();
 			}
+			ApplyCrossModChanges();
 		}
 
 		public override void SetDefaults()
