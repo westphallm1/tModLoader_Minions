@@ -31,6 +31,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of Armored Bones");
 			Tooltip.SetDefault("Summons a squire\nAn armored bone squire will fight for you!\nClick and hold to guide its attacks");
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(100f);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -153,6 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			DisplayName.SetDefault("Spirit Flail Chain");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 3;
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
 		public sealed override void SetDefaults()
 		{
@@ -199,11 +203,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		private void SpawnWisps()
 		{
-			int attackFrame = animationFrame % attackFrames;
+			int workingAttackFrames = (int)(attackFrames * 100 / CrossMod.ReplaceValueWithSummonersShineMinionPower(100, Projectile, 0));
+			int attackFrame = animationFrame % workingAttackFrames;
 			if(attackFrame == 0)
 			{
-				firingFrame1 = Main.rand.Next(attackFrames);
-				firingFrame2 = Main.rand.Next(attackFrames);
+				firingFrame1 = Main.rand.Next(workingAttackFrames);
+				firingFrame2 = Main.rand.Next(workingAttackFrames);
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
@@ -354,6 +359,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			DisplayName.SetDefault("Armored Bone Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
 		public override void LoadAssets()
 		{
