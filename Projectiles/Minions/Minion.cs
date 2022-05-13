@@ -310,5 +310,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		}
 
 		public abstract void Behavior();
+		
+		public virtual void ApplyCrossModChanges() { }
 	}
 }
