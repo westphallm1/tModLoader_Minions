@@ -273,5 +273,17 @@ namespace AmuletOfManyMinions
 			}
 			return true;
 		}
+		
+		public static void SetSummonersShineProjMaxEnergy(int ProjectileType, float maxEnergy)
+		{
+			const int HOOKPROJECTILE = 1;
+			const int HOOKPROJECTILEMAXENERGY = 0;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				SummonersShine.Call(HOOKPROJECTILE, ProjectileType, HOOKPROJECTILEMAXENERGY, maxEnergy);
+				return;
+			}
+			return;
+		}
 	}
 }
