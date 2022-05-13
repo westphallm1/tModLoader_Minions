@@ -204,7 +204,7 @@ namespace AmuletOfManyMinions
 			const int ADD_ITEM_STATICS = 2;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				SummonersShine.Call(ADD_ITEM_STATICS, ItemType, null, null, minionPowers.BakeToTupleArray(), 0, true);
+				summonersShine.Call(ADD_ITEM_STATICS, ItemType, null, null, minionPowers.BakeToTupleArray(), 0, true);
 			}
 		}
 		
