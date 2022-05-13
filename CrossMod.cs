@@ -292,7 +292,7 @@ namespace AmuletOfManyMinions
 			return;
 		}
 		
-		public static int GetCrossModNormalizedSpecialDuration(int original, Projectile projectile)
+		public static int GetCrossModNormalizedSpecialFrame(int original, Projectile projectile)
 		{
 			const int GET_MINIONPROJECTILEDATA_VAR = 7;
 			const int GET_MINIONSPEEDMODTYPE = 14;
@@ -307,9 +307,9 @@ namespace AmuletOfManyMinions
 				switch(minionSpeedModType)
 				{
 					case MINIONSPEEDMODTYPE_NORMAL:
-						return original / (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETSIMRATE, projectile);
+						return (int)(original / (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETSIMRATE, projectile));
 					case MINIONSPEEDMODTYPE_STEPPED:
-						return original / (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETINTERNALSIMRATE, projectile);
+						return (int)(original / (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETINTERNALSIMRATE, projectile));
 						break;
 				}
 			}
