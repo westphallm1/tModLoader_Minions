@@ -31,6 +31,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of Bones");
 			Tooltip.SetDefault("Summons a squire\nA bone squire will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
 			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(3.75f);
 			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
@@ -98,7 +102,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			Main.projFrames[Projectile.type] = 5;
 			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
-
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
+		}
 
 		protected override Rectangle GetWeaponTextureBounds(Texture2D texture)
 		{
@@ -188,7 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void OnStopUsingSpecial() => OnStartUsingSpecial();
 
 
-		protected override float WeaponDistanceFromCenter() => 16 * CrossMod.ReplaceValueWithSummonersShineMinionPower(3.75f, Projectile, 0);
+		protected override float WeaponDistanceFromCenter() => 16 * CrossMod.ApplyCrossModScaling(3.75f, Projectile, 0);
 
 		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() - 10;
 		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 10;
