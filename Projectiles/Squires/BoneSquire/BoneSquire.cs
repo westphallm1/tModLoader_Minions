@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			DisplayName.SetDefault("Crest of Bones");
 			Tooltip.SetDefault("Summons a squire\nA bone squire will fight for you!\nClick and hold to guide its attacks");
 			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
-			minionCollection.AddMinionPower(3.75);
+			minionCollection.AddMinionPower(3.75f);
 			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void OnStopUsingSpecial() => OnStartUsingSpecial();
 
 
-		protected override float WeaponDistanceFromCenter() => 16 * CrossMod.ReplaceValueWithSummonersShineMinionPower(3.75, Projectile, 0);
+		protected override float WeaponDistanceFromCenter() => 16 * CrossMod.ReplaceValueWithSummonersShineMinionPower(3.75f, Projectile, 0);
 
 		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() - 10;
 		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 10;
