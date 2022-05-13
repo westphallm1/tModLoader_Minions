@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			index = tooltips.Count - 1;
+			int index = tooltips.Count - 1;
 			if (tooltips[index].Name == "Price")
 				index--;
 			if (tooltips[index].Name == "JourneyResearch")
