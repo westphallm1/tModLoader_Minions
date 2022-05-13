@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		protected virtual int SpecialDuration => 30;
 		protected virtual int SpecialCooldown => 6 * 60;
-		protected int specialFrame => animationFrame - specialStartFrame;
+		protected int specialFrame => GetCrossModNormalizedSpecialFrame(animationFrame - specialStartFrame);
 
 		protected bool SpecialOnCooldown => player.HasBuff(ModContent.BuffType<SquireCooldownBuff>());
 
