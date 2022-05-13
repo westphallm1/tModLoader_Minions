@@ -249,6 +249,12 @@ namespace AmuletOfManyMinions
 			}
 		}
 		
+		public static float ApplyCrossModScaling(float original, Projectile projectile, int index = 0)
+		{
+			float rv = ReplaceValueWithSummonersShineMinionPower(original, projectile, index);
+			return rv;
+		}
+		
 		public static float ReplaceValueWithSummonersShineMinionPower(float value, Projectile projectile, int minionPowerIndex)
 		{
 			const int USEFUL_FUNCS = 10;
