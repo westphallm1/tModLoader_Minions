@@ -141,7 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			if(usingSpecial)
 			{
-				damage = damage * CrossMod.ReplaceValueWithSummonersShineMinionPower(5/4, Projectile, 0);
+				damage = (int)(damage * CrossMod.ReplaceValueWithSummonersShineMinionPower(5f / 4, Projectile, 0));
 			}
 		}
 
