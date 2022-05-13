@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Crest of Cobalt");
 			Tooltip.SetDefault("Summons a squire\nAn ancient cobalt squire will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
 			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(100f);
 			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
