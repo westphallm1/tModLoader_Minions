@@ -79,13 +79,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			tooltips.Add(new TooltipLine(Mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
+			index = tooltips.Count - 1;
+			if (tooltips[index].Name == "Price")
+				index--;
+			if (tooltips[index].Name == "JourneyResearch")
+				index--;
+			tooltips.Insert(index + 1, new TooltipLine(Mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
 			{
 				OverrideColor = Color.LimeGreen
 			});
 			if(SpecialDescription != null)
 			{
-				tooltips.Add(new TooltipLine(Mod, "SquireSpecialDescription", SpecialDescription));
+				tooltips.Insert(index + 2, new TooltipLine(Mod, "SquireSpecialDescription", SpecialDescription));
 			}
 		}
 	}
