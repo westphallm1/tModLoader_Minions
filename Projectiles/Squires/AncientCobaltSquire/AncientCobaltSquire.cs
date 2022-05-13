@@ -28,6 +28,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Crest of Cobalt");
 			Tooltip.SetDefault("Summons a squire\nAn ancient cobalt squire will fight for you!\nClick and hold to guide its attacks");
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(100f);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -141,6 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
 
 		public sealed override void SetDefaults()
@@ -185,7 +189,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			{
 				float angleOffset = Main.rand.NextFloat(MathHelper.Pi / 16) - MathHelper.Pi / 32;
 				Vector2 angleVector = UnitVectorFromWeaponAngle().RotatedBy(angleOffset);
-				angleVector *= ModifiedProjectileVelocity() * 2;
+				angleVector *= ModifiedProjectileVelocity() * 2 * CrossMod.ReplaceValueWithSummonersShineMinionPower(100, Projectile, 0)) * 0.01f;
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
