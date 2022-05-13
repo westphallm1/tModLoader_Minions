@@ -30,6 +30,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of the Crimson");
 			Tooltip.SetDefault("Summons a squire\nA crimson squire will fight for you!\nClick and hold to guide its attacks");
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(5);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -103,6 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		{
 			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
 		public override void SetDefaults()
 		{
@@ -175,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override string Texture => "Terraria/Images/Item_" + ItemID.FlaskofIchor;
 		protected override int DustId => 87;
 		protected override int BuffId => BuffID.Ichor;
-		protected override int BuffDuration => 300;
+		protected override int BuffDuration => Projectile.originalDamage;
 	}
 
 	public class CrimsonSquireMinion : WeaponHoldingSquire
@@ -204,6 +208,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			DisplayName.SetDefault("Crimson Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
 
 		public sealed override void SetDefaults()
@@ -222,7 +227,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
-				Projectile.NewProjectile(
+				Projectile proj = Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
@@ -231,6 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 					Projectile.knockBack,
 					Main.myPlayer,
 					8);
+				proj.originalDamage = (int)(60 * CrossMod.ReplaceValueWithSummonersShineMinionPower(5, Projectile, 0));
 			}
 		}
 
