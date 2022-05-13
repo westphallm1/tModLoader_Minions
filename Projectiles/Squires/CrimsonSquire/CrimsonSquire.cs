@@ -236,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 					Projectile.knockBack,
 					Main.myPlayer,
 					8);
-				proj.originalDamage = (int)(60 * CrossMod.ReplaceValueWithSummonersShineMinionPower(5, Projectile, 0));
+				proj.originalDamage = (int)(60 * CrossMod.ApplyCrossModScaling(5, Projectile, 0));
 			}
 		}
 
