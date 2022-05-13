@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		protected virtual int SpecialDuration => 30;
 		protected virtual int SpecialCooldown => 6 * 60;
-		protected int specialFrame => CrossMod.GetCrossModNormalizedSpecialFrame(animationFrame - specialStartFrame, Projectile);
+		protected int specialFrame => animationFrame - specialStartFrame;
 
 		protected bool SpecialOnCooldown => player.HasBuff(ModContent.BuffType<SquireCooldownBuff>());
 
@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if(player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
 			{
 				StartSpecial();
-			} else if (usingSpecial && specialFrame >= SpecialDuration)
+			} else if (usingSpecial && specialFrame >= GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))
 			{
 				usingSpecial = false;
 				OnStopUsingSpecial();
