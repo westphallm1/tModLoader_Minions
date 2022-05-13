@@ -271,7 +271,7 @@ namespace AmuletOfManyMinions
 		/// </summary>
 		public static bool StopSummonersShineFromAcceleratingSpecialAbilityCountdown(Projectile projectile)
 		{
-			const int GET_MINIONPROJECTILEDATA_VAR = 3;
+			const int GET_MINIONPROJECTILEDATA_VAR = 7;
 			const int GET_CURRENTTICK = 17;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
@@ -290,6 +290,30 @@ namespace AmuletOfManyMinions
 				return;
 			}
 			return;
+		}
+		
+		public static int GetCrossModNormalizedSpecialDuration(int original, Projectile projectile)
+		{
+			const int GET_MINIONPROJECTILEDATA_VAR = 7;
+			const int GET_MINIONSPEEDMODTYPE = 14;
+			const int MINIONSPEEDMODTYPE_NORMAL = 0;
+			const int MINIONSPEEDMODTYPE_STEPPED = 1;
+			const int USEFULFUNCS = 10;
+			const int USEFULFUNCS_GETSIMRATE = 5;
+			const int USEFULFUNCS_GETINTERNALSIMRATE = 5;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_minionSpeedModType);
+				switch(minionSpeedModType)
+				{
+					case MINIONSPEEDMODTYPE_NORMAL:
+						return original / (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETSIMRATE, projectile);
+					case MINIONSPEEDMODTYPE_STEPPED:
+						return original / (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETINTERNALSIMRATE, projectile);
+						break;
+				}
+			}
+			return original;
 		}
 	}
 }
