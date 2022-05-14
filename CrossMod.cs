@@ -249,13 +249,13 @@ namespace AmuletOfManyMinions
 			}
 		}
 		
-		public static float ApplyCrossModScaling(float original, Projectile projectile, int index = 0)
+		public static float ApplyCrossModScaling(float original, Projectile projectile, int index = 0, bool invertSummonersShine = false)
 		{
-			float rv = ReplaceValueWithSummonersShineMinionPower(original, projectile, index);
+			float rv = ReplaceValueWithSummonersShineMinionPower(original, projectile, index, invertSummonersShine);
 			return rv;
 		}
 		
-		public static float ReplaceValueWithSummonersShineMinionPower(float value, Projectile projectile, int minionPowerIndex)
+		public static float ReplaceValueWithSummonersShineMinionPower(float value, Projectile projectile, int minionPowerIndex, bool invert = false)
 		{
 			const int USEFUL_FUNCS = 10;
 			const int GET_ALL_MINION_POWER_DATA = 10;
@@ -271,13 +271,20 @@ namespace AmuletOfManyMinions
 				switch(mpScalingType){
 					case SummonersShineMinionPowerCollection.MinionPowerScalingType.add:
 					case SummonersShineMinionPowerCollection.MinionPowerScalingType.subtract:
-						value += (outValue - original) 
+						if(invert)
+							value -= (outValue - original);
+						else
+							value += (outValue - original);
 						break;
 					case SummonersShineMinionPowerCollection.MinionPowerScalingType.multiply:
 					case SummonersShineMinionPowerCollection.MinionPowerScalingType.divide:
-						if(original != 0)
+						if(original != 0 && !invert)
 						{
-							value *= (outValue / original) 
+							value *= (outValue / original);
+						}
+						if(outValue != 0 && invert)
+						{
+							value *= (original / outValue);
 						}
 						break;
 				}
