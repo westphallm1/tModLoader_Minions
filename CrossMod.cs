@@ -258,10 +258,34 @@ namespace AmuletOfManyMinions
 		public static float ReplaceValueWithSummonersShineMinionPower(float value, Projectile projectile, int minionPowerIndex)
 		{
 			const int USEFUL_FUNCS = 10;
-			const int GET_MINION_POWER = 3;
+			const int GET_ALL_MINION_POWER_DATA = 10;
+			
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				return (float)summonersShine.Call(USEFUL_FUNCS, GET_MINION_POWER, projectile, minionPowerIndex);
+				Tuple<float, float, int, int, bool> rv = (Tuple<float, float, int, int, bool>)summonersShine.Call(USEFUL_FUNCS, GET_ALL_MINION_POWER_DATA, projectile, index);
+				float outValue = rv.Item1;
+				float original = rv.Item2;
+				mpScalingType = (SummonersShineMinionPowerCollection.MinionPowerScalingType)rv.Item3;
+				mpRoudingType = (SummonersShineMinionPowerCollection.MinionPowerRoundingType)rv.Item4;
+				difficultyScale = rv.Item5;
+				switch(mpScalingType){
+					case SummonersShineMinionPowerCollection.MinionPowerScalingType.add:
+					case SummonersShineMinionPowerCollection.MinionPowerScalingType.subtract:
+						value += (outValue - original) 
+						break;
+					case SummonersShineMinionPowerCollection.MinionPowerScalingType.multiply:
+					case SummonersShineMinionPowerCollection.MinionPowerScalingType.divide:
+						if(original != 0)
+						{
+							value *= (outValue / original) 
+						}
+						break;
+				}
+				
+				if (mpRoudingType == SummonersShineMinionPowerCollection.MinionPowerRoundingType.integer)
+					value = MathF.Round(value);
+				else
+					value = MathF.Round(value, 2);
 			}
 			return value;
 		}
