@@ -195,7 +195,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void OnStopUsingSpecial() => OnStartUsingSpecial();
 
 
-		protected override float WeaponDistanceFromCenter() => 16 * CrossMod.ApplyCrossModScaling(3.75f, Projectile, 0);
+		protected override float WeaponDistanceFromCenter() => CrossMod.ApplyCrossModScaling(60, Projectile, 0);
 
 		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() - 10;
 		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 10;
