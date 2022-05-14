@@ -30,6 +30,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of the Crimson");
 			Tooltip.SetDefault("Summons a squire\nA crimson squire will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
 			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(5);
 			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
@@ -106,7 +110,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		{
 			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
-			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
 		public override void SetDefaults()
 		{
@@ -208,7 +211,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			DisplayName.SetDefault("Crimson Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
-			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
 
 		public sealed override void SetDefaults()
@@ -236,7 +238,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 					Projectile.knockBack,
 					Main.myPlayer,
 					8);
-				proj.originalDamage = (int)(60 * CrossMod.ApplyCrossModScaling(5, Projectile, 0));
+				proj.originalDamage = (int)(CrossMod.ApplyCrossModScaling(60, Projectile, 0));
 			}
 		}
 
