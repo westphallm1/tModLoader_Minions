@@ -162,11 +162,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Main.projFrames[Projectile.type] = 3;
 		}
 		
-		public override void ApplyCrossModChanges()
-		{
-			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
-		}
-		
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
