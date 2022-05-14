@@ -101,11 +101,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
-		
-		public override void ApplyCrossModChanges()
-		{
-			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
-		}
 
 		protected override Rectangle GetWeaponTextureBounds(Texture2D texture)
 		{
