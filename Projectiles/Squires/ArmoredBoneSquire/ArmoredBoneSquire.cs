@@ -212,7 +212,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		private void SpawnWisps()
 		{
-			int workingAttackFrames = (int)(attackFrames * 100 / CrossMod.ApplyCrossModScaling(100, Projectile, 0));
+			int workingAttackFrames = (int)(CrossMod.ApplyCrossModScaling(attackFrames, Projectile, 0, true));
 			int attackFrame = animationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
@@ -405,7 +405,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Vector2 flailPosition = Projectile.Center +
 				WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
 
-			int workingAttackFrames = (int)(AttackFrames * 100 / CrossMod.ApplyCrossModScaling(100, Projectile, 0));
+			int workingAttackFrames = (int)(CrossMod.ApplyCrossModScaling(AttackFrames, Projectile, 0));
 			int attackFrame = animationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
