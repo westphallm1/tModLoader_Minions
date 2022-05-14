@@ -90,6 +90,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
+		}
+		
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
