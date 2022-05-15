@@ -145,7 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				}
 				Vector2 angleVector = horizonVector - Projectile.Center;
 				angleVector.SafeNormalize();
-				angleVector *= CrossMod.ApplyCrossModScaling(24f, 0);
+				angleVector *= CrossMod.ApplyCrossModScaling(24f, Projectile, 0);
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					Projectile.Center,
