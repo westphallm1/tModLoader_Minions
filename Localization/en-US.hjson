@@ -22,6 +22,10 @@ Mods: {
 				'''
 				Ichor Flask's Ichor lasts {1} seconds
 				'''
+			DemonSquireMinionItem:
+				'''
+				Special Ability Imp Fireballs have {1}% velocity
+				'''
 		}
 	}
 }
