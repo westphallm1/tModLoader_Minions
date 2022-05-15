@@ -334,7 +334,7 @@ namespace AmuletOfManyMinions
 			const int USEFULFUNCS_GETINTERNALSIMRATE = 5;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_minionSpeedModType);
+				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_MINIONSPEEDMODTYPE);
 				switch(minionSpeedModType)
 				{
 					case MINIONSPEEDMODTYPE_NORMAL:
