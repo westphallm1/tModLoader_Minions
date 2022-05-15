@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if(player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
 			{
 				StartSpecial();
-			} else if (usingSpecial && specialFrame >= GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))
+			} else if (usingSpecial && specialFrame >= CrossMod.GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))
 			{
 				usingSpecial = false;
 				OnStopUsingSpecial();
