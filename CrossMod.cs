@@ -255,7 +255,7 @@ namespace AmuletOfManyMinions
 			return rv;
 		}
 		
-		public static float ReplaceValueWithSummonersShineMinionPower(float value, Projectile projectile, int minionPowerIndex, bool invert = false)
+		public static float ReplaceValueWithSummonersShineMinionPower(float value, Projectile projectile, int index, bool invert = false)
 		{
 			const int USEFUL_FUNCS = 10;
 			const int GET_ALL_MINION_POWER_DATA = 10;
