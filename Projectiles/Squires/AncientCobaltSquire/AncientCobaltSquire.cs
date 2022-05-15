@@ -192,7 +192,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			{
 				float angleOffset = Main.rand.NextFloat(MathHelper.Pi / 16) - MathHelper.Pi / 32;
 				Vector2 angleVector = UnitVectorFromWeaponAngle().RotatedBy(angleOffset);
-				angleVector *= (CrossMod.ApplyCrossModScaling(ModifiedProjectileVelocity() * 2, Projectile, 0);
+				angleVector *= CrossMod.ApplyCrossModScaling(ModifiedProjectileVelocity() * 2, Projectile, 0);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
