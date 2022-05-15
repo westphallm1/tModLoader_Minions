@@ -1,0 +1,31 @@
+Mods: {
+	AmuletOfManyMinions: {
+
+		SummonSpecial: {
+			AdamantiteSquireMinionItem:
+				'''
+				While jousting, the Adamantite Squire deals {1}x damage!
+				'''
+			AncientCobaltSquireMinionItem:
+				'''
+				Magic Shotblast travels {1}% distance
+				'''
+			ArmoredBoneSquireMinionItem:
+				'''
+				Spawns wisps at a {1}% rate
+				'''
+			BoneSquireMinionItem:
+				'''
+				Flail length is {1} blocks
+				'''
+			CrimsonSquireMinionItem:
+				'''
+				Ichor Flask's Ichor lasts {1} seconds
+				'''
+			DemonSquireMinionItem:
+				'''
+				Special Ability Imp Fireballs have {1}% velocity
+				'''
+		}
+	}
+}

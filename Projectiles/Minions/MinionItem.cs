@@ -16,6 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
 			ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
+			ApplyCrossModChanges();
 		}
 
 		public override void SetDefaults()
@@ -64,5 +65,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 			return base.CanUseItem(player);
 		}
+		
+		public virtual void ApplyCrossModChanges() { }
 	}
 }

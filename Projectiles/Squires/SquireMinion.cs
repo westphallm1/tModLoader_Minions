@@ -90,6 +90,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
+		}
+		
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -168,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if(player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
 			{
 				StartSpecial();
-			} else if (usingSpecial && specialFrame >= SpecialDuration)
+			} else if (usingSpecial && specialFrame >= CrossMod.GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))
 			{
 				usingSpecial = false;
 				OnStopUsingSpecial();

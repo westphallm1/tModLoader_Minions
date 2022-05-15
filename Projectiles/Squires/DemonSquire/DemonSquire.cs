@@ -32,6 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			DisplayName.SetDefault("Crest of the Underworld");
 			Tooltip.SetDefault("Summons a squire\nA demon squire will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(1.5f);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+		}
 
 		public override void SetDefaults()
 		{
@@ -138,7 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				}
 				Vector2 angleVector = horizonVector - Projectile.Center;
 				angleVector.SafeNormalize();
-				angleVector *= 24f;
+				angleVector *= CrossMod.ApplyCrossModScaling(24f, Projectile, 0);
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					Projectile.Center,

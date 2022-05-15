@@ -31,6 +31,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			DisplayName.SetDefault("Crest of the Crimson");
 			Tooltip.SetDefault("Summons a squire\nA crimson squire will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(5);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+		}
 
 		public override void SetDefaults()
 		{
@@ -175,7 +182,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override string Texture => "Terraria/Images/Item_" + ItemID.FlaskofIchor;
 		protected override int DustId => 87;
 		protected override int BuffId => BuffID.Ichor;
-		protected override int BuffDuration => 300;
+		protected override int BuffDuration => Projectile.originalDamage;
 	}
 
 	public class CrimsonSquireMinion : WeaponHoldingSquire
@@ -222,7 +229,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
-				Projectile.NewProjectile(
+				Projectile proj = Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
@@ -231,6 +238,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 					Projectile.knockBack,
 					Main.myPlayer,
 					8);
+				proj.originalDamage = (int)(CrossMod.ApplyCrossModScaling(60, Projectile, 0));
 			}
 		}
 

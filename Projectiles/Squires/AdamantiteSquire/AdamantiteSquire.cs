@@ -32,6 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			DisplayName.SetDefault("Adamantite Crest");
 			Tooltip.SetDefault("Summons a squire\nAn adamantite squire will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(5f/4);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+		}
 
 		public override void SetDefaults()
 		{
@@ -137,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			if(usingSpecial)
 			{
-				damage = 5 * damage / 4;
+				damage = (int)(CrossMod.ApplyCrossModScaling(5 * damage / 4, Projectile, 0));
 			}
 		}
 

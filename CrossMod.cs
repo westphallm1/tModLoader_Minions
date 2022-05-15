@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar;
 using AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar;
 using AmuletOfManyMinions.Projectiles.Minions.EclipseHerald;
@@ -198,6 +198,177 @@ namespace AmuletOfManyMinions
 				}
 			}
 		}
+		
+		public static void BakeSummonersShineMinionPower_NoHooks(int ItemType, SummonersShineMinionPowerCollection minionPowers)
+		{
+			const int ADD_ITEM_STATICS = 2;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				summonersShine.Call(ADD_ITEM_STATICS, ItemType, null, null, minionPowers.BakeToTupleArray(), 0, true);
+			}
+		}
+		
+		public class SummonersShineMinionPowerCollection
+		{
+			List<Tuple<float, int, int, bool>> minionPowers = new();
 
+			/// <summary>
+			/// Call this to feed data into ModSupport_AddItemStatics. Adds a Minion Power to the Minion Power Collection
+			/// </summary>
+			/// <param name="power">The base number of the minion power</param>
+			/// <param name="scalingType">How the minion power will scale with ability power modifiers</param>
+			/// <param name="roundingType">How much to round the ability power value to</param>
+			/// <param name="DifficultyScale">If true, halves this in Journey, doubles this in Expert, triples this in Master.</param>
+			/// 
+			public void AddMinionPower(float power, MinionPowerScalingType scalingType = MinionPowerScalingType.multiply, MinionPowerRoundingType roundingType = MinionPowerRoundingType.dp2, bool DifficultyScale = false)
+			{
+				minionPowers.Add(new Tuple<float, int, int, bool>
+				(
+					power,
+					(int)scalingType,
+					(int)roundingType,
+					DifficultyScale
+				));
+			}
+
+			public Tuple<float, int, int, bool>[] BakeToTupleArray()
+			{
+				return minionPowers.ToArray();
+			}
+			public enum MinionPowerScalingType
+			{
+				add,
+				subtract,
+				multiply,
+				divide,
+			}
+			public enum MinionPowerRoundingType
+			{
+				dp2,
+				integer,
+			}
+		}
+		
+		public static float ApplyCrossModScaling(float original, Projectile projectile, int summonersShineMinionPowerIndex = 0, bool invertSummonersShine = false)
+		{
+			float rv = ReplaceValueWithSummonersShineMinionPower(original, projectile, summonersShineMinionPowerIndex, invertSummonersShine);
+			return rv;
+		}
+		
+		public static float ReplaceValueWithSummonersShineMinionPower(float value, Projectile projectile, int index, bool invert = false)
+		{
+			const int USEFUL_FUNCS = 10;
+			const int GET_ALL_MINION_POWER_DATA = 10;
+			
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				Tuple<float, float, int, int, bool> rv = (Tuple<float, float, int, int, bool>)summonersShine.Call(USEFUL_FUNCS, GET_ALL_MINION_POWER_DATA, projectile, index);
+				float outValue = rv.Item1;
+				float original = rv.Item2;
+				SummonersShineMinionPowerCollection.MinionPowerScalingType mpScalingType = (SummonersShineMinionPowerCollection.MinionPowerScalingType)rv.Item3;
+				SummonersShineMinionPowerCollection.MinionPowerRoundingType mpRoudingType = (SummonersShineMinionPowerCollection.MinionPowerRoundingType)rv.Item4;
+				bool difficultyScale = rv.Item5;
+				switch(mpScalingType){
+					case SummonersShineMinionPowerCollection.MinionPowerScalingType.add:
+					case SummonersShineMinionPowerCollection.MinionPowerScalingType.subtract:
+						if(invert)
+							value -= (outValue - original);
+						else
+							value += (outValue - original);
+						break;
+					case SummonersShineMinionPowerCollection.MinionPowerScalingType.multiply:
+					case SummonersShineMinionPowerCollection.MinionPowerScalingType.divide:
+						if(original != 0 && !invert)
+						{
+							value *= (outValue / original);
+						}
+						if(outValue != 0 && invert)
+						{
+							value *= (original / outValue);
+						}
+						break;
+				}
+				
+				if (mpRoudingType == SummonersShineMinionPowerCollection.MinionPowerRoundingType.integer)
+					value = MathF.Round(value);
+				else
+					value = MathF.Round(value, 2);
+			}
+			return value;
+		}
+		
+		/// <summary>
+		/// Returns true if on default tick, false if on extra Summoner's Shine ticks
+		/// </summary>
+		public static bool StopSummonersShineFromAcceleratingSpecialAbilityCountdown(Projectile projectile)
+		{
+			const int GET_MINIONPROJECTILEDATA_VAR = 7;
+			const int GET_CURRENTTICK = 17;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				return (float)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_CURRENTTICK) == 1;
+			}
+			return true;
+		}
+		
+		public static void SetSummonersShineProjMaxEnergy(int ProjectileType, float maxEnergy)
+		{
+			const int HOOKPROJECTILE = 1;
+			const int HOOKPROJECTILEMAXENERGY = 0;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				summonersShine.Call(HOOKPROJECTILE, ProjectileType, HOOKPROJECTILEMAXENERGY, maxEnergy);
+				return;
+			}
+			return;
+		}
+		
+		public static int GetCrossModNormalizedSpecialFrame(int original, Projectile projectile)
+		{
+			const int GET_MINIONPROJECTILEDATA_VAR = 7;
+			const int GET_MINIONSPEEDMODTYPE = 14;
+			const int MINIONSPEEDMODTYPE_NORMAL = 0;
+			const int MINIONSPEEDMODTYPE_STEPPED = 1;
+			const int USEFULFUNCS = 10;
+			const int USEFULFUNCS_GETSIMRATE = 5;
+			const int USEFULFUNCS_GETINTERNALSIMRATE = 5;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_MINIONSPEEDMODTYPE);
+				switch(minionSpeedModType)
+				{
+					case MINIONSPEEDMODTYPE_NORMAL:
+						return (int)(original / (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETSIMRATE, projectile));
+					case MINIONSPEEDMODTYPE_STEPPED:
+						return (int)(original / (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETINTERNALSIMRATE, projectile));
+						break;
+				}
+			}
+			return original;
+		}
+
+		public static int GetCrossModNormalizedSpecialDuration(int original, Projectile projectile)
+		{
+			const int GET_MINIONPROJECTILEDATA_VAR = 7;
+			const int GET_MINIONSPEEDMODTYPE = 14;
+			const int MINIONSPEEDMODTYPE_NORMAL = 0;
+			const int MINIONSPEEDMODTYPE_STEPPED = 1;
+			const int USEFULFUNCS = 10;
+			const int USEFULFUNCS_GETSIMRATE = 5;
+			const int USEFULFUNCS_GETINTERNALSIMRATE = 5;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_MINIONSPEEDMODTYPE);
+				switch (minionSpeedModType)
+				{
+					case MINIONSPEEDMODTYPE_NORMAL:
+						return (int)(original * (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETSIMRATE, projectile));
+					case MINIONSPEEDMODTYPE_STEPPED:
+						return (int)(original * (float)summonersShine.Call(USEFULFUNCS, USEFULFUNCS_GETINTERNALSIMRATE, projectile));
+						break;
+				}
+			}
+			return original;
+		}
 	}
 }

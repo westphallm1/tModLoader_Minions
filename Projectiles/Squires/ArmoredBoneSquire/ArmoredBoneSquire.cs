@@ -32,6 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			DisplayName.SetDefault("Crest of Armored Bones");
 			Tooltip.SetDefault("Summons a squire\nAn armored bone squire will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(100);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+		}
 
 		public override void SetDefaults()
 		{
@@ -154,6 +161,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 3;
 		}
+		
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -172,17 +180,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// prefer circling around the target, or between the target and the mouse
-			if(GetClosestEnemyToPosition(syncedMouseWorld, 120f, false) is NPC newTarget)
+			if (GetClosestEnemyToPosition(syncedMouseWorld, 120f, false) is NPC newTarget)
 			{
 				target = newTarget;
 			}
-			if(target == default || !target.active || Vector2.DistanceSquared(target.Center, Projectile.Center) > 128 * 128)
+			if (target == default || !target.active || Vector2.DistanceSquared(target.Center, Projectile.Center) > 128 * 128)
 			{
 				target = default;
 				float flailAngle = 2 * MathHelper.Pi * animationFrame / 60f;
 				flailTarget = 40 * flailAngle.ToRotationVector2();
-			} 
-			else 
+			}
+			else
 			{
 				float flailAngle = 2 * MathHelper.Pi * animationFrame / attackFrames;
 				flailTarget = 40 * flailAngle.ToRotationVector2();
@@ -199,11 +207,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		private void SpawnWisps()
 		{
-			int attackFrame = animationFrame % attackFrames;
-			if(attackFrame == 0)
+			int workingAttackFrames = (int)(CrossMod.ApplyCrossModScaling(attackFrames, Projectile, 0, true));
+			int attackFrame = animationFrame % workingAttackFrames;
+			if (attackFrame == 0)
 			{
-				firingFrame1 = Main.rand.Next(attackFrames);
-				firingFrame2 = Main.rand.Next(attackFrames);
+				firingFrame1 = Main.rand.Next(workingAttackFrames);
+				firingFrame2 = Main.rand.Next(workingAttackFrames);
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
@@ -237,7 +246,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		public void SpawnDust(int count)
 		{
 			Vector2 flailPos = Projectile.Center + flailPosition;
-			for(int i = 0; i < count; i++)
+			for (int i = 0; i < count; i++)
 			{
 				int bonedust = Dust.NewDust(flailPos, Projectile.width, Projectile.height, 137, 0f, 0f, 0, Scale: 1f);
 				Main.dust[bonedust].position.X = flailPos.X - 4f + (float)Main.rand.Next(-2, 3);
@@ -251,7 +260,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		{
 			Vector2 flailOffset = flailTarget - flailPosition;
 			int inertia = 5;
-			if(flailOffset.LengthSquared() > flailSpeed * flailSpeed)
+			if (flailOffset.LengthSquared() > flailSpeed * flailSpeed)
 			{
 				flailOffset.Normalize();
 				flailOffset *= flailSpeed;
@@ -294,7 +303,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		public SpiritFlailDrawer()
 		{
-			SegmentCount = 3; 
+			SegmentCount = 3;
 		}
 		protected override void DrawHead()
 		{
@@ -307,7 +316,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Rectangle body = new Rectangle(8, 98, 24, 6);
 			for (int i = 0; i < SegmentCount + 1; i++)
 			{
-				AddSprite(30 + 22* i, body);
+				AddSprite(30 + 22 * i, body);
 			}
 		}
 
@@ -355,6 +364,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
+		
 		public override void LoadAssets()
 		{
 			base.LoadAssets();
@@ -384,10 +394,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Vector2 angleVector = UnitVectorFromWeaponAngle();
 			Vector2 flailPosition = Projectile.Center +
 				WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
+
+			int workingAttackFrames = (int)(CrossMod.ApplyCrossModScaling(AttackFrames, Projectile, 0));
+			int attackFrame = animationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
-				firingFrame1 = Main.rand.Next(AttackFrames);
-				firingFrame2 = Main.rand.Next(AttackFrames);
+				firingFrame1 = Main.rand.Next(workingAttackFrames);
+				firingFrame2 = Main.rand.Next(workingAttackFrames);
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
@@ -437,15 +450,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		public override void OnStartUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if (player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromThis(),
-					Projectile.Center, 
-					Projectile.velocity, 
-					ProjectileType<SpiritFlailWormMinion>(), 
-					Projectile.damage, 
-					Projectile.knockBack, 
+					Projectile.Center,
+					Projectile.velocity,
+					ProjectileType<SpiritFlailWormMinion>(),
+					Projectile.damage,
+					Projectile.knockBack,
 					player.whoAmI);
 				p.originalDamage = Projectile.originalDamage;
 			}
@@ -453,12 +466,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		public override void OnStopUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if (player.whoAmI == Main.myPlayer)
 			{
-				for(int i = 0; i < Main.maxProjectiles; i++)
+				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SpiritFlailWormMinion>())
+					if (p.active && p.owner == player.whoAmI && p.type == ProjectileType<SpiritFlailWormMinion>())
 					{
 						p.Kill();
 						break;
