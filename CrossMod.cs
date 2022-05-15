@@ -267,8 +267,7 @@ namespace AmuletOfManyMinions
 				float original = rv.Item2;
 				SummonersShineMinionPowerCollection.MinionPowerScalingType mpScalingType = (SummonersShineMinionPowerCollection.MinionPowerScalingType)rv.Item3;
 				SummonersShineMinionPowerCollection.MinionPowerRoundingType mpRoudingType = (SummonersShineMinionPowerCollection.MinionPowerRoundingType)rv.Item4;
-				difficultyScale = rv.Item5;
-				difficultyScale = rv.Item5;
+				bool difficultyScale = rv.Item5;
 				switch(mpScalingType){
 					case SummonersShineMinionPowerCollection.MinionPowerScalingType.add:
 					case SummonersShineMinionPowerCollection.MinionPowerScalingType.subtract:
