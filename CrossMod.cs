@@ -249,9 +249,9 @@ namespace AmuletOfManyMinions
 			}
 		}
 		
-		public static float ApplyCrossModScaling(float original, Projectile projectile, int index = 0, bool invertSummonersShine = false)
+		public static float ApplyCrossModScaling(float original, Projectile projectile, int summonersShineMinionPowerIndex = 0, bool invertSummonersShine = false)
 		{
-			float rv = ReplaceValueWithSummonersShineMinionPower(original, projectile, index, invertSummonersShine);
+			float rv = ReplaceValueWithSummonersShineMinionPower(original, projectile, summonersShineMinionPowerIndex, invertSummonersShine);
 			return rv;
 		}
 		
@@ -265,8 +265,9 @@ namespace AmuletOfManyMinions
 				Tuple<float, float, int, int, bool> rv = (Tuple<float, float, int, int, bool>)summonersShine.Call(USEFUL_FUNCS, GET_ALL_MINION_POWER_DATA, projectile, index);
 				float outValue = rv.Item1;
 				float original = rv.Item2;
-				mpScalingType = (SummonersShineMinionPowerCollection.MinionPowerScalingType)rv.Item3;
-				mpRoudingType = (SummonersShineMinionPowerCollection.MinionPowerRoundingType)rv.Item4;
+				SummonersShineMinionPowerCollection.MinionPowerScalingType.mpScalingType = (SummonersShineMinionPowerCollection.MinionPowerScalingType)rv.Item3;
+				SummonersShineMinionPowerCollection.MinionPowerRoundingType.mpRoudingType = (SummonersShineMinionPowerCollection.MinionPowerRoundingType)rv.Item4;
+				difficultyScale = rv.Item5;
 				difficultyScale = rv.Item5;
 				switch(mpScalingType){
 					case SummonersShineMinionPowerCollection.MinionPowerScalingType.add:
