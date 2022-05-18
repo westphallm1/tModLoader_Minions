@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		private int buffResetCountdown;
 
 		private List<int> BuffsToAddOnRespawn = new();
-		public void UpdatePetLevel(int newLevel, int newDamage, object[] newModdedStats, bool fromSync = false)
+		public void UpdatePetLevel(int newLevel, int newDamage, int newEmblemItem, object[] newModdedStats, bool fromSync = false)
 		{
 			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage || PetModdedStats.Length != newModdedStats.Length;
 			if (!didUpdate) {
@@ -145,11 +145,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 			PetLevel = newLevel;
 			PetDamage = newDamage;
+			PetEmblemItem = newEmblemItem;
 			PetModdedStats = newModdedStats;
 			if (didUpdate && !fromSync)
 			{
 				// TODO MP packet
-				new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage, PetModdedStats).Send();
+				new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage, PetEmblemItem, PetModdedStats).Send();
 			}
 		}
 
@@ -226,7 +227,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			int maxLevel = 0;
 			int maxDamage = CombatPetLevelTable.PetLevelTable[0].BaseDamage;
 			Item maxItem = null;
-			PetEmblemItem = -1;
+			int maxEmblemItem = -1;
 			for (int i = 0; i < Player.inventory.Length; i++)
 			{
 				Item item = Player.inventory[i];
@@ -238,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
 						maxItem = item;
-						PetEmblemItem = item.type;
+						maxEmblemItem = item.type;
 					}
 				}
 			}
@@ -253,11 +254,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
 						maxItem = item;
-						PetEmblemItem = item.type;
+						maxEmblemItem = item.type;
 					}
 				}
 			}
-			UpdatePetLevel(maxLevel, maxDamage, CrossMod.GetCrossModEmblemStats(maxItem));
+			UpdatePetLevel(maxLevel, maxDamage, maxEmblemItem, CrossMod.GetCrossModEmblemStats(maxItem));
 		}
 
 		private void ReflagPetBuffs()
