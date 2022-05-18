@@ -398,16 +398,31 @@ namespace AmuletOfManyMinions
 			{
 				const int GET_REWORKMINION_ITEM_VALUE = 16;
 				const int PREFIXMINIONPOWER = 0;
-				Item compItem = GetPrefixComparisonItem(item.netID);
-				if (compItem.useTime > 0) {
-					modPlayer.PetModdedStats[currentArrayPos] = item.useTime / (float)compItem.useTime;
+				if (item != null)
+				{
+					Item compItem = GetPrefixComparisonItem(item.netID);
+					if (compItem.useTime > 0)
+					{
+						modPlayer.PetModdedStats[currentArrayPos] = item.useTime / (float)(compItem.useTime);
+					}
+					else
+						modPlayer.PetModdedStats[currentArrayPos] = 1;
+					currentArrayPos++;
+					modPlayer.PetModdedStats[currentArrayPos] = item.crit;
+					currentArrayPos++;
+
+					modPlayer.PetModdedStats[currentArrayPos] = summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
+					currentArrayPos++;
 				}
-				currentArrayPos++;
-				modPlayer.PetModdedStats[currentArrayPos] = item.crit;
-				currentArrayPos++;
-				
-				modPlayer.PetModdedStats[currentArrayPos] = summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
-				currentArrayPos++;
+				else
+				{
+					modPlayer.PetModdedStats[currentArrayPos] = 1;
+					currentArrayPos++;
+					modPlayer.PetModdedStats[currentArrayPos] = 0;
+					currentArrayPos++;
+					modPlayer.PetModdedStats[currentArrayPos] = 0;
+					currentArrayPos++;
+				}
 			}
 		}
 		
