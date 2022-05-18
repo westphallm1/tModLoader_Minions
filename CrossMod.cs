@@ -395,16 +395,39 @@ namespace AmuletOfManyMinions
 			int currentArrayPos = 0;
 			if(summonersShine != null)
 			{
-				const GET_REWORKMINION_ITEM_VALUE = 16;
-				const PREFIXMINIONPOWER = 0;
+				const int GET_REWORKMINION_ITEM_VALUE = 16;
+				const int PREFIXMINIONPOWER = 0;
 				Item compItem = GetPrefixComparisonItem(item.netID);
 				modPlayer.PerModdedStats[currentArrayPos] = Item.useTime / compItem.useTime;
 				currentArrayPos++;
 				modPlayer.PerModdedStats[currentArrayPos] = Item.critChance;
 				currentArrayPos++;
 				
-				modPlayer.PerModdedStats[currentArrayPos] = SummonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
+				modPlayer.PerModdedStats[currentArrayPos] = summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
 				currentArrayPos++;
+			}
+		}
+		
+		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer, int PetEmblemID)
+		{
+			int PetItemID = PetEmblemID;
+			int currentArrayPos = 0;
+			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
+			{
+				const int SET_PROJFUNCS = 4;
+				const int SET_PROJDATA = 5;
+				const int USEFULFUNCS = 10;
+				const int OVERRIDESOURCEITEM = 11;
+				const int MINIONASMOD = 1;
+				const int PROJECTILECRIT = 0;
+				const int PREFIXMINIONPOWER = 10;
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, MINIONASMOD, modPlayer.PerModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PROJECTILECRIT, modPlayer.PerModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				summonersShine.Call(SET_PROJDATA, projectile.whoAmI, PREFIXMINIONPOWER, modPlayer.PerModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				summonersShine.Call(USEFULFUNCS, OVERRIDESOURCEITEM, projectile, PetItemID);
 			}
 		}
 	}
