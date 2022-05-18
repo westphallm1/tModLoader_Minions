@@ -111,6 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal int PetLevel { get; set; }
 		internal int PetDamage { get; set; }
 		
+		public int PetEmblemItem = -1;
 		public object[] PetModdedStats = null;
 
 		// todo this may be too many constructors, but it's a struct so I think it's ok
@@ -223,6 +224,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
 						maxItem = item;
+						PetEmblemItem = item.type;
 					}
 				}
 			}
