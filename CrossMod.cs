@@ -14,6 +14,7 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Squires;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -412,7 +413,7 @@ namespace AmuletOfManyMinions
 			}
 			return false;
 		}
-		public static void GetCrossModEmblemStats(LeveledCombatPetModPlayer modPlayer, Item item)
+		public static object[] GetCrossModEmblemStats(Item item)
 		{
 			Mod summonersShine = null;
 			int maxArray = 0;
@@ -420,7 +421,7 @@ namespace AmuletOfManyMinions
 			{
 				maxArray += 3;
 			}
-			modPlayer.PetModdedStats = new object[maxArray];
+			object[] rv = new object[maxArray];
 			int currentArrayPos = 0;
 			if(summonersShine != null)
 			{
@@ -431,27 +432,28 @@ namespace AmuletOfManyMinions
 					Item compItem = GetPrefixComparisonItem(item.netID);
 					if (compItem.useTime > 0)
 					{
-						modPlayer.PetModdedStats[currentArrayPos] = item.useTime / (float)(compItem.useTime);
+						rv[currentArrayPos] = item.useTime / (float)(compItem.useTime);
 					}
 					else
-						modPlayer.PetModdedStats[currentArrayPos] = 1f;
+						rv[currentArrayPos] = 1f;
 					currentArrayPos++;
-					modPlayer.PetModdedStats[currentArrayPos] = item.crit;
+					rv[currentArrayPos] = item.crit;
 					currentArrayPos++;
 
-					modPlayer.PetModdedStats[currentArrayPos] = summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
+					rv[currentArrayPos] = summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
 					currentArrayPos++;
 				}
 				else
 				{
-					modPlayer.PetModdedStats[currentArrayPos] = 1f;
+					rv[currentArrayPos] = 1f;
 					currentArrayPos++;
-					modPlayer.PetModdedStats[currentArrayPos] = 0;
+					rv[currentArrayPos] = 0;
 					currentArrayPos++;
-					modPlayer.PetModdedStats[currentArrayPos] = 0f;
+					rv[currentArrayPos] = 0f;
 					currentArrayPos++;
 				}
 			}
+			return rv;
 		}
 		
 		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer)
@@ -474,6 +476,42 @@ namespace AmuletOfManyMinions
 				currentArrayPos++;
 				summonersShine.Call(USEFULFUNCS, OVERRIDESOURCEITEM, projectile, modPlayer.PetEmblemItem);
 			}
+		}
+
+		public static void CombatPetSendCrossModData(BinaryWriter writer, object[] PetModdedStats)
+		{
+
+			int currentArrayPos = 0;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				writer.Write((float)PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				writer.Write7BitEncodedInt((int)PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				writer.Write((float)PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+			}
+		}
+		public static object[] CombatPetReceiveCrossModData(BinaryReader reader)
+		{
+			int maxArray = 0;
+			Mod summonersShine = null;
+			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
+			{
+				maxArray += 3;
+			}
+			object[] rv = new object[maxArray];
+			int currentArrayPos = 0;
+			if (summonersShine != null)
+			{
+				rv[currentArrayPos] = reader.ReadSingle();
+				currentArrayPos++;
+				rv[currentArrayPos] = reader.Read7BitEncodedInt();
+				currentArrayPos++;
+				rv[currentArrayPos] = reader.ReadSingle();
+				currentArrayPos++;
+			}
+			return rv;
 		}
 	}
 }
