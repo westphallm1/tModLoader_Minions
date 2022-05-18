@@ -408,9 +408,9 @@ namespace AmuletOfManyMinions
 			}
 		}
 		
-		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer, int PetEmblemID)
+		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer)
 		{
-			int PetItemID = PetEmblemID;
+			int PetItemID = modPlayer.PetEmblemID;
 			int currentArrayPos = 0;
 			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
 			{
