@@ -56,6 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			searchDistance = leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 			int petLevel = leveledPetPlayer.PetLevel;
 			idleInertia = petLevel < 4 ? 15 : 18 - petLevel;
+			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return base.IdleBehavior();
 		}
 
