@@ -370,5 +370,42 @@ namespace AmuletOfManyMinions
 			}
 			return original;
 		}
+		
+		public static Item GetPrefixComparisonItem(int netID)
+        {
+            if (Main.tooltipPrefixComparisonItem == null)
+            {
+                Main.tooltipPrefixComparisonItem = new Item();
+            }
+            Item compItem = Main.tooltipPrefixComparisonItem;
+            if (compItem.netID != netID)
+                compItem.netDefaults(netID);
+            return compItem;
+        }
+		
+		public static void GetCrossModEmblemStats(LeveledCombatPetModPlayer modPlayer, Item item)
+		{
+			Mod summonersShine = null;
+			int maxArray = 0;
+			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
+			{
+				maxArray += 3;
+			}
+			modPlayer.PerModdedStats = new object[maxArray];
+			int currentArrayPos = 0;
+			if(summonersShine != null)
+			{
+				const GET_REWORKMINION_ITEM_VALUE = 16;
+				const PREFIXMINIONPOWER = 0;
+				Item compItem = GetPrefixComparisonItem(item.netID);
+				modPlayer.PerModdedStats[currentArrayPos] = Item.useTime / compItem.useTime;
+				currentArrayPos++;
+				modPlayer.PerModdedStats[currentArrayPos] = Item.critChance;
+				currentArrayPos++;
+				
+				modPlayer.PerModdedStats[currentArrayPos] = SummonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
+				currentArrayPos++;
+			}
+		}
 	}
 }
