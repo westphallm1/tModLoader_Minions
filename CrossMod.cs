@@ -400,7 +400,7 @@ namespace AmuletOfManyMinions
 				const int PREFIXMINIONPOWER = 0;
 				Item compItem = GetPrefixComparisonItem(item.netID);
 				if (compItem.useTime > 0) {
-					modPlayer.PetModdedStats[currentArrayPos] = item.useTime / compItem.useTime;
+					modPlayer.PetModdedStats[currentArrayPos] = item.useTime / (float)compItem.useTime;
 				}
 				currentArrayPos++;
 				modPlayer.PetModdedStats[currentArrayPos] = item.crit;
