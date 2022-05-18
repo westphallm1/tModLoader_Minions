@@ -392,19 +392,21 @@ namespace AmuletOfManyMinions
 			{
 				maxArray += 3;
 			}
-			modPlayer.PerModdedStats = new object[maxArray];
+			modPlayer.PetModdedStats = new object[maxArray];
 			int currentArrayPos = 0;
 			if(summonersShine != null)
 			{
 				const int GET_REWORKMINION_ITEM_VALUE = 16;
 				const int PREFIXMINIONPOWER = 0;
 				Item compItem = GetPrefixComparisonItem(item.netID);
-				modPlayer.PerModdedStats[currentArrayPos] = Item.useTime / compItem.useTime;
+				if (compItem.useTime > 0) {
+					modPlayer.PetModdedStats[currentArrayPos] = item.useTime / compItem.useTime;
+				}
 				currentArrayPos++;
-				modPlayer.PerModdedStats[currentArrayPos] = Item.critChance;
+				modPlayer.PetModdedStats[currentArrayPos] = item.crit;
 				currentArrayPos++;
 				
-				modPlayer.PerModdedStats[currentArrayPos] = summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
+				modPlayer.PetModdedStats[currentArrayPos] = summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
 				currentArrayPos++;
 			}
 		}
@@ -412,7 +414,7 @@ namespace AmuletOfManyMinions
 		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer)
 		{
 			int currentArrayPos = 0;
-			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				const int SET_PROJFUNCS = 4;
 				const int SET_PROJDATA = 5;
@@ -421,11 +423,11 @@ namespace AmuletOfManyMinions
 				const int MINIONASMOD = 1;
 				const int PROJECTILECRIT = 0;
 				const int PREFIXMINIONPOWER = 10;
-				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, MINIONASMOD, modPlayer.PerModdedStats[currentArrayPos]);
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, MINIONASMOD, modPlayer.PetModdedStats[currentArrayPos]);
 				currentArrayPos++;
-				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PROJECTILECRIT, modPlayer.PerModdedStats[currentArrayPos]);
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PROJECTILECRIT, modPlayer.PetModdedStats[currentArrayPos]);
 				currentArrayPos++;
-				summonersShine.Call(SET_PROJDATA, projectile.whoAmI, PREFIXMINIONPOWER, modPlayer.PerModdedStats[currentArrayPos]);
+				summonersShine.Call(SET_PROJDATA, projectile.whoAmI, PREFIXMINIONPOWER, modPlayer.PetModdedStats[currentArrayPos]);
 				currentArrayPos++;
 				summonersShine.Call(USEFULFUNCS, OVERRIDESOURCEITEM, projectile, modPlayer.PetEmblemItem);
 			}
