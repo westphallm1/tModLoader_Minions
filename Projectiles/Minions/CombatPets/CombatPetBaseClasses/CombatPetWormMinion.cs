@@ -45,6 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			{
 				Projectile.localNPCHitCooldown = 25;
 			}
+			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return target;
 		}
 
