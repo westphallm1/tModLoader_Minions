@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Core.Netcode.Packets;
+using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
@@ -187,6 +187,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			Player.maxMinions = Math.Max(0, Player.maxMinions - minionSlotsUsed);
 		}
 
+		public bool GetEmblemSuperiority(CombatPetEmblem replacer, CombatPetEmblem old)
+		{
+			int PetLevelDiff = replacer.PetLevel - old.PetLevel;
+			if (PetLevelDiff > 0)
+				return true;
+			if (PetLevelDiff < 0)
+				return false;
+			int DamageDiff = replacer.Item.damage - old.Item.damage;
+			if (DamageDiff > 0)
+				return true;
+			if (DamageDiff < 0)
+				return false;
+			return CrossMod.GetCrossModEmblemSuperiority(replacer.Item, old.Item);
+		}
+
 		// look for the best Combat Pet Emblem in the player's inventory, use that
 		// to set the player's combat pet's damage
 		private void CheckForCombatPetEmblem()
@@ -206,7 +221,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				if(!item.IsAir && item.ModItem != null && item.ModItem is CombatPetEmblem petEmblem)
 				{
 					// choose max tier rather than max damage
-					if(petEmblem.PetLevel > maxLevel)
+					if(maxItem == null || GetEmblemSuperiority(item.ModItem as CombatPetEmblem, maxItem.ModItem as CombatPetEmblem))
 					{
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
@@ -221,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				if(!item.IsAir && item.ModItem != null && item.ModItem is CombatPetEmblem petEmblem)
 				{
 					// choose max tier rather than max damage
-					if(petEmblem.PetLevel > maxLevel)
+					if (maxItem == null || GetEmblemSuperiority(item.ModItem as CombatPetEmblem, maxItem.ModItem as CombatPetEmblem))
 					{
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
