@@ -384,6 +384,34 @@ namespace AmuletOfManyMinions
             return compItem;
         }
 		
+		public static bool GetCrossModEmblemSuperiority(Item replacer, Item old)
+		{
+			if (old == null)
+				return true;
+
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				const int GET_REWORKMINION_ITEM_VALUE = 16;
+				const int PREFIXMINIONPOWER = 0;
+
+				int useTimeDiff = replacer.useTime - old.useTime;
+				if (useTimeDiff < 0)
+					return true;
+				if (useTimeDiff > 0)
+					return false;
+				int critDiff = replacer.crit - old.crit;
+				if (critDiff > 0)
+					return true;
+				if (critDiff < 0)
+					return false;
+				float apDiff = (float)summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, replacer, PREFIXMINIONPOWER) - (float)summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, old, PREFIXMINIONPOWER);
+				if (apDiff > 0)
+					return true;
+				if (apDiff < 0)
+					return false;
+			}
+			return false;
+		}
 		public static void GetCrossModEmblemStats(LeveledCombatPetModPlayer modPlayer, Item item)
 		{
 			Mod summonersShine = null;
@@ -406,7 +434,7 @@ namespace AmuletOfManyMinions
 						modPlayer.PetModdedStats[currentArrayPos] = item.useTime / (float)(compItem.useTime);
 					}
 					else
-						modPlayer.PetModdedStats[currentArrayPos] = 1;
+						modPlayer.PetModdedStats[currentArrayPos] = 1f;
 					currentArrayPos++;
 					modPlayer.PetModdedStats[currentArrayPos] = item.crit;
 					currentArrayPos++;
