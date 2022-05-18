@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal int PetDamage { get; set; }
 		
 		public int PetEmblemItem = -1;
-		public object[] PetModdedStats = null;
+		public object[] PetModdedStats = new object[0];
 
 		// todo this may be too many constructors, but it's a struct so I think it's ok
 		private PlayerCombatPetLevelInfo CustomInfo;
@@ -132,15 +132,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		private int buffResetCountdown;
 
 		private List<int> BuffsToAddOnRespawn = new();
-		public void UpdatePetLevel(int newLevel, int newDamage, bool fromSync = false)
+		public void UpdatePetLevel(int newLevel, int newDamage, object[] newModdedStats, bool fromSync = false)
 		{
-			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage;
+			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage || PetModdedStats.Length != newModdedStats.Length;
+			if (!didUpdate) {
+				for (int x = 0; x < PetModdedStats.Length; x++) {
+					if (PetModdedStats[x] != newModdedStats[x]) {
+						didUpdate = true;
+						break;
+					}
+				}
+			}
 			PetLevel = newLevel;
 			PetDamage = newDamage;
-			if(didUpdate && !fromSync)
+			PetModdedStats = newModdedStats;
+			if (didUpdate && !fromSync)
 			{
 				// TODO MP packet
-				new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage).Send();
+				new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage, PetModdedStats).Send();
 			}
 		}
 
@@ -155,7 +164,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override void PostUpdate()
 		{
-			CheckForCombatPetEmblem();
+			if (Main.myPlayer == Player.whoAmI)
+			{
+				CheckForCombatPetEmblem();
+			}
 			UpdateCombatPetCount();
 			ReflagPetBuffs();
 		}
@@ -245,8 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					}
 				}
 			}
-			UpdatePetLevel(maxLevel, maxDamage);
-			CrossMod.GetCrossModEmblemStats(this, maxItem);
+			UpdatePetLevel(maxLevel, maxDamage, CrossMod.GetCrossModEmblemStats(maxItem));
 		}
 
 		private void ReflagPetBuffs()
