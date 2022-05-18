@@ -197,6 +197,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 			int maxLevel = 0;
 			int maxDamage = CombatPetLevelTable.PetLevelTable[0].BaseDamage;
+			Item maxItem = null;
 			for(int i = 0; i < Player.inventory.Length; i++)
 			{
 				Item item = Player.inventory[i];
@@ -207,6 +208,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					{
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
+						maxItem = item;
 					}
 				}
 			}
@@ -220,10 +222,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					{
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
+						maxItem = item;
 					}
 				}
 			}
 			UpdatePetLevel(maxLevel, maxDamage);
+			GetCrossModEmblemStats(this, maxItem);
 		}
 
 		private void ReflagPetBuffs()
