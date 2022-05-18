@@ -416,11 +416,11 @@ namespace AmuletOfManyMinions
 				}
 				else
 				{
-					modPlayer.PetModdedStats[currentArrayPos] = 1;
+					modPlayer.PetModdedStats[currentArrayPos] = 1f;
 					currentArrayPos++;
 					modPlayer.PetModdedStats[currentArrayPos] = 0;
 					currentArrayPos++;
-					modPlayer.PetModdedStats[currentArrayPos] = 0;
+					modPlayer.PetModdedStats[currentArrayPos] = 0f;
 					currentArrayPos++;
 				}
 			}
