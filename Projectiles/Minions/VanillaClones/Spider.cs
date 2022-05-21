@@ -41,6 +41,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class SpiderMinionItem : VanillaCloneMinionItem<SpiderMinionBuff, VenomSpiderMinion>
 	{
 		public int[] projTypes;
+
+		public override bool IsCloneable => true; //projTypes is fine to be shared across instances
 		internal override int VanillaItemID => ItemID.SpiderStaff;
 
 		internal override string VanillaItemName => "SpiderStaff";
