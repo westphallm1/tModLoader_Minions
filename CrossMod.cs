@@ -371,7 +371,7 @@ namespace AmuletOfManyMinions
 			return original;
 		}
 		
-		public static int HookBuffToItemCrossMod(int BuffType, int ItemType)
+		public static void HookBuffToItemCrossMod(int BuffType, int ItemType)
 		{
 			const int MODIFYCONFIGS = 0;
 			const int HOOKBUFFTOITEM = 9;
