@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		
 		void UnifiedCrossModChanges()
 		{
-			HookBuffToItemCrossMod(BuffType<TBuff>(), Item.type);
+			CrossMod.HookBuffToItemCrossMod(BuffType<TBuff>(), Item.type);
 			ApplyCrossModChanges();
 		}
 		
