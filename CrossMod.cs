@@ -265,7 +265,7 @@ namespace AmuletOfManyMinions
 			
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				if((bool)SummonersShine.Call(USEFUL_FUNCS, IS_PROJECTILE_MINION_POWER_ENABLED, projectile))
+				if((bool)summonersShine.Call(USEFUL_FUNCS, IS_PROJECTILE_MINION_POWER_ENABLED, projectile))
 					return value;
 				
 				Tuple<float, float, int, int, bool> rv = (Tuple<float, float, int, int, bool>)summonersShine.Call(USEFUL_FUNCS, GET_ALL_MINION_POWER_DATA, projectile, index);
