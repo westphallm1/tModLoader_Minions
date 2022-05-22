@@ -539,7 +539,10 @@ namespace AmuletOfManyMinions
 		{
 			Player player = Main.player[Main.myPlayer];
 			LeveledCombatPetModPlayer playerFuncs = player.GetModPlayer<LeveledCombatPetModPlayer>();
-			return new int[] { playerFuncs.PetEmblemItem };
+			int rv = playerFuncs.PetEmblemItem;
+			if (rv == -1)
+				return null;
+			return new int[] { rv };
 		}
 
 		public static void HookCombatPetBuffToEmblemSourceItem(int BuffType)
