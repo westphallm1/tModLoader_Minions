@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		private int buffResetCountdown;
 
 		private List<int> BuffsToAddOnRespawn = new();
-		public void UpdatePetLevel(int newLevel, int newDamage, int newEmblemItem, object[] newModdedStats, bool fromSync = false)
+		public void UpdatePetLevel(int newLevel, int newDamage, bool fromSync = false)
 		{
 			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage;
 			PetLevel = newLevel;
@@ -160,7 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			if (didUpdate && !fromSync)
 			{
 				// TODO MP packet
-				new CombatPetLevelPacketModded(Player, PetEmblemItem, PetModdedStats).Send();
+				new CombatPetLevelModdedPacket(Player, PetEmblemItem, PetModdedStats).Send();
 			}
 		}
 
