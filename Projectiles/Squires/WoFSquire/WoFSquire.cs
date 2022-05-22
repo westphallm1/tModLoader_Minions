@@ -37,6 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Wall of Flesh Squire");
 			Description.SetDefault("You can guide the Wall of Flesh!");
+			CrossMod.HookBuffToItemCrossMod(Type, ItemType<GuideVoodooSquireMinionItem>());
 		}
 		public override void Update(Player player, ref int buffIndex)
 		{
