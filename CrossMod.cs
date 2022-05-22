@@ -513,5 +513,23 @@ namespace AmuletOfManyMinions
 			}
 			return rv;
 		}
+		
+		public static void HookBuffToItemCrossMod(int BuffType, int[] ItemTypes)
+		{
+			const int MODIFYCONFIGS = 0;
+			const int HOOKBUFFTOITEM = 9;
+			const int HOOKBUFFCONSTS = 17;
+			const int DISPLAYOVERRIDE = 1;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				if(ItemTypes.Length == 1)
+				{
+					int ItemType = ItemTypes[0];
+					summonersShine.Call(MODIFYCONFIGS, HOOKBUFFTOITEM, BuffType, ItemType);
+				}
+				else
+					summonersShine.Call(HOOKBUFFCONSTS, DISPLAYOVERRIDE, BuffType, (int i) => ItemTypes);
+			}
+		}
 	}
 }
