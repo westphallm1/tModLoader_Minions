@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using System;
 using System.Collections.Generic;
 using System.IO;

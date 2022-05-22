@@ -1,4 +1,5 @@
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar;
 using AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar;
 using AmuletOfManyMinions.Projectiles.Minions.EclipseHerald;
@@ -13,6 +14,7 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Squires;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -379,6 +381,146 @@ namespace AmuletOfManyMinions
 			{
 				summonersShine.Call(MODIFYCONFIGS, HOOKBUFFTOITEM, BuffType, ItemType);
 			}
+    }
+		public static Item GetPrefixComparisonItem(int netID)
+        {
+            if (Main.tooltipPrefixComparisonItem == null)
+            {
+                Main.tooltipPrefixComparisonItem = new Item();
+            }
+            Item compItem = Main.tooltipPrefixComparisonItem;
+            if (compItem.netID != netID)
+                compItem.netDefaults(netID);
+            return compItem;
+        }
+		
+		public static bool GetCrossModEmblemSuperiority(Item replacer, Item old)
+		{
+			if (old == null)
+				return true;
+
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				const int GET_REWORKMINION_ITEM_VALUE = 16;
+				const int PREFIXMINIONPOWER = 0;
+
+				int useTimeDiff = replacer.useTime - old.useTime;
+				if (useTimeDiff < 0)
+					return true;
+				if (useTimeDiff > 0)
+					return false;
+				int critDiff = replacer.crit - old.crit;
+				if (critDiff > 0)
+					return true;
+				if (critDiff < 0)
+					return false;
+				float apDiff = (float)summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, replacer, PREFIXMINIONPOWER) - (float)summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, old, PREFIXMINIONPOWER);
+				if (apDiff > 0)
+					return true;
+				if (apDiff < 0)
+					return false;
+			}
+			return false;
+		}
+		public static object[] GetCrossModEmblemStats(Item item)
+		{
+			Mod summonersShine = null;
+			int maxArray = 0;
+			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
+			{
+				maxArray += 3;
+			}
+			object[] rv = new object[maxArray];
+			int currentArrayPos = 0;
+			if(summonersShine != null)
+			{
+				const int GET_REWORKMINION_ITEM_VALUE = 16;
+				const int PREFIXMINIONPOWER = 0;
+				if (item != null)
+				{
+					Item compItem = GetPrefixComparisonItem(item.netID);
+					if (compItem.useTime > 0)
+					{
+						rv[currentArrayPos] = item.useTime / (float)(compItem.useTime);
+					}
+					else
+						rv[currentArrayPos] = 1f;
+					currentArrayPos++;
+					rv[currentArrayPos] = item.crit;
+					currentArrayPos++;
+
+					rv[currentArrayPos] = summonersShine.Call(GET_REWORKMINION_ITEM_VALUE, item, PREFIXMINIONPOWER);
+					currentArrayPos++;
+				}
+				else
+				{
+					rv[currentArrayPos] = 1f;
+					currentArrayPos++;
+					rv[currentArrayPos] = 0;
+					currentArrayPos++;
+					rv[currentArrayPos] = 0f;
+					currentArrayPos++;
+				}
+			}
+			return rv;
+		}
+		
+		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer)
+		{
+			int currentArrayPos = 0;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				const int SET_PROJFUNCS = 4;
+				const int SET_PROJDATA = 5;
+				const int USEFULFUNCS = 10;
+				const int OVERRIDESOURCEITEM = 11;
+				const int MINIONASMOD = 1;
+				const int PROJECTILECRIT = 0;
+				const int PREFIXMINIONPOWER = 10;
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, MINIONASMOD, modPlayer.PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PROJECTILECRIT, modPlayer.PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				summonersShine.Call(SET_PROJDATA, projectile.whoAmI, PREFIXMINIONPOWER, modPlayer.PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				summonersShine.Call(USEFULFUNCS, OVERRIDESOURCEITEM, projectile, modPlayer.PetEmblemItem);
+			}
+		}
+
+		public static void CombatPetSendCrossModData(BinaryWriter writer, object[] PetModdedStats)
+		{
+
+			int currentArrayPos = 0;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				writer.Write((float)PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				writer.Write7BitEncodedInt((int)PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+				writer.Write((float)PetModdedStats[currentArrayPos]);
+				currentArrayPos++;
+			}
+		}
+		public static object[] CombatPetReceiveCrossModData(BinaryReader reader)
+		{
+			int maxArray = 0;
+			Mod summonersShine = null;
+			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
+			{
+				maxArray += 3;
+			}
+			object[] rv = new object[maxArray];
+			int currentArrayPos = 0;
+			if (summonersShine != null)
+			{
+				rv[currentArrayPos] = reader.ReadSingle();
+				currentArrayPos++;
+				rv[currentArrayPos] = reader.Read7BitEncodedInt();
+				currentArrayPos++;
+				rv[currentArrayPos] = reader.ReadSingle();
+				currentArrayPos++;
+			}
+			return rv;
 		}
 	}
 }
