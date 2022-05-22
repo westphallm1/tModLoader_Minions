@@ -375,6 +375,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			Main.vanityPet[Type] = true;
 			Main.buffNoSave[Type] = false;
 			CombatPetBuffTypes.Add(Type);
+			CrossMod.HookCombatPetBuffToEmblemSourceItem(Type);
 		}
 
 		public override void Update(Player player, ref int buffIndex)
