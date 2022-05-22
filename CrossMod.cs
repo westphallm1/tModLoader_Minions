@@ -381,7 +381,7 @@ namespace AmuletOfManyMinions
 			{
 				summonersShine.Call(MODIFYCONFIGS, HOOKBUFFTOITEM, BuffType, ItemType);
 			}
-    }
+    	}
 		public static Item GetPrefixComparisonItem(int netID)
         {
             if (Main.tooltipPrefixComparisonItem == null)
