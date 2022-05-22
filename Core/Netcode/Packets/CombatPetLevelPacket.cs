@@ -1,3 +1,4 @@
+
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using System;
 using System.Collections.Generic;
@@ -35,8 +36,7 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 			byte newLevel = reader.ReadByte();
 			short petDamage = reader.ReadInt16();
 			// there may be unintended consequences to setting damage to zero
-			LeveledCombatPetModPlayer modPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
-			modPlayer.UpdatePetLevel(newLevel, petDamage, fromSync: true);
+			player.GetModPlayer<LeveledCombatPetModPlayer>().UpdatePetLevel(newLevel, petDamage, fromSync: true);
 			if (Main.netMode == NetmodeID.Server)
 			{
 				new CombatPetLevelPacket(player, newLevel, petDamage).Send(from: sender);
