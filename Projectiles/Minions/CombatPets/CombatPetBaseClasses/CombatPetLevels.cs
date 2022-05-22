@@ -134,7 +134,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		private List<int> BuffsToAddOnRespawn = new();
 		public void UpdatePetLevel(int newLevel, int newDamage, int newEmblemItem, object[] newModdedStats, bool fromSync = false)
 		{
-			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage || PetModdedStats.Length != newModdedStats.Length;
+			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage;
+			PetLevel = newLevel;
+			PetDamage = newDamage;
+			if (didUpdate && !fromSync)
+			{
+				// TODO MP packet
+				new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage).Send();
+			}
+		}
+		
+		public void UpdatePetLevelModded(int newEmblemItem, object[] newModdedStats, bool fromSync = false)
+		{
+			bool didUpdate = PetEmblemItem != newEmblemItem || PetModdedStats.Length != newModdedStats.Length;
 			if (!didUpdate) {
 				for (int x = 0; x < PetModdedStats.Length; x++) {
 					if (PetModdedStats[x] != newModdedStats[x]) {
@@ -143,14 +155,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					}
 				}
 			}
-			PetLevel = newLevel;
-			PetDamage = newDamage;
 			PetEmblemItem = newEmblemItem;
 			PetModdedStats = newModdedStats;
 			if (didUpdate && !fromSync)
 			{
 				// TODO MP packet
-				new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage, PetEmblemItem, PetModdedStats).Send();
+				new CombatPetLevelPacketModded(Player, PetEmblemItem, PetModdedStats).Send();
 			}
 		}
 
@@ -258,7 +268,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					}
 				}
 			}
-			UpdatePetLevel(maxLevel, maxDamage, maxEmblemItem, CrossMod.GetCrossModEmblemStats(maxItem));
+			UpdatePetLevel(maxLevel, maxDamage);
+			UpdatePetLevelModded(maxEmblemItem, CrossMod.GetCrossModEmblemStats(maxItem));
 		}
 
 		private void ReflagPetBuffs()
