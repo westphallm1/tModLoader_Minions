@@ -531,5 +531,22 @@ namespace AmuletOfManyMinions
 					summonersShine.Call(HOOKBUFFCONSTS, DISPLAYOVERRIDE, BuffType, (int i) => ItemTypes);
 			}
 		}
+
+		static int[] SummonersShineEmblemDisplayOverride(int BuffType)
+		{
+			Player player = Main.player[Main.myPlayer];
+			LeveledCombatPetModPlayer playerFuncs = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			return new int[] { playerFuncs.PetEmblemItem };
+		}
+
+		public static void HookCombatPetBuffToEmblemSourceItem(int BuffType)
+		{
+			const int HOOKBUFFCONSTS = 17;
+			const int DISPLAYOVERRIDE = 1;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				summonersShine.Call(HOOKBUFFCONSTS, DISPLAYOVERRIDE, BuffType, SummonersShineEmblemDisplayOverride);
+			}
+		}
 	}
 }
