@@ -261,9 +261,12 @@ namespace AmuletOfManyMinions
 		{
 			const int USEFUL_FUNCS = 10;
 			const int GET_ALL_MINION_POWER_DATA = 10;
-			
+			const int IS_PROJECTILE_MINION_POWER_ENABLED = 13;
+
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
+				if(!(bool)summonersShine.Call(USEFUL_FUNCS, IS_PROJECTILE_MINION_POWER_ENABLED, projectile))
+					return value;
 				Tuple<float, float, int, int, bool> rv = (Tuple<float, float, int, int, bool>)summonersShine.Call(USEFUL_FUNCS, GET_ALL_MINION_POWER_DATA, projectile, index);
 				float outValue = rv.Item1;
 				float original = rv.Item2;
@@ -512,6 +515,44 @@ namespace AmuletOfManyMinions
 				currentArrayPos++;
 			}
 			return rv;
+		}
+		
+		public static void HookBuffToItemCrossMod(int BuffType, params int[] ItemTypes)
+		{
+			const int MODIFYCONFIGS = 0;
+			const int HOOKBUFFTOITEM = 9;
+			const int HOOKBUFFCONSTS = 17;
+			const int DISPLAYOVERRIDE = 1;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				if(ItemTypes.Length == 1)
+				{
+					int ItemType = ItemTypes[0];
+					summonersShine.Call(MODIFYCONFIGS, HOOKBUFFTOITEM, BuffType, ItemType);
+				}
+				else
+					summonersShine.Call(HOOKBUFFCONSTS, BuffType, DISPLAYOVERRIDE, (int i) => ItemTypes);
+			}
+		}
+
+		static int[] SummonersShineEmblemDisplayOverride(int BuffType)
+		{
+			Player player = Main.player[Main.myPlayer];
+			LeveledCombatPetModPlayer playerFuncs = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			int rv = playerFuncs.PetEmblemItem;
+			if (rv == -1)
+				return null;
+			return new int[] { rv };
+		}
+
+		public static void HookCombatPetBuffToEmblemSourceItem(int BuffType)
+		{
+			const int HOOKBUFFCONSTS = 17;
+			const int DISPLAYOVERRIDE = 1;
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				summonersShine.Call(HOOKBUFFCONSTS, BuffType, DISPLAYOVERRIDE, SummonersShineEmblemDisplayOverride);
+			}
 		}
 	}
 }
