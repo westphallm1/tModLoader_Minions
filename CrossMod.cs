@@ -531,7 +531,7 @@ namespace AmuletOfManyMinions
 					summonersShine.Call(MODIFYCONFIGS, HOOKBUFFTOITEM, BuffType, ItemType);
 				}
 				else
-					summonersShine.Call(HOOKBUFFCONSTS, DISPLAYOVERRIDE, BuffType, (int i) => ItemTypes);
+					summonersShine.Call(HOOKBUFFCONSTS, BuffType, DISPLAYOVERRIDE, (int i) => ItemTypes);
 			}
 		}
 
@@ -548,7 +548,7 @@ namespace AmuletOfManyMinions
 			const int DISPLAYOVERRIDE = 1;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				summonersShine.Call(HOOKBUFFCONSTS, DISPLAYOVERRIDE, BuffType, SummonersShineEmblemDisplayOverride);
+				summonersShine.Call(HOOKBUFFCONSTS, BuffType, DISPLAYOVERRIDE, SummonersShineEmblemDisplayOverride);
 			}
 		}
 	}
