@@ -31,6 +31,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 	{
 		public int[] projTypes;
 
+		public override bool IsCloneable => true; //projTypes is fine to be shared across instances
+
 		internal override int VanillaItemID => ItemID.PirateStaff;
 
 		internal override string VanillaItemName => "PirateStaff";

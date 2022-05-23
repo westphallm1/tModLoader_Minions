@@ -39,6 +39,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public int[] projTypes;
 
+		public override bool IsCloneable => true; //projTypes is fine to be shared across instances
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
