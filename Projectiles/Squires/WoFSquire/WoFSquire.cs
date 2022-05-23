@@ -533,6 +533,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		}
 		public override void LoadAssets()
 		{
+			base.LoadAssets();
 			AddTexture("Terraria/Images/HealthBar1");
 			AddTexture("Terraria/Images/HealthBar2");
 		}

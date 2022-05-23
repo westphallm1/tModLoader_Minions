@@ -10,7 +10,7 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
-v0.14.0.3-7 - tML API Changes
+v0.14.0.X - tML API Changes
 v0.14.0.2 - Bugfixes
     - Fix bug where Variety Buff would rapidly switch buff slots
     - Fix bug where combat pet accessories didn't give extra slots when player had non-pet minions
