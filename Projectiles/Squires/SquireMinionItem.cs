@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -80,41 +81,30 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
 			int index = tooltips.Count - 1;
-			iter = true;
+			bool iter = true;
+			string[] placeAfterTooltips = {
+					"ItemName",
+					"Favorite",
+					"FavoriteDesc",
+					"NoTransfer",
+					"Social",
+					"SocialDesc",
+					"Damage",
+					"CritChance",
+					"Speed",
+					"Knockback",
+					"PickPower",
+					"AxePower",
+					"HammerPower",
+					"UseMana"
+				};
 			while (iter)
 			{
-				if (index <= 0)
-					break;
-				switch (tooltips[index].Name)
+				if (index <= 0 || placeAfterTooltips.Contains(tooltips[index].Name) || tooltips[index].Name.StartsWith("Tooltip"))
 				{
-					case "ItemName":
-					case "Favorite":
-					case "FavoriteDesc":
-					case "NoTransfer":
-					case "Social":
-					case "SocialDesc":
-					case "Damage":
-					case "CritChance":
-					case "Speed":
-					case "Knockback":
-					case "PickPower":
-					case "AxePower":
-					case "HammerPower":
-					case "UseMana":
-						iter = false;
-						break;
-					default:
-						if (tooltips[index].Name.StartsWith("Tooltip"))
-						{
-							iter = false;
-							break;
-						}
-						else
-						{
-							index--;
-						}
-						break;
+					break;
 				}
+				index--;
 			}
 			tooltips.Insert(index + 1, new TooltipLine(Mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
 			{
