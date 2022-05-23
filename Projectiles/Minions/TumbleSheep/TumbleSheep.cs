@@ -125,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		{
 			lastFiredFrame = animationFrame;
 			launchPos = Projectile.position;
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
 			if(targetNPCIndex is int idx && Main.npc[idx].active)
 			{
 				vectorToTarget += 4 * Main.npc[idx].velocity; // track the target NPC a bit

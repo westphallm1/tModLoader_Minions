@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 113);
+			Item.UseSound = SoundID.Item113;
 		}
 	}
 
@@ -354,7 +354,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeadlySphere;
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
 
 		internal override int? FiredProjectileId => null;
 

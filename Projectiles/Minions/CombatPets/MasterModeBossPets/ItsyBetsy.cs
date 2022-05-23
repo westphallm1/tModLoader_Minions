@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int? FiredProjectileId => ProjectileType<ItsyBetsyFire>();
 
 		internal override int GetProjectileVelocity(ICombatPetLevelInfo info) => 6;
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
 
 		public override void SetStaticDefaults()
 		{

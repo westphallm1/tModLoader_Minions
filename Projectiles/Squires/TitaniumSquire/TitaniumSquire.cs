@@ -160,7 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 					Main.dust[dustId].scale = Main.rand.NextFloat(0.9f, 1.3f);
 					Main.dust[dustId].velocity *= 0.2f;
 				}
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 92), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item92, Projectile.Center);
 			}
 		}
 

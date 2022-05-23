@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 83);
+			Item.UseSound = SoundID.Item83;
 		}
 	}
 	public abstract class BaseSpiderMinion : SimpleGroundBasedMinion

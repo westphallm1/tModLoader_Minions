@@ -81,14 +81,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					spawnPos = Projectile.Center + hands[1].Position;
 					damage = Projectile.damage;
 					projId = ProjectileType<MiniTwinsLaser>();
-					SoundEngine.PlaySound(new LegacySoundStyle(2, 10).WithVolume(0.5f), Projectile.Center);
+					SoundEngine.PlaySound(SoundID.Item10 with { Volume = 0.5f }, Projectile.Center);
 				} else 
 				{
 					target *= 8;
 					spawnPos = Projectile.Center + hands[3].Position;
 					damage = 3 * Projectile.damage / 2;
 					projId = ProjectileType<PirateCannonball>();
-					SoundEngine.PlaySound(new LegacySoundStyle(2, 11).WithVolume(0.5f), Projectile.Center);
+					SoundEngine.PlaySound(SoundID.Item11 with { Volume = 0.5f }, Projectile.Center);
 				}
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
