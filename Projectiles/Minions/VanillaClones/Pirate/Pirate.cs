@@ -29,9 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public class PirateMinionItem : VanillaCloneMinionItem<PirateMinionBuff, PirateMinion>
 	{
+		[CloneByReference] //projTypes is fine to be shared across instances
 		public int[] projTypes;
-
-		public override bool IsCloneable => true; //projTypes is fine to be shared across instances
 
 		internal override int VanillaItemID => ItemID.PirateStaff;
 

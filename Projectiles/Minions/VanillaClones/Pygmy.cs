@@ -32,9 +32,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override int VanillaItemID => ItemID.PygmyStaff;
 
 		internal override string VanillaItemName => "PygmyStaff";
+		[CloneByReference] //projTypes is fine to be shared across instances
 		public int[] projTypes;
-
-		public override bool IsCloneable => true; //projTypes is fine to be shared across instances
 
 		public override void SetDefaults()
 		{
