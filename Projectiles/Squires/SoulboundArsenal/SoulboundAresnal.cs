@@ -120,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
@@ -267,7 +267,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 102), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item102, Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					int type = ProjectileType<SoulboundArsenalArrow>();
@@ -353,7 +353,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 71), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item71, Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Vector2 vector2Mouse = Main.MouseWorld - Projectile.Center;

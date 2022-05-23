@@ -169,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
+		protected override SoundStyle? attackSound => SoundID.Item5;
 
 		protected override float projectileVelocity => 16;
 
@@ -247,7 +247,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 						Projectile.knockBack,
 						Main.myPlayer);
 				}
-				SoundEngine.PlaySound(attackSound, Projectile.Center);
+				if (attackSound.HasValue)
+				{
+					SoundEngine.PlaySound(attackSound.Value, Projectile.Center);
+				}
 			}
 		}
 

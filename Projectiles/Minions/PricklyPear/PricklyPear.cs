@@ -228,7 +228,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		{
 			int seedVelocity = 7;
 			lastFiredFrame = animationFrame;
-			SoundEngine.PlaySound(new LegacySoundStyle(6, 1), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Grass, Projectile.Center);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				foreach (float seedAngle in seedAngles)

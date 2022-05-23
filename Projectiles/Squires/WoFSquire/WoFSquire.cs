@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		Vector2 specialStartPos;
 		int chargeDirection;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(15, 0);
+		protected override SoundStyle? SpecialStartSound => SoundID.Roar;
 		protected override int SpecialDuration => SpecialLoopCount * SpecialLoopSpeed + SpecialLoopSpeed / 2 + SpecialChargeTime;
 		protected override int SpecialCooldown => 6 * 60;
 
@@ -520,10 +520,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		protected int knockbackCounter = 0;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(1, 0);
+		protected override SoundStyle? SpecialStartSound => SoundID.PlayerHit with { Variants = stackalloc int[] { 0 } }; //Works too: new SoundStyle("Terraria/Sounds/Player_Hit_0");
 
-
-		protected override LegacySoundStyle attackSound => null;
+		protected override SoundStyle? attackSound => null;
 
 		public override void SetStaticDefaults()
 		{

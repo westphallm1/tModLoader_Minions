@@ -113,7 +113,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		{
 			if(usingSpecial && attackFrame == 0)
 			{
-				SoundEngine.PlaySound(attackSound, Projectile.Center);
+				if (attackSound.HasValue)
+				{
+					SoundEngine.PlaySound(attackSound.Value, Projectile.Center);
+				}
 			}
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}

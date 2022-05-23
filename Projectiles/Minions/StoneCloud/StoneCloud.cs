@@ -191,7 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 				{
 					didHitGround = true;
 					Collision.HitTiles(Projectile.BottomLeft, oldVelocity, 40, 8);
-					SoundEngine.PlaySound(new LegacySoundStyle(3, 7), Projectile.position);
+					SoundEngine.PlaySound(SoundID.NPCHit7, Projectile.position);
 				}
 			}
 			return false;

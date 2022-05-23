@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			// don't spawn an arrow on kill
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{

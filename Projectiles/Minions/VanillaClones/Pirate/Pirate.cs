@@ -29,9 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public class PirateMinionItem : VanillaCloneMinionItem<PirateMinionBuff, PirateMinion>
 	{
+		[CloneByReference] //projTypes is fine to be shared across instances
 		public int[] projTypes;
-
-		public override bool IsCloneable => true; //projTypes is fine to be shared across instances
 
 		internal override int VanillaItemID => ItemID.PirateStaff;
 
@@ -169,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					projectile.knockBack,
 					projectile.owner);
 			}
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 14)?.WithVolume(0.5f) ?? null, projectile.position);
+			SoundEngine.PlaySound(SoundID.Item14 with { Volume = 0.5f }, projectile.position);
 		}
 	}
 
@@ -354,7 +353,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		{
 			int bulletVelocity = 24;
 			lastFiredFrame = animationFrame;
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 11), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;
@@ -534,7 +533,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		internal override int BuffId => BuffType<PirateMinionBuff>();
 
 		internal override int? FiredProjectileId => ProjectileType<PirateCannonball>();
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 14).WithVolume(0.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item14 with { Volume = 0.5f };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

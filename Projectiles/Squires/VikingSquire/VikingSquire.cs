@@ -118,9 +118,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(usingSpecial && attackFrame == 0)
+			if(usingSpecial && attackFrame == 0 && attackSound.HasValue)
 			{
-				SoundEngine.PlaySound(attackSound, Projectile.Center);
+				SoundEngine.PlaySound(attackSound.Value, Projectile.Center);
 			}
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}

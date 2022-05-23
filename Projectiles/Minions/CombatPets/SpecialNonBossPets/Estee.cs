@@ -254,7 +254,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 					Projectile.knockBack,
 					Main.myPlayer,
 					ai0: target.whoAmI);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 9), spawnPos);
+				SoundEngine.PlaySound(SoundID.Item9, spawnPos);
 			}
 		}
 	}

@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		}
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
 			for (int i = 0; i < 15; i++)
 			{
 				int dustCreated = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 50, default(Color), 1.2f);
@@ -124,9 +124,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 13);
+		protected override SoundStyle? attackSound => SoundID.Item13;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 28);
+		protected override SoundStyle? SpecialStartSound => SoundID.Item28;
 		protected override float projectileVelocity => 8;
 
 		protected override bool travelRangeCanBeModified => false;

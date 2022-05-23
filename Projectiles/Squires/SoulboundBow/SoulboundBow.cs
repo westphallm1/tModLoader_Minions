@@ -151,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			// don't spawn an arrow on kill
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		protected override float IdleDistanceMulitplier => 3;
 		public override string Texture => "Terraria/Images/Item_0";
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
+		protected override SoundStyle? attackSound => SoundID.Item5;
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
 		protected override WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.VERTICAL;
@@ -276,7 +276,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 					Projectile.damage,
 					Projectile.knockBack,
 					Main.myPlayer);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 1), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			}
 		}
 
