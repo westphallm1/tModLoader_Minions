@@ -29,6 +29,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			DisplayName.SetDefault("Guide Friendship Bracelet");
 			Tooltip.SetDefault("Summons a squire\nClick and hold to guide its attacks!\n'Maybe you're not such a terrible person...'");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(3);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+		}
 
 		public override void SetDefaults()
 		{
@@ -105,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		{
 			if (Main.rand.NextBool(3))
 			{
-				target.AddBuff(BuffID.OnFire, 180);
+				target.AddBuff(BuffID.OnFire, (int)CrossMod.ApplyCrossModScaling(180, Projectile, 0));
 			}
 		}
 	}
