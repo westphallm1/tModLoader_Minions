@@ -621,8 +621,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					b = getGradient(halfHealthColor.B, zeroHealthColor.B, weight);
 				}
 				Color drawColor = new Color(r, g, b);
-				Texture2D healthBar = ExtraTextures[0].Value;
-				Texture2D healthBarBack = ExtraTextures[1].Value;
+				Texture2D healthBar = ExtraTextures[2].Value;
+				Texture2D healthBarBack = ExtraTextures[3].Value;
 				Rectangle bounds = new Rectangle(0, 0, (int)(healthBar.Width * widthFraction), healthBar.Height);
 				Vector2 origin = healthBar.Bounds.Center.ToVector2();
 				Vector2 pos = Projectile.Bottom + new Vector2(0, 8);
