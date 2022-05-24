@@ -36,6 +36,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			DisplayName.SetDefault("Potted Pal");
 			Tooltip.SetDefault("Summons a squire\nA friendly plant will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(25);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+		}
 
 		public override void SetDefaults()
 		{
@@ -153,8 +160,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 		public override Vector2? FindTarget()
 		{
-			if(GetClosestEnemyToPosition(Projectile.Center, 400f, true) is NPC targetNPC && 
-				Vector2.DistanceSquared(targetNPC.Center, spawnPos) < 600 * 600)
+			float maxDist = CrossMod.ApplyCrossModScaling(600, Projectile, 0)
+			float findRange = CrossMod.ApplyCrossModScaling(400, Projectile, 0)
+			if(GetClosestEnemyToPosition(Projectile.Center, findRange, true) is NPC targetNPC && 
+				Vector2.DistanceSquared(targetNPC.Center, spawnPos) < maxDist * maxDist)
 			{
 				return targetNPC.Center - Projectile.Center;
 			} else
