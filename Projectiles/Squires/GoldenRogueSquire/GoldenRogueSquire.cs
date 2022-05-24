@@ -32,6 +32,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			DisplayName.SetDefault("Golden Rogue Crest");
 			Tooltip.SetDefault("Summons a squire\nA golden rogue squire will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(20);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+		}
 
 		public override void SetDefaults()
 		{
@@ -96,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			// manually bypass defense
 			// this may not be wholly correct
-			int defenseBypass = 20;
+			int defenseBypass = (int)CrossMod.ApplyCrossModScaling(20f, Projectile, 0);
 			int defense = Math.Min(target.defense, defenseBypass);
 			damage += defense / 2;
 		}
