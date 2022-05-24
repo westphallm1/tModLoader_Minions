@@ -29,6 +29,10 @@ Mods: {
 				'''
 				Cloud of Knives pierce {1} armor
 				'''
+			GuideSquireMinionItem:
+				'''
+				Fire arrows have {1} second duration
+				'''
 		}
 
 		SummonSpecialCompressed: {
@@ -50,7 +54,7 @@ Mods: {
 				'''
 			CrimsonSquireMinionItem:
 				'''
-				{1} second Ichor Flask's Ichor duration
+				{1} second Ichor Flask Ichor duration
 				'''
 			DemonSquireMinionItem:
 				'''
@@ -59,6 +63,18 @@ Mods: {
 			GoldenRogueSquireMinionItem:
 				'''
 				{1} Cloud of Knives armor piercing
+				'''
+			GuideSquireMinionItem:
+				'''
+				{1} second arrow fire duration
+				'''
+			MushroomSquireMinionItem:
+				'''
+				{1}% special ability mushroom travel distance
+				'''
+			PottedPalMinionItem:
+				'''
+				{1} Potted Pal Jr. reach length
 				'''
 		}
 	}
