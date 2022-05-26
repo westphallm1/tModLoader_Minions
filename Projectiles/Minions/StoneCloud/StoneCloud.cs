@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			DisplayName.SetDefault("Cloud in a Boulder");
 			Tooltip.SetDefault("Summons an extremely dense cloud to fight for you!\nDeals high damage, but attacks very slowly");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
