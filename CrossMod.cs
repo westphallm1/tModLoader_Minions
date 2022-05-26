@@ -189,15 +189,92 @@ namespace AmuletOfManyMinions
 				// there are some weird speed/behavior inconsistencies
 				// with most minions, especially while following the waypoint,
 				// so give the option of disabling them all
-				if(ServerConfig.Instance.DisableSummonersShineAI)
+				if (ServerConfig.Instance.DisableSummonersShineAI)
 				{
 					IEnumerable<ModProjectile> minions = mod.GetContent<ModProjectile>().Where(p => p is Minion);
-					foreach(var minion in minions)
+					foreach (var minion in minions)
 					{
 						summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, minion.Type);
 						summonersShine.Call(ADD_FILTER, DONT_COUNT_AS_MINION, minion.Type);
 					}
 				}
+
+
+				IEnumerable<ModProjectile> counterMinions = mod.GetContent<ModProjectile>().Where(p => p is CounterMinion);
+				foreach (var minion in counterMinions)
+				{
+					summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, minion.Type);
+				}
+			}
+		}
+
+		public enum SummonersShineDefaultSpecialWhitelistType { 
+			RANGED,
+			MELEE,
+			RANGEDNOINSTASTRIKE,
+			MELEENOINSTASTRIKE,
+			RANGEDNOMULTISHOT,
+		}
+
+		static readonly BitsByte[] SUMMONERS_SHINE_RANGED_WHITELISTDEFAULTS = new BitsByte[] {
+			new BitsByte(
+				true, //multishot
+				true, //enrage (safe)
+				true) //instastrike (ranged)
+		};
+		
+		static readonly BitsByte[] SUMMONERS_SHINE_RANGED_WHITELISTDEFAULTS_NOMULTISHOT = new BitsByte[] {
+			new BitsByte(
+				false, //multishot
+				true, //enrage (safe)
+				true) //instastrike (ranged)
+		};
+
+		static readonly BitsByte[] SUMMONERS_SHINE_MELEE_WHITELISTDEFAULTS = new BitsByte[] {
+			new BitsByte(
+				false, //multishot
+				true, //enrage (safe)
+				false, //instastrike (ranged)
+				true) //instastrike (melee)
+		};
+		
+		static readonly BitsByte[] SUMMONERS_SHINE_RANGED_WHITELISTDEFAULTS_NOINSTASTRIKE = new BitsByte[] {
+			new BitsByte(
+				true, //multishot
+				true) //enrage (safe)
+		};
+		//this is default minion behavior
+		static readonly BitsByte[] SUMMONERS_SHINE_MELEE_WHITELISTDEFAULTS_NOINSTASTRIKE = new BitsByte[] {
+			new BitsByte(
+				false, //multishot
+				true) //enrage (safe)
+		};
+		public static void WhitelistSummonersShineMinionDefaultSpecialAbility(int ItemType, SummonersShineDefaultSpecialWhitelistType specialWhitelistType)
+		{
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				BitsByte[] enabledData = null;
+				switch (specialWhitelistType)
+				{
+					case SummonersShineDefaultSpecialWhitelistType.RANGED:
+						enabledData = SUMMONERS_SHINE_RANGED_WHITELISTDEFAULTS;
+						break;
+					case SummonersShineDefaultSpecialWhitelistType.MELEE:
+						enabledData = SUMMONERS_SHINE_MELEE_WHITELISTDEFAULTS;
+						break;
+					case SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE:
+						enabledData = SUMMONERS_SHINE_RANGED_WHITELISTDEFAULTS_NOINSTASTRIKE;
+						break;
+					case SummonersShineDefaultSpecialWhitelistType.MELEENOINSTASTRIKE:
+						enabledData = SUMMONERS_SHINE_MELEE_WHITELISTDEFAULTS_NOINSTASTRIKE;
+						break;
+					case SummonersShineDefaultSpecialWhitelistType.RANGEDNOMULTISHOT:
+						enabledData = SUMMONERS_SHINE_RANGED_WHITELISTDEFAULTS_NOMULTISHOT;
+							break;
+				}
+				const int ADD_FILTER = 0;
+				const int DEFAULTSPECIALABILITYWHITELIST = 4;
+				summonersShine.Call(ADD_FILTER, DEFAULTSPECIALABILITYWHITELIST, ItemType, enabledData);
 			}
 		}
 		
