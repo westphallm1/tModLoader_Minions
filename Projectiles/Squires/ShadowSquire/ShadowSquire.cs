@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 		protected override Vector2 WingOffset => new Vector2(-4, 0);
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 106);
+		protected override SoundStyle? SpecialStartSound => SoundID.Item106;
 
 		public override void SetStaticDefaults()
 		{

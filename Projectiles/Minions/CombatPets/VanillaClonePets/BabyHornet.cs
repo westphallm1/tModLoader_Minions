@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		internal override int BuffId => BuffType<BabyHornetMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyHornet;
 		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

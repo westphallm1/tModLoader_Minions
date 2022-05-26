@@ -278,7 +278,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				Vector2 pos = Projectile.Center;
 				framesSinceLastHit = 0;
 				Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 8), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					projId = Projectile.NewProjectile(

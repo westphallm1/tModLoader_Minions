@@ -94,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, 16, 16);
 			return true;
 		}
@@ -278,7 +278,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 						Main.myPlayer);
 				}
 
-				SoundEngine.PlaySound(SoundID.Item33.WithVolume(.5f), Projectile.Center); //Why is it so LOUD?!
+				SoundEngine.PlaySound(SoundID.Item33 with { Volume = 0.5f }, Projectile.Center); //Why is it so LOUD?!
 			}
 		}
 

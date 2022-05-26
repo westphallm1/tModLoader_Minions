@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			{
 				OnFloorBounce(bounces, oldVelocity);
 				bounces--;
-				SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y, 1, 1f, Main.rand.Next(1));
+				SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.Next(1) }, Projectile.Center);
 			}
 			if (oldVelocity.Y < 0)
 			{
@@ -113,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void Kill(int timeLeft)
 		{
 			// don't explode
-			SoundEngine.PlaySound(new LegacySoundStyle(4, 1).WithPitchVariance(.5f), Projectile.position);
+			SoundEngine.PlaySound(SoundID.NPCDeath1 with { PitchVariance = 0.5f }, Projectile.position);
 			Vector2 direction = -Projectile.velocity;
 			direction.Normalize();
 			for (int i = 0; i < dustCount; i++)
@@ -236,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 19);
+		protected override SoundStyle? attackSound => SoundID.Item19;
 		protected override float projectileVelocity => 8;
 
 		protected override bool travelRangeCanBeModified => false;
