@@ -30,6 +30,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			DisplayName.SetDefault("Spirit Revolver");
 			Tooltip.SetDefault("Summons sentient bullets to fight for you.\nMake sure they don't get hungry...");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOMULTISHOT);
+		}
 
 		public override void SetDefaults()
 		{
