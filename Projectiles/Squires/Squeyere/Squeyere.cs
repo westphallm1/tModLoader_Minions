@@ -32,6 +32,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			Tooltip.SetDefault("Summons a squire\nA Squeyere will fight for you!\nClick and hold to guide its attacks\n" +
 				"'Squ-Eye-Re. Get it?'");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
+		}
 
 		public override void SetDefaults()
 		{
