@@ -27,6 +27,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			DisplayName.SetDefault("Clarent");
 			Tooltip.SetDefault("Summons a flying sword to fight for you!");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
