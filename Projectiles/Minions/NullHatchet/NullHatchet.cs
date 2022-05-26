@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			DisplayName.SetDefault("Null Hatchet");
 			Tooltip.SetDefault("Summons an ethereal axe to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
