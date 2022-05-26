@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			DisplayName.SetDefault("Slimecart Staff");
 			Tooltip.SetDefault("Summons slime miner to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
