@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			DisplayName.SetDefault("Magic Jelly Bean Jar");
 			Tooltip.SetDefault("Summons a stack of magic moles to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
