@@ -32,6 +32,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Pumpkin Crest");
 			Tooltip.SetDefault("Summons a squire\nA pumpkin squire will fight for you!\nClick and hold to guide its attacks");
+		}public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
