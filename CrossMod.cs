@@ -273,7 +273,7 @@ namespace AmuletOfManyMinions
 							break;
 				}
 				const int ADD_FILTER = 0;
-				const int DEFAULTSPECIALABILITYWHITELIST = 4;
+				const int DEFAULTSPECIALABILITYWHITELIST = 13;
 				summonersShine.Call(ADD_FILTER, DEFAULTSPECIALABILITYWHITELIST, ItemType, enabledData);
 			}
 		}
