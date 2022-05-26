@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			DisplayName.SetDefault("Meteor Fist");
 			Tooltip.SetDefault("Summons a meteor fist to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
