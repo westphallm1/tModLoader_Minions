@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			DisplayName.SetDefault("Void Dagger");
 			Tooltip.SetDefault("Summons an ethereal dagger to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
