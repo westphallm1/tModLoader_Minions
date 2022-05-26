@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 		internal override int BuffId => BuffType<SharkPupMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SharkPup;
 		internal override int? FiredProjectileId => ProjectileType<SharkPupBubble>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 
 		internal override int GetProjectileVelocity(ICombatPetLevelInfo info) => Math.Min(8, 4 + info.Level);
 		public override void SetStaticDefaults()

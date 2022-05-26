@@ -264,7 +264,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		{
 			int dartVelocity = 15;
 			lastFiredFrame = animationFrame;
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;

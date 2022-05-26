@@ -312,7 +312,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 					Dust.NewDust(Projectile.Top, Projectile.width, 16, 13, catchVelocity.X / 4, catchVelocity.Y / 4, newColor: Color.LightBlue);
 				}
 				side = side == 0 ? 1 : 0;
-				SoundEngine.PlaySound(new LegacySoundStyle(19, 1), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.SplashWeak, Projectile.Center);
 				launchedFish.Kill();
 			}
 

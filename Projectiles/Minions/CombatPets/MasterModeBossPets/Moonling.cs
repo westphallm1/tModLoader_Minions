@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MoonLordPet;
 		internal override int? FiredProjectileId => ProjectileType<MoonlingLaser>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 
 		float initialRotation = 0;
 		Vector2 lastValidTarget;
@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 			if(framesSinceFired % 30 == 0)
 			{
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 15).WithVolume(0.5f), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item15 with { Volume = 0.5f }, Projectile.Center);
 			}
 			lastValidTarget = vectorToTargetPosition;
 			if(framesSinceFired == 0)

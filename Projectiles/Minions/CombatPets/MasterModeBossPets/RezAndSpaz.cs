@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TwinsPet;
 		internal override int? FiredProjectileId => ProjectileType<MiniTwinsLaser>();
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 10).WithVolume(.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item10 with { Volume = 0.5f };
 
 		internal override bool DoBumblingMovement =>  leveledPetPlayer.PetLevel < 5;
 		internal override float DamageMult => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed ? 0.67f : 1f;
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TwinsPet;
 		internal override int? FiredProjectileId => ProjectileType<MiniEyeFire>();
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
 		internal override bool DoBumblingMovement =>  leveledPetPlayer.PetLevel < 5;
 		internal override float DamageMult => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed ? 0.67f : 1f;
 

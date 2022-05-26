@@ -72,7 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 54), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item54, Projectile.position);
 			for (int i = 0; i < 8; i++)
 			{
 				int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, 137, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
@@ -308,7 +308,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 85), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item85, Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Vector2 angleVector = UnitVectorFromWeaponAngle();

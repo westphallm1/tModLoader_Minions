@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 77);
+			Item.UseSound = SoundID.Item77;
 		}
 	}
 
@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		internal override int? FiredProjectileId => ProjectileType<ImpFireball>();
 
-		internal override LegacySoundStyle ShootSound => SoundID.Item20;
+		internal override SoundStyle? ShootSound => SoundID.Item20;
 
 		internal Projectile flameRing;
 
@@ -373,7 +373,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				targetShootProximityRadius = 256,
 				CustomFireProjectile = FireTridents,
 				ModifyTargetVector = HandleTargetProximity,
-				AfterFiringProjectile = () => SoundEngine.PlaySound(new LegacySoundStyle(2, 8).WithVolume(0.5f), Projectile.position)
+				AfterFiringProjectile = () => SoundEngine.PlaySound(SoundID.Item8 with { Volume = 0.5f }, Projectile.position)
 			};
 		}
 

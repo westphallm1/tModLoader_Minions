@@ -10,6 +10,7 @@ using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using static Terraria.ModLoader.ModContent;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
@@ -40,6 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class SpiderMinionItem : VanillaCloneMinionItem<SpiderMinionBuff, VenomSpiderMinion>
 	{
+		[CloneByReference] //projTypes is fine to be shared across instances
 		public int[] projTypes;
 		internal override int VanillaItemID => ItemID.SpiderStaff;
 
@@ -67,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 83);
+			Item.UseSound = SoundID.Item83;
 		}
 	}
 	public abstract class BaseSpiderMinion : SimpleGroundBasedMinion

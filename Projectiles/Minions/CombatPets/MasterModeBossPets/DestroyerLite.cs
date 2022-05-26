@@ -84,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					Projectile.damage,
 					Projectile.knockBack,
 					Main.myPlayer);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 10).WithVolume(0.5f), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item10 with { Volume = 0.5f }, Projectile.position);
 			}
 		}
 

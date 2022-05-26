@@ -142,7 +142,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 107), Projectile.Center);
+			SoundEngine.PlaySound(SoundID.Item107, Projectile.Center);
 			Vector2 position = Projectile.Center;
 			int width = 22;
 			int height = 22;
@@ -201,7 +201,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 		protected override float projectileVelocity => 12;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 106);
+		protected override SoundStyle? SpecialStartSound => SoundID.Item106;
 
 		protected override int SpecialCooldown => 8 * 60;
 

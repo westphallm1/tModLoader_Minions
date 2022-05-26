@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		internal override int? FiredProjectileId => ProjectileType<MiniSharknado>();
 
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(4, 19).WithVolume(0.5f);
+		internal override SoundStyle? ShootSound => SoundID.NPCDeath19 with { Volume = 0.5f };
 
 		// if more than 4 copies are spawned, transform into a single big one
 		internal bool isBeingUsedAsToken;
