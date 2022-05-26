@@ -32,6 +32,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			DisplayName.SetDefault("Rod of the Ratkeeper");
 			Tooltip.SetDefault("Summons a hoarde of rats to fight for you!\nEach rat deals 1/3 of base damage,\nand ignores 10 enemy defense");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
