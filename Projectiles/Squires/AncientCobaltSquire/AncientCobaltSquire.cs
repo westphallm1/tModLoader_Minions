@@ -35,6 +35,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(100f);
 			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
