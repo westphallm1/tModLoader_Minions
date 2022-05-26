@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			DisplayName.SetDefault("Skeletal Keychain");
 			Tooltip.SetDefault("Summons a skull biker to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
