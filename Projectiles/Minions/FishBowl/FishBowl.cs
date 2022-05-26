@@ -32,6 +32,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			Tooltip.SetDefault("Summons a flying fishbowl to fight for you!\n"+
 				"Most effective against flying enemies");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 
 		public override void SetDefaults()
 		{
