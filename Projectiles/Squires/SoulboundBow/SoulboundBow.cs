@@ -35,6 +35,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			DisplayName.SetDefault("Soulbound Bow");
 			Tooltip.SetDefault("Summons a squire\nAn enchanted bow will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
+		}
 
 		public override void SetDefaults()
 		{
