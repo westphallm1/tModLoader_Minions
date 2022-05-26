@@ -26,6 +26,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			DisplayName.SetDefault("Slimepire Staff");
 			Tooltip.SetDefault("Summons a vampire slime to fight for you!\nIgnores 10 enemy defense");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
