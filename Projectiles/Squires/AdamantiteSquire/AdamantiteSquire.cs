@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(3, 12);
+		protected override SoundStyle? SpecialStartSound => SoundID.NPCHit12;
 
 		private MotionBlurDrawer blurHelper;
 		private int dashDirection = 1;

@@ -127,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/LeafWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/MushroomSquire/MushroomSquireSword";
 
-		protected override LegacySoundStyle SpecialStartSound => null;
+		protected override SoundStyle? SpecialStartSound => null;
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
 		protected override Vector2 WingOffset => new Vector2(-4, 4);
@@ -167,7 +167,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 					5 * Projectile.damage / 4,
 					Projectile.knockBack,
 					Projectile.owner);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 5), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
 			}
 		}
 

@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		Vector2 specialStartPos;
 		int chargeDirection;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(15, 0);
+		protected override SoundStyle? SpecialStartSound => SoundID.Roar;
 		protected override int SpecialDuration => SpecialLoopCount * SpecialLoopSpeed + SpecialLoopSpeed / 2 + SpecialChargeTime;
 		protected override int SpecialCooldown => 6 * 60;
 
@@ -521,10 +521,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		protected int knockbackCounter = 0;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(1, 0);
+		protected override SoundStyle? SpecialStartSound => SoundID.PlayerHit with { Variants = stackalloc int[] { 0 } }; //Works too: new SoundStyle("Terraria/Sounds/Player_Hit_0");
 
-
-		protected override LegacySoundStyle attackSound => null;
+		protected override SoundStyle? attackSound => null;
 
 		public override void SetStaticDefaults()
 		{
@@ -535,6 +534,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		}
 		public override void LoadAssets()
 		{
+			base.LoadAssets();
 			AddTexture("Terraria/Images/HealthBar1");
 			AddTexture("Terraria/Images/HealthBar2");
 		}
@@ -622,8 +622,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					b = getGradient(halfHealthColor.B, zeroHealthColor.B, weight);
 				}
 				Color drawColor = new Color(r, g, b);
-				Texture2D healthBar = ExtraTextures[0].Value;
-				Texture2D healthBarBack = ExtraTextures[1].Value;
+				Texture2D healthBar = ExtraTextures[2].Value;
+				Texture2D healthBarBack = ExtraTextures[3].Value;
 				Rectangle bounds = new Rectangle(0, 0, (int)(healthBar.Width * widthFraction), healthBar.Height);
 				Vector2 origin = healthBar.Bounds.Center.ToVector2();
 				Vector2 pos = Projectile.Bottom + new Vector2(0, 8);

@@ -248,7 +248,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 		protected override int SpecialDuration => 5; // very short
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 5);
+		protected override SoundStyle? SpecialStartSound => SoundID.Item5;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

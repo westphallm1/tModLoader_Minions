@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 76);
+			Item.UseSound = SoundID.Item76;
 		}
 	}
 
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Hornet;
 		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

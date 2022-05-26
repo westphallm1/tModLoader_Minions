@@ -89,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void Kill(int timeLeft)
 		{
 			// don't spawn the arrow
-			SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
 			for (int i = 0; i < 6; i++)
 			{
 				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 158);
@@ -181,7 +181,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
+		protected override SoundStyle? attackSound => SoundID.Item5;
 
 		protected override float projectileVelocity => 12;
 
@@ -273,8 +273,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 					Projectile.damage,
 					Projectile.knockBack,
 					Main.myPlayer);
-				SoundEngine.PlaySound(attackSound, spawnPos);
-
+				if (attackSound.HasValue)
+				{
+					SoundEngine.PlaySound(attackSound.Value, spawnPos);
+				}
 			}
 
 		}
