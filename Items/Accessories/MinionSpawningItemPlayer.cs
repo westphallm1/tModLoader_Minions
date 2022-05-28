@@ -187,6 +187,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 					Player.AddBuff(buffType, 2);
 				}
 			}
+
+			if(Player.ownedProjectileCounts[ProjectileType<BabyFinchMinion>()] > 0)
+			{
+				Player.babyBird = true;
+			}
 		}
 
 		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)

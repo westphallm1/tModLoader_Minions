@@ -96,6 +96,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			DoDefaultGroundedMovement(vector);
 		}
 
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			// deal slightly more damage than listed
+			damage = (int)(damage * 1.25f);
+		}
+
 		public override bool PreDraw(ref Color lightColor)
 		{
 			if(!IsFiring)
