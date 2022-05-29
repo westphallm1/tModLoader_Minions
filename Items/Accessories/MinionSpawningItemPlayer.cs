@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		internal bool didDrawDustThisFrame = false;
 		private HashSet<int> uniqueMinionTypes = new HashSet<int>();
 
-		static Color[] MinionColors = new Color[]
+		internal static Color[] MinionColors = new Color[]
 		{
 			Color.Red,
 			Color.LimeGreen,
