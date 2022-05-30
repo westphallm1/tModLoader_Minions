@@ -62,6 +62,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
 
+		public override void LoadAssets()
+		{
+			Main.instance.LoadProjectile(ProjectileID.MedusaHeadRay);
+		}
+
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -72,20 +77,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			frameSpeed = 8;
 			// can hit many npcs at once, so give it a relatively high on hit cooldown
 			Projectile.localNPCHitCooldown = 20;
-			hsHelper = new HoverShooterHelper(this, ProjectileType<ImpPortalUnholyTrident>())
+			hsHelper = new HoverShooterHelper(this, default)
 			{
 				attackFrames = 30,
 				projectileVelocity = 14,
 				targetShootProximityRadius = 128,
 				targetInnerRadius = 48,
 				targetOuterRadius = 64,
-				CustomFireProjectile = FireTridents,
 			};
-		}
-
-
-		private void FireTridents(Vector2 lineOfFire, int projId, float ai0)
-		{
 		}
 
 		public override Vector2 IdleBehavior()
@@ -161,9 +160,34 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			}
 		}
 
+
+		private void DrawLightRays(ref Color lightColor)
+		{
+			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.MedusaHeadRay].Value;
+			Rectangle bounds = texture.Bounds;
+			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
+			float baseAngle = MathHelper.TwoPi * animationFrame / 180;
+			int rayCount = 7;
+			for(int i = 0; i < rayCount; i++)
+			{
+				float localAngle = baseAngle + MathHelper.TwoPi * i / rayCount;
+				float localIntensity = MathF.Sin(1.75f * localAngle);
+				float scale = 0.5f + 0.25f * localIntensity;
+				float brightness = 0.65f + 0.25f * localIntensity;
+				Vector2 drawOffset = localAngle.ToRotationVector2() * scale * bounds.Height / 2;
+				Main.EntitySpriteDraw(texture, Projectile.Center + drawOffset - Main.screenPosition,
+					bounds, lightColor.MultiplyRGB(Color.LightCoral) * brightness, localAngle + MathHelper.PiOver2,
+					origin, scale, 0, 0);
+			}
+		}
+
 		public override bool PreDraw(ref Color lightColor)
 		{
 			// attacking light rays
+			if(IsAttacking)
+			{
+				DrawLightRays(ref lightColor);
+			}
 
 			// body
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
