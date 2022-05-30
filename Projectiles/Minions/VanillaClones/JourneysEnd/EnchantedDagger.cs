@@ -61,6 +61,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			targetSearchDistance = 600;
 			circleHelper.idleBumble = false;
 			bumbleSpriteDirection = -1;
+			maxSpeed = 16;
+			idleInertia = 8;
 			blurDrawer = new MotionBlurDrawer(5);
 		}
 
