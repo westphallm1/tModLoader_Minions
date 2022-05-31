@@ -21,11 +21,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			DisplayName.SetDefault("Necromancer");
 			Description.SetDefault("A necromancer and his skeletal servants will fight for you!");
 		}
-		
-		public override void ApplyCrossModChanges()
-		{
-			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
-		}
 	}
 
 	public class NecromancerMinionItem : MinionItem<NecromancerMinionBuff, NecromancerSkeletonMinion>
@@ -35,6 +30,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Necro Doll");
 			Tooltip.SetDefault("Summons a neromancer to fight for you!");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()

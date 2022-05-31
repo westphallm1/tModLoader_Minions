@@ -1,5 +1,6 @@
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar;
 using AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar;
 using AmuletOfManyMinions.Projectiles.Minions.EclipseHerald;
@@ -183,6 +184,7 @@ namespace AmuletOfManyMinions
 			const int DONT_COUNT_AS_MINION = 4;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
+				SummonersShineLoaded = true;
 				int projType = MinionWaypoint.Type;
 				summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, projType);
 				summonersShine.Call(ADD_FILTER, DONT_COUNT_AS_MINION, projType);
@@ -199,7 +201,13 @@ namespace AmuletOfManyMinions
 					}
 				}
 
-
+				//IEnumerable<ModProjectile> combatPets = mod.GetContent<ModProjectile>().Where(p =>
+				//	p is CombatPetGroundedMeleeMinion || p is CombatPetHoverShooterMinion ||
+				//	p is CombatPetSlimeMinion || p is CombatPetWormMinion || p is CombatPetGroundedWormMinion);
+				//foreach (var combatPet in combatPets)
+				//{
+				//	summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, combatPet.Type);
+				//}
 				IEnumerable<ModProjectile> counterMinions = mod.GetContent<ModProjectile>().Where(p => p is CounterMinion);
 				foreach (var minion in counterMinions)
 				{
@@ -251,7 +259,7 @@ namespace AmuletOfManyMinions
 		};
 		public static void WhitelistSummonersShineMinionDefaultSpecialAbility(int ItemType, SummonersShineDefaultSpecialWhitelistType specialWhitelistType)
 		{
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				BitsByte[] enabledData = null;
 				switch (specialWhitelistType)
@@ -281,7 +289,7 @@ namespace AmuletOfManyMinions
 		public static void BakeSummonersShineMinionPower_NoHooks(int ItemType, SummonersShineMinionPowerCollection minionPowers)
 		{
 			const int ADD_ITEM_STATICS = 2;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				summonersShine.Call(ADD_ITEM_STATICS, ItemType, null, null, minionPowers.BakeToTupleArray(), 0, true);
 			}
@@ -340,7 +348,7 @@ namespace AmuletOfManyMinions
 			const int GET_ALL_MINION_POWER_DATA = 10;
 			const int IS_PROJECTILE_MINION_POWER_ENABLED = 13;
 
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				if(!(bool)summonersShine.Call(USEFUL_FUNCS, IS_PROJECTILE_MINION_POWER_ENABLED, projectile))
 					return value;
@@ -386,7 +394,7 @@ namespace AmuletOfManyMinions
 		{
 			const int GET_MINIONPROJECTILEDATA_VAR = 7;
 			const int GET_CURRENTTICK = 17;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				return (float)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_CURRENTTICK) == 1;
 			}
@@ -397,7 +405,7 @@ namespace AmuletOfManyMinions
 		{
 			const int HOOKPROJECTILE = 1;
 			const int HOOKPROJECTILEMAXENERGY = 0;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				summonersShine.Call(HOOKPROJECTILE, ProjectileType, HOOKPROJECTILEMAXENERGY, maxEnergy);
 				return;
@@ -414,7 +422,7 @@ namespace AmuletOfManyMinions
 			const int USEFULFUNCS = 10;
 			const int USEFULFUNCS_GETSIMRATE = 5;
 			const int USEFULFUNCS_GETINTERNALSIMRATE = 5;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_MINIONSPEEDMODTYPE);
 				switch(minionSpeedModType)
@@ -438,7 +446,7 @@ namespace AmuletOfManyMinions
 			const int USEFULFUNCS = 10;
 			const int USEFULFUNCS_GETSIMRATE = 5;
 			const int USEFULFUNCS_GETINTERNALSIMRATE = 5;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_MINIONSPEEDMODTYPE);
 				switch (minionSpeedModType)
@@ -470,7 +478,7 @@ namespace AmuletOfManyMinions
 			if (old == null)
 				return true;
 
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				const int GET_REWORKMINION_ITEM_VALUE = 16;
 				const int PREFIXMINIONPOWER = 0;
@@ -497,7 +505,7 @@ namespace AmuletOfManyMinions
 		{
 			Mod summonersShine = null;
 			int maxArray = 0;
-			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out summonersShine))
 			{
 				maxArray += 3;
 			}
@@ -539,10 +547,9 @@ namespace AmuletOfManyMinions
 		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer)
 		{
 			int currentArrayPos = 0;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				const int SET_PROJFUNCS = 4;
-				const int SET_PROJDATA = 5;
 				const int USEFULFUNCS = 10;
 				const int OVERRIDESOURCEITEM = 11;
 				const int MINIONASMOD = 1;
@@ -552,7 +559,7 @@ namespace AmuletOfManyMinions
 				currentArrayPos++;
 				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PROJECTILECRIT, modPlayer.PetModdedStats[currentArrayPos]);
 				currentArrayPos++;
-				summonersShine.Call(SET_PROJDATA, projectile.whoAmI, PREFIXMINIONPOWER, modPlayer.PetModdedStats[currentArrayPos]);
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PREFIXMINIONPOWER, modPlayer.PetModdedStats[currentArrayPos]);
 				currentArrayPos++;
 				summonersShine.Call(USEFULFUNCS, OVERRIDESOURCEITEM, projectile, modPlayer.PetEmblemItem);
 			}
@@ -562,7 +569,7 @@ namespace AmuletOfManyMinions
 		{
 
 			int currentArrayPos = 0;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				writer.Write((float)PetModdedStats[currentArrayPos]);
 				currentArrayPos++;
@@ -576,7 +583,7 @@ namespace AmuletOfManyMinions
 		{
 			int maxArray = 0;
 			Mod summonersShine = null;
-			if (ModLoader.TryGetMod("SummonersShine", out summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out summonersShine))
 			{
 				maxArray += 3;
 			}
@@ -600,7 +607,7 @@ namespace AmuletOfManyMinions
 			const int HOOKBUFFTOITEM = 9;
 			const int HOOKBUFFCONSTS = 17;
 			const int DISPLAYOVERRIDE = 1;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				if(ItemTypes.Length == 1)
 				{
@@ -626,7 +633,7 @@ namespace AmuletOfManyMinions
 		{
 			const int HOOKBUFFCONSTS = 17;
 			const int DISPLAYOVERRIDE = 1;
-			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				summonersShine.Call(HOOKBUFFCONSTS, BuffType, DISPLAYOVERRIDE, SummonersShineEmblemDisplayOverride);
 			}
