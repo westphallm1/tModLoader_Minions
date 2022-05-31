@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		internal bool didDrawDustThisFrame = false;
 		private HashSet<int> uniqueMinionTypes = new HashSet<int>();
 
-		static Color[] MinionColors = new Color[]
+		internal static Color[] MinionColors = new Color[]
 		{
 			Color.Red,
 			Color.LimeGreen,
@@ -186,6 +186,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 				{
 					Player.AddBuff(buffType, 2);
 				}
+			}
+
+			if(Player.ownedProjectileCounts[ProjectileType<BabyFinchMinion>()] > 0)
+			{
+				Player.babyBird = true;
 			}
 		}
 

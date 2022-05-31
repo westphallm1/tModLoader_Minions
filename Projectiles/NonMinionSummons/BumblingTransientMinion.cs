@@ -65,8 +65,12 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 
 		protected virtual void Move(Vector2 vector2Target, bool isIdle = false)
 		{
-			vector2Target.SafeNormalize();
-			vector2Target *= isIdle ? idleSpeed : maxSpeed;
+			if((isIdle && vector2Target.LengthSquared() > idleSpeed * idleSpeed) ||
+				(!isIdle && vector2Target.LengthSquared() > maxSpeed * maxSpeed))
+			{
+				vector2Target.SafeNormalize();
+				vector2Target *= isIdle ? idleSpeed : maxSpeed;
+			}
 			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vector2Target) / inertia;
 			base.TargetedMovement(vector2Target);
 		}

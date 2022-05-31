@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -199,7 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if (p.active && p.ModProjectile is EmpoweredMinion em)
+					if (p.active && (p.ModProjectile is EmpoweredMinion || p.ModProjectile is DesertTigerMinion))
 					{
 						p.minion = true;
 					}
@@ -218,7 +219,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if (p.active && p.owner == player.whoAmI && p.ModProjectile is EmpoweredMinion em)
+					if (p.active && p.owner == player.whoAmI && (p.ModProjectile is EmpoweredMinion || p.ModProjectile is DesertTigerMinion))
 					{
 						player.GetModPlayer<EmpoweredMinionSacrificeCircumventionModPlayer>().ShouldResetMinionStatus = true;
 						p.minion = false; // temporarily de-minion it so that it doesn't get sacrificed
