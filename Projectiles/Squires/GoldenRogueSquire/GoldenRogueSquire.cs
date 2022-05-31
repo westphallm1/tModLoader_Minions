@@ -32,6 +32,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			DisplayName.SetDefault("Golden Rogue Crest");
 			Tooltip.SetDefault("Summons a squire\nA golden rogue squire will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
+		}
 
 		public override void SetDefaults()
 		{

@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			DisplayName.SetDefault("Starry SkySlasher");
 			Tooltip.SetDefault("Summons an enchanted sword to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{

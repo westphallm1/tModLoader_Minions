@@ -32,6 +32,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			DisplayName.SetDefault("Staff of Darts");
 			Tooltip.SetDefault("Summons a dart-throwing monkey to fight for you!");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 
 		public override void SetDefaults()
 		{

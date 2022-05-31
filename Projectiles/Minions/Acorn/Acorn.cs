@@ -28,6 +28,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			DisplayName.SetDefault("Acorn Staff");
 			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOMULTISHOT);
+		}
 
 		public override void SetDefaults()
 		{

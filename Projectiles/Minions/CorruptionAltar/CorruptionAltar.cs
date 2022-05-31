@@ -30,6 +30,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			DisplayName.SetDefault("Corruption Cell Staff");
 			Tooltip.SetDefault("Summons a corrupt cell to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 
 		public override void SetDefaults()
 		{

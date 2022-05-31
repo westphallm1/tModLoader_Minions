@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			Tooltip.SetDefault("Summons a flexible helicopter to fight for you!");
 
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{

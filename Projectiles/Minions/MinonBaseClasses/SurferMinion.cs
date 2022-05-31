@@ -24,6 +24,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Main.projFrames[Projectile.type] = 6;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void OnHitTarget(NPC target)
 		{

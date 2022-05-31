@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			DisplayName.SetDefault("Prickly Pear Staff");
 			Tooltip.SetDefault("Summons a prickly pear hedgehog to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 
 		public override void SetDefaults()
 		{

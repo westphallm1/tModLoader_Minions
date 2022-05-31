@@ -30,6 +30,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			DisplayName.SetDefault("Crimson Cell Staff");
 			Tooltip.SetDefault("Summons a crimson cell to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 
 		public override void SetDefaults()
 		{

@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			DisplayName.SetDefault("Eclipse Herald Staff");
 			Tooltip.SetDefault("Can't come to grips \nWith the total eclipse \nJust a slip of your lips \nand you're gone...");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 
 		public override void SetDefaults()
 		{

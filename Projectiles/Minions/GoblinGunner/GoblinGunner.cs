@@ -30,6 +30,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			DisplayName.SetDefault("Goblin Radio Beacon");
 			Tooltip.SetDefault("Summons a goblin gunship to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 
 		public override void SetDefaults()
 		{
