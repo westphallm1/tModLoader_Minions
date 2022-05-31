@@ -26,6 +26,11 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 		public static Texture2D GetSolidTexture(int projectileId)
 		{
+			if(Main.dedServ)
+			{
+				return default;
+			}
+
 			if(textureCache.TryGetValue(projectileId, out var cachedTexture))
 			{
 				// don't re-process already processed textures

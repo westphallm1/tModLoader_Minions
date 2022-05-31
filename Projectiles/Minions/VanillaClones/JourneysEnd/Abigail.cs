@@ -124,7 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
-		protected override int ComputeDamage() => baseDamage + baseDamage * (int)(Main.hardMode ? EmpowerCount * 1.3f : EmpowerCount * 0.55f);
+		protected override int ComputeDamage() => baseDamage + baseDamage * (int)((EmpowerCount - 1) * (Main.hardMode ? 1.3f : 0.55f));
 
 		protected override float ComputeSearchDistance() => 800;
 
