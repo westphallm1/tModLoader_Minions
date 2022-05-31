@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		internal bool isCloseToTarget = false;
 		internal HoverShooterHelper hsHelper;
 		internal int stayInPlaceFrames = 0;
-		internal int attackRadius = 128;
+		internal int attackRadius = 148;
 		internal int damageRadius = 80;
 		internal bool IsAttacking => vectorToTarget is Vector2 target && target.LengthSquared() < attackRadius * attackRadius;
 
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			{
 				attackFrames = 30,
 				projectileVelocity = 14,
-				targetShootProximityRadius = 128,
+				targetShootProximityRadius = attackRadius,
 				targetInnerRadius = 48,
 				targetOuterRadius = 64,
 			};
@@ -128,9 +128,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		protected override float ComputeSearchDistance() => 800;
 
-		protected override float ComputeInertia() => 12;
+		protected override float ComputeInertia() => 11;
 
-		protected override float ComputeTargetedSpeed() => Math.Min(13, 8 + EmpowerCount);
+		protected override float ComputeTargetedSpeed() => Math.Min(13, 9 + EmpowerCount);
 
 		protected override float ComputeIdleSpeed() => ComputeTargetedSpeed() + 3;
 

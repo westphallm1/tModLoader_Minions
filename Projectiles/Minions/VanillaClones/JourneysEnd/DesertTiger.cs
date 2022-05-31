@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.StormTigerAttack;
 
 		protected override float inertia => 1;
-		protected override float idleSpeed => 20;
+		protected override float idleSpeed => 22;
 		protected override int timeToLive => 400;
 		internal override bool tileCollide => false;
 		protected override float distanceToBumbleBack => 2000f; // don't bumble back
@@ -231,6 +231,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			base.SetDefaults();
 			ConfigureDrawBox(this, 30, 30, 0, 0);
 			xMaxSpeed = 12;
+			idleInertia = 8;
+			Projectile.localNPCHitCooldown = 6;
 			blurDrawer = new MotionBlurDrawer(5);
 		}
 
@@ -280,6 +282,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				}
 			}
 			xMaxSpeed = Math.Min(17, 12 + 2 * EmpowerCount / 3);
+			maxSpeed = xMaxSpeed + 2;
 			dashCooldown = Math.Max(4 * 60, (6 - EmpowerCount / 3) * 60);
 			searchDistance = Math.Min(1250, 850 + 50 * EmpowerCount);
 			UpdateEmpoweredAppearance();

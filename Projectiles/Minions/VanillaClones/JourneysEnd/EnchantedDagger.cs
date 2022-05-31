@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			List<Projectile> minions = GetMinionsOfType(Type);
 			if(minions.Count > 0)
 			{
-				int myIndex = minions.FindIndex(p => p.whoAmI == Projectile.whoAmI);
+				int myIndex = Math.Max(0, minions.FindIndex(p => p.whoAmI == Projectile.whoAmI));
 				outlineColor = (new Color[] { new(247, 168, 184), new(85, 205, 252), Color.White })[myIndex % 3] * 0.5f;
 			}
 			return base.IdleBehavior();

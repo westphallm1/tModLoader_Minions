@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			circleHelper.idleBumble = false;
 			bumbleSpriteDirection = -1;
 			attackThroughWalls = true;
-			maxSpeed = 18;
+			maxSpeed = 16;
 			idleInertia = 6;
 			blurDrawer = new MotionBlurDrawer(5);
 		}
@@ -153,22 +153,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		}
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			int targetSpeed = maxSpeed - 3;
+			maxSpeed = 16;
 			if(attackState == AttackState.RETURNING)
 			{
 				IdleMovement(vectorToIdle);
 				return;
 			}
-			if(vectorToTargetPosition.LengthSquared() > targetSpeed * targetSpeed)
+			if(vectorToTargetPosition.LengthSquared() > maxSpeed * maxSpeed)
 			{
 				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= targetSpeed;
+				vectorToTargetPosition *= maxSpeed;
 			}
 			Projectile.velocity = vectorToTargetPosition;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
+			maxSpeed = 16 + (int)player.velocity.Length(); // keep pace with the player when coming back
 			if(vectorToIdlePosition.LengthSquared() < 24 * 24)
 			{
 				attackState = AttackState.IDLE;
