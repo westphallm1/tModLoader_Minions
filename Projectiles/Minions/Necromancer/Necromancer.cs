@@ -21,6 +21,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			DisplayName.SetDefault("Necromancer");
 			Description.SetDefault("A necromancer and his skeletal servants will fight for you!");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 	}
 
 	public class NecromancerMinionItem : MinionItem<NecromancerMinionBuff, NecromancerSkeletonMinion>

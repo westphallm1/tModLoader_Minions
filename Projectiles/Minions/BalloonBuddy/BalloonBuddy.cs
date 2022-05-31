@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 			Tooltip.SetDefault("Summons an enchanted balloon animal to fight for you!");
 
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{

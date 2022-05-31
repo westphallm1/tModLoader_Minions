@@ -33,6 +33,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			DisplayName.SetDefault("Shepherd's Staff");
 			Tooltip.SetDefault("Summons a tumbling sheep to fight for you!");
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{

@@ -32,6 +32,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			DisplayName.SetDefault("Shadowflame Probe Controller");
 			Tooltip.SetDefault("Summons a goblin technomancer to fight for you!");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+		}
 
 		public override void SetDefaults()
 		{

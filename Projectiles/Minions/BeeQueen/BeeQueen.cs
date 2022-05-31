@@ -29,6 +29,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			DisplayName.SetDefault("Bee Queen's Crown");
 			Tooltip.SetDefault("Summons a bee assistant to fight for you!");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOMULTISHOT);
+		}
 
 		public override void SetDefaults()
 		{

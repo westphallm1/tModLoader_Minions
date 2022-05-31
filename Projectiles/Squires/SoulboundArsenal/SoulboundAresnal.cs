@@ -38,6 +38,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			DisplayName.SetDefault("Soulbound Arsenal");
 			Tooltip.SetDefault("Summons a squire\nA soulbound bow and sword will fight for you!\nClick and hold to guide their attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
+		}
 
 		public override void SetDefaults()
 		{

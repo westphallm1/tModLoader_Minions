@@ -38,6 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(20);
 			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()

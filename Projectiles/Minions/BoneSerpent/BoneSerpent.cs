@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			Tooltip.SetDefault("Summons a skeletal dragon to fight for you!");
 
 		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+		}
 
 		public override void SetDefaults()
 		{
