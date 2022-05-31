@@ -604,18 +604,12 @@ namespace AmuletOfManyMinions
 		public static void HookBuffToItemCrossMod(int BuffType, params int[] ItemTypes)
 		{
 			const int MODIFYCONFIGS = 0;
-			const int HOOKBUFFTOITEM = 9;
+			const int HOOKBUFFTOITEM = 11;
 			const int HOOKBUFFCONSTS = 17;
 			const int DISPLAYOVERRIDE = 1;
 			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				if(ItemTypes.Length == 1)
-				{
-					int ItemType = ItemTypes[0];
-					summonersShine.Call(MODIFYCONFIGS, HOOKBUFFTOITEM, BuffType, ItemType);
-				}
-				else
-					summonersShine.Call(HOOKBUFFCONSTS, BuffType, DISPLAYOVERRIDE, (int i) => ItemTypes);
+				summonersShine.Call(MODIFYCONFIGS, HOOKBUFFTOITEM, BuffType, ItemTypes);
 			}
 		}
 

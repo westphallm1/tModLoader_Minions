@@ -35,6 +35,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		
 		public override void ApplyCrossModChanges()
 		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(20);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
@@ -101,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			// manually bypass defense
 			// this may not be wholly correct
-			int defenseBypass = 20;
+			int defenseBypass = (int)CrossMod.ApplyCrossModScaling(20f, Projectile, 0);
 			int defense = Math.Min(target.defense, defenseBypass);
 			damage += defense / 2;
 		}

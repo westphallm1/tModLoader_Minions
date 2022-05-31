@@ -31,6 +31,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			DisplayName.SetDefault("Crest of the Forest");
 			Tooltip.SetDefault("Summons a squire\nA mushroom squire will fight for you!\nClick and hold to guide its attacks");
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(100);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+		}
 
 		public override void SetDefaults()
 		{
@@ -67,7 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			Projectile.penetrate = 1;
 			Projectile.width = 12;
 			Projectile.height = 12;
-			Projectile.timeLeft = TimeToLive;
+			Projectile.timeLeft = CrossMod.ApplyCrossModScaling(TimeToLive, Projectile, 0);
 			Projectile.friendly = true;
 			Projectile.tileCollide = true;
 			//Projectile.minion = true; //TODO 1.4
@@ -77,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		public override void AI()
 		{
 			base.AI();
-			if(Projectile.timeLeft < TimeLeftToStartFalling && Projectile.velocity.Y < 16)
+			if(Projectile.timeLeft < CrossMod.ApplyCrossModScaling(TimeLeftToStartFalling, Projectile, 0) && Projectile.velocity.Y < 16)
 			{
 				Projectile.velocity.Y += 0.5f;
 				Projectile.velocity.X *= 0.99f;

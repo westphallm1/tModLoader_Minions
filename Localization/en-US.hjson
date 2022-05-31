@@ -1,6 +1,5 @@
 Mods: {
 	AmuletOfManyMinions: {
-
 		SummonSpecial: {
 			AdamantiteSquireMinionItem:
 				'''
@@ -25,6 +24,57 @@ Mods: {
 			DemonSquireMinionItem:
 				'''
 				Special Ability Imp Fireballs have {1}% velocity
+				'''
+			GoldenRogueSquireMinionItem:
+				'''
+				Cloud of Knives pierce {1} armor
+				'''
+			GuideSquireMinionItem:
+				'''
+				Fire arrows have {1} second duration
+				'''
+		}
+
+		SummonSpecialCompressed: {
+			AdamantiteSquireMinionItem:
+				'''
+				{1}x jousting damage
+				'''
+			AncientCobaltSquireMinionItem:
+				'''
+				{1}% Magic Shotblast distance
+				'''
+			ArmoredBoneSquireMinionItem:
+				'''
+				{1}% wisp spawn rate
+				'''
+			BoneSquireMinionItem:
+				'''
+				{1} blocks flail length
+				'''
+			CrimsonSquireMinionItem:
+				'''
+				{1} second Ichor Flask Ichor duration
+				'''
+			DemonSquireMinionItem:
+				'''
+				{1}% Imp Assistants fireball velocity
+				'''
+			GoldenRogueSquireMinionItem:
+				'''
+				{1} Cloud of Knives armor piercing
+				'''
+			GuideSquireMinionItem:
+				'''
+				{1} second arrow fire duration
+				'''
+			MushroomSquireMinionItem:
+				'''
+				{1}% special ability mushroom travel distance
+				'''
+			PottedPalMinionItem:
+				'''
+				{1} Potted Pal Jr. reach length
 				'''
 		}
 	}
