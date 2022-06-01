@@ -92,8 +92,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 offset = Projectile.AI_158_GetHomeLocation(player, 0);
-			return player.Top - Projectile.Center;
+			Vector2 offset = 16 * (MathHelper.TwoPi * animationFrame / 60).ToRotationVector2();
+			return player.Top + offset - Projectile.Center;
 		}
 
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if(vectorToIdlePosition.LengthSquared() < 16 * 16)
+			if(Vector2.DistanceSquared(Projectile.Center, player.Top) < 24 * 24)
 			{
 				Projectile.position += vectorToIdlePosition;
 				Projectile.velocity = Vector2.Zero;
