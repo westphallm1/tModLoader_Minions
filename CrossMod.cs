@@ -546,6 +546,8 @@ namespace AmuletOfManyMinions
 		
 		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer)
 		{
+			if(modPlayer.PetModdedStats.Length == 0)
+			return;
 			int currentArrayPos = 0;
 			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
