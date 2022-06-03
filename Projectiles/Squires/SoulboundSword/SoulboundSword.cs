@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 {
 	public class SoulboundSwordMinionBuff : MinionBuff
 	{
-		public SoulboundSwordMinionBuff() : base(ProjectileType<SoulboundSwordMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SoulboundSwordMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -32,6 +32,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Sword");
 			Tooltip.SetDefault("Summons a squire\nAn enchanted sword will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
@@ -61,6 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 	public class SoulboundSwordMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SoulboundSwordMinionBuff>();
+		protected override int ItemType => ItemType<SoulboundSwordMinionItem>();
 		protected override int AttackFrames => 15;
 		protected override string WingTexturePath => null;
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/SoulboundSword/SoulboundSword";
@@ -75,8 +81,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 		protected override int SpecialDuration => 2 * 60;
 		protected override int SpecialCooldown => 9 * 60;
-
-		public SoulboundSwordMinion() : base(ItemType<SoulboundSwordMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -137,7 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center, 
 					Projectile.velocity, 
 					ProjectileType<SoulboundSpecialBow>(), 

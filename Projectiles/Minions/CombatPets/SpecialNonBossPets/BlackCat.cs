@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {
 	public class BlackCatMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public BlackCatMinionBuff() : base(ProjectileType<BlackCatMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BlackCatMinion>() };
 		public override int VanillaBuffId => BuffID.BlackCat;
 		public override string VanillaBuffName => "BlackCat";
 	}
@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			}
 			Projectile.rotation = Projectile.velocity.X * 0.05f;
 			Projectile.spriteDirection = -Math.Sign(Projectile.velocity.X);
-			if(Main.rand.Next(3) == 0)
+			if(Main.rand.NextBool(3))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Shadowflame, Alpha: 80);
 				Main.dust[dustId].noGravity = true;

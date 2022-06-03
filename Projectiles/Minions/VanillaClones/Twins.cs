@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class TwinsMinionBuff : MinionBuff
 	{
-		public TwinsMinionBuff() : base(ProjectileType<MiniRetinazerMinion>(), ProjectileType<MiniSpazmatismMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<MiniRetinazerMinion>(), ProjectileType<MiniSpazmatismMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			base.AI();
 			Projectile.friendly = Projectile.ai[0] == 0;
 			Projectile.localAI[0]++;
-			if(Projectile.localAI[0] < 8 || Main.rand.Next(2) != 0)
+			if(Projectile.localAI[0] < 8 || !Main.rand.NextBool(2))
 			{
 				return;
 			}
@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.dust[dustId].velocity.X *= 1.2f;
 			Main.dust[dustId].velocity.Y *= 1.2f;
 			Main.dust[dustId].noGravity = true;
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				Main.dust[dustId].scale *= 1.25f;
 				Main.dust[dustId].velocity.X *= 2f;
@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		internal override int? FiredProjectileId => ProjectileType<MiniTwinsLaser>();
 
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 10).WithVolume(.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item10 with { Volume = 0.5f };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -204,7 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Spazmamini;
 
 		internal override int? FiredProjectileId => ProjectileType<MiniEyeFire>();
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
 
 		public override void SetStaticDefaults()
 		{

@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 {
 	public class CrystalFistMinionBuff : MinionBuff
 	{
-		public CrystalFistMinionBuff() : base(ProjectileType<CrystalFistMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CrystalFistMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -39,6 +39,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			Item.height = 16;
 			Item.value = Item.buyPrice(0, 12, 0, 0);
 			Item.rare = ItemRarityID.Pink;
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -105,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 				leader.minionPos == Projectile.minionPos &&
 				player.ownedProjectileCounts[ProjectileType<CrystalFistHeadMinion>()] == 0)
 			{
-				Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<CrystalFistHeadMinion>(), 0, 0, Main.myPlayer);
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<CrystalFistHeadMinion>(), 0, 0, Main.myPlayer);
 			}
 			Projectile head = GetHead(ProjectileType<CrystalFistHeadMinion>());
 			if (head == default)

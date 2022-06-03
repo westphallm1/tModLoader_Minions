@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 {
 	public class BoneSerpentMinionBuff : MinionBuff
 	{
-		public BoneSerpentMinionBuff() : base(ProjectileType<BoneSerpentCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BoneSerpentCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			DisplayName.SetDefault("Bone Serpent Staff");
 			Tooltip.SetDefault("Summons a skeletal dragon to fight for you!");
 
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()

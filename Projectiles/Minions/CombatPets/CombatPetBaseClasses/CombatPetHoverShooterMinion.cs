@@ -54,6 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
 			UpdateHsHelperWithPetLevel(leveledPetPlayer.PetLevel);
 			dealsContactDamage = DoBumblingMovement;
+			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return base.IdleBehavior();
 		}
 
@@ -219,6 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		{
 			Vector2 target = base.IdleBehavior();
 			dealsContactDamage = true;
+			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return target;
 		}
 

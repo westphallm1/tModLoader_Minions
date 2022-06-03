@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
 	public class CompanionCubeMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public CompanionCubeMinionBuff() : base(ProjectileType<CompanionCubeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CompanionCubeMinion>() };
 		public override int VanillaBuffId => BuffID.CompanionCube;
 		public override string VanillaBuffName => "CompanionCube";
 	}
@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			if(cycleFrame == teleportCycleFrames / 2)
 			{
 				Projectile.Center = target;
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 8).WithVolume(0.5f), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item8 with { Volume = 0.5f }, Projectile.Center);
 			} else
 			{
 				Projectile.velocity = target - Projectile.Center;

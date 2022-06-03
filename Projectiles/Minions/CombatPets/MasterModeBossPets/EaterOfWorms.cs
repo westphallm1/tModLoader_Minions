@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class EaterOfWormsMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public EaterOfWormsMinionBuff() : base(ProjectileType<EaterOfWormsMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<EaterOfWormsMinion>() };
 
 		public override int VanillaBuffId => BuffID.EaterOfWorldsPet;
 

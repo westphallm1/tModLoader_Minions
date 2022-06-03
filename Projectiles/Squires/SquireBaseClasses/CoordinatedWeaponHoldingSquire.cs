@@ -12,8 +12,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		public virtual int AttackSequenceLength => 4;
 		public virtual bool IsBoss => false;
 
-		protected CoordinatedWeaponHoldingSquire(int itemID) : base(itemID) { }
-
 		protected virtual bool IsMyTurn()
 		{
 			if (IsBoss)

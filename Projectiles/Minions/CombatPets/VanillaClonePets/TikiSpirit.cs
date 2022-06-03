@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {
 	public class TikiSpiritMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public TikiSpiritMinionBuff() : base(ProjectileType<TikiSpiritMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<TikiSpiritMinion>() };
 		public override string VanillaBuffName => "TikiSpirit";
 		public override int VanillaBuffId => BuffID.TikiSpirit;
 	}
@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		internal override int BuffId => BuffType<TikiSpiritMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TikiSpirit;
 		internal override int? FiredProjectileId => ProjectileType<PygmySpear>();
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 17);
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

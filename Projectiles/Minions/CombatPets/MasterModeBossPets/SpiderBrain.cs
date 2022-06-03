@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class SpiderBrainMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public SpiderBrainMinionBuff() : base(ProjectileType<SpiderBrainMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SpiderBrainMinion>() };
 
 		public override int VanillaBuffId => BuffID.BrainOfCthulhuPet;
 
@@ -141,7 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			int eyeVelocity = 10;
 			lastFiredFrame = animationFrame;
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;
@@ -159,7 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				}
 				Vector2 fireDirection = angleToTarget.RotatedBy(2 * (MathHelper.Pi * fireCount++) / 5);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(fireDirection),
 					ProjectileType<SpiderBrainEyeProjectile>(),

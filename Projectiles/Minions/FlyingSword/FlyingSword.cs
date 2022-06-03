@@ -10,7 +10,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 {
 	public class FlyingSwordMinionBuff : MinionBuff
 	{
-		public FlyingSwordMinionBuff() : base(ProjectileType<FlyingSwordMinion>(), ProjectileType<FlyingSwordMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<FlyingSwordMinion>(), ProjectileType<FlyingSwordMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -26,6 +26,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Clarent");
 			Tooltip.SetDefault("Summons a flying sword to fight for you!");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()

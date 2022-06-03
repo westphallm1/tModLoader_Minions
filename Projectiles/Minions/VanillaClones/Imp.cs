@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class ImpMinionBuff : MinionBuff
 	{
-		public ImpMinionBuff() : base(ProjectileType<ImpMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<ImpMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 77);
+			Item.UseSound = SoundID.Item77;
 		}
 	}
 
@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		internal override int? FiredProjectileId => ProjectileType<ImpFireball>();
 
-		internal override LegacySoundStyle ShootSound => SoundID.Item20;
+		internal override SoundStyle? ShootSound => SoundID.Item20;
 
 		internal Projectile flameRing;
 
@@ -227,7 +227,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Projectile.rotation = Projectile.velocity.X * 0.05f;
 
 			// vanilla code for sparkly dust
-			if (Main.rand.Next(6) == 0)
+			if (Main.rand.NextBool(6))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 2f);
 				Main.dust[dustId].velocity *= 0.3f;
@@ -319,7 +319,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
@@ -373,7 +373,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				targetShootProximityRadius = 256,
 				CustomFireProjectile = FireTridents,
 				ModifyTargetVector = HandleTargetProximity,
-				AfterFiringProjectile = () => SoundEngine.PlaySound(new LegacySoundStyle(2, 8).WithVolume(0.5f), Projectile.position)
+				AfterFiringProjectile = () => SoundEngine.PlaySound(SoundID.Item8 with { Volume = 0.5f }, Projectile.position)
 			};
 		}
 
@@ -395,13 +395,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				}
 				Vector2 randomShoot = lineOfFire + Main.rand.NextFloatDirection().ToRotationVector2();
 				int damage = Projectile.damage;
-				if(hasBaby && Main.rand.Next(EmpowerCount) == 0)
+				if(hasBaby && Main.rand.NextBool(EmpowerCount))
 				{
 					projId = ProjectileType<BabyImpFireBall>();
 					damage = player.GetModPlayer<LeveledCombatPetModPlayer>().PetDamage;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center + fireOffset,
 					VaryLaunchVelocity(randomShoot),
 					projId,

@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 {
 	public class DemonSquireMinionBuff : MinionBuff
 	{
-		public DemonSquireMinionBuff() : base(ProjectileType<DemonSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<DemonSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -31,6 +31,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of the Underworld");
 			Tooltip.SetDefault("Summons a squire\nA demon squire will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(1.5f);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -138,9 +145,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				}
 				Vector2 angleVector = horizonVector - Projectile.Center;
 				angleVector.SafeNormalize();
-				angleVector *= 24f;
+				angleVector *= CrossMod.ApplyCrossModScaling(24f, Projectile, 0);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					angleVector,
 					ProjectileType<DemonSquireImpFireball>(),
@@ -186,6 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 	public class DemonSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<DemonSquireMinionBuff>();
+		protected override int ItemType => ItemType<DemonSquireMinionItem>();
 		protected override int AttackFrames => 25;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => null;
@@ -199,7 +207,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		protected override int SpecialCooldown => 10 * 60;
 
 		protected override float projectileVelocity => 12;
-		public DemonSquireMinion() : base(ItemType<DemonSquireMinionItem>()) { }
 
 		public sealed override void SetDefaults()
 		{
@@ -225,7 +232,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<DemonSquireUnholyTrident>(),
@@ -243,7 +250,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				for(int i = 0; i < 2; i++)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						Vector2.Zero,
 						ProjectileType<DemonSquireImpMinion>(),

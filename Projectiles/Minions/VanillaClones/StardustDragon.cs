@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class StardustDragonMinionBuff : MinionBuff
 	{
-		public StardustDragonMinionBuff() : base(ProjectileType<StardustDragonCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustDragonCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -114,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class StardustDragonDrawer : WormDrawer
 	{
 
-		public StardustDragonDrawer() : base()
+		public StardustDragonDrawer()
 		{
 			if(!Main.dedServ)
 			{
@@ -177,7 +177,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r + MathHelper.PiOver2,
 				origin, 1, GetEffects(r), 0);
-			if (Main.rand.Next(30) == 0)
+			if (Main.rand.NextBool(30))
 			{
 				int dustId = Dust.NewDust(pos, 8, 8, 135, 0f, 0f, 0, default, 2f);
 				Main.dust[dustId].noGravity = true;

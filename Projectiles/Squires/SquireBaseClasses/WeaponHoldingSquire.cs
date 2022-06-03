@@ -41,7 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected virtual WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.DIAGONAL;
 		protected virtual Vector2 WeaponCenterOfRotation => Vector2.Zero;
 
-		protected virtual LegacySoundStyle attackSound => SoundID.Item1;
+		protected virtual SoundStyle? attackSound => SoundID.Item1;
 
 		// used for motion blur effects
 		protected Vector2 lastWeaponPos;
@@ -51,7 +51,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		protected float weaponAngle = 0;
 
 		protected virtual Asset<Texture2D> WeaponTexture => ExtraTextures[1];
-		public WeaponHoldingSquire(int itemID) : base(itemID) { }
 
 		public override void LoadAssets()
 		{
@@ -277,9 +276,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			usingWeapon = true;
 			weaponAngle = GetWeaponAngle();
-			if (attackFrame == 0 && attackSound != null && !usingSpecial)
+			if (attackFrame == 0 && attackSound.HasValue && !usingSpecial)
 			{
-				SoundEngine.PlaySound(attackSound, Projectile.Center);
+				SoundEngine.PlaySound(attackSound.Value, Projectile.Center);
 			}
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}

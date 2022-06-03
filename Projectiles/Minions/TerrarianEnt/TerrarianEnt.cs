@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 {
 	public class TerrarianEntMinionBuff : MinionBuff
 	{
-		public TerrarianEntMinionBuff() : base(ProjectileType<TerrarianEntCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<TerrarianEntCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -251,7 +251,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 					}
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					player.Center,
 					Vector2.Zero,
 					subProjType,

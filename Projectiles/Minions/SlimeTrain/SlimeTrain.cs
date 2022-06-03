@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 {
 	public class SlimeTrainMinionBuff : MinionBuff
 	{
-		public SlimeTrainMinionBuff() : base(ProjectileType<SlimeTrainCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimeTrainCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				int dist = 48 + 30 * (currentSlimeCount + 1);
 				Vector2 spawnPos = wormDrawer.PositionLog.PositionAlongPath(dist, ref angle);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					spawnPos,
 					Projectile.velocity,
 					slimeType,
@@ -261,7 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				if(startOffset.LengthSquared() < 32 * 32 && player.whoAmI == Main.myPlayer)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						Projectile.velocity * 0.25f,
 						SubProjectileType,
@@ -377,7 +377,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r,
 				origin, 1, GetEffects(r), 0);
-			if (Main.rand.Next(20) == 0)
+			if (Main.rand.NextBool(20))
 			{
 				int dustId = Dust.NewDust(pos, bounds.Width, bounds.Height, dustType, 0f, 0f, 0, default, 2f);
 				Main.dust[dustId].noGravity = true;

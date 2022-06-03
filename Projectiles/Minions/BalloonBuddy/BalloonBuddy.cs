@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 {
 	public class BalloonBuddyMinionBuff : MinionBuff
 	{
-		public BalloonBuddyMinionBuff() : base(ProjectileType<BalloonBuddyCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BalloonBuddyCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 			DisplayName.SetDefault("Sorbet Staff");
 			Tooltip.SetDefault("Summons an enchanted balloon animal to fight for you!");
 
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()
@@ -83,14 +87,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if (PartyHatSystem.IsParty && Main.rand.Next(3) == 0)
+			if (PartyHatSystem.IsParty && Main.rand.NextBool(3))
 			{
 				Vector2 launchVector = Projectile.velocity;
 				launchVector.SafeNormalize();
 				launchVector *= 4;
 				// only called for owner, no need to check ownership
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					launchVector,
 					ProjectileType<BalloonMonkeyBalloon>(),

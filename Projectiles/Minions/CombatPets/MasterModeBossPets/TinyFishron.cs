@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class TinyFishronMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public TinyFishronMinionBuff() : base(ProjectileType<TinyFishronMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<TinyFishronMinion>() };
 
 		public override int VanillaBuffId => BuffID.DukeFishronPet;
 
@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			{
 				lastHitFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					target.Center, 
 					Vector2.Zero, 
 					ProjectileType<TinyFishronWhirlpool>(), 

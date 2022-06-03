@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 {
 	public class NecromancerMinionBuff : MinionBuff
 	{
-		public NecromancerMinionBuff() : base(ProjectileType<NecromancerMinion>(), ProjectileType<NecromancerSkeletonMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<NecromancerMinion>(), ProjectileType<NecromancerSkeletonMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -30,6 +30,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Necro Doll");
 			Tooltip.SetDefault("Summons a neromancer to fight for you!");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()
@@ -145,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 					vectorToTarget *= 12;
 					vectorToTarget += Main.npc[(int)targetNPCIndex].velocity;
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						vectorToTarget,
 						ProjectileType<BoneSphereBoneProjectile>(),
@@ -168,7 +173,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				Vector2 angle = Main.rand.NextFloat(MathHelper.Pi).ToRotationVector2();
 				angle *= 8;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					angle,
 					ProjectileType<BoneSphereBoneProjectile>(),
@@ -278,11 +283,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				Vector2 pos = Projectile.Center;
 				framesSinceLastHit = 0;
 				Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 8), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					projId = Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						pos,
 						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<BoneSphereProjectile>(),
@@ -444,7 +449,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if (Main.rand.Next(2) == 0)
+			if (Main.rand.NextBool(2))
 			{
 				target.AddBuff(BuffID.ShadowFlame, 180);
 			}
@@ -552,11 +557,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				int dustIdx = Dust.NewDust(position, width, height, DustID.Shadowflame, 0f, 0f, 100, default, 1.5f);
 				Main.dust[dustIdx].velocity *= 3f;
 			}
+			var source = Projectile.GetSource_FromThis();
 			for (float goreVel = 0.4f; goreVel < 0.8f; goreVel += 0.4f)
 			{
 				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 				{
-					int goreIdx = Gore.NewGore(position, default, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, position, default, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].velocity *= goreVel;
 					Main.gore[goreIdx].velocity += offset;
 				}
@@ -591,7 +597,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}

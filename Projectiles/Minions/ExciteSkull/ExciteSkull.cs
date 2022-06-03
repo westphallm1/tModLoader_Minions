@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 {
 	public class ExciteSkullMinionBuff : MinionBuff
 	{
-		public ExciteSkullMinionBuff() : base(ProjectileType<ExciteSkullMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<ExciteSkullMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -27,6 +27,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Skeletal Keychain");
 			Tooltip.SetDefault("Summons a skull biker to fight for you!");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()

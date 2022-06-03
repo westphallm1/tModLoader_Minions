@@ -9,9 +9,9 @@ using Terraria;
 
 namespace AmuletOfManyMinions.Core.Minions.Effects
 {
+	public delegate Rectangle FrameSelector(int idx, bool isLast);
 	public struct ChainDrawer
 	{
-		public delegate Rectangle FrameSelector(int idx, bool isLast);
 		// not customizable enough to warrent an abstract class
 		internal Rectangle EvenFrame;
 		internal Rectangle OddFrame;
@@ -44,31 +44,31 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			float drawLength = chainVector.Length();
 			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Vector2 pos;
-			float r;
-			if (drawLength > 16)
-			{
-				Vector2 unitToIdle = chainVector;
-				unitToIdle.Normalize();
-				r = (float)Math.PI / 2 + chainVector.ToRotation();
-				int idx = 0;
-				for (int i = bounds.Height / 2; i < drawLength; i += bounds.Height)
-				{
+			Vector2 unitToIdle = chainVector;
+			unitToIdle.Normalize();
+			float r = (float)Math.PI / 2 + chainVector.ToRotation();
+			int idx = 0;
 
-					bool isLast = i + bounds.Height >= chainVector.Length();
-					if (drawLength - i < bounds.Height / 2)
-					{
-						i = (int)(drawLength - bounds.Height / 2);
-					}
-					bounds = frameSelector?.Invoke(idx, isLast) ?? (bounds == EvenFrame ? OddFrame : EvenFrame);
-					pos = startPos + unitToIdle * i;
-					lightColor = lightColor == default ? Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16) : lightColor;
-					Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-						bounds, lightColor, r,
-						origin, 1, SpriteEffects.None, 0);
-					idx++;
-				}
+			if (drawLength <= 16)
+			{
+				return;
 			}
 
+			for (int i = bounds.Height / 2; i < drawLength; i += bounds.Height)
+			{
+				bool isLast = i + bounds.Height >= chainVector.Length();
+				if (drawLength - i < bounds.Height / 2)
+				{
+					i = (int)(drawLength - bounds.Height / 2);
+				}
+				bounds = frameSelector?.Invoke(idx, isLast) ?? (bounds == EvenFrame ? OddFrame : EvenFrame);
+				pos = startPos + unitToIdle * i;
+				lightColor = lightColor == default ? Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16) : lightColor;
+				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
+					bounds, lightColor, r,
+					origin, 1, SpriteEffects.None, 0);
+				idx++;
+			}
 		}
 	}
 }

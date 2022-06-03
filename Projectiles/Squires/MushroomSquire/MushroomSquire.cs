@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 {
 	public class MushroomSquireMinionBuff : MinionBuff
 	{
-		public MushroomSquireMinionBuff() : base(ProjectileType<MushroomSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<MushroomSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			{
 				Vector2 launcVel = new Vector2(0.25f * Projectile.velocity.X, -Main.rand.Next(5, 8));
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					launcVel,
 					ProjectileType<ForagerMushroom>(),
@@ -112,6 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 	public class MushroomSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<MushroomSquireMinionBuff>();
+		protected override int ItemType => ItemType<MushroomSquireMinionItem>();
 		protected override int AttackFrames => 20;
 
 		protected override int SpecialDuration => 30;
@@ -119,13 +120,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/LeafWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/MushroomSquire/MushroomSquireSword";
 
-		protected override LegacySoundStyle SpecialStartSound => null;
+		protected override SoundStyle? SpecialStartSound => null;
 		protected override WeaponAimMode aimMode => WeaponAimMode.FIXED;
 
 		protected override Vector2 WingOffset => new Vector2(-4, 4);
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
-		public MushroomSquireMinion() : base(ItemType<MushroomSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -153,14 +153,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 				vector2Mouse *= ModifiedProjectileVelocity();
 				vector2Mouse = vector2Mouse.RotatedBy(Main.rand.NextFloat(MathHelper.Pi / 8) - MathHelper.Pi/16);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<MushroomSquireMushroomProjectile>(),
 					5 * Projectile.damage / 4,
 					Projectile.knockBack,
 					Projectile.owner);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 5), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
 			}
 		}
 

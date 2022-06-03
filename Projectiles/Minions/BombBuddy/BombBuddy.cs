@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 {
 	public class BombBuddyMinionBuff : MinionBuff
 	{
-		public BombBuddyMinionBuff() : base(ProjectileType<BombBuddyMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BombBuddyMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -178,9 +178,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		private void DoRespawnEffects()
 		{
 			float goreVel = 0.4f;
+			var source = Projectile.GetSource_FromThis();
 			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 			{
-				int goreIdx = Gore.NewGore(Projectile.Center, default, Main.rand.Next(61, 64));
+				int goreIdx = Gore.NewGore(source, Projectile.Center, default, Main.rand.Next(61, 64));
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += 0.5f * offset;
 				Main.gore[goreIdx].scale = 0.75f;
@@ -206,11 +207,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 				dustIdx = Dust.NewDust(position, width, height, 6, 0f, 0f, 100, default, 1.5f);
 				Main.dust[dustIdx].velocity *= 3f;
 			}
+			var source = Projectile.GetSource_FromThis();
 			for (float goreVel = 0.4f; goreVel < 0.8f; goreVel += 0.4f)
 			{
 				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 				{
-					int goreIdx = Gore.NewGore(position, default, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, position, default, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].velocity *= goreVel;
 					Main.gore[goreIdx].velocity += offset;
 				}

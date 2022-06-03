@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {
 	public class DynamiteKittenMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public DynamiteKittenMinionBuff() : base(ProjectileType<DynamiteKittenMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<DynamiteKittenMinion>() };
 		public override int VanillaBuffId => BuffID.DynamiteKitten;
 		public override string VanillaBuffName => "DynamiteKitten";
 	}
@@ -115,14 +115,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			for(int i = 0; i < 2; i++)
 			{
 				Vector2 offset = Projectile.velocity * i * 0.5f;
-				if (Main.rand.Next(2) == 0)
+				if (Main.rand.NextBool(2))
 				{
 					int dustIdx = Dust.NewDust(Projectile.position - offset, Projectile.width, Projectile.height, 6, Alpha: 100);
 					Main.dust[dustIdx].scale *= Main.rand.NextFloat(1.4f, 2.4f);
 					Main.dust[dustIdx].velocity *= 0.2f;
 					Main.dust[dustIdx].noGravity = true;
 				}
-				if (Main.rand.Next(2) == 0)
+				if (Main.rand.NextBool(2))
 				{
 					int dustIdx = Dust.NewDust(Projectile.position - offset, Projectile.width, Projectile.height, 31, Alpha: 100, Scale: 0.5f);
 					Main.dust[dustIdx].fadeIn *= Main.rand.NextFloat(0.5f, 1f);

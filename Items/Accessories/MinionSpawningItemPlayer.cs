@@ -24,7 +24,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public bool techromancerAccessoryEquipped = false;
 		internal bool foragerArmorSetEquipped;
 		internal bool flinxArmorSetEquipped;
-		internal int summonFlatDamage;
 		internal bool illusionistArmorSetEquipped;
 		internal int idleMinionSyncronizationFrame = 0;
 		internal int minionVarietyBonusCount = 0;
@@ -33,7 +32,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		internal bool didDrawDustThisFrame = false;
 		private HashSet<int> uniqueMinionTypes = new HashSet<int>();
 
-		static Color[] MinionColors = new Color[]
+		internal static Color[] MinionColors = new Color[]
 		{
 			Color.Red,
 			Color.LimeGreen,
@@ -70,7 +69,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 			foragerArmorSetEquipped = false;
 			flinxArmorSetEquipped = false;
 			illusionistArmorSetEquipped = false;
-			summonFlatDamage = 0;
 			minionVarietyDamageBonus = 0.03f;
 		    didDrawDustThisFrame = false;
 		}
@@ -116,7 +114,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			}
 		}
 
-		public override void ModifyWeaponDamage(Item item, ref StatModifier modifier, ref float flat)
+		public override void ModifyWeaponDamage(Item item, ref StatModifier modifier)
 		{
 			if (!item.CountsAsClass<SummonDamageClass>())
 			{
@@ -126,15 +124,13 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				if (accessory.IsEquipped(this))
 				{
-					accessory.ModifyPlayerWeaponDamage(this, item, ref modifier, ref flat);
+					accessory.ModifyPlayerWeaponDamage(this, item, ref modifier);
 				}
 			}
 			if(item.ModItem?.Mod == Mod)
 			{
 				modifier += (ServerConfig.Instance.GlobalDamageMultiplier - 100) / 100f;
 			}
-			// a bit hacky, will wanna make this nicer eventually
-			flat += summonFlatDamage;
 		}
 
 		public List<Projectile> GetMinionsOfType(int projectileType)
@@ -172,15 +168,15 @@ namespace AmuletOfManyMinions.Items.Accessories
 				}
 				else if (Player.buffTime[Player.FindBuffIndex(buffType)] == 1)
 				{
-					Projectile.NewProjectile(Player.GetProjectileSource_SetBonus(-1), Player.Center, Vector2.Zero, projectileType, 
-						(int)(20 * Player.GetDamage<SummonDamageClass>()), 0.1f, Player.whoAmI, ai0: isCorrupt ? 0 : 1);
+					Projectile.NewProjectile(Player.GetSource_Misc("illusionistArmorSet"), Player.Center, Vector2.Zero, projectileType, 
+						(int)(Player.GetDamage<SummonDamageClass>().ApplyTo(20)), 0.1f, Player.whoAmI, ai0: isCorrupt ? 0 : 1);
 				}
 			}
 			int flinxType = ProjectileType<BonusFlinxMinion>();
 			if(flinxArmorSetEquipped && Player.ownedProjectileCounts[flinxType] == 0)
 			{
 				Player.AddBuff(BuffType<FlinxMinionBuff>(), 3);
-				int projId = Projectile.NewProjectile(Player.GetProjectileSource_SetBonus(-1), Player.Center, Vector2.Zero, flinxType, 8, 2, Player.whoAmI);
+				int projId = Projectile.NewProjectile(Player.GetSource_Misc("flinxArmorSet"), Player.Center, Vector2.Zero, flinxType, 8, 2, Player.whoAmI);
 				Main.projectile[projId].originalDamage = 8;
 			}
 			if (minionVarietyBonusCount > 1 && ClientConfig.Instance.ShowMinionVarietyBonus)
@@ -190,6 +186,11 @@ namespace AmuletOfManyMinions.Items.Accessories
 				{
 					Player.AddBuff(buffType, 2);
 				}
+			}
+
+			if(Player.ownedProjectileCounts[ProjectileType<BabyFinchMinion>()] > 0)
+			{
+				Player.babyBird = true;
 			}
 		}
 

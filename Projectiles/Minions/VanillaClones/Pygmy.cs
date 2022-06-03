@@ -17,11 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class PygmyMinionBuff : MinionBuff
 	{
-		public PygmyMinionBuff() : base(
-			ProjectileType<Pygmy1Minion>(),
-			ProjectileType<Pygmy2Minion>(),
-			ProjectileType<Pygmy3Minion>(),
-			ProjectileType<Pygmy4Minion>()) { }
+		internal override int[] ProjectileTypes => new int[] {  ProjectileType<Pygmy1Minion>(), ProjectileType<Pygmy2Minion>(), ProjectileType<Pygmy3Minion>(), ProjectileType<Pygmy4Minion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -36,7 +32,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override int VanillaItemID => ItemID.PygmyStaff;
 
 		internal override string VanillaItemName => "PygmyStaff";
-		public int[] projTypes;	
+		[CloneByReference] //projTypes is fine to be shared across instances
+		public int[] projTypes;
 
 		public override void SetDefaults()
 		{
@@ -238,7 +235,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			int spearVelocity = 16;
 			lastFiredFrame = animationFrame;
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;
@@ -255,7 +252,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					angleToTarget += targetVelocity / 4;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<PygmySpear>(),

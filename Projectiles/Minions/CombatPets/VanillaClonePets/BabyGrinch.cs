@@ -7,7 +7,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {
 	public class BabyGrinchMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public BabyGrinchMinionBuff() : base(ProjectileType<BabyGrinchMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BabyGrinchMinion>() };
 		public override string VanillaBuffName => "BabyGrinch";
 		public override int VanillaBuffId => BuffID.BabyGrinch;
 	}

@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			// don't spawn an arrow on kill
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
@@ -86,8 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 	{
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundBow";
 		internal override int BuffId => BuffType<SoulboundSwordMinionBuff>();
-
-		public SoulboundSpecialBow() : base(ItemType<SoulboundSwordMinionItem>()) { }
+		protected override int ItemType => ItemType<SoulboundSwordMinionItem>();
 
 		public override void SetDefaults()
 		{
@@ -130,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 				launchOffset *= 6 + Main.rand.Next(-2, 2);
 				Vector2 launchPos = hoverPos + Vector2.One * Main.rand.NextFloat(-12, 12) + launchOffset;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					launchPos,
 					launchAngle,
 					ProjectileType<SoulboundDescendingArrow>(),

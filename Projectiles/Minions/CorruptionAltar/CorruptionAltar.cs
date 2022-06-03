@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 {
 	public class CorruptionAltarMinionBuff : MinionBuff
 	{
-		public CorruptionAltarMinionBuff() : base(ProjectileType<CorruptionAltarCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CorruptionAltarCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Corruption Cell Staff");
 			Tooltip.SetDefault("Summons a corrupt cell to fight for you!");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()
@@ -183,7 +187,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 				framesSinceLastHit = 0;
 				for (int i = 0; i < minionsToSpawn; i++)
 				{
-					bool summonBig = EmpowerCount >= 4 && Main.rand.Next(4) == 0;
+					bool summonBig = EmpowerCount >= 4 && Main.rand.NextBool(4);
 					int projType = summonBig ? ProjectileType<CorruptionAltarBigEater>() : ProjectileType<CorruptionAltarEater>();
 					float rangeSquare = Math.Min(120, vectorToTargetPosition.Length() / 2);
 					vectorToTargetPosition.X += Main.rand.NextFloat() * rangeSquare - rangeSquare / 2;
@@ -196,7 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 					if (Main.myPlayer == player.whoAmI)
 					{
 						Projectile.NewProjectile(
-							Projectile.GetProjectileSource_FromThis(),
+							Projectile.GetSource_FromThis(),
 							pos,
 							VaryLaunchVelocity(vectorToTargetPosition),
 							projType,
@@ -267,7 +271,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			Projectile.frame = Math.Min(4, (int)EmpowerCount) - 1;
 			Projectile.rotation = (float)(Math.PI / 8 * Math.Cos(2 * Math.PI * animationFrame / 120f));
 
-			if (Main.rand.Next(120) == 0)
+			if (Main.rand.NextBool(120))
 			{
 				for (int i = 0; i < 3; i++)
 				{

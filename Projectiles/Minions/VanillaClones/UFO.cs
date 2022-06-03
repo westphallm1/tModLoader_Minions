@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class UFOMinionBuff : MinionBuff
 	{
-		public UFOMinionBuff() : base(ProjectileType<UFOMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<UFOMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -99,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		private void updateDust(int dustId)
 		{
-			if (Main.rand.Next(2) == 0)
+			if (Main.rand.NextBool(2))
 			{
 				Main.dust[dustId].color = Color.LimeGreen;
 			}
@@ -148,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				if(Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 						target.Center,
 						Vector2.Zero,
 						ProjectileType<UfoDamageHitbox>(),

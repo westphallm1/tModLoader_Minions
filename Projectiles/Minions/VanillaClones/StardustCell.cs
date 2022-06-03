@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class StardustCellMinionBuff : MinionBuff
 	{
-		public StardustCellMinionBuff() : base(ProjectileType<StardustCellMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustCellMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -179,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.StardustCellMinion;
 		public override string GlowTexture => "Terraria/Images/Glow_189";
 		internal override int? FiredProjectileId => ProjectileType<StardustCellClinger>();
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(4, 7).WithVolume(0.5f);
+		internal override SoundStyle? ShootSound => SoundID.NPCDeath7 with { Volume = 0.5f };
 
 		internal int baseSpeed = 14;
 		internal int baseInertia = 10;
@@ -244,7 +244,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(targetNPCIndex is int idx)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(lineOfFire),
 					projId,

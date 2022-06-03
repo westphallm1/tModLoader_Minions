@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 {
 	public class GoblinTechnomancerMinionBuff : MinionBuff
 	{
-		public GoblinTechnomancerMinionBuff() : base(ProjectileType<GoblinTechnomancerMinion>(), ProjectileType<GoblinTechnomancerProbeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<GoblinTechnomancerMinion>(), ProjectileType<GoblinTechnomancerProbeMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -31,6 +31,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Shadowflame Probe Controller");
 			Tooltip.SetDefault("Summons a goblin technomancer to fight for you!");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()
@@ -108,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
@@ -146,14 +151,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				lineOfFire *= projectileVelocity;
 				lastShootFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(lineOfFire),
 					ProjectileType<GoblinGunnerBullet>(),
 					Projectile.damage,
 					Projectile.knockBack,
 					Main.myPlayer);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 11), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
 			}
 			DistanceFromGroup(ref vectorToTargetPosition);
 			if (vectorToTargetPosition.Length() > travelSpeed)
@@ -337,14 +342,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						pos,
 						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<GoblinGunnerBullet>(),
 						Projectile.damage,
 						Projectile.knockBack,
 						Main.myPlayer);
-					SoundEngine.PlaySound(new LegacySoundStyle(2, 11), Projectile.position);
+					SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
 				}
 			}
 		}

@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
 	public class EsteeMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public EsteeMinionBuff() : base(ProjectileType<EsteeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<EsteeMinion>() };
 		public override string VanillaBuffName => "UpbeatStar";
 		public override int VanillaBuffId => BuffID.UpbeatStar;
 	}
@@ -83,10 +83,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		public static void AddImpactEffects(Projectile projectile)
 		{
-			for(int i = 0; i < 3; i++)
+			var source = projectile.GetSource_FromThis();
+			for (int i = 0; i < 3; i++)
 			{
 				Vector2 launchVelocity = Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(3f, 5f);
-				Gore.NewGore(projectile.Center, launchVelocity, Main.rand.Next(16, 18));
+				Gore.NewGore(source, projectile.Center, launchVelocity, Main.rand.Next(16, 18));
 				Dust dust = Dust.NewDustPerfect(projectile.Center, DustID.YellowStarDust, -launchVelocity * 1.25f);
 				dust.noGravity = true;
 			}
@@ -228,7 +229,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			{
 				Projectile.rotation = Utils.AngleLerp(Projectile.rotation, 0.05f * Projectile.velocity.X, 0.25f);
 			}
-			if(Main.rand.Next(24) == 0)
+			if(Main.rand.NextBool(24))
 			{
 				int dustIdx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.YellowStarDust);
 				Main.dust[dustIdx].noGravity = true;
@@ -245,7 +246,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				// spawn projectile slightly off the top of the screen
 				Vector2 spawnPos = Main.screenPosition + new Vector2(Main.rand.Next(0, Main.screenWidth), -16);
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					spawnPos,
 					Projectile.velocity,
 					ProjectileType<EsteeFallenStarProjectile>(),
@@ -253,7 +254,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 					Projectile.knockBack,
 					Main.myPlayer,
 					ai0: target.whoAmI);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 9), spawnPos);
+				SoundEngine.PlaySound(SoundID.Item9, spawnPos);
 			}
 		}
 	}

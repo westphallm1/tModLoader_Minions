@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 {
 	public class BoneSquireMinionBuff : MinionBuff
 	{
-		public BoneSquireMinionBuff() : base(ProjectileType<BoneSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BoneSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -31,6 +31,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crest of Bones");
 			Tooltip.SetDefault("Summons a squire\nA bone squire will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(3.75f);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -49,6 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 	public class BoneSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<BoneSquireMinionBuff>();
+		protected override int ItemType => ItemType<BoneSquireMinionItem>();
 		protected override int AttackFrames => usingSpecial ? 20 : 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 
@@ -69,7 +77,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		protected override int SpecialCooldown => 10 * 60;
 
 		protected override Asset<Texture2D> WeaponTexture => usingSpecial ? ExtraTextures[3] : base.WeaponTexture;
-		public BoneSquireMinion() : base(ItemType<BoneSquireMinionItem>()) { }
 
 		public sealed override void SetDefaults()
 		{
@@ -95,7 +102,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			Main.projFrames[Projectile.type] = 5;
 		}
 
-
 		protected override Rectangle GetWeaponTextureBounds(Texture2D texture)
 		{
 			if(usingSpecial)
@@ -113,7 +119,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		{
 			if(usingSpecial && attackFrame == 0)
 			{
-				SoundEngine.PlaySound(attackSound, Projectile.Center);
+				if (attackSound.HasValue)
+				{
+					SoundEngine.PlaySound(attackSound.Value, Projectile.Center);
+				}
 			}
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
@@ -184,7 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void OnStopUsingSpecial() => OnStartUsingSpecial();
 
 
-		protected override float WeaponDistanceFromCenter() => 60;
+		protected override float WeaponDistanceFromCenter() => CrossMod.ApplyCrossModScaling(60, Projectile, 0);
 
 		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() - 10;
 		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 10;

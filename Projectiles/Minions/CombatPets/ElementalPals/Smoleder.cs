@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
 	public class SmolederMinionBuff : CombatPetBuff
     {
-        public SmolederMinionBuff() : base(ProjectileType<SmolederMinion>()) { }
+        internal override int[] ProjectileTypes => new int[] { ProjectileType<SmolederMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			if(state == GroundAnimationState.JUMPING)
 			{
 				Projectile.frame = Projectile.velocity.Y > 0 ? 2 : 5;
-			} else if (state == GroundAnimationState.FLYING && Main.rand.Next(6) == 0)
+			} else if (state == GroundAnimationState.FLYING && Main.rand.NextBool(6))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 6, 0f, 0f, 100, default, 2f);
 				Main.dust[dustId].velocity *= 0.3f;

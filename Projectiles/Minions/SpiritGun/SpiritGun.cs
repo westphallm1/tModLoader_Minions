@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
 	public class SpiritGunMinionBuff : MinionBuff
 	{
-		public SpiritGunMinionBuff() : base(ProjectileType<SpiritGunCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SpiritGunCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Spirit Revolver");
 			Tooltip.SetDefault("Summons sentient bullets to fight for you.\nMake sure they don't get hungry...");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOMULTISHOT);
 		}
 
 		public override void SetDefaults()
@@ -230,7 +234,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						pos,
 						vectorToTargetPosition,
 						ProjectileType<SpiritGunMinionBullet>(),

@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Core.Netcode.Packets;
+using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
@@ -110,6 +110,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 	{
 		internal int PetLevel { get; set; }
 		internal int PetDamage { get; set; }
+		
+		public int PetEmblemItem = -1;
+		public object[] PetModdedStats = new object[0];
 
 		// todo this may be too many constructors, but it's a struct so I think it's ok
 		private PlayerCombatPetLevelInfo CustomInfo;
@@ -134,10 +137,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			bool didUpdate = newLevel != PetLevel || PetDamage != newDamage;
 			PetLevel = newLevel;
 			PetDamage = newDamage;
-			if(didUpdate && !fromSync)
+			if (didUpdate && !fromSync)
 			{
 				// TODO MP packet
 				new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage).Send();
+			}
+		}
+		
+		public void UpdatePetLevelModded(int newEmblemItem, object[] newModdedStats, bool fromSync = false)
+		{
+			bool didUpdate = PetEmblemItem != newEmblemItem || PetModdedStats.Length != newModdedStats.Length;
+			if (!didUpdate) {
+				for (int x = 0; x < PetModdedStats.Length; x++) {
+					if (PetModdedStats[x] != newModdedStats[x]) {
+						didUpdate = true;
+						break;
+					}
+				}
+			}
+			PetEmblemItem = newEmblemItem;
+			PetModdedStats = newModdedStats;
+			if (didUpdate && !fromSync)
+			{
+				// TODO MP packet
+				new CombatPetLevelModdedPacket(Player, PetEmblemItem, PetModdedStats).Send();
 			}
 		}
 
@@ -152,7 +175,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override void PostUpdate()
 		{
-			CheckForCombatPetEmblem();
+			if (Main.myPlayer == Player.whoAmI)
+			{
+				CheckForCombatPetEmblem();
+			}
 			UpdateCombatPetCount();
 			ReflagPetBuffs();
 		}
@@ -184,6 +210,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			Player.maxMinions = Math.Max(0, Player.maxMinions - minionSlotsUsed);
 		}
 
+		public bool GetEmblemSuperiority(CombatPetEmblem replacer, CombatPetEmblem old)
+		{
+			int PetLevelDiff = replacer.PetLevel - old.PetLevel;
+			if (PetLevelDiff > 0)
+				return true;
+			if (PetLevelDiff < 0)
+				return false;
+			int DamageDiff = replacer.Item.damage - old.Item.damage;
+			if (DamageDiff > 0)
+				return true;
+			if (DamageDiff < 0)
+				return false;
+			return CrossMod.GetCrossModEmblemSuperiority(replacer.Item, old.Item);
+		}
+
 		// look for the best Combat Pet Emblem in the player's inventory, use that
 		// to set the player's combat pet's damage
 		private void CheckForCombatPetEmblem()
@@ -195,16 +236,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 			int maxLevel = 0;
 			int maxDamage = CombatPetLevelTable.PetLevelTable[0].BaseDamage;
-			for(int i = 0; i < Player.inventory.Length; i++)
+			Item maxItem = null;
+			int maxEmblemItem = -1;
+			for (int i = 0; i < Player.inventory.Length; i++)
 			{
 				Item item = Player.inventory[i];
 				if(!item.IsAir && item.ModItem != null && item.ModItem is CombatPetEmblem petEmblem)
 				{
 					// choose max tier rather than max damage
-					if(petEmblem.PetLevel > maxLevel)
+					if(maxItem == null || GetEmblemSuperiority(item.ModItem as CombatPetEmblem, maxItem.ModItem as CombatPetEmblem))
 					{
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
+						maxItem = item;
+						maxEmblemItem = item.type;
 					}
 				}
 			}
@@ -214,14 +259,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				if(!item.IsAir && item.ModItem != null && item.ModItem is CombatPetEmblem petEmblem)
 				{
 					// choose max tier rather than max damage
-					if(petEmblem.PetLevel > maxLevel)
+					if (maxItem == null || GetEmblemSuperiority(item.ModItem as CombatPetEmblem, maxItem.ModItem as CombatPetEmblem))
 					{
 						maxLevel = petEmblem.PetLevel;
 						maxDamage = item.damage;
+						maxItem = item;
+						maxEmblemItem = item.type;
 					}
 				}
 			}
 			UpdatePetLevel(maxLevel, maxDamage);
+			UpdatePetLevelModded(maxEmblemItem, CrossMod.GetCrossModEmblemStats(maxItem));
 		}
 
 		private void ReflagPetBuffs()
@@ -321,14 +369,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			CombatPetBuffTypes = null;
 		}
 
-		public CombatPetBuff(params int[] projIds) : base(projIds) { }
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			Main.vanityPet[Type] = true;
 			Main.buffNoSave[Type] = false;
 			CombatPetBuffTypes.Add(Type);
+			CrossMod.HookCombatPetBuffToEmblemSourceItem(Type);
 		}
 
 		public override void Update(Player player, ref int buffIndex)
@@ -338,7 +385,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				int projType = projectileTypes[i];
 				if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] <= 0)
 				{
-					var p = Projectile.NewProjectileDirect(player.GetProjectileSource_Buff(buffIndex), player.Center, Vector2.Zero, projType, 0, 0, player.whoAmI);
+					var p = Projectile.NewProjectileDirect(player.GetSource_Buff(buffIndex), player.Center, Vector2.Zero, projType, 0, 0, player.whoAmI);
 					// p.originalDamage is updated in each frame by the minion itself
 					p.originalDamage = 0;
 				}
@@ -359,8 +406,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public abstract int VanillaBuffId { get; }
 		public abstract string VanillaBuffName { get; }
 
-		public CombatPetVanillaCloneBuff(params int[] projIds) : base(projIds) { }
-
 		public override string Texture => "Terraria/Images/Buff_" + VanillaBuffId;
 		public override void SetStaticDefaults()
 		{
@@ -379,7 +424,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				"This pet's fighting spirit has been awakened!\n" +
 				"It can be powered up by holding a Combat Pet Emblem.")
 			{
-				overrideColor = Color.LimeGreen
+				OverrideColor = Color.LimeGreen
 			});
 
 
@@ -394,14 +439,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 					CombatPetLevelTable.PetLevelTable[attackPatternUpdateTier].Description + 
 					" Combat Pet Emblem or stronger!")
 				{
-					overrideColor = Color.Gray
+					OverrideColor = Color.Gray
 				});
 			} else
 			{
 				tooltips.Add(new TooltipLine(mod, "CombatPetLeveledUp", 
 					"Your emblem enables this pet's stronger attack pattern!")
 				{
-					overrideColor = Color.LimeGreen
+					OverrideColor = Color.LimeGreen
 				});
 			}
 		}

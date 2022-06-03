@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 {
 	public class XCXCopterMinionBuff : MinionBuff
 	{
-		public XCXCopterMinionBuff() : base(ProjectileType<XCXCopterCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<XCXCopterCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 			DisplayName.SetDefault("Copter-X Staff");
 			Tooltip.SetDefault("Summons a flexible helicopter to fight for you!");
 
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()

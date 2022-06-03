@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 {
 	public class SoulboundArsenalMinionBuff : MinionBuff
 	{
-		public SoulboundArsenalMinionBuff() : base(ProjectileType<SoulboundArsenalMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SoulboundArsenalMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -37,6 +37,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Arsenal");
 			Tooltip.SetDefault("Summons a squire\nA soulbound bow and sword will fight for you!\nClick and hold to guide their attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
@@ -120,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
 				Vector2 velocity = 1.5f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));
@@ -166,7 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 	public abstract class SoulboundArsenalBaseMinion : CoordinatedWeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SoulboundArsenalMinionBuff>();
-		protected SoulboundArsenalBaseMinion(int itemID) : base(itemID) { }
+		protected override int ItemType => ItemType<SoulboundArsenalMinionItem>();
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => null;
 
@@ -226,7 +231,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		protected override WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.VERTICAL;
 
-		public SoulboundArsenalBowMinion() : base(ItemType<SoulboundArsenalMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -268,7 +272,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 102), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item102, Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					int type = ProjectileType<SoulboundArsenalArrow>();
@@ -279,7 +283,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 					for (int i = 0; i < 2; i++)
 					{
 						Projectile.NewProjectile(
-							Projectile.GetProjectileSource_FromThis(),
+							Projectile.GetSource_FromThis(),
 							Projectile.Center,
 							angleVector,
 							type,
@@ -304,7 +308,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override bool IsBoss => true;
 
-		public SoulboundArsenalMinion() : base(ItemType<SoulboundArsenalMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -326,7 +329,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.position,
 					Projectile.velocity,
 					ProjectileType<SoulboundArsenalBowMinion>(),
@@ -355,14 +358,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 71), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item71, Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Vector2 vector2Mouse = Main.MouseWorld - Projectile.Center;
 					vector2Mouse.Normalize();
 					vector2Mouse *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						vector2Mouse,
 						ProjectileType<SoulboundArsenalSwordProjectile>(),
@@ -414,7 +417,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center, 
 					Vector2.Zero, 
 					ProjectileType<SoulboundArsenalLaser>(), 

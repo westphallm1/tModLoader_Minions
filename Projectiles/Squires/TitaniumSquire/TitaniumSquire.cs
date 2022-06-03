@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 {
 	public class TitaniumSquireMinionBuff : MinionBuff
 	{
-		public TitaniumSquireMinionBuff() : base(ProjectileType<TitaniumSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<TitaniumSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -140,7 +140,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 				if(player.whoAmI == Main.myPlayer)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center + vectorToTargetPosition,
 						Vector2.Zero,
 						ProjectileType<TitaniumDroneDamageHitbox>(),
@@ -160,7 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 					Main.dust[dustId].scale = Main.rand.NextFloat(0.9f, 1.3f);
 					Main.dust[dustId].velocity *= 0.2f;
 				}
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 92), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item92, Projectile.Center);
 			}
 		}
 
@@ -184,6 +184,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 	public class TitaniumSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<TitaniumSquireMinionBuff>();
+		protected override int ItemType => ItemType<TitaniumSquireMinionItem>();
 		protected override int AttackFrames => 38;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -197,7 +198,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
-		public TitaniumSquireMinion() : base(ItemType<TitaniumSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -236,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					Vector2.Zero,
 					ProjectileType<TitaniumSquireDrone>(),

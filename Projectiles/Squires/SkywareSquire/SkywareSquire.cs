@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 {
 	public class SkywareSquireMinionBuff : MinionBuff
 	{
-		public SkywareSquireMinionBuff() : base(ProjectileType<SkywareSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SkywareSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -155,6 +155,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 	public class SkywareSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SkywareSquireMinionBuff>();
+		protected override int ItemType => ItemType<SkywareSquireMinionItem>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => base.Texture + "_Bow";
@@ -168,15 +169,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
+		protected override SoundStyle? attackSound => SoundID.Item5;
 
 		protected override float projectileVelocity => 16;
 
 		protected override int SpecialDuration => 45;
 		protected override bool travelRangeCanBeModified => false;
-
-
-		public SkywareSquireMinion() : base(ItemType<SkywareSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -220,7 +218,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						angleVector,
 						ProjectileType<SkywareArrow>(),
@@ -241,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						angleVector,
 						ProjectileType<SkywareLargeArrow>(),
@@ -249,7 +247,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 						Projectile.knockBack,
 						Main.myPlayer);
 				}
-				SoundEngine.PlaySound(attackSound, Projectile.Center);
+				if (attackSound.HasValue)
+				{
+					SoundEngine.PlaySound(attackSound.Value, Projectile.Center);
+				}
 			}
 		}
 

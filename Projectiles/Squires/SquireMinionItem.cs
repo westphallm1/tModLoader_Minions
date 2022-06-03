@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -35,6 +36,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			ApplyBuff(player);
+
+			if (player.ownedProjectileCounts[Item.shoot] > 0 || player.altFunctionUse == 2)
+			{
+				return false;
+			}
 
 			for (int i = 0; i < Main.maxProjectiles; i++)
 			{
@@ -74,13 +80,39 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			tooltips.Add(new TooltipLine(Mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
+			int index = tooltips.Count - 1;
+			bool iter = true;
+			string[] placeAfterTooltips = {
+					"ItemName",
+					"Favorite",
+					"FavoriteDesc",
+					"NoTransfer",
+					"Social",
+					"SocialDesc",
+					"Damage",
+					"CritChance",
+					"Speed",
+					"Knockback",
+					"PickPower",
+					"AxePower",
+					"HammerPower",
+					"UseMana"
+				};
+			while (iter)
 			{
-				overrideColor = Color.LimeGreen
+				if (index <= 0 || placeAfterTooltips.Contains(tooltips[index].Name) || tooltips[index].Name.StartsWith("Tooltip"))
+				{
+					break;
+				}
+				index--;
+			}
+			tooltips.Insert(index + 1, new TooltipLine(Mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
+			{
+				OverrideColor = Color.LimeGreen
 			});
 			if(SpecialDescription != null)
 			{
-				tooltips.Add(new TooltipLine(Mod, "SquireSpecialDescription", SpecialDescription));
+				tooltips.Insert(index + 2, new TooltipLine(Mod, "SquireSpecialDescription", SpecialDescription));
 			}
 		}
 	}

@@ -8,7 +8,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {
 	public class ShadowMimicMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public ShadowMimicMinionBuff() : base(ProjectileType<ShadowMimicMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<ShadowMimicMinion>() };
 		public override int VanillaBuffId => BuffID.ShadowMimic;
 		public override string VanillaBuffName => "ShadowMimic";
 	}
@@ -51,9 +51,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			{
 				if(idleCycle == 165)
 				{
+					var source = Projectile.GetSource_Death();
 					for(int i = 0; i < 3; i++)
 					{
-						Gore.NewGore(Projectile.Center, new Vector2(3 * forwardDir * Projectile.spriteDirection, -1), GoreID.ShadowMimicCoins);
+						Gore.NewGore(source, Projectile.Center, new Vector2(3 * forwardDir * Projectile.spriteDirection, -1), GoreID.ShadowMimicCoins);
 					}
 				}
 				Projectile.frame = 3 -  (idleCycle - 165) / 5;

@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 {
 	public class FishBowlMinionBuff : MinionBuff
 	{
-		public FishBowlMinionBuff() : base(ProjectileType<FishBowlMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<FishBowlMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -31,6 +31,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			DisplayName.SetDefault("Fishbowl Staff");
 			Tooltip.SetDefault("Summons a flying fishbowl to fight for you!\n"+
 				"Most effective against flying enemies");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()
@@ -251,7 +255,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 					targetTop *= 4;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					targetTop,
 					ProjectileType<FishBowlFish>(),
@@ -312,7 +316,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 					Dust.NewDust(Projectile.Top, Projectile.width, 16, 13, catchVelocity.X / 4, catchVelocity.Y / 4, newColor: Color.LightBlue);
 				}
 				side = side == 0 ? 1 : 0;
-				SoundEngine.PlaySound(new LegacySoundStyle(19, 1), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.SplashWeak, Projectile.Center);
 				launchedFish.Kill();
 			}
 

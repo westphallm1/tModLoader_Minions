@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class IceQueenMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public IceQueenMinionBuff() : base(ProjectileType<IceQueenMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<IceQueenMinion>() };
 
 		public override int VanillaBuffId => BuffID.IceQueenPet;
 
@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 50).WithVolume(0.5f), Projectile.Center);
+			SoundEngine.PlaySound(SoundID.Item50 with { Volume = 0.5f }, Projectile.Center);
 			for(int i = 0; i < 5; i++)
 			{
 				int idx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BlueFairy);
@@ -86,7 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.IceQueenPet;
 		internal override int? FiredProjectileId => ProjectileType<IceQueenIcicle>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 
 		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(20, 40 - 4 * info.Level);
 		internal override int GetProjectileVelocity(ICombatPetLevelInfo info) => 10;
@@ -113,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Vector2 spawnPos = Main.npc[idx].Top;
 				float spawnY = spawnPos.Y;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					spawnPos - 128 * spawnAngle,
 					VaryLaunchVelocity(hsHelper.projectileVelocity * spawnAngle),
 					projId,

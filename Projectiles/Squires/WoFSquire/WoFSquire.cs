@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 {
 	public class GuideVoodooSquireMinionBuff : MinionBuff
 	{
-		public GuideVoodooSquireMinionBuff() : base(ProjectileType<GuideVoodooSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<GuideVoodooSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -30,13 +30,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 	}
 	public class WoFSquireMinionBuff : MinionBuff
 	{
-		public WoFSquireMinionBuff() : base(ProjectileType<WoFSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<WoFSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			//TODO 1.4 did not call base before
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Wall of Flesh Squire");
 			Description.SetDefault("You can guide the Wall of Flesh!");
+			CrossMod.HookBuffToItemCrossMod(Type, ItemType<GuideVoodooSquireMinionItem>());
 		}
 		public override void Update(Player player, ref int buffIndex)
 		{
@@ -109,6 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 	public class WoFSquireMinion : SquireMinion
 	{
 		internal override int BuffId => BuffType<WoFSquireMinionBuff>();
+		protected override int ItemType => ItemType<GuideVoodooSquireMinionItem>();
 		int dashDirection = 1;
 		bool isDashing;
 
@@ -127,13 +129,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		Vector2 specialStartPos;
 		int chargeDirection;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(15, 0);
+		protected override SoundStyle? SpecialStartSound => SoundID.Roar;
 		protected override int SpecialDuration => SpecialLoopCount * SpecialLoopSpeed + SpecialLoopSpeed / 2 + SpecialChargeTime;
 		protected override int SpecialCooldown => 6 * 60;
 
 		private MotionBlurDrawer blurDrawer;
-
-		public WoFSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -440,16 +440,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override void Kill(int timeLeft)
 		{
-			Vector2 goreVelocity = Projectile.velocity;
-			goreVelocity.Normalize();
-			goreVelocity *= 4f;
-			int gore1 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFEyeGore").Type, 1f);
-			int gore2 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFEyeGore").Type, 1f);
-			int gore3 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFHammerGore").Type, 1f);
-			foreach (int gore in new int[] { gore1, gore2, gore3 })
+			if (Main.netMode != NetmodeID.Server)
 			{
-				Main.gore[gore].timeLeft = 180; // make it last not as long
-				Main.gore[gore].alpha = 128; // make it transparent
+				Vector2 goreVelocity = Projectile.velocity;
+				goreVelocity.Normalize();
+				goreVelocity *= 4f;
+				var source = Projectile.GetSource_Death();
+				int gore1 = Gore.NewGore(source, Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFEyeGore").Type, 1f);
+				int gore2 = Gore.NewGore(source, Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFEyeGore").Type, 1f);
+				int gore3 = Gore.NewGore(source, Projectile.position, goreVelocity, Mod.Find<ModGore>("WoFHammerGore").Type, 1f);
+				foreach (int gore in new int[] { gore1, gore2, gore3 })
+				{
+					Main.gore[gore].timeLeft = 180; // make it last not as long
+					Main.gore[gore].alpha = 128; // make it transparent
+				}
 			}
 			for (int i = 0; i < 8; i++)
 			{
@@ -497,6 +501,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 	public class GuideVoodooSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<GuideVoodooSquireMinionBuff>();
+		protected override int ItemType => ItemType<GuideVoodooSquireMinionItem>();
 		protected override int AttackFrames => 40;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => null;
@@ -516,13 +521,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		protected int knockbackCounter = 0;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(1, 0);
+		protected override SoundStyle? SpecialStartSound => SoundID.PlayerHit with { Variants = stackalloc int[] { 0 } }; //Works too: new SoundStyle("Terraria/Sounds/Player_Hit_0");
 
-
-		protected override LegacySoundStyle attackSound => null;
-
-
-		public GuideVoodooSquireMinion() : base(ItemType<GuideVoodooSquireMinionItem>()) { }
+		protected override SoundStyle? attackSound => null;
 
 		public override void SetStaticDefaults()
 		{
@@ -533,6 +534,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		}
 		public override void LoadAssets()
 		{
+			base.LoadAssets();
 			AddTexture("Terraria/Images/HealthBar1");
 			AddTexture("Terraria/Images/HealthBar2");
 		}
@@ -614,8 +616,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					b = getGradient(halfHealthColor.B, zeroHealthColor.B, weight);
 				}
 				Color drawColor = new Color(r, g, b);
-				Texture2D healthBar = ExtraTextures[0].Value;
-				Texture2D healthBarBack = ExtraTextures[1].Value;
+				Texture2D healthBar = ExtraTextures[2].Value;
+				Texture2D healthBarBack = ExtraTextures[3].Value;
 				Rectangle bounds = new Rectangle(0, 0, (int)(healthBar.Width * widthFraction), healthBar.Height);
 				Vector2 origin = healthBar.Bounds.Center.ToVector2();
 				Vector2 pos = Projectile.Bottom + new Vector2(0, 8);
@@ -657,16 +659,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		{
 			if (mockHealth == 0)
 			{
-				Vector2 goreVelocity = Projectile.velocity;
-				goreVelocity.Normalize();
-				goreVelocity *= 4f;
-				int gore1 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideGore").Type, 1f);
-				int gore2 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideBodyGore").Type, 1f);
-				int gore3 = Gore.NewGore(Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideLegsGore").Type, 1f);
-				foreach (int gore in new int[] { gore1, gore2, gore3 })
+				if (Main.netMode != NetmodeID.Server)
 				{
-					Main.gore[gore].timeLeft = 180; // make it last not as long
-					Main.gore[gore].alpha = 128; // make it transparent
+					Vector2 goreVelocity = Projectile.velocity;
+					goreVelocity.Normalize();
+					goreVelocity *= 4f;
+					var source = Projectile.GetSource_Death();
+					int gore1 = Gore.NewGore(source, Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideGore").Type, 1f);
+					int gore2 = Gore.NewGore(source, Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideBodyGore").Type, 1f);
+					int gore3 = Gore.NewGore(source, Projectile.position, goreVelocity, Mod.Find<ModGore>("GuideLegsGore").Type, 1f);
+					foreach (int gore in new int[] { gore1, gore2, gore3 })
+					{
+						Main.gore[gore].timeLeft = 180; // make it last not as long
+						Main.gore[gore].alpha = 128; // make it transparent
+					}
 				}
 				for (int i = 0; i < 6; i++)
 				{
@@ -675,8 +681,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 				if (player.whoAmI == Main.myPlayer)
 				{
-					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 45); // evolved form lasts 20 seconds
-					Projectile p = Projectile.NewProjectileDirect(Projectile.GetProjectileSource_FromThis(), Projectile.Center, Projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
+					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
+					Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
 					p.originalDamage = baseDamage;
 				}
 			}

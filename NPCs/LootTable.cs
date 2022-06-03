@@ -397,7 +397,7 @@ namespace AmuletOfManyMinions.NPCs
 		public override void OpenVanillaBag(string context, Player player, int arg)
 		{
 			float spawnChance = Main.rand.NextFloat();
-			var source = player.GetItemSource_OpenItem(arg);
+			var source = player.GetSource_OpenItem(arg);
 			switch (arg)
 			{
 				case ItemID.QueenBeeBossBag:

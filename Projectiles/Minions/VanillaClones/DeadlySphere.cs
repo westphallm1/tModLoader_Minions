@@ -17,10 +17,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class DeadlySphereMinionBuff : MinionBuff
 	{
-		public DeadlySphereMinionBuff() : base(
-			ProjectileType<DeadlySphereMinion>(), 
+		internal override int[] ProjectileTypes => new int[] {
+			ProjectileType<DeadlySphereMinion>(),
 			ProjectileType<DeadlySphereClingerMinion>(),
-			ProjectileType<DeadlySphereFireMinion>()) { }
+			ProjectileType<DeadlySphereFireMinion>()
+		};
+		
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -35,6 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		internal override string VanillaItemName => "DeadlySphereStaff";
 
+		[CloneByReference] //projTypes is fine to be shared across instances
 		public int[] projTypes;
 
 		public override void SetStaticDefaults()
@@ -65,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 113);
+			Item.UseSound = SoundID.Item113;
 		}
 	}
 
@@ -88,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.AI();
 			Projectile.localAI[0]++;
-			if(Projectile.localAI[0] < 4 || Main.rand.Next(2) != 0)
+			if(Projectile.localAI[0] < 4 || !Main.rand.NextBool(2))
 			{
 				return;
 			}
@@ -100,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.dust[dustId].velocity.X *= 1.2f;
 			Main.dust[dustId].velocity.Y *= 1.2f;
 			Main.dust[dustId].noGravity = true;
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				Main.dust[dustId].scale *= 2f;
 				Main.dust[dustId].velocity.X *= 2f;
@@ -350,7 +353,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeadlySphere;
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
 
 		internal override int? FiredProjectileId => null;
 
@@ -388,11 +391,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(vectorToTarget == null || animationFrame - hsHelper.lastShootFrame > 60)
 			{
 				Projectile.rotation += MathHelper.TwoPi/60;
-				if (Main.rand.Next(2) == 0)
+				if (Main.rand.NextBool(2))
 				{
 					for (float angle = 0; angle < MathHelper.TwoPi; angle += MathHelper.PiOver2)
 					{
-						if (Main.rand.Next(2) != 0)
+						if (!Main.rand.NextBool(2))
 						{
 							int dustType = new int[] { 226, 228, 75 }[Main.rand.Next(3)];
 							Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, dustType);

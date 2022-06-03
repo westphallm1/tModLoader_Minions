@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 {
 	public class BeeQueenMinionBuff : CombatPetBuff
 	{
-		public BeeQueenMinionBuff() : base(ProjectileType<BeeQueenMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BeeQueenCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						rememberedEnemyAngle,
 						ProjectileType<HoneySlime>(),
@@ -254,7 +254,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			if (readyToAttack && Main.myPlayer == player.whoAmI && Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(new Vector2(vectorAbove.X / 8, 2)),
 					ProjectileType<BeeQueenBucket>(),

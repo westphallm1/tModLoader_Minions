@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class HornetMinionBuff : MinionBuff
 	{
-		public HornetMinionBuff() : base(ProjectileType<HornetMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<HornetMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 76);
+			Item.UseSound = SoundID.Item76;
 		}
 	}
 
@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public virtual void SpawnDust()
 		{
-			if (Main.rand.Next(2) == 0)
+			if (Main.rand.NextBool(2))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 18, 0f, 0f, 0, default, 0.9f);
 				Main.dust[dustId].noGravity = true;
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Hornet;
 		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

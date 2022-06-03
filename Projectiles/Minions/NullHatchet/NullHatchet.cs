@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 {
 	public class NullHatchetMinionBuff : MinionBuff
 	{
-		public NullHatchetMinionBuff() : base(ProjectileType<NullHatchetMinion>(), ProjectileType<NullHatchetMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<NullHatchetMinion>(), ProjectileType<NullHatchetMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -27,6 +27,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Null Hatchet");
 			Tooltip.SetDefault("Summons an ethereal axe to fight for you!");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()

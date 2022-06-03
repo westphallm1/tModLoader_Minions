@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 {
 	public class PottedPalMinionBuff : MinionBuff
 	{
-		public PottedPalMinionBuff() : base(ProjectileType<PottedPalMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PottedPalMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			if (Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					-Projectile.velocity,
 					ProjectileType<PottedPalJrMinion>(),
@@ -228,7 +228,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 	public class PottedPalMinion : SquireMinion
 	{
 		internal override int BuffId => BuffType<PottedPalMinionBuff>();
-		public PottedPalMinion() : base(ItemType<PottedPalMinionItem>()) { }
+		protected override int ItemType => ItemType<PottedPalMinionItem>();
+
 		protected int wingFrameCounter = 0;
 
 		protected override float projectileVelocity => 12;
@@ -238,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 		protected override int SpecialDuration => 5; // very short
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 5);
+		protected override SoundStyle? SpecialStartSound => SoundID.Item5;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -339,7 +340,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<PottedPalSeedProjectile>(),

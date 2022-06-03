@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 {
 	public class AcornMinionBuff : MinionBuff
 	{
-		public AcornMinionBuff() : base(ProjectileType<AcornMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<AcornMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -27,6 +27,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Acorn Staff");
 			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOMULTISHOT);
 		}
 
 		public override void SetDefaults()
@@ -139,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			{
 				lastFiredFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					new Vector2(vectorAbove.X / 8 + Projectile.velocity.X, 2),
 					ProjectileType<AcornBomb>(),

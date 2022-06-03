@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 			Item.useTime = 30;
 			Item.useAnimation = 30;
 			Item.useStyle = ItemUseStyleID.HoldUp;
-			Item.UseSound = new LegacySoundStyle(2, 17);
+			Item.UseSound = SoundID.Item17;
 			Item.consumable = true;
 		}
 
@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 			}
 			tooltips.Add(new TooltipLine(Mod, "FriendshipBowRequirement", FriendshipBowRequirement)
 			{
-				overrideColor = Color.Gray
+				OverrideColor = Color.Gray
 			});
 		}
 

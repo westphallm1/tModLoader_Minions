@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
 	public class CinderHenMinionBuff : CombatPetBuff
 	{
-		public CinderHenMinionBuff() : base(ProjectileType<CinderHenMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<CinderHenMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -94,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			if(Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					Vector2.Zero,
 					ProjectileType<PirateCannonballExplosion>(),

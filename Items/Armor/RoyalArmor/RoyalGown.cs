@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		{
 			if (!Main.dedServ)
 			{
-				legsSlot = Mod.AddEquipTexture(this, EquipType.Legs, "AmuletOfManyMinions/Items/Armor/RoyalArmor/RoyalGown_Legs");
+				legsSlot = EquipLoader.AddEquipTexture(Mod, Texture + "_Legs", EquipType.Legs, name: nameof(RoyalGown) + "_Legs");
 			}
 		}
 

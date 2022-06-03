@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class ItsyBetsyMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public ItsyBetsyMinionBuff() : base(ProjectileType<ItsyBetsyMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<ItsyBetsyMinion>() };
 
 		public override int VanillaBuffId => BuffID.DD2BetsyPet;
 
@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.AI();
 			Projectile.friendly = Projectile.ai[0] == 0;
 			Projectile.localAI[0]++;
-			if(Projectile.localAI[0] < 8 || Main.rand.Next(2) != 0)
+			if(Projectile.localAI[0] < 8 || !Main.rand.NextBool(2))
 			{
 				return;
 			}
@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Main.dust[dustId].velocity.X *= 1.2f;
 			Main.dust[dustId].velocity.Y *= 1.2f;
 			Main.dust[dustId].noGravity = true;
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				Main.dust[dustId].scale *= 1.25f;
 				Main.dust[dustId].velocity.X *= 2f;
@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int? FiredProjectileId => ProjectileType<ItsyBetsyFire>();
 
 		internal override int GetProjectileVelocity(ICombatPetLevelInfo info) => 6;
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 34).WithVolume(.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
 
 		public override void SetStaticDefaults()
 		{

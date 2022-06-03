@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 {
 	public class StoneCloudMinionBuff : MinionBuff
 	{
-		public StoneCloudMinionBuff() : base(ProjectileType<StoneCloudMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StoneCloudMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -27,6 +27,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Cloud in a Boulder");
 			Tooltip.SetDefault("Summons an extremely dense cloud to fight for you!\nDeals high damage, but attacks very slowly");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()
@@ -191,7 +195,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 				{
 					didHitGround = true;
 					Collision.HitTiles(Projectile.BottomLeft, oldVelocity, 40, 8);
-					SoundEngine.PlaySound(new LegacySoundStyle(3, 7), Projectile.position);
+					SoundEngine.PlaySound(SoundID.NPCHit7, Projectile.position);
 				}
 			}
 			return false;
@@ -203,6 +207,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			int effectsIdx = 0;
 			int smokeStep = Main.rand.Next(10, 14);
 			int smokeStart = Main.rand.Next(4);
+			var source = Projectile.GetSource_FromThis();
 			for (float i = -0; i < MathHelper.TwoPi; i += MathHelper.Pi / 32)
 			{
 				effectsIdx++;
@@ -215,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 				Main.dust[dustIdx].alpha = ShockwaveDustAlpha;
 				if (effectsIdx % smokeStep == smokeStart)
 				{
-					int goreIdx = Gore.NewGore(pos, angle, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, pos, angle, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].scale = 0.5f;
 				}
 

@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class SlimePrincessMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public SlimePrincessMinionBuff() : base(ProjectileType<SlimePrincessMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimePrincessMinion>() };
 
 		public override int VanillaBuffId => BuffID.QueenSlimePet;
 
@@ -123,9 +123,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			if(!wasFlyingThisFrame && gHelper.isFlying)
+			if (!wasFlyingThisFrame && gHelper.isFlying)
 			{
-				Gore.NewGore(Projectile.Center, Vector2.Zero, GoreID.QueenSlimePetCrown);
+				var source = Projectile.GetSource_FromThis();
+				Gore.NewGore(source, Projectile.Center, Vector2.Zero, GoreID.QueenSlimePetCrown);
 			}
 			wasFlyingThisFrame = gHelper.isFlying;
 		}
@@ -154,7 +155,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			{
 				lastSpawnedFrame = animationFrame;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					launchVel,
 					projType,

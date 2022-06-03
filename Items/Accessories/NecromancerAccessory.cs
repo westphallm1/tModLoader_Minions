@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			accessories = null;
 		}
 
-		internal virtual void ModifyPlayerWeaponDamage(MinionSpawningItemPlayer necromancerAccessoryPlayer, Item item, ref StatModifier modifier, ref float flat)
+		internal virtual void ModifyPlayerWeaponDamage(MinionSpawningItemPlayer necromancerAccessoryPlayer, Item item, ref StatModifier modifier)
 		{
 			// no op
 		}
@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 					oldest.Kill();
 				}
 			}
-			Projectile.NewProjectile(player.GetProjectileSource_Accessory(this.Item), target.Center, spawnVelocity, projType, (int)(baseDamage * player.GetDamage<SummonDamageClass>()), 2, player.whoAmI);
+			Projectile.NewProjectile(player.GetSource_Accessory(this.Item), target.Center, spawnVelocity, projType, (int)(player.GetDamage<SummonDamageClass>().ApplyTo(baseDamage)), 2, player.whoAmI);
 			return true;
 		}
 

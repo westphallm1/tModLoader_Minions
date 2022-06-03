@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 {
 	public class SoulboundBowMinionBuff : MinionBuff
 	{
-		public SoulboundBowMinionBuff() : base(ProjectileType<SoulboundBowMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SoulboundBowMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -34,6 +34,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Soulbound Bow");
 			Tooltip.SetDefault("Summons a squire\nAn enchanted bow will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
@@ -151,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			// don't spawn an arrow on kill
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)
 			{
@@ -166,6 +171,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 	public class SoulboundBowMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SoulboundBowMinionBuff>();
+		protected override int ItemType => ItemType<SoulboundBowMinionItem>();
 		protected override int AttackFrames => 25;
 		protected override string WingTexturePath => null;
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundBow";
@@ -173,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		protected override float IdleDistanceMulitplier => 3;
 		public override string Texture => "Terraria/Images/Item_0";
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
+		protected override SoundStyle? attackSound => SoundID.Item5;
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
 		protected override WeaponSpriteOrientation spriteOrientation => WeaponSpriteOrientation.VERTICAL;
@@ -188,7 +194,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 
 		protected override int SpecialDuration => 2 * 60;
 		protected override int SpecialCooldown => 8 * 60;
-		public SoulboundBowMinion() : base(ItemType<SoulboundBowMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -244,7 +249,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity();
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						angleVector,
 						ProjectileType<SoulboundArrow>(),
@@ -269,14 +274,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 				Vector2 spawnPos = center + offset * spawnRadius;
 				Vector2 spawnVelocity = -offset * travelSpeed;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					spawnPos,
 					spawnVelocity,
 					ProjectileType<SoulboundSpecialSword>(),
 					Projectile.damage,
 					Projectile.knockBack,
 					Main.myPlayer);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 1), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			}
 		}
 

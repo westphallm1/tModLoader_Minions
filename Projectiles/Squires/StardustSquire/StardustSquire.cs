@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 {
 	public class StardustSquireMinionBuff : MinionBuff
 	{
-		public StardustSquireMinionBuff() : base(ProjectileType<StardustSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -270,6 +270,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 	public class StardustSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<StardustSquireMinionBuff>();
+		protected override int ItemType => ItemType<StardustSquireMinionItem>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => null;
 		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.StardustDragonStaff;
@@ -282,13 +283,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		protected override Vector2 WingOffset => new Vector2(-4, 0);
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 43);
+		protected override SoundStyle? attackSound => SoundID.Item43;
 
 		protected override float projectileVelocity => 14;
 		private int attackSequence = 0; // kinda replicate CoordinatedWeaponHoldingSquire but not quire
 		protected override bool travelRangeCanBeModified => false;
-
-		public StardustSquireMinion() : base(ItemType<StardustSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -347,7 +346,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					{
 						angleVector *= ModifiedProjectileVelocity() * 0.75f;
 						Projectile.NewProjectile(
-							Projectile.GetProjectileSource_FromThis(),
+							Projectile.GetSource_FromThis(),
 							Projectile.Center,
 							angleVector,
 							ProjectileType<StardustGuardianProjectile>(),
@@ -362,7 +361,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					{
 						angleVector *= ModifiedProjectileVelocity();
 						Projectile.NewProjectile(
-							Projectile.GetProjectileSource_FromThis(),
+							Projectile.GetSource_FromThis(),
 							Projectile.Center,
 							angleVector,
 							ProjectileType<StardustBeastProjectile>(),
@@ -395,7 +394,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				target.SafeNormalize();
 				target *= 2 * projectileVelocity;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					target,
 					ProjectileType<ConstellationSeed>(),

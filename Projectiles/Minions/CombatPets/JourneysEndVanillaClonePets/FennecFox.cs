@@ -9,7 +9,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 {
 	public class FennecFoxMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public FennecFoxMinionBuff() : base(ProjectileType<FennecFoxMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<FennecFoxMinion>() };
 		public override string VanillaBuffName => "FennecFox";
 		public override int VanillaBuffId => BuffID.FennecFox;
 	}

@@ -10,7 +10,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class SuspiciousEyeMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public SuspiciousEyeMinionBuff() : base(ProjectileType<SuspiciousEyeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SuspiciousEyeMinion>() };
 
 		public override int VanillaBuffId => BuffID.EyeOfCthulhuPet;
 

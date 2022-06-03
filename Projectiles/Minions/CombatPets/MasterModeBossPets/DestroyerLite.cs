@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class DestroyerLiteMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public DestroyerLiteMinionBuff() : base(ProjectileType<DestroyerLiteMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<DestroyerLiteMinion>() };
 
 		public override int VanillaBuffId => BuffID.DestroyerPet;
 
@@ -77,14 +77,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				target.SafeNormalize();
 				target *= 12;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					target,
 					ProjectileType<MiniTwinsLaser>(),
 					Projectile.damage,
 					Projectile.knockBack,
 					Main.myPlayer);
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 10).WithVolume(0.5f), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item10 with { Volume = 0.5f }, Projectile.position);
 			}
 		}
 
@@ -133,7 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				lastHitFrame = animationFrame;
 				Vector2 launchVector = -Vector2.UnitY.RotatedByRandom(MathHelper.PiOver4) * 6;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					target.Center,
 					launchVector,
 					ProjectileType<DestroyerLiteProbeProjectile>(),

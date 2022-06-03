@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 {
 	public class GuideSquireMinionBuff : MinionBuff
 	{
-		public GuideSquireMinionBuff() : base(ProjectileType<GuideSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<GuideSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void Kill(int timeLeft)
 		{
 			// don't spawn the arrow
-			SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
 			for (int i = 0; i < 6; i++)
 			{
 				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 158);
@@ -103,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if (Main.rand.Next(3) == 0)
+			if (Main.rand.NextBool(3))
 			{
 				target.AddBuff(BuffID.OnFire, 180);
 			}
@@ -160,6 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 	public class GuideSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<GuideSquireMinionBuff>();
+		protected override int ItemType => ItemType<GuideSquireMinionItem>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.WoodenBow;
@@ -173,16 +174,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 5);
+		protected override SoundStyle? attackSound => SoundID.Item5;
 
 		protected override float projectileVelocity => 12;
 
 		protected override int SpecialDuration => 2 * 60;
 		protected override int SpecialCooldown => 9 * 60;
 		protected override bool travelRangeCanBeModified => false;
-
-
-		public GuideSquireMinion() : base(ItemType<GuideSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -215,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(), 
 						Projectile.Center,
 						angleVector,
 						ProjectileType<GuideArrow>(),
@@ -235,7 +233,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				float launchAngle = -(7 * MathHelper.Pi / 16 + Main.rand.NextFloat(MathHelper.Pi / 8));
 				Vector2 launchVec = launchAngle.ToRotationVector2() * 20;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					launchVec,
 					ProjectileType<AscendingGuideArrow>(),
@@ -261,15 +259,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 				launchAngle.SafeNormalize();
 				launchAngle *= 20;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					spawnPos,
 					launchAngle,
 					ProjectileType<DescendingGuideArrow>(),
 					Projectile.damage,
 					Projectile.knockBack,
 					Main.myPlayer);
-				SoundEngine.PlaySound(attackSound, spawnPos);
-
+				if (attackSound.HasValue)
+				{
+					SoundEngine.PlaySound(attackSound.Value, spawnPos);
+				}
 			}
 
 		}

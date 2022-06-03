@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 {
 	public class StarSurferMinionBuff : MinionBuff
 	{
-		public StarSurferMinionBuff() : base(ProjectileType<StarSurferMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<StarSurferMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			if (Main.rand.Next(5) == 0)
+			if (Main.rand.NextBool(5))
 			{
 				Dust.NewDust(Projectile.Center,
 					8,
@@ -147,7 +147,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 				{
 					vectorToTargetPosition.SafeNormalize();
 					vectorToTargetPosition *= projectileVelocity;
-					Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.position, VaryLaunchVelocity(vectorToTargetPosition), projectileType, projectileDamage, 5, Main.myPlayer, ai0: Projectile.minionPos);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, VaryLaunchVelocity(vectorToTargetPosition), projectileType, projectileDamage, 5, Main.myPlayer, ai0: Projectile.minionPos);
 				}
 			}
 		}

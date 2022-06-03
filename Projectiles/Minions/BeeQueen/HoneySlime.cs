@@ -114,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			int direction = Math.Sign(Projectile.velocity.X);
 			direction = direction == 0 ? 1 : direction;
 			initialVelocity = new Vector2(direction * maxSpeed, 0);
-			if (Main.rand.Next(10) == 0)
+			if (Main.rand.NextBool(10))
 			{
 				target.AddBuff(BuffID.Slow, 120);
 			}

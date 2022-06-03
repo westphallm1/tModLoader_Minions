@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 {
 	public class SeaSquireMinionBuff : MinionBuff
 	{
-		public SeaSquireMinionBuff() : base(ProjectileType<SeaSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SeaSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -72,7 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 54), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item54, Projectile.position);
 			for (int i = 0; i < 8; i++)
 			{
 				int dustCreated = Dust.NewDust(Projectile.Center, 1, 1, 137, Projectile.velocity.X, Projectile.velocity.Y, 0, Scale: 1.4f);
@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		private bool isDashing;
 		private MotionBlurDrawer blurHelper;
 		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
-		public SeaSquireSharkMinion() : base(ItemType<SeaSquireMinionItem>()) { }
+		protected override int ItemType => ItemType<SeaSquireMinionItem>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -197,6 +197,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 	public class SeaSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
+		protected override int ItemType => ItemType<SeaSquireMinionItem>();
 		protected override int AttackFrames => 35;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -211,7 +212,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
-		public SeaSquireMinion() : base(ItemType<SeaSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -238,12 +238,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		private void TransformBubbles()
 		{
-			foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+			if (Main.netMode != NetmodeID.Server)
 			{
-				int goreIdx = Gore.NewGore(Projectile.position, Vector2.Zero, Mod.Find<ModGore>("SeaSquireBubbleGore").Type, 1f);
-				Main.gore[goreIdx].alpha = 128;
-				Main.gore[goreIdx].velocity *= 0.25f;
-				Main.gore[goreIdx].velocity += offset;
+				var source = Projectile.GetSource_FromThis();
+				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
+				{
+					int goreIdx = Gore.NewGore(source, Projectile.position, Vector2.Zero, Mod.Find<ModGore>("SeaSquireBubbleGore").Type, 1f);
+					Main.gore[goreIdx].alpha = 128;
+					Main.gore[goreIdx].velocity *= 0.25f;
+					Main.gore[goreIdx].velocity += offset;
+				}
 			}
 		}
 
@@ -253,7 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			if(player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center, 
 					Projectile.velocity, 
 					ProjectileType<SeaSquireSharkMinion>(), 
@@ -304,13 +308,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 85), Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item85, Projectile.position);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity() + bubbleVelOffset;
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						angleVector,
 						ProjectileType<SeaSquireBubble>(),

@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 {
 	public class EclipseHeraldMinionBuff : MinionBuff
 	{
-		public EclipseHeraldMinionBuff() : base(ProjectileType<EclipseHeraldCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<EclipseHeraldCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -27,6 +27,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Eclipse Herald Staff");
 			Tooltip.SetDefault("Can't come to grips \nWith the total eclipse \nJust a slip of your lips \nand you're gone...");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()
@@ -169,7 +173,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						pos,
 						vectorToTargetPosition,
 						ProjectileType<EclipseSphere>(),

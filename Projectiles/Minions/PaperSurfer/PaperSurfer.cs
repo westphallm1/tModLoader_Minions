@@ -8,7 +8,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 {
 	public class PaperSurferMinionBuff : MinionBuff
 	{
-		public PaperSurferMinionBuff() : base(ProjectileType<PaperSurferMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PaperSurferMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

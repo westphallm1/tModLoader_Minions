@@ -138,7 +138,7 @@ namespace AmuletOfManyMinions
 		public int SquireDamageMinionNerf;
 
 		[Label("Minions Are Less Accurate")]
-		[Tooltip("If enabled, minions will shoot less acurately and turn less sharply while chasing enemies")]
+		[Tooltip("If enabled, minions will shoot less accurately and turn less sharply while chasing enemies")]
 		[DefaultValue(false)]
 		public bool MinionsInnacurate;
 
@@ -156,6 +156,13 @@ namespace AmuletOfManyMinions
 		[Label("Allow Mulltiple Combat Pets")]
 		[Tooltip("If enabled, higher level combat pet emblems will increase the number of pets you can control.")]
 		public bool AllowMultipleCombatPets;
+
+		[Header("Cross-Mod Compatibility")]
+		[Label("Disable Summoner's Shine AI Changes")]
+		[Tooltip("If true, disable AI changes to minions from this mod made by Summoner's Shine.")]
+		[DefaultValue(false)]
+		[ReloadRequired]
+		public bool DisableSummonersShineAI;
 
 		// courtesy of direwolf420
 		public static bool IsPlayerLocalServerOwner(int whoAmI)

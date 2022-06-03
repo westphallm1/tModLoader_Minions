@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 {
 	public class MeteorFistMinionBuff : MinionBuff
 	{
-		public MeteorFistMinionBuff() : base(ProjectileType<MeteorFistMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<MeteorFistMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -27,6 +27,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Meteor Fist");
 			Tooltip.SetDefault("Summons a meteor fist to fight for you!");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()
@@ -104,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 				leader.minionPos == Projectile.minionPos &&
 				player.ownedProjectileCounts[ProjectileType<MeteorFistHead>()] == 0)
 			{
-				Projectile.NewProjectile(Projectile.GetProjectileSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<MeteorFistHead>(), 0, 0, Main.myPlayer);
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<MeteorFistHead>(), 0, 0, Main.myPlayer);
 			}
 			Projectile head = GetHead(ProjectileType<MeteorFistHead>());
 			if (head == default)

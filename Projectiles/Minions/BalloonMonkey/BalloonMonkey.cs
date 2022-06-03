@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 {
 	public class BalloonMonkeyMinionBuff : MinionBuff
 	{
-		public BalloonMonkeyMinionBuff() : base(ProjectileType<BalloonMonkeyMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BalloonMonkeyMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -31,6 +31,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Staff of Darts");
 			Tooltip.SetDefault("Summons a dart-throwing monkey to fight for you!");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()
@@ -116,11 +121,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			{
 				Dust.NewDust(position, width, height, 31, 0f, 0f, 100, default, 1.5f);
 			}
+			var source = Projectile.GetSource_Death();
 			for (float goreVel = 0.25f; goreVel < 0.5f; goreVel += 0.25f)
 			{
 				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 				{
-					int goreIdx = Gore.NewGore(position, default, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, position, default, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].velocity *= goreVel;
 					Main.gore[goreIdx].velocity += offset;
 				}
@@ -128,7 +134,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			if(Projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					Vector2.Zero,
 					// repurpose an existing explosion projectile
@@ -170,7 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			{
 				// only called for owner, no need to check ownership
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					launchVector,
 					ProjectileType<BalloonMonkeyBalloon>(),
@@ -263,7 +269,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		{
 			int dartVelocity = 15;
 			lastFiredFrame = animationFrame;
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;
@@ -280,7 +286,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 					angleToTarget += targetVelocity / 4;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<BalloonMonkeyDart>(),

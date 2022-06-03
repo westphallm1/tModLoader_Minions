@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 {
 	public class PumpkinSquireMinionBuff : MinionBuff
 	{
-		public PumpkinSquireMinionBuff() : base(ProjectileType<PumpkinSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PumpkinSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -32,6 +32,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Pumpkin Crest");
 			Tooltip.SetDefault("Summons a squire\nA pumpkin squire will fight for you!\nClick and hold to guide its attacks");
+		}public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
@@ -97,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			{
 				OnFloorBounce(bounces, oldVelocity);
 				bounces--;
-				SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y, 1, 1f, Main.rand.Next(1));
+				SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.Next(1) }, Projectile.Center);
 			}
 			if (oldVelocity.Y < 0)
 			{
@@ -113,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void Kill(int timeLeft)
 		{
 			// don't explode
-			SoundEngine.PlaySound(new LegacySoundStyle(4, 1).WithPitchVariance(.5f), Projectile.position);
+			SoundEngine.PlaySound(SoundID.NPCDeath1 with { PitchVariance = 0.5f }, Projectile.position);
 			Vector2 direction = -Projectile.velocity;
 			direction.Normalize();
 			for (int i = 0; i < dustCount; i++)
@@ -222,6 +225,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 	public class PumpkinSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<PumpkinSquireMinionBuff>();
+		protected override int ItemType => ItemType<PumpkinSquireMinionItem>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/SpookyWings";
 		protected override string WeaponTexturePath => null;
@@ -235,14 +239,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 19);
+		protected override SoundStyle? attackSound => SoundID.Item19;
 		protected override float projectileVelocity => 8;
 
 		protected override bool travelRangeCanBeModified => false;
 
 		protected override int SpecialDuration => 30;
-
-		public PumpkinSquireMinion() : base(ItemType<PumpkinSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -272,7 +274,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 				Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 				vector2Mouse *= 1.5f *  ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<PumpkinBomb>(),
@@ -292,7 +294,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			if (bigPumpkin == default && Main.myPlayer == player.whoAmI)
 			{
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					Vector2.Zero,
 					bigPumpkinType,

@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 {
 	public class PirateMinionBuff : MinionBuff
 	{
-		public PirateMinionBuff() : base(ProjectileType<PirateMinion>(), ProjectileType<ParrotMinion>(), ProjectileType<PirateDeadeyeMinion>(), ProjectileType<FlyingDutchmanMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PirateMinion>(), ProjectileType<ParrotMinion>(), ProjectileType<PirateDeadeyeMinion>(), ProjectileType<FlyingDutchmanMinion>() };
 			
 		public override void SetStaticDefaults()
 		{
@@ -29,6 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public class PirateMinionItem : VanillaCloneMinionItem<PirateMinionBuff, PirateMinion>
 	{
+		[CloneByReference] //projTypes is fine to be shared across instances
 		public int[] projTypes;
 
 		internal override int VanillaItemID => ItemID.PirateStaff;
@@ -146,11 +147,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 				dustIdx = Dust.NewDust(position, width, height, 6, 0f, 0f, 100, default, 1.5f);
 				Main.dust[dustIdx].velocity *= 1.5f;
 			}
+			var source = projectile.GetSource_FromThis();
 			for (float goreVel = 0.25f; goreVel < 0.5f; goreVel += 0.25f)
 			{
 				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 				{
-					int goreIdx = Gore.NewGore(position, default, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, position, default, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].velocity *= goreVel;
 					Main.gore[goreIdx].velocity += offset;
 				}
@@ -158,7 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			if(projectile.owner == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
-					projectile.GetProjectileSource_FromThis(),
+					projectile.GetSource_FromThis(),
 					projectile.Center,
 					Vector2.Zero,
 					ProjectileType<PirateCannonballExplosion>(),
@@ -166,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					projectile.knockBack,
 					projectile.owner);
 			}
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 14)?.WithVolume(0.5f) ?? null, projectile.position);
+			SoundEngine.PlaySound(SoundID.Item14 with { Volume = 0.5f }, projectile.position);
 		}
 	}
 
@@ -351,7 +353,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		{
 			int bulletVelocity = 24;
 			lastFiredFrame = animationFrame;
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 11), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
 			if (player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleToTarget = (Vector2)vectorToTarget;
@@ -369,7 +371,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					angleToTarget += targetVelocity / 4;
 				}
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(angleToTarget),
 					ProjectileType<PirateDeadeyeBullet>(),
@@ -531,7 +533,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		internal override int BuffId => BuffType<PirateMinionBuff>();
 
 		internal override int? FiredProjectileId => ProjectileType<PirateCannonball>();
-		internal override LegacySoundStyle ShootSound => new LegacySoundStyle(2, 14).WithVolume(0.5f);
+		internal override SoundStyle? ShootSound => SoundID.Item14 with { Volume = 0.5f };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -602,11 +604,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 				int dustIdx = Dust.NewDust(Projectile.Center - new Vector2(8, 8), 16, 16, 31, 0f, 0f, 100, default, 1.5f);
 				Main.dust[dustIdx].velocity *= 0.25f;
 			}
+			var source = Projectile.GetSource_FromThis();
 			for (float goreVel = 0.2f; goreVel < 0.4f; goreVel += 0.2f)
 			{
 				foreach (Vector2 offset in new Vector2[] { Vector2.One, -Vector2.One, new Vector2(1, -1), new Vector2(-1, 1) })
 				{
-					int goreIdx = Gore.NewGore(Projectile.Center, default, Main.rand.Next(61, 64));
+					int goreIdx = Gore.NewGore(source, Projectile.Center, default, Main.rand.Next(61, 64));
 					Main.gore[goreIdx].velocity *= goreVel;
 					Main.gore[goreIdx].velocity += offset;
 					Main.gore[goreIdx].scale *= Main.rand.NextFloat(0.25f, 0.4f);

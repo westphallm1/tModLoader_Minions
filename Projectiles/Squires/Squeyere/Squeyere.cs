@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 {
 	public class SqueyereMinionBuff : MinionBuff
 	{
-		public SqueyereMinionBuff() : base(ProjectileType<SqueyereMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SqueyereMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -31,6 +31,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			DisplayName.SetDefault("Crest of Eyes");
 			Tooltip.SetDefault("Summons a squire\nA Squeyere will fight for you!\nClick and hold to guide its attacks\n" +
 				"'Squ-Eye-Re. Get it?'");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
@@ -94,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			SoundEngine.PlaySound(SoundID.Item10, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, 16, 16);
 			return true;
 		}
@@ -202,7 +207,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				angleVector.SafeNormalize();
 				angleVector *= 24f;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					angleVector,
 					ProjectileType<SqueyereEyeLaser>(),
@@ -216,6 +221,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 	public class SqueyereMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<SqueyereMinionBuff>();
+		protected override int ItemType => ItemType<SqueyereMinionItem>();
 		protected override int AttackFrames => 60;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => null;
@@ -233,8 +239,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
-
-		public SqueyereMinion() : base(ItemType<SqueyereMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -270,7 +274,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 					weaponCenter.X *= Projectile.spriteDirection;
 					Vector2 tipCenter = Projectile.Center + weaponCenter;
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						tipCenter,
 						angleVector,
 						ProjectileType<SqueyereLaser>(),
@@ -279,7 +283,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 						Main.myPlayer);
 				}
 
-				SoundEngine.PlaySound(SoundID.Item33.WithVolume(.5f), Projectile.Center); //Why is it so LOUD?!
+				SoundEngine.PlaySound(SoundID.Item33 with { Volume = 0.5f }, Projectile.Center); //Why is it so LOUD?!
 			}
 		}
 
@@ -290,7 +294,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 				for(int i = 0; i < 2; i++)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						Vector2.Zero,
 						ProjectileType<SqueyereEyeMinion>(),

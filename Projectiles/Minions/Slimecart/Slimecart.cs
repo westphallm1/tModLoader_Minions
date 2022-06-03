@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 {
 	public class SlimecartMinionBuff : MinionBuff
 	{
-		public SlimecartMinionBuff() : base(ProjectileType<SlimecartMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimecartMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Slimecart Staff");
 			Tooltip.SetDefault("Summons slime miner to fight for you!");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()

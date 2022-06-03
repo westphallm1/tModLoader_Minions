@@ -10,16 +10,13 @@ using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using static Terraria.ModLoader.ModContent;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
 	public class SpiderMinionBuff : MinionBuff
 	{
-		public SpiderMinionBuff() : base(
-			ProjectileType<JumperSpiderMinion>(),
-			ProjectileType<VenomSpiderMinion>(),
-			ProjectileType<DangerousSpiderMinion>()
-			) { }
+		internal override int[] ProjectileTypes => new int[] {  ProjectileType<JumperSpiderMinion>(), ProjectileType<VenomSpiderMinion>(), ProjectileType<DangerousSpiderMinion>()  };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -29,12 +26,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			projectileTypes = new int[]
-			{
-				ProjectileType<JumperSpiderMinion>(),
-				ProjectileType<VenomSpiderMinion>(),
-				ProjectileType<DangerousSpiderMinion>()
-			};
 			if (projectileTypes.Select(p => player.ownedProjectileCounts[p]).Sum() > 0)
 			{
 				player.buffTime[buffIndex] = 18000;
@@ -50,6 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class SpiderMinionItem : VanillaCloneMinionItem<SpiderMinionBuff, VenomSpiderMinion>
 	{
+		[CloneByReference] //projTypes is fine to be shared across instances
 		public int[] projTypes;
 		internal override int VanillaItemID => ItemID.SpiderStaff;
 
@@ -77,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Item.UseSound = new LegacySoundStyle(2, 83);
+			Item.UseSound = SoundID.Item83;
 		}
 	}
 	public abstract class BaseSpiderMinion : SimpleGroundBasedMinion

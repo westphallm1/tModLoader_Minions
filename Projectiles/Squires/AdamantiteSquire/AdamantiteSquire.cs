@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 {
 	public class AdamantiteSquireMinionBuff : MinionBuff
 	{
-		public AdamantiteSquireMinionBuff() : base(ProjectileType<AdamantiteSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<AdamantiteSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -31,6 +31,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Adamantite Crest");
 			Tooltip.SetDefault("Summons a squire\nAn adamantite squire will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(5f/4);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -54,6 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 	{
 
 		internal override int BuffId => BuffType<AdamantiteSquireMinionBuff>();
+		protected override int ItemType => ItemType<AdamantiteSquireMinionItem>();
 		protected override int AttackFrames => 25;
 
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -68,13 +76,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		protected override int SpecialDuration => 4 * 60;
 		protected override int SpecialCooldown => 10 * 60;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(3, 12);
+		protected override SoundStyle? SpecialStartSound => SoundID.NPCHit12;
 
 		private MotionBlurDrawer blurHelper;
 		private int dashDirection = 1;
 		private bool isDashing = false;
-
-		public AdamantiteSquireMinion() : base(ItemType<AdamantiteSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -138,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			if(usingSpecial)
 			{
-				damage = 5 * damage / 4;
+				damage = (int)(CrossMod.ApplyCrossModScaling(5 * damage / 4, Projectile, 0));
 			}
 		}
 

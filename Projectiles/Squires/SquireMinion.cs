@@ -69,12 +69,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public virtual int CooldownDoneDust => 15;
 
-		protected virtual LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 43);
+		protected virtual SoundStyle? SpecialStartSound => SoundID.Item43;
 
-		public SquireMinion(int itemID)
-		{
-			itemType = itemID;
-		}
+		protected abstract int ItemType { get; }
 
 		public override void SetStaticDefaults()
 		{
@@ -93,6 +90,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
+		}
+		
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -105,6 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			base.OnSpawn();
 			baseLocalIFrames = Projectile.localNPCHitCooldown;
+			itemType = ItemType;
 		}
 
 		public override bool? CanCutTiles()
@@ -170,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if(player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
 			{
 				StartSpecial();
-			} else if (usingSpecial && specialFrame >= SpecialDuration)
+			} else if (usingSpecial && specialFrame >= CrossMod.GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))
 			{
 				usingSpecial = false;
 				OnStopUsingSpecial();
@@ -199,7 +203,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
+				if(p.active && p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
 				{
 					((SquireMinion)p.ModProjectile).SetSpecialStartFrame();
 				}
@@ -214,9 +218,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			usingSpecial = true;
 			specialStartFrame = animationFrame;
-			if(SpecialStartSound != null)
+			if(SpecialStartSound.HasValue)
 			{
-				SoundEngine.PlaySound(SpecialStartSound, Projectile.Center);
+				SoundEngine.PlaySound(SpecialStartSound.Value, Projectile.Center);
 			}
 			OnStartUsingSpecial();
 		}

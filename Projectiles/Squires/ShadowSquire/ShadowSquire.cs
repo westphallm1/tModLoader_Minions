@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 {
 	public class ShadowSquireMinionBuff : MinionBuff
 	{
-		public ShadowSquireMinionBuff() : base(ProjectileType<ShadowSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<ShadowSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -60,6 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 	public class ShadowSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<ShadowSquireMinionBuff>();
+		protected override int ItemType => ItemType<ShadowSquireMinionItem>();
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.WarAxeoftheNight;
@@ -70,9 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 		protected override Vector2 WingOffset => new Vector2(-4, 0);
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 106);
-
-		public ShadowSquireMinion() : base(ItemType<ShadowSquireMinionItem>()) { }
+		protected override SoundStyle? SpecialStartSound => SoundID.Item106;
 
 		public override void SetStaticDefaults()
 		{
@@ -98,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(), 
+					Projectile.GetSource_FromThis(), 
 					Projectile.Center,
 					vector2Mouse,
 					ProjectileType<CorruptFlaskProjectile>(),

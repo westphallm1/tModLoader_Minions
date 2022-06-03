@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 	public class TumbleSheepMinionBuff : MinionBuff
 	{
-		public TumbleSheepMinionBuff() : base(ProjectileType<TumbleSheepMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<TumbleSheepMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -32,6 +32,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Shepherd's Staff");
 			Tooltip.SetDefault("Summons a tumbling sheep to fight for you!");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()
@@ -125,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		{
 			lastFiredFrame = animationFrame;
 			launchPos = Projectile.position;
-			SoundEngine.PlaySound(new LegacySoundStyle(2, 17), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
 			if(targetNPCIndex is int idx && Main.npc[idx].active)
 			{
 				vectorToTarget += 4 * Main.npc[idx].velocity; // track the target NPC a bit

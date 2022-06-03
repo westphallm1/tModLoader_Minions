@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 {
 	public class WhackAMoleMinionBuff : MinionBuff
 	{
-		public WhackAMoleMinionBuff() : base(ProjectileType<WhackAMoleCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<WhackAMoleCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -28,6 +28,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Magic Jelly Bean Jar");
 			Tooltip.SetDefault("Summons a stack of magic moles to fight for you!");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()
@@ -263,7 +267,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			gHelper.SetIsOnGround();
-			if (gHelper.offTheGroundFrames == 20 || (gHelper.offTheGroundFrames > 60 && Main.rand.Next(120) == 0) || (gHelper.isOnGround && gHelper.offTheGroundFrames > 20))
+			if (gHelper.offTheGroundFrames == 20 || (gHelper.offTheGroundFrames > 60 && Main.rand.NextBool(120)) || (gHelper.isOnGround && gHelper.offTheGroundFrames > 20))
 			{
 				DrawPlatformDust();
 			}
@@ -361,7 +365,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				velocity *= 12;
 				velocity.X += Main.npc[targetIdx].velocity.X;
 				Projectile.NewProjectile(
-					Projectile.GetProjectileSource_FromThis(),
+					Projectile.GetSource_FromThis(),
 					Projectile.Center,
 					VaryLaunchVelocity(velocity),
 					ProjectileType<WhackAMoleMinionProjectile>(),

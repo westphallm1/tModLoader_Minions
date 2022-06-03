@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 {
 	public class VikingSquireMinionBuff : MinionBuff
 	{
-		public VikingSquireMinionBuff() : base(ProjectileType<VikingSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<VikingSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -47,6 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 	public class VikingSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<VikingSquireMinionBuff>();
+		protected override int ItemType => ItemType<VikingSquireMinionItem>();
 		protected override int AttackFrames => 18;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 
@@ -63,7 +64,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		protected override int SpecialCooldown => 10 * 60;
 
 		protected int swingDirection = 1;
-		public VikingSquireMinion() : base(ItemType<VikingSquireMinionItem>()) { }
 
 		public override bool PreDraw(ref Color lightColor)
 		{
@@ -118,9 +118,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(usingSpecial && attackFrame == 0)
+			if(usingSpecial && attackFrame == 0 && attackSound.HasValue)
 			{
-				SoundEngine.PlaySound(attackSound, Projectile.Center);
+				SoundEngine.PlaySound(attackSound.Value, Projectile.Center);
 			}
 			base.StandardTargetedMovement(vectorToTargetPosition);
 		}
@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.SpecialTargetedMovement(vectorToTargetPosition);
-			if (Main.rand.Next(8) == 0)
+			if (Main.rand.NextBool(8))
 			{
 				int dustId = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustType<SnowDust>(), 0f, 0f, 100, default, 1f);
 				Main.dust[dustId].velocity *= 0.3f;

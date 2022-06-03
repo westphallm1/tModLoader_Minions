@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class PlanteraSeedlingMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public PlanteraSeedlingMinionBuff() : base(ProjectileType<PlanteraSeedlingMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<PlanteraSeedlingMinion>() };
 
 		public override int VanillaBuffId => BuffID.PlanteraPet;
 
@@ -113,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			float damageMult = spawnThornBall ? 1.5f : 1;
 			launchVector *= spawnThornBall ? 0.6f : 1;
 			Projectile.NewProjectile(
-				Projectile.GetProjectileSource_FromThis(),
+				Projectile.GetSource_FromThis(),
 				Projectile.Center,
 				VaryLaunchVelocity(launchVector),
 				projId,

@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 {
 	public abstract class HoverShooterMinion : HeadCirclingGroupAwareMinion
 	{
-		internal virtual LegacySoundStyle ShootSound => null;
+		internal virtual SoundStyle? ShootSound => null;
 
 		internal virtual int? FiredProjectileId => null;
 
@@ -40,9 +40,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal virtual void AfterFiringProjectile()
 		{
-			if(ShootSound != null)
+			if(ShootSound.HasValue)
 			{
-				SoundEngine.PlaySound(ShootSound, Projectile.Center);
+				SoundEngine.PlaySound(ShootSound.Value, Projectile.Center);
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
 		{
 			Projectile.NewProjectile(
-				projectile.GetProjectileSource_FromThis(),
+				projectile.GetSource_FromThis(),
 				projectile.Center,
 				minion.VaryLaunchVelocity(lineOfFire),
 				projId,

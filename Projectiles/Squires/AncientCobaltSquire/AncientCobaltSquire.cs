@@ -11,7 +11,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 {
 	public class AncientCobaltSquireMinionBuff : MinionBuff
 	{
-		public AncientCobaltSquireMinionBuff() : base(ProjectileType<AncientCobaltSquireMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<AncientCobaltSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -28,6 +28,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Ancient Crest of Cobalt");
 			Tooltip.SetDefault("Summons a squire\nAn ancient cobalt squire will fight for you!\nClick and hold to guide its attacks");
+		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			minionCollection.AddMinionPower(100f);
+			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
@@ -77,7 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		}
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(SoundID.Dig, (int)Projectile.position.X, (int)Projectile.position.Y);
+			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
 			for (int i = 0; i < 15; i++)
 			{
 				int dustCreated = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, Projectile.oldVelocity.X, Projectile.oldVelocity.Y, 50, default(Color), 1.2f);
@@ -110,6 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 	public class AncientCobaltSquireMinion : WeaponHoldingSquire
 	{
 		internal override int BuffId => BuffType<AncientCobaltSquireMinionBuff>();
+		protected override int ItemType => ItemType<AncientCobaltSquireMinionItem>();
 		protected override int AttackFrames => 8;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/AncientCobaltSquire/AncientCobaltStaff";
@@ -123,9 +133,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override LegacySoundStyle attackSound => new LegacySoundStyle(2, 13);
+		protected override SoundStyle? attackSound => SoundID.Item13;
 
-		protected override LegacySoundStyle SpecialStartSound => new LegacySoundStyle(2, 28);
+		protected override SoundStyle? SpecialStartSound => SoundID.Item28;
 		protected override float projectileVelocity => 8;
 
 		protected override bool travelRangeCanBeModified => false;
@@ -133,8 +143,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		protected override int SpecialDuration => 60;
 
 		private float weaponAngleOverride = -1;
-
-		public AncientCobaltSquireMinion() : base(ItemType<AncientCobaltSquireMinionItem>()) { }
 
 		public override void SetStaticDefaults()
 		{
@@ -167,7 +175,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						angleVector,
 						ProjectileType<AncientCobaltStream>(),
@@ -182,15 +190,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		{
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			// special frame is 1-indexed because it's a bug and I can't be bothered to fix it
-			if(specialFrame % 5 == 1 && specialFrame <= 46 && Main.myPlayer == player.whoAmI)
+			if (specialFrame % 5 == 1 && specialFrame <= 46 && Main.myPlayer == player.whoAmI)
 			{
 				float angleOffset = Main.rand.NextFloat(MathHelper.Pi / 16) - MathHelper.Pi / 32;
 				Vector2 angleVector = UnitVectorFromWeaponAngle().RotatedBy(angleOffset);
-				angleVector *= ModifiedProjectileVelocity() * 2;
+				angleVector *= CrossMod.ApplyCrossModScaling(ModifiedProjectileVelocity() * 2, Projectile, 0);
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(), 
+						Projectile.GetSource_FromThis(),
 						Projectile.Center,
 						angleVector,
 						ProjectileType<AncientCobaltBolt>(),
@@ -200,9 +208,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				}
 				weaponAngle += 2 * angleOffset;
 				weaponAngleOverride = weaponAngle;
-			} else if (weaponAngleOverride != -1)
+			}
+			else if (weaponAngleOverride != -1)
 			{
-				weaponAngle = weaponAngleOverride ;
+				weaponAngle = weaponAngleOverride;
 			}
 		}
 

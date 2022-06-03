@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 {
 	public class GoblinGunnerMinionBuff : MinionBuff
 	{
-		public GoblinGunnerMinionBuff() : base(ProjectileType<GoblinGunnerCounterMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<GoblinGunnerCounterMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -29,6 +29,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Goblin Radio Beacon");
 			Tooltip.SetDefault("Summons a goblin gunship to fight for you!");
+		}
+		public override void ApplyCrossModChanges()
+		{
+			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()
@@ -168,7 +172,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 				if (Main.myPlayer == player.whoAmI)
 				{
 					Projectile.NewProjectile(
-						Projectile.GetProjectileSource_FromThis(),
+						Projectile.GetSource_FromThis(),
 						pos,
 						VaryLaunchVelocity(vectorToTargetPosition),
 						ProjectileType<GoblinGunnerBullet>(),
@@ -176,7 +180,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 						Projectile.knockBack,
 						Main.myPlayer);
 				}
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 11).WithVolume(0.5f), pos);
+				SoundEngine.PlaySound(SoundID.Item11 with { Volume = 0.5f }, pos);
 			}
 		}
 

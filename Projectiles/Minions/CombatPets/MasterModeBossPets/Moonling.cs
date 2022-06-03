@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class MoonlingMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public MoonlingMinionBuff() : base(ProjectileType<MoonlingMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<MoonlingMinion>() };
 
 		public override int VanillaBuffId => BuffID.MoonLordPet;
 
@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		protected override void SpawnDust(Vector2 position, Vector2 velocity)
 		{
-			if(Main.rand.Next(5) == 0)
+			if(Main.rand.NextBool(5))
 			{
 				int dustCreated = Dust.NewDust(position, 1, 1, DustID.UltraBrightTorch, velocity.X, velocity.Y, 50, default, Scale: 1.4f);
 				Main.dust[dustCreated].color = Color.Azure;
@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MoonLordPet;
 		internal override int? FiredProjectileId => ProjectileType<MoonlingLaser>();
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 
 		float initialRotation = 0;
 		Vector2 lastValidTarget;
@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 			if(framesSinceFired % 30 == 0)
 			{
-				SoundEngine.PlaySound(new LegacySoundStyle(2, 15).WithVolume(0.5f), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item15 with { Volume = 0.5f }, Projectile.Center);
 			}
 			lastValidTarget = vectorToTargetPosition;
 			if(framesSinceFired == 0)

@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public class HoneyBeeMinionBuff : CombatPetVanillaCloneBuff
 	{
-		public HoneyBeeMinionBuff() : base(ProjectileType<HoneyBeeMinion>()) { }
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<HoneyBeeMinion>() };
 
 		public override int VanillaBuffId => BuffID.QueenBeePet;
 
@@ -53,10 +53,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Kill(int timeLeft)
 		{
-			SoundEngine.PlaySound(new LegacySoundStyle(13, 0).WithVolume(0.5f), Projectile.Center);
-			Gore.NewGore(Projectile.position, Vector2.Zero, Mod.Find<ModGore>("HoneyPotBottomGore").Type);
-			Gore.NewGore(Projectile.position, Vector2.Zero, Mod.Find<ModGore>("HoneyPotLidGore").Type);
-			for(int i = 0; i < 3; i++)
+			if (Main.netMode != NetmodeID.Server)
+			{
+				var source = Projectile.GetSource_Death();
+				Gore.NewGore(source, Projectile.position, Vector2.Zero, Mod.Find<ModGore>("HoneyPotBottomGore").Type);
+				Gore.NewGore(source, Projectile.position, Vector2.Zero, Mod.Find<ModGore>("HoneyPotLidGore").Type);
+			}
+
+			SoundEngine.PlaySound(SoundID.Shatter with { Volume = 0.5f }, Projectile.Center);
+			for (int i = 0; i < 3; i++)
 			{
 				Dust.NewDust(Projectile.position, 32, 32, DustID.Honey2);
 			}
@@ -133,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Math.Max(16, 32 - 2 * info.Level) : base.GetAttackFrames(info);
 
 		internal override float DamageMult => UsingKnightAI ? 0.75f : 1f;
-		internal override LegacySoundStyle ShootSound => SoundID.Item17;
+		internal override SoundStyle? ShootSound => SoundID.Item17;
 
 		internal WeaponHoldingDrawer weaponDrawer;
 		public override void SetStaticDefaults()
