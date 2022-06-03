@@ -14,8 +14,10 @@ namespace AmuletOfManyMinions.Items.Accessories.TechnoCharm
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Increases squire damage by 12%" +
-				"\nSummons a mechanical skull that grants a rotating debuff to squire attacks");
+			Tooltip.SetDefault(
+				"Increases squire damage by 12%\n" +
+				"Increases attack speed by 10% while using a squire\n" +
+				"Summons a mechanical skull that grants a rotating debuff to squire attacks");
 			DisplayName.SetDefault("Techno Pendant");
 		}
 

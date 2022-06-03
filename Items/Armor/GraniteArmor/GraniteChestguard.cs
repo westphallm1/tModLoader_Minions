@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 			DisplayName.SetDefault("Granite Chestguard");
 			Tooltip.SetDefault(""
 				+ "Increases minion damage by 10%\n"
-				+ "Increases squire attack speed by 15%");
+				+ "Increases attack speed by 15% while using a squire");
 		}
 
 		public override void SetDefaults()

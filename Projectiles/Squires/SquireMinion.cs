@@ -154,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			// not sure what side effects changing this each frame might have
 			if (attackSpeedCanBeModified)
 			{
-				Projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier);
+				Projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier);
 			}
 			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
 			{

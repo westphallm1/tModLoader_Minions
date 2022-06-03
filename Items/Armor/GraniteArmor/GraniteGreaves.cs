@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 			DisplayName.SetDefault("Granite Greaves");
 			Tooltip.SetDefault(""+
 			    "Increases minion damage by 10%\n" +
-			    "Increases squire travel speed by 25%\n" +
+			    "Increases squire travel range by 2 blocks\n" +
 				"10% increased movement speed");
 		}
 
@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 		{
 			player.GetDamage<SummonDamageClass>() += 0.10f;
 			player.moveSpeed += 0.1f;
-			player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier += 0.28f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 32f;
 		}
 
 		public override void AddRecipes()

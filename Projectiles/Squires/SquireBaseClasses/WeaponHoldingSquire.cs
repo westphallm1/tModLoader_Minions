@@ -105,7 +105,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		}
 
 		protected int ModifiedAttackFrames => attackSpeedCanBeModified ?
-			(int)(AttackFrames * player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier) :
+			(int)(AttackFrames * player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier) :
 			AttackFrames;
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

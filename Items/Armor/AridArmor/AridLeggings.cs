@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		{
 			DisplayName.SetDefault("Arid Leggings");
 			Tooltip.SetDefault("Increases minion damage by 6%\n" +
-				"Increases squire travel speed by 12%");
+				"Increases squire travel range by 1 block");
 		}
 
 		public override void SetDefaults()
@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		public override void UpdateEquip(Player player)
 		{
 			player.GetDamage<SummonDamageClass>() += 0.06f;
-			player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier += 0.12f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 16f;
 		}
 
 		public override void AddRecipes()

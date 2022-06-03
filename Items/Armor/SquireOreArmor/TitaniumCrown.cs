@@ -41,13 +41,11 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 		{
 			player.setBonus = "Become immune after striking an enemy\n" +
 				"Increases minion damage by 10%\n" +
-				"Increases squire travel range by 5 blocks\n" +
-				"Increases squire travel speed by 20%";
+				"Increases squire travel range by 5 blocks";
 			player.GetDamage<SummonDamageClass>() += 0.10f;
 			player.onHitTitaniumStorm = true;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
 			squirePlayer.SquireRangeFlatBonus += 80f;
-			squirePlayer.SquireTravelSpeedMultiplier += 0.20f;
 			squirePlayer.hardmodeOreSquireArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}
