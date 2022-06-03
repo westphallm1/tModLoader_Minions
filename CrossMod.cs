@@ -547,6 +547,10 @@ namespace AmuletOfManyMinions
 		public static void CombatPetComputeMinionStats(Projectile projectile, LeveledCombatPetModPlayer modPlayer)
 		{
 			int currentArrayPos = 0;
+			if(modPlayer.PetModdedStats.Length == 0)
+			{
+				return;
+			}
 			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				const int SET_PROJFUNCS = 4;
@@ -555,12 +559,9 @@ namespace AmuletOfManyMinions
 				const int MINIONASMOD = 1;
 				const int PROJECTILECRIT = 0;
 				const int PREFIXMINIONPOWER = 10;
-				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, MINIONASMOD, modPlayer.PetModdedStats[currentArrayPos]);
-				currentArrayPos++;
-				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PROJECTILECRIT, modPlayer.PetModdedStats[currentArrayPos]);
-				currentArrayPos++;
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, MINIONASMOD, modPlayer.PetModdedStats[currentArrayPos++]);
+				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PROJECTILECRIT, modPlayer.PetModdedStats[currentArrayPos++]);
 				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PREFIXMINIONPOWER, modPlayer.PetModdedStats[currentArrayPos]);
-				currentArrayPos++;
 				summonersShine.Call(USEFULFUNCS, OVERRIDESOURCEITEM, projectile, modPlayer.PetEmblemItem);
 			}
 		}
