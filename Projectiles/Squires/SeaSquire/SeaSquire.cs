@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemID.Coral, 3).AddIngredient(ItemID.Starfish, 3).AddIngredient(ItemID.Seashell, 3).AddIngredient(ItemID.SharkFin, 1).AddTile(TileID.Anvils).Register();
+			CreateRecipe(1).AddIngredient(ItemID.Coral, 3).AddIngredient(ItemID.Starfish, 3).AddIngredient(ItemID.Seashell, 3).AddIngredient(ItemID.SharkFin, 1).AddTile(TileID.WorkBenches).Register();
 		}
 	}
 

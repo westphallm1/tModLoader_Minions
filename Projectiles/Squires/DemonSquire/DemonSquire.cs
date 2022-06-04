@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			player.GetSquire().type == ProjectileType<DemonSquireMinion>();
 		private static int AnimationFrames = 80;
 
-		private int attackRate => (int)Math.Max(30, 60f / player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier);
+		private int attackRate => (int)Math.Max(30, 60f * player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier);
 
 		private int shootOnFrame => Projectile.ai[0] == 0 ? 0 : 10;
 
@@ -171,7 +171,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
+			Projectile.penetrate = 4;
 			Projectile.timeLeft = 30;
+		}
+
+		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			base.OnHitNPC(target, damage, knockback, crit);
+			Projectile.damage = (int)(Projectile.damage * 0.95f);
 		}
 		public override void AI()
 		{
@@ -194,7 +201,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 	{
 		internal override int BuffId => BuffType<DemonSquireMinionBuff>();
 		protected override int ItemType => ItemType<DemonSquireMinionItem>();
-		protected override int AttackFrames => 25;
+		protected override int AttackFrames => 22;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
 		protected override string WeaponTexturePath => null;
 

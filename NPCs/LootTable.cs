@@ -205,9 +205,6 @@ namespace AmuletOfManyMinions.NPCs
 			else if (npc.type == NPCID.SkeletronHead)
 			{
 				npcLoot.Add(notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<BoneWaypointRod>())));
-			}
-			else if (npc.type == NPCID.SkeletronHead)
-			{
 				npcLoot.Add(notExpertRule.OnSuccess(new CommonDropWithReroll(ItemType<SquireSkullAccessory>(), 2)));
 			}
 			else if (npc.type == NPCID.WallofFlesh)

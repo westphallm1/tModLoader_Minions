@@ -110,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	public class GoldenDagger : ModProjectile
 	{
 
-		const int TimeToLive = 45;
+		const int TimeToLive = 30;
 		const int TimeLeftToStartFalling = TimeToLive - 15;
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MagicDagger;

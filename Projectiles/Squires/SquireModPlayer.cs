@@ -21,12 +21,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public float SquireRangeFlatBonus { get; set; }
 
 		// depends on squire travel speed modifier, 5% per block
-		public float SquireTravelSpeedMultiplier => SquireRangeFlatBonus * 0.05f / 16f;
+		public float SquireTravelSpeedMultiplier => 1 + SquireRangeFlatBonus * 0.05f / 16f;
 
-		public float SquireAttackSpeedMultiplier { private get; set; }
+		public float SquireAttackSpeedMultiplier { get; set; }
 		
 		// Also apply melee attack speed modifiers, up to a maximum of 45% of the original attack speed 
-		public float FullSquireAttackSpeedModifier => Math.Max(0.45f, SquireAttackSpeedMultiplier + 2 - Player.GetTotalAttackSpeed(DamageClass.SummonMeleeSpeed));
+		public float FullSquireAttackSpeedModifier => Math.Max(0.45f, SquireAttackSpeedMultiplier + 1 - Player.GetTotalAttackSpeed(DamageClass.SummonMeleeSpeed));
 
 		public float squireDamageMultiplierBonus;
 		public float squireDamageOnHitMultiplier;

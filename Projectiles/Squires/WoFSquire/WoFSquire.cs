@@ -491,7 +491,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override float ComputeIdleSpeed() => 18;
 
 		// needs to slow down a little so dash is visible
-		public override float ComputeTargetedSpeed() => isDashing ? 16 * player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier: 18;
+		public override float ComputeTargetedSpeed() => isDashing ? 16 / player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier: 19;
 
 		public override float ComputeInertia() => isDashing ? 4 : base.ComputeInertia();
 
