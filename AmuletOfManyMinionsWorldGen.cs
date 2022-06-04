@@ -26,6 +26,7 @@ namespace AmuletOfManyMinions
 		LockedShadowChest  = 4,
 		RichMahogonyChest = 8,
 		IvyChest = 10,
+		LivingWoodChest = 12,
 		SkywareChest = 13,
 		WaterChest = 17,
 		MushroomChest = 32,

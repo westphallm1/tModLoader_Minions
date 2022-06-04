@@ -4,6 +4,7 @@ using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using AmuletOfManyMinions.Projectiles.Minions.LilEnt;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
@@ -24,6 +25,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public bool techromancerAccessoryEquipped = false;
 		internal bool foragerArmorSetEquipped;
 		internal bool flinxArmorSetEquipped;
+		internal bool lilEntAccessoryEquipped;
 		internal bool illusionistArmorSetEquipped;
 		internal int idleMinionSyncronizationFrame = 0;
 		internal int minionVarietyBonusCount = 0;
@@ -68,6 +70,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			techromancerAccessoryEquipped = false;
 			foragerArmorSetEquipped = false;
 			flinxArmorSetEquipped = false;
+			lilEntAccessoryEquipped = false;
 			illusionistArmorSetEquipped = false;
 			minionVarietyDamageBonus = 0.03f;
 		    didDrawDustThisFrame = false;
@@ -179,6 +182,15 @@ namespace AmuletOfManyMinions.Items.Accessories
 				int projId = Projectile.NewProjectile(Player.GetSource_Misc("flinxArmorSet"), Player.Center, Vector2.Zero, flinxType, 8, 2, Player.whoAmI);
 				Main.projectile[projId].originalDamage = 8;
 			}
+
+			int lilEntType = ProjectileType<LilEntMinion>();
+			if(lilEntAccessoryEquipped && Player.ownedProjectileCounts[lilEntType] == 0)
+			{
+				Player.AddBuff(BuffType<LilEntMinionBuff>(), 3);
+				int projId = Projectile.NewProjectile(Player.GetSource_Misc("lilEntAccessory"), Player.Center, Vector2.Zero, lilEntType, 8, 2, Player.whoAmI);
+				Main.projectile[projId].originalDamage = 8;
+			}
+
 			if (minionVarietyBonusCount > 1 && ClientConfig.Instance.ShowMinionVarietyBonus)
 			{
 				int buffType = BuffType<MinionVarietyBuff>();
