@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			Item.height = 18;
 			Item.value = Item.sellPrice(silver: 2, copper: 50);
 			Item.rare = ItemRarityID.White;
-			Item.defense = 3;
+			Item.defense = 4;
 		}
 
 		public override void UpdateEquip(Player player)

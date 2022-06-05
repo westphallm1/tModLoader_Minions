@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Items.Armor
 	[AutoloadEquip(EquipType.Head)]
 	public class ForagerHelmet : NecromancerAccessory
 	{
-		protected override float baseDamage => 5;
+		protected override float baseDamage => 8;
 		protected override float onHitChance => 0.075f;
 		protected override int maxTransientMinions => 2;
 		protected override float onKillChance => .25f;
@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			Item.height = 18;
 			Item.value = Item.sellPrice(silver: 3);
 			Item.rare = ItemRarityID.White;
-			Item.defense = 1;
+			Item.defense = 2;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs)
@@ -44,9 +44,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases your max minions by 1\n"
-				+ "Your minions will release damaging fungi while attacking";
-			player.maxMinions++;
+			player.setBonus = "Your minions will release damaging fungi while attacking";
 			player.GetModPlayer<MinionSpawningItemPlayer>().foragerArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}

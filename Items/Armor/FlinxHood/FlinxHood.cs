@@ -35,8 +35,7 @@ namespace AmuletOfManyMinions.Items.Armor.FlinxHood
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Grants a free Flinx minion, but slightly reduces your minion damage.";
-			player.GetDamage<SummonDamageClass>() -= 0.15f;
+			player.setBonus = "Grants a free Flinx minion";
 			player.GetModPlayer<MinionSpawningItemPlayer>().flinxArmorSetEquipped = true;
 		}
 

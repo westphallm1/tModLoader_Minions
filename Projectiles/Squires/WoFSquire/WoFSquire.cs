@@ -35,6 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		{
 			//TODO 1.4 did not call base before
 			base.SetStaticDefaults();
+			Main.buffNoTimeDisplay[Type] = false;
 			DisplayName.SetDefault("Wall of Flesh Squire");
 			Description.SetDefault("You can guide the Wall of Flesh!");
 			CrossMod.HookBuffToItemCrossMod(Type, ItemType<GuideVoodooSquireMinionItem>());
@@ -77,11 +78,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		public override bool CanShoot(Player player)
 		{
-			if (player.ownedProjectileCounts[wofType] > 0)
+			if (player.HasBuff(BuffType<WoFSquireMinionBuff>()))
 			{
 				return false;
 			}
 			return base.CanShoot(player);
+		}
+
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		{
+			// CanShoot does not appear to properly gate things off anymore...
+			return base.Shoot(player, source, position, velocity, type, damage, knockback);
 		}
 
 		public override bool CanUseItem(Player player)
