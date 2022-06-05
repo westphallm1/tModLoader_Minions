@@ -141,7 +141,7 @@ namespace AmuletOfManyMinions.NPCs
 			}
 			else if (NPCSets.angryBones.Contains(npc.netID))
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<BoneSquireMinionItem>(), 2000, chanceNumerator: 3);
+				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<BoneSquireMinionItem>(), 200, chanceNumerator: 3);
 			}
 			else if (npc.type == NPCID.AngryNimbus)
 			{
@@ -210,9 +210,6 @@ namespace AmuletOfManyMinions.NPCs
 			else if (npc.type == NPCID.SkeletronHead)
 			{
 				npcLoot.Add(notExpertRule.OnSuccess(ItemDropRule.Common(ItemType<BoneWaypointRod>())));
-			}
-			else if (npc.type == NPCID.SkeletronHead)
-			{
 				npcLoot.Add(notExpertRule.OnSuccess(new CommonDropWithReroll(ItemType<SquireSkullAccessory>(), 2)));
 			}
 			else if (npc.type == NPCID.WallofFlesh)
