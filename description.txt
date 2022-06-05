@@ -10,6 +10,9 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
+v0.14.2 - Balance Changes
+    - Adjust the balance of a number of items, mostly early prehardmode minions and hardmode squires
+    - List of changes: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions/BalanceBeta
 v0.14.1 - Misc. Changes
     - Fix several cross-mod issues with Summoner's Shine, courtesy of Ouroel
     - Add advanced pathfinding to 1.4 minions (except Terraprisma)
