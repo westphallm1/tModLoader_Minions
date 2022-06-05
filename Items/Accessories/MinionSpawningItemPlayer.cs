@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				Player.AddBuff(BuffType<LilEntMinionBuff>(), 3);
 				int projId = Projectile.NewProjectile(Player.GetSource_Misc("lilEntAccessory"), Player.Center, Vector2.Zero, lilEntType, 8, 2, Player.whoAmI);
-				Main.projectile[projId].originalDamage = 8;
+				Main.projectile[projId].originalDamage = 6;
 			}
 
 			if (minionVarietyBonusCount > 1 && ClientConfig.Instance.ShowMinionVarietyBonus)

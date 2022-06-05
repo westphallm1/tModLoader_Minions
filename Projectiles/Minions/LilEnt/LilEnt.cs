@@ -84,12 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 		// TODO make the grounded ranged minion state generically available somehow
 		internal int preferredDistanceFromTarget = 96;
 		internal int lastFiredFrame = 0;
-		internal int tongueWhipDuration = 16;
-		internal Vector2 tongueFiringVector;
-		internal int minTongueLength = 96;
-		internal int maxTongueLength = 248;
 
-		internal bool IsFiring => animationFrame - lastFiredFrame < tongueWhipDuration && tongueFiringVector != default;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -104,9 +99,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 		{
 			gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			DoSimpleFlyingDust();
-			if(IsFiring)
+			if(vectorToTarget is Vector2 target && animationFrame - lastFiredFrame < 45)
 			{
-				Projectile.spriteDirection = Math.Sign(tongueFiringVector.X);
+				Projectile.spriteDirection = Math.Sign(target.X);
 			}
 		}
 

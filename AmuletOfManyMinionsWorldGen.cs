@@ -15,6 +15,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using AmuletOfManyMinions.Items.Materials;
+using AmuletOfManyMinions.Projectiles.Minions.LilEnt;
 
 namespace AmuletOfManyMinions
 {
@@ -118,6 +119,7 @@ namespace AmuletOfManyMinions
 				new ChestLootInfo(ChestFrame.WoodenChest, 6, ItemType<TumbleSheepMinionItem>()),
 				new ChestLootInfo(ChestFrame.WaterChest, 4, ItemType<FishBowlMinionItem>()),
 				new ChestLootInfo(ChestFrame.IvyChest, 4, ItemType<BalloonMonkeyMinionItem>()),
+				new ChestLootInfo(ChestFrame.LivingWoodChest, 4, ItemType<LilEntAccessory>()),
 				new ChestLootInfo(ChestFrame.SkywareChest, 4, ItemType<SkywareSquireMinionItem>()),
 				new ChestLootInfo(ChestFrame.LockedShadowChest, 4, ItemType<DemonSquireMinionItem>()),// shadow chest/golden rogue
 				// all the various gold chest variants
