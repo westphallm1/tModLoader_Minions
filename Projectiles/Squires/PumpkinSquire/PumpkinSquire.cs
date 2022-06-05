@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			Item.knockBack = 3.5f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 17;
+			Item.damage = 14;
 			Item.value = Item.sellPrice(0, 0, 1, 0);
 			Item.rare = ItemRarityID.Blue;
 		}
