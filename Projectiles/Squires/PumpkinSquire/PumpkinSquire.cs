@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
@@ -162,11 +163,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		}
 	}
 
-	public class PumpkinBomb : WeakPumpkinBomb
-	{
-		// no op
-	}
-
 	public class BigPumpkinBomb : BasePumpkinBomb
 	{
 		public override void SetDefaults()
@@ -239,12 +235,22 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override SoundStyle? attackSound => SoundID.Item19;
+		protected override SoundStyle? attackSound => SoundID.Item153 with { Volume = 0.5f };
 		protected override float projectileVelocity => 8;
 
 		protected override bool travelRangeCanBeModified => false;
 
 		protected override int SpecialDuration => 30;
+
+		private int WhipFrames => 2 * ModifiedAttackFrames / 3;
+
+
+		private readonly int whipLength = 128;
+		Vector2 whipVector;
+		private bool whipTipCrit;
+
+		private bool IsUsingWhip => whipVector != default && attackFrame < WhipFrames;
+
 
 		public override void SetStaticDefaults()
 		{
@@ -261,9 +267,40 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			Projectile.height = 32;
 		}
 
+		public override void LoadAssets()
+		{
+			base.LoadAssets();
+			AddTexture(Texture + "Whip");
+		}
+
+		public override Vector2 IdleBehavior()
+		{
+			whipTipCrit = false;
+			return base.IdleBehavior();
+		}
+
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			return false;
+			if(!IsUsingWhip || 
+				Vector2.DistanceSquared(projHitbox.Center.ToVector2(), targetHitbox.Center.ToVector2()) > 10 * whipLength * whipLength ||
+				!Collision.CanHitLine(projHitbox.Center.ToVector2(), 1, 1, targetHitbox.Center.ToVector2(), 1, 1))
+			{
+				return false;
+			}
+			targetHitbox.Inflate(16, 16);
+			bool anyHits = false;
+			Vector2 baseOffset = whipVector;
+			baseOffset.Normalize();
+			baseOffset *= WeaponDistanceFromCenter();
+			baseOffset += Projectile.Center + WeaponCenterOfRotation;
+			new WhipDrawer(GetVineFrame, WhipFrames).ApplyWhipSegments(
+				baseOffset, baseOffset + whipVector, attackFrame,
+				// TODO short circuit somehow
+				(midPoint, rotation, bounds) => { 
+					anyHits |= targetHitbox.Contains(midPoint.ToPoint()); 
+					whipTipCrit |= bounds.X == 40 && targetHitbox.Contains(midPoint.ToPoint()); 
+				});
+			return anyHits;
 		}
 
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
@@ -271,16 +308,38 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0 && Main.myPlayer == player.whoAmI)
 			{
-				Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
-				vector2Mouse *= 1.5f *  ModifiedProjectileVelocity();
-				Projectile.NewProjectile(
-					Projectile.GetSource_FromThis(), 
-					Projectile.Center,
-					vector2Mouse,
-					ProjectileType<PumpkinBomb>(),
-					Projectile.damage,
-					Projectile.knockBack,
-					Main.myPlayer);
+				whipVector = UnitVectorFromWeaponAngle();
+				whipVector *= whipLength;
+			}
+		}
+
+		protected override void DrawWeapon(Color lightColor)
+		{
+			if(IsUsingWhip)
+			{
+				Vector2 baseOffset = whipVector;
+				baseOffset.Normalize();
+				baseOffset *= WeaponDistanceFromCenter();
+				baseOffset += Projectile.Center + WeaponCenterOfRotation;
+				new WhipDrawer(GetVineFrame, WhipFrames).DrawWhip(
+					ExtraTextures[2].Value, baseOffset, baseOffset + whipVector, attackFrame);
+			}
+		}
+
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			// 50% chance to crit when hitting enemy with tip
+			crit |= Main.rand.NextBool(5) && whipTipCrit;
+		}
+
+		private Rectangle GetVineFrame(int frameIdx, bool isLast)
+		{
+			if(isLast)
+			{
+				return new(40, 0, 20, 20);
+			} else
+			{
+				return new(20 * (frameIdx % 2), 0, 20, 20);
 			}
 		}
 
@@ -313,7 +372,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			}
 		}
 
-		protected override float WeaponDistanceFromCenter() => 12;
+		protected override float WeaponDistanceFromCenter() => 8;
 
 		public override float ComputeIdleSpeed() => 9;
 

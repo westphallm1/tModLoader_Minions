@@ -12,9 +12,7 @@ namespace AmuletOfManyMinions.Items.Armor
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Mildew Breastplate");
-			Tooltip.SetDefault(""
-				+ "Increases minion damage by 1\n"
-				+ "Increased minion knockback by 1");
+			Tooltip.SetDefault("Increased minion knockback by 1");
 		}
 
 		public override void SetDefaults()
@@ -28,7 +26,6 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>().Flat += 1;
 			player.GetKnockback<SummonDamageClass>().Base += 1;
 		}
 

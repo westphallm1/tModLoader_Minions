@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		public void ApplyWhipSegments(Vector2 startPos, Vector2 endPos, int frame, Action<Vector2, float, Rectangle> perSegment)
 		{
 			int segmentLength = frameSelector.Invoke(0, false).Width;
-			int maximalExtensionFrame = 5 * duration / 8;
+			int maximalExtensionFrame = duration / 2;
 			float rotationMult = (maximalExtensionFrame - frame) / (float)maximalExtensionFrame;
 			float lengthMult = 0.75f + 0.5f * MathF.Sin(MathHelper.Pi * frame / maximalExtensionFrame);
 
