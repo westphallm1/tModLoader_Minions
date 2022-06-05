@@ -38,10 +38,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		}
 		public override void Kill(int timeLeft)
 		{
-			// TODO dust
 			for(int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(Projectile.position, 16, 16, DustID.Snow);
+				Dust.NewDust(Projectile.position, 16, 16, DustID.GlowingMushroom);
 			}
 		}
 	}

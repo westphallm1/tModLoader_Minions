@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			gHelper.DoGroundAnimation(frameInfo, base.Animate);
-			DoSimpleFlyingDust();
+			DoSimpleFlyingDust(DustID.Grass);
 			if(vectorToTarget is Vector2 target && animationFrame - lastFiredFrame < 45)
 			{
 				Projectile.spriteDirection = Math.Sign(target.X);

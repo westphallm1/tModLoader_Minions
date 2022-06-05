@@ -222,7 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 	{
 		internal override int BuffId => BuffType<PumpkinSquireMinionBuff>();
 		protected override int ItemType => ItemType<PumpkinSquireMinionItem>();
-		protected override int AttackFrames => 30;
+		protected override int AttackFrames => 40;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/SpookyWings";
 		protected override string WeaponTexturePath => null;
 
@@ -242,7 +242,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 		protected override int SpecialDuration => 30;
 
-		private int WhipFrames => 2 * ModifiedAttackFrames / 3;
+		private int WhipFrames => ModifiedAttackFrames / 2;
 
 
 		private readonly int whipLength = 128;

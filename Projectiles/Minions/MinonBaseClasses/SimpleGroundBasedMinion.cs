@@ -250,12 +250,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 		}
 
-		protected void DoSimpleFlyingDust()
+		protected void DoSimpleFlyingDust(int dustId = 16)
 		{
 			if(gHelper.isFlying)
 			{
 				Projectile.rotation = Projectile.velocity.X * 0.05f;
-				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
+				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, dustId, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;
 				Main.dust[idx].scale = .9f;
 			} else
