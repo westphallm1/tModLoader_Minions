@@ -124,7 +124,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				returningToPlayer = true;
 				return null; // force back into non-attacking mode if too far from player
 			}
-			if (player.HeldItem.type == itemType && (usingSpecial || (player.channel && player.altFunctionUse != 2)))
+
+			bool usingSquireNormally = player.HeldItem.type == itemType;
+			bool usingSquireWithWhip = ServerConfig.Instance.SquireSpecialsWithWhips && usingSpecial && ProjectileID.Sets.IsAWhip[player.HeldItem?.shoot ?? 0];
+			bool usingSquireItem = usingSquireNormally || usingSquireWithWhip;
+			if (usingSquireItem && (usingSpecial || (player.channel && player.altFunctionUse != 2)))
 			{
 				MousePlayer mPlayer = player.GetModPlayer<MousePlayer>();
 				mPlayer.SetMousePosition();
@@ -171,7 +175,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			// switch from "not using special" to "using special"
 			int cooldownBuffType = ModContent.BuffType<SquireCooldownBuff>();
-			if(player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && player.channel && Main.mouseRight)
+			bool usingSquireNormally = player.HeldItem?.type == itemType && player.channel;
+			bool usingSquireWithWhip = ServerConfig.Instance.SquireSpecialsWithWhips && ProjectileID.Sets.IsAWhip[player.HeldItem?.shoot ?? 0];
+			bool usingSpecialEnabledItem = usingSquireNormally || usingSquireWithWhip;
+			if(player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && usingSpecialEnabledItem && Main.mouseRight)
 			{
 				StartSpecial();
 			} else if (usingSpecial && specialFrame >= CrossMod.GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))

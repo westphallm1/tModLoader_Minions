@@ -147,6 +147,11 @@ namespace AmuletOfManyMinions
 		[Tooltip("If enabled, squires will occupy a minion slot")]
 		public bool SquireMinionSlot;
 
+		[DefaultValue(false)]
+		[Label("Allow Squire Specials While Using Whips")]
+		[Tooltip("If enabled, squire right click specials can be activated while holding a whip")]
+		public bool SquireSpecialsWithWhips;
+
 		[DefaultValue(true)]
 		[Label("All Combat Pets Occupy a Minion Slot")]
 		[Tooltip("If enabled, every combat pet will occupy a minion slot. Otherwise, the first summoned is free.")]
