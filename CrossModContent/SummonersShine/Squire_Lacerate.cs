@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.CrossModContent.SummonersShine
 	}
 	public static class Squire_Lacerate
 	{
-		const int SCALING_TYPE_ADD = 2;
+		const int SCALING_TYPE_ADD = 0;
 		const int ROUNDING_TYPE_INT = 1;
 		static Tuple<float, int, int, bool>[] GetMinionPower(float mp1, float mp2)
 		{
