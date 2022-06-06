@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.CrossModContent.SummonersShine
 		static Tuple<float, int, int, bool>[] GetRandomMinionPower(Random rand)
 		{
 			return new Tuple<float, int, int, bool>[] {
-				new(rand.Next(0, 4) * 5 + 100, SCALING_TYPE_ADD, ROUNDING_TYPE_INT, false)
+				new(rand.Next(0, 4) * 5 + 20, SCALING_TYPE_ADD, ROUNDING_TYPE_INT, false)
 			};
 		}
 
