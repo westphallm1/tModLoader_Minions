@@ -185,6 +185,7 @@ namespace AmuletOfManyMinions
 			const int COUNTS_AS_WHIP_FOR_INSTASTRIKE = 14;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
+				Squire_Lacerate.Hook(summonersShine);
 				SummonersShineLoaded = true;
 				int projType = MinionWaypoint.Type;
 				summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, projType);
