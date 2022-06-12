@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -91,7 +92,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			// motion blur
 			for(int i = 0; i < 2; i ++)
 			{
@@ -99,13 +99,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				float scale = 0.7f * 0.125f * i;
 				Main.EntitySpriteDraw(texture, blurPos - Main.screenPosition,
 					bounds, translucentColor, r,
-					origin, scale, effects, 0);
+					bounds.GetOrigin(), scale, effects, 0);
 			}
 
 			// regular
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 	}

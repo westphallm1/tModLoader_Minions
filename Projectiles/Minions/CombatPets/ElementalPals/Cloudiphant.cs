@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria.ModLoader;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -103,12 +104,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			int frameIdx = (Projectile.frame / 5) % 6;
 			int frameHeight = texture.Height / 6;
 			Rectangle bounds = new Rectangle(0, frameIdx * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 			lightColor *= 0.75f;
 			Main.EntitySpriteDraw(
 				texture, Projectile.Center - Main.screenPosition, 
 				bounds, lightColor, Projectile.rotation, 
-				origin, 1f, 0, 0);
+				bounds.GetOrigin(), 1f, 0, 0);
 			return false;
 		}
 		private void AddDust()
@@ -145,13 +145,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			int frameIdx = (Projectile.frame / 10) % 4;
 			int frameHeight = texture.Height / 4;
 			Rectangle bounds = new Rectangle(0, frameIdx * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 			float scale = 1f + 0.2f * MathF.Sin(MathHelper.TwoPi * Projectile.frame / 90f);
 			lightColor *= 0.75f;
 			Main.EntitySpriteDraw(
 				texture, Projectile.Center - Main.screenPosition, 
 				bounds, lightColor, Projectile.rotation, 
-				origin, scale, 0, 0);
+				bounds.GetOrigin(), scale, 0, 0);
 			return false;
 		}
 

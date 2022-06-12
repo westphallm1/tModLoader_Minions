@@ -15,6 +15,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ReLogic.Content;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 {
@@ -314,10 +315,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 			DrawEyes(ref lightColor);
 			if(usingSpecial && isDashing)
 			{
@@ -368,7 +367,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		{
 			Texture2D texture = ExtraTextures[1].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			for (int i = 0; i < 2; i++)
 			{
 				float r;
@@ -385,8 +383,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					r = 0;
 				}
 				Main.EntitySpriteDraw(texture, EyePos(i) - Main.screenPosition,
-					bounds, lightColor, r,
-					origin, 1, 0, 0);
+					bounds, lightColor, r, bounds.GetOrigin(), 1, 0, 0);
 			}
 		}
 
@@ -397,12 +394,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			for(int i = 0; i < blurDrawer.BlurLength; i++)
 			{
 				if(!blurDrawer.GetBlurPosAndColor(i, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
 				Main.EntitySpriteDraw(texture, blurPos - Main.screenPosition,
-					bounds, blurColor, r, origin, 1, effects, 0);
+					bounds, blurColor, r, bounds.GetOrigin(), 1, effects, 0);
 				if(usingSpecial && isDashing)
 				{
 					float scale = (blurDrawer.BlurLength - i) / (float)(blurDrawer.BlurLength + 1);
@@ -426,7 +422,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					frame = frame == 1 ? 0 : 1; // flip the frame for the middle clinger
 				}
 				Rectangle bounds = new Rectangle(0, frame * frameHeight, texture.Width, frameHeight);
-				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 				Vector2 pos = Projectile.Center;
 				float yOffset = 15 + 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 60f);
 				if (i == 0)
@@ -440,7 +435,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				pos.X += (float)(Projectile.spriteDirection * 20 + 4 * Math.Sin(2 * Math.PI * (animationFrame / 60f + i / 3f)));
 				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 					bounds, lightColor, r,
-					origin, 1, 0, 0);
+					bounds.GetOrigin(), 1, 0, 0);
 			}
 
 		}

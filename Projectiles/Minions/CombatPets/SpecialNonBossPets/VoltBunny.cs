@@ -7,6 +7,7 @@ using Terraria;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using Microsoft.Xna.Framework;
 using System;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {

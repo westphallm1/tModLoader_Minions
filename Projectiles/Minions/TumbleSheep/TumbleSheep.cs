@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.NPCs;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.NPCs;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

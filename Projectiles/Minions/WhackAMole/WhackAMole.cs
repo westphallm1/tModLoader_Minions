@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -247,9 +248,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			Texture2D platform = ExtraTextures[0].Value;
 			Rectangle bounds = platformBounds[DrawIndex];
 			Vector2 pos = Projectile.Bottom + new Vector2(0, bounds.Height / 2);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(platform, pos - Main.screenPosition,
-				bounds, lightColor, 0, origin, 1, 0, 0);
+				bounds, lightColor, 0, bounds.GetOrigin(), 1, 0, 0);
 
 		}
 

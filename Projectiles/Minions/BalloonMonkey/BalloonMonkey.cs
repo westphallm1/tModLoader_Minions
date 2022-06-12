@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using Microsoft.Xna.Framework;
@@ -106,8 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, r, origin, scale, effects, 0);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, r, bounds.GetOrigin(), scale, effects, 0);
 			return false;
 		}
 

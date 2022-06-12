@@ -9,6 +9,7 @@ using System;
 using Terraria.Audio;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using Microsoft.Xna.Framework.Graphics;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 {
@@ -165,7 +166,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.MedusaHeadRay].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 			float baseAngle = MathHelper.TwoPi * animationFrame / 180;
 			int rayCount = 7;
 			for(int i = 0; i < rayCount; i++)
@@ -177,7 +177,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				Vector2 drawOffset = localAngle.ToRotationVector2() * scale * bounds.Height / 2;
 				Main.EntitySpriteDraw(texture, Projectile.Center + drawOffset - Main.screenPosition,
 					bounds, lightColor.MultiplyRGB(Color.LightCoral) * brightness, localAngle + MathHelper.PiOver2,
-					origin, scale, 0, 0);
+					bounds.GetOrigin(), scale, 0, 0);
 			}
 		}
 
@@ -194,10 +194,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new (0, Projectile.frame * frameHeight, texture.Width/4, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
 				bounds, lightColor * 0.75f, Projectile.rotation,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 
 			// flower
 			Color flowerColor = MinionColors[((EmpowerCount - 1)/ 3) % MinionColors.Length];
@@ -205,7 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			bounds = new ((1 + (EmpowerCount - 1) % 3) * texture.Width/4, 0, texture.Width/4, frameHeight);
 			Main.EntitySpriteDraw(texture, Projectile.Center + flowerOffset - Main.screenPosition,
 				bounds, flowerColor.MultiplyRGB(lightColor), Projectile.rotation,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 

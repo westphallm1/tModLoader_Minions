@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -108,16 +109,13 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 			// draw the body
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r,
-				origin, 0.75f, 0, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 0.75f, 0, 0);
 			// draw the eyes
 			Texture2D eyesTexture = ExtraTextures[0].Value;
 			SpriteEffects effects = animationFrame % AnimationFrames < AnimationFrames / 2 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(eyesTexture, pos - Main.screenPosition,
-				bounds, Color.White, 0,
-				origin, 0.75f, effects, 0);
+				bounds, Color.White, 0, bounds.GetOrigin(), 0.75f, effects, 0);
 			return false;
 		}
 

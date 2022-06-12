@@ -50,13 +50,12 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		protected abstract void DrawHead();
 		protected virtual void AddSprite(float dist, Rectangle bounds, Color c = default)
 		{
-			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
 			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r,
-				origin, 1, GetEffects(r), 0);
+				bounds.GetOrigin(), 1, GetEffects(r), 0);
 		}
 
 		public void AddPosition(Vector2 position)
@@ -88,13 +87,12 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 		protected override void AddSprite(float dist, Rectangle bounds, Color c = default)
 		{
-			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
 			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r + MathHelper.PiOver2,
-				origin, 1, GetEffects(r), 0);
+				bounds.GetOrigin(), 1, GetEffects(r), 0);
 		}
 
 	}

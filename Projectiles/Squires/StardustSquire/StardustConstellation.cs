@@ -1,7 +1,7 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.NPCs;
-using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;

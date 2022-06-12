@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using static Terraria.ModLoader.ModContent;
@@ -18,20 +19,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Vector2 pos = self.projectile.Center;
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[self.projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, rotation,
-				origin, 1, 0, 0);
+				bounds, lightColor, rotation, bounds.GetOrigin(), 1, 0, 0);
 		}
 		public static void DrawGlow(ISpinningBladeMinion self)
 		{
 			Vector2 pos = self.projectile.Center;
 			Texture2D texture = Request<Texture2D>(self.Texture + "_Glow").Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, Color.White, 0,
-				origin, 1, 0, 0);
+				bounds, Color.White, 0, bounds.GetOrigin(), 1, 0, 0);
 		}
 	}
 

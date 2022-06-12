@@ -203,12 +203,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 				wingOffset.X *= Projectile.spriteDirection;
 				Vector2 pos = Projectile.Center + wingOffset;
 				Rectangle bounds = new Rectangle(0, wingTexture.Height / 4 * (wingFrame % 4), wingTexture.Width, wingTexture.Height / 4);
-				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 				SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 				float r = Projectile.rotation;
 				Main.EntitySpriteDraw(wingTexture, pos - Main.screenPosition,
-					bounds, lightColor, r,
-					origin, 1, effects, 0);
+					bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 			}
 			return true;
 		}
@@ -217,7 +215,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			PartyHatSystem.DrawManualHat(Projectile, lightColor);
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-			Vector2 origin = new Vector2(Projectile.width / 2f, Projectile.height / 2f);
 			Vector2 pos = Projectile.Center;
 			float r = Projectile.rotation;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
@@ -244,8 +241,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			}
 			Rectangle bounds = new Rectangle(0, armFrame * SpaceBetweenFrames, Projectile.width, Projectile.height);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 		}
 
 		protected virtual Vector2 WeaponCenter()
@@ -303,13 +299,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			}
 			Texture2D texture = WeaponTexture.Value;
 			Rectangle bounds = GetWeaponTextureBounds(texture);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = SpriteRotationFromWeaponAngle();
 			lastWeaponPos = GetWeaponSpriteLocation();
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(texture, lastWeaponPos - Main.screenPosition,
-				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 		}
 
 		protected virtual Vector2 GetWeaponSpriteLocation()

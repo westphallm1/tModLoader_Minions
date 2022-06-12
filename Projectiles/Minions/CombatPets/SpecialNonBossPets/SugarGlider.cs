@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
@@ -158,17 +159,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			if(IsPlayingRough)
 			{
-				for (int k = 0; k < blurDrawer.BlurLength; k++)
-				{
-					if(!blurDrawer.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-					Main.EntitySpriteDraw(texture, blurPos - Main.screenPosition, bounds, blurColor, r, origin, 1, 0, 0);
-				}
+				blurDrawer.DrawBlur(texture, lightColor, bounds, r);
 				// regular version
 				Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
-					bounds, lightColor, r, origin, 1, 0, 0);
+					bounds, lightColor, r, bounds.GetOrigin(), 1, 0, 0);
 			}
 			return !IsPlayingRough;
 		}

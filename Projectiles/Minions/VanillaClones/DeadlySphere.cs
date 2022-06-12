@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 {
@@ -204,21 +205,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			// motion blur
 			if(isDashing)
 			{
-				// lifted from ExampleMod's ExampleBullet
-				for (int k = 0; k < blurHelper.BlurLength; k++)
-				{
-					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-					blurPos = blurPos - Main.screenPosition;
-					Main.EntitySpriteDraw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
-				}
+				blurHelper.DrawBlur(texture, lightColor, bounds, r);
 			}
 			// regular version
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r, origin, 1, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 
@@ -342,8 +336,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, r, origin, 1, effects, 0);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 	}

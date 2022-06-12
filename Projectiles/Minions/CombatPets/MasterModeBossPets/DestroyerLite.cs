@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;

@@ -1,7 +1,6 @@
 ﻿using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Items.Armor.IllusionistArmor;
-using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

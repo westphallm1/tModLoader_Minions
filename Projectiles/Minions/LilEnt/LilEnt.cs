@@ -11,6 +11,7 @@ using Terraria.Audio;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Items.Armor;
 using Terraria.ModLoader;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 {

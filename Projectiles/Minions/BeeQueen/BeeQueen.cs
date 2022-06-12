@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
@@ -286,10 +287,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			Texture2D texture = ExtraTextures[0].Value;
 			int frameHeight = texture.Height / 4;
 			Rectangle bounds = new Rectangle(0, wingFrame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, translucentColor, r,
-				origin, 1f, effects, 0);
+				bounds, translucentColor, r, bounds.GetOrigin(), 1f, effects, 0);
 		}
 		private void DrawBody(Color lightColor)
 		{
@@ -299,10 +298,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r,
-				origin, 0.75f, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 0.75f, effects, 0);
 		}
 
 		protected override int ComputeDamage() => leveledPetPlayer.PetDamage;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,17 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 				}
 				myOldPos[0] = position;
 			}
+		}
+
+		public void DrawBlur(Texture2D texture, Color lightColor, Rectangle bounds, float rotation = 0f, float scale = 1f)
+		{
+			for (int k = 0; k < BlurLength; k++)
+			{
+				if(!GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
+				Main.EntitySpriteDraw(texture, blurPos - Main.screenPosition, bounds, blurColor, 
+					rotation, bounds.GetOrigin(), scale, 0, 0);
+			}
+
 		}
 	}
 }

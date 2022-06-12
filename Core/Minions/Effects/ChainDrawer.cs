@@ -42,7 +42,6 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			Vector2 chainVector = endPos - startPos;
 			Rectangle bounds = EvenFrame;
 			float drawLength = chainVector.Length();
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Vector2 pos;
 			Vector2 unitToIdle = chainVector;
 			unitToIdle.Normalize();
@@ -66,7 +65,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 				lightColor = lightColor == default ? Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16) : lightColor;
 				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 					bounds, lightColor, r,
-					origin, 1, SpriteEffects.None, 0);
+					bounds.GetOrigin(), 1, SpriteEffects.None, 0);
 				idx++;
 			}
 		}

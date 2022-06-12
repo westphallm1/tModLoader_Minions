@@ -7,6 +7,7 @@ using Terraria;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {
@@ -49,10 +50,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			int xFrame = Projectile.frame / 12;
 			int yFrame = Projectile.frame % 12;
 			Rectangle bounds = new Rectangle(frameWidth * xFrame, yFrame * frameHeight, frameWidth, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
-				bounds, lightColor, Projectile.rotation, origin, 1, effects, 0);
+				bounds, lightColor, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 

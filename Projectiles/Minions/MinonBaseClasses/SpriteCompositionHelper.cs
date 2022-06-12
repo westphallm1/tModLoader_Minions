@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -148,8 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			offsetFromCenter = new Vector2(snapToGrid(offsetFromCenter.X), snapToGrid(offsetFromCenter.Y)) + BaseOffset;
 			r = posResolution > 1 ? 0 : r; // don't rotate if snapping to grid
 			Vector2 pos = this.bounds.Center.ToVector2() + offsetFromCenter.RotatedBy(r);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			Main.EntitySpriteDraw(texture, pos, bounds, lightColor, r, origin, scale, 0, 0);
+			Main.EntitySpriteDraw(texture, pos, bounds, lightColor, r, bounds.GetOrigin(), scale, 0, 0);
 		}
 
 		public void AddSpriteToBatch(Texture2D texture, (int, int) boundsInfo, Vector2 offsetFromCenter, float r, float scale)
@@ -200,8 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 					Rectangle bounds = new Rectangle(tileSpacing * current.Item1, tileSpacing * current.Item2, tileSize, tileSize);
 					Vector2 currentOffset = startOffset + foRX * (i + 0.5f) + foRY * (j + 0.5f);
-					Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-					Main.EntitySpriteDraw(texture, pos + currentOffset, bounds, lightColor, r, origin, 1, 0, 0);
+					Main.EntitySpriteDraw(texture, pos + currentOffset, bounds, lightColor, r, bounds.GetOrigin(), 1, 0, 0);
 				}
 			}
 		}

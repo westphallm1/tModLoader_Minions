@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -138,10 +139,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			int frameWidth = texture.Width / nColors;
 			Rectangle bounds = new Rectangle(frameWidth * (int)(Projectile.ai[1] % nColors), Projectile.frame * frameHeight, frameWidth, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 

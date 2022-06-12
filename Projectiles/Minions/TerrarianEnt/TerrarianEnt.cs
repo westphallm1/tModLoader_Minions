@@ -12,6 +12,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ReLogic.Content;
 using static Terraria.ModLoader.ModContent;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 {

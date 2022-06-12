@@ -9,6 +9,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -95,7 +96,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			Rectangle bounds = new Rectangle(0, frameIdx * frameHeight, texture.Width, frameHeight);
 			for(int i = 0; i < beamLength - 2 * stepSize; i+= stepSize)
 			{
-				Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 				float scale = Math.Min(0.5f, i / (16f * 16f));
 				float angle = phaseOffset + MathHelper.TwoPi * i / wavelength;
 				float rotation = angle;
@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 				Main.EntitySpriteDraw(
 					texture, pos - Main.screenPosition, 
 					bounds, lightColor, rotation, 
-					origin, scale, 0, 0);
+					bounds.GetOrigin(), scale, 0, 0);
 			}
 			return false;
 		}

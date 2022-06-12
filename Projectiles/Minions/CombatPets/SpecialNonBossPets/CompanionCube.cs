@@ -7,6 +7,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
@@ -180,7 +181,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			int portalFrame = (animationFrame / 5) % 4;
 			int portalHeight = portalTexture.Height / 4;
 			Rectangle portalBounds = new Rectangle(0, portalHeight * portalFrame, portalTexture.Width, portalHeight);
-			Vector2 portalOrigin = new Vector2(portalBounds.Width / 2, portalBounds.Height / 2);
 			for(int sign = -1; sign <= 1; sign+= 2)
 			{
 				Vector2 pos = teleportTarget.Center + sign * offset;
@@ -193,9 +193,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				lightColor *= Math.Min(1f, fadeFraction);
 				portalColor *= Math.Min(1f, fadeFraction);
 				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-					texture.Bounds, lightColor, r, texture.Bounds.Center.ToVector2(), 1, 0, 0);
+					texture.Bounds, lightColor, r, texture.Bounds.GetOrigin(), 1, 0, 0);
 				Main.EntitySpriteDraw(portalTexture, portalPos - Main.screenPosition,
-					portalBounds, portalColor, portalR, portalOrigin, 1, 0, 0);
+					portalBounds, portalColor, portalR, portalBounds.GetOrigin(), 1, 0, 0);
 			}
 		}
 	}

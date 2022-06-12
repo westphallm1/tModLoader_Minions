@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using System;
 using Terraria.ModLoader;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {
@@ -153,10 +154,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			int starFrame = Projectile.frame < starFrames ? Projectile.frame : 2 * starFrames - 1 - Projectile.frame;
 			int starHeight = starTexture.Height / 8;
 			Rectangle starBounds = new Rectangle(0, starFrame * starHeight, starTexture.Width, starHeight);
-			Vector2 starOrigin = new Vector2(starBounds.Width, starBounds.Height) / 2;
 			Vector2 pos = Projectile.Center - Main.screenPosition;
 			Main.EntitySpriteDraw(starTexture, pos, starBounds, Color.White, 
-				Projectile.rotation, starOrigin, 1, 0, 0);
+				Projectile.rotation, starBounds.GetOrigin(), 1, 0, 0);
 			return false;
 		}
 
@@ -206,12 +206,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			int starFrame = Projectile.frame < starFrames ? Projectile.frame : 2 * starFrames - 1 - Projectile.frame;
 			int starHeight = starTexture.Height / 8;
 			Rectangle starBounds = new Rectangle(0, starFrame * starHeight, starTexture.Width, starHeight);
-			Vector2 starOrigin = new Vector2(starBounds.Width, starBounds.Height) / 2;
 			Vector2 pos = Projectile.Center - Main.screenPosition;
 
 			// star
 			Main.EntitySpriteDraw(starTexture, pos, starBounds, Color.White, 
-				Projectile.rotation, starOrigin, 1, 0, 0);
+				Projectile.rotation, starBounds.GetOrigin(), 1, 0, 0);
 			// eyes
 			float eyeRotation = 0.05f * Projectile.velocity.X;
 			Main.EntitySpriteDraw(eyesTexture, pos, eyesTexture.Bounds, Color.White, 

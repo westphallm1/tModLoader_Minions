@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using System;
 using System.Collections.Generic;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 {

@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -374,14 +375,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			int frameHeight = bodyTexture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, bodyTexture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(ribsTexture, pos - Main.screenPosition,
-				ribsTexture.Bounds, lightColor, r,
-				ribsTexture.Bounds.Center.ToVector2(), 1, effects, 0);
+				ribsTexture.Bounds, lightColor, r, ribsTexture.Bounds.GetOrigin(), 1, effects, 0);
 			DrawHeart(lightColor);
 			Main.EntitySpriteDraw(bodyTexture, pos - Main.screenPosition,
 				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 			foreach (Projectile head in allHeads)
 			{
 				DrawVertibrae(headTexture, lightColor, head);
@@ -395,15 +394,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			Texture2D heartTexture = ExtraTextures[2].Value;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Rectangle bounds = heartTexture.Bounds;
-			Vector2 origin = bounds.Center.ToVector2();
 			float r = 0;
 			int beatFrame = animationFrame % (animationFrames / 2);
 			float scale = beatFrame < animationFrames / 8 ?
 				1 + (float)(0.25 * Math.Sin(8 * Math.PI * beatFrame / animationFrames)) :
 				1 + (float)(0.125 * Math.Sin(Math.PI / 2 + 4 * Math.PI * beatFrame / animationFrames));
 			Main.EntitySpriteDraw(heartTexture, heartCenter - Main.screenPosition,
-				bounds, lightColor, r,
-				origin, scale, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), scale, effects, 0);
 		}
 
 		private void DrawHeads(Color lightColor)
@@ -416,10 +413,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 				SpriteEffects effects = head.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 				int frameHeight = texture.Height / Main.projFrames[head.type];
 				Rectangle bounds = new Rectangle(0, 0, texture.Width, frameHeight);
-				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-					bounds, lightColor, r,
-					origin, 1, effects, 0);
+					bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 				PartyHatSystem.DrawManualHat(head, lightColor);
 			}
 		}

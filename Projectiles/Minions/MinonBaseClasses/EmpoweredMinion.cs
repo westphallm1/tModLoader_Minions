@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

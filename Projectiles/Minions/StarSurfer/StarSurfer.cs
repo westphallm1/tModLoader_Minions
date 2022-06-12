@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;

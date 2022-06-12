@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -332,7 +333,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			Texture2D bowlTexture = ExtraTextures[1].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			Vector2 origin = bounds.GetOrigin();
 			Color waterColor = lightColor.MultiplyRGBA(new Color(196, 196, 196, 128));
 			Main.EntitySpriteDraw(waterTexture, pos - Main.screenPosition, waterTexture.Bounds, waterColor, 0, origin, 1, 0, 0);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, 0, origin, 1, 0, 0);
@@ -350,7 +351,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			Vector2 wingsOffset = new Vector2(-8 * Projectile.spriteDirection, -4);
 			int frameHeight = texture.Height / 4;
 			Rectangle bounds = new Rectangle(0, frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
+			Vector2 origin = bounds.GetOrigin();
 			Main.EntitySpriteDraw(texture, pos + wingsOffset - Main.screenPosition, bounds, lightColor, 0, origin, 1, effects, 0);
 
 		}

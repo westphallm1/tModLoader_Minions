@@ -14,6 +14,7 @@ using ReLogic.Content;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using System.Collections.Generic;
 using System.Linq;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 {
@@ -178,33 +179,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Type].Value;
 			Rectangle bounds = new(0, 0, texture.Width, texture.Height);
-			Vector2 origin = bounds.Center.ToVector2();
 			Vector2 pos = Projectile.Center - Main.screenPosition;
 			Color outlineColor = Color.Gold * 0.5f;
 			SpriteEffects effects = 0;
 			// motion blur
-			float blurScale = 1f;
-			for (int k = 0; k < blurDrawer.BlurLength; k++)
-			{
-				if(!blurDrawer.GetBlurPosAndColor(k, outlineColor, out Vector2 blurPos, out Color blurColor)) { break; }
-				Main.EntitySpriteDraw(texture, blurPos - Main.screenPosition, bounds, blurColor * 0.5f, 
-					Projectile.rotation, origin, blurScale, 0, 0);
-				blurScale *= 0.85f;
-			}
-
+			blurDrawer.DrawBlur(texture, outlineColor * 0.5f, bounds, Projectile.rotation);
 			// glowy outline
-			for(int i = -1; i <= 1; i+= 1)
-			{
-				for(int j = -1; j <= 1; j+= 1)
-				{
-					Vector2 offset = 2 * new Vector2(i, j).RotatedBy(Projectile.rotation);
-					Main.EntitySpriteDraw(texture, pos + offset,
-						bounds, outlineColor, Projectile.rotation, origin, 1, effects, 0);
-				}
-			}
+			OutlineDrawer.DrawOutline(texture, pos, bounds, outlineColor, Projectile.rotation, effects);
 			// main entity
 			Main.EntitySpriteDraw(texture, pos,
-				bounds, Color.White, Projectile.rotation, origin, 1, effects, 0);
+				bounds, Color.White, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 
 			return false;
 		}
@@ -347,18 +331,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			Texture2D texture = currentTexture.Value;
 			int frameHeight = texture.Height / Main.projFrames[Type];
 			Rectangle bounds = new(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 			Vector2 offset = new(DrawOffsetX, DrawOriginOffsetY);
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			// motion blur
-			for (int k = 0; k < blurDrawer.BlurLength; k++)
-			{
-				if(!blurDrawer.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-				Main.EntitySpriteDraw(texture, blurPos + offset - Main.screenPosition, bounds, blurColor * 0.5f, 
-					Projectile.rotation, origin, 1, effects, 0);
-			}
+			blurDrawer.DrawBlur(texture, lightColor * 0.5f, bounds, Projectile.rotation);
+
 			Main.EntitySpriteDraw(texture, Projectile.Center + offset - Main.screenPosition, bounds, lightColor, 
-				Projectile.rotation, origin, 1, effects, 0);
+				Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 

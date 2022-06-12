@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Dusts;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;

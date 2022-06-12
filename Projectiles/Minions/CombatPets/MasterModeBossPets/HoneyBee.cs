@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
@@ -230,12 +231,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Texture2D texture = TextureAssets.Item[ItemID.AnkhShield].Value;
 				Vector2 holdOffset = new(-forwardDir * Projectile.spriteDirection * 12, 4);
 				Rectangle bounds = new(0, 0, texture.Width, texture.Height);
-				Vector2 origin = new(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 				Vector2 pos = Projectile.Center + holdOffset;
 				float r = Projectile.rotation + MathHelper.Pi / 2 * forwardDir * Projectile.spriteDirection;
 				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-					bounds, lightColor, r,
-					origin, 0.5f, 0, 0);
+					bounds, lightColor, r, bounds.GetOrigin(), 0.5f, 0, 0);
 			}
 		}
 	}

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using AmuletOfManyMinions.Projectiles.Minions.Slimecart;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using ReLogic.Content;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 {
@@ -370,13 +371,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		protected override void AddSprite(float dist, Rectangle bounds, Color c = default)
 		{
-			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
 			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r,
-				origin, 1, GetEffects(r), 0);
+				bounds.GetOrigin(), 1, GetEffects(r), 0);
 			if (Main.rand.NextBool(20))
 			{
 				int dustId = Dust.NewDust(pos, bounds.Width, bounds.Height, dustType, 0f, 0f, 0, default, 2f);

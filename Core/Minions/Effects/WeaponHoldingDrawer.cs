@@ -1,5 +1,4 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
-using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -109,13 +108,12 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			holdOffset *= WeaponHoldDistance;
 			holdOffset.Y *= yOffsetScale;
 			Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = GetWeaponAngle(holdOffset);
 			Vector2 pos = Projectile.Center + WeaponOffset + holdOffset;
 			SpriteEffects effects = attackDir == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 		}
 
 	}

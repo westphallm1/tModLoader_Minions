@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -89,9 +90,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			float r = Projectile.rotation;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = bounds.Center();
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
-				bounds, translucentColor, r, origin, 1, 0, 0);
+				bounds, translucentColor, r, bounds.GetOrigin(), 1, 0, 0);
 			return false;
 		}
 

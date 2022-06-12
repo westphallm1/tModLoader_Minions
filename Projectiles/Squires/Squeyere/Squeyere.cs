@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.Audio;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 {
@@ -90,10 +91,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, translucentColor, r,
-				origin, 1.5f, effects, 0);
+				bounds.GetOrigin(), 1.5f, effects, 0);
 			return false;
 		}
 

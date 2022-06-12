@@ -1,6 +1,6 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Dusts;
-using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SoulboundBow;
 using AmuletOfManyMinions.Projectiles.Squires.SoulboundSword;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;

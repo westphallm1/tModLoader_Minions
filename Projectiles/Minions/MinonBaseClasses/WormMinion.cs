@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

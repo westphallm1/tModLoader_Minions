@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.GoblinGunner;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -258,12 +259,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				DrawWeapon(lightColor);
 			}
 			Rectangle bounds = new Rectangle(0, frame * texture.Height / 4, texture.Width, texture.Height / 4);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, Projectile.rotation,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 
 			DrawProbes(lightColor, 1);
 		}
@@ -295,13 +295,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			offset.SafeNormalize();
 			Texture2D texture = ExtraTextures[1].Value;
 			Rectangle bounds = new Rectangle(0, 0, texture.Width, texture.Height);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2); // origin should hopefully be more or less center of squire
 			float r = GetWeaponAngle(offset);
 			Vector2 pos = Projectile.Center + new Vector2(0, 8) + 16 * offset;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 		}
 
 		public override Vector2 IdleBehavior()

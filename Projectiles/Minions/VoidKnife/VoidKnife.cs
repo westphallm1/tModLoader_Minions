@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -101,10 +102,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 
 			int height = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * height, texture.Width, height);
-			Vector2 origin = bounds.Size() / 2;
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
 				bounds, translucentColor, Projectile.rotation,
-				origin, 1, 0, 0);
+				bounds.GetOrigin(), 1, 0, 0);
 			return false;
 		}
 

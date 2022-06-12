@@ -7,6 +7,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -90,12 +91,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			int flameFrame = (animationFrame / 5) % 8;
 			int frameHeight = flameTexture.Height / 8;
 			Rectangle bounds = new(0, flameFrame * frameHeight, flameTexture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 			Vector2 baseOffset = new Vector2(-6 * Projectile.spriteDirection * forwardDir, -16).RotatedBy(Projectile.rotation);
 			SpriteEffects effects = Projectile.spriteDirection == forwardDir ? 0 : SpriteEffects.FlipHorizontally;
 			// regular version
 			Main.EntitySpriteDraw(flameTexture, Projectile.Center + baseOffset - Main.screenPosition,
-				bounds, Color.White, Projectile.rotation, origin, 1, effects, 0);
+				bounds, Color.White, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 			return true;
 		}
 	}

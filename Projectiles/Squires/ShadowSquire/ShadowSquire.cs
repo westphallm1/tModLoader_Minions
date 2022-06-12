@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;

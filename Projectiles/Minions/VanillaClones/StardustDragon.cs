@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -170,13 +171,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		protected override void AddSprite(float dist, Rectangle bounds, Color c = default)
 		{
-			Vector2 origin = new Vector2(bounds.Width / 2f, bounds.Height / 2f);
 			Vector2 angle = new Vector2();
 			Vector2 pos = PositionLog.PositionAlongPath(dist, ref angle);
 			float r = angle.ToRotation();
 			Main.EntitySpriteDraw(texture.Value, pos - Main.screenPosition,
 				bounds, c == default ? lightColor : c, r + MathHelper.PiOver2,
-				origin, 1, GetEffects(r), 0);
+				bounds.GetOrigin(), 1, GetEffects(r), 0);
 			if (Main.rand.NextBool(30))
 			{
 				int dustId = Dust.NewDust(pos, 8, 8, 135, 0f, 0f, 0, default, 2f);

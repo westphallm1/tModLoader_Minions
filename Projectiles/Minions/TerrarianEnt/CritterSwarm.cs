@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -267,8 +268,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			Rectangle bounds = GetBounds(frame);
 			Vector2 pos = center + offset;
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, rotation, origin, scale, effects, 0);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, rotation, bounds.GetOrigin(), scale, effects, 0);
 		}
 	}
 

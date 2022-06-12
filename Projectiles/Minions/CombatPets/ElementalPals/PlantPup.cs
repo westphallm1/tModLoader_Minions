@@ -8,6 +8,7 @@ using AmuletOfManyMinions.Core.Minions.Effects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -67,14 +68,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-			for (int k = 0; k < blurDrawer.BlurLength; k++)
-			{
-				if(!blurDrawer.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-				Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-				blurPos -= Main.screenPosition;
-				Main.EntitySpriteDraw(texture, blurPos, bounds, blurColor, Projectile.rotation, origin, 1, 0, 0);
-			}
+			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+			blurDrawer.DrawBlur(texture, lightColor, bounds, Projectile.rotation);
 			return false;
 		}
 

@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Items.Armor;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Items.Armor;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;

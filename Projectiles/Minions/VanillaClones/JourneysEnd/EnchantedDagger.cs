@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -100,32 +101,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Type].Value;
 			Rectangle bounds = new(0, 0, texture.Width, texture.Height/2);
-			Vector2 origin = bounds.Center.ToVector2();
 			Vector2 pos = Projectile.Center - Main.screenPosition;
 			SpriteEffects effects = 0;
 			// motion blur
-			float blurScale = 1f;
-			for (int k = 0; k < blurDrawer.BlurLength; k++)
-			{
-				if(!blurDrawer.GetBlurPosAndColor(k, outlineColor, out Vector2 blurPos, out Color blurColor)) { break; }
-				Main.EntitySpriteDraw(solidTexture, blurPos - Main.screenPosition, bounds, blurColor * 0.5f, 
-					Projectile.rotation, origin, blurScale, 0, 0);
-				blurScale *= 0.85f;
-			}
-
-			// glowy outline
-			for(int i = -1; i <= 1; i+= 1)
-			{
-				for(int j = -1; j <= 1; j+= 1)
-				{
-					Vector2 offset = 2 * new Vector2(i, j).RotatedBy(Projectile.rotation);
-					Main.EntitySpriteDraw(solidTexture, pos + offset,
-						bounds, outlineColor, Projectile.rotation, origin, 1, effects, 0);
-				}
-			}
+			blurDrawer.DrawBlur(solidTexture, outlineColor * 0.5f, bounds);
+			// outline
+			OutlineDrawer.DrawOutline(solidTexture, pos, bounds, outlineColor, Projectile.rotation, effects);
 			// main entity
 			Main.EntitySpriteDraw(texture, pos,
-				bounds, lightColor, Projectile.rotation, origin, 1, effects, 0);
+				bounds, lightColor, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 
 			return false;
 		}

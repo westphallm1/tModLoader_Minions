@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.GameContent;
 using static Terraria.ModLoader.ModContent;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 {
@@ -102,12 +103,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			float r = (float)(2 * Math.PI * Projectile.ai[1]) / AnimationFrames;
 			int index = Math.Min(5, (int)EmpowerCount - 1);
 			Rectangle bounds = new Rectangle(0, 64 * index, 64, 64);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Texture2D texture = TextureAssets.Projectile[ProjectileType<EclipseSphere>()].Value;
 			// main
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
-				origin, 1, 0, 0);
+				bounds.GetOrigin(), 1, 0, 0);
 		}
 
 
@@ -116,17 +116,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			Vector2 pos = Projectile.Center;
 			pos.Y -= 4; // don't know why this offset needs to exist
 			Rectangle bounds = new Rectangle(0, 52 * Projectile.frame, 66, 52);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Color shadowColor = ShadowColor(lightColor);
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			// echo 1
 			float offset = 2f * (float)Math.Sin(Math.PI * (Projectile.ai[1] % 60) / 30);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition + Vector2.One * offset,
-				bounds, shadowColor, Projectile.rotation, origin, 1, effects, 0);
+				bounds, shadowColor, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 			// echo 2
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition - Vector2.One * offset,
-				bounds, shadowColor, Projectile.rotation, origin, 1, effects, 0);
+				bounds, shadowColor, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 
 		}
 

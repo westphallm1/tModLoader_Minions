@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 using Terraria.Audio;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 {

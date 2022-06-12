@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using Terraria.Audio;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 {
@@ -122,20 +123,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		private void DrawSpirits(Color lightColor)
 		{
 			Rectangle bounds = new Rectangle(0, Projectile.height, 10, 14);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			for (int i = 0; i < unfiredShots; i++)
 			{
 				Main.EntitySpriteDraw(texture, GetSpiritLocation(i) - Main.screenPosition,
-					bounds, lightColor, 0,
-					origin, 1, 0, 0);
+					bounds, lightColor, 0, bounds.GetOrigin(), 1, 0, 0);
 			}
 			foreach (Vector2 active in activeTargetVectors)
 			{
 				Lighting.AddLight(active, Color.LightCyan.ToVector3() * 0.75f);
 				Main.EntitySpriteDraw(texture, active - Main.screenPosition,
-					bounds, Color.LightCyan, 0,
-					origin, 1, 0, 0);
+					bounds, Color.LightCyan, 0, bounds.GetOrigin(), 1, 0, 0);
 			}
 		}
 
@@ -144,17 +142,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		{
 			Vector2 pos = Projectile.Center;
 			Rectangle bounds = new Rectangle(0, 0, Projectile.width, Projectile.height);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Color shadowColor = ShadowColor(lightColor);
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			// echo 1
 			float offset = 2f * (float)Math.Sin(Math.PI * (animationFrame % 60) / 30);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition + Vector2.One * offset,
-				bounds, shadowColor, Projectile.rotation, origin, 1, effects, 0);
+				bounds, shadowColor, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 			// echo 2
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition - Vector2.One * offset,
-				bounds, shadowColor, Projectile.rotation, origin, 1, effects, 0);
+				bounds, shadowColor, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 
 		}
 

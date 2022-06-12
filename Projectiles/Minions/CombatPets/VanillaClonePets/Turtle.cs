@@ -6,6 +6,7 @@ using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
 using Microsoft.Xna.Framework;
 using System;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {

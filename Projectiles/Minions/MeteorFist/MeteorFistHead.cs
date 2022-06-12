@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Core;
+using Microsoft.Xna.Framework;
 using Terraria;
 using static Terraria.ModLoader.ModContent;
 

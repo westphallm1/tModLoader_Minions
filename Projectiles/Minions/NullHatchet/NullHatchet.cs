@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
@@ -99,12 +100,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 
 			int height = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * height, texture.Width, height);
-			Vector2 origin = bounds.Size() / 2;
 			float r = Projectile.spriteDirection == 1 ? Projectile.rotation - MathHelper.PiOver4 : Projectile.rotation + MathHelper.PiOver4;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
-				bounds, translucentColor, r,
-				origin, 1, effects, 0);
+				bounds, translucentColor, r, bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 		public override void WindUpBehavior(ref Vector2 vectorToTargetPosition)

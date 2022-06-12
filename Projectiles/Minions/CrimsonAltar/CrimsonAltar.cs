@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -117,13 +118,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			Color maskColor = new Color(254, 202, 80);
 			Rectangle bounds = new Rectangle(0, 0,
 				texture.Bounds.Width, texture.Bounds.Height / 2);
-			Vector2 origin = bounds.Center.ToVector2();
 			Vector2 pos = Projectile.Center;
 			float r = Projectile.rotation;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, maskColor, r,
-				origin, 1.5f, 0, 0);
+				bounds, maskColor, r, bounds.GetOrigin(), 1.5f, 0, 0);
 			return false;
 		}
 
@@ -187,12 +186,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			}
 			Texture2D texture = ExtraTextures[0].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = bounds.Center.ToVector2();
 			Vector2 pos = Projectile.Center;
 			float r = Projectile.rotation;
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, Color.White, r,
-				origin, 1, 0, 0);
+				bounds, Color.White, r, bounds.GetOrigin(), 1, 0, 0);
 		}
 
 		public override Vector2 IdleBehavior()

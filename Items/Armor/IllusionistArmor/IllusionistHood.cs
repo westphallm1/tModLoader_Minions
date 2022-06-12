@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
@@ -208,11 +209,9 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			float scale = 1f - Projectile.timeLeft / 62f;
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, translucentColor, r,
-				origin, scale, effects, 0);
+				bounds, translucentColor, r, bounds.GetOrigin(), scale, effects, 0);
 			return false;
 		}
 	}

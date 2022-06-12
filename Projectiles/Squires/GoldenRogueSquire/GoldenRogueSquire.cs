@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
@@ -87,13 +88,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = texture.Bounds.Center.ToVector2();
 			float spawnPercent = Math.Min(1f, (TimeToLive - Projectile.timeLeft) / 5);
 			Color color = Color.White * spawnPercent;
 			float scale = 1;
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
 				bounds, color, Projectile.rotation,
-				origin, scale, 0, 0);
+				bounds.GetOrigin(), scale, 0, 0);
 			return false;
 		}
 
@@ -141,7 +141,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = texture.Bounds.Center.ToVector2();
 			Color color = Color.White;
 			float scale = 1;
 			if (Projectile.timeLeft < TimeLeftToStartFalling)
@@ -150,8 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 				scale = Projectile.timeLeft / (float)TimeLeftToStartFalling;
 			}
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
-				bounds, color, Projectile.rotation,
-				origin, scale, 0, 0);
+				bounds, color, Projectile.rotation, bounds.GetOrigin(), scale, 0, 0);
 			return false;
 		}
 		public override void AI()
@@ -285,9 +283,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Rectangle bounds = glow.Bounds;
-			Vector2 origin = bounds.Center.ToVector2();
 			Main.EntitySpriteDraw(glow, pos - Main.screenPosition,
-				bounds, Color.White, r, origin, 1, effects, 0);
+				bounds, Color.White, r, bounds.GetOrigin(), 1, effects, 0);
 			if (attackFrame < 10)
 			{
 				// only draw arm at start of attack
@@ -298,11 +295,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			{
 				Texture2D reticle = ExtraTextures[3].Value;
 				bounds = reticle.Bounds;
-				origin = bounds.Center.ToVector2();
 				r = MathHelper.TwoPi * animationFrame / 120;
 				float scale = 1f + 0.2f * (float)Math.Sin(r);
 				pos = targetNPC == default ? Main.MouseScreen + 8 * Vector2.One : targetNPC.Center - Main.screenPosition;
-				Main.EntitySpriteDraw(reticle, pos, bounds, Color.White, r, origin, scale, effects, 0);
+				Main.EntitySpriteDraw(reticle, pos, bounds, Color.White, r, bounds.GetOrigin(), scale, effects, 0);
 			}
 		}
 

@@ -6,6 +6,7 @@ using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Items.Accessories;
+using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -17,34 +18,6 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
-	public static class Vector2Extensions
-	{
-		// prevent 
-		public static void SafeNormalize(this ref Vector2 vec)
-		{
-			if (vec != Vector2.Zero)
-			{
-				vec.Normalize();
-			}
-		}
-	}
-
-	public static class ModProjectileExtensions
-	{
-		public static void ClientSideNPCHitCheck(this ModProjectile modProjectile)
-		{
-			if(modProjectile.Projectile.owner == Main.myPlayer || 
-				Minion.GetClosestEnemyToPosition(modProjectile.Projectile.Center, 128, requireLOS: false) is not NPC npc)
-			{
-				return;
-			}
-			if(modProjectile.Projectile.Hitbox.Intersects(npc.Hitbox))
-			{
-				modProjectile.OnHitNPC(npc, 0, 0, false);
-			}
-		}
-	}
-
 	public abstract class Minion : ModProjectile
 	{
 		public readonly float PI = (float)Math.PI;
@@ -75,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			if(!Main.dedServ)
+			if (!Main.dedServ)
 			{
 				LoadAssets();
 			}
@@ -116,7 +89,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			if (player.HasBuff(BuffId))
 			{
 				Projectile.timeLeft = 2;
-			} else if (Main.projPet[Projectile.type])
+			}
+			else if (Main.projPet[Projectile.type])
 			{
 				Projectile.Kill(); // pets don't die naturally for some reason
 			}
@@ -136,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, Vector2? losCenter = null)
 		{
 			MinionTacticsPlayer tacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
-			if(tacticsPlayer.IgnoreVanillaMinionTarget > 0 && tacticsPlayer.SelectedTactic != TargetSelectionTacticHandler.GetTactic<ClosestEnemyToMinion>())
+			if (tacticsPlayer.IgnoreVanillaMinionTarget > 0 && tacticsPlayer.SelectedTactic != TargetSelectionTacticHandler.GetTactic<ClosestEnemyToMinion>())
 			{
 				return null;
 			}
@@ -145,13 +119,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			if (player.HasMinionAttackTargetNPC)
 			{
 				NPC npc = Main.npc[player.MinionAttackTargetNPC];
-				if(ShouldIgnoreNPC(npc))
+				if (ShouldIgnoreNPC(npc))
 				{
 					return null;
 				}
 				float distance = Vector2.Distance(npc.Center, center);
-				if (distance < noLOSRange || (distance < maxRange &&
-					Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height)))
+				if (distance < noLOSRange || distance < maxRange &&
+					Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height))
 				{
 					targetNPCIndex = player.MinionAttackTargetNPC;
 					return npc.Center;
@@ -187,22 +161,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			currentTactic = tacticsPlayer.GetTacticForMinion(this);
 			bool tacticDidChange = currentTactic != previousTactic;
 			previousTactic = currentTactic;
-			
+
 			// to cut back on Line-of-Sight computations, always chase the same NPC for some number of frames once one has been found
-			if(!tacticDidChange && targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < currentTactic.TargetCacheFrames)
+			if (!tacticDidChange && targetNPCIndex is int idx && Main.npc[idx].active && targetNPCCacheFrames++ < currentTactic.TargetCacheFrames)
 			{
 				return Main.npc[idx].Center;
 			}
 			Vector2 rangeCheckCenter;
 			BlockAwarePathfinder pathfinder = pathfindingPlayer.GetPathfinder(this);
 			Vector2 waypointPos = pathfindingPlayer.GetWaypointPosition(this);
-			if(!maxRangeFromPlayer)
+			if (!maxRangeFromPlayer)
 			{
 				rangeCheckCenter = Projectile.Center;
-			} else if (!pathfinder.InProgress() && pathfinder.searchSucceeded && waypointPos != default)
+			}
+			else if (!pathfinder.InProgress() && pathfinder.searchSucceeded && waypointPos != default)
 			{
 				rangeCheckCenter = waypointPos;
-			} else
+			}
+			else
 			{
 				rangeCheckCenter = player.Center;
 			}
@@ -216,20 +192,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 				bool inRange = Vector2.DistanceSquared(npc.Center, rangeCheckCenter) < maxRange * maxRange;
 				bool inNoLOSRange = Vector2.DistanceSquared(npc.Center, player.Center) < noLOSRange * noLOSRange;
-				bool lineOfSight = inNoLOSRange || (inRange && Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height));
-				if (inNoLOSRange || (lineOfSight && inRange))
+				bool lineOfSight = inNoLOSRange || inRange && Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height);
+				if (inNoLOSRange || lineOfSight && inRange)
 				{
 					possibleTargets.Add(npc);
 				}
 			}
 			int tacticsGroup = tacticsPlayer.GetGroupForMinion(this);
 			NPC chosen = currentTactic.ChooseTargetNPC(Projectile, tacticsGroup, possibleTargets);
-			if(chosen != default)
+			if (chosen != default)
 			{
 				targetNPCIndex = chosen.whoAmI;
 				targetNPCCacheFrames = 0;
 				return chosen.Center;
-			} 
+			}
 			else
 			{
 				return null;
@@ -244,20 +220,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public static bool GenericIgnoreNPC(NPC npc) => !npc.CanBeChasedBy();
 
-		public static NPC GetClosestEnemyToPosition(Vector2 position, float searchRange,  Func<NPC, bool> shouldIgnore = null, bool requireLOS = true)
+		public static NPC GetClosestEnemyToPosition(Vector2 position, float searchRange, Func<NPC, bool> shouldIgnore = null, bool requireLOS = true)
 		{
 			float minDist = float.MaxValue;
 			NPC closest = null;
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
-				if (shouldIgnore?.Invoke(npc) ?? (!npc.active || !npc.CanBeChasedBy()))
+				if (shouldIgnore?.Invoke(npc) ?? !npc.active || !npc.CanBeChasedBy())
 				{
 					continue;
 				}
 				float distanceSq = Vector2.DistanceSquared(npc.Center, position);
-				bool inRange =  distanceSq < searchRange * searchRange;
-				bool lineOfSight = (!requireLOS) || (inRange && Collision.CanHitLine(position, 1, 1, npc.position, npc.width, npc.height));
+				bool inRange = distanceSq < searchRange * searchRange;
+				bool lineOfSight = !requireLOS || inRange && Collision.CanHitLine(position, 1, 1, npc.position, npc.width, npc.height);
 				if (lineOfSight && inRange && distanceSq < minDist)
 				{
 					minDist = distanceSq;
@@ -279,7 +255,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				}
 				// 
 				bool inRange = Vector2.Distance(center, npc.Center) < maxRange;
-				bool lineOfSight = noLOS || (inRange && Collision.CanHitLine(center, 1, 1, npc.Center, 1, 1));
+				bool lineOfSight = noLOS || inRange && Collision.CanHitLine(center, 1, 1, npc.Center, 1, 1);
 				if (lineOfSight && inRange)
 				{
 					targetNPCIndex = npc.whoAmI;
@@ -296,22 +272,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal void AddTexture(string texturePath)
 		{
-			if(!TextureCache.ExtraTextures.TryGetValue(Type, out List<Asset<Texture2D>> textures))
+			if (!TextureCache.ExtraTextures.TryGetValue(Type, out List<Asset<Texture2D>> textures))
 			{
 				textures = new List<Asset<Texture2D>>();
 				TextureCache.ExtraTextures[Type] = textures;
 			}
-			if(texturePath == null)
+			if (texturePath == null)
 			{
 				textures.Add(null);
-			} else
+			}
+			else
 			{
 				textures.Add(Request<Texture2D>(texturePath));
 			}
 		}
 
 		public abstract void Behavior();
-		
+
 		public virtual void ApplyCrossModChanges() { }
 	}
 }

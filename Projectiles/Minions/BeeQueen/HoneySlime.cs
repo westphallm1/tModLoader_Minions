@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.NonMinionSummons;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -146,10 +147,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, translucentColor, r,
-				origin, 0.75f, effects, 0);
+				bounds, translucentColor, r, bounds.GetOrigin(), 0.75f, effects, 0);
 			return false;
 		}
 

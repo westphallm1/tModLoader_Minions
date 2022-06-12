@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
@@ -57,9 +58,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Vector2 handPosition = Position + center;
 			SpriteEffects effects = SpriteDirection == 1  ? 0 : SpriteEffects.FlipHorizontally;
 			Rectangle bounds = new Rectangle(0, Frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width, bounds.Height) / 2;
 			Main.EntitySpriteDraw(texture, handPosition - Main.screenPosition,
-				bounds, lightColor, Rotation, origin, 1, effects, 0);
+				bounds, lightColor, Rotation, bounds.GetOrigin(), 1, effects, 0);
 		}
 	}
 	
@@ -103,10 +103,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			// body
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r, origin, 1, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 
 			for(int i = 0; i < hands.Length; i++)
 			{

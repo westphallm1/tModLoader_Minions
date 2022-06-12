@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -440,9 +441,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			Texture2D maskTexture= ExtraTextures[0].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
-			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, r, origin, 1, effects, 0);
-			Main.EntitySpriteDraw(maskTexture, pos - Main.screenPosition, bounds, lightColor, r, origin, 1, effects, 0);
+			Main.EntitySpriteDraw(texture, pos - Main.screenPosition, bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
+			Main.EntitySpriteDraw(maskTexture, pos - Main.screenPosition, bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 	}

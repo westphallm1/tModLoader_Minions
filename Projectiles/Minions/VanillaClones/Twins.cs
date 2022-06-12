@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Effects;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
@@ -113,10 +114,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Vector2 pos = Projectile.Center;
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, Color.White, r,
-				origin, 1, 0, 0);
+				bounds.GetOrigin(), 1, 0, 0);
 			return false;
 		}
 	}
@@ -289,21 +289,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			// motion blur
 			if(isDashing)
 			{
-				// lifted from ExampleMod's ExampleBullet
-				for (int k = 0; k < blurHelper.BlurLength; k++)
-				{
-					if(!blurHelper.GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
-					blurPos = blurPos - Main.screenPosition + origin;
-					Main.EntitySpriteDraw(texture, blurPos, bounds, blurColor, r, origin, 1, effects, 0);
-				}
+				blurHelper.DrawBlur(texture, lightColor, bounds, r);
 			}
 			// regular version
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
-				bounds, lightColor, r, origin, 1, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 

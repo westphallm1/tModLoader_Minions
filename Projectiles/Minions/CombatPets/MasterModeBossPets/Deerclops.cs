@@ -8,6 +8,8 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.Effects;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
@@ -100,23 +102,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Type].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = bounds.Center.ToVector2();
 			float scale = 0.5f;
 			Color glowColor = Color.Violet * Projectile.Opacity * 0.5f;
 			Color mainColor = Color.Black * Projectile.Opacity;
 			Vector2 pos = Projectile.Center - Main.screenPosition;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
-			for(int i = -1; i <= 1; i+= 1)
-			{
-				for(int j = -1; j <= 1; j+= 1)
-				{
-					Vector2 offset = 2 * new Vector2(i, j).RotatedBy(Projectile.rotation);
-					Main.EntitySpriteDraw(texture, pos + offset,
-						bounds, glowColor, Projectile.rotation, origin, scale, effects, 0);
-				}
-			}
+			OutlineDrawer.DrawOutline(texture, pos, bounds, glowColor, Projectile.rotation, effects);
 			Main.EntitySpriteDraw(texture, pos,
-				bounds, mainColor, Projectile.rotation, origin, scale, effects, 0);
+				bounds, mainColor, Projectile.rotation, bounds.GetOrigin(), scale, effects, 0);
 			return false;
 		}
 	}

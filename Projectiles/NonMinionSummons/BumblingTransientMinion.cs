@@ -1,5 +1,5 @@
 ﻿
-using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -45,12 +45,11 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 
 			int height = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * height, texture.Width, height);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 
 			SpriteEffects effects = GetSpriteEffects();
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
 				bounds, translucentColor, Projectile.rotation,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 

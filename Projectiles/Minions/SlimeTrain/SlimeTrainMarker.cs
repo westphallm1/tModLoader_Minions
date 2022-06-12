@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -211,10 +212,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, lightColor, r,
-				origin, 1, effects, 0);
+				bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 
@@ -289,9 +289,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				offset *= 8 + 8 * (float)Math.Sin(MathHelper.TwoPi * (frame - startFrame) / 60f);
 				int drawFrame = i == 0 ? startDrawFrame : i >= endLength ? endDrawFrame : middleDrawFrame;
 				Rectangle bounds = new Rectangle(0, 18 * drawFrame, 16, 16);
-				Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 				Main.EntitySpriteDraw(texture, drawPos  + offset - Main.screenPosition,
-					bounds, lightColor, 0, origin, 1, effects, 0);
+					bounds, lightColor, 0, bounds.GetOrigin(), 1, effects, 0);
 			}
 		}
 

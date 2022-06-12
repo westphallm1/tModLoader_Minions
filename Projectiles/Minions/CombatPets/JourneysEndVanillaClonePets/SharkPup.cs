@@ -8,6 +8,7 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
 using System;
 using Microsoft.Xna.Framework;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets
 {

@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
@@ -432,10 +433,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Vector2 glowpos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Rectangle glowbounds = glow.Bounds;
-			Vector2 gloworigin = glowbounds.Center.ToVector2();
 			Main.EntitySpriteDraw(glow, glowpos - Main.screenPosition,
 				glowbounds, Color.White, glowR,
-				gloworigin, 1, effects, 0);
+				glowbounds.GetOrigin(), 1, effects, 0);
 
 			if (usingWeapon)
 			{

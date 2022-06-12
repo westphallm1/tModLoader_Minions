@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
@@ -199,10 +200,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 			// draw dirt block
 			Rectangle bounds = new Rectangle(0, 18 * 4, 16, 16);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			lightColor = Lighting.GetColor((int)spawnPos.X / 16, (int)spawnPos.Y / 16);
 			Main.EntitySpriteDraw(texture, spawnPos - Main.screenPosition,
-				bounds, lightColor, 0, origin, 1, SpriteEffects.None, 0);
+				bounds, lightColor, 0, bounds.GetOrigin(), 1, SpriteEffects.None, 0);
 			return true;
 		}
 
@@ -368,7 +368,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			Texture2D potTexture = ExtraTextures[0].Value;
 			int frameHeight = potTexture.Height / 4;
 			Rectangle bounds = new Rectangle(0, wingFrame * frameHeight, potTexture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			if (vectorToIdle.Length() > 16 || vectorToTarget is Vector2 target)
 			{
 				pos = Projectile.Center + vectorToIdle + new Vector2(0, 8); // move pot down a bit;
@@ -381,8 +380,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			}
 			lightColor = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
 			Main.EntitySpriteDraw(potTexture, pos - Main.screenPosition,
-				bounds, lightColor, r,
-				origin, 1, SpriteEffects.None, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, SpriteEffects.None, 0);
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

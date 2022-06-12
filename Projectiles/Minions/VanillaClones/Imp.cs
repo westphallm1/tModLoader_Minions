@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Dusts;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
@@ -152,12 +153,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 
 			// regular
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 				bounds, translucentColor, r,
-				origin, 1, 0, 0);
+				bounds.GetOrigin(), 1, 0, 0);
 			return false;
 		}
 	}

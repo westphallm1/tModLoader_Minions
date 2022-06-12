@@ -12,6 +12,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {

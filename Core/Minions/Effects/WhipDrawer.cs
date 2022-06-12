@@ -54,11 +54,10 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		{
 			ApplyWhipSegments(startPos, endPos, frame, (midPoint, rotation, bounds) =>
 			{
-				Vector2 origin = new(bounds.Width / 2, bounds.Height / 2);
 				lightColor = lightColor == default ? Lighting.GetColor((int)midPoint.X / 16, (int)midPoint.Y / 16) : lightColor;
 				Main.EntitySpriteDraw(texture, midPoint - Main.screenPosition,
 					bounds, lightColor, rotation,
-					origin, 1, SpriteEffects.None, 0);
+					bounds.GetOrigin(), 1, SpriteEffects.None, 0);
 			});
 		}
 	}

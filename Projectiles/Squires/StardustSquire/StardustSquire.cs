@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
@@ -74,7 +75,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 
 			Rectangle bounds = new Rectangle(0, Projectile.frame * texture.Height / Main.projFrames[Projectile.type], Projectile.width, Projectile.height);
-			Vector2 origin = new Vector2(Projectile.width / 2, Projectile.height / 2);
 
 			SpriteEffects effects = 0;
 			if (Projectile.velocity.X < 0)
@@ -82,8 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				effects = SpriteEffects.FlipVertically;
 			}
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
-				bounds, translucentColor, Projectile.rotation,
-				origin, 1, effects, 0);
+				bounds, translucentColor, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
 

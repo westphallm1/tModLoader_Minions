@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Items.Accessories;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

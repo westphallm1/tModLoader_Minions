@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -103,12 +104,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			Rectangle bounds = texture.Bounds;
-			Vector2 origin = bounds.Center.ToVector2();
 			int timeElapsed = TimeToLive - Projectile.timeLeft;
 			float scale = timeElapsed > 20 ? 1 : timeElapsed / 20f;
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
 				bounds, lightColor, Projectile.rotation,
-				origin, scale, 0, 0);
+				bounds.GetOrigin(), scale, 0, 0);
 			return false;
 		}
 		public override void AI()

@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
@@ -210,11 +211,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			Texture2D horseTexture = ExtraTextures[2].Value;
 			int frameHeight = horseTexture.Height / 4;
 			Rectangle bounds = new Rectangle(0, frameHeight * (wingFrame % 4), horseTexture.Width, frameHeight);
-			Vector2 origin = new Vector2(bounds.Width / 2, bounds.Height / 2);
 			Vector2 pos = projCenter + offset;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(horseTexture, pos - Main.screenPosition,
-				bounds, lightColor, r, origin, 1, effects, 0);
+				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 
 		}
 
