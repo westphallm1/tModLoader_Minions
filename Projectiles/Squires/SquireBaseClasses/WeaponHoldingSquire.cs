@@ -240,7 +240,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 				DrawWeapon(lightColor);
 			}
 			Rectangle bounds = new Rectangle(0, armFrame * SpaceBetweenFrames, Projectile.width, Projectile.height);
-			Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
+			Vector2 offset = new(DrawOriginOffsetX, DrawOriginOffsetY);
+			Main.EntitySpriteDraw(texture, pos + offset - Main.screenPosition,
 				bounds, lightColor, r, bounds.GetOrigin(), 1, effects, 0);
 		}
 
