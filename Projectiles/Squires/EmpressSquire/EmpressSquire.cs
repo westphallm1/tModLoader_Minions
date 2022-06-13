@@ -5,6 +5,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -84,9 +85,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 		private float weaponAngleOffset;
 
-		private static Color[] TrailColors = { new(247, 120, 224), new(255, 250, 60), new(112, 180, 255), };
+		private readonly static Color[] TrailColors = { new(247, 120, 224), new(255, 250, 60), new(112, 180, 255), };
 
-		private static Color[] SpecialColors = { 
+		public readonly static Color[] SpecialColors = { 
 			Color.Red,
 			Color.Orange,
 			new(255, 250, 60),
@@ -150,13 +151,78 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.SpecialTargetedMovement(vectorToTargetPosition);
+			// fun fact, this works on non-minions as well
+			float baseAngle = MathHelper.TwoPi * animationFrame / 90f;
+			List<Projectile> starProjectiles = GetMinionsOfType(ProjectileType<EmpressSpecialOrbitProjectile>());
+			foreach(var starProj in starProjectiles)
+			{
+				float angle = baseAngle + MathHelper.TwoPi * starProj.ai[0] / SpecialColors.Length;
+				float distance = 8 * Math.Min(12, specialFrame / 2);
+				starProj.Center = Projectile.Center + angle.ToRotationVector2() * distance;
+				if(player.whoAmI == Main.myPlayer && 
+					specialFrame % 4 == 0 && (specialFrame / 4) % SpecialColors.Length == starProj.ai[0] &&
+					Collision.CanHitLine(Projectile.Center,1,1,starProj.Center,1,1))
+				{
+					Vector2 angleVector = UnitVectorFromWeaponAngle();
+					// shoot approximately at the horizon
+					Vector2 launchVector = Projectile.Center + 800 * angleVector - starProj.Center;
+					launchVector.SafeNormalize();
+					launchVector *= ModifiedProjectileVelocity();
+					Projectile.NewProjectile(
+						Projectile.GetSource_FromThis(),
+						starProj.Center,
+						launchVector,
+						ProjectileType<EmpressStarlightProjectile>(),
+						3 * Projectile.damage / 4,
+						Projectile.knockBack,
+						Main.myPlayer,
+						ai0: AIColorTransfer.FromColor(SpecialColors[(int)starProj.ai[0]]),
+						ai1: 0.5f);
+
+				}
+			}
+		}
+
+		public override void OnStartUsingSpecial()
+		{
+			base.OnStartUsingSpecial();
+			if(player.whoAmI != Main.myPlayer)
+			{
+				return;
+			}
+			for(int i = 0; i < 6; i++)
+			{
+				Projectile.NewProjectile(
+					Projectile.GetSource_FromThis(),
+					Projectile.Center, default,
+					ProjectileType<EmpressSpecialOrbitProjectile>(),
+					0, 0, Main.myPlayer, ai0: i);
+			}
+		}
+
+		public override void OnStopUsingSpecial()
+		{
+			base.OnStopUsingSpecial();
+			if(player.whoAmI != Main.myPlayer)
+			{
+				return;
+			}
+			List<Projectile> starProjectiles = GetMinionsOfType(ProjectileType<EmpressSpecialOrbitProjectile>());
+			foreach(var starProj in starProjectiles)
+			{
+				starProj.Kill();
+			}
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			trailColor = InterpolateColorWheel(usingSpecial ? SpecialColors: TrailColors, MathHelper.TwoPi * animationFrame / 90f);
 			Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.5f);
-			if(animationFrame % 16 == 0)
+			if(usingSpecial)
+			{
+				weaponAngleOffset = 0;
+			}
+			else if(animationFrame % 16 == 0)
 			{
 				weaponAngleOffset = Main.rand.NextFloat(-MathF.PI, MathF.PI) / 16f;
 			}
@@ -179,7 +245,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 						Projectile.damage,
 						Projectile.knockBack,
 						Main.myPlayer,
-						ai0: AIColorTransfer.FromColor(trailColor));
+						ai0: AIColorTransfer.FromColor(trailColor),
+						ai1: 0.75f);
 				}
 			}
 		}
