@@ -35,6 +35,23 @@ namespace AmuletOfManyMinions.Core
 				modProjectile.OnHitNPC(npc, 0, 0, false);
 			}
 		}
+
+		public static bool BounceOnCollision(this Projectile proj, Vector2 oldVelocity)
+		{
+			// bounce off walls while coasting after hitting enemies
+			if (Math.Abs(proj.velocity.Y) < Math.Abs(oldVelocity.Y))
+			{
+				proj.velocity.Y = -oldVelocity.Y;
+			} else if (Math.Abs(proj.velocity.X) < Math.Abs(oldVelocity.X))
+			{
+				proj.velocity.X = -oldVelocity.X;
+			} else
+			{
+				// don't really understand what's going on in this case but that's ok
+				return false; 
+			}
+			return false;
+		}
 	}
 
 	public static class RectangleExtensions

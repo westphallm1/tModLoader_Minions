@@ -9,6 +9,7 @@ using AmuletOfManyMinions.Core.Minions.Effects;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 {
@@ -54,17 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if (Math.Abs(Projectile.velocity.Y) < Math.Abs(oldVelocity.Y))
-			{
-				Projectile.velocity.Y = -oldVelocity.Y;
-			} else if (Math.Abs(Projectile.velocity.X) < Math.Abs(oldVelocity.X))
-			{
-				Projectile.velocity.X = -oldVelocity.X;
-			} else
-			{
-				// don't really understand what's going on in this case but that's ok
-				return false; 
-			}
+			Projectile.BounceOnCollision(oldVelocity);
 			return !(bouncesLeft-- > 0);
 		}
 

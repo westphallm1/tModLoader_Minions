@@ -58,13 +58,14 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			}
 		}
 
-		public void DrawBlur(Texture2D texture, Color lightColor, Rectangle bounds, float rotation = 0f, float scale = 1f)
+		public void DrawBlur(Texture2D texture, Color lightColor, Rectangle bounds, float rotation = 0f, float scale = 1f, float scaleFactor = 1f)
 		{
 			for (int k = 0; k < BlurLength; k++)
 			{
 				if(!GetBlurPosAndColor(k, lightColor, out Vector2 blurPos, out Color blurColor)) { break; }
 				Main.EntitySpriteDraw(texture, blurPos - Main.screenPosition, bounds, blurColor, 
 					rotation, bounds.GetOrigin(), scale, 0, 0);
+				scale *= scaleFactor;
 			}
 
 		}

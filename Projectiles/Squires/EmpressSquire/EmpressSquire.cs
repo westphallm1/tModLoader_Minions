@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 			Item.knockBack = 5f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 28;
+			Item.damage = 120;
 			Item.value = Item.sellPrice(0, 0, 20, 0);
 			Item.rare = ItemRarityID.Green;
 		}
@@ -58,9 +58,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 	{
 		internal override int BuffId => BuffType<EmpressSquireMinionBuff>();
 		protected override int ItemType => ItemType<EmpressSquireMinionItem>();
-		protected override int AttackFrames => 30;
+		protected override int AttackFrames => 24;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
-		protected override string WeaponTexturePath => "Terraria/Images/Item_" + ItemID.PiercingStarlight;
+		protected override string WeaponTexturePath => Texture + "_Staff";
 
 		protected override WeaponAimMode aimMode => WeaponAimMode.TOWARDS_MOUSE;
 
@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 		protected override Vector2 WeaponCenterOfRotation => new Vector2(0, 4);
 
-		protected override float projectileVelocity => 12;
+		protected override float projectileVelocity => 16;
 
 		protected override SoundStyle? SpecialStartSound => SoundID.Item106;
 
@@ -80,11 +80,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 		private MotionBlurDrawer blurDrawer;
 		private Texture2D solidTexture;
+		private Texture2D solidWeaponTexture;
+
+		private float weaponAngleOffset;
 
 		private static Color[] TrailColors = { new(247, 120, 224), new(255, 250, 60), new(112, 180, 255), };
 
 		private static Color[] SpecialColors = { 
-			Color.Tomato,
+			Color.Red,
 			Color.Orange,
 			new(255, 250, 60),
 			Color.MediumSpringGreen,
@@ -141,6 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 			base.OnSpawn();
 			// run this as late as possible, hope to avoid issues with asset loading
 			solidTexture = SolidColorTexture.GetSolidTexture(Type);
+			solidWeaponTexture = SolidColorTexture.GetSolidTexture("EmpressWeapon", WeaponTexture.Value);
 		}
 
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
@@ -152,7 +156,47 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		{
 			trailColor = InterpolateColorWheel(usingSpecial ? SpecialColors: TrailColors, MathHelper.TwoPi * animationFrame / 90f);
 			Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.5f);
+			if(animationFrame % 16 == 0)
+			{
+				weaponAngleOffset = Main.rand.NextFloat(-MathF.PI, MathF.PI) / 16f;
+			}
 			return base.IdleBehavior();
+		}
+		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
+		{
+			base.StandardTargetedMovement(vectorToTargetPosition);
+			if (attackFrame == 0)
+			{
+				Vector2 angleVector = UnitVectorFromWeaponAngle();
+				angleVector *= ModifiedProjectileVelocity();
+				if (Main.myPlayer == player.whoAmI)
+				{
+					Projectile.NewProjectile(
+						Projectile.GetSource_FromThis(),
+						Projectile.Center,
+						angleVector,
+						ProjectileType<EmpressStarlightProjectile>(),
+						Projectile.damage,
+						Projectile.knockBack,
+						Main.myPlayer,
+						ai0: AIColorTransfer.FromColor(trailColor));
+				}
+			}
+		}
+
+		protected override float GetWeaponAngle()
+		{
+			return base.GetWeaponAngle() + weaponAngleOffset;
+		}
+
+		private void DrawWeaponOutline()
+		{
+			Rectangle bounds = GetWeaponTextureBounds(solidWeaponTexture);
+			float r = SpriteRotationFromWeaponAngle();
+			Vector2 pos = GetWeaponSpriteLocation();
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
+			OutlineDrawer.DrawOutline(solidWeaponTexture, pos - Main.screenPosition, bounds, 
+				trailColor * 0.5f, r, effects);
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -170,6 +214,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 			}
 			OutlineDrawer.DrawOutline(solidTexture, Projectile.Center + offset - Main.screenPosition, bounds, 
 				trailColor * 0.5f, Projectile.rotation, effects);
+			if(IsAttacking())
+			{
+				DrawWeaponOutline();
+			}
 			return base.PreDraw(ref lightColor);
 		}
 
@@ -178,10 +226,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 		protected override int WeaponHitboxEnd() => 55;
 
-		public override float ComputeIdleSpeed() => 8.5f;
 
-		public override float ComputeTargetedSpeed() => 8.5f;
+		public override float MaxDistanceFromPlayer() => usingSpecial ? 600 : 400;
 
-		public override float MaxDistanceFromPlayer() => 192;
+		public override float ComputeTargetedSpeed() => 14;
+
+		public override float ComputeIdleSpeed() => 14;
+
 	}
 }

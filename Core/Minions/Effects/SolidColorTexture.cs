@@ -12,7 +12,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 {
 	internal class SolidColorTexture : ModSystem
 	{
-		private static Dictionary<int, Texture2D> textureCache;
+		private static Dictionary<string, Texture2D> textureCache;
 
 		public override void Load()
 		{
@@ -26,17 +26,22 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 		public static Texture2D GetSolidTexture(int projectileId)
 		{
+			Texture2D baseTexture = Terraria.GameContent.TextureAssets.Projectile[projectileId].Value;
+			return GetSolidTexture("Projectile_" + projectileId, baseTexture);
+		}
+
+		public static Texture2D GetSolidTexture(string key, Texture2D baseTexture)
+		{
 			if(Main.dedServ)
 			{
 				return default;
 			}
 
-			if(textureCache.TryGetValue(projectileId, out var cachedTexture))
+			if(textureCache.TryGetValue(key, out var cachedTexture))
 			{
 				// don't re-process already processed textures
 				return cachedTexture;
 			}
-			Texture2D baseTexture = Terraria.GameContent.TextureAssets.Projectile[projectileId].Value;
 			Color[] color = new Color[baseTexture.Width * baseTexture.Height];
 			baseTexture.GetData(color);
 			for(int i = 0; i < color.Length; i++)
@@ -48,7 +53,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 			}
 			Texture2D copyTexture = new(Main.graphics.GraphicsDevice, baseTexture.Width, baseTexture.Height);
 			copyTexture.SetData(color);
-			textureCache[projectileId] = copyTexture;
+			textureCache[key] = copyTexture;
 			return copyTexture;
 		}
 	}

@@ -104,7 +104,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			Vector2 pos = Projectile.Center - Main.screenPosition;
 			SpriteEffects effects = 0;
 			// motion blur
-			blurDrawer.DrawBlur(solidTexture, outlineColor * 0.5f, bounds);
+			blurDrawer.DrawBlur(solidTexture, outlineColor * 0.5f, bounds, scaleFactor: 0.9f);
 			// outline
 			OutlineDrawer.DrawOutline(solidTexture, pos, bounds, outlineColor, Projectile.rotation, effects);
 			// main entity
@@ -144,19 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				return false;
 			}
 
-			// bounce off walls while coasting after hitting enemies
-			if (Math.Abs(Projectile.velocity.Y) < Math.Abs(oldVelocity.Y))
-			{
-				Projectile.velocity.Y = -oldVelocity.Y;
-			} else if (Math.Abs(Projectile.velocity.X) < Math.Abs(oldVelocity.X))
-			{
-				Projectile.velocity.X = -oldVelocity.X;
-			} else
-			{
-				// don't really understand what's going on in this case but that's ok
-				return false; 
-			}
-			return false;
+			return Projectile.BounceOnCollision(oldVelocity);
 		}
 
 		public override void OnHitTarget(NPC target)
