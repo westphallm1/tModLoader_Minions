@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			}
 
 			var projectile = Projectile.NewProjectileDirect(source, player.Center, Vector2.Zero, Item.shoot, damage, Item.knockBack, player.whoAmI);
-			projectile.originalDamage = damage;
+			projectile.originalDamage = Item.damage; // using damage directly appears to double-dip into damage multipliers
 			return false;
 		}
 
