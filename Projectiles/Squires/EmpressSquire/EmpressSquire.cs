@@ -43,9 +43,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 			Item.knockBack = 5f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 120;
-			Item.value = Item.sellPrice(0, 0, 20, 0);
-			Item.rare = ItemRarityID.Green;
+			Item.damage = 102;
+			Item.value = Item.sellPrice(0, 10, 0, 0);
+			Item.rare = ItemRarityID.Yellow;
 		}
 
 		public override void AddRecipes()

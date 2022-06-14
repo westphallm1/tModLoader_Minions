@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Item.knockBack = 7f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 90;
+			Item.damage = 94;
 			Item.value = Item.sellPrice(0, 8, 0, 0);
 			Item.rare = ItemRarityID.Yellow;
 		}

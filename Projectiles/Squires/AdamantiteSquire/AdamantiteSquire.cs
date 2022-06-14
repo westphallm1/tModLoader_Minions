@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 			Item.knockBack = 5.5f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 33;
+			Item.damage = 36;
 			Item.value = Item.buyPrice(0, 2, 0, 0);
 			Item.rare = ItemRarityID.LightRed;
 		}

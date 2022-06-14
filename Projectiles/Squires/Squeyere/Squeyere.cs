@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 			Item.knockBack = 6f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 70;
+			Item.damage = 75;
 			Item.value = Item.sellPrice(0, 4, 0, 0);
 			Item.rare = ItemRarityID.Pink;
 		}

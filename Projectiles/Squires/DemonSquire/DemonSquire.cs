@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			Item.knockBack = 7.0f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 32;
+			Item.damage = 36;
 			Item.value = Item.sellPrice(0, 0, 50, 0);
 			Item.rare = ItemRarityID.Orange;
 		}

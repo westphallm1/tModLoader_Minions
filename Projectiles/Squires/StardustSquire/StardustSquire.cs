@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			Item.knockBack = 3f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 84;
+			Item.damage = 92;
 			Item.value = Item.sellPrice(0, 10, 0, 0);
 			Item.rare = ItemRarityID.Red;
 		}

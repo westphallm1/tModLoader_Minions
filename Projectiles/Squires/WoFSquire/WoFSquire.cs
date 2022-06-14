@@ -72,7 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Item.knockBack = 5f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 140;
+			Item.damage = 142;
 			Item.value = Item.sellPrice(0, 0, 1, 0);
 			Item.rare = ItemRarityID.Red;
 		}

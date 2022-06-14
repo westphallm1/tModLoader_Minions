@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			Item.knockBack = 3f;
 			Item.width = 24;
 			Item.height = 38;
-			Item.damage = 32;
+			Item.damage = 34;
 			Item.value = Item.buyPrice(0, 0, 50, 0);
 			Item.rare = ItemRarityID.LightRed;
 			Item.noUseGraphic = true;
