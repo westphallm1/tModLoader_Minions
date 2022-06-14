@@ -88,12 +88,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		private readonly static Color[] TrailColors = { new(247, 120, 224), new(255, 250, 60), new(112, 180, 255), };
 
 		public readonly static Color[] SpecialColors = { 
-			Color.Red,
+			Color.Tomato,
 			Color.Orange,
 			new(255, 250, 60),
 			Color.MediumSpringGreen,
 			new(112, 180, 255),
-			new(102, 51, 153)
+			Color.MediumOrchid
 		};
 
 
@@ -138,7 +138,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 				Main.dust[dustId].noLight = true;
 				Main.dust[dustId].fadeIn = 1f;
 			}
-			
 		}
 		public override void OnSpawn()
 		{
@@ -160,7 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 				float distance = 8 * Math.Min(12, specialFrame / 2);
 				starProj.Center = Projectile.Center + angle.ToRotationVector2() * distance;
 				if(player.whoAmI == Main.myPlayer && 
-					specialFrame % 4 == 0 && (specialFrame / 4) % SpecialColors.Length == starProj.ai[0] &&
+					specialFrame % 6 == 0 && (specialFrame / 6) % SpecialColors.Length == starProj.ai[0] &&
 					Collision.CanHitLine(Projectile.Center,1,1,starProj.Center,1,1))
 				{
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
@@ -231,7 +230,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.StandardTargetedMovement(vectorToTargetPosition);
-			if (attackFrame == 0)
+			if (attackFrame == 0 && !usingSpecial)
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				angleVector *= ModifiedProjectileVelocity();

@@ -35,6 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		MotionBlurDrawer blurDrawer;
 		internal Color projColor;
 		internal float baseScale;
+		internal Texture2D solidTexture;
 
 		public override void SetDefaults()
 		{
