@@ -10,7 +10,7 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
-v0.14.1.3 - Summoner's Shine Compatibility fixes
+v0.14.1.4 - Summoner's Shine Compatibility fixes
 v0.14.1 - Misc. Changes
     - Fix several cross-mod issues with Summoner's Shine, courtesy of Ouroel
     - Add advanced pathfinding to 1.4 minions (except Terraprisma)

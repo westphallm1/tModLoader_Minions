@@ -1,5 +1,5 @@
 displayName = The Amulet Of Many Minions: Combat Pets!
 author = billybobmcbo, SkyanUltra, direwolf420, Metallumere, SPATULA LEMMY
-version = 0.14.1.3
+version = 0.14.1.4
 homepage = https://forums.terraria.org/index.php?threads/the-amulet-of-many-minions.97188/
 weakReferences = SummonersAssociation@0.4.7
