@@ -403,7 +403,7 @@ namespace AmuletOfManyMinions
 			const int GET_CURRENTTICK = 17;
 			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				return (float)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_CURRENTTICK) == 1;
+				return (float)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile, GET_CURRENTTICK) == 1;
 			}
 			return true;
 		}
@@ -431,7 +431,7 @@ namespace AmuletOfManyMinions
 			const int USEFULFUNCS_GETINTERNALSIMRATE = 5;
 			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_MINIONSPEEDMODTYPE);
+				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile, GET_MINIONSPEEDMODTYPE);
 				switch(minionSpeedModType)
 				{
 					case MINIONSPEEDMODTYPE_NORMAL:
@@ -455,7 +455,7 @@ namespace AmuletOfManyMinions
 			const int USEFULFUNCS_GETINTERNALSIMRATE = 5;
 			if (SummonersShineLoaded && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile.whoAmI, GET_MINIONSPEEDMODTYPE);
+				int minionSpeedModType = (int)summonersShine.Call(GET_MINIONPROJECTILEDATA_VAR, projectile, GET_MINIONSPEEDMODTYPE);
 				switch (minionSpeedModType)
 				{
 					case MINIONSPEEDMODTYPE_NORMAL:
@@ -566,9 +566,9 @@ namespace AmuletOfManyMinions
 				const int MINIONASMOD = 1;
 				const int PROJECTILECRIT = 0;
 				const int PREFIXMINIONPOWER = 10;
-				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, MINIONASMOD, modPlayer.PetModdedStats[currentArrayPos++]);
-				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PROJECTILECRIT, modPlayer.PetModdedStats[currentArrayPos++]);
-				summonersShine.Call(SET_PROJFUNCS, projectile.whoAmI, PREFIXMINIONPOWER, modPlayer.PetModdedStats[currentArrayPos]);
+				summonersShine.Call(SET_PROJFUNCS, projectile, MINIONASMOD, modPlayer.PetModdedStats[currentArrayPos++]);
+				summonersShine.Call(SET_PROJFUNCS, projectile, PROJECTILECRIT, modPlayer.PetModdedStats[currentArrayPos++]);
+				summonersShine.Call(SET_PROJFUNCS, projectile, PREFIXMINIONPOWER, modPlayer.PetModdedStats[currentArrayPos]);
 				summonersShine.Call(USEFULFUNCS, OVERRIDESOURCEITEM, projectile, modPlayer.PetEmblemItem);
 			}
 		}
