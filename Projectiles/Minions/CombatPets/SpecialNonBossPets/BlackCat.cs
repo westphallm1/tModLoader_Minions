@@ -196,6 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 		private void SetAttackStyleSpecificBehaviors()
 		{
+			levelInfo = CatPetLevels[0]; // ensure not null
 			for(int i = CatPetLevels.Length -1; i >= 0; i--)
 			{
 				CatPetLevelInfo levelInfo = CatPetLevels[i];
@@ -205,7 +206,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 					break;
 				}
 			}
-			levelInfo ??= CatPetLevels[0]; // have had a bug report of this being null
 			launchVelocity = levelInfo.ProjectileVelocity;
 			weaponDrawer.SpriteOrientation = levelInfo.Orientation;
 		}
