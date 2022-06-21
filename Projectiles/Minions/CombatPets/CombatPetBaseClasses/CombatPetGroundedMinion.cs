@@ -89,6 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public virtual void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			if(ProjId is not int projId) { return; }
+			launchVector *= 1.15f;
 			Projectile.NewProjectile(
 				Projectile.GetSource_FromThis(),
 				LaunchPos,

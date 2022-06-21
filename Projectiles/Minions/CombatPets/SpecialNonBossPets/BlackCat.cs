@@ -205,6 +205,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 					break;
 				}
 			}
+			levelInfo ??= CatPetLevels[0]; // have had a bug report of this being null
 			launchVelocity = levelInfo.ProjectileVelocity;
 			weaponDrawer.SpriteOrientation = levelInfo.Orientation;
 		}

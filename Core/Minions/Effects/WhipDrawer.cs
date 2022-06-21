@@ -52,12 +52,13 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 		public void DrawWhip(Texture2D texture, Vector2 startPos, Vector2 endPos, int frame, Color lightColor = default)
 		{
+			SpriteEffects effects = endPos.X > startPos.X ? SpriteEffects.None : SpriteEffects.FlipVertically;
 			ApplyWhipSegments(startPos, endPos, frame, (midPoint, rotation, bounds) =>
 			{
 				lightColor = lightColor == default ? Lighting.GetColor((int)midPoint.X / 16, (int)midPoint.Y / 16) : lightColor;
 				Main.EntitySpriteDraw(texture, midPoint - Main.screenPosition,
 					bounds, lightColor, rotation,
-					bounds.GetOrigin(), 1, SpriteEffects.None, 0);
+					bounds.GetOrigin(), 1, effects, 0);
 			});
 		}
 	}
