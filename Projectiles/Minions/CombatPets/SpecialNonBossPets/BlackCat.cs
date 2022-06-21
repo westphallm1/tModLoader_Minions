@@ -205,6 +205,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 		private void SetAttackStyleSpecificBehaviors()
 		{
+			levelInfo = CatPetLevels[0]; // ensure not null
 			for(int i = CatPetLevels.Length -1; i >= 0; i--)
 			{
 				CatPetLevelInfo levelInfo = CatPetLevels[i];
