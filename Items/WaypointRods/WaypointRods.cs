@@ -47,7 +47,12 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 
 		public override bool? UseItem(Player player)
 		{
-			// it seems that it's possible to useItem without calling SetDefaults somehow, so check here as well
+			if (player.altFunctionUse == 2)
+			{
+				return false;
+			}
+
+            // it seems that it's possible to useItem without calling SetDefaults somehow, so check here as well
 			if(placementRange == 0)
 			{
 				placementRange = 16 * placementRangeInBlocks;
@@ -66,14 +71,12 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 			return true;
 		}
 
-		public override bool CanUseItem(Player player)
+		public override void UseAnimation(Player player)
 		{
 			if (player.altFunctionUse == 2 && Main.myPlayer == player.whoAmI)
 			{
 				UserInterfaces.buffClickCapture.PlaceTacticSelectRadial(UserInterfaces.MousePositionUI);
-				return false;
 			}
-			return base.CanUseItem(player);
 		}
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)

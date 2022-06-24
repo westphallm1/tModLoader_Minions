@@ -60,11 +60,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		{
 			CreateRecipe(1).AddIngredient(ItemID.BrokenHeroSword, 1).AddIngredient(ItemType<SoulboundSwordMinionItem>(), 1).AddIngredient(ItemType<SoulboundBowMinionItem>(), 1).AddTile(TileID.MythrilAnvil).Register();
 		}
-		public override bool CanUseItem(Player player)
+
+		public override void UseAnimation(Player player)
 		{
-			var canUse = base.CanUseItem(player);
+			base.UseAnimation(player);
 			Item.noUseGraphic = true;
-			return canUse;
 		}
 	}
 

@@ -183,50 +183,47 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		}
 	}
 
-	/// This class, along with the globalItem below it, are used to conditionally
-	/// unset the minion flag from EmpoweredMinions in order to prevent them from
-	/// being sacrificed when the player uses a summon item.
+	/// <summary>
+	/// This class is used to conditionally reset and then set the minion flag on EmpoweredMinion projectiles
+	/// in order to prevent them from being sacrificed when the player uses a summon item. 
 	/// </summary>
-	public class EmpoweredMinionSacrificeCircumventionModPlayer : ModPlayer
+	public class EmpoweredMinionSacrificeCircumventionSystem : ModSystem
 	{
-		internal bool ShouldResetMinionStatus { get; set; }
-
-		public override void PreUpdate()
+		public override void Load()
 		{
-			// re-minionify all EmpoweredMinions
-			if (ShouldResetMinionStatus)
+			On.Terraria.Player.FreeUpPetsAndMinions += Player_FreeUpPetsAndMinions;
+		}
+
+		private void Player_FreeUpPetsAndMinions(On.Terraria.Player.orig_FreeUpPetsAndMinions orig, Player self, Item sItem)
+		{
+			bool atleastOne = false;
+			if (ProjectileID.Sets.MinionSacrificable[sItem.shoot])
 			{
-				ShouldResetMinionStatus = true;
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if (p.active && (p.ModProjectile is EmpoweredMinion || p.ModProjectile is DesertTigerMinion))
+					if (p.active && p.owner == self.whoAmI && (p.ModProjectile is EmpoweredMinion || p.ModProjectile is DesertTigerMinion))
+					{
+						atleastOne = true;
+						p.minion = false; // temporarily de-minion it so that it doesn't get sacrificed
+					}
+				}
+			}
+
+			orig(self, sItem);
+
+			// re-minionify all necessary minions
+			if (atleastOne)
+			{
+				for (int i = 0; i < Main.maxProjectiles; i++)
+				{
+					Projectile p = Main.projectile[i];
+					if (p.active && p.owner == self.whoAmI && !p.minion && (p.ModProjectile is EmpoweredMinion || p.ModProjectile is DesertTigerMinion))
 					{
 						p.minion = true;
 					}
 				}
 			}
-		}
-	}
-
-	public class EmpoweredMinionSacrificeCircumventionGlobalItem : GlobalItem
-	{
-
-		public override bool CanUseItem(Item item, Player player)
-		{
-			if (item.DamageType == DamageClass.Summon && ProjectileID.Sets.MinionSacrificable[item.shoot])
-			{
-				for (int i = 0; i < Main.maxProjectiles; i++)
-				{
-					Projectile p = Main.projectile[i];
-					if (p.active && p.owner == player.whoAmI && (p.ModProjectile is EmpoweredMinion || p.ModProjectile is DesertTigerMinion))
-					{
-						player.GetModPlayer<EmpoweredMinionSacrificeCircumventionModPlayer>().ShouldResetMinionStatus = true;
-						p.minion = false; // temporarily de-minion it so that it doesn't get sacrificed
-					}
-				}
-			}
-			return base.CanUseItem(item, player);
 		}
 	}
 }
