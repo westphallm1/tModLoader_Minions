@@ -73,14 +73,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				Projectile.rotation = growthDirection.ToRotation();
 				Projectile.velocity = Vector2.Zero;
 			}
+			if(animationFrame < 12)
+			{
+				int dustIdx = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, growthDirection.X * 2, growthDirection.Y * 2);
+				Main.dust[dustIdx].noGravity = true;
+				Main.dust[dustIdx].scale *= Main.rand.NextFloat(1f, 1.3f);
+			}
 			scale = maxScale * Math.Min(1, animationFrame / 8f);
 		}
 
-
-		public override void Kill(int timeLeft)
-		{
-			//
-		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
