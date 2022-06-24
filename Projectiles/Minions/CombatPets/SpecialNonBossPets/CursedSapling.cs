@@ -34,7 +34,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		int frame = -1;
 		SpriteEffects effects;
 		float maxScale;
+		float scale;
 		Vector2 growthDirection;
+		internal static int SpikeMaxLength = 200;
 
 		int animationFrame => TimeToLive - Projectile.timeLeft;
 
@@ -48,8 +50,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.width = 16;
-			Projectile.height = 16;
+			Projectile.width = 24;
+			Projectile.height = 24;
 			Projectile.timeLeft = TimeToLive;
 			Projectile.penetrate = -1;
 			Projectile.usesLocalNPCImmunity = true;
@@ -71,6 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				Projectile.rotation = growthDirection.ToRotation();
 				Projectile.velocity = Vector2.Zero;
 			}
+			scale = maxScale * Math.Min(1, animationFrame / 8f);
 		}
 
 
@@ -79,16 +82,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			//
 		}
 
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			for(int i = 0; i < scale * SpikeMaxLength; i+= 16) 
+			{ 
+				if(targetHitbox.Contains((Projectile.Center + growthDirection * i).ToPoint()))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Type];
-			float scale = maxScale * Math.Min(1, animationFrame / 12f);
+			float brightness = Projectile.timeLeft < 12 ?
+				Projectile.timeLeft / 12f : Math.Min(1, animationFrame / 8f);
 			Vector2 centerOffset = texture.Width * 0.5f * scale * growthDirection;
 
 			Rectangle bounds = new(0, frame * frameHeight, texture.Width, frameHeight);
 			Main.EntitySpriteDraw(texture, Projectile.Center + centerOffset - Main.screenPosition,
-				bounds, lightColor * scale, Projectile.rotation, bounds.GetOrigin(), scale, effects, 0);
+				bounds, lightColor * brightness, Projectile.rotation, bounds.GetOrigin(), scale, effects, 0);
 			return false;
 		}
 	}
@@ -98,8 +114,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.CursedSapling;
 		internal override int BuffId => BuffType<CursedSaplingMinionBuff>();
 		internal override int? ProjId => ProjectileType<CursedSaplingBranchProjectile>();
-
+		internal int SpikePlacementTries = 8;
 		internal override Vector2 LaunchPos => Projectile.Top;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -107,13 +124,42 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			ConfigureFrames(10, (0, 0), (3, 6), (1, 1), (7, 10));
 		}
 
+		private (Vector2, Vector2) ChooseSpikeSpawnLocation()
+		{
+			NPC target = Main.npc[(int)targetNPCIndex];
+			float minSpikeScale = 0.67f;
+			float maxSearchRange = CursedSaplingBranchProjectile.SpikeMaxLength * minSpikeScale * 0.85f;
+			int searchStep = 16;
+			Vector2 searchDir = default;
+			for(int attempt = 0; attempt < SpikePlacementTries; attempt++)
+			{
+				searchDir = Main.rand.NextVector2Unit();
+				for (int i = 0; i < maxSearchRange; i += searchStep)
+				{
+					Vector2 current = target.Center + searchDir * i;
+					Vector2 next = current + searchDir * searchStep;
+					if(!Collision.CanHitLine(current, 1, 1, next, 1, 1))
+					{
+						// we've found a wall to cling to, return it
+						return (next, -searchDir * Main.rand.NextFloat(minSpikeScale, 1f));
+					}
+				}
+			}
+			return (target.Center + searchDir * maxSearchRange, -searchDir * Main.rand.NextFloat(minSpikeScale, 1f));
+		}
+
 		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
-			base.LaunchProjectile(launchVector, ai0);
+			if(targetNPCIndex == null)
+			{
+				return;
+			}
+			var (position, direction) = ChooseSpikeSpawnLocation();
+
 			Projectile.NewProjectile(
 				Projectile.GetSource_FromThis(),
-				LaunchPos,
-				VaryLaunchVelocity(launchVector),
+				position,
+				direction,
 				(int)ProjId,
 				(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 				Projectile.knockBack,
