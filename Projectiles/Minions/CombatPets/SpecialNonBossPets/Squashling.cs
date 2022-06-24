@@ -130,7 +130,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void AfterMoving()
 		{
 			// Don't disable collisions
-			Main.NewText(Projectile.friendly);
 		}
 	}
 }

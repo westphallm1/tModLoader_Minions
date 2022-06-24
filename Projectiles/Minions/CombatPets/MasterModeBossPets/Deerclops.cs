@@ -118,8 +118,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeerclopsRangedProjectile;
 		int TimeToLive = 60;
-		float travelDistance;
-		float travelVelocity = 8;
 
 		int frame = -1;
 

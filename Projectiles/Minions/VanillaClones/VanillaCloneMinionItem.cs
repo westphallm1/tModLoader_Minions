@@ -35,12 +35,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void AddRecipes()
 		{
-			Recipe recipe = Mod.CreateRecipe(VanillaItemID);
+			Recipe recipe = Recipe.Create(VanillaItemID);
 			recipe.AddIngredient(Type, 1);
 			recipe.AddTile(TileID.DemonAltar);
 			recipe.Register();
 
-			Recipe reciprocal = Mod.CreateRecipe(Type);
+			Recipe reciprocal = Recipe.Create(Type);
 			reciprocal.AddIngredient(VanillaItemID, 1);
 			reciprocal.AddTile(TileID.DemonAltar);
 			reciprocal.Register();
