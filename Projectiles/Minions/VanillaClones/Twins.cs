@@ -42,6 +42,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			p2.originalDamage = Item.damage;
 			return false;
 		}
+
+		public override void AddRecipes()
+		{
+			// Rather annoying little Calamity shim. I will remember this.
+			if(!ModLoader.HasMod("CalamityMod"))
+			{
+				base.AddRecipes();
+			}
+		}
 	}
 
 	public class MiniEyeFire : ModProjectile
