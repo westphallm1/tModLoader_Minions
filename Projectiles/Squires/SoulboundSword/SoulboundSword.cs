@@ -55,11 +55,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		{
 			CreateRecipe(1).AddRecipeGroup("AmuletOfManyMinions:EvilWoodSwords").AddIngredient(ItemID.SoulofNight, 10).AddTile(TileID.Anvils).Register();
 		}
-		public override bool CanUseItem(Player player)
+
+		public override void UseAnimation(Player player)
 		{
-			var canUse = base.CanUseItem(player);
+			base.UseAnimation(player);
 			Item.noUseGraphic = true;
-			return canUse;
 		}
 	}
 

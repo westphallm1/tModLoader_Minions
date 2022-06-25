@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			return true;
 		}
 
-		public override bool CanUseItem(Player player)
+		public override void UseAnimation(Player player)
 		{
 			if (player.ownedProjectileCounts[Item.shoot] > 0)
 			{
@@ -76,7 +76,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				Item.noUseGraphic = false;
 				Item.UseSound = SoundID.Item44;
 			}
-			return true;
 		}
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)

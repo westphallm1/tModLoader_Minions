@@ -86,15 +86,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			return base.CanShoot(player);
 		}
 
-		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		public override void UseAnimation(Player player)
 		{
-			// CanShoot does not appear to properly gate things off anymore...
-			return base.Shoot(player, source, position, velocity, type, damage, knockback);
-		}
-
-		public override bool CanUseItem(Player player)
-		{
-			base.CanUseItem(player);
+			base.UseAnimation(player);
 			if (player.ownedProjectileCounts[Item.shoot] > 0 || player.ownedProjectileCounts[wofType] > 0)
 			{
 				Item.UseSound = null;
@@ -107,8 +101,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				Item.noUseGraphic = false;
 				Item.UseSound = SoundID.Item44;
 			}
-			return true;
 		}
+
 		public override void AddRecipes()
 		{
 			CreateRecipe(1).AddIngredient(ItemID.GuideVoodooDoll, 1).AddIngredient(ItemType<GuideSquireMinionItem>(), 1).AddIngredient(ItemType<GuideHair>(), 1).AddTile(TileID.LunarCraftingStation).Register();

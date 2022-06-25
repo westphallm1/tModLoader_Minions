@@ -453,6 +453,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		// hack to temporarily un-flag buffs as pet type to prevent vanilla removal code from running
 		// depending on how many open combat pet slots the player has
+		// TODO figure out how to move the hack to avoid using CanUseItem entirely, possibly look into how and what EmpoweredMinionSacrificeCircumventionSystem does (if applicable vanilla method to detour exists)
 		public static bool CanUseItem(Player player, Item item)
 		{
 			LeveledCombatPetModPlayer petPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
