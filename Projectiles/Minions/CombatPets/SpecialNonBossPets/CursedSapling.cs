@@ -40,7 +40,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		int animationFrame => TimeToLive - Projectile.timeLeft;
 
-
 		public override void SetStaticDefaults()
 		{
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
@@ -114,9 +113,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.CursedSapling;
 		internal override int BuffId => BuffType<CursedSaplingMinionBuff>();
-		internal override int? ProjId => ProjectileType<CursedSaplingBranchProjectile>();
+
+		int attackCycle = 0;
+		internal override int? ProjId => attackCycle % 6 > 3 ?
+			ProjectileType<RavenGreekFire>() :
+			ProjectileType<CursedSaplingBranchProjectile>();
 		internal int SpikePlacementTries = 8;
 		internal override Vector2 LaunchPos => Projectile.Top;
+
 
 		public override void SetDefaults()
 		{
@@ -128,13 +132,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		private (Vector2, Vector2) ChooseSpikeSpawnLocation()
 		{
 			NPC target = Main.npc[(int)targetNPCIndex];
+			float targetVelocityRotation = target.velocity.ToRotation();
 			float minSpikeScale = 0.67f;
 			float maxSearchRange = CursedSaplingBranchProjectile.SpikeMaxLength * minSpikeScale * 0.85f;
 			int searchStep = 16;
 			Vector2 searchDir = default;
 			for(int attempt = 0; attempt < SpikePlacementTries; attempt++)
 			{
-				searchDir = Main.rand.NextVector2Unit();
+				searchDir = Main.rand.NextVector2Unit(targetVelocityRotation, MathHelper.Pi);
 				for (int i = 0; i < maxSearchRange; i += searchStep)
 				{
 					Vector2 current = target.Center + searchDir * i;
@@ -151,6 +156,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
+			attackCycle++;
+			if(attackCycle % 6 > 3)
+			{
+				base.LaunchProjectile(launchVector, ai0);
+				return;
+			}
+
 			if(targetNPCIndex == null)
 			{
 				return;

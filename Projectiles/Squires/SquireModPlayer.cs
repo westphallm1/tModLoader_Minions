@@ -228,6 +228,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		}
 	}
 
+	class SquireTagDamageBuff: ModBuff
+	{
+		public override string Texture => "Terraria/Images/Buff_" + BuffID.BlandWhipEnemyDebuff;
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Squire Tag");
+			Description.SetDefault("Take 10% increased damage from summoner weapons");
+			Main.debuff[Type] = true;
+			Main.buffNoSave[Type] = true;
+		}
+
+	}
+
 	class SquireGlobalProjectile : GlobalProjectile
 	{
 		public static HashSet<int> isSquireShot;
@@ -308,6 +321,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if (!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
 			{
 				return;
+			}
+			if(ServerConfig.Instance.SquiresDealTagDamage)
+			{
+				target.AddBuff(BuffType<SquireTagDamageBuff>(), 4 * 60);
 			}
 			SquireModPlayer player = Main.player[projectile.owner].GetModPlayer<SquireModPlayer>();
 			int debuffType = player.squireDebuffOnHit;

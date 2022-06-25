@@ -27,6 +27,7 @@ using AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire;
 using AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.BoneSquire;
 using AmuletOfManyMinions.Projectiles.Squires.DemonSquire;
+using AmuletOfManyMinions.Projectiles.Squires.EmpressSquire;
 using AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire;
 using AmuletOfManyMinions.Projectiles.Squires.GuideSquire;
 using AmuletOfManyMinions.Projectiles.Squires.PottedPal;
@@ -210,6 +211,10 @@ namespace AmuletOfManyMinions.NPCs
 			else if (npc.type == NPCID.WallofFlesh)
 			{
 				npcLoot.Add(notExpertRule.OnSuccess(new CommonDropWithReroll(ItemType<BoneSerpentMinionItem>(), 4)));
+			}
+			else if (npc.type == NPCID.HallowBoss)
+			{
+				npcLoot.Add(notExpertRule.OnSuccess(new CommonDropWithReroll(ItemType<EmpressSquireMinionItem>(), 4)));
 			}
 		}
 
@@ -415,6 +420,9 @@ namespace AmuletOfManyMinions.NPCs
 					break;
 				case ItemID.MoonLordBossBag:
 					player.QuickSpawnItem(source, ItemType<TrueEyeWaypointRod>());
+					break;
+				case ItemID.FairyQueenBossBag:
+					if (spawnChance < 0.67f) { player.QuickSpawnItem(source, ItemType<EmpressSquireMinionItem>()); }
 					break;
 				// fishing crate chest loot
 				case ItemID.WoodenCrate:

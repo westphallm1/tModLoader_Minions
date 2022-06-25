@@ -45,12 +45,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Squashling;
 		internal override int BuffId => BuffType<SquashlingMinionBuff>();
-		internal override int? ProjId => ProjectileID.None; // needs to be non null for super to invoke on fire
+		internal override int? ProjId => ProjectileType<WeakPumpkinBomb>(); // needs to be non null for super to invoke on fire
 
 		internal int vineWhipDuration => Math.Min(18, 3 * attackFrames / 4);
 		internal Vector2 vineFiringVector;
 		internal int minVineLength = 96;
 		internal int maxVineLength => 232 + 16 * leveledPetPlayer.PetLevel;
+		int attackCycle = 0;
 
 		internal bool IsFiring => animationFrame - lastFiredFrame < vineWhipDuration && vineFiringVector != default;
 		public override void SetDefaults()
@@ -97,6 +98,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
+			attackCycle++;
+			if(attackCycle % 6 > 3)
+			{
+				base.LaunchProjectile(launchVector, ai0);
+				return;
+			}
+
 			if(vectorToTarget is not Vector2 target)
 			{
 				return;

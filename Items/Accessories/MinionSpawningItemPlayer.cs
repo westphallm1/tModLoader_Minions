@@ -291,6 +291,10 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				damageMult -= ServerConfig.Instance.MinionDamageSquireNerf / 100f;
 			}
+			if(target.HasBuff<SquireTagDamageBuff>())
+			{
+				damageMult += 0.1f;
+			}
 			damage = (int)(damage * damageMult);
 		}
 	}

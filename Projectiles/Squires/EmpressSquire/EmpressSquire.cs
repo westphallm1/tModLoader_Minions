@@ -16,20 +16,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 {
 	public class EmpressSquireMinionBuff : MinionBuff
 	{
-		public override string Texture => "Terraria/Images/Buff_" + BuffID.BabyBird;
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<EmpressSquireMinion>() };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			DisplayName.SetDefault("Crowned by the Empress of Light");
-			Description.SetDefault("The priestess of light will fight for you!");
+			Description.SetDefault("Check THIS out!");
 		}
 	}
 
 	public class EmpressSquireMinionItem : SquireMinionItem<EmpressSquireMinionBuff, EmpressSquireMinion>
 	{
-		protected override string SpecialName => "Nightmare Corruption";
-		public override string Texture => "Terraria/Images/Item_" + 4952;
+		protected override string SpecialName => "Spectrum Supreme";
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();

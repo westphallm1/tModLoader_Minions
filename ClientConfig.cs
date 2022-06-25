@@ -147,10 +147,15 @@ namespace AmuletOfManyMinions
 		[Tooltip("If enabled, squires will occupy a minion slot")]
 		public bool SquireMinionSlot;
 
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		[Label("Allow Squire Specials While Using Whips")]
 		[Tooltip("If enabled, squire right click specials can be activated while holding a whip")]
 		public bool SquireSpecialsWithWhips;
+
+		[DefaultValue(true)]
+		[Label("Squires Inflict Summon Tag Damage")]
+		[Tooltip("If enabled, squires will grant a flat 10% summon tag damage bonus")]
+		public bool SquiresDealTagDamage;
 
 		[DefaultValue(true)]
 		[Label("All Combat Pets Occupy a Minion Slot")]
@@ -158,7 +163,7 @@ namespace AmuletOfManyMinions
 		public bool CombatPetsMinionSlots;
 
 		[DefaultValue(true)]
-		[Label("Allow Mulltiple Combat Pets")]
+		[Label("Allow Multiple Combat Pets")]
 		[Tooltip("If enabled, higher level combat pet emblems will increase the number of pets you can control.")]
 		public bool AllowMultipleCombatPets;
 

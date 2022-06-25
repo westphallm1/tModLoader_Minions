@@ -10,12 +10,13 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
-v0.14.2 - Balance Changes
+v0.15.0 - Balance Changes!
+    - Add a prehardmode minion and a prehardmode accessory
+    - Add Empress of Light Squire
+    - Fix very large and longstanding bug where squires benefited from damage bonuses twice
+    - Add unique AI to Squashling and Cursed Sapling combat pets
     - Adjust the balance of a number of items, mostly early prehardmode minions and hardmode squires
-    - List of changes: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions/BalanceBeta
-v0.14.1 - Misc. Changes
-    - Fix several cross-mod issues with Summoner's Shine, courtesy of Ouroel
-    - Add advanced pathfinding to 1.4 minions (except Terraprisma)
+    - Full list of changes: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions/0.15.0
 v0.14.0 - Combat Pets: Part 2!
     - Add the Elemental Pals, a group of 8 consistently obtainable combat pets
       - Obtained via Bows of Friendship found in wooden + shadow chests
@@ -41,16 +42,6 @@ v0.13.0 - Combat Pets!
     - Powered up by new weapon class called "Combat Pet Emblem"
       - Craftable from many ore tiers
     - All combat pets scale with best emblem in inventory
-v0.12.2 - Summoners Association Support!
-    - (Very long overdue) proper integration with Summoner's Association
-    - Requires S. A. v0.4.7 to work fully
-    - Fix a bug that allowed the Slime Train to deal massive damage with a 
-      certain combination of config settings
-    - Attempt to fix a multiplayer cross-mod compatibility bug
-v0.12.1 - Whip Support
-    - Rework AoMM Pathfinding AI to prioritize whip-marked NPCs
-    - Other tweaks to make player set pathing targets feel a bit more responsive
-    - General code cleanup for asset loading
 v0.12.0 - Alpha Port!
     - Mod fully ported, feature-complete compared with v0.11.0
     - Some minor cosmetic bugs known
