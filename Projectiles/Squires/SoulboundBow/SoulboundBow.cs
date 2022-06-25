@@ -58,11 +58,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			CreateRecipe(1).AddIngredient(ItemID.PearlwoodBow, 1).AddIngredient(ItemID.SoulofLight, 10).AddTile(TileID.Anvils).Register();
 		}
 
-		public override bool CanUseItem(Player player)
+		public override void UseAnimation(Player player)
 		{
-			var canUse = base.CanUseItem(player);
+			base.UseAnimation(player);
 			Item.noUseGraphic = true;
-			return canUse;
 		}
 	}
 

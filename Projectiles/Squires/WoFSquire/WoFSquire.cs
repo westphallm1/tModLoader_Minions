@@ -84,9 +84,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			return base.CanShoot(player);
 		}
 
-		public override bool CanUseItem(Player player)
+		public override void UseAnimation(Player player)
 		{
-			base.CanUseItem(player);
+			base.UseAnimation(player);
 			if (player.ownedProjectileCounts[Item.shoot] > 0 || player.ownedProjectileCounts[wofType] > 0)
 			{
 				Item.UseSound = null;
@@ -99,8 +99,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				Item.noUseGraphic = false;
 				Item.UseSound = SoundID.Item44;
 			}
-			return true;
 		}
+
 		public override void AddRecipes()
 		{
 			CreateRecipe(1).AddIngredient(ItemID.GuideVoodooDoll, 1).AddIngredient(ItemType<GuideSquireMinionItem>(), 1).AddIngredient(ItemType<GuideHair>(), 1).AddTile(TileID.LunarCraftingStation).Register();
