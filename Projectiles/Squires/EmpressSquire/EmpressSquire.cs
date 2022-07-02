@@ -45,11 +45,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 			Item.value = Item.sellPrice(0, 10, 0, 0);
 			Item.rare = ItemRarityID.Yellow;
 		}
-
-		public override void AddRecipes()
-		{
-			CreateRecipe(1).AddIngredient(ItemID.CrimtaneBar, 12).AddIngredient(ItemID.TissueSample, 6).AddTile(TileID.Anvils).Register();
-		}
 	}
 
 
