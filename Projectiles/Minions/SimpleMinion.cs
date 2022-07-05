@@ -38,6 +38,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public int animationFrame { get; set; }
 
+
+
 		public int groupAnimationFrames = 180;
 		public int groupAnimationFrame
 		{
@@ -45,6 +47,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		}
 		public AttackState attackState = AttackState.IDLE;
 		public bool usesTactics = true;
+
+		internal bool IsPrimaryFrame => Projectile.extraUpdates == 0 || animationFrame % (Projectile.extraUpdates + 1) == 0;
 
 		public override void SetStaticDefaults()
 		{
@@ -141,6 +145,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		{
 			targetNPCIndex = null;
 			vectorToIdle = IdleBehavior();
+
+			// Determine whether to update tactic selection, and whether th change pathfinding state
 			bool useBeaconThisFrame = useBeacon;
 			var tacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
 			var waypointsPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
@@ -167,7 +173,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				vectorToTarget = FindTarget();
 				framesSinceHadTarget++;
 			}
+
+			// Update frame counter metadata
 			animationFrame++;
+
+			// Do targeted movement using the most recently found NPC
 			if (vectorToTarget is Vector2 targetPosition)
 			{
 				if (player.whoAmI == Main.myPlayer && oldVectorToTarget == null)
@@ -181,6 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				oldVectorToTarget = vectorToTarget;
 				oldTargetNpcIndex = targetNPCIndex;
 			}
+			// For several frames after losing the target, contine doing targeted movement against the previous cached target
 			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < noLOSPursuitTime)
 			{
 				Projectile.tileCollide = !attackThroughWalls;
@@ -196,6 +207,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
 				}
 			}
+			// If no target and beacon is active, follow the beacon
 			else if (useBeaconThisFrame && pathfinder.NextPathfindingTarget() is Vector2 pathNode)
 			{
 				isFollowingPath = true;
@@ -215,6 +227,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 					Projectile.tileCollide = !pathfinder.atStart && !attackThroughWalls;
 				}
 			} 
+			// Do idle movement
 			else
 			{
 				if (framesSinceHadTarget > 30)
@@ -229,10 +242,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				Projectile.friendly = false;
 				IdleMovement(vectorToIdle);
 			}
+
+			// If we've reached the end of the pathfinding path, return to regular AI
 			if(useBeacon && !isFollowingPath)
 			{
 				pathfinder.DetachFromPath();
 			}
+
+			// Perform a Multiplayer-safe approximation of OnHitNPC() against just the target NPC
 			if (targetNPCIndex is int idx &&
 				targetFrameCounter++ > Projectile.localNPCHitCooldown &&
 				vectorToTarget is Vector2 target && target.LengthSquared() < proximityForOnHitTarget * proximityForOnHitTarget)

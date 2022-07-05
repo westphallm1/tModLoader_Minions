@@ -326,7 +326,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override Vector2 IdleBehavior()
 		{
-			if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0)
+			if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0 && IsPrimaryFrame)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromThis(),

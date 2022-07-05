@@ -76,7 +76,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			leader = null;
 			others = null;
 			head = null;
-			attackFrame = (attackFrame + 1) % attackFrames;
+			if(IsPrimaryFrame)
+			{
+				attackFrame = (attackFrame + 1) % attackFrames;
+			}
 			return default;
 		}
 

@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		{
 			// Lifted from EmpoweredMinion.cs
 			int minionType = ProjectileType<GoblinTechnomancerMinion>();
-			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[minionType] == 0)
+			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[minionType] == 0 && IsPrimaryFrame)
 			{
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)

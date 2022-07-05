@@ -139,6 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
+			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 			if(usingSpecial)
 			{
 				damage = 3 * damage / 2;

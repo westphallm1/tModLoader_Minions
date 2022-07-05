@@ -55,9 +55,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		{
 			ApplyBuff(player);
 			var p1 = Projectile.NewProjectileDirect(source, position + new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
-			p1.originalDamage = damage;
+			p1.originalDamage = Item.damage;
 			var p2 = Projectile.NewProjectileDirect(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
-			p2.originalDamage = damage;
+			p2.originalDamage = Item.damage;
 			return false;
 		}
 	}
@@ -106,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			List<Projectile> minions = GetActiveMinions();
 			Projectile leader = GetFirstMinion(minions);
 			if (Main.myPlayer == player.whoAmI &&
-				leader.minionPos == Projectile.minionPos &&
+				leader.minionPos == Projectile.minionPos && IsPrimaryFrame &&
 				player.ownedProjectileCounts[ProjectileType<MeteorFistHead>()] == 0)
 			{
 				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<MeteorFistHead>(), 0, 0, Main.myPlayer);

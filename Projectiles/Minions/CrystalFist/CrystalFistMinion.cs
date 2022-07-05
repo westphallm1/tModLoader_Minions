@@ -50,9 +50,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		{
 			ApplyBuff(player);
 			var p1 = Projectile.NewProjectileDirect(source, position + new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
-			p1.originalDamage = damage;
+			p1.originalDamage = Item.damage;
 			var p2 = Projectile.NewProjectileDirect(source, position - new Vector2(5, 0), velocity, Item.shoot, damage, knockback, Main.myPlayer);
-			p2.originalDamage = damage;
+			p2.originalDamage = Item.damage;
 
 			return false;
 		}
@@ -106,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			base.IdleBehavior();
 			List<Projectile> minions = GetActiveMinions();
 			Projectile leader = GetFirstMinion(minions);
-			if (Main.myPlayer == player.whoAmI &&
+			if (Main.myPlayer == player.whoAmI && IsPrimaryFrame && 
 				leader.minionPos == Projectile.minionPos &&
 				player.ownedProjectileCounts[ProjectileType<CrystalFistHeadMinion>()] == 0)
 			{

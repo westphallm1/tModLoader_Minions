@@ -205,7 +205,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					Main.dust[dustId].noLight = true;
 				}
 			}
-			if (player.whoAmI == Main.myPlayer && selfCountAboveThreshold && player.ownedProjectileCounts[minionType] == 0)
+			if (player.whoAmI == Main.myPlayer && selfCountAboveThreshold && player.ownedProjectileCounts[minionType] == 0 && IsPrimaryFrame)
 			{
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)

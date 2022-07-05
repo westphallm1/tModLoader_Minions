@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.5f);
 			int headType = ProjectileType<CharredChimeraMinionHead>();
 			int currentHeadCount = player.ownedProjectileCounts[headType];
-			if (Main.myPlayer == player.whoAmI)
+			if (Main.myPlayer == player.whoAmI && IsPrimaryFrame)
 			{
 				for (int i = currentHeadCount; i < EmpowerCount + 1; i++)
 				{

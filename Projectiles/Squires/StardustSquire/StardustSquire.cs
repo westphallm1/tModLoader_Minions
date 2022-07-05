@@ -341,7 +341,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				if ((attackSequence++ * ModifiedAttackFrames) % 180 < ModifiedAttackFrames &&
 					player.ownedProjectileCounts[ProjectileType<StardustGuardianProjectile>()] == 0)
 				{
-					if (Main.myPlayer == player.whoAmI)
+					if (Main.myPlayer == player.whoAmI && IsPrimaryFrame)
 					{
 						angleVector *= ModifiedProjectileVelocity() * 0.75f;
 						Projectile.NewProjectile(

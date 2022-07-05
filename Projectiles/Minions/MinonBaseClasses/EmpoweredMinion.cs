@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Projectile.friendly = false;
 			Projectile.velocity = Vector2.Zero;
 			Projectile.position = player.Center;
-			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[MinionType] == 0)
+			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[MinionType] == 0 && IsPrimaryFrame)
 			{
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
