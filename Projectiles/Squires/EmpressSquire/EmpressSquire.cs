@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 		protected override float projectileVelocity => 16;
 
-		protected override SoundStyle? attackSound => SoundID.Item8;
+		protected override SoundStyle? attackSound => SoundID.Item9 with { Volume = 0.33f };
 		protected override SoundStyle? SpecialStartSound => SoundID.Item163;
 
 		protected override int SpecialCooldown => 12 * 60;
@@ -147,6 +147,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 			// fun fact, this works on non-minions as well
 			float baseAngle = MathHelper.TwoPi * animationFrame / 90f;
 			List<Projectile> starProjectiles = GetMinionsOfType(ProjectileType<EmpressSpecialOrbitProjectile>());
+
+			if(specialFrame % 18 == 0)
+			{
+				SoundEngine.PlaySound(SoundID.Item9 with { Volume = 0.33f }, Projectile.Center);
+			}
+
 			foreach(var starProj in starProjectiles)
 			{
 				float angle = baseAngle + MathHelper.TwoPi * starProj.ai[0] / SpecialColors.Length;

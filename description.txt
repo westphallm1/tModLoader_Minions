@@ -10,6 +10,8 @@ Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
+v0.15.1.1 - Bugfixes
+    - Fix Empress Squire using Crimson Squire's sounds
 v0.15.1 - Balance Change Bugfixes
     - Fix very large and longstanding bug where "Fist" minions benefited from damage bonuses twice
     - Fix several issues with AI when minions are given extra updates by another mod
