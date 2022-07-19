@@ -14,7 +14,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Increases squire damage by 10\n%" +
+			Tooltip.SetDefault("Increases squire damage by 10%\n" +
 							   "Increases attack speed by 5% while using a squire\n" +
 							   "Summons a cursed skull that grants a rotating debuff to squire attacks");
 			DisplayName.SetDefault("Necro Pendant");

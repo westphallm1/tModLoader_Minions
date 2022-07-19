@@ -64,7 +64,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 		protected override float projectileVelocity => 16;
 
-		protected override SoundStyle? SpecialStartSound => SoundID.Item106;
+		protected override SoundStyle? attackSound => SoundID.Item8;
+		protected override SoundStyle? SpecialStartSound => SoundID.Item163;
 
 		protected override int SpecialCooldown => 12 * 60;
 
