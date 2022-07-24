@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.NPCs
 {
 	public class LootTable : GlobalNPC
 	{
-		private static void NPCAddExpertScalingRuleCommon(NPCLoot npcLoot, int itemId, int chanceDenominator = 1, int minimumDropped = 1, int maximumDropped = 1, int chanceNumerator = 1, IItemDropRule ruleExpert = null, IItemDropRule ruleNormal = null)
+		private static void AddExpertScalingRuleCommon(ILoot loot, int itemId, int chanceDenominator = 1, int minimumDropped = 1, int maximumDropped = 1, int chanceNumerator = 1, IItemDropRule ruleExpert = null, IItemDropRule ruleNormal = null)
 		{
 			//Since the conditions are exclusive, only one of them will show up
 			IItemDropRule expertRule = new LeadingConditionRule(new Conditions.IsExpert());
@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.NPCs
 				expertRule = ruleToAdd.OnSuccess(expertRule);
 			}
 			expertRule.OnSuccess(new CommonDropWithReroll(itemId, chanceDenominator, minimumDropped, maximumDropped, chanceNumerator));
-			npcLoot.Add(ruleToAdd);
+			loot.Add(ruleToAdd);
 
 			//Vanilla example
 			//Conditions.IsPumpkinMoon condition2 = new Conditions.IsPumpkinMoon();
@@ -74,30 +74,7 @@ namespace AmuletOfManyMinions.NPCs
 				notExpertRule = ruleToAdd.OnSuccess(notExpertRule);
 			}
 			notExpertRule.OnSuccess(new CommonDrop(itemId, chanceDenominator, minimumDropped, maximumDropped, chanceNumerator));
-			npcLoot.Add(ruleToAdd);
-		}
-
-		private static void GlobalAddExpertScalingRuleCommon(GlobalLoot globalLoot, int itemId, int chanceDenominator = 1, int minimumDropped = 1, int maximumDropped = 1, int chanceNumerator = 1, IItemDropRule ruleExpert = null, IItemDropRule ruleNormal = null)
-		{
-			IItemDropRule expertRule = new LeadingConditionRule(new Conditions.IsExpert());
-			IItemDropRule ruleToAdd = expertRule;
-			if (ruleExpert != null)
-			{
-				ruleToAdd = ruleExpert; //If a rule is specified, use that to add it (Always add the "baseline" rule first)
-				expertRule = ruleToAdd.OnSuccess(expertRule);
-			}
-			expertRule.OnSuccess(new CommonDropWithReroll(itemId, chanceDenominator, minimumDropped, maximumDropped, chanceNumerator));
-			globalLoot.Add(ruleToAdd);
-
-			IItemDropRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
-			ruleToAdd = notExpertRule;
-			if (ruleNormal != null)
-			{
-				ruleToAdd = ruleNormal;
-				notExpertRule = ruleToAdd.OnSuccess(notExpertRule);
-			}
-			notExpertRule.OnSuccess(new CommonDrop(itemId, chanceDenominator, minimumDropped, maximumDropped, chanceNumerator));
-			globalLoot.Add(ruleToAdd);
+			loot.Add(ruleToAdd);
 		}
 
 		public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
@@ -123,7 +100,7 @@ namespace AmuletOfManyMinions.NPCs
 			}
 			else if (NPCSets.preHardmodeIceEnemies.Contains(npc.netID))
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<VikingSquireMinionItem>(), 20);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<VikingSquireMinionItem>(), 20);
 			}
 			else if (npc.type == NPCID.GraniteFlyer || npc.type == NPCID.GraniteGolem)
 			{
@@ -133,51 +110,51 @@ namespace AmuletOfManyMinions.NPCs
 			}
 			else if (npc.type == NPCID.ManEater)
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 75, chanceNumerator: 3);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 75, chanceNumerator: 3);
 			}
 			else if (NPCSets.hornets.Contains(npc.netID))
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 75);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<AncientCobaltSquireMinionItem>(), 75);
 			}
 			else if (NPCSets.angryBones.Contains(npc.netID))
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<BoneSquireMinionItem>(), 200, chanceNumerator: 3);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<BoneSquireMinionItem>(), 200, chanceNumerator: 3);
 			}
 			else if (npc.type == NPCID.AngryNimbus)
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<StoneCloudMinionItem>(), 25, chanceNumerator: 3);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<StoneCloudMinionItem>(), 25, chanceNumerator: 3);
 			}
 			else if (npc.type == NPCID.BigMimicHallow)
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<StarSurferMinionItem>(), 3);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<StarSurferMinionItem>(), 3);
 			}
 			else if (npc.type == NPCID.BigMimicCrimson)
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<NullHatchetMinionItem>(), 3);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<NullHatchetMinionItem>(), 3);
 			}
 			else if (npc.type == NPCID.BigMimicCorruption)
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<VoidKnifeMinionItem>(), 3);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<VoidKnifeMinionItem>(), 3);
 			}
 			else if (npc.type == NPCID.GoblinSummoner)
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<GoblinGunnerMinionItem>(), 3);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<GoblinGunnerMinionItem>(), 3);
 			}
 			else if (npc.type == NPCID.Eyezor)
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<SqueyereMinionItem>(), 10);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<SqueyereMinionItem>(), 10);
 			}
 			else if (NPCSets.blueArmoredBones.Contains(npc.netID))
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<ArmoredBoneSquireMinionItem>(), 33);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<ArmoredBoneSquireMinionItem>(), 33);
 			}
 			else if (NPCSets.hellArmoredBones.Contains(npc.netID))
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<CharredChimeraMinionItem>(), 40);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<CharredChimeraMinionItem>(), 40);
 			}
 			else if (NPCSets.necromancers.Contains(npc.netID))
 			{
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<NecromancerMinionItem>(), 20);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<NecromancerMinionItem>(), 20);
 			}
 			else if (npc.type == NPCID.Pumpking)
 			{
@@ -191,7 +168,7 @@ namespace AmuletOfManyMinions.NPCs
 				IItemDropRule ruleToChain2 = new LeadingConditionRule(wave);
 				ruleToChain2 = entry2.OnSuccess(ruleToChain2);
 
-				NPCAddExpertScalingRuleCommon(npcLoot, ItemType<GoldenRogueSquireMinionItem>(), 8, ruleExpert: ruleToChain, ruleNormal: ruleToChain2);
+				AddExpertScalingRuleCommon(npcLoot, ItemType<GoldenRogueSquireMinionItem>(), 8, ruleExpert: ruleToChain, ruleNormal: ruleToChain2);
 				//float pumpkingSpawnChance = 0.0156f + 0.1f * (Main.invasionProgressWave - 10) / 5f;
 			}
 			else if (npc.type == NPCID.Plantera)
@@ -224,7 +201,7 @@ namespace AmuletOfManyMinions.NPCs
 			var condition = new SlimepireCondition();
 			var ruleToChain = new LeadingConditionRule(condition);
 			var ruleToChain2 = new LeadingConditionRule(condition);
-			GlobalAddExpertScalingRuleCommon(globalLoot, ItemType<SlimepireMinionItem>(), 100, ruleExpert: ruleToChain, ruleNormal: ruleToChain2);
+			AddExpertScalingRuleCommon(globalLoot, ItemType<SlimepireMinionItem>(), 100, ruleExpert: ruleToChain, ruleNormal: ruleToChain2);
 		}
 
 		//Old code kept for reference
