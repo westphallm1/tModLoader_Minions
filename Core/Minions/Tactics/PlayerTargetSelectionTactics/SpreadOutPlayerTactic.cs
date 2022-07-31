@@ -38,7 +38,9 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics
 
 		public override void PreUpdate()
 		{
-			var toRemove = enemyProjectileMatches.Where(kv => !kv.Value.active).Select(kv=>kv.Key).ToArray();
+			var toRemove = enemyProjectileMatches
+				.Where(kv => !kv.Value.active || ! kv.Value.CanBeChasedBy())
+				.Select(kv=>kv.Key).ToArray();
 			foreach(var remove in toRemove)
 			{
 				enemyProjectileMatches.Remove(remove);
