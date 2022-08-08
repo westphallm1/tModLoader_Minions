@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 	public class MysticPaintbrushMinion : TeleportingWeaponMinion
 	{
 
-		internal override int BuffId => BuffType<MysticPaintbrushMinionBuff>();
+		public override int BuffId => BuffType<MysticPaintbrushMinionBuff>();
 		float windUpPerFrame = MathHelper.Pi / 60;
 		float swingPerFrame = MathHelper.Pi / 20;
 		float initialWindUp = MathHelper.PiOver4;
@@ -81,11 +81,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.tileCollide = false;
-			attackState = AttackState.IDLE;
+			AttackState = AttackState.IDLE;
 			Projectile.minionSlots = 1;
 			attackFrames = 90;
-			attackThroughWalls = true;
-			useBeacon = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
 			travelVelocity = 16;
 			maxPhaseFrames = 30;
 			targetIsDead = false;
@@ -94,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 
 		public override void OnSpawn()
 		{
-			brushColor = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColor();
+			brushColor = Player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColor();
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -136,7 +136,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			//Randomized stuff should only be decided by the client
 			//That would require a change of the ai so it doesnt move for other clients during this phase
 			float swingDistance = 80;
-			if (Main.myPlayer == player.whoAmI && distanceFromFoe == default)
+			if (Main.myPlayer == Player.whoAmI && distanceFromFoe == default)
 			{
 				distanceFromFoe = swingDistance + Main.rand.Next(-20, 20); ;
 				teleportAngle = Main.rand.NextFloat(MathHelper.TwoPi);
@@ -169,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 			if (framesInAir++ > maxFramesInAir)
 			{
 				targetNPC = null;
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 				return;
 			}
 

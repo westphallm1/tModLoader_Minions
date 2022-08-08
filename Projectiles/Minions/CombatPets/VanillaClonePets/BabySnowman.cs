@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class BabySnowmanMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabySnowman;
-		internal override int BuffId => BuffType<BabySnowmanMinionBuff>();
+		public override int BuffId => BuffType<BabySnowmanMinionBuff>();
 		internal override int? ProjId => ProjectileType<SnowmanPetSnowballProjectile>();
 		public override void SetDefaults()
 		{

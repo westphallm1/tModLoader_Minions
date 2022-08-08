@@ -84,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 	public class StarSurferMinion : SurferMinion
 	{
 
-		internal override int BuffId => BuffType<StarSurferMinionBuff>();
+		public override int BuffId => BuffType<StarSurferMinionBuff>();
 
 		protected int projectileFireRate = 120;
 		protected int projectileDamage = 30;
@@ -144,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 			if (projectileFrameCount++ > projectileFireRate)
 			{
 				projectileFrameCount = 0;
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					vectorToTargetPosition.SafeNormalize();
 					vectorToTargetPosition *= projectileVelocity;

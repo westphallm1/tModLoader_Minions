@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class SuspiciousEyeMinion : CombatPetHoverDasherMinion
 	{
-		internal override int BuffId => BuffType<SuspiciousEyeMinionBuff>();
+		public override int BuffId => BuffType<SuspiciousEyeMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EyeOfCthulhuPet;
 
@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Projectile.height = 24;
 			attackFrames = 90;
 			circleHelper.idleBumbleFrames = 90;
-			frameSpeed = 5;
+			FrameSpeed = 5;
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -58,8 +58,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(!DoBumblingMovement && vectorToTarget != null && 
-				animationFrame - hsHelper.lastShootFrame <= attackFrames)
+			if(!DoBumblingMovement && VectorToTarget != null && 
+				AnimationFrame - hsHelper.lastShootFrame <= attackFrames)
 			{
 				minFrame = 10;
 				maxFrame = 16;

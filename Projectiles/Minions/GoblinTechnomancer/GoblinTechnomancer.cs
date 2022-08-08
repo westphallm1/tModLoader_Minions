@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 	// Uses LocalAI[0] to indicate whether the projectile is close to its orbit position
 	public class GoblinTechnomancerProbeMinion : HeadCirclingGroupAwareMinion
 	{
-		internal override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
+		public override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
 		int lastShootFrame = 0;
 
 		bool isCloseToCenter
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			maxSpeed = 14;
 			idleInertia = 1;
 			targetSearchDistance = 950;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 			circleHelper.idleCircle = 20;
 			circleHelper.idleCircleHeight = 8;
 			circleHelper.idleBumble = false;
@@ -102,19 +102,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public Vector2 CenterOfRotation()
 		{
 			Projectile center = GetMinionsOfType(ProjectileType<GoblinTechnomancerMinion>()).FirstOrDefault();
-			return center == default ? player.Top : center.Bottom + new Vector2(0, 4);
+			return center == default ? Player.Top : center.Bottom + new Vector2(0, 4);
 		}
 
 		public override void AfterMoving()
 		{
 			// Lifted from EmpoweredMinion.cs
 			int minionType = ProjectileType<GoblinTechnomancerMinion>();
-			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[minionType] == 0 && IsPrimaryFrame)
+			if (Player.whoAmI == Main.myPlayer && Player.ownedProjectileCounts[minionType] == 0 && IsPrimaryFrame)
 			{
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
@@ -136,7 +136,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Vector2 oppositeVector = -vectorToTargetPosition;
 			oppositeVector.SafeNormalize();
 			float targetDistanceFromFoe = 64f;
-			if (targetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
+			if (TargetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
 			{
 				// use the average of the width and height to get an approximate "radius" for the enemy
 				NPC npc = Main.npc[targetIdx];
@@ -144,13 +144,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				targetDistanceFromFoe += (hitbox.Width + hitbox.Height) / 4;
 			}
 			vectorToTargetPosition += targetDistanceFromFoe * oppositeVector;
-			if (player.whoAmI == Main.myPlayer && IsMyTurn() &&
-				animationFrame - lastShootFrame >= attackFrames &&
+			if (Player.whoAmI == Main.myPlayer && IsMyTurn() &&
+				AnimationFrame - lastShootFrame >= attackFrames &&
 				vectorToTargetPosition.LengthSquared() < 96 * 96)
 			{
 				lineOfFire.SafeNormalize();
 				lineOfFire *= projectileVelocity;
-				lastShootFrame = animationFrame;
+				lastShootFrame = AnimationFrame;
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					Projectile.Center,
@@ -173,7 +173,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 
 	public class GoblinTechnomancerMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
+		public override int BuffId => BuffType<GoblinTechnomancerMinionBuff>();
 		public override int CounterType => ProjectileType<GoblinTechnomancerProbeMinion>();
 
 		private int framesSinceLastHit;
@@ -202,9 +202,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Projectile.height = 42;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			dealsContactDamage = false;
-			attackThroughWalls = true;
-			useBeacon = false;
+			DealsContactDamage = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
 		}
 
 		private void DrawProbes(Color lightColor, int spriteDirectionFilter)
@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Texture2D texture = ExtraTextures[0].Value;
 			int frame = 0;
 			float shootSlope = default;
-			if (framesSinceHadTarget < 30 && lastShotVector != default && framesSinceLastHit <= 30)
+			if (FramesSinceHadTarget < 30 && lastShotVector != default && framesSinceLastHit <= 30)
 			{
 				float denominator = Math.Max(Math.Abs(lastShotVector.X), 1);
 				shootSlope = lastShotVector.Y / denominator;
@@ -305,14 +305,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
-			idlePosition.Y += -24 + 8 * (float)Math.Sin(MathHelper.TwoPi * (animationFrame % 120) / 120);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			idlePosition.Y += -24 + 8 * (float)Math.Sin(MathHelper.TwoPi * (AnimationFrame % 120) / 120);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
-				idlePosition.Y = player.Top.Y - 16;
+				idlePosition.X = Player.Top.X;
+				idlePosition.Y = Player.Top.Y - 16;
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
@@ -321,11 +321,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// stay floating behind the player at all times
-			IdleMovement(vectorToIdle);
+			IdleMovement(VectorToIdle);
 			framesSinceLastHit++;
 			int rateOfFire = Math.Max(25, 60 - 5 * EmpowerCount);
 			int projectileVelocity = 40;
-			if (framesSinceLastHit++ > rateOfFire && targetNPCIndex is int npcIdx)
+			if (framesSinceLastHit++ > rateOfFire && TargetNPCIndex is int npcIdx)
 			{
 				NPC target = Main.npc[npcIdx];
 				// try to predict the position at the time of impact a bit
@@ -337,7 +337,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				Vector2 pos = Projectile.Center;
 				framesSinceLastHit = 0;
 				Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -360,7 +360,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -396,7 +396,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if (Math.Abs(Projectile.velocity.X) > 2 && vectorToTarget is null)
+			if (Math.Abs(Projectile.velocity.X) > 2 && VectorToTarget is null)
 			{
 				Projectile.spriteDirection = Projectile.velocity.X > 0 ? 1 : -1;
 			}
@@ -406,7 +406,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void CheckActive()
 		{
 			base.CheckActive();
-			if(player.ownedProjectileCounts[CounterType] == 0 && animationFrame > 2)
+			if(Player.ownedProjectileCounts[CounterType] == 0 && AnimationFrame > 2)
 			{
 				Projectile.Kill();
 			}

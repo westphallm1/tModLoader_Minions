@@ -23,13 +23,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 	public class BabyWerewolfMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyWerewolf;
-		internal override int BuffId => BuffType<BabyWerewolfMinionBuff>();
+		public override int BuffId => BuffType<BabyWerewolfMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			ConfigureDrawBox(24, 30, -4, -12, -1);
 			ConfigureFrames(24, (0, 3), (5, 17), (4, 4), (18, 23));
-			frameSpeed = 8;
+			FrameSpeed = 8;
 		}
 	}
 }

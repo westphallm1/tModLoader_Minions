@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class TikiSpiritMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<TikiSpiritMinionBuff>();
+		public override int BuffId => BuffType<TikiSpiritMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TikiSpirit;
 		internal override int? FiredProjectileId => ProjectileType<PygmySpear>();
 		internal override SoundStyle? ShootSound => SoundID.Item17;
@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 		private void FireProjectile(Vector2 target, int projType, float ai0)
 		{
-			hsHelper.FireProjectile(target, projType, targetNPCIndex ?? -1);
+			hsHelper.FireProjectile(target, projType, TargetNPCIndex ?? -1);
 		}
 	}
 }

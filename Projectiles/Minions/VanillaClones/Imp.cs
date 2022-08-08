@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class ImpMinion : HoverShooterMinion
 	{
-		internal override int BuffId => BuffType<ImpMinionBuff>();
+		public override int BuffId => BuffType<ImpMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.FlyingImp;
 
@@ -213,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					Projectile.frame = 0;
 				}
 			}
-			if(vectorToTarget is Vector2 target)
+			if(VectorToTarget is Vector2 target)
 			{
 				Projectile.spriteDirection = -Math.Sign(target.X);
 			} else if(Projectile.velocity.X > 1)
@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 		public override Vector2 IdleBehavior()
 		{
-			attackThroughWalls = isBeingUsedAsToken;
+			AttackThroughWalls = isBeingUsedAsToken;
 			if(isBeingUsedAsToken)
 			{
 				int minionType = ProjectileType<ImpPortalMinion>();
@@ -264,7 +264,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			if(isBeingUsedAsToken)
 			{
-				IdleMovement(vectorToIdle);	
+				IdleMovement(VectorToIdle);	
 			} else
 			{
 				base.TargetedMovement(vectorToTargetPosition);
@@ -278,7 +278,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				return;
 			}
 			int myIndex = otherImps.FindIndex(p => p.whoAmI == Projectile.whoAmI);
-			float startAngle = -2f * (float)Math.PI * groupAnimationFrame / 120;
+			float startAngle = -2f * (float)Math.PI * GroupAnimationFrame / 120;
 			float angle = startAngle + myIndex * 2 * (float)Math.PI / otherImps.Count;
 			Vector2 rotation = angle.ToRotationVector2();
 			rotation.X *= 0.75f;
@@ -303,7 +303,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			int minionType = ProjectileType<ImpPortalMinion>();
 			bool lastBeingUsedAsToken = isBeingUsedAsToken;
-			isBeingUsedAsToken = player.ownedProjectileCounts[Projectile.type] > 3;
+			isBeingUsedAsToken = Player.ownedProjectileCounts[Projectile.type] > 3;
 			if(isBeingUsedAsToken != lastBeingUsedAsToken)
 			{
 				for(int i = 0; i < 3; i++)
@@ -314,12 +314,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					Main.dust[dustId].noLight = true;
 				}
 			}
-			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[Projectile.type] > 3 && player.ownedProjectileCounts[minionType] == 0 && IsPrimaryFrame)
+			if (Player.whoAmI == Main.myPlayer && Player.ownedProjectileCounts[Projectile.type] > 3 && Player.ownedProjectileCounts[minionType] == 0 && IsPrimaryFrame)
 			{
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
@@ -330,11 +330,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	/// </summary>
 	public class ImpPortalMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<ImpMinionBuff>();
+		public override int BuffId => BuffType<ImpMinionBuff>();
 		public override int CounterType => ProjectileType<ImpMinion>();
 		protected override int dustType => 6;
 
-		protected int BabyImpCount => player.ownedProjectileCounts[ProjectileType<BabyImpMinion>()];
+		protected int BabyImpCount => Player.ownedProjectileCounts[ProjectileType<BabyImpMinion>()];
 		protected override int EmpowerCount => base.EmpowerCount + BabyImpCount;
 
 		public override string Texture => "Terraria/Images/NPC_" + NPCID.RedDevil;
@@ -360,10 +360,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.SetDefaults();
 			Projectile.tileCollide = true;
-			attackThroughWalls = false;
+			AttackThroughWalls = false;
 			Projectile.width = 32;
 			Projectile.height = 32;
-			frameSpeed = 5;
+			FrameSpeed = 5;
 			// can hit many npcs at once, so give it a relatively high on hit cooldown
 			Projectile.localNPCHitCooldown = 20;
 			hsHelper = new HoverShooterHelper(this, ProjectileType<ImpPortalUnholyTrident>())
@@ -385,7 +385,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			bool hasBaby = BabyImpCount > 0;
 			for(int i = 0; i < fireCount; i ++)
 			{
-				float startAngle = -2f * (float)Math.PI * animationFrame / 120;
+				float startAngle = -2f * (float)Math.PI * AnimationFrame / 120;
 				float angle = startAngle + i * MathHelper.TwoPi / fireCount;
 				Vector2 fireOffset = angle.ToRotationVector2() * fireRadius;
 				fireOffset.X *= 0.75f;
@@ -398,7 +398,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				if(hasBaby && Main.rand.NextBool(EmpowerCount))
 				{
 					projId = ProjectileType<BabyImpFireBall>();
-					damage = player.GetModPlayer<LeveledCombatPetModPlayer>().PetDamage;
+					damage = Player.GetModPlayer<LeveledCombatPetModPlayer>().PetDamage;
 				}
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
@@ -416,7 +416,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.IdleBehavior();
 			hsHelper.attackFrames = Math.Max(12, 24 - EmpowerCount);
-			Vector2 vectorToIdlePosition = player.Top - Projectile.Center;
+			Vector2 vectorToIdlePosition = Player.Top - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
@@ -496,7 +496,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			{
 				return;
 			}
-			float startAngle = -2f * (float)Math.PI * animationFrame / 120;
+			float startAngle = -2f * (float)Math.PI * AnimationFrame / 120;
 			bool hasBaby = BabyImpCount > 0;
 			for (int i = 0; i < 20; i++)
 			{

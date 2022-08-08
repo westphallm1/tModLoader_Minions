@@ -27,7 +27,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.SetDefaults();
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			lastHitFrame = -1;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				GetUnstuck = GetUnstuck,
 				transformRateLimit = 60
 			};
-			pathfinder.modifyPath = gHelper.ModifyPathfinding;
+			Pathfinder.modifyPath = gHelper.ModifyPathfinding;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -50,12 +50,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			gHelper.SetIsOnGround();
 			// the ground-based minions can sometimes jump/bounce to get themselves unstuck
 			// , but the flying versions can't
-			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
-			Vector2 idlePosition = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, Projectile);
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			NoLOSPursuitTime = gHelper.isFlying ? 15 : 300;
+			Vector2 idlePosition = Player.Center;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, Projectile);
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition = player.Center;
+				idlePosition = Player.Center;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
@@ -63,12 +63,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			gHelper.DoIdleMovement(vectorToIdlePosition, vectorToTarget, searchDistance, 180f);
+			gHelper.DoIdleMovement(vectorToIdlePosition, VectorToTarget, searchDistance, 180f);
 		}
 
 		protected virtual void GetUnstuck(Vector2 destination, int startFrame, ref bool done)
 		{
-			if (vectorToTarget is null || gHelper.stuckInfo.overCliff)
+			if (VectorToTarget is null || gHelper.stuckInfo.overCliff)
 			{
 				Vector2 vectorToUnstuck = destination - Projectile.Center;
 				if (vectorToUnstuck.Length() < 16)
@@ -82,8 +82,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 			else
 			{
-				base.IdleMovement(vectorToIdle);
-				if (vectorToIdle.Length() < 16)
+				base.IdleMovement(VectorToIdle);
+				if (VectorToIdle.Length() < 16)
 				{
 					done = true;
 				}
@@ -92,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual void IdleGroundedMovement(Vector2 vector)
 		{
-			if (vector.Y < -startFlyingAtTargetHeight && Math.Abs(vector.X) < startFlyingAtTargetDist && vectorToTarget != null)
+			if (vector.Y < -startFlyingAtTargetHeight && Math.Abs(vector.X) < startFlyingAtTargetDist && VectorToTarget != null)
 			{
 				gHelper.isFlying = true;
 				if (gHelper.isFlying)
@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual bool CheckForStuckness()
 		{
-			return animationFrame % 5 == 0; // by default, only check for stuckness every 5 frames
+			return AnimationFrame % 5 == 0; // by default, only check for stuckness every 5 frames
 		}
 
 		protected abstract void DoGroundedMovement(Vector2 vector);
@@ -141,13 +141,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				gHelper.DoJump(vector);
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (animationFrame - lastHitFrame > Math.Max(6, 90 / xMaxSpeed))
+			if (AnimationFrame - lastHitFrame > Math.Max(6, 90 / xMaxSpeed))
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -159,7 +159,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual void IdleFlyingMovement(Vector2 vector)
 		{
-			if (!gHelper.DropThroughPlatform() && animationFrame - lastHitFrame > 15)
+			if (!gHelper.DropThroughPlatform() && AnimationFrame - lastHitFrame > 15)
 			{
 				base.IdleMovement(vector);
 			}
@@ -167,12 +167,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override void OnHitTarget(NPC target)
 		{
-			lastHitFrame = animationFrame;
+			lastHitFrame = AnimationFrame;
 		}
 
 		protected virtual bool ScaleLedge(Vector2 vector)
 		{
-			vector.Y = Math.Min(vector.Y - 32f, (vectorToTarget ?? vectorToIdle).Y);
+			vector.Y = Math.Min(vector.Y - 32f, (VectorToTarget ?? VectorToIdle).Y);
 			gHelper.DoJump(vector, defaultJumpVelocity, maxJumpVelocity);
 			return true;
 		}
@@ -203,7 +203,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				Projectile.frame = minFrame;
 			}
-			if (Projectile.frameCounter >= frameSpeed)
+			if (Projectile.frameCounter >= FrameSpeed)
 			{
 				Projectile.frameCounter = 0;
 				Projectile.frame++;
@@ -232,11 +232,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override Vector2? FindTarget()
 		{
-			if (Vector2.Distance(player.Center, Projectile.Center) > 1.5f * searchDistance)
+			if (Vector2.Distance(Player.Center, Projectile.Center) > 1.5f * searchDistance)
 			{
 				return null;
 			}
-			else if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
+			else if (PlayerTargetPosition(searchDistance, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}

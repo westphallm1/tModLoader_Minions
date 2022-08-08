@@ -127,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class PhantasmalDragonMinion : CombatPetWormMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.LunaticCultistPet;
-		internal override int BuffId => BuffType<PhantasmalDragonMinionBuff>();
+		public override int BuffId => BuffType<PhantasmalDragonMinionBuff>();
 		protected override int dustType => 135;
 
 		private int lastShootFrame;
@@ -142,10 +142,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			int radius = Math.Abs(player.velocity.X) < 4 ? 140 : 24;
+			Vector2 idlePosition = Player.Top;
+			int radius = Math.Abs(Player.velocity.X) < 4 ? 140 : 24;
 			float idleAngle = IdleLocationSets.GetAngleOffsetInSet(IdleLocationSets.circlingHead, Projectile)
-				+ 2 * PI * groupAnimationFrame / groupAnimationFrames;
+				+ 2 * MathHelper.Pi * GroupAnimationFrame / GroupAnimationFrames;
 			idlePosition.X += radius * (float)Math.Cos(idleAngle);
 			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
@@ -156,11 +156,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override Vector2? FindTarget()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance, losCenter: player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center, searchDistance, losCenter: Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
-			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: Player.Center) is Vector2 target2)
 			{
 				return target2 - Projectile.Center;
 			}
@@ -182,9 +182,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					p.ai[0] = target.whoAmI;
 				}
 			}
-			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > fireRate && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
+			if(Projectile.owner == Main.myPlayer && AnimationFrame - lastShootFrame > fireRate && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
 			{
-				lastShootFrame = animationFrame;
+				lastShootFrame = AnimationFrame;
 				// spawn projectile slightly off the top of the screen
 				Vector2 spawnPos = Main.screenPosition + new Vector2(Main.rand.Next(0, Main.screenWidth), -16);
 				Projectile.NewProjectile(

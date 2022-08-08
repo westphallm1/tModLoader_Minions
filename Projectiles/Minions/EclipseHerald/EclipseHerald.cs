@@ -54,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 	public class EclipseHeraldCounterMinion : CounterMinion
 	{
 
-		internal override int BuffId => BuffType<EclipseHeraldMinionBuff>();
+		public override int BuffId => BuffType<EclipseHeraldMinionBuff>();
 		protected override int MinionType => ProjectileType<EclipseHeraldMinion>();
 	}
 	/// <summary>
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 	/// </summary>
 	public class EclipseHeraldMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<EclipseHeraldMinionBuff>();
+		public override int BuffId => BuffType<EclipseHeraldMinionBuff>();
 
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;
@@ -84,10 +84,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			Projectile.height = 60;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			dealsContactDamage = false;
-			attackThroughWalls = true;
-			useBeacon = false;
-			frameSpeed = 5;
+			DealsContactDamage = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
+			FrameSpeed = 5;
 		}
 
 		private Color ShadowColor(Color original)
@@ -140,13 +140,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -32;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
-				idlePosition.Y = player.Top.Y - 16;
+				idlePosition.X = Player.Top.X;
+				idlePosition.Y = Player.Top.Y - 16;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
@@ -161,15 +161,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// stay floating behind the player at all times
-			IdleMovement(vectorToIdle);
+			IdleMovement(VectorToIdle);
 			framesSinceLastHit++;
-			if (framesSinceLastHit++ > 60 && targetNPCIndex is int npcIndex)
+			if (framesSinceLastHit++ > 60 && TargetNPCIndex is int npcIndex)
 			{
 				vectorToTargetPosition.SafeNormalize();
 				vectorToTargetPosition *= 8;
 				Vector2 pos = Projectile.Center;
 				pos.Y -= 24;
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -194,7 +194,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance / 2) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center, searchDistance / 2) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -235,7 +235,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 
 		protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)
 		{
-			if (vectorToTarget != null)
+			if (VectorToTarget != null)
 			{
 				minFrame = 5;
 				maxFrame = 9;

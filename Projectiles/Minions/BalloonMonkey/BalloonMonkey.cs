@@ -189,7 +189,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 
 	public class BalloonMonkeyMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<BalloonMonkeyMinionBuff>();
+		public override int BuffId => BuffType<BalloonMonkeyMinionBuff>();
 		int lastFiredFrame = 0;
 		// don't get too close
 		int preferredDistanceFromTarget = 128;
@@ -216,18 +216,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			DrawOffsetX = -2;
 			DrawOriginOffsetY = -14;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
 			searchDistance = 650;
 			maxJumpVelocity = 12;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 		}
 
 		protected override void IdleFlyingMovement(Vector2 vector)
 		{
-			if(animationFrame - lastFiredFrame < 10)
+			if(AnimationFrame - lastFiredFrame < 10)
 			{
 				// don't fly while throwing the spear
 				gHelper.didJustLand = false;
@@ -248,14 +248,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 8;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
-			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
+			if (Math.Abs(vector.X) < 4 && TargetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
 			{
 				Projectile.velocity.X = Main.npc[idx].velocity.X;
 			}
@@ -268,14 +268,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		private void FireDart()
 		{
 			int dartVelocity = 15;
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
-			if (player.whoAmI == Main.myPlayer)
+			if (Player.whoAmI == Main.myPlayer)
 			{
-				Vector2 angleToTarget = (Vector2)vectorToTarget;
+				Vector2 angleToTarget = (Vector2)VectorToTarget;
 				angleToTarget.SafeNormalize();
 				angleToTarget *= dartVelocity;
-				if(targetNPCIndex is int idx)
+				if(TargetNPCIndex is int idx)
 				{
 					Vector2 targetVelocity = Main.npc[idx].velocity;
 					if(targetVelocity.Length() > 32)
@@ -292,8 +292,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 					ProjectileType<BalloonMonkeyDart>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
-					ai0: targetNPCIndex ?? -1);
+					Player.whoAmI,
+					ai0: TargetNPCIndex ?? -1);
 			}
 		}
 
@@ -302,7 +302,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 
 			if (Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 4 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= attackFrames)
+				AnimationFrame - lastFiredFrame >= attackFrames)
 			{
 				FireDart();
 			}
@@ -321,20 +321,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if (animationFrame - lastFiredFrame < 5)
+			if (AnimationFrame - lastFiredFrame < 5)
 			{
 				Projectile.frame = gHelper.didJustLand ? 4 : 7;
-			} else if (animationFrame - lastFiredFrame < 10)
+			} else if (AnimationFrame - lastFiredFrame < 10)
 			{
 				Projectile.frame = gHelper.didJustLand ? 5 : 8;
-			} else if (animationFrame - lastFiredFrame < 15)
+			} else if (AnimationFrame - lastFiredFrame < 15)
 			{
 				Projectile.frame = gHelper.didJustLand ? 6 : 9;
 			} else
 			{
 				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
-			if (targetNPCIndex is int idx && animationFrame - lastFiredFrame < 30)
+			if (TargetNPCIndex is int idx && AnimationFrame - lastFiredFrame < 30)
 			{
 				Projectile.spriteDirection = Math.Sign(Main.npc[idx].position.X - Projectile.position.X);
 			} 

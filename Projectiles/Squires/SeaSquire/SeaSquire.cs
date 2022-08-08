@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		internal int dashDirection = 1;
 		private bool isDashing;
 		private MotionBlurDrawer blurHelper;
-		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
+		public override int BuffId => BuffType<SeaSquireMinionBuff>();
 		protected override int ItemType => ItemType<SeaSquireMinionItem>();
 		public override void SetStaticDefaults()
 		{
@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			base.SetDefaults();
 			Projectile.width = 24;
 			Projectile.height = 24;
-			frameSpeed = 10;
+			FrameSpeed = 10;
 			blurHelper = new MotionBlurDrawer(5);
 			Projectile.minionSlots = 0;
 		}
@@ -191,7 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 	public class SeaSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<SeaSquireMinionBuff>();
+		public override int BuffId => BuffType<SeaSquireMinionBuff>();
 		protected override int ItemType => ItemType<SeaSquireMinionItem>();
 		protected override int AttackFrames => 35;
 
@@ -249,7 +249,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void OnStartUsingSpecial()
 		{
 			TransformBubbles();
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromThis(),
@@ -258,7 +258,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 					ProjectileType<SeaSquireSharkMinion>(), 
 					3 * Projectile.damage, 
 					Projectile.knockBack, 
-					player.whoAmI);
+					Player.whoAmI);
 				p.originalDamage = 3 * Projectile.originalDamage;
 			}
 		}
@@ -266,12 +266,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void OnStopUsingSpecial()
 		{
 			TransformBubbles();
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				for(int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SeaSquireSharkMinion>())
+					if(p.active && p.owner == Player.whoAmI && p.type == ProjectileType<SeaSquireSharkMinion>())
 					{
 						p.Kill();
 						break;
@@ -304,7 +304,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			if (attackFrame == 0)
 			{
 				SoundEngine.PlaySound(SoundID.Item85, Projectile.position);
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity() + bubbleVelOffset;
@@ -325,7 +325,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SeaSquireSharkMinion>())
+				if(p.active && p.owner == Player.whoAmI && p.type == ProjectileType<SeaSquireSharkMinion>())
 				{
 					Projectile.Center = p.Center;
 					break;

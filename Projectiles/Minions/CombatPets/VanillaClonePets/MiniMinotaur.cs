@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class MiniMinotaurMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MiniMinotaur;
-		internal override int BuffId => BuffType<MiniMinotaurMinionBuff>();
+		public override int BuffId => BuffType<MiniMinotaurMinionBuff>();
 		internal override int? ProjId => ProjectileType<MiniMinotaurAxeProjectile>();
 		public override void SetDefaults()
 		{

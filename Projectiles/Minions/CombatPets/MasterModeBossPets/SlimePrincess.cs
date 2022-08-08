@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class SlimePrincessHelperSlimeMinion : CombatPetSlimeMinion
 	{
-		internal override int BuffId => BuffType<SlimePrincessMinionBuff>();
+		public override int BuffId => BuffType<SlimePrincessMinionBuff>();
 		internal int spriteType = 0;
 
 		public override void SetStaticDefaults()
@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			if(animationFrame > 180)
+			if(AnimationFrame > 180)
 			{
 				Projectile.Kill();
 				SpawnDust();
@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SlimePrincessMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.QueenSlimePet;
-		internal override int BuffId => BuffType<SlimePrincessMinionBuff>();
+		public override int BuffId => BuffType<SlimePrincessMinionBuff>();
 
 		private bool wasFlyingThisFrame = false;
 
@@ -149,10 +149,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			int projType = ProjectileType<SlimePrincessHelperSlimeMinion>();
 			Vector2 launchVel = (-8 * Vector2.UnitY).RotatedByRandom(MathHelper.PiOver4);
-			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] == 0 && 
-				animationFrame - lastSpawnedFrame > 240 && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful)
+			if(Player.whoAmI == Main.myPlayer && Player.ownedProjectileCounts[projType] == 0 && 
+				AnimationFrame - lastSpawnedFrame > 240 && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful)
 			{
-				lastSpawnedFrame = animationFrame;
+				lastSpawnedFrame = AnimationFrame;
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					Projectile.Center,

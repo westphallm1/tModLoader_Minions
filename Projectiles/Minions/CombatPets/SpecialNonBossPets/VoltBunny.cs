@@ -27,14 +27,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	public class VoltBunnyMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.VoltBunny;
-		internal override int BuffId => BuffType<VoltBunnyMinionBuff>();
+		public override int BuffId => BuffType<VoltBunnyMinionBuff>();
 
 		private MotionBlurDrawer blurDrawer;
 		private int dashStartFrame;
 		private Vector2 dashVector;
 		private readonly int dashVelocity = 14;
 		private readonly int dashDuration = 10;
-		private bool isDashing => dashVector != default && animationFrame - dashStartFrame < dashDuration;
+		private bool isDashing => dashVector != default && AnimationFrame - dashStartFrame < dashDuration;
 
 		public override void SetDefaults()
 		{
@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			Vector2 target = base.IdleBehavior();
 			if(gHelper.isFlying)
 			{
-				float idleAngle = MathHelper.TwoPi * animationFrame / 120f;
+				float idleAngle = MathHelper.TwoPi * AnimationFrame / 120f;
 				target += 36 * idleAngle.ToRotationVector2();
 			}
 			return target;
@@ -59,12 +59,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		{
 			if(!isDashing)
 			{
-				dashStartFrame = animationFrame;
+				dashStartFrame = AnimationFrame;
 				dashVector = vector;
 				dashVector.SafeNormalize();
 				dashVector *= dashVelocity;
 			}
-			bool isIdling = vectorToTarget is null && vector.LengthSquared() < 128 * 128;
+			bool isIdling = VectorToTarget is null && vector.LengthSquared() < 128 * 128;
 			if(isIdling)
 			{
 				base.IdleFlyingMovement(vector);

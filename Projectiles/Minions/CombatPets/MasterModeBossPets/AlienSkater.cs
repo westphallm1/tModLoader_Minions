@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class AlienSkaterMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MartianPet;
-		internal override int BuffId => BuffType<AlienSkaterMinionBuff>();
+		public override int BuffId => BuffType<AlienSkaterMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class PuppyMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Puppy;
-		internal override int BuffId => BuffType<PuppyMinionBuff>();
+		public override int BuffId => BuffType<PuppyMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

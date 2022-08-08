@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Netcode.Packets;
+﻿using AmuletOfManyMinions.Core.Minions.AI;
+using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
@@ -46,13 +47,13 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal static int WAYPOINT_PROXIMITY_THRESHOLD = 64;
 		internal BlockAwarePathfinder GetPathfinder(int idx) => pathfinderMetas[idx].pHelper;
 
-		internal BlockAwarePathfinder GetPathfinder(Minion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].pHelper;
+		internal BlockAwarePathfinder GetPathfinder(IMinion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].pHelper;
 
-		internal List<Projectile> GetMinionsAtWaypoint(Minion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].MinionsAtWaypoint;
+		internal List<Projectile> GetMinionsAtWaypoint(IMinion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].MinionsAtWaypoint;
 
 		internal Vector2 GetWaypointPosition(int tacticsGroup) => pathfinderMetas[tacticsGroup].WaypointPosition;
 
-		internal Vector2 GetWaypointPosition(Minion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].WaypointPosition;
+		internal Vector2 GetWaypointPosition(IMinion minion) => pathfinderMetas[myTacticsPlayer.GetGroupForMinion(minion)].WaypointPosition;
 
 		public override void ResetEffects()
 		{

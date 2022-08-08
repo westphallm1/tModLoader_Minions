@@ -116,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 				{
 					Dust.NewDust(Projectile.Top, 16, 16, 153);
 				}
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -125,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 						ProjectileType<HoneySlime>(),
 						Projectile.damage,
 						Projectile.knockBack,
-						player.whoAmI);
+						Player.whoAmI);
 				}
 			}
 			if (Projectile.timeLeft == 60)
@@ -155,7 +155,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 	{
 		public override int CounterType => -1;
 		internal LeveledCombatPetModPlayer leveledPetPlayer;
-		internal override int BuffId => BuffType<BeeQueenMinionBuff>();
+		public override int BuffId => BuffType<BeeQueenMinionBuff>();
 		int animationFrameCounter = 0;
 		int reloadCycleLength => Math.Max(120, 300 - 20 * EmpowerCount);
 
@@ -181,10 +181,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			base.SetDefaults();
 			Projectile.width = 32;
 			Projectile.height = 32;
-			frameSpeed = 15;
+			FrameSpeed = 15;
 			animationFrameCounter = 0;
 			reloadStartFrame = -reloadCycleLength;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -202,16 +202,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 
 		public override Vector2 IdleBehavior()
 		{
-			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			base.IdleBehavior();
 			float idleAngle = (float)(2 * Math.PI * animationFrameCounter % 240) / 240;
-			Vector2 idlePosition = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Center;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -35 + 5 * (float)Math.Sin(idleAngle);
-			if (!Collision.CanHit(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHit(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition = player.Center;
-				idlePosition.X += 30 * -player.direction;
+				idlePosition = Player.Center;
+				idlePosition.X += 30 * -Player.direction;
 				idlePosition.Y += -35;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
@@ -219,7 +219,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			animationFrameCounter++;
 			if (animationFrameCounter - reloadStartFrame == reloadCycleLength)
 			{
-				player.AddBuff(BuffID.Honey, 60);
+				Player.AddBuff(BuffID.Honey, 60);
 			}
 
 			return vectorToIdlePosition;
@@ -252,7 +252,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 					}
 				}
 			}
-			if (readyToAttack && Main.myPlayer == player.whoAmI && Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
+			if (readyToAttack && Main.myPlayer == Player.whoAmI && Math.Abs(vectorAbove.X) <= 32 && vectorToTargetPosition.Y > 0)
 			{
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
@@ -261,7 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 					ProjectileType<BeeQueenBucket>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: Math.Max(45, 100 - 10 * EmpowerCount));
 				reloadStartFrame = animationFrameCounter;
 			}

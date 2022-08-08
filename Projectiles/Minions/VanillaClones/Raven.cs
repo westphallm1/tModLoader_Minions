@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		bool isDashing = false;
 		private MotionBlurDrawer blurHelper;
 		public override string GlowTexture => base.Texture + "_Glow";
-		internal override int BuffId => BuffType<RavenMinionBuff>();
+		public override int BuffId => BuffType<RavenMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{
@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 			int frameSpeed = 5;
 			Projectile.frameCounter++;
-			if(vectorToTarget is Vector2 target && target.Length() < 256)
+			if(VectorToTarget is Vector2 target && target.Length() < 256)
 			{
 				minFrame = 4;
 				maxFrame = 8;
@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					Projectile.frame = minFrame;
 				}
 			}
-			if(vectorToTarget != null)
+			if(VectorToTarget != null)
 			{
 				if(Projectile.velocity.X > 1)
 				{
@@ -206,13 +206,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void AfterMoving()
 		{
 			// left shift old position
-			isDashing = vectorToTarget is Vector2 target && target.Length() < 256;
+			isDashing = VectorToTarget is Vector2 target && target.Length() < 256;
 			blurHelper.Update(Projectile.Center, isDashing);
 		}
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[ProjectileType<RavenGreekFire>()] < 8 && Main.rand.NextBool(5))
+			if(Player.whoAmI == Main.myPlayer && Player.ownedProjectileCounts[ProjectileType<RavenGreekFire>()] < 8 && Main.rand.NextBool(5))
 			{
 				Vector2 lineOfFire = (Main.rand.NextFloat(MathHelper.Pi) + MathHelper.Pi).ToRotationVector2() * Main.rand.NextFloat(6, 8);
 				Projectile.NewProjectile(

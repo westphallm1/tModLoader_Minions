@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria.ModLoader;
 using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.AI;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 {
@@ -166,7 +167,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			int speed = 12;
 			int inertia = 30;
 			if(Projectile.timeLeft < 150 && 
-				Minion.GetClosestEnemyToPosition(Projectile.Center, 200f, requireLOS: true) is NPC target)
+				MinionBehavior.GetClosestEnemyToPosition(Projectile.Center, 200f, requireLOS: true) is NPC target)
 			{
 				Vector2 targetVector = target.Center - Projectile.Center;
 				targetVector.SafeNormalize();
@@ -196,7 +197,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	public class CloudiphantMinion : CombatPetGroundedRangedMinion
 	{
-		internal override int BuffId => BuffType<CloudiphantMinionBuff>();
+		public override int BuffId => BuffType<CloudiphantMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -223,7 +224,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.GetAnimationState();
-			frameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
+			FrameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
 			base.Animate(minFrame, maxFrame);
 			if(state == GroundAnimationState.JUMPING)
 			{

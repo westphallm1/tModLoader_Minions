@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class BabyTruffleMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Truffle;
-		internal override int BuffId => BuffType<BabyTruffleMinionBuff>();
+		public override int BuffId => BuffType<BabyTruffleMinionBuff>();
 		internal override int? ProjId => ProjectileType<TrufflePetGlowingMushroom>();
 		public override void SetDefaults()
 		{

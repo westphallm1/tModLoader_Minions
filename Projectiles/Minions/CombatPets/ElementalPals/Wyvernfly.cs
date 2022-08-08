@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	public class WyvernFlyMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<WyvernFlyMinionBuff>();
+		public override int BuffId => BuffType<WyvernFlyMinionBuff>();
 		internal override bool DoBumblingMovement => leveledPetPlayer.PetLevel < (int)CombatPetTier.Skeletal;
 		internal override int GetAttackFrames(ICombatPetLevelInfo info) => 
 			(int)(base.GetAttackFrames(info) * (info.Level >= (int)CombatPetTier.Spectre ? 1.5f : 1f));
@@ -59,14 +59,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			base.IdleBehavior();
 			hsHelper.firedProjectileId = (leveledPetPlayer?.PetLevel ?? 0) >= (int)CombatPetTier.Spectre ?
 				ProjectileType<TwisterProjectile>() : ProjectileType<CloudPuffProjectile>();
-			float idleAngle = (MathHelper.TwoPi * animationFrame % 240) / 240;
-			Vector2 idlePosition = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			float idleAngle = (MathHelper.TwoPi * AnimationFrame % 240) / 240;
+			Vector2 idlePosition = Player.Center;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -35 + 5 * MathF.Sin(idleAngle);
-			if (!Collision.CanHit(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHit(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition = player.Center;
-				idlePosition.X += 30 * -player.direction;
+				idlePosition = Player.Center;
+				idlePosition.X += 30 * -Player.direction;
 				idlePosition.Y += -35;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
@@ -76,9 +76,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if(vectorToTarget == null && vectorToIdle.LengthSquared() < 32 * 32)
+			if(VectorToTarget == null && VectorToIdle.LengthSquared() < 32 * 32)
 			{
-				Projectile.spriteDirection = forwardDir * Math.Sign(player.Center.X - Projectile.Center.X);
+				Projectile.spriteDirection = forwardDir * Math.Sign(Player.Center.X - Projectile.Center.X);
 			}
 		}
 	}

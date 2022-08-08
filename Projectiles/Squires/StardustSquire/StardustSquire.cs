@@ -116,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			return vectorToTarget == null;
+			return VectorToTarget == null;
 		}
 
 		public override void Kill(int timeLeft)
@@ -143,7 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			frameSpeed = 5;
+			FrameSpeed = 5;
 			Projectile.timeLeft = 180;
 			Projectile.penetrate = 3;
 			Projectile.friendly = true;
@@ -222,12 +222,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
 			return base.OnTileCollide(oldVelocity) && (!hasFoundTarget && Projectile.timeLeft < 30) 
-				|| framesSinceHadTarget > 60;
+				|| FramesSinceHadTarget > 60;
 		}
 
 		public override void PostDraw(Color lightColor)
 		{
-			if (!(vectorToTarget is Vector2 target) || target.Length() > 48)
+			if (!(VectorToTarget is Vector2 target) || target.Length() > 48)
 			{
 				return;
 			}
@@ -268,7 +268,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 	public class StardustSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<StardustSquireMinionBuff>();
+		public override int BuffId => BuffType<StardustSquireMinionBuff>();
 		protected override int ItemType => ItemType<StardustSquireMinionItem>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => null;
@@ -307,7 +307,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		{
 			Lighting.AddLight(Projectile.Center, Color.DeepSkyBlue.ToVector3());
 			int projType = ProjectileType<StardustGuardianProjectile>();
-			if (player.ownedProjectileCounts[projType] == 0)
+			if (Player.ownedProjectileCounts[projType] == 0)
 			{
 				Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 100);
 				Texture2D texture = TextureAssets.Projectile[projType].Value;
@@ -339,9 +339,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				if ((attackSequence++ * ModifiedAttackFrames) % 180 < ModifiedAttackFrames &&
-					player.ownedProjectileCounts[ProjectileType<StardustGuardianProjectile>()] == 0)
+					Player.ownedProjectileCounts[ProjectileType<StardustGuardianProjectile>()] == 0)
 				{
-					if (Main.myPlayer == player.whoAmI && IsPrimaryFrame)
+					if (Main.myPlayer == Player.whoAmI && IsPrimaryFrame)
 					{
 						angleVector *= ModifiedProjectileVelocity() * 0.75f;
 						Projectile.NewProjectile(
@@ -356,7 +356,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 				}
 				else
 				{
-					if (Main.myPlayer == player.whoAmI)
+					if (Main.myPlayer == Player.whoAmI)
 					{
 						angleVector *= ModifiedProjectileVelocity();
 						Projectile.NewProjectile(
@@ -387,7 +387,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override void OnStartUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				Vector2 target = Main.MouseWorld - Projectile.Center;
 				target.SafeNormalize();
@@ -399,7 +399,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					ProjectileType<ConstellationSeed>(),
 					Projectile.damage / 2,
 					Projectile.knockBack / 2,
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: Main.MouseWorld.X,
 					ai1: Main.MouseWorld.Y);
 			}

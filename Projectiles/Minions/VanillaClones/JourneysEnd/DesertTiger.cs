@@ -41,7 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	
 	public class DesertTigerCounterMinion : CounterMinion
 	{
-		internal override int BuffId => BuffType<DesertTigerMinionBuff>();
+		public override int BuffId => BuffType<DesertTigerMinionBuff>();
 		protected override int MinionType => ProjectileType<DesertTigerMinion>();
 	}
 
@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			Projectile.friendly = true;
 			Projectile.penetrate = -1;
 			Projectile.tileCollide = false;
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 			blurDrawer = new MotionBlurDrawer(5);
 		}
 
@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				for(int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if(p.active && p.owner == player.whoAmI && p.type == minionType)
+					if(p.active && p.owner == Player.whoAmI && p.type == minionType)
 					{
 						p.Center = Projectile.Center;
 						break;
@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			if(targetList.Count > 0)
 			{
-				targetNPCIndex = targetList[0].whoAmI;
+				TargetNPCIndex = targetList[0].whoAmI;
 				return targetList[0].Center - Projectile.Center;
 			} else
 			{
@@ -143,7 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				base.Move(vector2Target, false);
 			} else
 			{
-				base.Move(vectorToIdle, true);
+				base.Move(VectorToIdle, true);
 			}
 			if(Main.rand.NextBool())
 			{
@@ -197,7 +197,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public class DesertTigerMinion : SimpleGroundBasedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.StormTigerTier1;
-		internal override int BuffId => BuffType<DesertTigerMinionBuff>();
+		public override int BuffId => BuffType<DesertTigerMinionBuff>();
 
 		private MotionBlurDrawer blurDrawer;
 
@@ -231,22 +231,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			Vector2 target = base.IdleBehavior();
 			UpdateEmpowerCount();
 
-			if(animationFrame - lastDashFrame > dashCooldown && animationFrame % 10 == 0)
+			if(AnimationFrame - lastDashFrame > dashCooldown && AnimationFrame % 10 == 0)
 			{
 				DashIfEnemiesOnscreen();
 			}
 
-			if(player.ownedProjectileCounts[ProjectileType<DesertTigerDashMinion>()] > 0)
+			if(Player.ownedProjectileCounts[ProjectileType<DesertTigerDashMinion>()] > 0)
 			{
-				Projectile.Center = player.Center;
+				Projectile.Center = Player.Center;
 				Projectile.velocity = Vector2.Zero;
 				return Vector2.Zero;
 			}
 
 			if(gHelper.isFlying)
 			{
-				float idleAngle = MathHelper.TwoPi * animationFrame / 90f;
-				target = player.Center + 42 * idleAngle.ToRotationVector2() - Projectile.Center;
+				float idleAngle = MathHelper.TwoPi * AnimationFrame / 90f;
+				target = Player.Center + 42 * idleAngle.ToRotationVector2() - Projectile.Center;
 			}
 			return target;
 		}
@@ -254,12 +254,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		private void UpdateEmpowerCount()
 		{
 			int counterType = ProjectileType<DesertTigerCounterMinion>();
-			EmpowerCount = player.ownedProjectileCounts[counterType];
+			EmpowerCount = Player.ownedProjectileCounts[counterType];
 			// update damage to scale based on number of counters
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == counterType)
+				if(p.active && p.owner == Player.whoAmI && p.type == counterType)
 				{
 					Projectile.originalDamage = (int)(p.originalDamage * (0.6f + 0.4f * EmpowerCount));
 					break;
@@ -285,7 +285,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 					Projectile.knockBack,
 					Projectile.owner,
 					ai0: searchDistance);
-				lastDashFrame = animationFrame;
+				lastDashFrame = AnimationFrame;
 			}
 		}
 
@@ -315,7 +315,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			var animState = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			if(animState == GroundAnimationState.FLYING)
 			{
-				Projectile.rotation = Math.Sign(Projectile.velocity.X) * MathHelper.TwoPi * animationFrame / 15;
+				Projectile.rotation = Math.Sign(Projectile.velocity.X) * MathHelper.TwoPi * AnimationFrame / 15;
 			} else
 			{
 				Projectile.rotation = 0;
@@ -324,7 +324,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			if(player.ownedProjectileCounts[ProjectileType<DesertTigerDashMinion>()] > 0)
+			if(Player.ownedProjectileCounts[ProjectileType<DesertTigerDashMinion>()] > 0)
 			{
 				return false;
 			}
@@ -349,7 +349,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			Projectile.friendly &= player.ownedProjectileCounts[ProjectileType<DesertTigerDashMinion>()] == 0;
+			Projectile.friendly &= Player.ownedProjectileCounts[ProjectileType<DesertTigerDashMinion>()] == 0;
 			blurDrawer.Update(Projectile.Center, Projectile.velocity.LengthSquared() > 2);
 		}
 	}

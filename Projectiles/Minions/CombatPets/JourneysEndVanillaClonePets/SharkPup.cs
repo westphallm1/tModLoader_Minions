@@ -9,6 +9,7 @@ using AmuletOfManyMinions.Projectiles.Squires.SeaSquire;
 using System;
 using Microsoft.Xna.Framework;
 using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.AI;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets
 {
@@ -44,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 			int speed = 12;
 			int inertia = 30;
 			if(Projectile.timeLeft < 150 && 
-				Minion.GetClosestEnemyToPosition(Projectile.Center, 200f, requireLOS: true) is NPC target)
+				MinionBehavior.GetClosestEnemyToPosition(Projectile.Center, 200f, requireLOS: true) is NPC target)
 			{
 				Vector2 targetVector = target.Center - Projectile.Center;
 				targetVector.SafeNormalize();
@@ -56,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 
 	public class SharkPupMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<SharkPupMinionBuff>();
+		public override int BuffId => BuffType<SharkPupMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SharkPup;
 		internal override int? FiredProjectileId => ProjectileType<SharkPupBubble>();
 		internal override SoundStyle? ShootSound => SoundID.Item17;

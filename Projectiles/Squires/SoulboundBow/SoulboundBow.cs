@@ -169,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 
 	public class SoulboundBowMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<SoulboundBowMinionBuff>();
+		public override int BuffId => BuffType<SoulboundBowMinionBuff>();
 		protected override int ItemType => ItemType<SoulboundBowMinionItem>();
 		protected override int AttackFrames => 25;
 		protected override string WingTexturePath => null;
@@ -243,7 +243,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
 					angleVector *= ModifiedProjectileVelocity();
@@ -262,8 +262,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.IdleMovement(vectorToIdle);
-			if(player.whoAmI == Main.myPlayer && specialFrame % 8 == 1)
+			base.IdleMovement(VectorToIdle);
+			if(Player.whoAmI == Main.myPlayer && specialFrame % 8 == 1)
 			{
 				Vector2 center = Main.MouseWorld; // only run on main player safe to use
 				// spawn two whole circles of swords over the course of the special

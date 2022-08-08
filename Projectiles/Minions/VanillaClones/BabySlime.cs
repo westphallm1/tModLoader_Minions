@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class BabySlimeMinion : SimpleGroundBasedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabySlime;
-		internal override int BuffId => BuffType<BabySlimeMinionBuff>();
+		public override int BuffId => BuffType<BabySlimeMinionBuff>();
 		private float intendedX = 0;
 
 		public override void SetStaticDefaults()
@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			DrawOffsetX = (Projectile.width - 44) / 2;
 			DrawOriginOffsetY = 0;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 			gHelper.DoJump(vector);
 			int maxHorizontalSpeed = vector.Y < -64 ? 4 : 6;
-			if(targetNPCIndex is int idx && vector.Length() < 64)
+			if(TargetNPCIndex is int idx && vector.Length() < 64)
 			{
 				// go fast enough to hit the enemy while chasing them
 				Vector2 targetVelocity = Main.npc[idx].velocity;

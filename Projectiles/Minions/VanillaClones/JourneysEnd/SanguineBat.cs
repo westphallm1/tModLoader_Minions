@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 12;
 		private NPC currentTarget;
-		internal override int BuffId => BuffType<SanguineBatMinionBuff>();
+		public override int BuffId => BuffType<SanguineBatMinionBuff>();
 
 		private MotionBlurDrawer blurDrawer;
 
@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			targetSearchDistance = 600;
 			circleHelper.idleBumble = false;
 			bumbleSpriteDirection = -1;
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 			maxSpeed = 16;
 			idleInertia = 6;
 			blurDrawer = new MotionBlurDrawer(5);
@@ -84,16 +84,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			{
 				currentTarget = default;
 			}
-			return player.Center - offset - Projectile.Center;
+			return Player.Center - offset - Projectile.Center;
 
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(0, 4);
-			if(vectorToTarget == default && vectorToIdle.LengthSquared() < 16 * 16)
+			if(VectorToTarget == default && VectorToIdle.LengthSquared() < 16 * 16)
 			{
-				Projectile.spriteDirection = player.direction;
+				Projectile.spriteDirection = Player.direction;
 			} else
 			{
 				Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
@@ -121,12 +121,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			if(currentTarget != null)
 			{
-				targetNPCIndex = currentTarget.whoAmI;
+				TargetNPCIndex = currentTarget.whoAmI;
 				return currentTarget.Center - Projectile.Center;
 			} 
-			else if (attackState != AttackState.RETURNING && IsMyTurn() && base.FindTarget() is Vector2 target)
+			else if (AttackState != AttackState.RETURNING && IsMyTurn() && base.FindTarget() is Vector2 target)
 			{
-				currentTarget = Main.npc[(int)targetNPCIndex];
+				currentTarget = Main.npc[(int)TargetNPCIndex];
 				return target;
 			} else
 			{
@@ -136,9 +136,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			maxSpeed = 16;
-			if(attackState == AttackState.RETURNING)
+			if(AttackState == AttackState.RETURNING)
 			{
-				IdleMovement(vectorToIdle);
+				IdleMovement(VectorToIdle);
 				return;
 			}
 			if(vectorToTargetPosition.LengthSquared() > maxSpeed * maxSpeed)
@@ -151,23 +151,23 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			maxSpeed = 16 + (int)player.velocity.Length(); // keep pace with the player when coming back
+			maxSpeed = 16 + (int)Player.velocity.Length(); // keep pace with the player when coming back
 			if(vectorToIdlePosition.LengthSquared() < 24 * 24)
 			{
-				attackState = AttackState.IDLE;
+				AttackState = AttackState.IDLE;
 			}
 			base.IdleMovement(vectorToIdlePosition);
 		}
 
 		public override void OnHitTarget(NPC target)
 		{
-			attackState = AttackState.RETURNING;
+			AttackState = AttackState.RETURNING;
 		}
 
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			blurDrawer.Update(Projectile.Center, vectorToTarget != default || Projectile.velocity.LengthSquared() > 2 * 2);
+			blurDrawer.Update(Projectile.Center, VectorToTarget != default || Projectile.velocity.LengthSquared() > 2 * 2);
 		}
 	}
 }

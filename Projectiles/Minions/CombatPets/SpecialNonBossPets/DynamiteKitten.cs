@@ -152,7 +152,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class DynamiteKittenMinion : WeaponHoldingCatMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DynamiteKitten;
-		internal override int BuffId => BuffType<DynamiteKittenMinionBuff>();
+		public override int BuffId => BuffType<DynamiteKittenMinionBuff>();
 
 		// scale attack type rather than attack speed
 		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(45, 60 - 4 * info.Level);
@@ -213,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			int attackCycleFrame = animationFrame - lastFiredFrame;
+			int attackCycleFrame = AnimationFrame - lastFiredFrame;
 			weaponDrawer.AttackDuration = 30;
 			weaponDrawer.WeaponOffset = new Vector2(0, 6);
 			if(levelInfo.ItemId == ItemID.Flamethrower)
@@ -223,7 +223,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 				{
 					weaponDrawer.lastAttackVector = vectorToTargetPosition;
 				}
-				bool shouldLaunch = player.whoAmI == Main.myPlayer && attackCycleFrame > 1 &&
+				bool shouldLaunch = Player.whoAmI == Main.myPlayer && attackCycleFrame > 1 &&
 					attackCycleFrame < attackFrames * 0.75f && attackCycleFrame % 6 == 0;
 				if (shouldLaunch)
 				{

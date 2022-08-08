@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			player.GetSquire().type == ProjectileType<TitaniumSquireMinion>();
 		private static int AnimationFrames = 80;
 
-		private int attackRate => (int)Math.Max(15f, 30f * player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier);
+		private int attackRate => (int)Math.Max(15f, 30f * Player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier);
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			base.SetDefaults();
 			Projectile.width = 18;
 			Projectile.height = 18;
-			frameSpeed = 10;
+			FrameSpeed = 10;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -94,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			float angle = 2 * (float)(Math.PI * angleFrame) / AnimationFrames;
 			float radius = 36;
 			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-			SquireModPlayer modPlayer = player.GetModPlayer<SquireModPlayer>();
+			SquireModPlayer modPlayer = Player.GetModPlayer<SquireModPlayer>();
 			if(modPlayer.HasSquire())
 			{
 				Projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
@@ -134,10 +134,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.IdleMovement(vectorToIdle);
+			base.IdleMovement(VectorToIdle);
 			if (animationFrame % attackRate == 0 )
 			{
-				if(player.whoAmI == Main.myPlayer)
+				if(Player.whoAmI == Main.myPlayer)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -146,7 +146,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 						ProjectileType<TitaniumDroneDamageHitbox>(),
 						Projectile.damage,
 						0,
-						player.whoAmI);
+						Player.whoAmI);
 				}
 				Vector2 targetVector = vectorToTargetPosition;
 				Vector2 stepVector = targetVector;
@@ -183,7 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 	public class TitaniumSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<TitaniumSquireMinionBuff>();
+		public override int BuffId => BuffType<TitaniumSquireMinionBuff>();
 		protected override int ItemType => ItemType<TitaniumSquireMinionItem>();
 		protected override int AttackFrames => 38;
 
@@ -233,7 +233,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 		public override void OnStartUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
@@ -242,7 +242,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 					ProjectileType<TitaniumSquireDrone>(),
 					Projectile.damage,
 					0,
-					player.whoAmI);
+					Player.whoAmI);
 			}
 		}
 
@@ -252,7 +252,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.owner == player.whoAmI && p.type == projType)
+				if(p.owner == Player.whoAmI && p.type == projType)
 				{
 					p.Kill();
 					break;

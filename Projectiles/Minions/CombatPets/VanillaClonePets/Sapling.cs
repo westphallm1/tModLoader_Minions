@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class SaplingMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Sapling;
-		internal override int BuffId => BuffType<SaplingMinionBuff>();
+		public override int BuffId => BuffType<SaplingMinionBuff>();
 		internal override int? ProjId => ProjectileType<SaplingMinionLeafProjectile>();
 		public override void SetDefaults()
 		{

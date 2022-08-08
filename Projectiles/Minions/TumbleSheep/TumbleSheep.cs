@@ -54,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 	public class TumbleSheepMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<TumbleSheepMinionBuff>();
+		public override int BuffId => BuffType<TumbleSheepMinionBuff>();
 		static int bounceCycleLength = 45;
 		int lastFiredFrame = -bounceCycleLength;
 		// don't get too close
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 		private Vector2 launchPos;
 
-		private bool IsBouncing => animationFrame - lastFiredFrame < bounceCycleLength;
+		private bool IsBouncing => AnimationFrame - lastFiredFrame < bounceCycleLength;
 
 		private SpriteCompositionHelper scHelper;
 
@@ -84,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			Projectile.width = 32;
 			Projectile.height = 32;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -109,14 +109,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 11;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
-			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
+			if (Math.Abs(vector.X) < 4 && TargetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
 			{
 				Projectile.velocity.X = Main.npc[idx].velocity.X;
 			}
@@ -128,10 +128,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 		private void LaunchBounce(Vector2 vectorToTarget)
 		{
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			launchPos = Projectile.position;
 			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
-			if(targetNPCIndex is int idx && Main.npc[idx].active)
+			if(TargetNPCIndex is int idx && Main.npc[idx].active)
 			{
 				vectorToTarget += 4 * Main.npc[idx].velocity; // track the target NPC a bit
 			}
@@ -154,14 +154,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		private void DoBounce()
 		{
 			Projectile.tileCollide = true;
-			if(animationFrame - lastFiredFrame > 10 && Projectile.velocity.Y < 16)
+			if(AnimationFrame - lastFiredFrame > 10 && Projectile.velocity.Y < 16)
 			{
 				Projectile.velocity.Y += 0.5f;
 			}
 			if(Vector2.DistanceSquared(launchPos, Projectile.position) > 240 * 240)
 			{
 				// snap out of bounce if we go too far in a straight line
-				lastFiredFrame = animationFrame - bounceCycleLength;
+				lastFiredFrame = AnimationFrame - bounceCycleLength;
 			}
 
 		}
@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 			if (Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= attackFrames)
+				AnimationFrame - lastFiredFrame >= attackFrames)
 			{
 				LaunchBounce(vectorToTargetPosition);
 				return;
@@ -321,7 +321,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 				return;
 			} 				
 			Projectile.rotation = 0;
-			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
+			if (VectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
 				Projectile.spriteDirection = Math.Sign(target.X);
 			} else if (Projectile.velocity.X > 1)

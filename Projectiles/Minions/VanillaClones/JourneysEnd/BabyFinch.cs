@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyBird;
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 12;
-		internal override int BuffId => BuffType<BabyFinchMinionBuff>();
+		public override int BuffId => BuffType<BabyFinchMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{
@@ -70,19 +70,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			bool isNested = Vector2.DistanceSquared(player.Top, Projectile.Center) < 24 * 24;
+			bool isNested = Vector2.DistanceSquared(Player.Top, Projectile.Center) < 24 * 24;
 			if(!isNested)
 			{
 				return true;
 			}
 			int myOrder = GetMinionsOfType(Type)
-				.Where(p=>Vector2.DistanceSquared(player.Top, p.Center) < 24 * 24)
+				.Where(p=>Vector2.DistanceSquared(Player.Top, p.Center) < 24 * 24)
 				.ToList().FindIndex(p=>p.whoAmI == Projectile.whoAmI);
 
-			Vector2 offset = Projectile.AI_158_GetHomeLocation(player, myOrder) - new Vector2(0, 6);
+			Vector2 offset = Projectile.AI_158_GetHomeLocation(Player, myOrder) - new Vector2(0, 6);
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Type].Value;
 			Rectangle bounds = new(8, 106, 16, 12);
-			SpriteEffects effects = player.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+			SpriteEffects effects = Player.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 			Main.EntitySpriteDraw(texture, offset - Main.screenPosition,
 				bounds, lightColor, 0,
 				new Vector2(bounds.Width, bounds.Height) / 2, 1f, effects, 0);
@@ -93,8 +93,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 offset = 16 * (MathHelper.TwoPi * animationFrame / 60).ToRotationVector2();
-			return player.Top + offset - Projectile.Center;
+			Vector2 offset = 16 * (MathHelper.TwoPi * AnimationFrame / 60).ToRotationVector2();
+			return Player.Top + offset - Projectile.Center;
 		}
 
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if(Vector2.DistanceSquared(Projectile.Center, player.Top) < 24 * 24)
+			if(Vector2.DistanceSquared(Projectile.Center, Player.Top) < 24 * 24)
 			{
 				Projectile.position += vectorToIdlePosition;
 				Projectile.velocity = Vector2.Zero;

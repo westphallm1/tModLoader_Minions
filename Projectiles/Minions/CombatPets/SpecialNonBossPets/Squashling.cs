@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	public class SquashlingMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Squashling;
-		internal override int BuffId => BuffType<SquashlingMinionBuff>();
+		public override int BuffId => BuffType<SquashlingMinionBuff>();
 		internal override int? ProjId => ProjectileType<WeakPumpkinBomb>(); // needs to be non null for super to invoke on fire
 
 		internal int vineWhipDuration => Math.Min(18, 3 * attackFrames / 4);
@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		internal int maxVineLength => 232 + 16 * leveledPetPlayer.PetLevel;
 		int attackCycle = 0;
 
-		internal bool IsFiring => animationFrame - lastFiredFrame < vineWhipDuration && vineFiringVector != default;
+		internal bool IsFiring => AnimationFrame - lastFiredFrame < vineWhipDuration && vineFiringVector != default;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			targetHitbox.Inflate(16, 16);
 			bool anyHits = false;
 			new WhipDrawer(GetVineFrame, vineWhipDuration).ApplyWhipSegments(
-				Projectile.Center, Projectile.Center + vineFiringVector, animationFrame - lastFiredFrame,
+				Projectile.Center, Projectile.Center + vineFiringVector, AnimationFrame - lastFiredFrame,
 				// TODO short circuit somehow
 				(midPoint, rotation, bounds) => { anyHits |= targetHitbox.Contains(midPoint.ToPoint()); });
 			return anyHits;
@@ -105,11 +105,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				return;
 			}
 
-			if(vectorToTarget is not Vector2 target)
+			if(VectorToTarget is not Vector2 target)
 			{
 				return;
 			}
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			vineFiringVector = target;
 			if(vineFiringVector.LengthSquared() < minVineLength * minVineLength)
 			{
@@ -131,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			}
 			new WhipDrawer(GetVineFrame, vineWhipDuration).DrawWhip(
 				ExtraTextures[0].Value, 
-				Projectile.Center, Projectile.Center + vineFiringVector, animationFrame - lastFiredFrame);
+				Projectile.Center, Projectile.Center + vineFiringVector, AnimationFrame - lastFiredFrame);
 			return true;
 		}
 

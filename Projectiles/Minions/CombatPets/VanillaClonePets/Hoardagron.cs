@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class HoardagronHeadMinion : CombatPetHoverDasherMinion
 	{
-		internal override int BuffId => BuffType<HoardagronHeadMinionBuff>();
+		public override int BuffId => BuffType<HoardagronHeadMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DD2PetDragon;
 		public override void SetStaticDefaults()
 		{

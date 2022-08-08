@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 
 	public class RatsMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<RatsMinionBuff>();
+		public override int BuffId => BuffType<RatsMinionBuff>();
 
 		// which of the 3 rats this is, affects some cosmetic behavior
 		private int clusterIdx;
@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			DrawOffsetX = -6;
 			DrawOriginOffsetY = -6;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -106,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			// this one likes to jump while attacking
 			// different rats like to jump different heights
 			vector.Y -= 3 * (clusterIdx % 10);
-			if(vectorToTarget is null)
+			if(VectorToTarget is null)
 			{
 				vector.Y -= 16;
 			}
@@ -116,13 +116,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 7;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8 && Math.Abs(player.velocity.X) > 4)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8 && Math.Abs(Player.velocity.X) > 4)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (animationFrame - lastHitFrame > 15)
+			if (AnimationFrame - lastHitFrame > 15)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -146,15 +146,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 				head = rats[0];
 			}
 			gHelper.SetIsOnGround();
-			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
-			Vector2 idlePosition = player.Center;
+			NoLOSPursuitTime = gHelper.isFlying ? 15 : 300;
+			Vector2 idlePosition = Player.Center;
 			// every rat should gather around the first rat
-			idlePosition.X += -player.direction * (8 + IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, head));
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			idlePosition.X += -Player.direction * (8 + IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, head));
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition = player.Center;
+				idlePosition = Player.Center;
 			}
-			idlePosition.X += (12 + rats.Count/3 ) * (float)Math.Sin(2 * Math.PI * ((groupAnimationFrame % 60) / 60f + clusterIdx/(rats.Count + 1)));
+			idlePosition.X += (12 + rats.Count/3 ) * (float)Math.Sin(2 * Math.PI * ((GroupAnimationFrame % 60) / 60f + clusterIdx/(rats.Count + 1)));
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;

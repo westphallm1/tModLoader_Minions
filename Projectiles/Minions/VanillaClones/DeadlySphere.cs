@@ -124,7 +124,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		private Vector2 dashVector;
 		private MotionBlurDrawer blurHelper;
 
-		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
+		public override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeadlySphere;
 
@@ -152,7 +152,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 160;
 			hsHelper.targetShootProximityRadius = 112;
-			dealsContactDamage = true;
+			DealsContactDamage = true;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -164,7 +164,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
+			int framesSinceShoot = AnimationFrame - hsHelper.lastShootFrame;
 			if(framesSinceShoot > 20 && framesSinceShoot % 15 < 10)
 			{
 				// dash at the target
@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					dashVector = vectorToTargetPosition;
 					dashVector.SafeNormalize();
 					dashVector *= (hsHelper.travelSpeed + 2);
-					if(targetNPCIndex is int idx)
+					if(TargetNPCIndex is int idx)
 					{
 						dashVector += Main.npc[idx].velocity / 8;
 					}
@@ -229,7 +229,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		float clingDistanceTolerance = 24f;
 		Vector2 targetOffset = default;
 
-		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
+		public override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeadlySphere;
 
@@ -257,7 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 0;
 			hsHelper.targetOuterRadius = 0;
 			hsHelper.travelSpeedAtTarget = 15;
-			dealsContactDamage = true;
+			DealsContactDamage = true;
 		}
 
 		public override void OnSpawn()
@@ -282,7 +282,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override Vector2? FindTarget()
 		{
 			Vector2? target = base.FindTarget();
-			if (targetNPCIndex is int idx && oldTargetNpcIndex != idx)
+			if (TargetNPCIndex is int idx && OldTargetNpcIndex != idx)
 			{
 				// choose a new preferred location on the enemy to cling to
 				targetOffset = new Vector2(
@@ -309,7 +309,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				}
 				isClinging = true;
 				// move in a small circle around the cling location
-				Vector2 clingRotation = (animationFrame * MathHelper.TwoPi / 60f).ToRotationVector2() * 8;
+				Vector2 clingRotation = (AnimationFrame * MathHelper.TwoPi / 60f).ToRotationVector2() * 8;
 				Projectile.Center += vectorToTargetPosition + clingRotation;
 				Projectile.velocity = Vector2.Zero;
 			} else
@@ -343,7 +343,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class DeadlySphereFireMinion : HoverShooterMinion
 	{
 
-		internal override int BuffId => BuffType<DeadlySphereMinionBuff>();
+		public override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeadlySphere;
 		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
@@ -381,7 +381,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(17, 21);
-			if(vectorToTarget == null || animationFrame - hsHelper.lastShootFrame > 60)
+			if(VectorToTarget == null || AnimationFrame - hsHelper.lastShootFrame > 60)
 			{
 				Projectile.rotation += MathHelper.TwoPi/60;
 				if (Main.rand.NextBool(2))
@@ -420,10 +420,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
+			int framesSinceShoot = AnimationFrame - hsHelper.lastShootFrame;
 			if (framesSinceShoot < 60 && framesSinceShoot % 6 == 0)
 			{
-				if(targetNPCIndex is int idx) 
+				if(TargetNPCIndex is int idx) 
 				{
 					vectorToTargetPosition += Main.npc[idx].velocity / 4;
 				}
@@ -434,7 +434,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				lineOfFire += Projectile.velocity / 3;
 				for(int i = 0; i < 3; i++)
 				{
-					if(player.whoAmI == Main.myPlayer)
+					if(Player.whoAmI == Main.myPlayer)
 					{
 						hsHelper.FireProjectile(lineOfFire, ProjectileType<DeadlySphereFire>(), (framesSinceShoot % 12) + i);
 					}

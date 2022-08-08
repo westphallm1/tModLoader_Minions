@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public class VampireFrogMinion : SimpleGroundBasedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.VampireFrog;
-		internal override int BuffId => BuffType<VampireFrogMinionBuff>();
+		public override int BuffId => BuffType<VampireFrogMinionBuff>();
 
 		// TODO make the grounded ranged minion state generically available somehow
 		internal int preferredDistanceFromTarget = 96;
@@ -46,7 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		internal int minTongueLength = 96;
 		internal int maxTongueLength = 248;
 
-		internal bool IsFiring => animationFrame - lastFiredFrame < tongueWhipDuration && tongueFiringVector != default;
+		internal bool IsFiring => AnimationFrame - lastFiredFrame < tongueWhipDuration && tongueFiringVector != default;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -59,10 +59,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			var animState = gHelper.DoGroundAnimation(frameInfo, base.Animate);
-			frameSpeed = animState == GroundAnimationState.WALKING ? 2 : 5;
+			FrameSpeed = animState == GroundAnimationState.WALKING ? 2 : 5;
 			int croakCycle = 200;
 			int croakStartFrame = croakCycle - 8 * 5;
-			int idleFrame = animationFrame % croakCycle;
+			int idleFrame = AnimationFrame % croakCycle;
 			if(animState == GroundAnimationState.STANDING && idleFrame > croakStartFrame)
 			{
 				int croakAnimFrame = (idleFrame - croakStartFrame) / 5;
@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			targetHitbox.Inflate(16, 16);
 			bool anyHits = false;
 			new WhipDrawer(GetTongueFrame, tongueWhipDuration).ApplyWhipSegments(
-				Projectile.Center, Projectile.Center + tongueFiringVector, animationFrame - lastFiredFrame,
+				Projectile.Center, Projectile.Center + tongueFiringVector, AnimationFrame - lastFiredFrame,
 				// TODO short circuit somehow
 				(midPoint, rotation, bounds) => { anyHits |= targetHitbox.Contains(midPoint.ToPoint()); });
 			return anyHits;
@@ -110,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			}
 			new WhipDrawer(GetTongueFrame, tongueWhipDuration).DrawWhip(
 				Terraria.GameContent.TextureAssets.Projectile[Type].Value, 
-				Projectile.Center, Projectile.Center + tongueFiringVector, animationFrame - lastFiredFrame);
+				Projectile.Center, Projectile.Center + tongueFiringVector, AnimationFrame - lastFiredFrame);
 			return true;
 		}
 
@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		private void SetupTongue(Vector2 target)
 		{
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			tongueFiringVector = target;
 			if(tongueFiringVector.LengthSquared() < minTongueLength * minTongueLength)
 			{
@@ -150,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 			if (Math.Abs(vectorToTargetPosition.X) < 2 * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= attackFrames)
+				AnimationFrame - lastFiredFrame >= attackFrames)
 			{
 				SetupTongue(vectorToTargetPosition);
 			}

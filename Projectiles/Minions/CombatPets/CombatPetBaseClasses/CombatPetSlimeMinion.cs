@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		internal virtual float DamageMult => 1f;
 		protected int forwardDir = 1;
 
-		protected bool ShouldBounce => vectorToTarget != null || vectorToIdle.LengthSquared() > 32 * 32;
+		protected bool ShouldBounce => VectorToTarget != null || VectorToIdle.LengthSquared() > 32 * 32;
 
 		public override void SetStaticDefaults()
 		{
@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			base.SetDefaults();
 			Projectile.minionSlots = 0;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		public override Vector2 IdleBehavior()
 		{
-			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
 			searchDistance = leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 			int petLevel = leveledPetPlayer.PetLevel;
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			gHelper.DoJump(vector);
 			int baseSpeed = (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;
 			int maxHorizontalSpeed = vector.Y < -64 ? baseSpeed/2 : baseSpeed;
-			if(targetNPCIndex is int idx && vector.Length() < 64)
+			if(TargetNPCIndex is int idx && vector.Length() < 64)
 			{
 				// go fast enough to hit the enemy while chasing them
 				Vector2 targetVelocity = Main.npc[idx].velocity;

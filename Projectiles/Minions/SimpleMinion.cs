@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions;
+using AmuletOfManyMinions.Core.Minions.AI;
 using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
@@ -11,44 +12,43 @@ using Terraria.ModLoader;
 namespace AmuletOfManyMinions.Projectiles.Minions
 {
 
-	internal enum WaypointMovementStyle
+	public enum WaypointMovementStyle
 	{
 		IDLE,
 		TARGET,
 		CUSTOM
 	}
 
-	public abstract class SimpleMinion : Minion
+	public abstract class SimpleMinion : Minion, ISimpleMinion
 	{
-		protected Vector2 vectorToIdle;
-		protected Vector2? vectorToTarget;
-		protected Vector2 oldVectorToIdle;
-		protected Vector2? oldVectorToTarget = null;
-		protected int? oldTargetNpcIndex = null;
-		protected int framesSinceHadTarget = 0;
-		protected bool attackThroughWalls = false;
-		protected bool dealsContactDamage = true;
-		protected int frameSpeed = 5;
-		protected int proximityForOnHitTarget = 24;
-		protected int targetFrameCounter = 0;
-		protected int noLOSPursuitTime = 15; // time to chase the NPC after losing sight
-		protected MinionPathfindingHelper pathfinder;
-
-		internal virtual WaypointMovementStyle waypointMovementStyle => WaypointMovementStyle.IDLE;
-
-		public int animationFrame { get; set; }
-
+		public Vector2 VectorToIdle { get; set; }
+		public Vector2? VectorToTarget { get; set; }
+		public Vector2 OldVectorToIdle { get; set; }
+		public Vector2? OldVectorToTarget { get; set; }
+		public int? OldTargetNpcIndex { get; set; }
+		public int FramesSinceHadTarget { get; set; } = 0;
+		public bool AttackThroughWalls { get; set; } = false;
+		public bool DealsContactDamage { get; set; } = true;
+		public int FrameSpeed { get; set; } = 5;
+		public int ProximityForOnHitTarget { get; set; } = 24;
+		public int TargetFrameCounter { get; set; } = 0;
+		public int NoLOSPursuitTime { get; set; } = 15; // time to chase the NPC after losing sight
+		public MinionPathfindingHelper Pathfinder { get; set; }
+		public bool UsesTactics { get; set; } = true;
+		public int AnimationFrame { get; set; }
+		public virtual WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
 
 
-		public int groupAnimationFrames = 180;
-		public int groupAnimationFrame
+		public int GroupAnimationFrames = 180;
+		public int GroupAnimationFrame
 		{
-			get => player.GetModPlayer<MinionSpawningItemPlayer>().idleMinionSyncronizationFrame % groupAnimationFrames;
+			get => Player.GetModPlayer<MinionSpawningItemPlayer>().idleMinionSyncronizationFrame % GroupAnimationFrames;
 		}
-		public AttackState attackState = AttackState.IDLE;
-		public bool usesTactics = true;
+		public AttackState AttackState { get; set; } = AttackState.IDLE;
 
-		internal bool IsPrimaryFrame => Projectile.extraUpdates == 0 || animationFrame % (Projectile.extraUpdates + 1) == 0;
+		internal bool IsPrimaryFrame => Projectile.extraUpdates == 0 || AnimationFrame % (Projectile.extraUpdates + 1) == 0;
+
+		internal new SimpleMinionBehavior MinionBehavior;
 
 		public override void SetStaticDefaults()
 		{
@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			Projectile.minion = true;
 			// Determines damage type
 			Projectile.DamageType = DamageClass.Summon; //TODO 1.4 check shot projectiles, the spawn for originalDamage
-			// Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
+														// Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
 			Projectile.minionSlots = 1f;
 			// Needed so the minion doesn't despawn on collision with enemies or tiles
 			Projectile.penetrate = -1;
@@ -87,7 +87,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// Makes sure this projectile is synced to other newly joined players 
 			Projectile.netImportant = true;
 
-			pathfinder = new MinionPathfindingHelper(this);
+			Pathfinder = new MinionPathfindingHelper(this);
+			MinionBehavior = new SimpleMinionBehavior(this);
 		}
 
 
@@ -119,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				Projectile.frame = minFrame;
 			}
-			if (Projectile.frameCounter >= frameSpeed)
+			if (Projectile.frameCounter >= FrameSpeed)
 			{
 				Projectile.frameCounter = 0;
 				Projectile.frame++;
@@ -142,126 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		}
 
 		public override void Behavior()
-		{
-			targetNPCIndex = null;
-			vectorToIdle = IdleBehavior();
-
-			// Determine whether to update tactic selection, and whether th change pathfinding state
-			bool useBeaconThisFrame = useBeacon;
-			var tacticsPlayer = player.GetModPlayer<MinionTacticsPlayer>();
-			var waypointsPlayer = player.GetModPlayer<MinionPathfindingPlayer>();
-			bool didChangePathfindingState = false;
-			bool isFollowingPath = false;
-			bool tacticMissing = false;
-			if(useBeacon && usesTactics)
-			{
-				currentTactic = tacticsPlayer.GetTacticForMinion(this);
-				tacticMissing = currentTactic == null;
-				useBeaconThisFrame &= ! tacticMissing && !currentTactic.IgnoreWaypoint;
-				didChangePathfindingState = 
-					(tacticsPlayer.DidUpdateAttackTarget || waypointsPlayer.DidUpdateWaypoint) &&
-					!pathfinder.PrecheckPathCompletion();
-			}
-			// don't allow finding the target while travelling along path
-			if(tacticMissing || (useBeaconThisFrame && (didChangePathfindingState || pathfinder.InTransit)))
-			{
-				vectorToTarget = null;
-				targetNPCCacheFrames = currentTactic?.TargetCacheFrames ?? 999;
-				framesSinceHadTarget = noLOSPursuitTime;
-			} else
-			{
-				vectorToTarget = FindTarget();
-				framesSinceHadTarget++;
-			}
-
-			// Update frame counter metadata
-			animationFrame++;
-
-			// Do targeted movement using the most recently found NPC
-			if (vectorToTarget is Vector2 targetPosition)
-			{
-				if (player.whoAmI == Main.myPlayer && oldVectorToTarget == null)
-				{
-					Projectile.netUpdate = true;
-				}
-				Projectile.tileCollide = !attackThroughWalls;
-				framesSinceHadTarget = 0;
-				Projectile.friendly = dealsContactDamage;
-				TargetedMovement(targetPosition);
-				oldVectorToTarget = vectorToTarget;
-				oldTargetNpcIndex = targetNPCIndex;
-			}
-			// For several frames after losing the target, contine doing targeted movement against the previous cached target
-			else if (attackState != AttackState.RETURNING && oldTargetNpcIndex is int previousIndex && framesSinceHadTarget < noLOSPursuitTime)
-			{
-				Projectile.tileCollide = !attackThroughWalls;
-				if (!Main.npc[previousIndex].active)
-				{
-					oldTargetNpcIndex = null;
-					oldVectorToTarget = null;
-				}
-				else if (previousIndex < Main.maxNPCs)
-				{
-					vectorToTarget = Main.npc[previousIndex].Center - Projectile.Center;
-					Projectile.friendly = dealsContactDamage;
-					TargetedMovement((Vector2)vectorToTarget); // don't immediately give up if losing LOS
-				}
-			}
-			// If no target and beacon is active, follow the beacon
-			else if (useBeaconThisFrame && pathfinder.NextPathfindingTarget() is Vector2 pathNode)
-			{
-				isFollowingPath = true;
-				Projectile.friendly = false;
-				if(pathfinder.isStuck)
-				{
-					pathfinder.GetUnstuck();
-				} else
-				{
-					if(waypointMovementStyle == WaypointMovementStyle.IDLE)
-					{
-						IdleMovement(pathNode);
-					} else
-					{
-						TargetedMovement(pathNode);
-					}
-					Projectile.tileCollide = !pathfinder.atStart && !attackThroughWalls;
-				}
-			} 
-			// Do idle movement
-			else
-			{
-				if (framesSinceHadTarget > 30)
-				{
-					Projectile.tileCollide = false;
-				}
-				if (player.whoAmI == Main.myPlayer && oldVectorToTarget != null)
-				{
-					Projectile.netUpdate = true;
-				}
-				oldVectorToTarget = null;
-				Projectile.friendly = false;
-				IdleMovement(vectorToIdle);
-			}
-
-			// If we've reached the end of the pathfinding path, return to regular AI
-			if(useBeacon && !isFollowingPath)
-			{
-				pathfinder.DetachFromPath();
-			}
-
-			// Perform a Multiplayer-safe approximation of OnHitNPC() against just the target NPC
-			if (targetNPCIndex is int idx &&
-				targetFrameCounter++ > Projectile.localNPCHitCooldown &&
-				vectorToTarget is Vector2 target && target.LengthSquared() < proximityForOnHitTarget * proximityForOnHitTarget)
-			{
-				targetFrameCounter = 0;
-				OnHitTarget(Main.npc[idx]);
-			}
-			AfterMoving();
-			Animate();
-			oldVectorToIdle = vectorToIdle;
-			AdjustInertia();
-		}
+			=> MinionBehavior.MainBehavior();
 
 		/**
 		 * Multiplayer safe approximation of OnHitNPC
@@ -274,79 +156,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		// utility methods
 		public void TeleportToPlayer(ref Vector2 vectorToIdlePosition, float maxDistance)
-		{
-			if (Main.myPlayer == player.whoAmI && vectorToIdlePosition.LengthSquared() > maxDistance * maxDistance)
-			{
-				Projectile.position += vectorToIdlePosition;
-				Projectile.velocity = Vector2.Zero;
-				Projectile.netUpdate = true;
-				vectorToIdlePosition = Vector2.Zero;
-			}
-		}
+			=> MinionBehavior.TeleportToPlayer(ref vectorToIdlePosition, maxDistance);
 
 
-		public List<Projectile> GetMinionsOfType(int projectileType)
-		{
-			var otherMinions = new List<Projectile>();
-			for (int i = 0; i < Main.maxProjectiles; i++)
-			{
-				// Fix overlap with other minions
-				Projectile other = Main.projectile[i];
-				if (other.active && other.owner == Projectile.owner && other.type == projectileType)
-				{
-					otherMinions.Add(other);
-				}
-			}
-			otherMinions.Sort((x, y) => x.minionPos - y.minionPos);
-			if(otherMinions.Count == 0 && Projectile.type == projectileType)
-			{
-				otherMinions.Add(Projectile);
-			}
-			return otherMinions;
-		}
-
-		/**
-		 * Optionally tune down the turning radius of minions for a gameplay
-		 * experience closer to standard vanilla AI
-		 */
-		private void AdjustInertia()
-		{
-			if(ServerConfig.Instance.MinionsInnacurate && useBeacon && vectorToTarget is Vector2 target)
-			{
-				// only alter horizontal velocity, messes with gravity otherwise
-				float accelerationX = Projectile.velocity.X - Projectile.oldVelocity.X;
-				// only make minion more slugish when it's moving towards the enemy, allow it 
-				// to fall away at regular speeds
-				if(Math.Sign(accelerationX) == Math.Sign(target.X))
-				{
-					accelerationX *= 0.75f;
-				}
-				Projectile.velocity.X = Projectile.oldVelocity.X + accelerationX;
-			}
-		}
+		public List<Projectile> GetMinionsOfType(int projectileType) => MinionBehavior.GetMinionsOfType(projectileType);
 
 		/**
 		 * Optionally introduce a shot spread to minions for a gameplay experience closer to standard
 		 * vanilla ai
 		 */
-		internal Vector2 VaryLaunchVelocity(Vector2 initial)
-		{
-			if(!ServerConfig.Instance.MinionsInnacurate)
-			{
-				return initial;
-			}
-			float maxRotation = MathHelper.Pi / 8;
-			float minRotation = MathHelper.Pi / 24;
-			float minRotDist = 800f;
-			if(targetNPCIndex is int idx)
-			{
-				float distance = Math.Min(minRotDist, Vector2.Distance(Main.npc[idx].Center, Projectile.Center));
-				float rotation = MathHelper.Lerp(maxRotation, minRotation, distance/ minRotDist);
-				return initial.RotatedBy(Main.rand.NextFloat(rotation) - rotation/2);
-			} else
-			{
-				return initial.RotatedBy(Main.rand.NextFloat(minRotation) - minRotation/2);
-			}
-		}
+		internal Vector2 VaryLaunchVelocity(Vector2 initial) => MinionBehavior.VaryLaunchVelocity(initial);
 	}
 }

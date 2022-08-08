@@ -24,7 +24,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.tileCollide = false;
-			attackState = AttackState.IDLE;
+			AttackState = AttackState.IDLE;
 			attackFrames = 30;
 			Projectile.localNPCHitCooldown = 20;
 			Projectile.frame = (2 * Projectile.minionPos) % 6;
@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			if(circleHelper.idleBumble && player.velocity.Length() < 4)
+			if(circleHelper.idleBumble && Player.velocity.Length() < 4)
 			{
 				return circleHelper.BumblingHeadCircle();
 			} else
@@ -64,12 +64,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				{
 					Projectile.rotation = 0;
 				}
-				if(circleHelper.idleBumble && player.velocity.Length() < 4)
+				if(circleHelper.idleBumble && Player.velocity.Length() < 4)
 				{
 					Projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(circleHelper.bumbleTarget.X);
 				} else
 				{
-					Projectile.spriteDirection = (circleHelper.idleAngle % (2 * PI)) > PI ? -1 : 1;
+					Projectile.spriteDirection = (circleHelper.idleAngle % (2 * MathHelper.Pi)) > MathHelper.Pi ? -1 : 1;
 				}
 			}
 			else
@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal Projectile projectile => minion.Projectile;
 
-		internal Player player => minion.player;
+		internal Player player => minion.Player;
 
 		internal float idleAngle;
 		internal int idleCircle = 40;
@@ -179,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				}
 				int order = minions.IndexOf(projectile);
 				idleAngle = (2 * MathHelper.Pi * order) / minionCount;
-				idleAngle += 2 * MathHelper.Pi * minion.groupAnimationFrame / minion.groupAnimationFrames;
+				idleAngle += 2 * MathHelper.Pi * minion.GroupAnimationFrame / minion.GroupAnimationFrames;
 				idlePosition.X += 2 + radius * (float)Math.Cos(idleAngle);
 				idlePosition.Y += -20 + idleCircleHeight * (float)Math.Sin(idleAngle);
 			}

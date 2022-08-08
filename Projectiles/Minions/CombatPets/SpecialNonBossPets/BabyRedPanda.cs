@@ -175,7 +175,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	public class BabyRedPandaMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyRedPanda;
-		internal override int BuffId => BuffType<BabyRedPandaMinionBuff>();
+		public override int BuffId => BuffType<BabyRedPandaMinionBuff>();
 
 		int lastSpawnedFrame;
 		int spawnRate = 60;
@@ -186,14 +186,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			base.SetDefaults();
 			ConfigureDrawBox(24, 30, -16, -18, -1);
 			ConfigureFrames(26, (0, 0), (12, 19), (12, 12), (20, 25));
-			frameSpeed = 8;
+			FrameSpeed = 8;
 			markedNPCs = new List<int>();
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			int yawnCycle = 292;
-			int idleFrame = animationFrame % yawnCycle;
+			int idleFrame = AnimationFrame % yawnCycle;
 			frameInfo[GroundAnimationState.STANDING] = idleFrame < yawnCycle - 80 ? (0, 0) : (0, 11);
 			base.Animate(minFrame, maxFrame);
 		}
@@ -210,11 +210,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 					markedNPCs.Add((int)p.ai[0]); // don't re-attack marked npcs
 				}
 			}
-			if(oldTargetNpcIndex is int idx && markedNPCs.Contains(idx))
+			if(OldTargetNpcIndex is int idx && markedNPCs.Contains(idx))
 			{
 				// need to clear all of this out
-				oldTargetNpcIndex = null;
-				framesSinceHadTarget = noLOSPursuitTime;
+				OldTargetNpcIndex = null;
+				FramesSinceHadTarget = NoLOSPursuitTime;
 			}
 			return base.IdleBehavior();
 		}
@@ -235,10 +235,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			int projType = ProjectileType<BabyRedPandaBambooSpikeController>();
-			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful && player.whoAmI == Main.myPlayer && 
-				animationFrame - lastSpawnedFrame > spawnRate && !markedNPCs.Contains(target.whoAmI))
+			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful && Player.whoAmI == Main.myPlayer && 
+				AnimationFrame - lastSpawnedFrame > spawnRate && !markedNPCs.Contains(target.whoAmI))
 			{
-				lastSpawnedFrame = animationFrame;
+				lastSpawnedFrame = AnimationFrame;
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					target.Center,
@@ -246,7 +246,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 					projType,
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: target.whoAmI);
 			}
 		}

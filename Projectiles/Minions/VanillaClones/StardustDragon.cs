@@ -34,14 +34,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class StardustDragonCounterMinion : CounterMinion
 	{
 
-		internal override int BuffId => BuffType<StardustDragonMinionBuff>();
+		public override int BuffId => BuffType<StardustDragonMinionBuff>();
 		protected override int MinionType => ProjectileType<StardustDragonMinion>();
 	}
 
 	public class StardustDragonMinion : WormMinion
 	{
 		public override string Texture => "Terraria/Images/Item_0";
-		internal override int BuffId => BuffType<StardustDragonMinionBuff>();
+		public override int BuffId => BuffType<StardustDragonMinionBuff>();
 		public override int CounterType => ProjectileType<StardustDragonCounterMinion>();
 		protected override int dustType => 135;
 		protected override float baseDamageRatio => 1.6f;
@@ -56,16 +56,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.SetDefaults();
 			Projectile.tileCollide = false;
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 			wormDrawer = new StardustDragonDrawer();
 		}
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			int radius = Math.Abs(player.velocity.X) < 4 ? 160 : 24;
+			Vector2 idlePosition = Player.Top;
+			int radius = Math.Abs(Player.velocity.X) < 4 ? 160 : 24;
 			float idleAngle = IdleLocationSets.GetAngleOffsetInSet(IdleLocationSets.circlingHead, Projectile)
-				+ 2 * PI * groupAnimationFrame / groupAnimationFrames;
+				+ 2 * MathHelper.Pi * GroupAnimationFrame / GroupAnimationFrames;
 			idlePosition.X += radius * (float)Math.Cos(idleAngle);
 			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
@@ -97,11 +97,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override Vector2? FindTarget()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance, losCenter: player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center, searchDistance, losCenter: Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
-			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: Player.Center) is Vector2 target2)
 			{
 				return target2 - Projectile.Center;
 			}

@@ -119,15 +119,15 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.timeLeft = 62;
-			attackThroughWalls = true;
-			frameSpeed = 5;
+			AttackThroughWalls = true;
+			FrameSpeed = 5;
 			Projectile.penetrate = 1;
 		}
 		public override Vector2 IdleBehavior()
 		{
 			List<Projectile> others = GetMinionsOfType(Projectile.type);
 			int myIndex = others.FindIndex(p => p.whoAmI == Projectile.whoAmI);
-			if (player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped)
+			if (Player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped)
 			{
 				Projectile.timeLeft = Math.Max(Projectile.timeLeft, 2);
 			}
@@ -156,9 +156,9 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 					offsetVector = new Vector2(0, -40);
 					break;
 			}
-			offsetVector.Y += 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 120);
+			offsetVector.Y += 4 * (float)Math.Sin(2 * Math.PI * AnimationFrame / 120);
 			Lighting.AddLight(Projectile.Center, Color.LimeGreen.ToVector3() * 0.25f);
-			return player.Center - Projectile.Center + offsetVector;
+			return Player.Center - Projectile.Center + offsetVector;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -205,7 +205,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			Color translucentColor = isCorrupt ? new Color(160, 213, 137, 100) : new Color(253, 204, 129, 100);
 			float r = Projectile.rotation;
 			Vector2 pos = Projectile.Center;
-			SpriteEffects effects = player.direction < 0 ? 0 : SpriteEffects.FlipHorizontally;
+			SpriteEffects effects = Player.direction < 0 ? 0 : SpriteEffects.FlipHorizontally;
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			Rectangle bounds = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);

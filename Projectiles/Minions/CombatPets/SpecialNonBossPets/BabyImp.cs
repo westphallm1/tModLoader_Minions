@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	public class BabyImpMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyImp;
-		internal override int BuffId => BuffType<BabyImpMinionBuff>();
+		public override int BuffId => BuffType<BabyImpMinionBuff>();
 		internal override int? ProjId => ProjectileType<BabyImpFireBall>();
 
 		private Projectile flameRing;
@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			base.SetDefaults();
 			ConfigureDrawBox(24, 28, 0, -14, -1);
 			ConfigureFrames(23, (0, 5), (12, 18), (12, 12), (19, 22));
-			frameSpeed = 8;
+			FrameSpeed = 8;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -86,7 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		{
 			if (flameRing != null)
 			{
-				IdleMovement(vectorToIdle);
+				IdleMovement(VectorToIdle);
 			} else
 			{
 				base.TargetedMovement(vectorToTargetPosition);
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			int yawnCycle = 292;
-			int idleFrame = animationFrame % yawnCycle;
+			int idleFrame = AnimationFrame % yawnCycle;
 			frameInfo[GroundAnimationState.STANDING] = idleFrame < yawnCycle - 40 ? (0, 5) : (6, 11);
 			base.Animate(minFrame, maxFrame);
 		}

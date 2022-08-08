@@ -23,7 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class BabyHornetMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<BabyHornetMinionBuff>();
+		public override int BuffId => BuffType<BabyHornetMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyHornet;
 		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();
 		internal override SoundStyle? ShootSound => SoundID.Item17;

@@ -23,7 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class GlitteryButterflyMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<GlitteryButterflyMinionBuff>();
+		public override int BuffId => BuffType<GlitteryButterflyMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.GlitteryButterfly;
 		internal override int? FiredProjectileId => null;
 		internal override bool DoBumblingMovement => true;

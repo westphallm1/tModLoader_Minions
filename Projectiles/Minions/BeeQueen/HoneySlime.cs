@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.penetrate = -1;
-			attackThroughWalls = false;
+			AttackThroughWalls = false;
 			Projectile.tileCollide = true;
 			minFrame = 2 * Main.rand.Next(3);
 			gHelper = new GroundAwarenessHelper(this);

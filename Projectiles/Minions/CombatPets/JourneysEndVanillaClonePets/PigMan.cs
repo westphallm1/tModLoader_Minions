@@ -23,13 +23,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 	public class PigManMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.PigPet;
-		internal override int BuffId => BuffType<PigManMinionBuff>();
+		public override int BuffId => BuffType<PigManMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			ConfigureDrawBox(24, 30, -16, -32);
 			ConfigureFrames(12, (0, 0), (1, 9), (10, 10), (11, 11));
-			frameSpeed = 8;
+			FrameSpeed = 8;
 		}
 	}
 }

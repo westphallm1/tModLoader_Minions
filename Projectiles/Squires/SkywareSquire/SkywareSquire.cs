@@ -154,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 
 	public class SkywareSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<SkywareSquireMinionBuff>();
+		public override int BuffId => BuffType<SkywareSquireMinionBuff>();
 		protected override int ItemType => ItemType<SkywareSquireMinionItem>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -189,7 +189,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 			base.SetDefaults();
 			Projectile.width = 22;
 			Projectile.height = 32;
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -203,9 +203,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 			// position squire about halfway between the player and the mouse,
 			// near the top of the screen
 			Vector2 mousePos = syncedMouseWorld;
-			float targetX = (mousePos.X + player.position.X) / 2;
+			float targetX = (mousePos.X + Player.position.X) / 2;
 			// should factor into an extension method
-			Vector2 myScreenPosition = player.Center - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+			Vector2 myScreenPosition = Player.Center - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 			float targetY = myScreenPosition.Y + Main.screenHeight * 0.05f;
 			Vector2 targetPos = new Vector2(targetX, targetY);
 			vectorToTargetPosition = targetPos - Projectile.Center;
@@ -215,7 +215,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				angleVector *= ModifiedProjectileVelocity();
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(), 
@@ -232,11 +232,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			StandardTargetedMovement(vectorToTargetPosition);
-			if(specialFrame % 12 == 1 && player.whoAmI == Main.myPlayer)
+			if(specialFrame % 12 == 1 && Player.whoAmI == Main.myPlayer)
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				angleVector *= 1.5f * ModifiedProjectileVelocity();
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(), 
@@ -261,7 +261,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 
 		// go faster while ascending
 		public override float ComputeTargetedSpeed() => 
-			Math.Abs(player.Center.Y - Main.screenHeight/2 - Projectile.Center.Y) < 64 ? 8 : 24;
+			Math.Abs(Player.Center.Y - Main.screenHeight/2 - Projectile.Center.Y) < 64 ? 8 : 24;
 
 		public override float MaxDistanceFromPlayer() => 2000;
 	}

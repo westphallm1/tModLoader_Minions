@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 
 	public class LilEntMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<LilEntMinionBuff>();
+		public override int BuffId => BuffType<LilEntMinionBuff>();
 
 		// TODO make the grounded ranged minion state generically available somehow
 		internal int preferredDistanceFromTarget = 96;
@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 		{
 			gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			DoSimpleFlyingDust(DustID.Grass);
-			if(vectorToTarget is Vector2 target && animationFrame - lastFiredFrame < 45)
+			if(VectorToTarget is Vector2 target && AnimationFrame - lastFiredFrame < 45)
 			{
 				Projectile.spriteDirection = Math.Sign(target.X);
 			}
@@ -108,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 
 		public virtual void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			launchVector.SafeNormalize();
 			launchVector *= 12;
 			Projectile.NewProjectile(
@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 				ProjectileType<LilEntLeafProjectile>(),
 				Projectile.damage,
 				Projectile.knockBack,
-				player.whoAmI);
+				Player.whoAmI);
 		}
 
 		protected override void DoGroundedMovement(Vector2 vector)
@@ -131,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 
 			if (Math.Abs(vectorToTargetPosition.X) < 2 * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= attackFrames)
+				AnimationFrame - lastFiredFrame >= attackFrames)
 			{
 				LaunchProjectile(vectorToTargetPosition);
 			}
@@ -157,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 		public override void CheckActive()
 		{
 			base.CheckActive();
-			if(!player.GetModPlayer<MinionSpawningItemPlayer>().lilEntAccessoryEquipped)
+			if(!Player.GetModPlayer<MinionSpawningItemPlayer>().lilEntAccessoryEquipped)
 			{
 				Projectile.Kill();
 			}

@@ -23,7 +23,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class ZephyrFishMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<ZephyrFishMinionBuff>();
+		public override int BuffId => BuffType<ZephyrFishMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.ZephyrFish;
 		internal override int? FiredProjectileId => null;
 		internal override bool DoBumblingMovement => true;

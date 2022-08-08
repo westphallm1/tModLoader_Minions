@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	public class PlantPupMinion : CombatPetGroundedRangedMinion
 	{
-		internal override int BuffId => BuffType<PlantPupMinionBuff>();
+		public override int BuffId => BuffType<PlantPupMinionBuff>();
 
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
 
@@ -136,7 +136,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.GetAnimationState();
-			frameSpeed = (state == GroundAnimationState.STANDING) ? 10 : 5;
+			FrameSpeed = (state == GroundAnimationState.STANDING) ? 10 : 5;
 			base.Animate(minFrame, maxFrame);
 			if(state == GroundAnimationState.JUMPING)
 			{

@@ -65,7 +65,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 	public class SoulboundSwordMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<SoulboundSwordMinionBuff>();
+		public override int BuffId => BuffType<SoulboundSwordMinionBuff>();
 		protected override int ItemType => ItemType<SoulboundSwordMinionItem>();
 		protected override int AttackFrames => 15;
 		protected override string WingTexturePath => null;
@@ -133,12 +133,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.IdleMovement(vectorToIdle);
+			base.IdleMovement(VectorToIdle);
 		}
 
 		public override void OnStartUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromThis(),
@@ -147,19 +147,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 					ProjectileType<SoulboundSpecialBow>(), 
 					5 * Projectile.damage / 4, 
 					Projectile.knockBack, 
-					player.whoAmI);
+					Player.whoAmI);
 				p.originalDamage = Projectile.originalDamage;
 			}
 		}
 
 		public override void OnStopUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				for(int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if(p.active && p.owner == player.whoAmI && p.type == ProjectileType<SoulboundSpecialBow>())
+					if(p.active && p.owner == Player.whoAmI && p.type == ProjectileType<SoulboundSpecialBow>())
 					{
 						p.Kill();
 						break;

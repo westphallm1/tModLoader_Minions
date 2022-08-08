@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class BabyDinosaurMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyDino;
-		internal override int BuffId => BuffType<BabyDinosaurMinionBuff>();
+		public override int BuffId => BuffType<BabyDinosaurMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			{
 				Projectile.localNPCHitCooldown = AttackFrames / 2;
 			}
-			useBeacon = false;
+			UseBeacon = false;
 		}
 
 		protected virtual bool IsAttacking()
@@ -105,7 +105,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		}
 
 		protected int ModifiedAttackFrames => attackSpeedCanBeModified ?
-			(int)(AttackFrames * player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier) :
+			(int)(AttackFrames * Player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier) :
 			AttackFrames;
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -146,12 +146,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			Vector2 attackVector;
 			// when the squire is close enough to the mouse, attack along the 
 			// mouse-player line
-			Vector2? _mouseWorld = player.GetModPlayer<MousePlayer>().GetMousePosition();
+			Vector2? _mouseWorld = Player.GetModPlayer<MousePlayer>().GetMousePosition();
 			if (_mouseWorld is Vector2 mouseWorld)
 			{
 				if (Vector2.Distance(mouseWorld, Projectile.Center) < 48)
 				{
-					attackVector = mouseWorld - player.Center;
+					attackVector = mouseWorld - Player.Center;
 				}
 				else
 				{
@@ -319,13 +319,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 
 		protected virtual int? GetSpriteDirection()
 		{
-			if (vectorToTarget is Vector2 target)
+			if (VectorToTarget is Vector2 target)
 			{
-				MousePlayer mPlayer = player.GetModPlayer<MousePlayer>();
+				MousePlayer mPlayer = Player.GetModPlayer<MousePlayer>();
 				Vector2? _mouseWorld = mPlayer.GetMousePosition();
 				if (_mouseWorld is Vector2 mouseWorld)
 				{
-					return Math.Sign((mouseWorld - player.Center).X);
+					return Math.Sign((mouseWorld - Player.Center).X);
 				}
 				else return null;
 			}
@@ -348,7 +348,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 		{
 			Projectile.rotation = Projectile.velocity.X * 0.05f;
 			Projectile.frameCounter++;
-			if (Projectile.frameCounter == frameSpeed)
+			if (Projectile.frameCounter == FrameSpeed)
 			{
 				Projectile.frameCounter = 0;
 				wingFrame += 1;

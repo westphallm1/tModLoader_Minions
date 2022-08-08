@@ -46,7 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 
 	public class SlimepireMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<SlimepireMinionBuff>();
+		public override int BuffId => BuffType<SlimepireMinionBuff>();
 		private float intendedX = 0;
 
 		public override void SetStaticDefaults()
@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			DrawOffsetX = (Projectile.width - 44) / 2;
 			DrawOriginOffsetY = 0;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			}
 			gHelper.DoJump(vector);
 			int maxHorizontalSpeed = vector.Y < -64 ? 4 : 8;
-			if(targetNPCIndex is int idx && vector.Length() < 64)
+			if(TargetNPCIndex is int idx && vector.Length() < 64)
 			{
 				// go fast enough to hit the enemy while chasing them
 				Vector2 targetVelocity = Main.npc[idx].velocity;

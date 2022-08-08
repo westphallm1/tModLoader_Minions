@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		protected int maxDistanceFromPlayer = 600;
 		protected int minDistanceToEnemy = 200;
 
-		internal override int BuffId => BuffType<MeteorFistMinionBuff>();
+		public override int BuffId => BuffType<MeteorFistMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{
@@ -30,13 +30,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			Projectile.width = 26;
 			Projectile.height = 28;
 			Projectile.tileCollide = false;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 			Projectile.minionSlots = 0f;
 		}
 
 		public override Vector2? FindTarget()
 		{
-			if (PlayerTargetPosition(600f, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(600f, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -57,12 +57,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		}
 		public override Vector2 IdleBehavior()
 		{
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -5;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition = player.Center;
+				idlePosition = Player.Center;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			int maxSpeed = targetedSpeed;
 			// move towards the enemy, but don't get too far from the player
 			Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? -1 : 1;
-			Vector2 vectorFromPlayer = player.Center - Projectile.Center;
+			Vector2 vectorFromPlayer = Player.Center - Projectile.Center;
 			if (vectorFromPlayer.Length() > maxDistanceFromPlayer)
 			{
 				vectorToTargetPosition = vectorFromPlayer;

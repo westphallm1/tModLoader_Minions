@@ -190,7 +190,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		{
 			Vector2 target = base.IdleBehavior();
 			SetAttackStyleSpecificBehaviors();
-			weaponDrawer.Update(Projectile, animationFrame);
+			weaponDrawer.Update(Projectile, AnimationFrame);
 			return target;
 		}
 
@@ -225,7 +225,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			if(animationFrame == lastFiredFrame)
+			if(AnimationFrame == lastFiredFrame)
 			{
 				weaponDrawer.StartAttack(vectorToTargetPosition);
 			}
@@ -246,7 +246,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class BlackCatMinion : WeaponHoldingCatMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BlackCat;
-		internal override int BuffId => BuffType<BlackCatMinionBuff>();
+		public override int BuffId => BuffType<BlackCatMinionBuff>();
 
 		// scale attack type rather than attack speed
 		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(45, 60 - 4 * info.Level);

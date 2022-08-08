@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 	public abstract class SoulboundArsenalBaseMinion : CoordinatedWeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<SoulboundArsenalMinionBuff>();
+		public override int BuffId => BuffType<SoulboundArsenalMinionBuff>();
 		protected override int ItemType => ItemType<SoulboundArsenalMinionItem>();
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => null;
@@ -273,7 +273,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			if (attackFrame == 0)
 			{
 				SoundEngine.PlaySound(SoundID.Item102, Projectile.position);
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					int type = ProjectileType<SoulboundArsenalArrow>();
 					Vector2 angleVector = UnitVectorFromWeaponAngle();
@@ -326,7 +326,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override Vector2 IdleBehavior()
 		{
-			if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0 && IsPrimaryFrame)
+			if (Main.myPlayer == Player.whoAmI && Player.ownedProjectileCounts[ProjectileType<SoulboundArsenalBowMinion>()] == 0 && IsPrimaryFrame)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromThis(),
@@ -359,7 +359,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			if (attackFrame == 0)
 			{
 				SoundEngine.PlaySound(SoundID.Item71, Projectile.position);
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Vector2 vector2Mouse = Main.MouseWorld - Projectile.Center;
 					vector2Mouse.Normalize();
@@ -388,7 +388,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == projType)
+				if(p.active && p.owner == Player.whoAmI && p.type == projType)
 				{
 					p.ai[0] = offset.ToRotation();
 					p.Center = Projectile.Center + offset * 48;
@@ -404,7 +404,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == projType)
+				if(p.active && p.owner == Player.whoAmI && p.type == projType)
 				{
 					p.Kill();
 					break;
@@ -414,7 +414,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 		public override void OnStartUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
@@ -423,7 +423,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 					ProjectileType<SoulboundArsenalLaser>(), 
 					3 * Projectile.damage, 
 					Projectile.knockBack, 
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: UnitVectorFromWeaponAngle().ToRotation());
 			}
 		}

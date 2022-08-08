@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			frameSpeed = 15;
+			FrameSpeed = 15;
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.tileCollide = true;
@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Items.Armor
 			{
 				// enforce drifting left and right
 				float lifeFraction = Projectile.timeLeft / (float)timeToLive;
-				vector2Target.X += 12 * (1 - lifeFraction) * (float)Math.Sin(10 * PI * lifeFraction);
+				vector2Target.X += 12 * (1 - lifeFraction) * (float)Math.Sin(10 * MathHelper.Pi * lifeFraction);
 			}
 			base.Move(vector2Target, isIdle);
 			if (Projectile.timeLeft > timeToLive - 30)

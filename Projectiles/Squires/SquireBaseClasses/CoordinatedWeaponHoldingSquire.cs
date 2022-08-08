@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 				}
 				if (!IsMyTurn())
 				{
-					IdleMovement(vectorToIdle);
+					IdleMovement(VectorToIdle);
 					return null;
 				}
 			}

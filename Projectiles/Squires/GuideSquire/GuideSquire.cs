@@ -160,7 +160,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 	public class GuideSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<GuideSquireMinionBuff>();
+		public override int BuffId => BuffType<GuideSquireMinionBuff>();
 		protected override int ItemType => ItemType<GuideSquireMinionItem>();
 		protected override int AttackFrames => 35;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -211,7 +211,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				angleVector *= ModifiedProjectileVelocity();
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(), 
@@ -229,7 +229,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		{
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			weaponAngle = MathHelper.PiOver2;
-			if (specialFrame <= 31 && specialFrame % 10 == 1 && Main.myPlayer == player.whoAmI)
+			if (specialFrame <= 31 && specialFrame % 10 == 1 && Main.myPlayer == Player.whoAmI)
 			{
 				float launchAngle = -(7 * MathHelper.Pi / 16 + Main.rand.NextFloat(MathHelper.Pi / 8));
 				Vector2 launchVec = launchAngle.ToRotationVector2() * 20;
@@ -242,14 +242,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 					0,
 					Main.myPlayer);
 			}
-			else if (specialFrame > 31 && specialFrame % 8 == 1 && Main.myPlayer == player.whoAmI)
+			else if (specialFrame > 31 && specialFrame % 8 == 1 && Main.myPlayer == Player.whoAmI)
 			{
 				// spawn a downward facing arrow about halfway between the player and the mouse,
 				// angled towards the mouse
 				int spawnPosRange = 64;
 				float spawnAngleRange = MathHelper.Pi / 24;
 				Vector2 mousePos = Main.MouseWorld; // only run on client player, MP safe
-				float spawnX = (mousePos.X + player.position.X) / 2 + 
+				float spawnX = (mousePos.X + Player.position.X) / 2 + 
 					Main.rand.Next(-spawnPosRange, spawnPosRange);
 				Vector2 myScreenPosition = Main.player[Projectile.owner].Center 
 					- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);

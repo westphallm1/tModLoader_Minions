@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	public class CursedSaplingMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.CursedSapling;
-		internal override int BuffId => BuffType<CursedSaplingMinionBuff>();
+		public override int BuffId => BuffType<CursedSaplingMinionBuff>();
 
 		int attackCycle = 0;
 		internal override int? ProjId => attackCycle % 6 > 3 ?
@@ -131,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		private (Vector2, Vector2) ChooseSpikeSpawnLocation()
 		{
-			NPC target = Main.npc[(int)targetNPCIndex];
+			NPC target = Main.npc[(int)TargetNPCIndex];
 			float targetVelocityRotation = target.velocity.ToRotation();
 			float minSpikeScale = 0.67f;
 			float maxSearchRange = CursedSaplingBranchProjectile.SpikeMaxLength * minSpikeScale * 0.85f;
@@ -163,7 +163,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				return;
 			}
 
-			if(targetNPCIndex == null)
+			if(TargetNPCIndex == null)
 			{
 				return;
 			}
@@ -176,7 +176,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				(int)ProjId,
 				(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 				Projectile.knockBack,
-				player.whoAmI,
+				Player.whoAmI,
 				ai0: ai0 ?? Projectile.whoAmI);
 		}
 

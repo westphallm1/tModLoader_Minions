@@ -220,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 	public class PumpkinSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<PumpkinSquireMinionBuff>();
+		public override int BuffId => BuffType<PumpkinSquireMinionBuff>();
 		protected override int ItemType => ItemType<PumpkinSquireMinionItem>();
 		protected override int AttackFrames => 40;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/SpookyWings";
@@ -306,7 +306,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.StandardTargetedMovement(vectorToTargetPosition);
-			if (attackFrame == 0 && Main.myPlayer == player.whoAmI)
+			if (attackFrame == 0 && Main.myPlayer == Player.whoAmI)
 			{
 				whipVector = UnitVectorFromWeaponAngle();
 				whipVector *= whipLength;
@@ -348,9 +348,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			int bigPumpkinType = ProjectileType<BigPumpkinBomb>();
 			Projectile bigPumpkin = Main.projectile.Where(p =>
-				p.active && p.owner == player.whoAmI && p.type == bigPumpkinType && p.ai[0] == Projectile.whoAmI).FirstOrDefault();
+				p.active && p.owner == Player.whoAmI && p.type == bigPumpkinType && p.ai[0] == Projectile.whoAmI).FirstOrDefault();
 			Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
-			if (bigPumpkin == default && Main.myPlayer == player.whoAmI)
+			if (bigPumpkin == default && Main.myPlayer == Player.whoAmI)
 			{
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(), 

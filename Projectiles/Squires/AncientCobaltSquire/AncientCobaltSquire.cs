@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 	public class AncientCobaltSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<AncientCobaltSquireMinionBuff>();
+		public override int BuffId => BuffType<AncientCobaltSquireMinionBuff>();
 		protected override int ItemType => ItemType<AncientCobaltSquireMinionItem>();
 		protected override int AttackFrames => 8;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -172,7 +172,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				angleVector *= ModifiedProjectileVelocity();
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -190,12 +190,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		{
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			// special frame is 1-indexed because it's a bug and I can't be bothered to fix it
-			if (specialFrame % 5 == 1 && specialFrame <= 46 && Main.myPlayer == player.whoAmI)
+			if (specialFrame % 5 == 1 && specialFrame <= 46 && Main.myPlayer == Player.whoAmI)
 			{
 				float angleOffset = Main.rand.NextFloat(MathHelper.Pi / 16) - MathHelper.Pi / 32;
 				Vector2 angleVector = UnitVectorFromWeaponAngle().RotatedBy(angleOffset);
 				angleVector *= CrossMod.ApplyCrossModScaling(ModifiedProjectileVelocity() * 2, Projectile, 0);
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),

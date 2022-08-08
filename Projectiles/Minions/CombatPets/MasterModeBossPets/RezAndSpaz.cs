@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class RezMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<RezAndSpazMinionBuff>();
+		public override int BuffId => BuffType<RezAndSpazMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TwinsPet;
 		internal override int? FiredProjectileId => ProjectileType<MiniTwinsLaser>();
@@ -55,13 +55,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			int attackCycleFrame = animationFrame - hsHelper.lastShootFrame;
+			int attackCycleFrame = AnimationFrame - hsHelper.lastShootFrame;
 			if(attackCycleFrame == attackFrames / 3)
 			{
 				Vector2 lineOfFire = vectorToTargetPosition;
 				lineOfFire.SafeNormalize();
 				lineOfFire *= hsHelper.projectileVelocity;
-				if(player.whoAmI == Main.myPlayer)
+				if(Player.whoAmI == Main.myPlayer)
 				{
 					hsHelper.FireProjectile(lineOfFire, (int)FiredProjectileId, 0);
 				}
@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class SpazMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<RezAndSpazMinionBuff>();
+		public override int BuffId => BuffType<RezAndSpazMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.TwinsPet;
 		internal override int? FiredProjectileId => ProjectileType<MiniEyeFire>();
@@ -97,14 +97,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			hsHelper.projectileVelocity = 6;
 			base.TargetedMovement(vectorToTargetPosition);
-			int attackCycleFrame = animationFrame - hsHelper.lastShootFrame;
+			int attackCycleFrame = AnimationFrame - hsHelper.lastShootFrame;
 			if(attackCycleFrame < attackFrames / 2 && attackFrames % 6 == 0)
 			{
 				Vector2 lineOfFire = vectorToTargetPosition;
 				lineOfFire.SafeNormalize();
 				lineOfFire *= hsHelper.projectileVelocity;
 				lineOfFire += Projectile.velocity / 3;
-				if(player.whoAmI == Main.myPlayer)
+				if(Player.whoAmI == Main.myPlayer)
 				{
 					hsHelper.FireProjectile(lineOfFire, (int)FiredProjectileId, attackCycleFrame % 18);
 				}

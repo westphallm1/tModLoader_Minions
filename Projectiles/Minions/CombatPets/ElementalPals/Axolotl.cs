@@ -149,7 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 				for(int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if(p.active && p.owner == player.whoAmI && p.type == laserType && p.ai[1] == Projectile.whoAmI)
+					if(p.active && p.owner == Player.whoAmI && p.type == laserType && p.ai[1] == Projectile.whoAmI)
 					{
 						laser = p;
 						break;
@@ -173,7 +173,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 					(int)ProjId,
 					(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: launchVector.ToRotation(),
 					ai1: Projectile.whoAmI);
 			}
@@ -192,7 +192,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			base.IdleMovement(vectorToIdlePosition);
-			if(laser != default && vectorToTarget == default)
+			if(laser != default && VectorToTarget == default)
 			{
 				laser.Kill();
 			}
@@ -210,7 +210,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	public class AxolotlMinion : WaterBeamLaserCombatPet
 	{
-		internal override int BuffId => BuffType<AxolotlMinionBuff>();
+		public override int BuffId => BuffType<AxolotlMinionBuff>();
 
 		public override void SetDefaults()
 		{
@@ -222,7 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.GetAnimationState();
-			frameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
+			FrameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
 			base.Animate(minFrame, maxFrame);
 			if(state == GroundAnimationState.JUMPING)
 			{

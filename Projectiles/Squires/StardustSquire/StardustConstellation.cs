@@ -225,11 +225,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		{
 			for(int i = 0; i < bigStars.Count; i++)
 			{
-				bigStars[i].DrawConnections(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, helper.spriteBatch, animationFrame);
+				bigStars[i].DrawConnections(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, helper.spriteBatch, AnimationFrame);
 			}
 			for(int i = 0; i < bigStars.Count; i++)
 			{
-				bigStars[i].Draw(helper.spriteBatch, animationFrame);
+				bigStars[i].Draw(helper.spriteBatch, AnimationFrame);
 			}
 		}
 
@@ -238,7 +238,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			// could probably be accomplished with dust
 			for(int i = 0; i < smallStars.Count; i++)
 			{
-				smallStars[i].Draw(helper.spriteBatch, ExtraTextures[0].Value, animationFrame);
+				smallStars[i].Draw(helper.spriteBatch, ExtraTextures[0].Value, AnimationFrame);
 			}
 		}
 
@@ -249,7 +249,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(player.whoAmI == Main.myPlayer && animationFrame % 10 == 0 && targetNPCIndex is int idx)
+			if(Player.whoAmI == Main.myPlayer && AnimationFrame % 10 == 0 && TargetNPCIndex is int idx)
 			{
 				Vector2 launchPos = Projectile.Center + bigStars[Main.rand.Next(bigStars.Count)].EndOffset;
 				int projectileVelocity = 12;
@@ -264,20 +264,20 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 					ProjectileType<StardustHomingStar>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: idx);
 			}
 		}
 
 		public override Vector2? FindTarget()
 		{
-			if (animationFrame < 15) 
+			if (AnimationFrame < 15) 
 			{ 
 				return null; 
 			}
 			if(GetClosestEnemyToPosition(Projectile.Center, AttackRange, false) is NPC target)
 			{
-				targetNPCIndex = target.whoAmI;
+				TargetNPCIndex = target.whoAmI;
 				return target.Center - Projectile.Center;
 			}
 			return null;
@@ -285,14 +285,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 		private void UpdateSmallStars()
 		{
-			if (animationFrame < 15) 
+			if (AnimationFrame < 15) 
 			{ 
 				return; 
 			}
 			int lastDeadIdx = -1;
 			for(int i = 0; i < smallStars.Count; i++)
 			{
-				if(smallStars[i].IsDead(animationFrame))
+				if(smallStars[i].IsDead(AnimationFrame))
 				{
 					lastDeadIdx = i;
 				}
@@ -305,7 +305,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			if(smallStars.Count < MaxSmallStars && Main.rand.NextFloat() < SmallSpawnChance)
 			{
 				Vector2 parentPos = bigStars[Main.rand.Next(bigStars.Count)].position;
-				smallStars.Add(new ConstellationSmallStar(animationFrame, parentPos));
+				smallStars.Add(new ConstellationSmallStar(AnimationFrame, parentPos));
 			}
 		}
 

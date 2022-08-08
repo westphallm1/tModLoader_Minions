@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 	}
 	public class CopperSwordMinion : GroupAwareMinion
 	{
-		internal override int BuffId => BuffType<CopperSwordMinionBuff>();
+		public override int BuffId => BuffType<CopperSwordMinionBuff>();
 		private readonly float baseRoation = 3 * (float)Math.PI / 4f;
 		private int hitsSinceLastIdle = 0;
 		private int framesSinceLastHit = 0;
@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			Projectile.height = 16;
 			Projectile.tileCollide = false;
 			Projectile.localNPCHitCooldown = 20;
-			attackState = AttackState.IDLE;
+			AttackState = AttackState.IDLE;
 			attackFrames = 60;
 		}
 
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		{
 			if (hitsSinceLastIdle++ > 2)
 			{
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 			}
 			framesSinceLastHit = 0;
 		}
@@ -89,13 +89,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Center;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -5 * Projectile.minionPos;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Center.X + 20 * -player.direction;
-				idlePosition.Y = player.Center.Y - 5;
+				idlePosition.X = Player.Center.X + 20 * -Player.direction;
+				idlePosition.Y = Player.Center.Y - 5;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
@@ -141,11 +141,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		{
 			// alway clamp to the idle position
 			int inertia = 5;
-			int maxSpeed = attackState == AttackState.IDLE ? 12 : 8;
+			int maxSpeed = AttackState == AttackState.IDLE ? 12 : 8;
 			if (vectorToIdlePosition.Length() < 32)
 			{
 				// return to the attacking state after getting back home
-				attackState = AttackState.IDLE;
+				AttackState = AttackState.IDLE;
 				hitsSinceLastIdle = 0;
 				framesSinceLastHit = 0;
 			}
@@ -157,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 			}
 			Projectile.velocity = (Projectile.velocity * (inertia - 1) + speedChange) / inertia;
 
-			float intendedRotation = baseRoation + player.direction * (Projectile.minionPos * (float)Math.PI / 36);
+			float intendedRotation = baseRoation + Player.direction * (Projectile.minionPos * (float)Math.PI / 36);
 			intendedRotation += Projectile.velocity.X * 0.05f;
 			Projectile.rotation = intendedRotation;
 		}

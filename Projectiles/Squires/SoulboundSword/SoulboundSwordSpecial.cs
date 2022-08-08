@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 	public class SoulboundSpecialBow : SquireMinion
 	{
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundBow";
-		internal override int BuffId => BuffType<SoulboundSwordMinionBuff>();
+		public override int BuffId => BuffType<SoulboundSwordMinionBuff>();
 		protected override int ItemType => ItemType<SoulboundSwordMinionItem>();
 
 		public override void SetDefaults()
@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			// angled towards the mouse
 			float spawnAngleRange = MathHelper.Pi / 16;
 			Vector2 mousePos = syncedMouseWorld;
-			float hoverX = (mousePos.X + player.position.X) / 2;
+			float hoverX = (mousePos.X + Player.position.X) / 2;
 			Vector2 myScreenPosition = Main.player[Projectile.owner].Center 
 				- new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 			float hoverY = myScreenPosition.Y + 0.05f * Main.screenHeight; // hover 5% of the way down the screen
@@ -119,7 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			Vector2 attackAngle = mousePos - hoverPos;
 			Projectile.Center = hoverPos;
 			Projectile.rotation = attackAngle.ToRotation();
-			if(animationFrame % 6 == 0)
+			if(AnimationFrame % 6 == 0)
 			{
 				Vector2 launchAngle = attackAngle.RotatedBy(
 					Main.rand.NextFloat(spawnAngleRange) - spawnAngleRange/2);

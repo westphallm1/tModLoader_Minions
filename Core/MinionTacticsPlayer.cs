@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Tactics;
+﻿using AmuletOfManyMinions.Core.Minions.AI;
+using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
 using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Core.Netcode.Packets;
@@ -450,7 +451,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			return groupForMinion;
 
 		}
-		internal int GetGroupForMinion(Minion minion)
+		internal int GetGroupForMinion(IMinion minion)
 		{
 			return GetGroupForBuff(minion.BuffId);
 		}
@@ -469,7 +470,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		{
 			return MinionTacticsMap.ContainsKey(minionBuffId);
 		}
-		public PlayerTargetSelectionTactic GetTacticForMinion(Minion minion)
+		public PlayerTargetSelectionTactic GetTacticForMinion(IMinion minion)
 		{
 			if(isQuickDefending || UsingGlobalTactics)
 			{

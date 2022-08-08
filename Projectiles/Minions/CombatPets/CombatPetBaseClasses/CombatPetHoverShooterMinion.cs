@@ -51,10 +51,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		public override Vector2 IdleBehavior()
 		{
-			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
 			UpdateHsHelperWithPetLevel(leveledPetPlayer.PetLevel);
-			dealsContactDamage = DoBumblingMovement;
+			DealsContactDamage = DoBumblingMovement;
 			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return base.IdleBehavior();
 		}
@@ -116,7 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if(vectorToTarget is Vector2 target)
+			if(VectorToTarget is Vector2 target)
 			{
 				Projectile.spriteDirection = forwardDir * Math.Sign(target.X);
 			}
@@ -144,7 +144,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			dealsContactDamage = true;
+			DealsContactDamage = true;
 			hsHelper.targetInnerRadius = 96;
 			hsHelper.targetOuterRadius = 128;
 			hsHelper.targetShootProximityRadius = 112;
@@ -158,7 +158,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				BumblingMovement(vectorToTargetPosition);
 				return;
 			} 
-			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
+			int framesSinceShoot = AnimationFrame - hsHelper.lastShootFrame;
 			if(framesSinceShoot > 20 && framesSinceShoot % 15 < 10 && framesSinceShoot < attackFrames)
 			{
 				// dash at the target
@@ -213,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 target = base.IdleBehavior();
-			dealsContactDamage = true;
+			DealsContactDamage = true;
 			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return target;
 		}

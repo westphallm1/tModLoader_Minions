@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	public class SugarGliderMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SugarGlider;
-		internal override int BuffId => BuffType<SugarGliderMinionBuff>();
+		public override int BuffId => BuffType<SugarGliderMinionBuff>();
 
 		internal MotionBlurDrawer blurDrawer;
 		internal static int PlayRoughDuration = 120;
@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		internal Vector2 playRoughVelocity;
 
 		internal bool IsPlayingRough => playRoughTarget != null && playRoughTarget.active && 
-			animationFrame - playRoughStartFrame < PlayRoughDuration;
+			AnimationFrame - playRoughStartFrame < PlayRoughDuration;
 
 		public override void SetDefaults()
 		{
@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void OnHitTarget(NPC target)
 		{
 			base.OnHitTarget(target);
-			if(player.whoAmI != Main.myPlayer)
+			if(Player.whoAmI != Main.myPlayer)
 			{
 				StartPlayingRough(target);
 			}
@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			if(!IsPlayingRough && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre)
 			{
 				playRoughTarget = target;
-				playRoughStartFrame = animationFrame;
+				playRoughStartFrame = AnimationFrame;
 				playRoughOffset = target.Center - Projectile.Center;
 				playRoughVelocity = playRoughOffset;
 				playRoughVelocity.SafeNormalize();
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		private void DoPlayRoughMovement()
 		{
-			if(animationFrame - playRoughStartFrame == PlayRoughDuration - 1)
+			if(AnimationFrame - playRoughStartFrame == PlayRoughDuration - 1)
 			{
 				Projectile.Center = playRoughTarget.Center;
 				Projectile.velocity = playRoughVelocity + playRoughTarget.velocity;

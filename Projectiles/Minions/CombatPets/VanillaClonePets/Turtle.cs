@@ -26,14 +26,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class TurtleMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Turtle;
-		internal override int BuffId => BuffType<TurtleMinionBuff>();
+		public override int BuffId => BuffType<TurtleMinionBuff>();
 		internal override int? ProjId => null;
 
 		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(50, 65 - 3 * info.Level);
 
 		private Vector2 launchPos;
 		private int bounceCycleLength => (int)(0.75f * attackFrames);
-		private bool IsBouncing => animationFrame - lastFiredFrame < bounceCycleLength;
+		private bool IsBouncing => AnimationFrame - lastFiredFrame < bounceCycleLength;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -46,14 +46,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		private void DoBounce()
 		{
 			Projectile.tileCollide = true;
-			if(animationFrame - lastFiredFrame > 10 && Projectile.velocity.Y < 16)
+			if(AnimationFrame - lastFiredFrame > 10 && Projectile.velocity.Y < 16)
 			{
 				Projectile.velocity.Y += 0.5f;
 			}
 			if(Vector2.DistanceSquared(launchPos, Projectile.position) > 240 * 240)
 			{
 				// snap out of bounce if we go too far in a straight line
-				lastFiredFrame = animationFrame - bounceCycleLength;
+				lastFiredFrame = AnimationFrame - bounceCycleLength;
 			}
 		}
 
@@ -62,9 +62,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		// TODO: Refactor into a BounceHelper class
 		private void LaunchBounce(Vector2 vectorToTarget)
 		{
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			launchPos = Projectile.position;
-			if(targetNPCIndex is int idx && Main.npc[idx].active)
+			if(TargetNPCIndex is int idx && Main.npc[idx].active)
 			{
 				vectorToTarget += 4 * Main.npc[idx].velocity; // track the target NPC a bit
 			}
@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
-			LaunchBounce((Vector2)vectorToTarget);
+			LaunchBounce((Vector2)VectorToTarget);
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)

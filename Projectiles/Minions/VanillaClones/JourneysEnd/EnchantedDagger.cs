@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Smolstar;
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 12;
-		internal override int BuffId => BuffType<EnchantedDaggerMinionBuff>();
+		public override int BuffId => BuffType<EnchantedDaggerMinionBuff>();
 
 		private Texture2D solidTexture;
 		private Color outlineColor;
@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(vectorToTarget != default || vectorToIdle.LengthSquared() > 24 * 24)
+			if(VectorToTarget != default || VectorToIdle.LengthSquared() > 24 * 24)
 			{
 				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			} else
@@ -139,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			if(vectorToTarget == default || framesSinceLastHit > cooldownAfterHitFrames)
+			if(VectorToTarget == default || framesSinceLastHit > cooldownAfterHitFrames)
 			{
 				return false;
 			}
@@ -164,7 +164,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			blurDrawer.Update(Projectile.Center, vectorToTarget != default);
+			blurDrawer.Update(Projectile.Center, VectorToTarget != default);
 		}
 	}
 }

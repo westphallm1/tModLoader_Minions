@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public abstract class BaseFlinxMinion : SimpleGroundBasedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.FlinxMinion;
-		internal override int BuffId => BuffType<FlinxMinionBuff>();
+		public override int BuffId => BuffType<FlinxMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void CheckActive()
 		{
 			base.CheckActive();
-			if(!player.GetModPlayer<MinionSpawningItemPlayer>().flinxArmorSetEquipped)
+			if(!Player.GetModPlayer<MinionSpawningItemPlayer>().flinxArmorSetEquipped)
 			{
 				Projectile.Kill();
 			}

@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class ShadowMimicMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.ShadowMimic;
-		internal override int BuffId => BuffType<ShadowMimicMinionBuff>();
+		public override int BuffId => BuffType<ShadowMimicMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{
@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			int idleCycle = animationFrame % 180;
+			int idleCycle = AnimationFrame % 180;
 			if(gHelper.isFlying) { base.Animate(6, 14); }
 			else if(ShouldBounce) { base.Animate(4, 6); }
 			else if (idleCycle < 150) 

@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		protected int minDistanceToEnemy = 200;
 		protected int animationFrames = 120;
 
-		internal override int BuffId => BuffType<CrystalFistMinionBuff>();
+		public override int BuffId => BuffType<CrystalFistMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{
@@ -34,14 +34,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			Projectile.width = 36;
 			Projectile.height = 60;
 			Projectile.tileCollide = false;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 			Projectile.minionSlots = 0f;
-			attackThroughWalls = false;
+			AttackThroughWalls = false;
 		}
 
 		public override Vector2? FindTarget()
 		{
-			if (PlayerTargetPosition(950f, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(950f, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -62,14 +62,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		}
 		public override Vector2 IdleBehavior()
 		{
-			Vector2 idlePosition = player.Top;
+			Vector2 idlePosition = Player.Top;
 			Projectile.ai[0] = (Projectile.ai[0] + 1) % animationFrames;
 			float idleAngle = (float)Math.PI * 2 * Projectile.ai[0] / animationFrames;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -5 + 8 * (float)Math.Sin(idleAngle);
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition = player.Center;
+				idlePosition = Player.Center;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
@@ -87,7 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 				speedChange.SafeNormalize();
 				speedChange *= maxSpeed;
 			}
-			Projectile.spriteDirection = -player.direction;
+			Projectile.spriteDirection = -Player.direction;
 			Projectile.velocity = (Projectile.velocity * (inertia - 1) + speedChange) / inertia;
 		}
 
@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			int maxSpeed = targetedSpeed;
 			// move towards the enemy, but don't get too far from the player
 			Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? -1 : 1;
-			Vector2 vectorFromPlayer = player.Center - Projectile.Center;
+			Vector2 vectorFromPlayer = Player.Center - Projectile.Center;
 			if (vectorFromPlayer.Length() > maxDistanceFromPlayer)
 			{
 				vectorToTargetPosition = vectorFromPlayer;

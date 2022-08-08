@@ -113,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	public class CinderHenMinion : CombatPetGroundedRangedMinion
 	{
-		internal override int BuffId => BuffType<CinderHenMinionBuff>();
+		public override int BuffId => BuffType<CinderHenMinionBuff>();
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
 
 		internal override int? ProjId => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre ? 
@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.GetAnimationState();
-			frameSpeed = (state == GroundAnimationState.STANDING) ? 10 : 5;
+			FrameSpeed = (state == GroundAnimationState.STANDING) ? 10 : 5;
 			base.Animate(minFrame, maxFrame);
 		}
 	}

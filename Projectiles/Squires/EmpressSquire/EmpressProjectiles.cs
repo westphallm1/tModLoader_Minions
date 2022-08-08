@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.AI;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
@@ -144,7 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 				baseVelocity = Projectile.velocity.Length();
 			}
 
-			if((target == null || !target.active) && Minion.GetClosestEnemyToPosition(Projectile.Center, 400f) is NPC npc)
+			if((target == null || !target.active) && MinionBehavior.GetClosestEnemyToPosition(Projectile.Center, 400f) is NPC npc)
 			{
 				target = npc;
 			}

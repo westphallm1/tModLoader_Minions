@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public bool IsMyTurn()
 		{
-			if (player.ownedProjectileCounts[Projectile.type] == 1)
+			if (Player.ownedProjectileCounts[Projectile.type] == 1)
 			{
 				// don't obey cycle if only one minion
 				return true;
@@ -126,22 +126,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		protected Vector2? FindTargetInTurnOrder(float searchDistance, Vector2 center, float noLOSDistance = 0)
 		{
-			if (attackState == AttackState.RETURNING)
+			if (AttackState == AttackState.RETURNING)
 			{
 				return null;
 			}
-			else if (attackState == AttackState.IDLE && !IsMyTurn())
+			else if (AttackState == AttackState.IDLE && !IsMyTurn())
 			{
 				return null;
 			}
 			if (PlayerTargetPosition(searchDistance, center, noLOSDistance) is Vector2 target)
 			{
-				attackState = AttackState.ATTACKING;
+				AttackState = AttackState.ATTACKING;
 				return target - Projectile.Center;
 			}
 			else if (SelectedEnemyInRange(searchDistance, noLOSDistance) is Vector2 target2)
 			{
-				attackState = AttackState.ATTACKING;
+				AttackState = AttackState.ATTACKING;
 				return target2 - Projectile.Center;
 			}
 			else

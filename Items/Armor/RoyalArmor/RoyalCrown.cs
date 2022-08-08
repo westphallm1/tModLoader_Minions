@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			base.SetDefaults();
 			Projectile.width = 20;
 			Projectile.height = 14;
-			frameSpeed = 3;
+			FrameSpeed = 3;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 			{
 				return;
 			}
-			if (vectorToTarget is null || returning)
+			if (VectorToTarget is null || returning)
 			{
 				Projectile.rotation = (float)(Math.PI / 12 * Math.Cos(2 * Math.PI * animationFrame / 60f));
 				if (squire.spriteDirection == 1)

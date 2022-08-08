@@ -58,12 +58,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 	public class SlimeTrainCounterMinion : CounterMinion
 	{
 
-		internal override int BuffId => BuffType<SlimeTrainMinionBuff>();
+		public override int BuffId => BuffType<SlimeTrainMinionBuff>();
 		protected override int MinionType => ProjectileType<SlimeTrainMinion>();
 	}
 	public class SlimeTrainMinion : WormMinion
 	{
-		internal override int BuffId => BuffType<SlimeTrainMinionBuff>();
+		public override int BuffId => BuffType<SlimeTrainMinionBuff>();
 		public override int CounterType => ProjectileType<SlimeTrainCounterMinion>();
 		protected override int dustType => DustType<StarDust>();
 
@@ -100,11 +100,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			base.SetDefaults();
 			Projectile.tileCollide = false;
-			attackThroughWalls = true;
-			frameSpeed = 8;
+			AttackThroughWalls = true;
+			FrameSpeed = 8;
 			SubProjectileType = ProjectileType<SlimeTrainMarkerProjectile>();
 			rotationTracker = new SlimeTrainRotationTracker();
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 			wormDrawer = new SlimeTrainDrawer()
 			{
 				SlimeTexture = Main.dedServ ? null : null // : ExtraTextures[0]
@@ -114,10 +114,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			int radius = Math.Abs(player.velocity.X) < 4 ? 120 : 24;
+			Vector2 idlePosition = Player.Top;
+			int radius = Math.Abs(Player.velocity.X) < 4 ? 120 : 24;
 			float idleAngle = IdleLocationSets.GetAngleOffsetInSet(IdleLocationSets.circlingHead, Projectile)
-				+ 2 * PI * groupAnimationFrame / groupAnimationFrames;
+				+ 2 * MathHelper.Pi * GroupAnimationFrame / GroupAnimationFrames;
 			idlePosition.X += radius * (float)Math.Cos(idleAngle);
 			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == SubProjectileType && 
+				if(p.active && p.owner == Player.whoAmI && p.type == SubProjectileType && 
 					(int)p.localAI[0] < SetupTime)
 				{
 					currentMarker = p;
@@ -145,22 +145,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Tile tile = Framing.GetTileSafely(new Point((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16));
 			inOpenAir = !tile.HasTile;
 			int slimeType = ProjectileType<SlimeTrainSlimeMinion>();
-			int currentSlimeCount = player.ownedProjectileCounts[slimeType];
+			int currentSlimeCount = Player.ownedProjectileCounts[slimeType];
 			summonedSlimes.Clear();
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == slimeType)
+				if(p.active && p.owner == Player.whoAmI && p.type == slimeType)
 				{
 					summonedSlimes.Add((int)p.ai[1]);
 				}
 			}
 			// If there's a lot of nearby enemies, sspawn in a slime buddy to help out
-			if (Main.myPlayer == player.whoAmI && inOpenAir 
-				&& animationFrame - lastSpawnedSlimeFrame > 120 &&
+			if (Main.myPlayer == Player.whoAmI && inOpenAir 
+				&& AnimationFrame - lastSpawnedSlimeFrame > 120 &&
 				potentialTargetCount > 1 && currentSlimeCount < EmpowerCount)
 			{
-				lastSpawnedSlimeFrame = animationFrame;
+				lastSpawnedSlimeFrame = AnimationFrame;
 				for (int i = 0; i < summonedSlimes.Count; i++)
 				{
 					if(summonedSlimes.Contains(nextSlimeIndex +1))
@@ -193,7 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			// ignore any npc with a marker actively placed on it
 			bool shouldIgnore = base.ShouldIgnoreNPC(npc) || Main.projectile.Any(p =>
-				p.active && p.owner == player.whoAmI &&
+				p.active && p.owner == Player.whoAmI &&
 				p.type == SubProjectileType && (int)p.ai[0] == npc.whoAmI);
 			// this is a bit hacky, but it's the easiest existing hook to get
 			// info on every possible target
@@ -255,11 +255,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			if(currentMarker != null)
 			{
 				DoMarkerSpawnMovement();
-			} else if(targetNPCIndex is int idx)
+			} else if(TargetNPCIndex is int idx)
 			{
 				rotationTracker.SetRotationInfo(Main.npc[idx], Projectile);
 				Vector2 startOffset = rotationTracker.GetStartOffset(vectorToTargetPosition);
-				if(startOffset.LengthSquared() < 32 * 32 && player.whoAmI == Main.myPlayer)
+				if(startOffset.LengthSquared() < 32 * 32 && Player.whoAmI == Main.myPlayer)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -282,11 +282,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override Vector2? FindTarget()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance, losCenter: player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center, searchDistance, losCenter: Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
-			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: Player.Center) is Vector2 target2)
 			{
 				return target2 - Projectile.Center;
 			}

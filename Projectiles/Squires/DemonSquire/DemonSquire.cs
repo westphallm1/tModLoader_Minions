@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			player.GetSquire().type == ProjectileType<DemonSquireMinion>();
 		private static int AnimationFrames = 80;
 
-		private int attackRate => (int)Math.Max(30, 60f * player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier);
+		private int attackRate => (int)Math.Max(30, 60f * Player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier);
 
 		private int shootOnFrame => Projectile.ai[0] == 0 ? 0 : 10;
 
@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			base.SetDefaults();
 			Projectile.width = 42;
 			Projectile.height = 34;
-			frameSpeed = 10;
+			FrameSpeed = 10;
 		}
 
 		public override Vector2 IdleBehavior()
@@ -89,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			float angle = baseAngle + (MathHelper.TwoPi * angleFrame) / AnimationFrames;
 			float radius = 24;
 			Vector2 angleVector = radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-			SquireModPlayer modPlayer = player.GetModPlayer<SquireModPlayer>();
+			SquireModPlayer modPlayer = Player.GetModPlayer<SquireModPlayer>();
 			if(modPlayer.HasSquire())
 			{
 				Projectile.spriteDirection = modPlayer.GetSquire().spriteDirection;
@@ -126,8 +126,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			base.IdleMovement(vectorToIdle);
-			if (animationFrame % attackRate == shootOnFrame && Main.myPlayer == player.whoAmI)
+			base.IdleMovement(VectorToIdle);
+			if (animationFrame % attackRate == shootOnFrame && Main.myPlayer == Player.whoAmI)
 			{
 				SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
 				Projectile squire = squirePlayer.GetSquire();
@@ -135,9 +135,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				Vector2 horizonVector;
 				if (Vector2.DistanceSquared(squire.Center, Main.MouseWorld) < 48 * 48)
 				{
-					Vector2 horizonAngle = Main.MouseWorld - player.Center;
+					Vector2 horizonAngle = Main.MouseWorld - Player.Center;
 					horizonAngle.SafeNormalize();
-					horizonVector = player.Center + 2000f * horizonAngle;
+					horizonVector = Player.Center + 2000f * horizonAngle;
 				} else
 				{
 					Vector2 horizonAngle = Main.MouseWorld - squire.Center;
@@ -200,7 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 
 	public class DemonSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<DemonSquireMinionBuff>();
+		public override int BuffId => BuffType<DemonSquireMinionBuff>();
 		protected override int ItemType => ItemType<DemonSquireMinionItem>();
 		protected override int AttackFrames => 22;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
@@ -235,7 +235,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		public override void StandardTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.StandardTargetedMovement(vectorToTargetPosition);
-			if (attackFrame == 0 && Main.myPlayer == player.whoAmI)
+			if (attackFrame == 0 && Main.myPlayer == Player.whoAmI)
 			{
 				Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 				vector2Mouse *= ModifiedProjectileVelocity();
@@ -253,7 +253,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 
 		public override void OnStartUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				for(int i = 0; i < 2; i++)
 				{
@@ -264,7 +264,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 						ProjectileType<DemonSquireImpMinion>(),
 						Projectile.damage,
 						Projectile.knockBack,
-						player.whoAmI,
+						Player.whoAmI,
 						ai0: i);
 				}
 			}
@@ -276,7 +276,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.owner == player.whoAmI && p.type == projType)
+				if(p.owner == Player.whoAmI && p.type == projType)
 				{
 					p.Kill();
 				}

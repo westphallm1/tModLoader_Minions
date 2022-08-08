@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			Projectile.penetrate = -1;
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 30;
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 		}
 		public override Vector2 IdleBehavior()
 		{
@@ -86,7 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void OnHitTarget(NPC target)
 		{
-			if (player.whoAmI != Main.myPlayer)
+			if (Player.whoAmI != Main.myPlayer)
 			{
 				returnedToHeadFrame = null;
 				returning = true;

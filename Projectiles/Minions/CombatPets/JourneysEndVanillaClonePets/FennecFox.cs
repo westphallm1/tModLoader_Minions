@@ -23,13 +23,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 	public class FennecFoxMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.FennecFox;
-		internal override int BuffId => BuffType<FennecFoxMinionBuff>();
+		public override int BuffId => BuffType<FennecFoxMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			ConfigureDrawBox(24, 30, -16, -8, -1);
 			ConfigureFrames(17, (0, 3), (4, 10), (4, 4), (11, 16));
-			frameSpeed = 8;
+			FrameSpeed = 8;
 		}
 	}
 }

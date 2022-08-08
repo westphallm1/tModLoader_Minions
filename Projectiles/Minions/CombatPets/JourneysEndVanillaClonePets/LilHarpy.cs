@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 
 	public class LilHarpyMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<LilHarpyMinionBuff>();
+		public override int BuffId => BuffType<LilHarpyMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.LilHarpy;
 		internal override int? FiredProjectileId => ProjectileType<LilHarpyFeather>();
 		internal override SoundStyle? ShootSound => SoundID.Item17;

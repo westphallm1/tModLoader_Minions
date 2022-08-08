@@ -46,7 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 
 	public class VikingSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<VikingSquireMinionBuff>();
+		public override int BuffId => BuffType<VikingSquireMinionBuff>();
 		protected override int ItemType => ItemType<VikingSquireMinionItem>();
 		protected override int AttackFrames => 18;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";

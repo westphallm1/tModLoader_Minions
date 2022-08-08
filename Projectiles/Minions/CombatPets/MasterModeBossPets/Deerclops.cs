@@ -184,7 +184,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class DeerclopsMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeerclopsPet;
-		internal override int BuffId => BuffType<DeerclopsMinionBuff>();
+		public override int BuffId => BuffType<DeerclopsMinionBuff>();
 		internal override int? ProjId => ProjectileType<DeerclopsShadowHand>();
 
 		int attackCycle = 0;
@@ -197,7 +197,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			if(attackCycle % 5 != 3)
 			{
 				NPC target;
-				if(targetNPCIndex is int idx)
+				if(TargetNPCIndex is int idx)
 				{
 					 target = Main.npc[idx];
 				} else if (GetClosestEnemyToPosition(Projectile.Center, 2.5f * preferredDistanceFromTarget, false) is NPC anyTarget)
@@ -216,7 +216,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					(int)ProjId,
 					(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: target.whoAmI);
 			}
 		}
@@ -231,18 +231,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			int blinkCycle = 115;
-			int idleFrame = animationFrame % blinkCycle;
+			int idleFrame = AnimationFrame % blinkCycle;
 			frameInfo[GroundAnimationState.STANDING] = idleFrame < blinkCycle - 20 ? (0, 0) : (0, 4);
 			base.Animate(minFrame, maxFrame);
 		}
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			int framesSinceShoot = animationFrame - lastFiredFrame;
+			int framesSinceShoot = AnimationFrame - lastFiredFrame;
 			if(framesSinceShoot == 0)
 			{
 				attackCycle++;
-				if(attackCycle % 5 == 4 && targetNPCIndex is int idx)
+				if(attackCycle % 5 == 4 && TargetNPCIndex is int idx)
 				{
 					NPC targetNPC = Main.npc[idx];
 					rockStormDirection = Math.Sign(vectorToTargetPosition.X);
@@ -252,7 +252,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					rockStormStart = default;
 				}
 			}
-			if(player.whoAmI == Main.myPlayer && attackCycle % 5 == 4 && framesSinceShoot < 30 && framesSinceShoot % 6 == 0 && rockStormStart != default)
+			if(Player.whoAmI == Main.myPlayer && attackCycle % 5 == 4 && framesSinceShoot < 30 && framesSinceShoot % 6 == 0 && rockStormStart != default)
 			{
 				Vector2 launchPos = rockStormStart - new Vector2(0, 6);
 				launchPos.X += rockStormDirection * 1.25f * framesSinceShoot + Main.rand.Next(-4, 4);
@@ -268,7 +268,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					ProjectileType<DeerclopsIceBlock>(),
 					(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 					Projectile.knockBack,
-					player.whoAmI);
+					Player.whoAmI);
 			}
 		}
 	}

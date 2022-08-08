@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class WoFSquireMinion : SquireMinion
 	{
-		internal override int BuffId => BuffType<WoFSquireMinionBuff>();
+		public override int BuffId => BuffType<WoFSquireMinionBuff>();
 		protected override int ItemType => ItemType<GuideVoodooSquireMinionItem>();
 		int dashDirection = 1;
 		bool isDashing;
@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			base.SetDefaults();
 			Projectile.width = 32;
 			Projectile.height = 32;
-			frameSpeed = 7;
+			FrameSpeed = 7;
 			laserTargets = new Vector2?[2];
 			laserFrames = new int[2];
 			isDashing = false;
@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.75f);
 			// use very small hit cooldown during special, since the hitbox moves so quickly
 			baseLocalIFrames = usingSpecial ? 2 : 10;
-			return base.IdleBehavior() + new Vector2(-player.direction * 8, 0);
+			return base.IdleBehavior() + new Vector2(-Player.direction * 8, 0);
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
@@ -221,11 +221,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			if(specialFrame < SpecialChargeTime / 2)
 			{
 				isDashing = false;
-				targetX = MathHelper.Lerp(specialStartPos.X, player.Center.X, 2f * specialFrame / SpecialChargeTime );
-				Projectile.spriteDirection = Math.Sign(targetX - player.Center.X);
+				targetX = MathHelper.Lerp(specialStartPos.X, Player.Center.X, 2f * specialFrame / SpecialChargeTime );
+				Projectile.spriteDirection = Math.Sign(targetX - Player.Center.X);
 			} else if (specialFrame < SpecialChargeTime)
 			{
-				targetX = player.Center.X;
+				targetX = Player.Center.X;
 				chargeDirection = Math.Sign(syncedMouseWorld.X - targetX);
 				Projectile.spriteDirection = chargeDirection;
 			} else
@@ -233,7 +233,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				isDashing = true;
 				int dashFrame = (specialFrame - SpecialChargeTime) % SpecialLoopSpeed;
 				int xPerFrame =  chargeDirection * SpecialXRange / SpecialLoopSpeed;
-				targetX = player.Center.X + 2 * dashFrame * xPerFrame +
+				targetX = Player.Center.X + 2 * dashFrame * xPerFrame +
 					(dashFrame < SpecialLoopSpeed / 2 ? 0 : -2 * chargeDirection * SpecialXRange); 
 			}
 			float maxYSpeed = 20;
@@ -299,7 +299,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			{
 				DrawAferImage(ref lightColor);
 			}
-			if (vectorToTarget != null)
+			if (VectorToTarget != null)
 			{
 				DrawClingers(ref lightColor);
 			}
@@ -322,7 +322,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		private void DrawSonicBoom(Vector2 center)
 		{
 			Vector2 offset = new Vector2(96, 0) * chargeDirection;
-			float animSin = (float)Math.Sin(MathHelper.TwoPi * animationFrame / 15);
+			float animSin = (float)Math.Sin(MathHelper.TwoPi * AnimationFrame / 15);
 			float scale = 1.1f + 0.1f * animSin;
 			// stamp out an "aura" around the main shockwave
 			// I'm pretty sure this effect is accomplished via shaders in vanilla, but..
@@ -364,7 +364,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			for (int i = 0; i < 2; i++)
 			{
 				float r;
-				if (laserTargets[i] is Vector2 target && animationFrame - laserFrames[i] < 10)
+				if (laserTargets[i] is Vector2 target && AnimationFrame - laserFrames[i] < 10)
 				{
 					r = target.ToRotation();
 				}
@@ -410,14 +410,14 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			float r = Projectile.spriteDirection == 1 ? MathHelper.PiOver2 : -MathHelper.PiOver2;
 			for (int i = 0; i < 3; i++)
 			{
-				int frame = animationFrame % 60 < 30 ? 0 : 1;
+				int frame = AnimationFrame % 60 < 30 ? 0 : 1;
 				if (i == 1)
 				{
 					frame = frame == 1 ? 0 : 1; // flip the frame for the middle clinger
 				}
 				Rectangle bounds = new Rectangle(0, frame * frameHeight, texture.Width, frameHeight);
 				Vector2 pos = Projectile.Center;
-				float yOffset = 15 + 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 60f);
+				float yOffset = 15 + 4 * (float)Math.Sin(2 * Math.PI * AnimationFrame / 60f);
 				if (i == 0)
 				{
 					pos.Y -= yOffset;
@@ -426,7 +426,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 				{
 					pos.Y += yOffset;
 				}
-				pos.X += (float)(Projectile.spriteDirection * 20 + 4 * Math.Sin(2 * Math.PI * (animationFrame / 60f + i / 3f)));
+				pos.X += (float)(Projectile.spriteDirection * 20 + 4 * Math.Sin(2 * Math.PI * (AnimationFrame / 60f + i / 3f)));
 				Main.EntitySpriteDraw(texture, pos - Main.screenPosition,
 					bounds, lightColor, r,
 					bounds.GetOrigin(), 1, 0, 0);
@@ -461,15 +461,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			if(usingSpecial)
 			{
 				// set in SpecialTargetedMovement
-			} else if (vectorToIdle.Length() < 32)
+			} else if (VectorToIdle.Length() < 32)
 			{
-				Projectile.spriteDirection = player.direction;
+				Projectile.spriteDirection = Player.direction;
 			}
-			else if (vectorToTarget is Vector2 target)
+			else if (VectorToTarget is Vector2 target)
 			{
 				if (target.Length() < 64f && !isDashing)
 				{
-					Projectile.spriteDirection = player.Center.X - Projectile.Center.X > 0 ? -1 : 1;
+					Projectile.spriteDirection = Player.Center.X - Projectile.Center.X > 0 ? -1 : 1;
 				}
 				else if (relativeVelocity.X > 2)
 				{
@@ -487,7 +487,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override float ComputeIdleSpeed() => 18;
 
 		// needs to slow down a little so dash is visible
-		public override float ComputeTargetedSpeed() => isDashing ? 16 / player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier: 19;
+		public override float ComputeTargetedSpeed() => isDashing ? 16 / Player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier: 19;
 
 		public override float ComputeInertia() => isDashing ? 4 : base.ComputeInertia();
 
@@ -496,7 +496,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class GuideVoodooSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<GuideVoodooSquireMinionBuff>();
+		public override int BuffId => BuffType<GuideVoodooSquireMinionBuff>();
 		protected override int ItemType => ItemType<GuideVoodooSquireMinionItem>();
 		protected override int AttackFrames => 40;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -675,10 +675,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 					Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X, Projectile.velocity.Y);
 				}
 
-				if (player.whoAmI == Main.myPlayer)
+				if (Player.whoAmI == Main.myPlayer)
 				{
-					player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
-					Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, player.whoAmI);
+					Player.AddBuff(BuffType<WoFSquireMinionBuff>(), 60 * 20); // evolved form lasts 20 seconds
+					Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ProjectileType<WoFSquireMinion>(), baseDamage, baseKnockback, Player.whoAmI);
 					p.originalDamage = baseDamage;
 				}
 			}

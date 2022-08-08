@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class EaterOfWormsMinion : CombatPetGroundedWormMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EaterOfWorldsPet;
-		internal override int BuffId => BuffType<EaterOfWormsMinionBuff>();
+		public override int BuffId => BuffType<EaterOfWormsMinionBuff>();
 		public override int CounterType => -1;
 		protected override int dustType => 135;
 

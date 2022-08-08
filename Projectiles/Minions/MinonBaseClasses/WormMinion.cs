@@ -58,17 +58,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			base.IdleBehavior();
 			wormDrawer.SegmentCount = GetSegmentCount();
-			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingHead, player.whoAmI);
+			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingHead, Player.whoAmI);
 			int minionCount = minions.Count;
-			Vector2 idlePosition = player.Top;
+			Vector2 idlePosition = Player.Top;
 			// this was silently failing sometimes, don't know why
 			if (minionCount > 0)
 			{
-				int radius = player.velocity.Length() < 4 ? 48 + 2 * EmpowerCount : 48;
-				float yRadius = player.velocity.Length() < 4 ? 8 + 0.5f * EmpowerCount : 8;
+				int radius = Player.velocity.Length() < 4 ? 48 + 2 * EmpowerCount : 48;
+				float yRadius = Player.velocity.Length() < 4 ? 8 + 0.5f * EmpowerCount : 8;
 				int order = minions.IndexOf(Projectile);
-				float idleAngle = (2 * PI * order) / minionCount;
-				idleAngle += 2 * PI * groupAnimationFrame / groupAnimationFrames;
+				float idleAngle = (2 * MathHelper.Pi * order) / minionCount;
+				idleAngle += 2 * MathHelper.Pi * GroupAnimationFrame / GroupAnimationFrames;
 				idlePosition.X += radius * (float)Math.Cos(idleAngle);
 				idlePosition.Y += -20 + EmpowerCount + yRadius * (float)Math.Sin(idleAngle);
 			}

@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		public override Vector2 IdleBehavior()
 		{
-			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			searchDistance = leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
 			int petLevel = leveledPetPlayer.PetLevel;
@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				projId,
 				(int)(ModifyProjectileDamage(leveledPetPlayer.PetLevelInfo) * Projectile.damage),
 				Projectile.knockBack,
-				player.whoAmI,
+				Player.whoAmI,
 				ai0: ai0 ?? Projectile.whoAmI);
 		}
 
@@ -126,14 +126,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
-			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
+			if (Math.Abs(vector.X) < 4 && TargetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
 			{
 				Projectile.velocity.X = Main.npc[idx].velocity.X;
 			}
@@ -153,12 +153,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			bool inLaunchRange = 
 				Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 4 * preferredDistanceFromTarget;
-			if (player.whoAmI == Main.myPlayer && inLaunchRange && animationFrame - lastFiredFrame >= attackFrames)
+			if (Player.whoAmI == Main.myPlayer && inLaunchRange && AnimationFrame - lastFiredFrame >= attackFrames)
 			{
-				lastFiredFrame = animationFrame;
+				lastFiredFrame = AnimationFrame;
 				Vector2 launchVector = vectorToTargetPosition;
 				// lead shot a little bit
-				if(targetNPCIndex is int idx && Main.npc[idx] is NPC target)
+				if(TargetNPCIndex is int idx && Main.npc[idx] is NPC target)
 				{
 					launchVector += target.velocity * 0.167f;
 				}
@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate();
-			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
+			if (VectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
 				Projectile.spriteDirection = forwardDir * Math.Sign(target.X);
 			} else if (Projectile.velocity.X > 1)

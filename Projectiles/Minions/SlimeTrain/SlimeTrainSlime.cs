@@ -19,7 +19,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 	/// </summary>
 	public class SlimeTrainSlimeMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<SlimeTrainMinionBuff>();
+		public override int BuffId => BuffType<SlimeTrainMinionBuff>();
 		private float intendedX = 0;
 		private Projectile parent;
 
@@ -40,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			Projectile.width = 20;
 			Projectile.height = 20;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -53,13 +53,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			base.IdleBehavior();
 
-			noLOSPursuitTime = 15; // no long pursuit like regular grounded minions
+			NoLOSPursuitTime = 15; // no long pursuit like regular grounded minions
 			parent = default;
 			int parentType = ProjectileType<SlimeTrainMinion>();
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == parentType)
+				if(p.active && p.owner == Player.whoAmI && p.type == parentType)
 				{
 					parent = p;
 					break;
@@ -87,7 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		{
 			// ignore any npc with a marker actively placed on it
 			return base.ShouldIgnoreNPC(npc) || Main.projectile.Any(p =>
-				p.active && p.owner == player.whoAmI &&
+				p.active && p.owner == Player.whoAmI &&
 				p.type == ProjectileType<SlimeTrainMarkerProjectile>() && (int)p.ai[0] == npc.whoAmI);
 		}
 
@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 			}
 			gHelper.DoJump(vector);
 			int maxHorizontalSpeed = vector.Y < -64 ? 8 : 12;
-			if(targetNPCIndex is int idx && vector.Length() < 64)
+			if(TargetNPCIndex is int idx && vector.Length() < 64)
 			{
 				// go fast enough to hit the enemy while chasing them
 				Vector2 targetVelocity = Main.npc[idx].velocity;

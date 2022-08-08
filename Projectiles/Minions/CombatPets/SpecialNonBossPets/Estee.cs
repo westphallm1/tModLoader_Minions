@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 	public class EsteeMinion : CombatPetHoverDasherMinion
 	{
-		internal override int BuffId => BuffType<EsteeMinionBuff>();
+		public override int BuffId => BuffType<EsteeMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.UpbeatStar;
 		internal override int? FiredProjectileId => null;
 		internal override bool DoBumblingMovement => true;
@@ -200,7 +200,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			Texture2D eyesTexture = TextureAssets.Projectile[Projectile.type].Value;
 			Texture2D cometTexture = TextureAssets.Extra[ExtrasID.FallingStar].Value;
 
-			CometTrailDrawer.DrawCometTrail(Projectile, cometTexture, animationFrame, ref cometRotation);
+			CometTrailDrawer.DrawCometTrail(Projectile, cometTexture, AnimationFrame, ref cometRotation);
 
 			int starFrames = 8;
 			int starFrame = Projectile.frame < starFrames ? Projectile.frame : 2 * starFrames - 1 - Projectile.frame;
@@ -220,7 +220,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			Projectile.frame = (animationFrame / 5) % Main.projFrames[Projectile.type];
+			Projectile.frame = (AnimationFrame / 5) % Main.projFrames[Projectile.type];
 			if(Projectile.velocity.LengthSquared() > 16)
 			{
 				Projectile.rotation += Math.Sign(Projectile.velocity.X) * MathHelper.Pi / 15f;
@@ -239,9 +239,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			CometTrailDrawer.AddImpactEffects(Projectile);
-			if(Projectile.owner == Main.myPlayer && animationFrame - lastShootFrame > attackFrames / 2 && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful)
+			if(Projectile.owner == Main.myPlayer && AnimationFrame - lastShootFrame > attackFrames / 2 && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful)
 			{
-				lastShootFrame = animationFrame;
+				lastShootFrame = AnimationFrame;
 				// spawn projectile slightly off the top of the screen
 				Vector2 spawnPos = Main.screenPosition + new Vector2(Main.rand.Next(0, Main.screenWidth), -16);
 				Projectile.NewProjectile(

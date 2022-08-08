@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class SharknadoMinion : HoverShooterMinion
 	{
-		internal override int BuffId => BuffType<SharknadoMinionBuff>();
+		public override int BuffId => BuffType<SharknadoMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Tempest;
 
@@ -137,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Projectile.height = 32;
 			DrawOffsetX = (Projectile.width - 44) / 2;
 			attackFrames = 60;
-			frameSpeed = 4;
+			FrameSpeed = 4;
 			targetSearchDistance = 900;
 			hsHelper.travelSpeed = 12;
 			hsHelper.projectileVelocity = 24;
@@ -180,7 +180,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(isBeingUsedAsToken)
 			{
 				Projectile.friendly = false;
-				Projectile.Center = player.Center;
+				Projectile.Center = Player.Center;
 				CheckActive();
 				AfterMoving();
 			} else
@@ -193,7 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			int minionType = ProjectileType<BigSharknadoMinion>();
 			bool lastBeingUsedAsToken = isBeingUsedAsToken;
-			bool selfCountAboveThreshold = player.ownedProjectileCounts[Projectile.type] > 3;
+			bool selfCountAboveThreshold = Player.ownedProjectileCounts[Projectile.type] > 3;
 			isBeingUsedAsToken = selfCountAboveThreshold;
 			if(isBeingUsedAsToken != lastBeingUsedAsToken)
 			{
@@ -205,12 +205,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					Main.dust[dustId].noLight = true;
 				}
 			}
-			if (player.whoAmI == Main.myPlayer && selfCountAboveThreshold && player.ownedProjectileCounts[minionType] == 0 && IsPrimaryFrame)
+			if (Player.whoAmI == Main.myPlayer && selfCountAboveThreshold && Player.ownedProjectileCounts[minionType] == 0 && IsPrimaryFrame)
 			{
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Player.Top, Vector2.Zero, minionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			}
 		}
@@ -311,7 +311,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class BigSharknadoMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<SharknadoMinionBuff>();
+		public override int BuffId => BuffType<SharknadoMinionBuff>();
 		public override int CounterType => ProjectileType<SharknadoMinion>();
 		protected override int dustType => 135;
 
@@ -327,10 +327,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		{
 			base.SetDefaults();
 			Projectile.tileCollide = false;
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 			Projectile.width = 64;
 			Projectile.height = 128;
-			frameSpeed = 5;
+			FrameSpeed = 5;
 			// can hit many npcs at once, so give it a relatively high on hit cooldown
 			Projectile.localNPCHitCooldown = 20;
 			whirlpoolDrawer = new WhirlpoolDrawer();
@@ -338,12 +338,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
+			Vector2 idlePosition = Player.Top;
 			Projectile.localNPCHitCooldown = Math.Max(10, 25 - EmpowerCount);
-			if(animationFrame > 60)
+			if(AnimationFrame > 60)
 			{
 				int radius = 160;
-				float idleAngle = 2 * PI * groupAnimationFrame / groupAnimationFrames;
+				float idleAngle = 2 * MathHelper.Pi * GroupAnimationFrame / GroupAnimationFrames;
 				idlePosition.X += radius * (float)Math.Cos(idleAngle);
 				idlePosition.Y += radius * (float)Math.Sin(idleAngle);
 			} else
@@ -377,16 +377,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override Vector2? FindTarget()
 		{
-			if(animationFrame < 60)
+			if(AnimationFrame < 60)
 			{
 				return null;
 			}
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance, losCenter: player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center, searchDistance, losCenter: Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
-			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, searchDistance, losCenter: Player.Center) is Vector2 target2)
 			{
 				return target2 - Projectile.Center;
 			}
@@ -418,7 +418,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			whirlpoolDrawer.CalculateWhirlpoolPositions(Projectile, animationFrame, EmpowerCount + 3, out int height);
+			whirlpoolDrawer.CalculateWhirlpoolPositions(Projectile, AnimationFrame, EmpowerCount + 3, out int height);
 			Projectile.height = height;
 			whirlpoolDrawer.AddWhirlpoolEffects();
 			if(EmpowerCount > 0 && EmpowerCount < 4)

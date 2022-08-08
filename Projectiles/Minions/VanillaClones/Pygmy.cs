@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public abstract class BasePygmyMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<PygmyMinionBuff>();
+		public override int BuffId => BuffType<PygmyMinionBuff>();
 		int lastFiredFrame = 0;
 		// don't get too close
 		int preferredDistanceFromTarget = 128;
@@ -183,18 +183,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			DrawOffsetX = -2;
 			DrawOriginOffsetY = -18;
 			attackFrames = 30;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
 			searchDistance = 900;
 			maxJumpVelocity = 12;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 		}
 
 		protected override void IdleFlyingMovement(Vector2 vector)
 		{
-			if(animationFrame - lastFiredFrame < 10)
+			if(AnimationFrame - lastFiredFrame < 10)
 			{
 				// don't fly while throwing the spear
 				gHelper.didJustLand = false;
@@ -215,14 +215,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 11;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
-			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
+			if (Math.Abs(vector.X) < 4 && TargetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
 			{
 				Projectile.velocity.X = Main.npc[idx].velocity.X;
 			}
@@ -235,14 +235,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		private void FireSpear()
 		{
 			int spearVelocity = 16;
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
-			if (player.whoAmI == Main.myPlayer)
+			if (Player.whoAmI == Main.myPlayer)
 			{
-				Vector2 angleToTarget = (Vector2)vectorToTarget;
+				Vector2 angleToTarget = (Vector2)VectorToTarget;
 				angleToTarget.SafeNormalize();
 				angleToTarget *= spearVelocity;
-				if(targetNPCIndex is int idx)
+				if(TargetNPCIndex is int idx)
 				{
 					Vector2 targetVelocity = Main.npc[idx].velocity;
 					if(targetVelocity.Length() > 32)
@@ -259,8 +259,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					ProjectileType<PygmySpear>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
-					ai0: targetNPCIndex ?? -1);
+					Player.whoAmI,
+					ai0: TargetNPCIndex ?? -1);
 			}
 		}
 
@@ -269,7 +269,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 			if (Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 4 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= attackFrames)
+				AnimationFrame - lastFiredFrame >= attackFrames)
 			{
 				FireSpear();
 			}
@@ -288,20 +288,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if (animationFrame - lastFiredFrame < 5)
+			if (AnimationFrame - lastFiredFrame < 5)
 			{
 				Projectile.frame = 1;
-			} else if (animationFrame - lastFiredFrame < 10)
+			} else if (AnimationFrame - lastFiredFrame < 10)
 			{
 				Projectile.frame = 2;
-			} else if (animationFrame - lastFiredFrame < 15)
+			} else if (AnimationFrame - lastFiredFrame < 15)
 			{
 				Projectile.frame = 3;
 			} else
 			{
 				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
-			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
+			if (VectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
 				Projectile.spriteDirection = -Math.Sign(target.X);
 			} else if (Projectile.velocity.X > 1)

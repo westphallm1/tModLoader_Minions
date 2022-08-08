@@ -213,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public abstract class BasePirateMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<PirateMinionBuff>();
+		public override int BuffId => BuffType<PirateMinionBuff>();
 
 		protected Dictionary<GroundAnimationState, (int, int?)> frameInfo = new Dictionary<GroundAnimationState, (int, int?)>
 		{
@@ -237,7 +237,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			DrawOffsetX = -2;
 			DrawOriginOffsetY = -14;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -258,13 +258,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
 			int xMaxSpeed = 10;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (animationFrame - lastHitFrame > 10)
+			if (AnimationFrame - lastHitFrame > 10)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -294,7 +294,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(!gHelper.isFlying && vectorToTarget is Vector2 target && target.Length() < 48)
+			if(!gHelper.isFlying && VectorToTarget is Vector2 target && target.Length() < 48)
 			{
 				if(gHelper.didJustLand)
 				{
@@ -333,12 +333,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			base.SetDefaults();
 			attackFrames = 45;
 			DrawOriginOffsetY = -4;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 		}
 
 		protected override void IdleFlyingMovement(Vector2 vector)
 		{
-			if(animationFrame - lastFiredFrame < 10)
+			if(AnimationFrame - lastFiredFrame < 10)
 			{
 				// don't fly while throwing the spear
 				gHelper.didJustLand = false;
@@ -353,15 +353,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		private void FireGun()
 		{
 			int bulletVelocity = 24;
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-			if (player.whoAmI == Main.myPlayer)
+			if (Player.whoAmI == Main.myPlayer)
 			{
-				Vector2 angleToTarget = (Vector2)vectorToTarget;
+				Vector2 angleToTarget = (Vector2)VectorToTarget;
 				angleToTarget.SafeNormalize();
 				angleToTarget *= bulletVelocity;
 				shootAngle = (MathHelper.TwoPi + angleToTarget.ToRotation()) % MathHelper.TwoPi;
-				if(targetNPCIndex is int idx)
+				if(TargetNPCIndex is int idx)
 				{
 					Vector2 targetVelocity = Main.npc[idx].velocity;
 					if(targetVelocity.Length() > 32)
@@ -378,7 +378,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					ProjectileType<PirateDeadeyeBullet>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI);
+					Player.whoAmI);
 			}
 		}
 
@@ -387,7 +387,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 			if (Math.Abs(vectorToTargetPosition.X) < 4 * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 4 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= attackFrames)
+				AnimationFrame - lastFiredFrame >= attackFrames)
 			{
 				FireGun();
 			}
@@ -406,7 +406,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if (animationFrame - lastFiredFrame < 20)
+			if (AnimationFrame - lastFiredFrame < 20)
 			{
 				if(shootAngle > 5 * MathHelper.PiOver4 && shootAngle < 7 * MathHelper.PiOver4)
 				{
@@ -426,7 +426,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			{
 				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
-			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 3 * preferredDistanceFromTarget)
+			if (VectorToTarget is Vector2 target && Math.Abs(target.X) < 3 * preferredDistanceFromTarget)
 			{
 				Projectile.spriteDirection = Math.Sign(target.X);
 			} 
@@ -450,7 +450,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 	{
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 16;
-		internal override int BuffId => BuffType<PirateMinionBuff>();
+		public override int BuffId => BuffType<PirateMinionBuff>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -467,7 +467,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			attackFrames = 60;
 			targetSearchDistance = 850;
 			bumbleSpriteDirection = -1;
-			frameSpeed = 5;
+			FrameSpeed = 5;
 			circleHelper.idleBumbleFrames = 40;
 			circleHelper.idleBumbleRadius = 96;
 		}
@@ -481,7 +481,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 
-			if(vectorToTarget is Vector2 target && target.Length() < 128)
+			if(VectorToTarget is Vector2 target && target.Length() < 128)
 			{
 				base.Animate(4, 8);
 			} else
@@ -530,7 +530,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public class FlyingDutchmanMinion : HoverShooterMinion
 	{
-		internal override int BuffId => BuffType<PirateMinionBuff>();
+		public override int BuffId => BuffType<PirateMinionBuff>();
 
 		internal override int? FiredProjectileId => ProjectileType<PirateCannonball>();
 		internal override SoundStyle? ShootSound => SoundID.Item14 with { Volume = 0.5f };
@@ -550,7 +550,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			frameSpeed = 15;
+			FrameSpeed = 15;
 			Projectile.width = 32;
 			Projectile.height = 32;
 			DrawOriginOffsetY = (32 - 46) / 2;
@@ -568,7 +568,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if(vectorToTarget is Vector2 target)
+			if(VectorToTarget is Vector2 target)
 			{
 				Projectile.spriteDirection = -Math.Sign(target.X);
 			} 
@@ -584,14 +584,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * (16 + IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile));
-			idlePosition.Y += -16 + 6 * (float)Math.Sin(MathHelper.TwoPi * animationFrame / 120);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * (16 + IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile));
+			idlePosition.Y += -16 + 6 * (float)Math.Sin(MathHelper.TwoPi * AnimationFrame / 120);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
-				idlePosition.Y = player.Top.Y - 16;
+				idlePosition.X = Player.Top.X;
+				idlePosition.Y = Player.Top.Y - 16;
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
@@ -615,14 +615,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 					Main.gore[goreIdx].scale *= Main.rand.NextFloat(0.25f, 0.4f);
 				}
 			}
-			Vector2 target = (Vector2)vectorToTarget;
+			Vector2 target = (Vector2)VectorToTarget;
 			target.Normalize();
 			target *= -4;
 			Projectile.velocity = target;
 		}
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(animationFrame - hsHelper.lastShootFrame > 6)
+			if(AnimationFrame - hsHelper.lastShootFrame > 6)
 			{
 				base.TargetedMovement(vectorToTargetPosition);
 			}

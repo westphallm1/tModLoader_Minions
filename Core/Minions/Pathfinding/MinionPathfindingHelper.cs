@@ -51,9 +51,9 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				else if(pathfinder.stationaryWaypoint)
 				{
 					return nodeIndex < pathfinder.orderedPath.Count - 1;
-				} else if (minion.player.MinionAttackTargetNPC > -1)
+				} else if (minion.Player.MinionAttackTargetNPC > -1)
 				{
-					NPC target = Main.npc[minion.player.MinionAttackTargetNPC];
+					NPC target = Main.npc[minion.Player.MinionAttackTargetNPC];
 					return Vector2.DistanceSquared(projectile.Center, target.Center) > 600 * 600 ||
 						!Collision.CanHitLine(projectile.Center, 1, 1, target.Center, 1, 1);
 				} else

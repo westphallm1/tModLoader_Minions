@@ -81,12 +81,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 	public class GoblinGunnerCounterMinion : CounterMinion
 	{
 
-		internal override int BuffId => BuffType<GoblinGunnerMinionBuff>();
+		public override int BuffId => BuffType<GoblinGunnerMinionBuff>();
 		protected override int MinionType => ProjectileType<GoblinGunnerMinion>();
 	}
 	public class GoblinGunnerMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<GoblinGunnerMinionBuff>();
+		public override int BuffId => BuffType<GoblinGunnerMinionBuff>();
 		public override int CounterType => ProjectileType<GoblinGunnerCounterMinion>();
 
 		private int framesSinceLastHit;
@@ -107,10 +107,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 			Projectile.height = 44;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			dealsContactDamage = false;
-			attackThroughWalls = true;
-			useBeacon = false;
-			frameSpeed = 5;
+			DealsContactDamage = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
+			FrameSpeed = 5;
 		}
 
 
@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Texture2D texture = TextureAssets.Projectile[ProjectileType<GoblinGunnerMinionGuns>()].Value;
-			Vector2 angle = vectorToTarget ?? new Vector2(-Projectile.spriteDirection, 0);
+			Vector2 angle = VectorToTarget ?? new Vector2(-Projectile.spriteDirection, 0);
 			int frame = Math.Min(4, (int)EmpowerCount - 1);
 			Rectangle bounds = new Rectangle(0, 14 * frame, 14, 14);
 			int distanceFromOrigin = framesSinceLastHit > 3 ? 34 : 32;
@@ -135,14 +135,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -32;
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
-				idlePosition.Y = player.Top.Y - 16;
+				idlePosition.X = Player.Top.X;
+				idlePosition.Y = Player.Top.Y - 16;
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
@@ -156,11 +156,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// stay floating behind the player at all times
-			IdleMovement(vectorToIdle);
+			IdleMovement(VectorToIdle);
 			framesSinceLastHit++;
 			int rateOfFire = Math.Max(8, 35 - 3 * (int)EmpowerCount);
 			int projectileVelocity = 40;
-			if (framesSinceLastHit++ > rateOfFire && targetNPCIndex is int npcIdx)
+			if (framesSinceLastHit++ > rateOfFire && TargetNPCIndex is int npcIdx)
 			{
 				NPC target = Main.npc[npcIdx];
 				// try to predict the position at the time of impact a bit
@@ -170,7 +170,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 				Vector2 pos = Projectile.Center;
 				framesSinceLastHit = 0;
 				Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? -1 : 1;
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -193,7 +193,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -241,7 +241,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if (Math.Abs(Projectile.velocity.X) > 2 && vectorToTarget is null)
+			if (Math.Abs(Projectile.velocity.X) > 2 && VectorToTarget is null)
 			{
 				Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
 			}

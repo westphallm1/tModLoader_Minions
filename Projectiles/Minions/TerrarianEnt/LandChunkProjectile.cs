@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 	{
 		public override string Texture => "Terraria/Images/Item_0";
 
-		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
+		public override int BuffId => BuffType<TerrarianEntMinionBuff>();
 
 		internal SpriteCompositionHelper scHelper;
 		private int attackStyle;
@@ -67,8 +67,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			Projectile.localNPCHitCooldown = 18;
 			Projectile.minionSlots = 0;
 			Projectile.minion = false;
-			attackThroughWalls = true;
-			useBeacon = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
 			attackFrames = 60;
 			blurHelper = new MotionBlurDrawer(4);
 		}
@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			if(travelDir == default || animationFrame - targetStartFrame < windupFrames)
+			if(travelDir == default || AnimationFrame - targetStartFrame < windupFrames)
 			{
 				return false;
 			}
@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			// this is a lot of sprite drawing
 			// lifted from ExampleMod's ExampleBullet
-			int attackFrame = animationFrame - targetStartFrame;
+			int attackFrame = AnimationFrame - targetStartFrame;
 			if(targetStartFrame != default && attackFrame > windupFrames)
 			{
 				for (int k = 0; k < blurHelper.BlurLength; k++)
@@ -144,26 +144,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			float[] angleOffsets = { 0, MathHelper.PiOver4, -MathHelper.PiOver4 };
 			Vector2 center = new Vector2(-16, -64);
 			float baseAngle = isEven ? angleOffsets[attackStyle] : MathHelper.Pi - angleOffsets[attackStyle];
-			baseAngle += MathHelper.Pi / 16 * (float) Math.Sin(MathHelper.TwoPi * groupAnimationFrame / groupAnimationFrames);
+			baseAngle += MathHelper.Pi / 16 * (float) Math.Sin(MathHelper.TwoPi * GroupAnimationFrame / GroupAnimationFrames);
 			Vector2 offset = 164 * baseAngle.ToRotationVector2();
 			offset.Y *= 0.5f;
-			Projectile.rotation = MathHelper.Pi/48 * (float) Math.Sin(MathHelper.TwoPi * animationFrame / 120);
-			Projectile.position = player.Center + center + offset;
+			Projectile.rotation = MathHelper.Pi/48 * (float) Math.Sin(MathHelper.TwoPi * AnimationFrame / 120);
+			Projectile.position = Player.Center + center + offset;
 			Projectile.velocity = Vector2.Zero;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Array.ForEach(drawers, d => d.Update(Projectile, animationFrame, spawnFrames));
+			Array.ForEach(drawers, d => d.Update(Projectile, AnimationFrame, spawnFrames));
 			return Vector2.Zero;
 		}
 
 		public override Vector2? FindTarget()
 		{
 			// TODO lift some EmpoweredMinion stuff from here
-			int attackFrame = animationFrame - targetStartFrame;
-			if(animationFrame < attackDelayFrames)
+			int attackFrame = AnimationFrame - targetStartFrame;
+			if(AnimationFrame < attackDelayFrames)
 			{
 				return null;
 			} else if (attackFrame == windupFrames && targetNPC != null && targetNPC.active)
@@ -180,17 +180,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				return travelDir;
 			} else if (IsMyTurn() && SelectedEnemyInRange(1400, 1400) is Vector2 target)
 			{
-				if(targetNPCIndex == null)
+				if(TargetNPCIndex == null)
 				{
 					return null; // need an actual npc target for this to work
 				}
-				targetNPC = Main.npc[(int)targetNPCIndex];
-				attackStartPlayerOffset = Projectile.position - player.Center;
+				targetNPC = Main.npc[(int)TargetNPCIndex];
+				attackStartPlayerOffset = Projectile.position - Player.Center;
 				attackStartRotation = Projectile.rotation;
 				travelDir = target - Projectile.Center;
 				travelDir.SafeNormalize();
 				travelDir *= 14;
-				targetStartFrame = animationFrame;
+				targetStartFrame = AnimationFrame;
 				return travelDir;
 			}
 			return null;
@@ -199,7 +199,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// localAI[0] used to communicate attack animation progress with main ent
-			int attackFrame = animationFrame - targetStartFrame;
+			int attackFrame = AnimationFrame - targetStartFrame;
 			if (attackFrame > windupFrames)
 			{
 				Projectile.ai[1] = -1; // no longer 'attached' the the main npc, can spawn a new one
@@ -224,9 +224,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		internal void HammerTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			int attackFrame = animationFrame - targetStartFrame;
+			int attackFrame = AnimationFrame - targetStartFrame;
 			int offsetDir = -Math.Sign(vectorToTargetPosition.X);
-			Vector2 targetBase = player.Center - new Vector2(0, 96);
+			Vector2 targetBase = Player.Center - new Vector2(0, 96);
 			int windupRadius = 256;
 			int genericSwingRadius = 30;
 			if(targetNPC.active)
@@ -284,7 +284,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		internal void MissileTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			int attackFrame = animationFrame - targetStartFrame;
+			int attackFrame = AnimationFrame - targetStartFrame;
 			int offsetDir = -Math.Sign(vectorToTargetPosition.X);
 			if (attackFrame > windupFrames)
 			{
@@ -304,13 +304,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				// swing backwards a little bit before swinging forwards a little bit
 				Vector2 centerOfRotation = attackStartPlayerOffset + offsetDir * windupRadius * attackStartRotation.ToRotationVector2();
 				Projectile.rotation = rotation;
-				Projectile.position = player.Center + centerOfRotation + -offsetDir * windupRadius * Projectile.rotation.ToRotationVector2();
+				Projectile.position = Player.Center + centerOfRotation + -offsetDir * windupRadius * Projectile.rotation.ToRotationVector2();
 			}
 		}
 
 		internal void BoomerangTargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			int attackFrame = animationFrame - targetStartFrame;
+			int attackFrame = AnimationFrame - targetStartFrame;
 			int offsetDir = -Math.Sign(vectorToTargetPosition.X);
 			if(attackFrame > windupFrames)
 			{
@@ -326,17 +326,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				// swing backwards a little bit before swinging forwards a little bit
 				Vector2 centerOfRotation = attackStartPlayerOffset + offsetDir * windupRadius * attackStartRotation.ToRotationVector2();
 				Projectile.rotation += offsetDir * rotationScale;
-				Projectile.position = player.Center + centerOfRotation + -offsetDir * windupRadius * Projectile.rotation.ToRotationVector2();
+				Projectile.position = Player.Center + centerOfRotation + -offsetDir * windupRadius * Projectile.rotation.ToRotationVector2();
 			}
 		}
 
 		public override void AfterMoving()
 		{
 			// left shift old position
-			int attackFrame = animationFrame - targetStartFrame;
+			int attackFrame = AnimationFrame - targetStartFrame;
 			blurHelper.Update(Projectile.Center, targetStartFrame != default && attackFrame > windupFrames);
-			if(targetStartFrame != default && (animationFrame - targetStartFrame > framesToLiveAfterAttack 
-				|| Vector2.DistanceSquared(player.Center, Projectile.Center) > 1300f * 1300f))
+			if(targetStartFrame != default && (AnimationFrame - targetStartFrame > framesToLiveAfterAttack 
+				|| Vector2.DistanceSquared(Player.Center, Projectile.Center) > 1300f * 1300f))
 			{
 				Projectile.Kill();
 			}
@@ -348,7 +348,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			int maxSwarmSize = 4;
 			int projType = ProjectileType<CritterSwarmProjectile>();
 			if(!hasSpawnedSwarm && Main.projectile.Where(p =>
-				p.active && p.owner == player.whoAmI &&
+				p.active && p.owner == Player.whoAmI &&
 				p.type == projType && (int)p.ai[0] == target.whoAmI).Count() < maxSwarmSize)
 			{
 				hasSpawnedSwarm = true;

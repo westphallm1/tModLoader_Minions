@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				inertia = diveBombInertia;
 				speed = diveBombSpeed;
-				Projectile.rotation = (Projectile.velocity.X > 0 ? 7 : 5) * PI / 4;
+				Projectile.rotation = (Projectile.velocity.X > 0 ? 7 : 5) * MathHelper.Pi / 4;
 			}
 			vectorToTargetPosition.SafeNormalize();
 			vectorToTargetPosition *= speed;

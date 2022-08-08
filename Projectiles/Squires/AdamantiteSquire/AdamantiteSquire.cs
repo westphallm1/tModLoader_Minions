@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 	public class AdamantiteSquireMinion : WeaponHoldingSquire
 	{
 
-		internal override int BuffId => BuffType<AdamantiteSquireMinionBuff>();
+		public override int BuffId => BuffType<AdamantiteSquireMinionBuff>();
 		protected override int ItemType => ItemType<AdamantiteSquireMinionItem>();
 		protected override int AttackFrames => 25;
 

@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 	public class NullHatchetMinion : TeleportingWeaponMinion
 	{
 
-		internal override int BuffId => BuffType<NullHatchetMinionBuff>();
+		public override int BuffId => BuffType<NullHatchetMinionBuff>();
 		float windUpPerFrame = MathHelper.Pi / 60;
 		float swingPerFrame = MathHelper.Pi / 20;
 		float initialWindUp = MathHelper.PiOver4;
@@ -71,11 +71,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.tileCollide = false;
-			attackState = AttackState.IDLE;
+			AttackState = AttackState.IDLE;
 			Projectile.minionSlots = 1;
 			attackFrames = 60;
-			attackThroughWalls = true;
-			useBeacon = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
 			travelVelocity = 16;
 			maxPhaseFrames = 30;
 			targetIsDead = false;
@@ -113,7 +113,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			//Randomized stuff should only be decided by the client
 			//That would require a change of the ai so it doesnt move for other clients during this phase
 			float swingDistance = 80;
-			if (Main.myPlayer == player.whoAmI && distanceFromFoe == default)
+			if (Main.myPlayer == Player.whoAmI && distanceFromFoe == default)
 			{
 				distanceFromFoe = swingDistance + Main.rand.Next(-20, 20); ;
 				teleportAngle = Main.rand.NextFloat(MathHelper.TwoPi);
@@ -138,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 			if (framesInAir++ > maxFramesInAir)
 			{
 				targetNPC = null;
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 				return;
 			}
 
@@ -177,9 +177,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if (attackState == AttackState.IDLE || phaseFrames < maxPhaseFrames / 2)
+			if (AttackState == AttackState.IDLE || phaseFrames < maxPhaseFrames / 2)
 			{
-				Projectile.spriteDirection = Projectile.Center.X > player.Center.X ? 1 : -1;
+				Projectile.spriteDirection = Projectile.Center.X > Player.Center.X ? 1 : -1;
 			}
 			base.IdleMovement(vectorToIdlePosition);
 		}

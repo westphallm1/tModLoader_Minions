@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class MiniPrimeMinion : SkeletronCombatPet
 	{
-		internal override int BuffId => BuffType<MiniPrimeMinionBuff>();
+		public override int BuffId => BuffType<MiniPrimeMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SkeletronPrimePet;
 		internal override int? FiredProjectileId => null;
@@ -65,10 +65,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			int framesSinceShoot = animationFrame - hsHelper.lastShootFrame;
+			int framesSinceShoot = AnimationFrame - hsHelper.lastShootFrame;
 			bool isLaserFrame = attackCycle == 2 && (framesSinceShoot == attackFrames / 4 || framesSinceShoot == 3 * attackFrames / 4);
 			bool isBombFrame = attackCycle == 4 && framesSinceShoot == attackFrames / 4;
-			bool shouldShoot = player.whoAmI == Main.myPlayer && (isLaserFrame || isBombFrame);
+			bool shouldShoot = Player.whoAmI == Main.myPlayer && (isLaserFrame || isBombFrame);
 			if(shouldShoot)
 			{
 				Vector2 target = vectorToTargetPosition;
@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					projId,
 					damage,
 					Projectile.knockBack,
-					player.whoAmI);
+					Player.whoAmI);
 
 			}
 		}
@@ -106,12 +106,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			// very hacky way to get -1 and 1
 			Vector2 offset;
-			int shootFrame = animationFrame - hsHelper.lastShootFrame;
-			if(attackCycle > 4 || handIdx != attackCycle - 1 || vectorToTarget is not Vector2 target || shootFrame > attackFrames)
+			int shootFrame = AnimationFrame - hsHelper.lastShootFrame;
+			if(attackCycle > 4 || handIdx != attackCycle - 1 || VectorToTarget is not Vector2 target || shootFrame > attackFrames)
 			{
 				Vector2 baseOffset = 32 * Vector2.UnitX * (handIdx % 2 == 0 ? -1 : 1);
 				baseOffset += 16 * Vector2.UnitY * (handIdx > 1 ? -1 : 1);
-				float cycleAngle = MathHelper.TwoPi * animationFrame / 120 + handIdx * MathHelper.Pi/2;
+				float cycleAngle = MathHelper.TwoPi * AnimationFrame / 120 + handIdx * MathHelper.Pi/2;
 				Vector2 cycleOffset = 8 * cycleAngle.ToRotationVector2();
 				offset = baseOffset + cycleOffset;
 				hand.Rotation = 0;

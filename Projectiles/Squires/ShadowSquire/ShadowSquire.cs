@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 	public class ShadowSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<ShadowSquireMinionBuff>();
+		public override int BuffId => BuffType<ShadowSquireMinionBuff>();
 		protected override int ItemType => ItemType<ShadowSquireMinionItem>();
 		protected override int AttackFrames => 20;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
@@ -91,10 +91,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 
 		public override void OnStartUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				Vector2 vector2Mouse = Vector2.DistanceSquared(Projectile.Center, Main.MouseWorld) < 48 * 48 ?
-					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
+					Main.MouseWorld - Player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(

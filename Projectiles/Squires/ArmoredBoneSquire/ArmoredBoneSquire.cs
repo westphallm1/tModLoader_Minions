@@ -141,7 +141,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 	public class SpiritFlailWormMinion : SquireMinion
 	{
 		protected override int ItemType => ItemType<ArmoredBoneSquireMinionItem>();
-		internal override int BuffId => BuffType<ArmoredBoneSquireMinionBuff>();
+		public override int BuffId => BuffType<ArmoredBoneSquireMinionBuff>();
 
 		// used to allow the flail itself to move through walls a bit while the "center"
 		// remains bounded by tiles
@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			base.SetDefaults();
 			Projectile.width = 24;
 			Projectile.height = 24;
-			frameSpeed = 10;
+			FrameSpeed = 10;
 			wormDrawer = new SpiritFlailDrawer();
 			Projectile.minionSlots = 0;
 		}
@@ -188,12 +188,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			if (target == default || !target.active || Vector2.DistanceSquared(target.Center, Projectile.Center) > 128 * 128)
 			{
 				target = default;
-				float flailAngle = 2 * MathHelper.Pi * animationFrame / 60f;
+				float flailAngle = 2 * MathHelper.Pi * AnimationFrame / 60f;
 				flailTarget = 40 * flailAngle.ToRotationVector2();
 			}
 			else
 			{
-				float flailAngle = 2 * MathHelper.Pi * animationFrame / attackFrames;
+				float flailAngle = 2 * MathHelper.Pi * AnimationFrame / attackFrames;
 				flailTarget = 40 * flailAngle.ToRotationVector2();
 				// circle between the mouse cursor and the target
 				Vector2 axis = Projectile.Center - target.Center;
@@ -209,7 +209,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		private void SpawnWisps()
 		{
 			int workingAttackFrames = (int)(CrossMod.ApplyCrossModScaling(attackFrames, Projectile, 0, true));
-			int attackFrame = animationFrame % workingAttackFrames;
+			int attackFrame = AnimationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
 				firingFrame1 = Main.rand.Next(workingAttackFrames);
@@ -217,7 +217,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -273,7 +273,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			base.IdleMovement(vectorToIdlePosition);
-			float flailAngle = 2 * MathHelper.Pi * animationFrame / 60f;
+			float flailAngle = 2 * MathHelper.Pi * AnimationFrame / 60f;
 			flailTarget = 40 * flailAngle.ToRotationVector2();
 			UpdateFlailOffset();
 		}
@@ -335,7 +335,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 	{
 
 		protected override int ItemType => ItemType<ArmoredBoneSquireMinionItem>();
-		internal override int BuffId => BuffType<ArmoredBoneSquireMinionBuff>();
+		public override int BuffId => BuffType<ArmoredBoneSquireMinionBuff>();
 		protected override int AttackFrames => 27;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/BoneWings";
 		protected override string WeaponTexturePath => "AmuletOfManyMinions/Projectiles/Squires/ArmoredBoneSquire/ArmoredBoneSquireFlailBall";
@@ -397,7 +397,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 				WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
 
 			int workingAttackFrames = (int)(CrossMod.ApplyCrossModScaling(AttackFrames, Projectile, 0));
-			int attackFrame = animationFrame % workingAttackFrames;
+			int attackFrame = AnimationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
 				firingFrame1 = Main.rand.Next(workingAttackFrames);
@@ -405,7 +405,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			}
 			if (attackFrame == firingFrame1 || attackFrame == firingFrame2)
 			{
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -423,7 +423,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// the flail takes over while using special
-			base.IdleMovement(vectorToIdle);
+			base.IdleMovement(VectorToIdle);
 		}
 
 		public override void PostDraw(Color lightColor)
@@ -450,7 +450,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		public override void OnStartUsingSpecial()
 		{
-			if (player.whoAmI == Main.myPlayer)
+			if (Player.whoAmI == Main.myPlayer)
 			{
 				Projectile p = Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromThis(),
@@ -459,19 +459,19 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 					ProjectileType<SpiritFlailWormMinion>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI);
+					Player.whoAmI);
 				p.originalDamage = Projectile.originalDamage;
 			}
 		}
 
 		public override void OnStopUsingSpecial()
 		{
-			if (player.whoAmI == Main.myPlayer)
+			if (Player.whoAmI == Main.myPlayer)
 			{
 				for (int i = 0; i < Main.maxProjectiles; i++)
 				{
 					Projectile p = Main.projectile[i];
-					if (p.active && p.owner == player.whoAmI && p.type == ProjectileType<SpiritFlailWormMinion>())
+					if (p.active && p.owner == Player.whoAmI && p.type == ProjectileType<SpiritFlailWormMinion>())
 					{
 						p.Kill();
 						break;

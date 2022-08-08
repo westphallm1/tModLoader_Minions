@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 	public class BombBuddyMinion : SimpleGroundBasedMinion
 	{
 
-		internal override int BuffId => BuffType<BombBuddyMinionBuff>();
+		public override int BuffId => BuffType<BombBuddyMinionBuff>();
 		private int slowFrameCount = 0;
 		const int explosionRespawnTime = 90;
 		const int explosionRadius = 64;
@@ -66,9 +66,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			[GroundAnimationState.WALKING] = (2, 12),
 		};
 
-		private bool didJustRespawn => animationFrame - lastExplosionFrame == explosionRespawnTime;
-		private bool canAttack => animationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
-		private bool isRespawning => animationFrame - lastExplosionFrame < explosionRespawnTime;
+		private bool didJustRespawn => AnimationFrame - lastExplosionFrame == explosionRespawnTime;
+		private bool canAttack => AnimationFrame - lastExplosionFrame >= explosionAttackRechargeTime;
+		private bool isRespawning => AnimationFrame - lastExplosionFrame < explosionRespawnTime;
 
 		public override void SetStaticDefaults()
 		{
@@ -84,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			Projectile.height = 30;
 			DrawOriginOffsetY = -4;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -111,13 +111,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			if (isRespawning)
 			{
 				// clamp to the player while respawning
-				Projectile.position = player.position;
-				Projectile.velocity = player.velocity;
+				Projectile.position = Player.position;
+				Projectile.velocity = Player.velocity;
 			}
 			else if (didJustRespawn)
 			{
-				Projectile.position += vectorToIdle;
-				Projectile.velocity = player.velocity;
+				Projectile.position += VectorToIdle;
+				Projectile.velocity = Player.velocity;
 				DoRespawnEffects();
 			}
 			else
@@ -134,9 +134,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			float xMaxSpeed = 9.5f;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
@@ -148,19 +148,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			if (isRespawning)
 			{
 				// clamp to the player while respawning
-				Projectile.position = player.position;
-				Projectile.velocity = player.velocity;
+				Projectile.position = Player.position;
+				Projectile.velocity = Player.velocity;
 			}
-			else if (vectorToTargetPosition.Length() < explosionRadius / 2 && !usingBeacon)
+			else if (vectorToTargetPosition.Length() < explosionRadius / 2 && !UsingBeacon)
 			{
-				lastExplosionFrame = animationFrame;
+				lastExplosionFrame = AnimationFrame;
 				explosionLocation = Projectile.Center;
 				SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
 				DoExplosionEffects();
 			}
 			else
 			{
-				base.TargetedMovement(canAttack ? vectorToTargetPosition : vectorToIdle);
+				base.TargetedMovement(canAttack ? vectorToTargetPosition : VectorToIdle);
 			}
 		}
 
@@ -222,7 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
-			if (state == GroundAnimationState.FLYING && animationFrame % 3 == 0)
+			if (state == GroundAnimationState.FLYING && AnimationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;
@@ -232,7 +232,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 
 		public override void AfterMoving()
 		{
-			Projectile.friendly = isRespawning && animationFrame - lastExplosionFrame <= 15;
+			Projectile.friendly = isRespawning && AnimationFrame - lastExplosionFrame <= 15;
 		}
 	}
 }

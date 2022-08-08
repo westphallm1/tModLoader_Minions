@@ -101,7 +101,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SpiderBrainMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BrainOfCthulhuPet;
-		internal override int BuffId => BuffType<SpiderBrainMinionBuff>();
+		public override int BuffId => BuffType<SpiderBrainMinionBuff>();
 
 
 		internal override int GetAttackFrames(ICombatPetLevelInfo info) => base.GetAttackFrames(info) / 4;
@@ -141,14 +141,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			int eyeVelocity = 10;
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
-			if (player.whoAmI == Main.myPlayer)
+			if (Player.whoAmI == Main.myPlayer)
 			{
-				Vector2 angleToTarget = (Vector2)vectorToTarget;
+				Vector2 angleToTarget = (Vector2)VectorToTarget;
 				angleToTarget.SafeNormalize();
 				angleToTarget *= eyeVelocity;
-				if(targetNPCIndex is int idx)
+				if(TargetNPCIndex is int idx)
 				{
 					Vector2 targetVelocity = Main.npc[idx].velocity;
 					if(targetVelocity.Length() > 32)
@@ -166,7 +166,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 					ProjectileType<SpiderBrainEyeProjectile>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: Projectile.whoAmI);
 			}
 		}

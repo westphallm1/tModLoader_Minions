@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		private bool _isWalking;
 		private SpriteCycleDrawer[] drawers;
 
-		internal int idleFrame => frameShift + minion.animationFrame - (minion.animationFrame % frameResolution);
+		internal int idleFrame => frameShift + minion.AnimationFrame - (minion.AnimationFrame % frameResolution);
 
 		internal int walkFrame => frameShift + walkCycleFrame - (walkCycleFrame % frameResolution);
 
@@ -213,7 +213,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal void Process()
 		{
 			// don't draw if server, or not an update frame, or there are no drawers
-			if(Main.dedServ || minion.animationFrame % frameResolution != 0 || drawers == null || drawers.Length == 0)
+			if(Main.dedServ || minion.AnimationFrame % frameResolution != 0 || drawers == null || drawers.Length == 0)
 			{
 				return;
 			}

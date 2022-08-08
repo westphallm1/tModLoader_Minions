@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	public class TruffleTurtleMinion : CombatPetGroundedRangedMinion
 	{
-		internal override int BuffId => BuffType<TruffleTurtleMinionBuff>();
+		public override int BuffId => BuffType<TruffleTurtleMinionBuff>();
 
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
 
@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.GetAnimationState();
-			frameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
+			FrameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
 			base.Animate(minFrame, maxFrame);
 			if(state == GroundAnimationState.JUMPING)
 			{

@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class SlimePrinceNinjaMinion : CombatPetGroundedMeleeMinion
 	{
-		internal override int BuffId => BuffType<SlimePrinceMinionBuff>();
+		public override int BuffId => BuffType<SlimePrinceMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{
@@ -54,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(!gHelper.isFlying && vectorToTarget is Vector2 target && target.Length() < 48)
+			if(!gHelper.isFlying && VectorToTarget is Vector2 target && target.Length() < 48)
 			{
 				frameInfo[GroundAnimationState.WALKING] = (4, 7);
 				frameInfo[GroundAnimationState.JUMPING] = (7, 10);
@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			if(animationFrame > 180)
+			if(AnimationFrame > 180)
 			{
 				Projectile.Kill();
 			}
@@ -108,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SlimePrinceMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.KingSlimePet;
-		internal override int BuffId => BuffType<SlimePrinceMinionBuff>();
+		public override int BuffId => BuffType<SlimePrinceMinionBuff>();
 
 		private bool wasFlyingThisFrame = false;
 
@@ -160,10 +160,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			int projType = ProjectileType<SlimePrinceNinjaMinion>();
 			Vector2 launchVel = (-8 * Vector2.UnitY).RotatedByRandom(MathHelper.PiOver4);
-			if(player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[projType] == 0 &&
-				animationFrame - lastSpawnedFrame > 240 && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal)
+			if(Player.whoAmI == Main.myPlayer && Player.ownedProjectileCounts[projType] == 0 &&
+				AnimationFrame - lastSpawnedFrame > 240 && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal)
 			{
-				lastSpawnedFrame = animationFrame;
+				lastSpawnedFrame = AnimationFrame;
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					Projectile.Center,

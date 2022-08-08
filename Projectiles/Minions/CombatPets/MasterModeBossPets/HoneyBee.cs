@@ -129,7 +129,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class HoneyBeeMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<HoneyBeeMinionBuff>();
+		public override int BuffId => BuffType<HoneyBeeMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.QueenBeePet;
 		internal override int? FiredProjectileId => ProjectileType<HoneyPotProjectile>();
@@ -177,7 +177,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 target = base.IdleBehavior();
-			weaponDrawer.Update(Projectile, animationFrame);
+			weaponDrawer.Update(Projectile, AnimationFrame);
 			hsHelper.firedProjectileId = UsingKnightAI ? null : FiredProjectileId;
 			return target;
 		}
@@ -191,7 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			if(hsHelper.lastShootFrame == animationFrame)
+			if(hsHelper.lastShootFrame == AnimationFrame)
 			{
 				weaponDrawer.StartAttack(vectorToTargetPosition);
 			}
@@ -199,7 +199,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		internal override void AfterFiringProjectile()
 		{
-			if(UsingKnightAI && player.whoAmI == Main.myPlayer && vectorToTarget is Vector2 target) 
+			if(UsingKnightAI && Player.whoAmI == Main.myPlayer && VectorToTarget is Vector2 target) 
 			{
 				int projId = ProjectileType<HoneyBeeBee>();
 				int extraCount = 1 + Main.rand.Next(2);
@@ -226,7 +226,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void PostDraw(Color lightColor)
 		{
-			if(vectorToTarget is not null && UsingKnightAI)
+			if(VectorToTarget is not null && UsingKnightAI)
 			{
 				Texture2D texture = TextureAssets.Item[ItemID.AnkhShield].Value;
 				Vector2 holdOffset = new(-forwardDir * Projectile.spriteDirection * 12, 4);

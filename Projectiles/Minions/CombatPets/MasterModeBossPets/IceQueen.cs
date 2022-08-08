@@ -82,7 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class IceQueenMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<IceQueenMinionBuff>();
+		public override int BuffId => BuffType<IceQueenMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.IceQueenPet;
 		internal override int? FiredProjectileId => ProjectileType<IceQueenIcicle>();
@@ -100,13 +100,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			frameSpeed = 5;
+			FrameSpeed = 5;
 			hsHelper.CustomFireProjectile = LaunchIcicle;
 		}
 
 		private void LaunchIcicle(Vector2 lineOfFire, int projId, float ai0)
 		{
-			if(player.whoAmI == Main.myPlayer && targetNPCIndex is int idx)
+			if(Player.whoAmI == Main.myPlayer && TargetNPCIndex is int idx)
 			{
 				Vector2 spawnAngle = Vector2.UnitY.RotatedBy(
 					Main.rand.NextFloat(MathHelper.Pi / 4) - MathHelper.PiOver2 / 8);

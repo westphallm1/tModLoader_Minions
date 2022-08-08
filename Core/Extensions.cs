@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Core.Minions.AI;
+using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace AmuletOfManyMinions.Core
 		public static void ClientSideNPCHitCheck(this ModProjectile modProjectile)
 		{
 			if (modProjectile.Projectile.owner == Main.myPlayer ||
-				Minion.GetClosestEnemyToPosition(modProjectile.Projectile.Center, 128, requireLOS: false) is not NPC npc)
+				MinionBehavior.GetClosestEnemyToPosition(modProjectile.Projectile.Center, 128, requireLOS: false) is not NPC npc)
 			{
 				return;
 			}

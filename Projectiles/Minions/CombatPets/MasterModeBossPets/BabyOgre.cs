@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class BabyOgreMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DD2OgrePet;
-		internal override int BuffId => BuffType<BabyOgreMinionBuff>();
+		public override int BuffId => BuffType<BabyOgreMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

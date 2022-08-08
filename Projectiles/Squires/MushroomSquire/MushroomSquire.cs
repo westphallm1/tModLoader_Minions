@@ -112,7 +112,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
 	public class MushroomSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<MushroomSquireMinionBuff>();
+		public override int BuffId => BuffType<MushroomSquireMinionBuff>();
 		protected override int ItemType => ItemType<MushroomSquireMinionItem>();
 		protected override int AttackFrames => 20;
 
@@ -146,10 +146,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.SpecialTargetedMovement(vectorToTargetPosition);
-			if(specialFrame % 10 == 0 && player.whoAmI == Main.myPlayer)
+			if(specialFrame % 10 == 0 && Player.whoAmI == Main.myPlayer)
 			{
 				Vector2 vector2Mouse = Vector2.DistanceSquared(Projectile.Center, Main.MouseWorld) < 48 * 48 ?
-					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
+					Main.MouseWorld - Player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				vector2Mouse = vector2Mouse.RotatedBy(Main.rand.NextFloat(MathHelper.Pi / 8) - MathHelper.Pi/16);

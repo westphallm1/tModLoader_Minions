@@ -91,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 	public class AcornMinion : HeadCirclingGroupAwareMinion
 	{
 		int lastFiredFrame = 0;
-		internal override int BuffId => BuffType<AcornMinionBuff>();
+		public override int BuffId => BuffType<AcornMinionBuff>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -107,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			Projectile.height = 16;
 			DrawOffsetX = (Projectile.width - 44) / 2;
 			attackFrames = 60;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -141,9 +141,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 					}
 				}
 			}
-			if (Main.myPlayer == player.whoAmI && IsMyTurn() && animationFrame - lastFiredFrame >= attackFrames && Math.Abs(vectorAbove.X) <= 32)
+			if (Main.myPlayer == Player.whoAmI && IsMyTurn() && AnimationFrame - lastFiredFrame >= attackFrames && Math.Abs(vectorAbove.X) <= 32)
 			{
-				lastFiredFrame = animationFrame;
+				lastFiredFrame = AnimationFrame;
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					Projectile.Center,
@@ -151,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 					ProjectileType<AcornBomb>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI);
+					Player.whoAmI);
 			}
 			DistanceFromGroup(ref vectorAbove);
 			vectorAbove.SafeNormalize();

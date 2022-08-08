@@ -36,13 +36,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 	public class AbigailCounterMinion : CounterMinion
 	{
-		internal override int BuffId => BuffType<AbigailMinionBuff>();
+		public override int BuffId => BuffType<AbigailMinionBuff>();
 		protected override int MinionType => ProjectileType<AbigailMinion>();
 	}
 
 	public class AbigailMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<AbigailMinionBuff>();
+		public override int BuffId => BuffType<AbigailMinionBuff>();
 		public override int CounterType => ProjectileType<AbigailCounterMinion>();
 		protected override int dustType => 6;
 
@@ -53,7 +53,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		internal int stayInPlaceFrames = 0;
 		internal int attackRadius = 148;
 		internal int damageRadius = 80;
-		internal bool IsAttacking => vectorToTarget is Vector2 target && target.LengthSquared() < attackRadius * attackRadius;
+		internal bool IsAttacking => VectorToTarget is Vector2 target && target.LengthSquared() < attackRadius * attackRadius;
 
 		public override void SetStaticDefaults()
 		{
@@ -72,10 +72,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			base.SetDefaults();
 			Projectile.tileCollide = true;
-			attackThroughWalls = false;
+			AttackThroughWalls = false;
 			Projectile.width = 32;
 			Projectile.height = 32;
-			frameSpeed = 8;
+			FrameSpeed = 8;
 			// can hit many npcs at once, so give it a relatively high on hit cooldown
 			Projectile.localNPCHitCooldown = 20;
 			hsHelper = new HoverShooterHelper(this, default)
@@ -91,14 +91,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -32;
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
-				idlePosition.Y = player.Top.Y - 16;
+				idlePosition.X = Player.Top.X;
+				idlePosition.Y = Player.Top.Y - 16;
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			base.Animate(minFrame, maxFrame);
 			if(IsAttacking)
 			{
-				Projectile.spriteDirection = Math.Sign(((Vector2)vectorToTarget).X);
+				Projectile.spriteDirection = Math.Sign(((Vector2)VectorToTarget).X);
 			}
 			else if(Math.Abs(Projectile.velocity.X) > 1)
 			{
@@ -166,7 +166,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[ProjectileID.MedusaHeadRay].Value;
 			Rectangle bounds = texture.Bounds;
-			float baseAngle = MathHelper.TwoPi * animationFrame / 180;
+			float baseAngle = MathHelper.TwoPi * AnimationFrame / 180;
 			int rayCount = 7;
 			for(int i = 0; i < rayCount; i++)
 			{

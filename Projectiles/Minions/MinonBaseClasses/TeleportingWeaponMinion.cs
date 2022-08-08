@@ -40,20 +40,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			dealsContactDamage = false; // manually managed
+			DealsContactDamage = false; // manually managed
 		}
 
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingBody, player.whoAmI);
-			Vector2 idlePosition = player.Center;
+			List<Projectile> minions = IdleLocationSets.GetProjectilesInSet(IdleLocationSets.circlingBody, Player.whoAmI);
+			Vector2 idlePosition = Player.Center;
 			if (minions.Count > 0)
 			{
 				int minionCount = minions.Count;
 				int order = minions.IndexOf(Projectile);
 				idleAngle = (float)(MathHelper.TwoPi * order) / minionCount;
-				idleAngle += (MathHelper.TwoPi * groupAnimationFrame) / groupAnimationFrames;
+				idleAngle += (MathHelper.TwoPi * GroupAnimationFrame) / GroupAnimationFrames;
 				idlePosition.X += 2 + 30 * (float)Math.Cos(idleAngle);
 				idlePosition.Y += -12 + 5 * (float)Math.Sin(idleAngle);
 			}
@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 
-			if (targetNPC is null && targetNPCIndex is int index)
+			if (targetNPC is null && TargetNPCIndex is int index)
 			{
 				OnAcquireTarget(vectorToTargetPosition);
 				targetNPC = Main.npc[index];
@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			if (targetNPC != null && phaseFrames++ < maxPhaseFrames / 2)
 			{
 				// do nothing, preDraw will do phase out animation
-				IdleMovement(vectorToIdle);
+				IdleMovement(VectorToIdle);
 			}
 			else if (phaseFrames > maxPhaseFrames / 2 && phaseFrames < maxPhaseFrames)
 			{
@@ -136,7 +136,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if (attackState == AttackState.ATTACKING)
+			if (AttackState == AttackState.ATTACKING)
 			{
 				framesWithoutTarget++;
 				if (phaseFrames < maxPhaseFrames && targetNPC != null)
@@ -159,8 +159,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 			else
 			{
-				attackState = AttackState.IDLE;
-				Projectile.rotation = (player.Center - Projectile.Center).X * -0.01f;
+				AttackState = AttackState.IDLE;
+				Projectile.rotation = (Player.Center - Projectile.Center).X * -0.01f;
 				Projectile.position += vectorToIdlePosition;
 				Projectile.velocity = Vector2.Zero;
 			}

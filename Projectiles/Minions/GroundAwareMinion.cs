@@ -71,9 +71,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			get => _isFlying;
 			set
 			{
-				if (self.animationFrame - lastTransformedFrame > transformRateLimit)
+				if (self.AnimationFrame - lastTransformedFrame > transformRateLimit)
 				{
-					lastTransformedFrame = self.animationFrame;
+					lastTransformedFrame = self.AnimationFrame;
 					_isFlying = value;
 				}
 			}
@@ -283,7 +283,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				clearGround.Y -= projectile.height;
 				teleportDestination = clearGround;
 				teleportDestination.X += Math.Sign(vectorToTarget.X) * projectile.width / 2;
-				teleportStartFrame = self.animationFrame;
+				teleportStartFrame = self.AnimationFrame;
 				return true;
 			}
 			return false;
@@ -316,7 +316,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				clearGround.Y -= clearGround.Y % 16; // snap to the nearest block
 				clearGround.Y -= (projectile.height);
 				teleportDestination = clearGround;
-				teleportStartFrame = self.animationFrame;
+				teleportStartFrame = self.AnimationFrame;
 				return true;
 			}
 			return false;
@@ -510,7 +510,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal void ModifyPathfinding(ref Vector2 target)
 		{
 			_isFlying = true;
-			lastTransformedFrame = self.animationFrame;
+			lastTransformedFrame = self.AnimationFrame;
 			if(target.Y > 16)
 			{
 				DropThroughPlatform();

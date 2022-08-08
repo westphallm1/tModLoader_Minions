@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	public class CompanionCubeMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.CompanionCube;
-		internal override int BuffId => BuffType<CompanionCubeMinionBuff>();
+		public override int BuffId => BuffType<CompanionCubeMinionBuff>();
 
 		internal NPC teleportTarget;
 		internal int teleportStartFrame;
@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		private int teleportRadius;
 		private float currentAngle;
 
-		internal int teleportFrame => animationFrame - teleportStartFrame;
+		internal int teleportFrame => AnimationFrame - teleportStartFrame;
 		internal bool IsTeleporting => teleportTarget != null && teleportTarget.active && teleportFrame < teleportDuration;
 
 		public override void SetDefaults()
@@ -120,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			if(!IsTeleporting && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Spectre)
 			{
 				teleportTarget = target;
-				teleportStartFrame = animationFrame;
+				teleportStartFrame = AnimationFrame;
 				teleportStartAngle = Projectile.velocity.ToRotation();
 			}
 		}
@@ -178,7 +178,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			Texture2D portalTexture = TextureAssets.Projectile[ProjectileID.PortalGunGate].Value;
 			Vector2 offset = currentAngle.ToRotationVector2() * (teleportRadius + 14);
 			Vector2 portalOffset = currentAngle.ToRotationVector2() * teleportRadius;
-			int portalFrame = (animationFrame / 5) % 4;
+			int portalFrame = (AnimationFrame / 5) % 4;
 			int portalHeight = portalTexture.Height / 4;
 			Rectangle portalBounds = new Rectangle(0, portalHeight * portalFrame, portalTexture.Width, portalHeight);
 			for(int sign = -1; sign <= 1; sign+= 2)

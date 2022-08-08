@@ -26,13 +26,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		{
 			Projectile.friendly = false;
 			Projectile.velocity = Vector2.Zero;
-			Projectile.position = player.Center;
-			if (player.whoAmI == Main.myPlayer && player.ownedProjectileCounts[MinionType] == 0 && IsPrimaryFrame)
+			Projectile.position = Player.Center;
+			if (Player.whoAmI == Main.myPlayer && Player.ownedProjectileCounts[MinionType] == 0 && IsPrimaryFrame)
 			{
 				// hack to prevent multiple 
 				if (GetMinionsOfType(Projectile.type)[0].whoAmI == Projectile.whoAmI)
 				{
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Top, Vector2.Zero, MinionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Player.Top, Vector2.Zero, MinionType, Projectile.damage, Projectile.knockBack, Main.myPlayer);
 				}
 			} else
 			{
@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected abstract void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame);
 
 		public virtual int CounterType => default;
-		protected virtual int EmpowerCount => player == null ? 0 : player.ownedProjectileCounts[CounterType];
+		protected virtual int EmpowerCount => Player == null ? 0 : Player.ownedProjectileCounts[CounterType];
 
 		public virtual void OnEmpower()
 		{
@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == CounterType)
+				if(p.active && p.owner == Player.whoAmI && p.type == CounterType)
 				{
 					baseDamage = p.originalDamage;
 					break;
@@ -142,7 +142,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override Vector2? FindTarget()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			SetMinAndMaxFrames(ref minFrame, ref max);
 			maxFrame = max;
 			Projectile.frameCounter++;
-			if (Projectile.frameCounter >= frameSpeed)
+			if (Projectile.frameCounter >= FrameSpeed)
 			{
 				Projectile.frameCounter = 0;
 				Projectile.frame++;

@@ -55,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 
 	public class MycelialMageMinion : HoverShooterMinion
 	{
-		internal override int BuffId => BuffType<MycelialMageMinionBuff>();
+		public override int BuffId => BuffType<MycelialMageMinionBuff>();
 
 		internal override int? FiredProjectileId => ProjectileType<TrufflePetGlowingMushroom>();
 		internal override SoundStyle? ShootSound => SoundID.Item17;
@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 			DrawOriginOffsetY = -12;
 			targetSearchDistance = 650;
 			attackFrames = 50;
-			frameSpeed = 20;
+			FrameSpeed = 20;
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.travelSpeed = 9;
 			hsHelper.projectileVelocity = 12;
@@ -89,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(vectorToTarget is Vector2 target)
+			if(VectorToTarget is Vector2 target)
 			{
 				base.Animate(4, 8);
 				Projectile.spriteDirection = Math.Sign(target.X);

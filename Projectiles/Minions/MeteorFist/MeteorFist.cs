@@ -66,7 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 	public class MeteorFistMinion : GroupAwareMinion
 	{
 
-		internal override int BuffId => BuffType<MeteorFistMinionBuff>();
+		public override int BuffId => BuffType<MeteorFistMinionBuff>();
 		private int framesInAir;
 		private float idleAngle;
 
@@ -84,17 +84,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.tileCollide = false;
-			attackState = AttackState.IDLE;
+			AttackState = AttackState.IDLE;
 			Projectile.minionSlots = 0.5f;
 			attackFrames = 30;
-			useBeacon = false;
+			UseBeacon = false;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
 			if (Projectile.tileCollide)
 			{
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 				Projectile.tileCollide = false;
 			}
 			return base.OnTileCollide(oldVelocity);
@@ -105,9 +105,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			base.IdleBehavior();
 			List<Projectile> minions = GetActiveMinions();
 			Projectile leader = GetFirstMinion(minions);
-			if (Main.myPlayer == player.whoAmI &&
+			if (Main.myPlayer == Player.whoAmI &&
 				leader.minionPos == Projectile.minionPos && IsPrimaryFrame &&
-				player.ownedProjectileCounts[ProjectileType<MeteorFistHead>()] == 0)
+				Player.ownedProjectileCounts[ProjectileType<MeteorFistHead>()] == 0)
 			{
 				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<MeteorFistHead>(), 0, 0, Main.myPlayer);
 			}
@@ -121,7 +121,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			int minionCount = minions.Count;
 			int order = minions.IndexOf(Projectile);
 			idleAngle = (float)(2 * Math.PI * order) / minionCount;
-			idleAngle += Projectile.spriteDirection * 2 * (float)Math.PI * groupAnimationFrame / groupAnimationFrames;
+			idleAngle += Projectile.spriteDirection * 2 * (float)Math.PI * GroupAnimationFrame / GroupAnimationFrames;
 			idlePosition.X += 2 + 30 * (float)Math.Sin(idleAngle);
 			idlePosition.Y += 2 + 30 * (float)Math.Cos(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
@@ -157,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		{
 			int speed = 16;
 			Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
-			if (oldVectorToTarget == null && vectorToTarget is Vector2 target)
+			if (OldVectorToTarget == null && VectorToTarget is Vector2 target)
 			{
 				target.Y -= Math.Abs(target.X) / 10; // add a bit of vertical increase to target
 				target.SafeNormalize();
@@ -168,14 +168,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			}
 			if (framesInAir++ > 15)
 			{
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 			}
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// attack should continue until ground is hit
-			if (attackState == AttackState.ATTACKING)
+			if (AttackState == AttackState.ATTACKING)
 			{
 				TargetedMovement(Vector2.Zero);
 				return;
@@ -187,7 +187,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			int maxSpeed = 20;
 			if (vectorToIdlePosition.Length() < 32)
 			{
-				attackState = AttackState.IDLE;
+				AttackState = AttackState.IDLE;
 				Projectile head = GetHead(ProjectileType<MeteorFistHead>());
 				if (head != default)
 				{

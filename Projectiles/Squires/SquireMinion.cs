@@ -63,9 +63,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		protected virtual int SpecialDuration => 30;
 		protected virtual int SpecialCooldown => 6 * 60;
-		protected int specialFrame => animationFrame - specialStartFrame;
+		protected int specialFrame => AnimationFrame - specialStartFrame;
 
-		protected bool SpecialOnCooldown => player.HasBuff(ModContent.BuffType<SquireCooldownBuff>());
+		protected bool SpecialOnCooldown => Player.HasBuff(ModContent.BuffType<SquireCooldownBuff>());
 
 		public virtual int CooldownDoneDust => 15;
 
@@ -99,8 +99,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			useBeacon = false;
-			usesTactics = false;
+			UseBeacon = false;
+			UsesTactics = false;
 			Projectile.minionSlots = 0;
 		}
 
@@ -119,31 +119,31 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override Vector2? FindTarget()
 		{
 			// move towards the mouse if player is holding and clicking
-			if (returningToPlayer || Vector2.Distance(Projectile.Center, player.Center) > IdleDistanceMulitplier * ModifiedMaxDistance())
+			if (returningToPlayer || Vector2.Distance(Projectile.Center, Player.Center) > IdleDistanceMulitplier * ModifiedMaxDistance())
 			{
 				returningToPlayer = true;
 				return null; // force back into non-attacking mode if too far from player
 			}
 
-			bool usingSquireNormally = player.HeldItem.type == itemType;
-			bool usingSquireWithWhip = ServerConfig.Instance.SquireSpecialsWithWhips && usingSpecial && ProjectileID.Sets.IsAWhip[player.HeldItem?.shoot ?? 0];
+			bool usingSquireNormally = Player.HeldItem.type == itemType;
+			bool usingSquireWithWhip = ServerConfig.Instance.SquireSpecialsWithWhips && usingSpecial && ProjectileID.Sets.IsAWhip[Player.HeldItem?.shoot ?? 0];
 			bool usingSquireItem = usingSquireNormally || usingSquireWithWhip;
-			if (usingSquireItem && (usingSpecial || (player.channel && player.altFunctionUse != 2)))
+			if (usingSquireItem && (usingSpecial || (Player.channel && Player.altFunctionUse != 2)))
 			{
-				MousePlayer mPlayer = player.GetModPlayer<MousePlayer>();
+				MousePlayer mPlayer = Player.GetModPlayer<MousePlayer>();
 				mPlayer.SetMousePosition();
 				Vector2? _mouseWorld = mPlayer.GetMousePosition();
 				if (_mouseWorld is Vector2 mouseWorld)
 				{
 					syncedMouseWorld = mouseWorld;
-					Vector2 targetFromPlayer = mouseWorld - player.Center;
+					Vector2 targetFromPlayer = mouseWorld - Player.Center;
 					if (targetFromPlayer.Length() < ModifiedMaxDistance())
 					{
 						return mouseWorld - Projectile.Center;
 					}
 					targetFromPlayer.Normalize();
 					targetFromPlayer *= ModifiedMaxDistance();
-					return player.Center + targetFromPlayer - Projectile.Center;
+					return Player.Center + targetFromPlayer - Projectile.Center;
 				}
 			}
 			return null;
@@ -152,18 +152,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override Vector2 IdleBehavior()
 		{
 			// hover behind the player
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += 24 * -player.direction;
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += 24 * -Player.direction;
 			idlePosition.Y += -8;
 			// not sure what side effects changing this each frame might have
 			if (attackSpeedCanBeModified)
 			{
-				Projectile.localNPCHitCooldown = (int)(baseLocalIFrames * player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier);
+				Projectile.localNPCHitCooldown = (int)(baseLocalIFrames * Player.GetModPlayer<SquireModPlayer>().FullSquireAttackSpeedModifier);
 			}
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Center.X;
-				idlePosition.Y = player.Center.Y - 24;
+				idlePosition.X = Player.Center.X;
+				idlePosition.Y = Player.Center.Y - 24;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
@@ -175,18 +175,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			// switch from "not using special" to "using special"
 			int cooldownBuffType = ModContent.BuffType<SquireCooldownBuff>();
-			bool usingSquireNormally = player.HeldItem?.type == itemType && player.channel;
-			bool usingSquireWithWhip = ServerConfig.Instance.SquireSpecialsWithWhips && ProjectileID.Sets.IsAWhip[player.HeldItem?.shoot ?? 0];
+			bool usingSquireNormally = Player.HeldItem?.type == itemType && Player.channel;
+			bool usingSquireWithWhip = ServerConfig.Instance.SquireSpecialsWithWhips && ProjectileID.Sets.IsAWhip[Player.HeldItem?.shoot ?? 0];
 			bool usingSpecialEnabledItem = usingSquireNormally || usingSquireWithWhip;
-			if(player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && usingSpecialEnabledItem && Main.mouseRight)
+			if(Player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && usingSpecialEnabledItem && Main.mouseRight)
 			{
 				StartSpecial();
 			} else if (usingSpecial && specialFrame >= CrossMod.GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))
 			{
 				usingSpecial = false;
 				OnStopUsingSpecial();
-			} else if (player.whoAmI == Main.myPlayer 
-				&& SpecialOnCooldown && player.buffTime[player.FindBuffIndex(cooldownBuffType)] == 1)
+			} else if (Player.whoAmI == Main.myPlayer 
+				&& SpecialOnCooldown && Player.buffTime[Player.FindBuffIndex(cooldownBuffType)] == 1)
 			{
 				// a little dust animation to indicate special can be used again
 				for(int i = 0; i < 3; i++)
@@ -196,7 +196,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 					Main.dust[dustIdx].noLight = true;
 				}
 				// maybe using the mana refill sound isn't the best idea
-				SoundEngine.PlaySound(SoundID.MaxMana, player.Center);
+				SoundEngine.PlaySound(SoundID.MaxMana, Player.Center);
 			}
 		}
 		
@@ -204,27 +204,27 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public void StartSpecial(bool fromSync = false)
 		{
 			int cooldownBuffType = ModContent.BuffType<SquireCooldownBuff>();
-			player.AddBuff(cooldownBuffType, SpecialCooldown + SpecialDuration);
+			Player.AddBuff(cooldownBuffType, SpecialCooldown + SpecialDuration);
 			// this is a bit hacky, but this code only runs on the first squire, so
 			// manually propegate the special to all squires the player owns
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && SquireMinionTypes.Contains(p.type))
+				if(p.active && p.owner == Player.whoAmI && SquireMinionTypes.Contains(p.type))
 				{
 					((SquireMinion)p.ModProjectile).SetSpecialStartFrame();
 				}
 			}
 			if(!fromSync)
 			{
-				new SquireSpecialStartPacket(player).Send();
+				new SquireSpecialStartPacket(Player).Send();
 			}
 		}
 
 		public void SetSpecialStartFrame()
 		{
 			usingSpecial = true;
-			specialStartFrame = animationFrame;
+			specialStartFrame = AnimationFrame;
 			if(SpecialStartSound.HasValue)
 			{
 				SoundEngine.PlaySound(SpecialStartSound.Value, Projectile.Center);
@@ -258,7 +258,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				returningToPlayer = false;
 			}
 			relativeVelocity = (relativeVelocity * (inertia - 1) + speedChange) / inertia;
-			Projectile.velocity = player.velocity + relativeVelocity;
+			Projectile.velocity = Player.velocity + relativeVelocity;
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -277,7 +277,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if (vectorToTargetPosition.Length() < 8 && relativeVelocity.Length() < 4)
 			{
 				relativeVelocity = Vector2.Zero;
-				Projectile.velocity = player.velocity;
+				Projectile.velocity = Player.velocity;
 				Vector2 newPosition = Projectile.position + vectorToTargetPosition;
 				if (!Collision.SolidCollision(newPosition, Projectile.width, Projectile.height))
 				{
@@ -294,7 +294,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			vectorToTargetPosition.SafeNormalize();
 			vectorToTargetPosition *= speed;
 			relativeVelocity = (relativeVelocity * (inertia - 1) + vectorToTargetPosition) / inertia;
-			Projectile.velocity = player.velocity + relativeVelocity;
+			Projectile.velocity = Player.velocity + relativeVelocity;
 		}
 
 		public virtual void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
@@ -303,15 +303,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			StandardTargetedMovement(vectorToTargetPosition);
 		}
 
-		public float ModifiedTargetedSpeed() => ComputeTargetedSpeed() * player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier;
-		public float ModifiedIdleSpeed() => ComputeIdleSpeed() * player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier;
+		public float ModifiedTargetedSpeed() => ComputeTargetedSpeed() * Player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier;
+		public float ModifiedIdleSpeed() => ComputeIdleSpeed() * Player.GetModPlayer<SquireModPlayer>().SquireTravelSpeedMultiplier;
 
-		public float ModifiedMaxDistance() => MaxDistanceFromPlayer() + (travelRangeCanBeModified ? player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus : 0);
+		public float ModifiedMaxDistance() => MaxDistanceFromPlayer() + (travelRangeCanBeModified ? Player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus : 0);
 
 		// increase projectile velocity based on max travel distance, since projectile shooting squires
 		// can't take advantage of it
 		// 15 blocks extra range doubles projectile speed
-		protected float ModifiedProjectileVelocity() => projectileVelocity * (1 + player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus / 240f);
+		protected float ModifiedProjectileVelocity() => projectileVelocity * (1 + Player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus / 240f);
 
 		public virtual float ComputeInertia() => 12;
 

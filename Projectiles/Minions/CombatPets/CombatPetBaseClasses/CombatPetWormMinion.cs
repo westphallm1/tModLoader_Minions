@@ -33,12 +33,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			base.SetDefaults();
 			Projectile.minionSlots = 0;
 			Projectile.tileCollide = false;
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			maxFramesInAir = 50 + 8 * leveledPetPlayer.PetLevel;
 			Vector2 target = base.IdleBehavior();
 			if(IsPreHM)
@@ -86,7 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			// require that the worm returns to owner between attacks
 			if(IsPreHM && hitCount >= MaxHits)
 			{
-				IdleMovement(vectorToIdle);
+				IdleMovement(VectorToIdle);
 			} else
 			{
 				base.TargetedMovement(vectorToTargetPosition);
@@ -120,12 +120,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			base.SetDefaults();
 			Projectile.minionSlots = 0;
 			Projectile.tileCollide = false;
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 		}
 
 		public override Vector2 IdleBehavior()
 		{
-			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return base.IdleBehavior();
 		}

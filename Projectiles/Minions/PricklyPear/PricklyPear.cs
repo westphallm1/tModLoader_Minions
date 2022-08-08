@@ -165,7 +165,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 	public class PricklyPearMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<PricklyPearMinionBuff>();
+		public override int BuffId => BuffType<PricklyPearMinionBuff>();
 		int lastFiredFrame = 0;
 		int fireRate = 90;
 		// don't get too close
@@ -194,11 +194,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			DrawOffsetX = -2;
 			DrawOriginOffsetY = -6;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
-			dealsContactDamage = false;
+			DealsContactDamage = false;
 			maxJumpVelocity = 12;
 		}
 
@@ -211,14 +211,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 7;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
 			// only change speed if the target is a decent distance away
-			if (Math.Abs(vector.X) < 4 && targetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
+			if (Math.Abs(vector.X) < 4 && TargetNPCIndex is int idx && Math.Abs(Main.npc[idx].velocity.X) < 7)
 			{
 				Projectile.velocity.X = Main.npc[idx].velocity.X;
 			}
@@ -231,9 +231,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		private void FireSeeds()
 		{
 			int seedVelocity = 7;
-			lastFiredFrame = animationFrame;
+			lastFiredFrame = AnimationFrame;
 			SoundEngine.PlaySound(SoundID.Grass, Projectile.Center);
-			if (player.whoAmI == Main.myPlayer)
+			if (Player.whoAmI == Main.myPlayer)
 			{
 				foreach (float seedAngle in seedAngles)
 				{
@@ -247,7 +247,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 						ProjectileType<PricklyPearSeedProjectile>(),
 						Projectile.damage,
 						Projectile.knockBack,
-						player.whoAmI);
+						Player.whoAmI);
 				}
 			}
 		}
@@ -257,7 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 			if (Math.Abs(vectorToTargetPosition.X) < 1.5f * preferredDistanceFromTarget &&
 				Math.Abs(vectorToTargetPosition.Y) < 2 * preferredDistanceFromTarget &&
-				animationFrame - lastFiredFrame >= fireRate)
+				AnimationFrame - lastFiredFrame >= fireRate)
 			{
 				FireSeeds();
 			}
@@ -272,7 +272,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
-			if (vectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
+			if (VectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
 				Projectile.spriteDirection = Math.Sign(target.X);
 			}

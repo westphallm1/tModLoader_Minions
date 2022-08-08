@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 	public class CrystalFistMinion : GroupAwareMinion
 	{
 
-		internal override int BuffId => BuffType<CrystalFistMinionBuff>();
+		public override int BuffId => BuffType<CrystalFistMinionBuff>();
 		private int framesInAir;
 		private float idleAngle;
 
@@ -85,10 +85,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			Projectile.width = 32;
 			Projectile.height = 20;
 			Projectile.tileCollide = false;
-			attackState = AttackState.IDLE;
+			AttackState = AttackState.IDLE;
 			Projectile.minionSlots = 0.5f;
-			attackThroughWalls = false;
-			useBeacon = false;
+			AttackThroughWalls = false;
+			UseBeacon = false;
 			attackFrames = 30;
 		}
 
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		{
 			if (Projectile.tileCollide)
 			{
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 			}
 			return base.OnTileCollide(oldVelocity);
 		}
@@ -106,9 +106,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			base.IdleBehavior();
 			List<Projectile> minions = GetActiveMinions();
 			Projectile leader = GetFirstMinion(minions);
-			if (Main.myPlayer == player.whoAmI && IsPrimaryFrame && 
+			if (Main.myPlayer == Player.whoAmI && IsPrimaryFrame && 
 				leader.minionPos == Projectile.minionPos &&
-				player.ownedProjectileCounts[ProjectileType<CrystalFistHeadMinion>()] == 0)
+				Player.ownedProjectileCounts[ProjectileType<CrystalFistHeadMinion>()] == 0)
 			{
 				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Vector2.Zero, ProjectileType<CrystalFistHeadMinion>(), 0, 0, Main.myPlayer);
 			}
@@ -122,7 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			int minionCount = minions.Count;
 			int order = minions.IndexOf(Projectile);
 			idleAngle = (float)(2 * Math.PI * order) / minionCount;
-			idleAngle += Projectile.spriteDirection * 2 * (float)Math.PI * groupAnimationFrame / groupAnimationFrames;
+			idleAngle += Projectile.spriteDirection * 2 * (float)Math.PI * GroupAnimationFrame / GroupAnimationFrames;
 			idlePosition.X += 2 + 45 * (float)Math.Sin(idleAngle);
 			idlePosition.Y += 2 + 45 * (float)Math.Cos(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
@@ -157,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			int speed = 16;
-			if (oldVectorToTarget == null && vectorToTarget is Vector2 target)
+			if (OldVectorToTarget == null && VectorToTarget is Vector2 target)
 			{
 				target.Y -= Math.Abs(target.X) / 10; // add a bit of vertical increase to target
 				target.SafeNormalize();
@@ -169,14 +169,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			Projectile.rotation = (float)(Math.PI + Projectile.velocity.ToRotation());
 			if (framesInAir++ > 15)
 			{
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 			}
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// attack should continue until attack timer is up
-			if (attackState == AttackState.ATTACKING)
+			if (AttackState == AttackState.ATTACKING)
 			{
 				TargetedMovement(Vector2.Zero);
 				return;
@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 			int maxSpeed = 20;
 			if (vectorToIdlePosition.Length() < 32)
 			{
-				attackState = AttackState.IDLE;
+				AttackState = AttackState.IDLE;
 				Projectile head = GetHead(ProjectileType<CrystalFistHeadMinion>());
 				if (head != default)
 				{

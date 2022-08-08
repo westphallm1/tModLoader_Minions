@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class MoonlingMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<MoonlingMinionBuff>();
+		public override int BuffId => BuffType<MoonlingMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MoonLordPet;
 		internal override int? FiredProjectileId => ProjectileType<MoonlingLaser>();
@@ -109,7 +109,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == projType)
+				if(p.active && p.owner == Player.whoAmI && p.type == projType)
 				{
 					MoveLaser(p, vectorToTargetPosition);
 					p.damage = 2 * Projectile.damage;
@@ -120,7 +120,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		private void MoveLaser(Projectile p, Vector2 vectorToTargetPosition)
 		{
-			int framesSinceFired = animationFrame - hsHelper.lastShootFrame;
+			int framesSinceFired = AnimationFrame - hsHelper.lastShootFrame;
 			int rotationFrames = (int)(0.75f * attackFrames);
 			if(framesSinceFired > rotationFrames)
 			{

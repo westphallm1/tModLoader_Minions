@@ -172,7 +172,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class StardustCellMinion : HoverShooterMinion
 	{
-		internal override int BuffId => BuffType<StardustCellMinionBuff>();
+		public override int BuffId => BuffType<StardustCellMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.StardustCellMinion;
 		public override string GlowTexture => "Terraria/Images/Glow_189";
@@ -239,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		}
 		internal void FireProjectile(Vector2 lineOfFire, int projId, float ai0 = 0)
 		{
-			if(targetNPCIndex is int idx)
+			if(TargetNPCIndex is int idx)
 			{
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
@@ -256,7 +256,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(animationFrame - hsHelper.lastShootFrame <= 6)
+			if(AnimationFrame - hsHelper.lastShootFrame <= 6)
 			{
 				return;
 			}
@@ -301,7 +301,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				dust.noGravity = true;
 				dust.scale = 0.7f + Main.rand.NextFloat();
 			}
-			Vector2 target = (Vector2)vectorToTarget;
+			Vector2 target = (Vector2)VectorToTarget;
 			target.Normalize();
 			target *= -4;
 			Projectile.velocity = target;

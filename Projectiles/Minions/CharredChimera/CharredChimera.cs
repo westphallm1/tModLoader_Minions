@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 
 		public override string Texture => "Terraria/Images/Item_0";
 
-		internal override int BuffId => BuffType<CharredChimeraMinionBuff>();
+		public override int BuffId => BuffType<CharredChimeraMinionBuff>();
 
 		int speed = 8;
 		int inertia = 16;
@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			base.SetDefaults();
 			Projectile.minion = false;
 			Projectile.minionSlots = 0;
-			useBeacon = false;
+			UseBeacon = false;
 			Projectile.width = 16;
 			Projectile.height = 16;
 			attackFrames = 180;
@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		public override Vector2? FindTarget()
 		{
 			int maxHits = Math.Max(1, 10 - GetActiveMinions().Count());
-			if (vectorToIdle.Length() > 300f || attackingFlag == 0 || hitsSinceRetreat > maxHits)
+			if (VectorToIdle.Length() > 300f || attackingFlag == 0 || hitsSinceRetreat > maxHits)
 			{
 				return null;
 			}
@@ -175,12 +175,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 	}
 	public class CharredChimeraCounterMinion : CounterMinion
 	{
-		internal override int BuffId => BuffType<CharredChimeraMinionBuff>();
+		public override int BuffId => BuffType<CharredChimeraMinionBuff>();
 		protected override int MinionType => ProjectileType<CharredChimeraMinion>();
 	}
 	public class CharredChimeraMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<CharredChimeraMinionBuff>();
+		public override int BuffId => BuffType<CharredChimeraMinionBuff>();
 		protected int targetedInertia = 15;
 		protected int targetedSpeed = 14;
 		protected int maxDistanceFromPlayer = 850;
@@ -208,10 +208,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			DrawOriginOffsetX = (56 - 32) / 2;
 			DrawOriginOffsetY = (52 - 32) / 2;
 			Projectile.tileCollide = false;
-			dealsContactDamage = false;
-			attackThroughWalls = false;
-			frameSpeed = 5;
-			animationFrame = 0;
+			DealsContactDamage = false;
+			AttackThroughWalls = false;
+			FrameSpeed = 5;
+			AnimationFrame = 0;
 		}
 
 		public override void LoadAssets()
@@ -224,24 +224,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			float idleAngle = (float)Math.PI * 2 * (animationFrame % animationFrames) / animationFrames;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Top;
+			float idleAngle = (float)Math.PI * 2 * (AnimationFrame % animationFrames) / animationFrames;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -5 + 8 * (float)Math.Sin(idleAngle);
-			if (!Collision.CanHit(idlePosition, 1, 1, player.Top, 1, 1))
+			if (!Collision.CanHit(idlePosition, 1, 1, Player.Top, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
+				idlePosition.X = Player.Top.X;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.5f);
 			int headType = ProjectileType<CharredChimeraMinionHead>();
-			int currentHeadCount = player.ownedProjectileCounts[headType];
-			if (Main.myPlayer == player.whoAmI && IsPrimaryFrame)
+			int currentHeadCount = Player.ownedProjectileCounts[headType];
+			if (Main.myPlayer == Player.whoAmI && IsPrimaryFrame)
 			{
 				for (int i = currentHeadCount; i < EmpowerCount + 1; i++)
 				{
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, headType, Projectile.damage, Projectile.knockBack, player.whoAmI);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, headType, Projectile.damage, Projectile.knockBack, Player.whoAmI);
 				}
 
 				if (currentHeadCount > EmpowerCount + 1)
@@ -266,7 +266,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 				speedChange.SafeNormalize();
 				speedChange *= maxSpeed;
 			}
-			Projectile.spriteDirection = player.direction;
+			Projectile.spriteDirection = Player.direction;
 			Projectile.velocity = (Projectile.velocity * (inertia - 1) + speedChange) / inertia;
 		}
 
@@ -304,7 +304,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 				return;
 			}
 			int attackFrames = (int)(Math.Max(20, 60 - 5 * EmpowerCount) * Math.Max(EmpowerCount, 1));
-			int attackFrame = animationFrame % attackFrames;
+			int attackFrame = AnimationFrame % attackFrames;
 			int interval = (attackFrames / allHeads.Count) % attackFrames;
 			for (int i = 0; i < allHeads.Count; i++)
 			{
@@ -340,7 +340,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			}
 			else
 			{
-				float baseIdleAngle = (float)Math.PI * 2 * (animationFrame % animationFrames) / animationFrames;
+				float baseIdleAngle = (float)Math.PI * 2 * (AnimationFrame % animationFrames) / animationFrames;
 				float idleAngleStep = (float)(2 * Math.PI) / (allHeads.Count() - 1);
 				int headRadius = 4 + 4 * heads.Count();
 				for (int i = 0; i < heads.Count() - 1; i++)
@@ -395,7 +395,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Rectangle bounds = heartTexture.Bounds;
 			float r = 0;
-			int beatFrame = animationFrame % (animationFrames / 2);
+			int beatFrame = AnimationFrame % (animationFrames / 2);
 			float scale = beatFrame < animationFrames / 8 ?
 				1 + (float)(0.25 * Math.Sin(8 * Math.PI * beatFrame / animationFrames)) :
 				1 + (float)(0.125 * Math.Sin(Math.PI / 2 + 4 * Math.PI * beatFrame / animationFrames));

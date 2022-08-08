@@ -101,13 +101,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 	public class WhackAMoleCounterMinion : CounterMinion
 	{
 
-		internal override int BuffId => BuffType<WhackAMoleMinionBuff>();
+		public override int BuffId => BuffType<WhackAMoleMinionBuff>();
 		protected override int MinionType => ProjectileType<WhackAMoleMinion>();
 	}
 	public class WhackAMoleMinion : EmpoweredMinion
 	{
 
-		internal override int BuffId => BuffType<WhackAMoleMinionBuff>();
+		public override int BuffId => BuffType<WhackAMoleMinionBuff>();
 		public override int CounterType => ProjectileType<WhackAMoleCounterMinion>();
 
 		protected override int dustType => DustID.Dirt;
@@ -176,9 +176,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			Projectile.tileCollide = false;
 			Projectile.friendly = true;
 			Projectile.localNPCHitCooldown = 30;
-			attackThroughWalls = false;
-			frameSpeed = 5;
-			animationFrame = 0;
+			AttackThroughWalls = false;
+			FrameSpeed = 5;
+			AnimationFrame = 0;
 			Projectile.hide = true;
 			projectileIndex = 0;
 			gHelper = new GroundAwarenessHelper(this)
@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				IdleFlyingMovement = IdleFlyingMovement,
 				IdleGroundedMovement = IdleGroundedMovement
 			};
-			pathfinder.modifyPath = gHelper.ModifyPathfinding;
+			Pathfinder.modifyPath = gHelper.ModifyPathfinding;
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
@@ -212,7 +212,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				Vector2 pos = Projectile.Center;
 				if (gHelper.teleportStartFrame is int teleportStart)
 				{
-					int teleportFrame = animationFrame - teleportStart;
+					int teleportFrame = AnimationFrame - teleportStart;
 					int teleportHalf = TeleportFrames / 2;
 					float heightToSink = 24 - positionOffsets[i].Y;
 					if (teleportFrame < teleportHalf)
@@ -228,7 +228,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 				}
 				else
 				{
-					offsetPixels = (int)(3 * Math.Sin(headBobOffset * i + 2 * Math.PI * (animationFrame % AnimationFrames) / AnimationFrames));
+					offsetPixels = (int)(3 * Math.Sin(headBobOffset * i + 2 * Math.PI * (AnimationFrame % AnimationFrames) / AnimationFrames));
 					pos += positionOffsets[i];
 				}
 				Rectangle bounds = new Rectangle(0, 0, 24, 24 + offsetPixels);
@@ -256,13 +256,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			noLOSPursuitTime = gHelper.isFlying ? 15 : 300;
-			Vector2 idlePosition = gHelper.isFlying ? player.Top : player.Bottom;
-			Vector2 idleHitLine = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, Projectile);
-			if (!Collision.CanHitLine(idleHitLine, 1, 1, player.Center, 1, 1))
+			NoLOSPursuitTime = gHelper.isFlying ? 15 : 300;
+			Vector2 idlePosition = gHelper.isFlying ? Player.Top : Player.Bottom;
+			Vector2 idleHitLine = Player.Center;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, Projectile);
+			if (!Collision.CanHitLine(idleHitLine, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition = player.Bottom;
+				idlePosition = Player.Bottom;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
@@ -286,7 +286,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			gHelper.DoIdleMovement(vectorToIdlePosition, vectorToTarget, ComputeSearchDistance(), idleGroundDistance);
+			gHelper.DoIdleMovement(vectorToIdlePosition, VectorToTarget, ComputeSearchDistance(), idleGroundDistance);
 		}
 
 		public void IdleFlyingMovement(Vector2 vectorToIdlePosition)
@@ -298,7 +298,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		private void DoTeleport(Vector2 destination, int startFrame, ref bool done)
 		{
 			Projectile.velocity = Vector2.Zero;
-			int teleportFrame = animationFrame - startFrame;
+			int teleportFrame = AnimationFrame - startFrame;
 			int width = widths[DrawIndex];
 			if (teleportFrame == 1 || teleportFrame == 1 + TeleportFrames / 2)
 			{
@@ -332,7 +332,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			{
 				gHelper.DoJump(vectorToIdlePosition);
 			}
-			if (animationFrame - lastHitFrame > 10)
+			if (AnimationFrame - lastHitFrame > 10)
 			{
 				float intendedY = Projectile.velocity.Y;
 				base.IdleMovement(vectorToIdlePosition);
@@ -342,7 +342,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		public override void OnHitTarget(NPC target)
 		{
-			lastHitFrame = animationFrame;
+			lastHitFrame = AnimationFrame;
 		}
 
 		public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
@@ -354,11 +354,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			int attackRate = Math.Max(40, 65 - 5 * EmpowerCount);
-			bool isAttackFrame = player.whoAmI == Main.myPlayer && animationFrame % attackRate == 0;
+			bool isAttackFrame = Player.whoAmI == Main.myPlayer && AnimationFrame % attackRate == 0;
 			bool canHitTarget = isAttackFrame && Collision.CanHit(Projectile.Center, 1, 1, Projectile.Center + vectorToTargetPosition, 1, 1);
 			bool isAbove = isAttackFrame && Math.Abs(vectorToTargetPosition.X) < 160 && vectorToTargetPosition.Y < -24;
 			bool isAttackingFromAir = isAttackFrame && gHelper.isFlying;
-			if (player.whoAmI == Main.myPlayer && targetNPCIndex is int targetIdx && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
+			if (Player.whoAmI == Main.myPlayer && TargetNPCIndex is int targetIdx && isAttackFrame && canHitTarget && (isAbove || isAttackingFromAir))
 			{
 				Vector2 velocity = vectorToTargetPosition;
 				velocity.SafeNormalize();
@@ -371,7 +371,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 					ProjectileType<WhackAMoleMinionProjectile>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					projectileIndex);
 				projectileIndex = (projectileIndex + 1) % (DrawIndex + 1);
 			}
@@ -391,7 +391,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, noLOSRange: searchDistance) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center, noLOSRange: searchDistance) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -428,7 +428,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 
 		protected override float ComputeIdleSpeed()
 		{
-			return gHelper.isFlying ? 13 : 8 + (vectorToTarget == null ? 0 : Math.Min(2, 0.5f * EmpowerCount));
+			return gHelper.isFlying ? 13 : 8 + (VectorToTarget == null ? 0 : Math.Min(2, 0.5f * EmpowerCount));
 		}
 
 		protected override void SetMinAndMaxFrames(ref int minFrame, ref int maxFrame)

@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class UFOMinion : HoverShooterMinion
 	{
-		internal override int BuffId => BuffType<UFOMinionBuff>();
+		public override int BuffId => BuffType<UFOMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.UFOMinion;
 
@@ -143,10 +143,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal override void AfterFiringProjectile()
 		{
 			base.AfterFiringProjectile();
-			if(targetNPCIndex is int idx)
+			if(TargetNPCIndex is int idx)
 			{
 				NPC target = Main.npc[idx];
-				if(Main.myPlayer == player.whoAmI)
+				if(Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),

@@ -25,14 +25,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class BabySkeletronHeadMinion : CombatPetHoverDasherMinion
 	{
-		internal override int BuffId => BuffType<BabySkeletronHeadMinionBuff>();
+		public override int BuffId => BuffType<BabySkeletronHeadMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabySkeletronHead;
 
 		internal override bool DoBumblingMovement => true;
 
 		internal static int FallDuration = 90;
 		internal int fallStartFrame = -FallDuration;
-		internal bool IsFalling => animationFrame - fallStartFrame < FallDuration;
+		internal bool IsFalling => AnimationFrame - fallStartFrame < FallDuration;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			if(IsFalling)
 			{
 				return;
-			} else if(vectorToTarget is null)
+			} else if(VectorToTarget is null)
 			{
 				Projectile.rotation = 0.05f * Projectile.velocity.X;
 			} else
@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override void OnHitTarget(NPC target)
 		{
 			// start falling, approximately
-			if(player.whoAmI != Main.myPlayer)
+			if(Player.whoAmI != Main.myPlayer)
 			{
 				StartFalling();
 			}
@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		}
 		private void StartFalling()
 		{
-			fallStartFrame = animationFrame;
+			fallStartFrame = AnimationFrame;
 			float xVel = -4 * Math.Sign(Projectile.velocity.X);
 			float yVel = -4;
 			Projectile.velocity = new Vector2(xVel, yVel);
@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			{
 				Projectile.velocity.Y += 0.5f;
 			}
-			if(animationFrame - fallStartFrame >= FallDuration - 1 || Projectile.Center.X  - player.Center.X > 600)
+			if(AnimationFrame - fallStartFrame >= FallDuration - 1 || Projectile.Center.X  - Player.Center.X > 600)
 			{
 				// go somewhere off screen before we start falling, synced MP
 				Vector2 spawnOffset = default;
@@ -106,10 +106,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 					spawnOffset.Y = Math.Sign(Main.rand.NextFloat() - 0.5f) * (32 + Main.screenHeight/ 2);
 					spawnOffset.X = Main.rand.Next(Main.screenWidth) - Main.screenWidth/2;
 				}
-				fallStartFrame = animationFrame - FallDuration - 1;
-				Projectile.position = player.Center + spawnOffset;
+				fallStartFrame = AnimationFrame - FallDuration - 1;
+				Projectile.position = Player.Center + spawnOffset;
 				Projectile.velocity = Vector2.Zero;
-				if(player.whoAmI == Main.myPlayer)
+				if(Player.whoAmI == Main.myPlayer)
 				{
 					Projectile.netUpdate = true; // lazy networking implementation here
 				}
@@ -159,11 +159,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override Vector2? FindTarget()
 		{
 			float searchRange = targetSearchDistance;
-			if (PlayerTargetPosition(searchRange, player.Center, 0.67f * searchRange, losCenter: player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchRange, Player.Center, 0.67f * searchRange, losCenter: Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
-			else if (SelectedEnemyInRange(searchRange, 0.67f * searchRange, losCenter: player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchRange, 0.67f * searchRange, losCenter: Player.Center) is Vector2 target2)
 			{
 				return target2 - Projectile.Center;
 			}

@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class PlanteraSeedlingMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.PlanteraPet;
-		internal override int BuffId => BuffType<PlanteraSeedlingMinionBuff>();
+		public override int BuffId => BuffType<PlanteraSeedlingMinionBuff>();
 
 		// fire a spike ball instead every 4th projectile
 		int fireCount;
@@ -119,7 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				projId,
 				(int)(damageMult * Projectile.damage),
 				Projectile.knockBack,
-				player.whoAmI,
+				Player.whoAmI,
 				ai0: Projectile.whoAmI);
 		}
 	}

@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 
 	public class SmolederMinion : CombatPetGroundedRangedMinion
 	{
-		internal override int BuffId => BuffType<SmolederMinionBuff>();
+		public override int BuffId => BuffType<SmolederMinionBuff>();
 
 		internal override bool ShouldDoShootingMovement => leveledPetPlayer.PetLevel >= (int)CombatPetTier.Skeletal;
 
@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			GroundAnimationState state = gHelper.GetAnimationState();
-			frameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
+			FrameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
 			base.Animate(minFrame, maxFrame);
 			if(state == GroundAnimationState.JUMPING)
 			{
@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Texture2D flameTexture = ExtraTextures[0].Value;
-			int flameFrame = (animationFrame / 5) % 8;
+			int flameFrame = (AnimationFrame / 5) % 8;
 			int frameHeight = flameTexture.Height / 8;
 			Rectangle bounds = new(0, flameFrame * frameHeight, flameTexture.Width, frameHeight);
 			Vector2 baseOffset = new Vector2(-6 * Projectile.spriteDirection * forwardDir, -16).RotatedBy(Projectile.rotation);

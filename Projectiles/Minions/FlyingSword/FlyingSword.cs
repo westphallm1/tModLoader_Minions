@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 	}
 	public class FlyingSwordMinion : GroupAwareMinion
 	{
-		internal override int BuffId => BuffType<FlyingSwordMinionBuff>();
+		public override int BuffId => BuffType<FlyingSwordMinionBuff>();
 
 		int hitCount = 0;
 		int maxHitCount = 8;
@@ -76,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.tileCollide = false;
-			attackState = AttackState.IDLE;
+			AttackState = AttackState.IDLE;
 			attackFrames = 120;
 		}
 
@@ -84,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 		{
 			if (hitCount++ >= maxHitCount)
 			{
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 			}
 			enemyHitFrame = framesInAir;
 			Dust.NewDust(Projectile.Center, Projectile.width / 2, Projectile.height / 2, DustID.Platinum);
@@ -99,15 +99,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			float idleAngle = (float)(2 * Math.PI * order) / minionCount;
 			if (minions.Count > 0)
 			{
-				idleAngle += (2 * (float)Math.PI * groupAnimationFrame) / groupAnimationFrames;
+				idleAngle += (2 * (float)Math.PI * GroupAnimationFrame) / GroupAnimationFrames;
 			}
-			Vector2 idlePosition = player.Center;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(minions, Projectile);
+			Vector2 idlePosition = Player.Center;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(minions, Projectile);
 			idlePosition.Y += -35 + 5 * (float)Math.Sin(idleAngle);
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition = player.Center;
-				idlePosition.X += 30 * -player.direction;
+				idlePosition = Player.Center;
+				idlePosition.X += 30 * -Player.direction;
 				idlePosition.Y += -35;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
@@ -151,7 +151,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			}
 			if (framesInAir >= maxFramesInAir)
 			{
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 			}
 			Lighting.AddLight(Projectile.position, Color.LightGray.ToVector3() * 0.5f);
 		}
@@ -164,7 +164,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 			if (vectorToIdlePosition.Length() < 32)
 			{
 				// return to the attacking state after getting back home
-				attackState = AttackState.IDLE;
+				AttackState = AttackState.IDLE;
 				hitCount = 0;
 				framesInAir = 0;
 				enemyHitFrame = 0;

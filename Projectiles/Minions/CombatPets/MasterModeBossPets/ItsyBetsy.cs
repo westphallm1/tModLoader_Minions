@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class ItsyBetsyMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<ItsyBetsyMinionBuff>();
+		public override int BuffId => BuffType<ItsyBetsyMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DD2BetsyPet;
 		internal override int? FiredProjectileId => ProjectileType<ItsyBetsyFire>();
@@ -105,14 +105,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.TargetedMovement(vectorToTargetPosition);
-			int attackCycleFrame = animationFrame - hsHelper.lastShootFrame;
+			int attackCycleFrame = AnimationFrame - hsHelper.lastShootFrame;
 			if(attackCycleFrame < attackFrames / 2 && attackFrames % 6 == 0)
 			{
 				Vector2 lineOfFire = vectorToTargetPosition;
 				lineOfFire.SafeNormalize();
 				lineOfFire *= hsHelper.projectileVelocity;
 				lineOfFire += Projectile.velocity / 3;
-				if(player.whoAmI == Main.myPlayer)
+				if(Player.whoAmI == Main.myPlayer)
 				{
 					hsHelper.FireProjectile(lineOfFire, (int)FiredProjectileId, attackCycleFrame % 18);
 				}

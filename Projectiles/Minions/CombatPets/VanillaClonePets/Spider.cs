@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class SpiderPetMinion : BaseSpiderMinion
 	{
-		internal override int BuffId => BuffType<SpiderPetMinionBuff>();
+		public override int BuffId => BuffType<SpiderPetMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Spider;
 
 		private LeveledCombatPetModPlayer leveledPetPlayer;
@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 target = base.IdleBehavior();
-			leveledPetPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
+			leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			Projectile.originalDamage = leveledPetPlayer.PetDamage;
 			searchDistance = leveledPetPlayer.PetLevelInfo.BaseSearchRange;
 			xMaxSpeed = (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;

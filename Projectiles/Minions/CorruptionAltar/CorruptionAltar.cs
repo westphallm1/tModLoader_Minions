@@ -94,13 +94,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 	}
 	public class CorruptionAltarCounterMinion : CounterMinion
 	{
-		internal override int BuffId => BuffType<CorruptionAltarMinionBuff>();
+		public override int BuffId => BuffType<CorruptionAltarMinionBuff>();
 		protected override int MinionType => ProjectileType<CorruptionAltarMinion>();
 	}
 
 	public class CorruptionAltarMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<CorruptionAltarMinionBuff>();
+		public override int BuffId => BuffType<CorruptionAltarMinionBuff>();
 
 		private int framesSinceLastHit;
 		protected override int dustType => DustID.Blood;
@@ -128,9 +128,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			Projectile.height = 50;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			dealsContactDamage = false;
-			attackThroughWalls = true;
-			useBeacon = false;
+			DealsContactDamage = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
 		}
 
 
@@ -152,16 +152,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -8;
-			animationFrame += 1;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			AnimationFrame += 1;
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
-				idlePosition.Y = player.Top.Y - 16;
+				idlePosition.X = Player.Top.X;
+				idlePosition.Y = Player.Top.Y - 16;
 			}
-			idlePosition.Y += 4 * (float)Math.Sin(2 * Math.PI * animationFrame / 120f);
+			idlePosition.Y += 4 * (float)Math.Sin(2 * Math.PI * AnimationFrame / 120f);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			Lighting.AddLight(Projectile.Center, Color.Purple.ToVector3() * 0.25f);
@@ -175,7 +175,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// stay floating behind the player at all times
-			IdleMovement(vectorToIdle);
+			IdleMovement(VectorToIdle);
 			framesSinceLastHit++;
 			int rateOfFire = Math.Max(70, 120 - 10 * EmpowerCount);
 			if (framesSinceLastHit++ > rateOfFire)
@@ -194,7 +194,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 					vectorToTargetPosition *= projectileVelocity;
 					Vector2 pos = Projectile.Center;
 					framesSinceLastHit = 0;
-					if (Main.myPlayer == player.whoAmI)
+					if (Main.myPlayer == Player.whoAmI)
 					{
 						Projectile.NewProjectile(
 							Projectile.GetSource_FromThis(),
@@ -217,7 +217,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -266,7 +266,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		{
 			Projectile.spriteDirection = 1;
 			Projectile.frame = Math.Min(4, (int)EmpowerCount) - 1;
-			Projectile.rotation = (float)(Math.PI / 8 * Math.Cos(2 * Math.PI * animationFrame / 120f));
+			Projectile.rotation = (float)(Math.PI / 8 * Math.Cos(2 * Math.PI * AnimationFrame / 120f));
 
 			if (Main.rand.NextBool(120))
 			{

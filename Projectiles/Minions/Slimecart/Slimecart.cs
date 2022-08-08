@@ -53,9 +53,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 	public class SlimecartMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<SlimecartMinionBuff>();
+		public override int BuffId => BuffType<SlimecartMinionBuff>();
 
-		internal override WaypointMovementStyle waypointMovementStyle => WaypointMovementStyle.TARGET;
+		public override WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.TARGET;
 		private int slimeIndex;
 
 		public override void SetStaticDefaults()
@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			DrawOffsetX = -2;
 			DrawOriginOffsetY = 2;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -114,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 		public override void OnSpawn()
 		{
-			slimeIndex = player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColorIndex() % 7;
+			slimeIndex = Player.GetModPlayer<MinionSpawningItemPlayer>().GetNextColorIndex() % 7;
 		}
 
 		protected override void DoGroundedMovement(Vector2 vector)
@@ -125,13 +125,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 8;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (animationFrame - lastHitFrame > 15)
+			if (AnimationFrame - lastHitFrame > 15)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if (gHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4 && animationFrame % 5 == 0)
+			if (gHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4 && AnimationFrame % 5 == 0)
 			{
 				Vector2 pos = Projectile.Bottom;
 				pos.Y -= 4;

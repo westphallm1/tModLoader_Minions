@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 			{
 				return;
 			}
-			if (vectorToTarget is null || returning)
+			if (VectorToTarget is null || returning)
 			{
 				Projectile.rotation += squire.spriteDirection * 0.2f;
 			}

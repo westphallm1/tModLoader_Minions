@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class GlommerMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<GlommerMinionBuff>();
+		public override int BuffId => BuffType<GlommerMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.GlommerPet;
 		internal override int? FiredProjectileId => null;
 		internal override bool DoBumblingMovement => true;

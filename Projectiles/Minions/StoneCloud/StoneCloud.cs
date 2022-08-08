@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 	public class StoneCloudMinion : HeadCirclingGroupAwareMinion
 	{
-		internal override int BuffId => BuffType<StoneCloudMinionBuff>();
+		public override int BuffId => BuffType<StoneCloudMinionBuff>();
 
 		private static int ShockwaveSpeed = 8;
 		private static int ShockwaveInitialRadius = 16;
@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			if (animationFrame - shockwaveStartFrame < ShockwaveTotalFrames && SemiCircleColliding(targetHitbox))
+			if (AnimationFrame - shockwaveStartFrame < ShockwaveTotalFrames && SemiCircleColliding(targetHitbox))
 			{
 				return true;
 			}
@@ -111,19 +111,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			circleHelper.idleBumbleRadius = 96;
 			bumbleSpriteDirection = -1;
 			attackFrames = 45;
-			animationFrame = 0;
+			AnimationFrame = 0;
 			idleInertia = 8;
-			frameSpeed = 5;
+			FrameSpeed = 5;
 			Projectile.localNPCHitCooldown = 10;
 			gHelper = new GroundAwarenessHelper(this);
-			pathfinder.modifyPath = gHelper.ModifyPathfinding;
+			Pathfinder.modifyPath = gHelper.ModifyPathfinding;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			minFrame = isStone ? 3 : 0;
 			maxFrame = isStone ? 6 : 3;
-			if (!isStone && Math.Abs(Projectile.velocity.X) > 1 && vectorToTarget != null)
+			if (!isStone && Math.Abs(Projectile.velocity.X) > 1 && VectorToTarget != null)
 			{
 				Projectile.spriteDirection = -Math.Sign(Projectile.velocity.X);
 			}
@@ -137,9 +137,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		public override Vector2 IdleBehavior()
 		{
-			dealsContactDamage = isStone;
+			DealsContactDamage = isStone;
 			Vector2 vectorToIdle = base.IdleBehavior();
-			int framesAsStone = animationFrame - stoneStartFrame;
+			int framesAsStone = AnimationFrame - stoneStartFrame;
 			doShockwaveCalculations();
 			if (isStone && (framesAsStone > 60 || (!didHitGround && framesAsStone > 40)))
 			{
@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 		private void doShockwaveCalculations()
 		{
-			int shockwaveFramesElapsed = animationFrame - shockwaveStartFrame;
+			int shockwaveFramesElapsed = AnimationFrame - shockwaveStartFrame;
 			Projectile.knockBack = shockwaveFramesElapsed < ShockwaveTotalFrames ? defaultKnockback + 2 : defaultKnockback;
 			if (shockwaveFramesElapsed > ShockwaveMaxSpeedFrames)
 			{
@@ -163,11 +163,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 
 			if (didHitGround && shockwaveStartFrame <= stoneStartFrame)
 			{
-				shockwaveStartFrame = animationFrame;
+				shockwaveStartFrame = AnimationFrame;
 				shockwaveHitboxRadius = 0;
 				shockwaveHitboxSpeed = 0;
 			}
-			if (isStone && animationFrame - shockwaveStartFrame == 3)
+			if (isStone && AnimationFrame - shockwaveStartFrame == 3)
 			{
 				shockwaveStartPosition = Projectile.Bottom;
 				SpawnShockwaveDust(Projectile.Bottom + new Vector2(0, -2));
@@ -180,7 +180,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		{
 			if (isStone && shockwaveStartFrame <= stoneStartFrame)
 			{
-				shockwaveStartFrame = animationFrame;
+				shockwaveStartFrame = AnimationFrame;
 				shockwaveHitboxRadius = 0;
 				shockwaveHitboxSpeed = 0;
 			}
@@ -287,13 +287,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 				}
 			}
 			myTurnToDrop |= Math.Abs(vectorAbove.X) < 64 && IsMyTurn();
-			if (myTurnToDrop && Math.Abs(vectorAbove.X) <= 16 && Math.Abs(vectorAbove.Y) <= 16 && animationFrame - stoneStartFrame > 80)
+			if (myTurnToDrop && Math.Abs(vectorAbove.X) <= 16 && Math.Abs(vectorAbove.Y) <= 16 && AnimationFrame - stoneStartFrame > 80)
 			{
 				DoStoneDust();
 				isStone = true;
 				myTurnToDrop = false;
-				stoneStartFrame = animationFrame;
-				if (targetNPCIndex is int idx && Main.npc[idx].active)
+				stoneStartFrame = AnimationFrame;
+				if (TargetNPCIndex is int idx && Main.npc[idx].active)
 				{
 					//// approximately home in
 					if (vectorToTargetPosition.Y > 16)

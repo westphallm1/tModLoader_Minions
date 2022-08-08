@@ -90,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 				maxSpeed = Projectile.velocity.Length();
 				initialVelocity = Projectile.velocity;
 			}
-			Vector2 vector2Player = player.Center - Projectile.Center;
+			Vector2 vector2Player = Player.Center - Projectile.Center;
 			if (lastHitFrame - Projectile.timeLeft > Projectile.localNPCHitCooldown &&
 				vector2Player.Length() > distanceToBumbleBack)
 			{

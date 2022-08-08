@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.AI;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
@@ -110,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 			if(targetNPC == null || !targetNPC.active)
 			{
-				targetNPC = Minion.GetClosestEnemyToPosition(Projectile.Center, 300);
+				targetNPC = MinionBehavior.GetClosestEnemyToPosition(Projectile.Center, 300);
 				return;
 			}
 			Vector2 target = targetNPC.Center - Projectile.Bottom;
@@ -132,7 +133,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class TinyFishronMinion : CombatPetHoverDasherMinion
 	{
-		internal override int BuffId => BuffType<TinyFishronMinionBuff>();
+		public override int BuffId => BuffType<TinyFishronMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DukeFishronPet;
 
@@ -153,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Projectile.width = 24;
 			Projectile.height = 24;
 			circleHelper.idleBumbleFrames = 90;
-			frameSpeed = 5;
+			FrameSpeed = 5;
 			forwardDir = -1;
 		}
 
@@ -166,10 +167,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
 			base.OnHitNPC(target, damage, knockback, crit);
-			if(player.whoAmI == Main.myPlayer && animationFrame - lastHitFrame > attackFrames && 
+			if(Player.whoAmI == Main.myPlayer && AnimationFrame - lastHitFrame > attackFrames && 
 			   leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
 			{
-				lastHitFrame = animationFrame;
+				lastHitFrame = AnimationFrame;
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					target.Center, 

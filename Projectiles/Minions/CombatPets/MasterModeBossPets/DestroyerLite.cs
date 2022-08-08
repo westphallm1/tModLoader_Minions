@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.AI;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
@@ -66,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		{
 			if(targetNPC == null || !targetNPC.active)
 			{
-				targetNPC = Minion.GetClosestEnemyToPosition(Projectile.Center, 300);
+				targetNPC = MinionBehavior.GetClosestEnemyToPosition(Projectile.Center, 300);
 				return;
 			}
 			Vector2 target = targetNPC.Center - Projectile.Center;
@@ -109,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class DestroyerLiteMinion : CombatPetGroundedWormMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DestroyerPet;
-		internal override int BuffId => BuffType<DestroyerLiteMinionBuff>();
+		public override int BuffId => BuffType<DestroyerLiteMinionBuff>();
 		public override int CounterType => -1;
 		protected override int dustType => 135;
 
@@ -129,9 +130,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
-			if(player.whoAmI == Main.myPlayer && animationFrame - lastHitFrame > ProbeSpawnRate && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
+			if(Player.whoAmI == Main.myPlayer && AnimationFrame - lastHitFrame > ProbeSpawnRate && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
 			{
-				lastHitFrame = animationFrame;
+				lastHitFrame = AnimationFrame;
 				Vector2 launchVector = -Vector2.UnitY.RotatedByRandom(MathHelper.PiOver4) * 6;
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),

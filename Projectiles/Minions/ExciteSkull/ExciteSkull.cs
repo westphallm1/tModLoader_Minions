@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 
 	public class ExciteSkullMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<ExciteSkullMinionBuff>();
+		public override int BuffId => BuffType<ExciteSkullMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{
@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			Projectile.localNPCHitCooldown = 20;
 			DrawOffsetX = -2;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -97,13 +97,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
 			int xMaxSpeed = 9;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (animationFrame - lastHitFrame > 10)
+			if (AnimationFrame - lastHitFrame > 10)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if (((gHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4) || gHelper.isFlying) && animationFrame % 3 == 0)
+			if (((gHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4) || gHelper.isFlying) && AnimationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;

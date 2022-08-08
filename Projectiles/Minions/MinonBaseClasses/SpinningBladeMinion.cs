@@ -94,10 +94,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Vector2 launchVelocity = vectorToTargetPosition;
 			launchVelocity.SafeNormalize();
 			launchVelocity *= SpinVelocity;
-			npcVelocity = Main.npc[(int)targetNPCIndex].velocity;
+			npcVelocity = Main.npc[(int)TargetNPCIndex].velocity;
 			launchVelocity += launchVelocity;
 			spinVector = launchVelocity;
-			if (Main.myPlayer == player.whoAmI)
+			if (Main.myPlayer == Player.whoAmI)
 			{
 				int projId = Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
@@ -106,7 +106,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 					bladeType,
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					ai1: SpinAnimationLength - SpinTravelLength);
 				Main.projectile[projId].timeLeft = SpinAnimationLength + 1;
 			}
@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			{
 				isSpinning = true;
 				spinAnimationCounter = 0;
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					SummonSecondBlade(vectorToTargetPosition);
 				}
@@ -162,7 +162,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		protected virtual float GetBackBladeAngle()
 		{
-			return (6 * MathHelper.Pi * animationFrame) / groupAnimationFrames;
+			return (6 * MathHelper.Pi * AnimationFrame) / GroupAnimationFrames;
 		}
 
 		protected virtual float GetFrontBladeAngle()

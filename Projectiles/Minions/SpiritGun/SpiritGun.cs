@@ -56,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 	public class SpiritGunCounterMinion : CounterMinion
 	{
 
-		internal override int BuffId => BuffType<SpiritGunMinionBuff>();
+		public override int BuffId => BuffType<SpiritGunMinionBuff>();
 		protected override int MinionType => ProjectileType<SpiritGunMinion>();
 	}
 	/// <summary>
@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 	/// </summary>
 	public class SpiritGunMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<SpiritGunMinionBuff>();
+		public override int BuffId => BuffType<SpiritGunMinionBuff>();
 		private int framesSinceLastHit;
 		private const int AnimationFrames = 120;
 		private Queue<Vector2> activeTargetVectors;
@@ -93,11 +93,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			Projectile.width = 36;
 			Projectile.height = 22;
 			Projectile.tileCollide = false;
-			animationFrame = 0;
+			AnimationFrame = 0;
 			framesSinceLastHit = 0;
-			dealsContactDamage = false;
-			attackThroughWalls = true;
-			useBeacon = false;
+			DealsContactDamage = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
 			activeTargetVectors = new Queue<Vector2>();
 		}
 
@@ -108,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		private Vector2 GetSpiritLocation(int index)
 		{
-			float r = (float)(2 * Math.PI * animationFrame) / AnimationFrames;
+			float r = (float)(2 * Math.PI * AnimationFrame) / AnimationFrames;
 			Vector2 pos = Projectile.Center;
 			float r1 = r + 2 * (float)Math.PI * index / (EmpowerCount + 1);
 			Vector2 pos1 = pos + new Vector2((float)Math.Cos(r1), (float)Math.Sin(r1)) * 32;
@@ -146,7 +146,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			// echo 1
-			float offset = 2f * (float)Math.Sin(Math.PI * (animationFrame % 60) / 30);
+			float offset = 2f * (float)Math.Sin(Math.PI * (AnimationFrame % 60) / 30);
 			Main.EntitySpriteDraw(texture, pos - Main.screenPosition + Vector2.One * offset,
 				bounds, shadowColor, Projectile.rotation, bounds.GetOrigin(), 1, effects, 0);
 			// echo 2
@@ -157,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			animationFrame %= AnimationFrames;
+			AnimationFrame %= AnimationFrames;
 			DrawSpirits(lightColor);
 			DrawShadows(lightColor);
 			return true;
@@ -202,13 +202,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 				}
 			}
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -32;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Center.X;
-				idlePosition.Y = player.Center.Y - 24;
+				idlePosition.X = Player.Center.X;
+				idlePosition.Y = Player.Center.Y - 24;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
@@ -223,12 +223,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			IdleMovement(vectorToIdle);
+			IdleMovement(VectorToIdle);
 			if (framesSinceLastHit > 15 && unfiredShots > 0 && !isReloading)
 			{
 				vectorToTargetPosition = VaryLaunchVelocity(vectorToTargetPosition);
 				Vector2 pos = Projectile.Center;
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
@@ -300,7 +300,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 		public override Vector2? FindTarget()
 		{
-			if (framesSinceLastHit > 15 && !isReloading && TrickshotAngle(animationFrame) is Vector2 trickshot2)
+			if (framesSinceLastHit > 15 && !isReloading && TrickshotAngle(AnimationFrame) is Vector2 trickshot2)
 			{
 				return trickshot2;
 			}

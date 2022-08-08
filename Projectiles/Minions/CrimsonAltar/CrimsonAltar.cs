@@ -138,12 +138,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 
 	public class CrimsonAltarCounterMinion : CounterMinion
 	{
-		internal override int BuffId => BuffType<CrimsonAltarMinionBuff>();
+		public override int BuffId => BuffType<CrimsonAltarMinionBuff>();
 		protected override int MinionType => ProjectileType<CrimsonAltarMinion>();
 	}
 	public class CrimsonAltarMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<CrimsonAltarMinionBuff>();
+		public override int BuffId => BuffType<CrimsonAltarMinionBuff>();
 		private int framesSinceLastHit;
 		public override int CounterType => ProjectileType<CrimsonAltarCounterMinion>();
 		protected override int dustType => DustID.Blood;
@@ -171,9 +171,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			Projectile.height = 40;
 			Projectile.tileCollide = false;
 			framesSinceLastHit = 0;
-			dealsContactDamage = false;
-			attackThroughWalls = true;
-			useBeacon = false;
+			DealsContactDamage = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
 		}
 
 
@@ -195,16 +195,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			Vector2 idlePosition = player.Top;
-			idlePosition.X += -player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -8;
-			animationFrame += 1;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			AnimationFrame += 1;
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
-				idlePosition.Y = player.Top.Y - 16;
+				idlePosition.X = Player.Top.X;
+				idlePosition.Y = Player.Top.Y - 16;
 			}
-			idlePosition.Y += 4 * (float)Math.Sin(animationFrame / 32f);
+			idlePosition.Y += 4 * (float)Math.Sin(AnimationFrame / 32f);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.25f);
@@ -218,7 +218,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// stay floating behind the player at all times
-			IdleMovement(vectorToIdle);
+			IdleMovement(VectorToIdle);
 			framesSinceLastHit++;
 			int rateOfFire = 120;
 			if (framesSinceLastHit++ > rateOfFire)
@@ -236,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 					vectorToTargetPosition *= projectileVelocity;
 					Vector2 pos = Projectile.Center;
 					framesSinceLastHit = 0;
-					if (Main.myPlayer == player.whoAmI)
+					if (Main.myPlayer == Player.whoAmI)
 					{
 						Projectile.NewProjectile(
 							Projectile.GetSource_FromThis(),
@@ -259,7 +259,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -308,7 +308,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		{
 			Projectile.spriteDirection = 1;
 			Projectile.frame = Math.Min(4, (int)EmpowerCount) - 1;
-			Projectile.rotation += player.direction / 32f;
+			Projectile.rotation += Player.direction / 32f;
 			if (Main.rand.NextBool(120))
 			{
 				for (int i = 0; i < 3; i++)

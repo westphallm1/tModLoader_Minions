@@ -128,10 +128,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		{
 			base.SetDefaults();
 			Projectile.timeLeft = 12 * 60;
-			attackThroughWalls = false;
+			AttackThroughWalls = false;
 			Projectile.width = 16;
 			Projectile.height = 16;
-			frameSpeed = 15;
+			FrameSpeed = 15;
 		}
 
 		public override void OnSpawn()
@@ -148,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		{
 			Projectile.rotation = (Projectile.Center - spawnPos).ToRotation() + MathHelper.PiOver2;
 			Vector2 vectorToIdle = spawnPos - Projectile.position;
-			float offsetMagnitude = 16 + 8 * (float)Math.Sin(MathHelper.TwoPi * animationFrame / 60);
+			float offsetMagnitude = 16 + 8 * (float)Math.Sin(MathHelper.TwoPi * AnimationFrame / 60);
 			return vectorToIdle + idleDirection * offsetMagnitude;
 		}
 
@@ -189,7 +189,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			Projectile.tileCollide = vectorToTarget != null;
+			Projectile.tileCollide = VectorToTarget != null;
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
@@ -227,7 +227,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 	public class PottedPalMinion : SquireMinion
 	{
-		internal override int BuffId => BuffType<PottedPalMinionBuff>();
+		public override int BuffId => BuffType<PottedPalMinionBuff>();
 		protected override int ItemType => ItemType<PottedPalMinionItem>();
 
 		protected int wingFrameCounter = 0;
@@ -257,7 +257,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			base.SetDefaults();
 			Projectile.width = 16;
 			Projectile.height = 16;
-			frameSpeed = 15;
+			FrameSpeed = 15;
 			Projectile.localNPCHitCooldown = 10;
 			cooldownCounter = hitCooldown;
 		}
@@ -271,9 +271,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if (vectorToIdle.Length() > 32)
+			if (VectorToIdle.Length() > 32)
 			{
-				Vector2 vectorFromPlayer = player.Center - Projectile.Center;
+				Vector2 vectorFromPlayer = Player.Center - Projectile.Center;
 				Projectile.rotation = vectorFromPlayer.ToRotation() - (float)Math.PI / 2;
 			}
 			else
@@ -314,16 +314,16 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			{
 				base.StandardTargetedMovement(vectorToTargetPosition);
 			}
-			Vector2 vectorFromPlayer = player.Center - Projectile.Center;
+			Vector2 vectorFromPlayer = Player.Center - Projectile.Center;
 			Projectile.rotation = vectorFromPlayer.ToRotation() - (float)Math.PI / 2;
 		}
 
 		public override void OnStartUsingSpecial()
 		{
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				int projType = ProjectileType<PottedPalJrMinion>();
-				if(player.ownedProjectileCounts[projType] > 1)
+				if(Player.ownedProjectileCounts[projType] > 1)
 				{
 					// "prune" the oldest child (heh, plants)
 					Projectile oldestChild = Main.projectile.Where(p =>
@@ -336,7 +336,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 					}
 				}
 				Vector2 vector2Mouse = Vector2.DistanceSquared(Projectile.Center, Main.MouseWorld) < 48 * 48 ?
-					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
+					Main.MouseWorld - Player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile.NewProjectile(
@@ -346,7 +346,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 					ProjectileType<PottedPalSeedProjectile>(),
 					Projectile.damage / 2,
 					Projectile.knockBack,
-					player.whoAmI);
+					Player.whoAmI);
 			}
 		}
 
@@ -354,7 +354,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Vector2 center = Projectile.Center;
-			Vector2 vineEnd = center + vectorToIdle + new Vector2(0, 8);
+			Vector2 vineEnd = center + VectorToIdle + new Vector2(0, 8);
 			ChainDrawer chainDrawer = new ChainDrawer(new Rectangle(0, 36, 16, 16), new Rectangle(0, 54, 16, 16));
 			chainDrawer.DrawChain(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, center, vineEnd);
 			return true;
@@ -368,10 +368,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			Texture2D potTexture = ExtraTextures[0].Value;
 			int frameHeight = potTexture.Height / 4;
 			Rectangle bounds = new Rectangle(0, wingFrame * frameHeight, potTexture.Width, frameHeight);
-			if (vectorToIdle.Length() > 16 || vectorToTarget is Vector2 target)
+			if (VectorToIdle.Length() > 16 || VectorToTarget is Vector2 target)
 			{
-				pos = Projectile.Center + vectorToIdle + new Vector2(0, 8); // move pot down a bit;
-				r = player.velocity.X * 0.05f;
+				pos = Projectile.Center + VectorToIdle + new Vector2(0, 8); // move pot down a bit;
+				r = Player.velocity.X * 0.05f;
 			}
 			else
 			{
@@ -385,7 +385,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if (vectorToTarget is null)
+			if (VectorToTarget is null)
 			{
 				Projectile.frame = 0;
 			}

@@ -183,7 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 	public class GoldenRogueSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<GoldenRogueSquireMinionBuff>();
+		public override int BuffId => BuffType<GoldenRogueSquireMinionBuff>();
 		protected override int ItemType => ItemType<GoldenRogueSquireMinionItem>();
 		protected override int AttackFrames => 12;
 
@@ -246,7 +246,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			base.StandardTargetedMovement(vectorToTargetPosition);
 			if (attackFrame == 0)
 			{
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Vector2 vector2Mouse = UnitVectorFromWeaponAngle();
 					vector2Mouse *= daggerSpeed;
@@ -291,11 +291,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 				base.PostDraw(lightColor);
 			}
 			// draw a spinning reticle as a visual indicator for the special
-			if(player.whoAmI == Main.myPlayer && usingSpecial)
+			if(Player.whoAmI == Main.myPlayer && usingSpecial)
 			{
 				Texture2D reticle = ExtraTextures[3].Value;
 				bounds = reticle.Bounds;
-				r = MathHelper.TwoPi * animationFrame / 120;
+				r = MathHelper.TwoPi * AnimationFrame / 120;
 				float scale = 1f + 0.2f * (float)Math.Sin(r);
 				pos = targetNPC == default ? Main.MouseScreen + 8 * Vector2.One : targetNPC.Center - Main.screenPosition;
 				Main.EntitySpriteDraw(reticle, pos, bounds, Color.White, r, bounds.GetOrigin(), scale, effects, 0);
@@ -347,8 +347,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 
 		private void ManageKnifeCloud()
 		{
-			int cloudSize = player.ownedProjectileCounts[ProjectileType<GoldenDaggerCloud>()];
-			if(Main.myPlayer == player.whoAmI && specialFrame % 3 == 0 && cloudSize < maxKnifeCount)
+			int cloudSize = Player.ownedProjectileCounts[ProjectileType<GoldenDaggerCloud>()];
+			if(Main.myPlayer == Player.whoAmI && specialFrame % 3 == 0 && cloudSize < maxKnifeCount)
 			{
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(), 
@@ -373,13 +373,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == player.whoAmI && p.ai[0] > -1)
+				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == Player.whoAmI && p.ai[0] > -1)
 				{
 					int ai0 = (int)p.ai[0];
 					int knifeRow = ai0 / knivesPerRow;
 					int knifeIdx = ai0 % knivesPerRow;
 					float angleOffset = MathHelper.PiOver4 - knifeIdx * MathHelper.PiOver2 / knivesPerRow;
-					float animationSin = (float)Math.Sin(MathHelper.TwoPi * animationFrame / 30);
+					float animationSin = (float)Math.Sin(MathHelper.TwoPi * AnimationFrame / 30);
 					angleOffset *= 1 + 0.2f * animationSin * (knifeRow == 0 ? 1 : -1);
 					Vector2 baseOffset = (Projectile.Center - targetNPC.Center).RotatedBy(angleOffset);
 					baseOffset.SafeNormalize();
@@ -416,7 +416,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == player.whoAmI)
+				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == Player.whoAmI)
 				{
 					p.ai[0] = -1;
 					p.timeLeft = Math.Min(p.timeLeft, 15);
@@ -435,7 +435,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == player.whoAmI)
+				if(p.active && p.type == ProjectileType<GoldenDaggerCloud>() && p.owner == Player.whoAmI)
 				{
 					p.Kill();
 				}
@@ -450,7 +450,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			{
 				LaunchKnives();
 				// teleport back to player
-				Projectile.position += vectorToIdle;
+				Projectile.position += VectorToIdle;
 				didTeleport = true;
 			}
 			targetNPC = default;

@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
 	public class BoneSerpentCounterMinion : CounterMinion
 	{
-		internal override int BuffId => BuffType<BoneSerpentMinionBuff>();
+		public override int BuffId => BuffType<BoneSerpentMinionBuff>();
 		protected override int MinionType => ProjectileType<BoneSerpentMinion>();
 	}
 
@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			attackThroughWalls = true;
+			AttackThroughWalls = true;
 			framesInAir = 0;
 			framesInGround = 0;
 			gHelper = new GroundAwarenessHelper(this);
@@ -77,8 +77,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 			{
 				framesInAir = 0; // reset poor air movement after spending long enough in the air
 			}
-			if (framesInAir < 2 * maxFramesInAir + 10 || Vector2.Distance(player.Center, Projectile.Center) > 300f ||
-				Math.Abs(player.Center.Y - Projectile.Center.Y) > 80f)
+			if (framesInAir < 2 * maxFramesInAir + 10 || Vector2.Distance(Player.Center, Projectile.Center) > 300f ||
+				Math.Abs(Player.Center.Y - Projectile.Center.Y) > 80f)
 			{
 				base.IdleMovement(vectorToIdlePosition);
 			}
@@ -114,27 +114,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 				Projectile.velocity.Y += 0.5f;
 			}
 			base.IdleBehavior();
-			vectorToIdle.Y += 64; // circle around the player
-			Vector2 idlePosition = player.Top;
-			int radius = Math.Abs(player.velocity.X) < 4 ? idleRadius : 24;
+			Vector2 idlePosition = Player.Top;
+			int radius = Math.Abs(Player.velocity.X) < 4 ? idleRadius : 24;
 			float idleAngle = IdleLocationSets.GetAngleOffsetInSet(IdleLocationSets.circlingHead, Projectile)
-				+ 2 * PI * groupAnimationFrame / groupAnimationFrames;
+				+ 2 * MathHelper.Pi * GroupAnimationFrame / GroupAnimationFrames;
 			idlePosition.X += radius * (float)Math.Cos(idleAngle);
 			idlePosition.Y += radius * (float)Math.Sin(idleAngle);
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
-			return vectorToIdle;
 		}
 
 		public override Vector2? FindTarget()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center, searchDistance * 0.67f, losCenter: Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
-			else if (SelectedEnemyInRange(searchDistance, searchDistance * 0.67f, losCenter: player.Center) is Vector2 target2)
+			else if (SelectedEnemyInRange(searchDistance, searchDistance * 0.67f, losCenter: Player.Center) is Vector2 target2)
 			{
 				return target2 - Projectile.Center;
 			}
@@ -147,7 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 
 	public class BoneSerpentMinion : GroundTravellingWormMinion
 	{
-		internal override int BuffId => BuffType<BoneSerpentMinionBuff>();
+		public override int BuffId => BuffType<BoneSerpentMinionBuff>();
 
 		protected override int dustType => 30;
 		public override int CounterType => ProjectileType<BoneSerpentCounterMinion>();

@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 	public class HornetMinion : HoverShooterMinion
 	{
-		internal override int BuffId => BuffType<HornetMinionBuff>();
+		public override int BuffId => BuffType<HornetMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Hornet;
 		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();
@@ -119,7 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 					Projectile.frame = 0;
 				}
 			}
-			if(vectorToTarget is Vector2 target)
+			if(VectorToTarget is Vector2 target)
 			{
 				Projectile.spriteDirection = -Math.Sign(target.X);
 			}

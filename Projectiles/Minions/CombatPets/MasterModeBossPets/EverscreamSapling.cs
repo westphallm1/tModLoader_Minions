@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class EverscreamSaplingMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EverscreamPet;
-		internal override int BuffId => BuffType<EverscreamSaplingMinionBuff>();
+		public override int BuffId => BuffType<EverscreamSaplingMinionBuff>();
 
 		internal override int? ProjId => ProjectileType<EverscreamSaplingOrnament>();
 

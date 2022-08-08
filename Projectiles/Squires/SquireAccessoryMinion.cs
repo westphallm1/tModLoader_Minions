@@ -30,7 +30,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override Vector2 IdleBehavior()
 		{
 			animationFrame++;
-			squirePlayer = player.GetModPlayer<SquireModPlayer>();
+			squirePlayer = Player.GetModPlayer<SquireModPlayer>();
 			squire = squirePlayer.GetSquire();
 			if (squire == null || !IsEquipped(squirePlayer))
 			{
@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public bool SquireAttacking()
 		{
-			return player.channel && SquireMinionTypes.Contains(player.HeldItem.shoot);
+			return Player.channel && SquireMinionTypes.Contains(Player.HeldItem.shoot);
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)

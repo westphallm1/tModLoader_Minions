@@ -23,13 +23,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 	public class BernieMinion : CombatPetGroundedMeleeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BerniePet;
-		internal override int BuffId => BuffType<BernieMinionBuff>();
+		public override int BuffId => BuffType<BernieMinionBuff>();
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			ConfigureDrawBox(24, 30, -12, -16);
 			ConfigureFrames(11, (0, 0), (1, 8), (9, 9), (10, 10));
-			frameSpeed = 8;
+			FrameSpeed = 8;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)

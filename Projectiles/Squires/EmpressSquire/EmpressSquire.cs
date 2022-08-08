@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 	public class EmpressSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<EmpressSquireMinionBuff>();
+		public override int BuffId => BuffType<EmpressSquireMinionBuff>();
 		protected override int ItemType => ItemType<EmpressSquireMinionItem>();
 		protected override int AttackFrames => 24;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/AngelWings";
@@ -145,7 +145,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		{
 			base.SpecialTargetedMovement(vectorToTargetPosition);
 			// fun fact, this works on non-minions as well
-			float baseAngle = MathHelper.TwoPi * animationFrame / 90f;
+			float baseAngle = MathHelper.TwoPi * AnimationFrame / 90f;
 			List<Projectile> starProjectiles = GetMinionsOfType(ProjectileType<EmpressSpecialOrbitProjectile>());
 
 			if(specialFrame % 18 == 0)
@@ -158,7 +158,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 				float angle = baseAngle + MathHelper.TwoPi * starProj.ai[0] / SpecialColors.Length;
 				float distance = 8 * Math.Min(12, specialFrame / 2);
 				starProj.Center = Projectile.Center + angle.ToRotationVector2() * distance;
-				if(player.whoAmI == Main.myPlayer && 
+				if(Player.whoAmI == Main.myPlayer && 
 					specialFrame % 6 == 0 && (specialFrame / 6) % SpecialColors.Length == starProj.ai[0] &&
 					Collision.CanHitLine(Projectile.Center,1,1,starProj.Center,1,1))
 				{
@@ -185,7 +185,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		public override void OnStartUsingSpecial()
 		{
 			base.OnStartUsingSpecial();
-			if(player.whoAmI != Main.myPlayer)
+			if(Player.whoAmI != Main.myPlayer)
 			{
 				return;
 			}
@@ -202,7 +202,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		public override void OnStopUsingSpecial()
 		{
 			base.OnStopUsingSpecial();
-			if(player.whoAmI != Main.myPlayer)
+			if(Player.whoAmI != Main.myPlayer)
 			{
 				return;
 			}
@@ -215,13 +215,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 		public override Vector2 IdleBehavior()
 		{
-			trailColor = InterpolateColorWheel(usingSpecial ? SpecialColors: TrailColors, MathHelper.TwoPi * animationFrame / 90f);
+			trailColor = InterpolateColorWheel(usingSpecial ? SpecialColors: TrailColors, MathHelper.TwoPi * AnimationFrame / 90f);
 			Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.5f);
 			if(usingSpecial)
 			{
 				weaponAngleOffset = 0;
 			}
-			else if(animationFrame % 16 == 0)
+			else if(AnimationFrame % 16 == 0)
 			{
 				weaponAngleOffset = Main.rand.NextFloat(-MathF.PI, MathF.PI) / 16f;
 			}
@@ -234,7 +234,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 			{
 				Vector2 angleVector = UnitVectorFromWeaponAngle();
 				angleVector *= ModifiedProjectileVelocity();
-				if (Main.myPlayer == player.whoAmI)
+				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),

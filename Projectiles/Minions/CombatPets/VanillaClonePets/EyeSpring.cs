@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class EyeSpringMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EyeSpring;
-		internal override int BuffId => BuffType<EyeSpringMinionBuff>();
+		public override int BuffId => BuffType<EyeSpringMinionBuff>();
 
 		public override void SetStaticDefaults()
 		{

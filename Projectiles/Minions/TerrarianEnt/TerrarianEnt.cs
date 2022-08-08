@@ -57,13 +57,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 	public class TerrarianEntCounterMinion : CounterMinion
 	{
 
-		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
+		public override int BuffId => BuffType<TerrarianEntMinionBuff>();
 		protected override int MinionType => ProjectileType<TerrarianEntMinion>();
 	}
 
 	public class TerrarianEntMinion : EmpoweredMinion
 	{
-		internal override int BuffId => BuffType<TerrarianEntMinionBuff>();
+		public override int BuffId => BuffType<TerrarianEntMinionBuff>();
 		public override int CounterType => ProjectileType<TerrarianEntCounterMinion>();
 		
 		private SpriteCompositionHelper scHelper;
@@ -91,10 +91,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			Projectile.width = 44;
 			Projectile.height = 44;
 			Projectile.tileCollide = false;
-			dealsContactDamage = false;
-			attackThroughWalls = true;
-			useBeacon = false;
-			frameSpeed = 5;
+			DealsContactDamage = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
+			FrameSpeed = 5;
 
 			subProjectiles = new List<LandChunkProjectile>();
 		}
@@ -188,8 +188,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		{
 			base.IdleBehavior();
 			// center on the player at all times
-			Vector2 idlePosition = player.Top;
-			idlePosition.Y += -96 + 8 * (float)Math.Sin(MathHelper.TwoPi * groupAnimationFrame / groupAnimationFrames);
+			Vector2 idlePosition = Player.Top;
+			idlePosition.Y += -96 + 8 * (float)Math.Sin(MathHelper.TwoPi * GroupAnimationFrame / GroupAnimationFrames);
 			if(swingingProjectile != default)
 			{
 				int attackStyle = (int)Projectile.ai[1] / 2;
@@ -200,10 +200,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				idlePosition += swingOffset;
 			}
 			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
-			if (!Collision.CanHitLine(idlePosition, 1, 1, player.Center, 1, 1))
+			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
-				idlePosition.X = player.Top.X;
-				idlePosition.Y = player.Top.Y - 16;
+				idlePosition.X = Player.Top.X;
+				idlePosition.Y = Player.Top.Y - 16;
 			}
 			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			SpawnTrees();
@@ -224,7 +224,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			for(int i = 0; i < Main.maxProjectiles; i++)
 			{
 				Projectile p = Main.projectile[i];
-				if(p.active && p.owner == player.whoAmI && p.type == subProjType)
+				if(p.active && p.owner == Player.whoAmI && p.type == subProjType)
 				{
 					subProjectiles.Add((LandChunkProjectile)p.ModProjectile);
 					if(swingingProjectile == null && p.localAI[0] != 0)
@@ -239,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				.OrderBy(v=>v).ToList();
 
 
-			if(Main.myPlayer == player.whoAmI && idle.Count < maxCount && animationFrame % 30 == 0)
+			if(Main.myPlayer == Player.whoAmI && idle.Count < maxCount && AnimationFrame % 30 == 0)
 			{
 				for(int i = 0; i < idle.Count; i++)
 				{
@@ -253,12 +253,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 				}
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
-					player.Center,
+					Player.Center,
 					Vector2.Zero,
 					subProjType,
 					Projectile.damage,
 					0,
-					player.whoAmI,
+					Player.whoAmI,
 					ai1: nextTreeIndex);
 				nextTreeIndex = (nextTreeIndex + 1) % maxCount;
 			}
@@ -271,7 +271,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// stay floating behind the player at all times
-			IdleMovement(vectorToIdle);
+			IdleMovement(VectorToIdle);
 		}
 
 		protected override int ComputeDamage()
@@ -282,7 +282,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		private Vector2? GetTargetVector()
 		{
 			float searchDistance = ComputeSearchDistance();
-			if (PlayerTargetPosition(searchDistance, player.Center) is Vector2 target)
+			if (PlayerTargetPosition(searchDistance, Player.Center) is Vector2 target)
 			{
 				return target - Projectile.Center;
 			}
@@ -314,7 +314,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			// frames go back and forth rather than looping
-			int rawFrame = (animationFrame / 8) % 20;
+			int rawFrame = (AnimationFrame / 8) % 20;
 			if(rawFrame < 7)
 			{
 				Projectile.frame = 0;

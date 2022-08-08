@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class BabyGrinchMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyGrinch;
-		internal override int BuffId => BuffType<BabyGrinchMinionBuff>();
+		public override int BuffId => BuffType<BabyGrinchMinionBuff>();
 		internal override int? ProjId => ProjectileType<EverscreamSaplingOrnament>();
 		public override void SetDefaults()
 		{

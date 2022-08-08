@@ -88,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 vectorToIdle = base.IdleBehavior();
-			dealsContactDamage = true;
+			DealsContactDamage = true;
 			// can't attack as far as other hover shooters due to limited hand range, so search a bit farther
 			targetSearchDistance = leveledPetPlayer.PetLevelInfo.BaseSearchRange + 96;
 			return vectorToIdle;
@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
-			if(framesSinceHadTarget > 30)
+			if(FramesSinceHadTarget > 30)
 			{
 				attackCycle = 0;
 			}
@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			bool isSpinning = DoBumblingMovement && vectorToTarget is Vector2 target &&
+			bool isSpinning = DoBumblingMovement && VectorToTarget is Vector2 target &&
 				target.LengthSquared() < 2 * hsHelper.targetOuterRadius * hsHelper.targetOuterRadius;
 			if(isSpinning)
 			{
@@ -191,7 +191,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 	public class SkeletronJrMinion : SkeletronCombatPet
 	{
-		internal override int BuffId => BuffType<SkeletronJrMinionBuff>();
+		public override int BuffId => BuffType<SkeletronJrMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SkeletronPet;
 		internal override int? FiredProjectileId => null;
@@ -213,12 +213,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override void UpdateHand(ref SkeletronHand hand, int handIdx)
 		{
 			Vector2 offset;
-			int shootFrame = animationFrame - hsHelper.lastShootFrame;
-			if(attackCycle > 4 || handIdx != attackCycle % 2 || vectorToTarget is not Vector2 target || shootFrame > attackFrames)
+			int shootFrame = AnimationFrame - hsHelper.lastShootFrame;
+			if(attackCycle > 4 || handIdx != attackCycle % 2 || VectorToTarget is not Vector2 target || shootFrame > attackFrames)
 			{
 				// very hacky way to get -1 and 1
 				Vector2 baseOffset = 32 * Vector2.UnitX * Math.Sign(handIdx - 0.5f);
-				float cycleAngle = MathHelper.TwoPi * animationFrame / 120 + handIdx * MathHelper.Pi;
+				float cycleAngle = MathHelper.TwoPi * AnimationFrame / 120 + handIdx * MathHelper.Pi;
 				Vector2 cycleOffset = 8 * cycleAngle.ToRotationVector2();
 				offset = baseOffset + cycleOffset;
 			} else
@@ -226,7 +226,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				float attackFraction = MathF.Sin(MathHelper.Pi * shootFrame / attackFrames);
 				offset = target * attackFraction;
 			}
-			int handFrame = (handIdx + animationFrame / 10) % 4;
+			int handFrame = (handIdx + AnimationFrame / 10) % 4;
 			handFrame = handFrame == 3 ? 1 : handFrame;
 			handFrame += firstHandFrame;
 			hand.TargetPosition = offset;

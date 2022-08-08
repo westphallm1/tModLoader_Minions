@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 	public class CrimsonSquireMinion : WeaponHoldingSquire
 	{
-		internal override int BuffId => BuffType<CrimsonSquireMinionBuff>();
+		public override int BuffId => BuffType<CrimsonSquireMinionBuff>();
 		protected override int ItemType => ItemType<CrimsonSquireMinionItem>();
 		protected override int AttackFrames => 30;
 		protected override string WingTexturePath => "AmuletOfManyMinions/Projectiles/Squires/Wings/DemonWings";
@@ -224,10 +224,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			base.SpecialTargetedMovement(vectorToTargetPosition);
-			if(specialFrame == 1 && player.whoAmI == Main.myPlayer)
+			if(specialFrame == 1 && Player.whoAmI == Main.myPlayer)
 			{
 				Vector2 vector2Mouse = Vector2.DistanceSquared(Projectile.Center, Main.MouseWorld) < 48 * 48 ?
-					Main.MouseWorld - player.Center : Main.MouseWorld - Projectile.Center;
+					Main.MouseWorld - Player.Center : Main.MouseWorld - Projectile.Center;
 				vector2Mouse.SafeNormalize();
 				vector2Mouse *= ModifiedProjectileVelocity();
 				Projectile proj = Projectile.NewProjectileDirect(

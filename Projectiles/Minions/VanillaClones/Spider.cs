@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	}
 	public abstract class BaseSpiderMinion : SimpleGroundBasedMinion
 	{
-		internal override int BuffId => BuffType<SpiderMinionBuff>();
+		public override int BuffId => BuffType<SpiderMinionBuff>();
 
 		internal bool isClinging = false;
 		internal bool onWall = false;
@@ -108,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			DrawOffsetX = -2;
 			DrawOriginOffsetY = -6;
 			attackFrames = 60;
-			noLOSPursuitTime = 300;
+			NoLOSPursuitTime = 300;
 			startFlyingAtTargetHeight = 96;
 			startFlyingAtTargetDist = 64;
 			defaultJumpVelocity = 4;
@@ -139,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		// while idling on a wall
 		protected override void IdleFlyingMovement(Vector2 vector)
 		{
-			if(onWall && vectorToTarget is null && vector.Length() < 4)
+			if(onWall && VectorToTarget is null && vector.Length() < 4)
 			{
 				Projectile.velocity = Vector2.Zero;
 			} else
@@ -156,13 +156,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				gHelper.DoJump(vector);
 			}
 			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
-			if (vectorToTarget is null && Math.Abs(vector.X) < 8)
+			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
-				Projectile.velocity.X = player.velocity.X;
+				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (animationFrame - lastHitFrame > 10)
+			if (AnimationFrame - lastHitFrame > 10)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -206,7 +206,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override Vector2? FindTarget()
 		{
 			Vector2? target = base.FindTarget();
-			if (targetNPCIndex is int idx && oldTargetNpcIndex != idx)
+			if (TargetNPCIndex is int idx && OldTargetNpcIndex != idx)
 			{
 				// choose a new preferred location on the enemy to cling to
 				targetOffset = new Vector2(
@@ -232,14 +232,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(onWall)
 			{
 				base.Animate(wallFrames.Item1, wallFrames.Item2);
-				if(vectorToTarget != null && isClinging)
+				if(VectorToTarget != null && isClinging)
 				{
-					if(animationFrame % 60 > 30)
+					if(AnimationFrame % 60 > 30)
 					{
-						Projectile.rotation = MathHelper.PiOver2 + MathHelper.Pi / 8 - (MathHelper.PiOver4 * (animationFrame % 60) / 60f);
+						Projectile.rotation = MathHelper.PiOver2 + MathHelper.Pi / 8 - (MathHelper.PiOver4 * (AnimationFrame % 60) / 60f);
 					} else
 					{
-						Projectile.rotation = MathHelper.PiOver2 - MathHelper.Pi / 8 + (MathHelper.PiOver4 * (animationFrame % 60) / 60f);
+						Projectile.rotation = MathHelper.PiOver2 - MathHelper.Pi / 8 + (MathHelper.PiOver4 * (AnimationFrame % 60) / 60f);
 					}
 				} else if (Projectile.velocity.Length() > 0)
 				{

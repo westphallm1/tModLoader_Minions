@@ -7,7 +7,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 {
 	public abstract class TransientMinion : SimpleMinion
 	{
-		internal override int BuffId => -1;
+		public override int BuffId => -1;
 
 		internal virtual bool tileCollide => true;
 		public override void SetDefaults()
@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			base.SetDefaults();
 			Projectile.minion = false;
 			Projectile.minionSlots = 0;
-			useBeacon = false;
+			UseBeacon = false;
 		}
 
 		public override void SetStaticDefaults()

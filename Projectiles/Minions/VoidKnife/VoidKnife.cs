@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 	public class VoidKnifeMinion : TeleportingWeaponMinion
 	{
 
-		internal override int BuffId => BuffType<VoidKnifeMinionBuff>();
+		public override int BuffId => BuffType<VoidKnifeMinionBuff>();
 		protected override Vector3 lightColor => Color.Purple.ToVector3() * 0.75f;
 		public override void SetStaticDefaults()
 		{
@@ -74,11 +74,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.tileCollide = false;
-			attackState = AttackState.IDLE;
+			AttackState = AttackState.IDLE;
 			Projectile.minionSlots = 1;
 			attackFrames = 120;
-			attackThroughWalls = true;
-			useBeacon = false;
+			AttackThroughWalls = true;
+			UseBeacon = false;
 			travelVelocity = 16;
 			targetIsDead = false;
 		}
@@ -114,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			//This section might require a slight change of the behavior regarding the teleporting to work properly for MP
 			//Randomized stuff should only be decided by the client
 			//That would require a change of the ai so it doesnt move for other clients during this phase
-			if (Main.myPlayer == player.whoAmI)
+			if (Main.myPlayer == Player.whoAmI)
 			{
 				if (distanceFromFoe == default)
 				{
@@ -139,7 +139,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 			if (framesInAir++ > maxFramesInAir || framesWithoutTarget == 10)
 			{
 				targetNPC = null;
-				attackState = AttackState.RETURNING;
+				AttackState = AttackState.RETURNING;
 			}
 			else if (framesInAir - lastHitFrame > 10 && !targetIsDead)
 			{

@@ -16,7 +16,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 			set => Projectile.ai[0] = value ? 1 : 0;
 		}
 
-		internal override int BuffId => -1;
+		public override int BuffId => -1;
 
 		bool lookingForTarget;
 		const int speed = 26;
@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		private void LookForTarget()
 		{
-			if ((PlayerTargetPosition(600) ?? SelectedEnemyInRange(600)) is Vector2 target && targetNPCIndex is int targetIdx)
+			if ((PlayerTargetPosition(600) ?? SelectedEnemyInRange(600)) is Vector2 target && TargetNPCIndex is int targetIdx)
 			{
 				velocity = target - Projectile.Center;
 				vectorToTarget = velocity;
@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public override void AI()
 		{
-			player = Main.player[Projectile.owner];
+			Player = Main.player[Projectile.owner];
 			if (velocity == default)
 			{
 				velocity = Projectile.velocity;

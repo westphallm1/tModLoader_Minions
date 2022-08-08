@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 	public class PlanteroMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Plantero;
-		internal override int BuffId => BuffType<PlanteroMinionBuff>();
+		public override int BuffId => BuffType<PlanteroMinionBuff>();
 		private bool wasFlyingThisFrame =  false;
 
 		private int attackCycle;
@@ -41,7 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			ConfigureDrawBox(24, 24, -8, -18, -1);
 			ConfigureFrames(19, (0, 3), (4, 12), (12, 12), (13, 18));
 			hands = new SkeletronHand[2];
-			frameSpeed = 8;
+			FrameSpeed = 8;
 		}
 
 		public override void LoadAssets()
@@ -72,7 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			wasFlyingThisFrame = gHelper.isFlying;
 
 			bool didDrawHands = shouldDrawHands;
-			shouldDrawHands = vectorToTarget is Vector2 target && target.LengthSquared() < 
+			shouldDrawHands = VectorToTarget is Vector2 target && target.LengthSquared() < 
 				2 * preferredDistanceFromTarget * preferredDistanceFromTarget;
 
 			// dust to cover up the hands' (dis)appearance
@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				}
 			}
 
-			dealsContactDamage = shouldDrawHands;
+			DealsContactDamage = shouldDrawHands;
 			Projectile.friendly = shouldDrawHands;
 			for(int i = 0; i < hands.Length; i++)
 			{
@@ -120,12 +120,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		private void UpdateHand(ref SkeletronHand hand, int handIdx)
 		{
 			Vector2 offset;
-			int shootFrame = animationFrame - lastFiredFrame;
-			if(handIdx != attackCycle % 2 || vectorToTarget is not Vector2 target || shootFrame > attackFrames)
+			int shootFrame = AnimationFrame - lastFiredFrame;
+			if(handIdx != attackCycle % 2 || VectorToTarget is not Vector2 target || shootFrame > attackFrames)
 			{
 				// very hacky way to get -1 and 1
 				Vector2 baseOffset = 32 * Vector2.UnitX * MathF.Sign(handIdx - 0.5f);
-				float cycleAngle = MathHelper.TwoPi * animationFrame / 120 + handIdx * MathHelper.Pi;
+				float cycleAngle = MathHelper.TwoPi * AnimationFrame / 120 + handIdx * MathHelper.Pi;
 				Vector2 cycleOffset = 8 * cycleAngle.ToRotationVector2();
 				offset = baseOffset + cycleOffset;
 			} else
@@ -135,7 +135,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			}
 			hand.Rotation = offset.ToRotation() + MathHelper.PiOver2;
 			hand.TargetPosition = offset;
-			hand.Frame = (animationFrame /10) % 2;
+			hand.Frame = (AnimationFrame /10) % 2;
 			hand.SpriteDirection = handIdx == 0 ? 1 : -1;
 		}
 

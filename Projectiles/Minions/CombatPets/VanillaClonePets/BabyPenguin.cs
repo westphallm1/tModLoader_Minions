@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 	public class BabyPenguinMinion : CombatPetGroundedRangedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Penguin;
-		internal override int BuffId => BuffType<BabyPenguinMinionBuff>();
+		public override int BuffId => BuffType<BabyPenguinMinionBuff>();
 		internal override int? ProjId => ProjectileType<PenguinPetFishProjectile>();
 		public override void SetDefaults()
 		{

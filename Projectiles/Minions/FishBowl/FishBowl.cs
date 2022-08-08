@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 	{
 		int lastFiredFrame = 0;
 		int side = -1;
-		internal override int BuffId => BuffType<FishBowlMinionBuff>();
+		public override int BuffId => BuffType<FishBowlMinionBuff>();
 
 		Projectile launchedFish = default;
 		public override void SetStaticDefaults()
@@ -142,8 +142,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			DrawOriginOffsetX = -4;
 			DrawOriginOffsetY = -2;
 			attackFrames = 30;
-			frameSpeed = 15;
-			dealsContactDamage = false;
+			FrameSpeed = 15;
+			DealsContactDamage = false;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -155,7 +155,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			{
 				base.Animate(4, maxFrame);
 			}
-			if(vectorToTarget is Vector2 target)
+			if(VectorToTarget is Vector2 target)
 			{
 				Projectile.spriteDirection = Math.Sign(target.X);
 			}
@@ -212,7 +212,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			}
 
 			Vector2 targetTop = default;
-			if(targetNPCIndex is int idx && Main.npc[idx].active)
+			if(TargetNPCIndex is int idx && Main.npc[idx].active)
 			{
 				targetTop = Main.npc[idx].Top - Projectile.Center;
 				targetTop += 2 * Main.npc[idx].velocity;
@@ -241,9 +241,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			}
 			DistanceFromGroup(ref vectorBelow);
 			// this is a bit of a touchy launch condition, may want to revisit
-			if (Main.myPlayer == player.whoAmI && IsMyTurn() && targetTop != default && animationFrame - lastFiredFrame >= attackFrames && vectorBelow.Length() < 32)
+			if (Main.myPlayer == Player.whoAmI && IsMyTurn() && targetTop != default && AnimationFrame - lastFiredFrame >= attackFrames && vectorBelow.Length() < 32)
 			{
-				lastFiredFrame = animationFrame;
+				lastFiredFrame = AnimationFrame;
 				// hit the target in ~8 frames;
 				targetTop /= 8;
 				if(targetTop.Length() > 8)
@@ -262,7 +262,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 					ProjectileType<FishBowlFish>(),
 					Projectile.damage,
 					Projectile.knockBack,
-					player.whoAmI,
+					Player.whoAmI,
 					ai0: Projectile.whoAmI);
 				for(int i = 0; i < 5; i++)
 				{
@@ -296,7 +296,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 			{
 				Projectile.velocity.Y = 0;
 			}
-			if(animationFrame - lastFiredFrame > 8 && Vector2.DistanceSquared(Projectile.Center, launchedFish.Center) < 16 * 16)
+			if(AnimationFrame - lastFiredFrame > 8 && Vector2.DistanceSquared(Projectile.Center, launchedFish.Center) < 16 * 16)
 			{
 				Projectile.tileCollide = true;
 				// (hopefully) get out of any blocks we were stuck in
@@ -345,7 +345,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		private void DrawWings(Color lightColor)
 		{
 			Texture2D texture = ExtraTextures[2].Value;
-			int frame = (animationFrame / 8) % 4;
+			int frame = (AnimationFrame / 8) % 4;
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			Vector2 wingsOffset = new Vector2(-8 * Projectile.spriteDirection, -4);

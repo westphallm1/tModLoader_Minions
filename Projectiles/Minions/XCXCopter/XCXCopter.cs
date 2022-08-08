@@ -54,12 +54,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 	public class XCXCopterCounterMinion : CounterMinion
 	{
 
-		internal override int BuffId => BuffType<XCXCopterMinionBuff>();
+		public override int BuffId => BuffType<XCXCopterMinionBuff>();
 		protected override int MinionType => ProjectileType<XCXCopterMinion>();
 	}
 	public class XCXCopterMinion : WormMinion
 	{
-		internal override int BuffId => BuffType<XCXCopterMinionBuff>();
+		public override int BuffId => BuffType<XCXCopterMinionBuff>();
 		public override int CounterType => ProjectileType<XCXCopterCounterMinion>();
 		protected override int dustType => 72;
 
@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		{
 			base.SetDefaults();
 			Projectile.tileCollide = false;
-			frameSpeed = 5;
+			FrameSpeed = 5;
 			wormDrawer = new CopterDrawer();
 		}
 

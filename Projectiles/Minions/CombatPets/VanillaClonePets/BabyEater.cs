@@ -21,7 +21,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 	public class BabyEaterMinion : CombatPetHoverShooterMinion
 	{
-		internal override int BuffId => BuffType<BabyEaterMinionBuff>();
+		public override int BuffId => BuffType<BabyEaterMinionBuff>();
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyEater;
 		internal override bool DoBumblingMovement => true;
 		public override void SetStaticDefaults()
@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			Projectile.height = 24;
 			attackFrames = 90;
 			circleHelper.idleBumbleFrames = 90;
-			frameSpeed = 10;
+			FrameSpeed = 10;
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
