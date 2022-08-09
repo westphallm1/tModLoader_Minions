@@ -14,23 +14,12 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 {
 	public interface IMinion
 	{
-		bool Spawned { get; }
-
 		Projectile Projectile { get; }
 
 		Player Player { get; }
 
-		int? TargetNPCIndex { get; set; }
-
 		int BuffId { get; }
 
-		bool UseBeacon { get; }
-
-		public PlayerTargetSelectionTactic CurrentTactic { get; set; }
-		public PlayerTargetSelectionTactic PreviousTactic { get; set; }
-		public int TargetNPCCacheFrames { get; set; }
-
-		void ApplyCrossModChanges();
 		void OnSpawn();
 		bool ShouldIgnoreNPC(NPC npc);
 	}
@@ -38,6 +27,20 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 
 	internal class MinionBehavior
 	{
+		public Player Player { get; set; }
+
+		public int? TargetNPCIndex { get; set; }
+		public int TargetNPCCacheFrames { get; set; }
+
+
+		public bool UseBeacon { get; set; } = true;
+
+		public bool UsingBeacon { get; set; } = false;
+
+		public PlayerTargetSelectionTactic CurrentTactic { get; set; }
+		public PlayerTargetSelectionTactic PreviousTactic { get; set; }
+
+		public bool Spawned { get; set; }
 		internal IMinion Minion { get; set; }
 
 		public MinionBehavior(IMinion minion)
@@ -46,8 +49,6 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 		}
 
 		internal Projectile Projectile => Minion.Projectile;
-
-		internal Player Player => Minion.Player;
 
 
 		public Vector2? PlayerTargetPosition(float maxRange, Vector2? centeredOn = null, float noLOSRange = 0, Vector2? losCenter = null)
@@ -70,7 +71,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 				if (distance < noLOSRange || distance < maxRange &&
 					Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height))
 				{
-					Minion.TargetNPCIndex = Player.MinionAttackTargetNPC;
+					TargetNPCIndex = Player.MinionAttackTargetNPC;
 					return npc.Center;
 				}
 			}
@@ -87,7 +88,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 				bool lineOfSight = Collision.CanHitLine(center, 1, 1, npc.Center, 1, 1);
 				if (distance < maxRange && lineOfSight)
 				{
-					Minion.TargetNPCIndex = Player.MinionAttackTargetNPC;
+					TargetNPCIndex = Player.MinionAttackTargetNPC;
 					return npc.Center;
 				}
 			}
@@ -101,12 +102,12 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			MinionPathfindingPlayer pathfindingPlayer = Player.GetModPlayer<MinionPathfindingPlayer>();
 
 			// Make sure not to cache the target if the target selection tactic changes
-			Minion.CurrentTactic = tacticsPlayer.GetTacticForMinion(Minion);
-			bool tacticDidChange = Minion.CurrentTactic != Minion.PreviousTactic;
-			Minion.PreviousTactic = Minion.CurrentTactic;
+			CurrentTactic = tacticsPlayer.GetTacticForMinion(Minion);
+			bool tacticDidChange = CurrentTactic != PreviousTactic;
+			PreviousTactic = CurrentTactic;
 
 			// to cut back on Line-of-Sight computations, always chase the same NPC for some number of frames once one has been found
-			if (!tacticDidChange && Minion.TargetNPCIndex is int idx && Main.npc[idx].active && Minion.TargetNPCCacheFrames++ < Minion.CurrentTactic.TargetCacheFrames)
+			if (!tacticDidChange && TargetNPCIndex is int idx && Main.npc[idx].active && TargetNPCCacheFrames++ < CurrentTactic.TargetCacheFrames)
 			{
 				return Main.npc[idx].Center;
 			}
@@ -142,11 +143,11 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 				}
 			}
 			int tacticsGroup = tacticsPlayer.GetGroupForMinion(Minion);
-			NPC chosen = Minion.CurrentTactic.ChooseTargetNPC(Projectile, tacticsGroup, possibleTargets);
+			NPC chosen = CurrentTactic.ChooseTargetNPC(Projectile, tacticsGroup, possibleTargets);
 			if (chosen != default)
 			{
-				Minion.TargetNPCIndex = chosen.whoAmI;
-				Minion.TargetNPCCacheFrames = 0;
+				TargetNPCIndex = chosen.whoAmI;
+				TargetNPCCacheFrames = 0;
 				return chosen.Center;
 			}
 			else
@@ -199,7 +200,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 				bool lineOfSight = noLOS || inRange && Collision.CanHitLine(center, 1, 1, npc.Center, 1, 1);
 				if (lineOfSight && inRange)
 				{
-					Minion.TargetNPCIndex = npc.whoAmI;
+					TargetNPCIndex = npc.whoAmI;
 					return npc.Center;
 				}
 			}

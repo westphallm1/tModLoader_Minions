@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+﻿using AmuletOfManyMinions.Core.Minions.AI;
+using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	delegate void ModifyPath(ref Vector2 target);
 	public class MinionPathfindingHelper
 	{
-		private Minion minion;
+		private IMinion minion;
 		private Projectile projectile => minion.Projectile;
 		internal BlockAwarePathfinder pathfinder;
 		// number of nodes to check against before starting from the beginning
@@ -24,7 +25,6 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal bool isStuck = false;
 		internal bool atStart => nodeIndex == 0;
 		internal ModifyPath modifyPath;
-		internal Action afterMovingAlongPath;
 
 		internal int realWidth;
 		internal int realHeight;
@@ -35,7 +35,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 		internal int nodeProximity = 24;
 
 
-		internal MinionPathfindingHelper(Minion minion)
+		internal MinionPathfindingHelper(IMinion minion)
 		{
 			this.minion = minion;
 		}

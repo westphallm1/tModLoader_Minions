@@ -21,34 +21,30 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 	public abstract class SimpleMinion : Minion, ISimpleMinion
 	{
-		public Vector2 VectorToIdle { get; set; }
-		public Vector2? VectorToTarget { get; set; }
-		public Vector2 OldVectorToIdle { get; set; }
-		public Vector2? OldVectorToTarget { get; set; }
-		public int? OldTargetNpcIndex { get; set; }
-		public int FramesSinceHadTarget { get; set; } = 0;
-		public bool AttackThroughWalls { get; set; } = false;
-		public bool DealsContactDamage { get; set; } = true;
-		public int FrameSpeed { get; set; } = 5;
-		public int ProximityForOnHitTarget { get; set; } = 24;
-		public int TargetFrameCounter { get; set; } = 0;
-		public int NoLOSPursuitTime { get; set; } = 15; // time to chase the NPC after losing sight
-		public MinionPathfindingHelper Pathfinder { get; set; }
-		public bool UsesTactics { get; set; } = true;
-		public int AnimationFrame { get; set; }
+		public Vector2 VectorToIdle { get => SimpleBehavior.VectorToIdle; set => SimpleBehavior.VectorToIdle = value; }
+		public Vector2? VectorToTarget { get => SimpleBehavior.VectorToTarget; set => SimpleBehavior.VectorToTarget = value; }
+		public Vector2 OldVectorToIdle { get => SimpleBehavior.OldVectorToIdle; set => SimpleBehavior.OldVectorToIdle = value; }
+		public Vector2? OldVectorToTarget { get => SimpleBehavior.OldVectorToTarget; set => SimpleBehavior.OldVectorToTarget = value; }
+		public int? OldTargetNpcIndex { get => SimpleBehavior.OldTargetNpcIndex; set => SimpleBehavior.OldTargetNpcIndex = value; }
+		public int FramesSinceHadTarget { get => SimpleBehavior.FramesSinceHadTarget; set => SimpleBehavior.FramesSinceHadTarget = value; }
+		public bool AttackThroughWalls { get => SimpleBehavior.AttackThroughWalls; set => SimpleBehavior.AttackThroughWalls = value; }
+		public bool DealsContactDamage { get => SimpleBehavior.DealsContactDamage; set => SimpleBehavior.DealsContactDamage = value; }
+		public int FrameSpeed { get => SimpleBehavior.FrameSpeed; set => SimpleBehavior.FrameSpeed = value; }
+		public int NoLOSPursuitTime { get => SimpleBehavior.NoLOSPursuitTime; set => SimpleBehavior.NoLOSPursuitTime = value; }
+		public MinionPathfindingHelper Pathfinder { get => SimpleBehavior.Pathfinder; set => SimpleBehavior.Pathfinder = value; }
+		public bool UsesTactics { get => SimpleBehavior.UsesTactics; set => SimpleBehavior.UsesTactics = value; }
+		public int AnimationFrame { get => SimpleBehavior.AnimationFrame; set => SimpleBehavior.AnimationFrame = value; }
 		public virtual WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
 
 
-		public int GroupAnimationFrames = 180;
-		public int GroupAnimationFrame
-		{
-			get => Player.GetModPlayer<MinionSpawningItemPlayer>().idleMinionSyncronizationFrame % GroupAnimationFrames;
-		}
-		public AttackState AttackState { get; set; } = AttackState.IDLE;
+		public int GroupAnimationFrames => SimpleBehavior.GroupAnimationFrames;
+		public int GroupAnimationFrame => SimpleBehavior.GroupAnimationFrame;
+
+		public AttackState AttackState { get => SimpleBehavior.AttackState; set => SimpleBehavior.AttackState = value; }
 
 		internal bool IsPrimaryFrame => Projectile.extraUpdates == 0 || AnimationFrame % (Projectile.extraUpdates + 1) == 0;
 
-		internal new SimpleMinionBehavior MinionBehavior;
+		internal SimpleMinionBehavior SimpleBehavior => (SimpleMinionBehavior) MinionBehavior;
 
 		public override void SetStaticDefaults()
 		{
@@ -87,7 +83,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			// Makes sure this projectile is synced to other newly joined players 
 			Projectile.netImportant = true;
 
-			Pathfinder = new MinionPathfindingHelper(this);
 			MinionBehavior = new SimpleMinionBehavior(this);
 		}
 
@@ -143,7 +138,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		}
 
 		public override void Behavior()
-			=> MinionBehavior.MainBehavior();
+			=> SimpleBehavior.MainBehavior();
 
 		/**
 		 * Multiplayer safe approximation of OnHitNPC
@@ -156,15 +151,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		// utility methods
 		public void TeleportToPlayer(ref Vector2 vectorToIdlePosition, float maxDistance)
-			=> MinionBehavior.TeleportToPlayer(ref vectorToIdlePosition, maxDistance);
+			=> SimpleBehavior.TeleportToPlayer(ref vectorToIdlePosition, maxDistance);
 
 
-		public List<Projectile> GetMinionsOfType(int projectileType) => MinionBehavior.GetMinionsOfType(projectileType);
+		public List<Projectile> GetMinionsOfType(int projectileType) => SimpleBehavior.GetMinionsOfType(projectileType);
 
 		/**
 		 * Optionally introduce a shot spread to minions for a gameplay experience closer to standard
 		 * vanilla ai
 		 */
-		internal Vector2 VaryLaunchVelocity(Vector2 initial) => MinionBehavior.VaryLaunchVelocity(initial);
+		internal Vector2 VaryLaunchVelocity(Vector2 initial) => SimpleBehavior.VaryLaunchVelocity(initial);
 	}
 }

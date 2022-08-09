@@ -23,20 +23,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	public abstract class Minion : ModProjectile, IMinion
 	{
 
-		public Player Player { get; set; }
+		internal MinionBehavior MinionBehavior;
 
-		public int? TargetNPCIndex { get; set; }
-		public int TargetNPCCacheFrames { get; set; }
+		public Player Player { get => MinionBehavior.Player; set => MinionBehavior.Player = value; }
+
+		public int? TargetNPCIndex { get => MinionBehavior.TargetNPCIndex; set => MinionBehavior.TargetNPCIndex = value; }
+		public int TargetNPCCacheFrames { get => MinionBehavior.TargetNPCCacheFrames; set => MinionBehavior.TargetNPCCacheFrames = value; }
 
 
-		public bool UseBeacon { get; set; } = true;
+		public bool UseBeacon { get => MinionBehavior.UseBeacon; set => MinionBehavior.UseBeacon = value; }
 
-		public bool UsingBeacon { get; set; } = false;
+		public bool UsingBeacon { get => MinionBehavior.UsingBeacon; set => MinionBehavior.UsingBeacon = value; }
 
-		public PlayerTargetSelectionTactic CurrentTactic { get; set; }
-		public PlayerTargetSelectionTactic PreviousTactic { get; set; }
+		public PlayerTargetSelectionTactic CurrentTactic { get => MinionBehavior.CurrentTactic; set => MinionBehavior.CurrentTactic = value; }
+		public PlayerTargetSelectionTactic PreviousTactic { get => MinionBehavior.PreviousTactic; set => MinionBehavior.PreviousTactic = value; }
 
-		public bool Spawned { get; private set; }
+		public bool Spawned { get => MinionBehavior.Spawned; private set => MinionBehavior.Spawned = value; }
 
 		public abstract int BuffId { get; }
 
@@ -45,7 +47,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// Many unsafe gets to this
 		protected List<Asset<Texture2D>> ExtraTextures;
 
-		internal MinionBehavior MinionBehavior;
 
 		public override void SetStaticDefaults()
 		{
