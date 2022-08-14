@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		}
 
 
-		public override void Behavior()
+		public override void DoAI()
 		{
 			Projectile.friendly = false;
 			Projectile.velocity = Vector2.Zero;

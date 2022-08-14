@@ -18,9 +18,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		bool DoVanillaAI();
 		void PostAI();
 
-		// This is a little roundabout circular reference. Should still be garbage collected (maybe)
-		SimpleMinionBehavior Behavior { get; }
-
 	}
 
 	internal delegate ICrossModSimpleMinion CrossModAISupplier(Projectile projectile);

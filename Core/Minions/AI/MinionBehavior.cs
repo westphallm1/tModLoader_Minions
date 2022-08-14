@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 	}
 
 
-	internal class MinionBehavior
+	public class MinionBehavior
 	{
 		public Player Player { get; set; }
 

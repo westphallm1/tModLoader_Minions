@@ -21,9 +21,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	public abstract class GroupAwareMinion : SimpleMinion
 	{
 
-		private List<Projectile> others = null;
-		private Projectile leader = null;
-		private Projectile head = null;
 		public int attackFrames = 60;
 		public int attackFrame
 		{
@@ -31,51 +28,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			set => Projectile.ai[0] = value;
 		}
 
-		public override void SetDefaults()
-		{
-			base.SetDefaults();
-		}
+		public List<Projectile> GetActiveMinions() => Behavior.GetActiveMinions();
 
-		public List<Projectile> GetActiveMinions()
-		{
-			if (others == null)
-			{
-				others = GetMinionsOfType(Projectile.type);
-			}
-			return others;
-		}
+		public List<Projectile> GetAllMinionsOwnedByPlayer() => Behavior.GetAllMinionsOwnedByPlayer();
 
-		public List<Projectile> GetAllMinionsOwnedByPlayer()
-		{
-			return Main.projectile
-				.Where(p => p.active && p.owner == Projectile.owner && (p.minion || ProjectileID.Sets.MinionShot[p.type]))
-				.ToList();
-		}
+		public Projectile GetHead(int headType) => Behavior.GetHead(headType);
 
-		public Projectile GetHead(int headType)
-		{
-			if (head == null)
-			{
-				head = GetMinionsOfType(headType).FirstOrDefault();
-			}
-			return head;
-		}
+		public Projectile GetFirstMinion(List<Projectile> others = null) => Behavior.GetFirstMinion(others);
 
-		public Projectile GetFirstMinion(List<Projectile> others = null)
-		{
-			if (leader == null)
-			{
-				leader = (others ?? GetActiveMinions()).FirstOrDefault();
-
-			}
-			return leader;
-		}
+		public void DistanceFromGroup(ref Vector2 distanceToTarget, int separation = 16, int closeDistance = 32)
+			=> Behavior.DistanceFromGroup(ref distanceToTarget, separation, closeDistance);
 
 		public override Vector2 IdleBehavior()
 		{
-			leader = null;
-			others = null;
-			head = null;
 			if(IsPrimaryFrame)
 			{
 				attackFrame = (attackFrame + 1) % attackFrames;
@@ -100,28 +65,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			int attackFrame = order * (attackFrames / minions.Count);
 			int currentFrame = (int)leader.ai[0];
 			return currentFrame == attackFrame;
-		}
-
-		public void DistanceFromGroup(ref Vector2 distanceToTarget, int separation = 16, int closeDistance = 32)
-		{
-			// if multiple minions are gathered on a target, space them out a little bit
-			if (distanceToTarget.Length() < closeDistance)
-			{
-				foreach (Projectile otherMinion in GetAllMinionsOwnedByPlayer())
-				{
-					if (otherMinion.whoAmI == Projectile.whoAmI)
-					{
-						continue;
-					}
-					if (Projectile.Hitbox.Intersects(otherMinion.Hitbox))
-					{
-						Vector2 difference = otherMinion.Center - Projectile.Center;
-						difference.SafeNormalize();
-						distanceToTarget += -separation * difference;
-					}
-				}
-			}
-
 		}
 
 		protected Vector2? FindTargetInTurnOrder(float searchDistance, Vector2 center, float noLOSDistance = 0)

@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.AI;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -75,7 +76,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal float leadShotsFraction = 0.167f;
 		internal bool inAttackRange;
 
-		private SimpleMinion minion;
+		private ISimpleMinion minion;
 		private Projectile projectile => minion.Projectile;
 		internal int? firedProjectileId;
 
@@ -86,9 +87,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal ModifyMovementVector ModifyTargetVector;
 		internal Action<Vector2, int, float> CustomFireProjectile;
 
+		internal SimpleMinionBehavior Behavior => minion.Behavior;
 
 
-		public HoverShooterHelper(SimpleMinion minion, int? firedProjectileType)
+
+		public HoverShooterHelper(ISimpleMinion minion, int? firedProjectileType)
 		{
 			this.minion = minion;
 			this.firedProjectileId = firedProjectileType;
@@ -99,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Projectile.NewProjectile(
 				projectile.GetSource_FromThis(),
 				projectile.Center,
-				minion.VaryLaunchVelocity(lineOfFire),
+				Behavior.VaryLaunchVelocity(lineOfFire),
 				projId,
 				projectile.damage,
 				projectile.knockBack,
@@ -114,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			Vector2 oppositeVector = -vectorToTargetPosition;
 			oppositeVector.SafeNormalize();
 			float targetDistanceFromFoe = distanceCyle == 1 ? targetInnerRadius : targetOuterRadius;
-			if (minion.TargetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
+			if (minion.Behavior.TargetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
 			{
 				// use the average of the width and height to get an approximate "radius" for the enemy
 				NPC npc = Main.npc[targetIdx];
@@ -136,16 +139,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				inAttackRange = false;
 			}
 			bool? doAttack = ExtraAttackConditionsMet?.Invoke();
-			if ((doAttack is null || doAttack == true) && minion.AnimationFrame - lastShootFrame >= attackFrames 
+			if ((doAttack is null || doAttack == true) && Behavior.AnimationFrame - lastShootFrame >= attackFrames 
 				&& vectorToTargetPosition.LengthSquared() < targetShootProximityRadius * targetShootProximityRadius)
 			{
 				lineOfFire.SafeNormalize();
 				lineOfFire *= projectileVelocity;
-				if(minion.TargetNPCIndex is int idx && Main.npc[idx].active)
+				if(Behavior.TargetNPCIndex is int idx && Main.npc[idx].active)
 				{
 					lineOfFire += Main.npc[idx].velocity * leadShotsFraction;
 				}
-				lastShootFrame = minion.AnimationFrame;
+				lastShootFrame = Behavior.AnimationFrame;
 				if(Main.myPlayer == minion.Player.whoAmI && firedProjectileId is int projId)
 				{
 					(CustomFireProjectile ?? FireProjectile).Invoke(lineOfFire, projId, 0);

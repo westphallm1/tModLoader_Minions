@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			Projectile.height = 24;
 			attackFrames = 60;
 			targetSearchDistance = 600;
-			circleHelper.idleBumble = false;
+			circleHelper.IdleBumble = false;
 			bumbleSpriteDirection = -1;
 			maxSpeed = 16;
 			idleInertia = 8;

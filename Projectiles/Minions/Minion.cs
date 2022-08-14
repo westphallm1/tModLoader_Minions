@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				OnSpawn();
 			}
 			UsingBeacon = false;
-			Behavior();
+			DoAI();
 		}
 
 		public virtual void OnSpawn()
@@ -150,7 +150,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			}
 		}
 
-		public abstract void Behavior();
+		public abstract void DoAI();
 
 		public virtual void ApplyCrossModChanges() { }
 	}

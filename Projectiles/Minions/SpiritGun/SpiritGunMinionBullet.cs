@@ -91,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		}
 
 
-		public override void Behavior()
+		public override void DoAI()
 		{
 			// no-op
 		}

@@ -84,7 +84,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			DealsContactDamage = false;
 			circleHelper.idleCircle = 20;
 			circleHelper.idleCircleHeight = 8;
-			circleHelper.idleBumble = false;
+			circleHelper.IdleBumble = false;
 			circleHelper.MyGetIdleSpaceSharingMinions = GetIdleSpaceSharingMinions;
 			circleHelper.GetCenterOfRotation = CenterOfRotation;
 		}

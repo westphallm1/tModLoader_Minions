@@ -44,9 +44,9 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			return Vector2.Zero;
 		}
 
-		public override void Behavior()
+		public override void DoAI()
 		{
-			base.Behavior();
+			base.DoAI();
 			Projectile.tileCollide = tileCollide;
 		}
 

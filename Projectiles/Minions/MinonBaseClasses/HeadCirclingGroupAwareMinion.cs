@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.AI;
 using AmuletOfManyMinions.Items.Accessories;
 using Microsoft.Xna.Framework;
 using System;
@@ -34,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			if(circleHelper.idleBumble && Player.velocity.Length() < 4)
+			if(circleHelper.IdleBumble && Player.velocity.Length() < 4)
 			{
 				return circleHelper.BumblingHeadCircle();
 			} else
@@ -64,7 +65,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				{
 					Projectile.rotation = 0;
 				}
-				if(circleHelper.idleBumble && Player.velocity.Length() < 4)
+				if(circleHelper.IdleBumble && Player.velocity.Length() < 4)
 				{
 					Projectile.spriteDirection = bumbleSpriteDirection * Math.Sign(circleHelper.bumbleTarget.X);
 				} else
@@ -84,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 	public class HeadCirclingHelper
 	{
-		internal SimpleMinion minion;
+		internal ISimpleMinion minion;
 
 		internal Projectile projectile => minion.Projectile;
 
@@ -96,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		internal int idleInertia = 15;
 		internal int maxSpeed = 12;
 
-		internal bool idleBumble = true;
+		internal bool IdleBumble { get; set; } = true;
 		internal int idleBumbleRadius = 128;
 		internal int idleBumbleFrames = 60;
 		internal float travelFraction;
@@ -107,7 +108,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		internal Func<List<Projectile>> MyGetIdleSpaceSharingMinions;
 
-		public HeadCirclingHelper(SimpleMinion minion)
+		public HeadCirclingHelper(ISimpleMinion minion)
 		{
 			this.minion = minion;
 		}
@@ -153,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			}
 			travelFraction = ((idleSyncFrame + idleSyncOffset) % idleBumbleFrames) / (float)idleBumbleFrames;
 			Vector2 vectorToIdlePosition = rotationCenter + bumbleTarget * travelFraction - projectile.Center;
-			minion.TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			minion.Behavior.TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			float maxIdleTravelSpeed = player.velocity.Length() + (idleBumbleRadius * 2) / (float)idleBumbleFrames;
 			if(vectorToIdlePosition.LengthSquared() > maxIdleTravelSpeed && Vector2.Distance(projectile.Center, rotationCenter) < 1.25f * idleBumbleRadius)
 			{
@@ -179,12 +180,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 				}
 				int order = minions.IndexOf(projectile);
 				idleAngle = (2 * MathHelper.Pi * order) / minionCount;
-				idleAngle += 2 * MathHelper.Pi * minion.GroupAnimationFrame / minion.GroupAnimationFrames;
+				idleAngle += 2 * MathHelper.Pi * minion.Behavior.GroupAnimationFrame / minion.Behavior.GroupAnimationFrames;
 				idlePosition.X += 2 + radius * (float)Math.Cos(idleAngle);
 				idlePosition.Y += -20 + idleCircleHeight * (float)Math.Sin(idleAngle);
 			}
 			Vector2 vectorToIdlePosition = idlePosition - projectile.Center;
-			minion.TeleportToPlayer(ref vectorToIdlePosition, 2000f);
+			minion.Behavior.TeleportToPlayer(ref vectorToIdlePosition, 2000f);
 			return vectorToIdlePosition;
 		}
 	}

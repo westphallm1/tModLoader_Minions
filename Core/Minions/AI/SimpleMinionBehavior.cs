@@ -8,11 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 
 namespace AmuletOfManyMinions.Core.Minions.AI
 {
 	public interface ISimpleMinion : IMinion
 	{
+
+		// This is a little roundabout circular reference. Should still be garbage collected (maybe)
+		SimpleMinionBehavior Behavior { get; }
+
 		WaypointMovementStyle WaypointMovementStyle { get; }
 
 		void AfterMoving();
@@ -39,7 +44,20 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 		void TargetedMovement(Vector2 vectorToTargetPosition);
 	}
 
-	internal class SimpleMinionBehavior : MinionBehavior
+	internal class MinionGroupState
+	{
+		internal List<Projectile> Others { get; set; }
+		internal Projectile Leader { get; set; }
+		internal Projectile Head { get; set; }
+
+		internal void Clear()
+		{
+			Others = null;
+			Leader = null;
+			Head = null;
+		}
+	}
+	public class SimpleMinionBehavior : MinionBehavior
 	{
 
 		// Instance variables, not sure if it's the best to put them here
@@ -59,6 +77,8 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 		internal Vector2 VectorToIdle { get; set; }
 		internal Vector2? VectorToTarget { get; set; }
 		internal AttackState AttackState { get; set; } = AttackState.IDLE;
+
+		internal MinionGroupState GroupState { get; set; } = new();
 
 		internal bool IsFollowingBeacon { get; set; }
 
@@ -81,6 +101,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 		public void MainBehavior()
 		{
 			TargetNPCIndex = null;
+			GroupState.Clear();
 			VectorToIdle = Minion.IdleBehavior();
 
 			// Determine whether to update tactic selection, and whether th change pathfinding state
@@ -278,6 +299,53 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			else
 			{
 				return initial.RotatedBy(Main.rand.NextFloat(minRotation) - minRotation / 2);
+			}
+		}
+
+		// Methods lifted from GroupAwareMinion, used by many subclasses
+		public List<Projectile> GetActiveMinions()
+		{
+			GroupState.Others ??= GetMinionsOfType(Projectile.type);
+			return GroupState.Others;
+		}
+
+		public List<Projectile> GetAllMinionsOwnedByPlayer()
+		{
+			return Main.projectile
+				.Where(p => p.active && p.owner == Projectile.owner && (p.minion || ProjectileID.Sets.MinionShot[p.type]))
+				.ToList();
+		}
+
+		public Projectile GetHead(int headType)
+		{
+			GroupState.Head ??= GetMinionsOfType(headType).FirstOrDefault();
+			return GroupState.Head;
+		}
+
+		public Projectile GetFirstMinion(List<Projectile> others = null)
+		{
+			GroupState.Leader ??= (others ?? GetActiveMinions()).FirstOrDefault();
+			return GroupState.Leader;
+		}
+
+		public void DistanceFromGroup(ref Vector2 distanceToTarget, int separation = 16, int closeDistance = 32)
+		{
+			// if multiple minions are gathered on a target, space them out a little bit
+			if (distanceToTarget.Length() < closeDistance)
+			{
+				foreach (Projectile otherMinion in GetAllMinionsOwnedByPlayer())
+				{
+					if (otherMinion.whoAmI == Projectile.whoAmI)
+					{
+						continue;
+					}
+					if (Projectile.Hitbox.Intersects(otherMinion.Hitbox))
+					{
+						Vector2 difference = otherMinion.Center - Projectile.Center;
+						difference.SafeNormalize();
+						distanceToTarget += -separation * difference;
+					}
+				}
 			}
 		}
 	}
