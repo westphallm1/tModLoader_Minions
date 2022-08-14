@@ -43,7 +43,9 @@ using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.NPCs
 {
-	public class LootTable : GlobalNPC
+	//This file contains both loot for NPCs and for items
+
+	public class LootTableGlobalNPC : GlobalNPC
 	{
 		private static void AddExpertScalingRuleCommon(ILoot loot, int itemId, int chanceDenominator = 1, int minimumDropped = 1, int maximumDropped = 1, int chanceNumerator = 1, IItemDropRule ruleExpert = null, IItemDropRule ruleNormal = null)
 		{
@@ -370,9 +372,65 @@ namespace AmuletOfManyMinions.NPCs
 		}
 	}
 
-	public class BossBagGlobalItem : GlobalItem
+	public class LootTableGlobalItem : GlobalItem
 	{
+		public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
+		{
+			switch (item.type)
+			{
+				case ItemID.QueenBeeBossBag:
+					//ItemDropRule.Common does not allow customizing chanceNumerator pre-1.4.4 Terraria
+					itemLoot.Add(new CommonDrop(ItemType<BeeQueenMinionItem>(), chanceDenominator: 3, chanceNumerator: 2));
+					break;
+				case ItemID.SkeletronBossBag:
+					itemLoot.Add(ItemDropRule.Common(ItemType<SquireSkullAccessory>()));
+					itemLoot.Add(ItemDropRule.Common(ItemType<BoneWaypointRod>()));
+					break;
+				case ItemID.WallOfFleshBossBag:
+					itemLoot.Add(new CommonDrop(ItemType<BoneSerpentMinionItem>(), chanceDenominator: 3, chanceNumerator: 2));
+					break;
+				case ItemID.PlanteraBossBag:
+					itemLoot.Add(new CommonDrop(ItemType<PottedPalMinionItem>(), chanceDenominator: 3, chanceNumerator: 2));
+					break;
+				case ItemID.MoonLordBossBag:
+					itemLoot.Add(ItemDropRule.Common(ItemType<TrueEyeWaypointRod>()));
+					break;
+				case ItemID.FairyQueenBossBag:
+					itemLoot.Add(new CommonDrop(ItemType<EmpressSquireMinionItem>(), chanceDenominator: 3, chanceNumerator: 2));
+					break;
+				// fishing crate chest loot
+				case ItemID.WoodenCrate:
+				case ItemID.IronCrate:
+				case ItemID.WoodenCrateHard:
+				case ItemID.IronCrateHard:
+					itemLoot.Add(new CommonDrop(ItemType<TumbleSheepMinionItem>(), chanceDenominator: 100, chanceNumerator: 3));
+					itemLoot.Add(new CommonDrop(ItemType<RatsMinionItem>(), chanceDenominator: 100, chanceNumerator: 6));
+					break;
+				case ItemID.JungleFishingCrate:
+				case ItemID.JungleFishingCrateHard:
+					itemLoot.Add(new CommonDrop(ItemType<BalloonMonkeyMinionItem>(), chanceDenominator: 6, chanceNumerator: 1));
+					break;
+				case ItemID.FloatingIslandFishingCrate:
+				case ItemID.FloatingIslandFishingCrateHard:
+					itemLoot.Add(new CommonDrop(ItemType<SkywareSquireMinionItem>(), chanceDenominator: 6, chanceNumerator: 1));
+					break;
+				case ItemID.OceanCrate:
+				case ItemID.OceanCrateHard:
+					itemLoot.Add(new CommonDrop(ItemType<FishBowlMinionItem>(), chanceDenominator: 6, chanceNumerator: 1));
+					break;
+				case ItemID.LockBox:
+					itemLoot.Add(new CommonDrop(ItemType<ExciteSkullMinionItem>(), chanceDenominator: 6, chanceNumerator: 1));
+					break;
+				case ItemID.ObsidianLockbox:
+					itemLoot.Add(new CommonDrop(ItemType<DemonSquireMinionItem>(), chanceDenominator: 6, chanceNumerator: 1));
+					break;
+				default:
+					break;
+			}
+		}
 
+		//Old code kept for reference
+		/*
 		public override void OpenVanillaBag(string context, Player player, int arg)
 		{
 			float spawnChance = Main.rand.NextFloat();
@@ -432,6 +490,6 @@ namespace AmuletOfManyMinions.NPCs
 				player.QuickSpawnItem(source, ItemType<DemonSquireMinionItem>());
 			}
 		}
-
+		*/
 	}
 }
