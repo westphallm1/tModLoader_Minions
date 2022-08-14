@@ -35,6 +35,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		private Vector2 CachedVelocity { get; set; }
 		private Vector2 CachedPosition { get; set; }
 
+		private Vector2 CachedPlayerPosition { get; set; }
+
 		public BasicCrossModAI(
 			Projectile projectile, int buffId, int maxSpeed, int inertia = 8, int searchRange = 600, bool defaultPathfinding = false)
 		{
@@ -60,15 +62,22 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			{
 				vectorToIdlePosition.Normalize();
 				vectorToIdlePosition *= MaxSpeed;
-			} else if (!Behavior.Pathfinder.InTransit && vectorToIdlePosition.LengthSquared() < MaxSpeed * MaxSpeed)
+			} 
+			
+			
+			if (!Behavior.Pathfinder.InTransit && vectorToIdlePosition.LengthSquared() < MaxSpeed * MaxSpeed)
 			{
 				CachedVelocity = vectorToIdlePosition;
-				CachedPosition = Projectile.position;
-				return;
+			} else
+			{
+				CachedVelocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
 			}
 
-			CachedVelocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
 			CachedPosition = Projectile.position;
+			// trick to force many vanilla-styled minions into their flying animation
+			// Would be surprised if this did not have unintended side effects
+			CachedPlayerPosition = Player.position;
+			Player.position.Y = CachedPosition.Y + 300;
 		}
 		
 		public Vector2? FindTarget()
@@ -82,6 +91,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 			Projectile.velocity = CachedVelocity;
 			Projectile.position = CachedPosition;
+			Player.position = CachedPlayerPosition;
 		}
 
 		public void AfterMoving() 
