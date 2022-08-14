@@ -13,7 +13,7 @@ using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static AmuletOfManyMinions.AmuletOfManyMinions;
+using static AmuletOfManyMinions.CrossMod;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Items.Accessories

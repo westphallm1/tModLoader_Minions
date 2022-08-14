@@ -16,12 +16,26 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 		WaypointMovementStyle WaypointMovementStyle { get; }
 
 		void AfterMoving();
-		void Animate(int minFrame = 0, int? maxFrame = null);
-		Vector2? FindTarget();
+		public void Animate(int minFrame = 0, int? maxFrame = null)
+		{
+			// Empty default
+		}
+
+		public Vector2? FindTarget()
+		{
+			// Empty default
+			return default;
+		}
+
 		Vector2 IdleBehavior();
 		void IdleMovement(Vector2 vectorToIdlePosition);
-		bool MinionContactDamage();
-		void OnHitTarget(NPC target);
+		public bool MinionContactDamage() => true;
+
+		public void OnHitTarget(NPC target)
+		{
+			// Empty default
+		}
+
 		void TargetedMovement(Vector2 vectorToTargetPosition);
 	}
 
@@ -45,6 +59,8 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 		internal Vector2 VectorToIdle { get; set; }
 		internal Vector2? VectorToTarget { get; set; }
 		internal AttackState AttackState { get; set; } = AttackState.IDLE;
+
+		internal bool IsFollowingBeacon { get; set; }
 
 		private readonly int ProximityForOnHitTarget = 24;
 
@@ -72,7 +88,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			var tacticsPlayer = Player.GetModPlayer<MinionTacticsPlayer>();
 			var waypointsPlayer = Player.GetModPlayer<MinionPathfindingPlayer>();
 			bool didChangePathfindingState = false;
-			bool isFollowingPath = false;
+			IsFollowingBeacon = false;
 			bool tacticMissing = false;
 			if (UseBeacon && UsesTactics)
 			{
@@ -133,7 +149,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			// If no target and beacon is active, follow the beacon
 			else if (useBeaconThisFrame && Pathfinder.NextPathfindingTarget() is Vector2 pathNode)
 			{
-				isFollowingPath = true;
+				IsFollowingBeacon = true;
 				Projectile.friendly = false;
 				if (Pathfinder.isStuck)
 				{
@@ -169,7 +185,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			}
 
 			// If we've reached the end of the pathfinding path, return to regular AI
-			if (UseBeacon && !isFollowingPath)
+			if (UseBeacon && !IsFollowingBeacon)
 			{
 				Pathfinder.DetachFromPath();
 			}

@@ -20,8 +20,14 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 
 		int BuffId { get; }
 
-		void OnSpawn();
-		bool ShouldIgnoreNPC(NPC npc);
+		public void OnSpawn()
+		{
+
+		}
+		public bool ShouldIgnoreNPC(NPC npc)
+		{
+			return !npc.CanBeChasedBy();
+		}
 	}
 
 

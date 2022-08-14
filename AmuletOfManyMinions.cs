@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions
 		internal static ModKeybind CycleTacticHotKey;
 		internal static ModKeybind CycleTacticsGroupHotKey;
 		internal static ModKeybind QuickDefendHotKey;
-		internal static bool SummonersAssociationLoaded;
+
 		public override void Load()
 		{
 			NetHandler.Load();
