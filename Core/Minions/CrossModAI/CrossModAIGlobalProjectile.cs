@@ -54,10 +54,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public override bool PreAI(Projectile projectile)
 		{
-			if(CrossModAI == default)
-			{
-				return true;
-			}
+			if(CrossModAI == default) { return true; }
 			CrossModAI.Behavior.MainBehavior();
 			// This feels a little roundabout
 			return CrossModAI.DoVanillaAI();
@@ -65,7 +62,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public override void PostAI(Projectile projectile)
 		{
-			// TODO
+			CrossModAI?.PostAI();
 		}
 	}
 }

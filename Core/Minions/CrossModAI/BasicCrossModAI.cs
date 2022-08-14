@@ -27,19 +27,23 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		private int Inertia { get; set; }
 		private int SearchRange { get; set; }
 
+		private bool UseDefaultPathfindingMovement { get; set; }
+
 		/// <summary>
 		/// Cache the projectile's velocity
 		/// </summary>
 		private Vector2 CachedVelocity { get; set; }
 		private Vector2 CachedPosition { get; set; }
 
-		public BasicCrossModAI(Projectile projectile, int buffId, int maxSpeed, int inertia = 8, int searchRange = 600)
+		public BasicCrossModAI(
+			Projectile projectile, int buffId, int maxSpeed, int inertia = 8, int searchRange = 600, bool defaultPathfinding = false)
 		{
 			Projectile = projectile;
 			BuffId = buffId;
 			MaxSpeed = maxSpeed;
 			Inertia = inertia;
 			SearchRange = searchRange;
+			UseDefaultPathfindingMovement = defaultPathfinding;
 			
 			Behavior = new(this);
 			Behavior.Player = Player;
@@ -50,16 +54,20 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// Only take over idle movement if pathfinding
-			if(!Behavior.IsFollowingBeacon) { return;  }
+			if(!Behavior.IsFollowingBeacon || !UseDefaultPathfindingMovement) { return; }
 
 			if(vectorToIdlePosition.LengthSquared() > MaxSpeed * MaxSpeed)
 			{
 				vectorToIdlePosition.Normalize();
 				vectorToIdlePosition *= MaxSpeed;
+			} else if (!Behavior.Pathfinder.InTransit && vectorToIdlePosition.LengthSquared() < MaxSpeed * MaxSpeed)
+			{
+				CachedVelocity = vectorToIdlePosition;
+				CachedPosition = Projectile.position;
+				return;
 			}
 
-			Projectile.velocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
-			CachedVelocity = Projectile.velocity;
+			CachedVelocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
 			CachedPosition = Projectile.position;
 		}
 		
@@ -70,7 +78,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public void PostAI()
 		{
-			if(!Behavior.IsFollowingBeacon) { return; }
+			if(!Behavior.IsFollowingBeacon || !UseDefaultPathfindingMovement) { return; }
 
 			Projectile.velocity = CachedVelocity;
 			Projectile.position = CachedPosition;

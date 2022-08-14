@@ -50,13 +50,20 @@ namespace AmuletOfManyMinions.CrossModSystem
 		}
 
 
+		private static void AddBuffMappingIdempotent(ModBuff buff)
+		{
+			if(!MinionTacticsGroupMapper.TypeToHashDict.ContainsKey(buff.Type))
+			{
+				MinionTacticsGroupMapper.AddBuffMapping(buff);
+			}
+		}
 
 		internal static object RegisterPathfinder(ModProjectile proj, ModBuff buff, int travelSpeed, int inertia, int searchRange)
 		{
-			MinionTacticsGroupMapper.AddBuffMapping(buff);
+			AddBuffMappingIdempotent(buff);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 			{
-				return new BasicCrossModAI(proj, buff.Type, travelSpeed, inertia, searchRange);
+				return new BasicCrossModAI(proj, buff.Type, travelSpeed, inertia, searchRange, defaultPathfinding: true);
 			};
 			return default;
 		}
