@@ -14,6 +14,7 @@ using Terraria.GameContent.Creative;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Items.Accessories.CombatPetAccessories;
+using AmuletOfManyMinions.CrossModSystem;
 
 namespace AmuletOfManyMinions
 {
@@ -50,6 +51,10 @@ namespace AmuletOfManyMinions
 			
 		}
 
+		public override object Call(params object[] args)
+		{
+			return ModCallHandler.HandleCall(args);
+		}
 		public override void Unload()
 		{
 			NetHandler.Unload();

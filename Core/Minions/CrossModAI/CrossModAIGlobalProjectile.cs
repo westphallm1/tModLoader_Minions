@@ -25,26 +25,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 	internal delegate ICrossModSimpleMinion CrossModAISupplier(Projectile projectile);
 
-	internal class CrossModAIGlobalProjectileSystem : ModSystem
-	{
-
-		public override void PostSetupContent()
-		{
-			base.PostAddRecipes();
-			if (ModLoader.TryGetMod("ExampleMod", out Mod exampleMod))
-			{
-				int exampleMinionType = exampleMod.Find<ModProjectile>("ExampleSimpleMinion").Type;
-				ModBuff exampleMinionBuff = exampleMod.Find<ModBuff>("ExampleSimpleMinionBuff");
-
-				MinionTacticsGroupMapper.AddBuffMapping(exampleMinionBuff);
-				CrossModAIGlobalProjectile.CrossModAISuppliers[exampleMinionType] = proj =>
-				{
-					return new FollowWaypointCrossModAI(proj, exampleMinionBuff.Type, 8);
-				};
-			}
-		}
-	}
-
 	internal class CrossModAIGlobalProjectile : GlobalProjectile
 	{
 
@@ -63,14 +43,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		{
 			CrossModAISuppliers = null;
 			CrossModAIs = null;
-		}
-
-		public override void SetDefaults(Projectile projectile)
-		{
-			//if(CrossModAISuppliers.TryGetValue(projectile.type, out var supplier))
-			//{
-			//	CrossModAIs[projectile.whoAmI] = supplier.Invoke(projectile);
-			//}
 		}
 
 		public override bool PreAI(Projectile projectile)
