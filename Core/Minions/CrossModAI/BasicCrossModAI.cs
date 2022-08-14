@@ -10,7 +10,11 @@ using Terraria;
 
 namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 {
-	internal class FollowWaypointCrossModAI : ICrossModSimpleMinion
+	/// <summary>
+	/// Basic cross-mod AI that allows for exposing AoMM-tracked state to other mods. Also include
+	/// the basic "follow waypoint" code here, since it's pretty simple.
+	/// </summary>
+	internal class BasicCrossModAI : ICrossModSimpleMinion
 	{
 
 		public Projectile Projectile { get; set; }
@@ -29,7 +33,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		private Vector2 CachedVelocity { get; set; }
 		private Vector2 CachedPosition { get; set; }
 
-		public FollowWaypointCrossModAI(Projectile projectile, int buffId, int maxSpeed, int inertia = 8, int searchRange = 600)
+		public BasicCrossModAI(Projectile projectile, int buffId, int maxSpeed, int inertia = 8, int searchRange = 600)
 		{
 			Projectile = projectile;
 			BuffId = buffId;
@@ -61,13 +65,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		
 		public Vector2? FindTarget()
 		{
-			// If we're at the edge of the beacon, break control of the projectile
-			// as soon as an enemy comes in range
-			if(!Behavior.Pathfinder.InTransit)
-			{
-				return Behavior.AnyEnemyInRange(SearchRange);
-			}
-			return default;
+			return Behavior.AnyEnemyInRange(SearchRange);
 		}
 
 		public void PostAI()

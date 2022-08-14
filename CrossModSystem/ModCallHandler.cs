@@ -9,8 +9,22 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.CrossModSystem
 {
+	internal static class ObjectArrayExtensions
+	{
+		public static T Get<T>(this object[] args, int idx, T defaultVal = default)
+		{
+			if(args.Length > idx)
+			{
+				return (T) args[idx];
+			} else
+			{
+				return defaultVal;
+			}
+		}
+	}
 	internal class ModCallHandler
 	{
+
 		internal static object HandleCall(params object[] args)
 		{
 			if(args.Length == 0)
@@ -26,7 +40,9 @@ namespace AmuletOfManyMinions.CrossModSystem
 			switch ((string)args[0])
 			{
 				case "RegisterPathfinder":
-					return RegisterPathfinder((ModProjectile)args[1], (ModBuff)args[2], (int)args[3]);
+					return RegisterPathfinder(
+						args.Get<ModProjectile>(1), args.Get<ModBuff>(2), 
+						args.Get(3, 8), args.Get(4, 12), args.Get(5, 600));
 				default:
 					break;
 			}
@@ -35,12 +51,12 @@ namespace AmuletOfManyMinions.CrossModSystem
 
 
 
-		internal static object RegisterPathfinder(ModProjectile proj, ModBuff buff, int travelSpeed)
+		internal static object RegisterPathfinder(ModProjectile proj, ModBuff buff, int travelSpeed, int inertia, int searchRange)
 		{
 			MinionTacticsGroupMapper.AddBuffMapping(buff);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 			{
-				return new FollowWaypointCrossModAI(proj, buff.Type, travelSpeed);
+				return new BasicCrossModAI(proj, buff.Type, travelSpeed, inertia, searchRange);
 			};
 			return default;
 		}

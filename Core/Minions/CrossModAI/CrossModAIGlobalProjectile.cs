@@ -28,51 +28,44 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 	internal class CrossModAIGlobalProjectile : GlobalProjectile
 	{
 
-		// TODO it might make sense to use InstancePerEntity rather than manually managing these lifecycles
+		public override bool InstancePerEntity => true;
 		internal static Dictionary<int, CrossModAISupplier> CrossModAISuppliers;
 
-		internal static Dictionary<int, ICrossModSimpleMinion> CrossModAIs;
+		internal ICrossModSimpleMinion CrossModAI { get; set; }
 
 		public override void Load()
 		{
 			CrossModAISuppliers = new();
-			CrossModAIs = new();
 		}
 
 		public override void Unload()
 		{
 			CrossModAISuppliers = null;
-			CrossModAIs = null;
+		}
+
+
+		public override void SetDefaults(Projectile projectile)
+		{
+			if(CrossModAISuppliers.TryGetValue(projectile.type, out var supplier))
+			{
+				CrossModAI = supplier.Invoke(projectile);
+			}
 		}
 
 		public override bool PreAI(Projectile projectile)
 		{
-			if(!CrossModAIs.TryGetValue(projectile.whoAmI, out var crossModMinion))
+			if(CrossModAI == default)
 			{
-				// TODO this might be too computationally intense
-				if(CrossModAISuppliers.TryGetValue(projectile.type, out var supplier))
-				{
-					CrossModAIs[projectile.whoAmI] = supplier.Invoke(projectile);
-				}
 				return true;
 			}
-			crossModMinion.Behavior.MainBehavior();
+			CrossModAI.Behavior.MainBehavior();
 			// This feels a little roundabout
-			return crossModMinion.DoVanillaAI();
+			return CrossModAI.DoVanillaAI();
 		}
 
 		public override void PostAI(Projectile projectile)
 		{
 			// TODO
 		}
-
-		public override void Kill(Projectile projectile, int timeLeft)
-		{
-			if(CrossModAIs.ContainsKey(projectile.whoAmI))
-			{
-				CrossModAIs.Remove(projectile.whoAmI);
-			}
-		}
-
 	}
 }
