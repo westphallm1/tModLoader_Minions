@@ -17,7 +17,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 	/// </summary>
 	internal class FlyingCrossModAI : GroupAwareCrossModAI, ICrossModSimpleMinion
 	{
-		internal int? FiredProjectileId { get; set; }
 
 		internal HoverShooterHelper HsHelper { get; set; }
 
@@ -25,9 +24,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		private int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
 
-		public FlyingCrossModAI(Projectile proj, int buffId, int? projId) : base(proj, buffId)
+		public FlyingCrossModAI(Projectile proj, int buffId, int? projId) : base(proj, buffId, projId)
 		{
-			FiredProjectileId = projId;
 			HsHelper = new HoverShooterHelper(this, FiredProjectileId)
 			{
 				AfterFiringProjectile = AfterFiringProjectile,

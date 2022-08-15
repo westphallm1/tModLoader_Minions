@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Core.Minions.AI;
 using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 	{
 		bool DoVanillaAI();
 		void PostAI();
+
+		public void OnTileCollide(Vector2 oldVelocity)
+		{
+		}
 
 	}
 
@@ -55,6 +60,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			CrossModAI.Behavior.MainBehavior();
 			// This feels a little roundabout
 			return CrossModAI.DoVanillaAI();
+		}
+
+		public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
+		{
+			CrossModAI?.OnTileCollide(oldVelocity);
+			return base.OnTileCollide(projectile, oldVelocity);
 		}
 
 		public override void PostAI(Projectile projectile)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AmuletOfManyMinions.Core.Minions.AI;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -63,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	public delegate void GetUnstuckDelegate(Vector2 destination, int startFrame, ref bool done);
 	public class GroundAwarenessHelper
 	{
-		internal SimpleMinion self;
+		internal ISimpleMinion self;
 		internal bool didHitWall;
 		private bool _isFlying;
 		internal bool isFlying
@@ -71,9 +72,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			get => _isFlying;
 			set
 			{
-				if (self.AnimationFrame - lastTransformedFrame > transformRateLimit)
+				if (self.Behavior.AnimationFrame - lastTransformedFrame > transformRateLimit)
 				{
-					lastTransformedFrame = self.AnimationFrame;
+					lastTransformedFrame = self.Behavior.AnimationFrame;
 					_isFlying = value;
 				}
 			}
@@ -94,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		private int slowFrameCount;
 
 		private Projectile projectile => self.Projectile;
-		public GroundAwarenessHelper(SimpleMinion self)
+		public GroundAwarenessHelper(ISimpleMinion self)
 		{
 			this.self = self;
 		}
@@ -283,7 +284,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				clearGround.Y -= projectile.height;
 				teleportDestination = clearGround;
 				teleportDestination.X += Math.Sign(vectorToTarget.X) * projectile.width / 2;
-				teleportStartFrame = self.AnimationFrame;
+				teleportStartFrame = self.Behavior.AnimationFrame;
 				return true;
 			}
 			return false;
@@ -316,7 +317,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				clearGround.Y -= clearGround.Y % 16; // snap to the nearest block
 				clearGround.Y -= (projectile.height);
 				teleportDestination = clearGround;
-				teleportStartFrame = self.AnimationFrame;
+				teleportStartFrame = self.Behavior.AnimationFrame;
 				return true;
 			}
 			return false;
@@ -510,7 +511,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		internal void ModifyPathfinding(ref Vector2 target)
 		{
 			_isFlying = true;
-			lastTransformedFrame = self.AnimationFrame;
+			lastTransformedFrame = self.Behavior.AnimationFrame;
 			if(target.Y > 16)
 			{
 				DropThroughPlatform();

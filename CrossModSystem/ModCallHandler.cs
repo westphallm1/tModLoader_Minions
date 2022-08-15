@@ -70,8 +70,10 @@ namespace AmuletOfManyMinions.CrossModSystem
 						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(8), a.Arg(12), a.Arg(600));
 				case "RegisterFlyingPet":
 					return RegisterFlyingPet(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), 
-						a.Arg(8), a.Arg(12), a.Arg(600));
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(8), a.Arg(12), a.Arg(600));
+				case "RegisterGroundedPet":
+					return RegisterGroundedPet(
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(8), a.Arg(12), a.Arg(600));
 				default:
 					break;
 			}
@@ -104,6 +106,17 @@ namespace AmuletOfManyMinions.CrossModSystem
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 			{
 				return new FlyingCrossModAI(proj, buff.Type, projType);
+			};
+			return default;
+		}
+
+		internal static object RegisterGroundedPet(ModProjectile proj, ModBuff buff, int? projType, int travelSpeed, int inertia, int searchRange)
+		{
+			AddBuffMappingIdempotent(buff);
+			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
+			{
+				return new GroundedCrossModAI(proj, buff.Type, projType);
 			};
 			return default;
 		}

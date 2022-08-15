@@ -16,6 +16,7 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 			ACTRegisterSlimePathfinding();
 			ACTRegisterDronePathfinding();
 			ACTRegisterFlyingPets();
+			ACTRegisterGroundedPets();
 		}
 
 		internal ModBuff FindBuff(string buffName)
@@ -82,6 +83,16 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 			var aomm = Mod; // this mod
 			aomm.Call("RegisterFlyingPet", FindProj("AnimatedTomeProj"), FindBuff("AnimatedTomeBuff"), (int?)ProjectileID.BookStaffShot);
 			aomm.Call("RegisterFlyingPet", FindProj("DrumstickElementalProj"), FindBuff("DrumstickElementalBuff"), null);
+		}
+
+		/// <summary>
+		/// Register ACT's grounded pets as AoMM grounded combat pets
+		/// </summary>
+		private void ACTRegisterGroundedPets()
+		{
+			if (!ModLoader.TryGetMod("AssortedCrazyThings", out Mod actMod)) { return; }
+			var aomm = Mod; // this mod
+			aomm.Call("RegisterGroundedPet", FindProj("CuteLamiaPetProj"), FindBuff("CuteLamiaPetBuff"), (int?)ProjectileID.AmethystBolt);
 		}
 
 
