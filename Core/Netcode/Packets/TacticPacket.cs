@@ -7,28 +7,28 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 {
 	public class TacticPacket : PlayerPacket
 	{
-		readonly byte[] ids;
+		readonly byte[] idByGroup;
 
 		public TacticPacket() { }
 
-		public TacticPacket(Player player, byte[] ids) : base(player)
+		public TacticPacket(Player player, byte[] idByGroup) : base(player)
 		{
-			this.ids = ids;
+			this.idByGroup = idByGroup;
 		}
 
 		protected override void PostSend(BinaryWriter writer, Player player)
 		{
-			writer.Write(ids);
+			writer.Write(idByGroup);
 		}
 
 		protected override void PostReceive(BinaryReader reader, int sender, Player player)
 		{
-			byte[] ids = reader.ReadBytes(MinionTacticsPlayer.TACTICS_GROUPS_COUNT);
+			byte[] idByGroup = reader.ReadBytes(MinionTacticsPlayer.TACTICS_GROUPS_COUNT);
 
-			player.GetModPlayer<MinionTacticsPlayer>().SetAllTactics(ids);
+			player.GetModPlayer<MinionTacticsPlayer>().SetAllTactics(idByGroup);
 			if (Main.netMode == NetmodeID.Server)
 			{
-				new TacticPacket(player, ids).Send(from: sender);
+				new TacticPacket(player, idByGroup).Send(from: sender);
 			}
 		}
 	}

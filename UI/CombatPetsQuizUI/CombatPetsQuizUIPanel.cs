@@ -102,6 +102,11 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 					lastDisplayedText = currentText;
 				}
 				int charactersToDisplay = Math.Min(currentText.Length, 2 * (int)(Main.GameUpdateCount - textSwitchTime));
+				if (charactersToDisplay < 0)
+				{
+					//Fallback when in MP Main.GameUpdateCount behaves weirdly, causing the calculated index to be negative
+					charactersToDisplay = currentText.Length;
+				}
 				questionPanel.TextLines = TextFont.CreateWrappedText(
 					currentText.Substring(0, charactersToDisplay), MaxTextboxWidth - 4 * MarginSize).Split('\n');
 				if(charactersToDisplay == currentText.Length && ModPlayer.CurrentQuiz.CurrentState == QuizState.QUIZ)

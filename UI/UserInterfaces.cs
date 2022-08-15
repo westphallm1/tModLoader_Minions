@@ -17,6 +17,7 @@ namespace AmuletOfManyMinions.UI
 	/// <summary>
 	/// Contains all UIs, and manages boilerplate drawing/updating
 	/// </summary>
+	[Autoload(true, Side = ModSide.Client)]
 	public class UserInterfaces : ModSystem
 	{
 		internal static UserInterface tacticsInterface;
@@ -28,26 +29,23 @@ namespace AmuletOfManyMinions.UI
 
 		public override void OnModLoad()
 		{
-			if (!Main.dedServ)
-			{
-				tacticsInterface = new UserInterface();
+			tacticsInterface = new UserInterface();
 
-				tacticsUI = new TacticsUIMain();
-				buffClickCapture = new BuffRowClickCapture();
-				quizUI = new CombatPetsQuizUIMain();
-				tacticsUI.Activate();
-				buffClickCapture.Activate();
-				quizUI.Activate();
+			tacticsUI = new TacticsUIMain();
+			buffClickCapture = new BuffRowClickCapture();
+			quizUI = new CombatPetsQuizUIMain();
+			tacticsUI.Activate();
+			buffClickCapture.Activate();
+			quizUI.Activate();
 
-				UIState state = new UIState();
-				state.Append(quizUI);
-				state.Append(buffClickCapture);
-				// tacticsUI should take priority over buffClickCapture in the case that
-				// they're both active
-				state.Append(tacticsUI);
+			UIState state = new UIState();
+			state.Append(quizUI);
+			state.Append(buffClickCapture);
+			// tacticsUI should take priority over buffClickCapture in the case that
+			// they're both active
+			state.Append(tacticsUI);
 
-				tacticsInterface.SetState(state);
-			}
+			tacticsInterface.SetState(state);
 		}
 
 		public override void Unload()

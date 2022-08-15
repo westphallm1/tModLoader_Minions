@@ -71,7 +71,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		{
 			base.OnSpawn();
 			// run this as late as possible, hope to avoid issues with asset loading
-			solidTexture = SolidColorTexture.GetSolidTexture(Type);
+			if (!Main.dedServ)
+			{
+				solidTexture = SolidColorTexture.GetSolidTexture(Type);
+			}
 		}
 
 		public override Vector2 IdleBehavior()

@@ -112,9 +112,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		internal int PetDamage { get; set; }
 		
 		public int PetEmblemItem = -1;
-		public object[] PetModdedStats = new object[0];
+		public object[] PetModdedStats;
 
-		// todo this may be too many constructors, but it's a struct so I think it's ok
 		private PlayerCombatPetLevelInfo CustomInfo;
 		internal ICombatPetLevelInfo PetLevelInfo => CustomInfo.WithLevel(PetLevel);
 
@@ -164,9 +163,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			}
 		}
 
+		public override void Initialize()
+		{
+			PetModdedStats = new object[0];
+			CustomInfo = new PlayerCombatPetLevelInfo(this);
+		}
+
 		public override void PreUpdate()
 		{
-			CustomInfo ??= new PlayerCombatPetLevelInfo(this);
 			PetDamageBonus = 0;
 			PetSpeedBonus = 0;
 			SearchRangeBonus = 0;
