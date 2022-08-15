@@ -117,7 +117,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			{
 				velocity = Projectile.velocity;
 			}
-			Player = Main.player[Projectile.owner];
 			Projectile.rotation += 0.05f;
 			int timeElapsed = TimeToLive - Projectile.timeLeft;
 			if (timeElapsed % 2 == 0)

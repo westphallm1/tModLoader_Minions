@@ -303,6 +303,10 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 		}
 
 		// Methods lifted from GroupAwareMinion, used by many subclasses
+
+		// TODO this is implemented in a way that is not safe on cross mod content (affects Projectile.ai)
+		// just use a proxy for starters
+		public bool IsMyTurn() => true;
 		public List<Projectile> GetActiveMinions()
 		{
 			GroupState.Others ??= GetMinionsOfType(Projectile.type);

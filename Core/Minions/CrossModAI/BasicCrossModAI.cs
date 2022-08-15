@@ -23,11 +23,11 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public int BuffId { get; set; }
 		public SimpleMinionBehavior Behavior { get; set; }
 
-		private int MaxSpeed { get; set; }
-		private int Inertia { get; set; }
-		private int SearchRange { get; set; }
+		internal int MaxSpeed { get; set; }
+		internal int Inertia { get; set; }
+		internal int SearchRange { get; set; }
 
-		private bool UseDefaultPathfindingMovement { get; set; }
+		internal bool UseDefaultPathfindingMovement { get; set; }
 
 		/// <summary>
 		/// Cache the projectile's velocity
@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		private Vector2 CachedPlayerPosition { get; set; }
 
 		public BasicCrossModAI(
-			Projectile projectile, int buffId, int maxSpeed, int inertia = 8, int searchRange = 600, bool defaultPathfinding = false)
+			Projectile projectile, int buffId, int maxSpeed = 8, int inertia = 8, int searchRange = 600, bool defaultPathfinding = false)
 		{
 			Projectile = projectile;
 			BuffId = buffId;
@@ -48,12 +48,26 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			UseDefaultPathfindingMovement = defaultPathfinding;
 			
 			Behavior = new(this);
-			Behavior.Player = Player;
 		}
 
 		public WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
 
-		public void IdleMovement(Vector2 vectorToIdlePosition)
+
+		internal void CacheProjectileState()
+		{
+			CachedVelocity = Projectile.velocity;
+			CachedPosition = Projectile.position;
+			CachedPlayerPosition = Player.position;
+		}
+
+		internal void UncacheProjectileState()
+		{
+			Projectile.velocity = CachedVelocity;
+			Projectile.position = CachedPosition;
+			Player.position = CachedPlayerPosition;
+		}
+
+		public virtual void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// Only take over idle movement if pathfinding
 			if(!Behavior.IsFollowingBeacon || !UseDefaultPathfindingMovement) { return; }
@@ -63,54 +77,47 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 				vectorToIdlePosition.Normalize();
 				vectorToIdlePosition *= MaxSpeed;
 			} 
-			
-			
 			if (!Behavior.Pathfinder.InTransit && vectorToIdlePosition.LengthSquared() < MaxSpeed * MaxSpeed)
 			{
-				CachedVelocity = vectorToIdlePosition;
+				Projectile.velocity = vectorToIdlePosition;
 			} else
 			{
-				CachedVelocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
+				Projectile.velocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
 			}
-
-			CachedPosition = Projectile.position;
+			CacheProjectileState();
 			// trick to force many vanilla-styled minions into their flying animation
 			// Would be surprised if this did not have unintended side effects
-			CachedPlayerPosition = Player.position;
 			Player.position.Y = CachedPosition.Y + 300;
 		}
 		
-		public Vector2? FindTarget()
+		public virtual Vector2? FindTarget()
 		{
-			return Behavior.AnyEnemyInRange(SearchRange);
+			return Behavior.SelectedEnemyInRange(SearchRange) is Vector2 target ? target - Projectile.Center : null;
 		}
 
-		public void PostAI()
+		public virtual void PostAI()
 		{
 			if(!Behavior.IsFollowingBeacon || !UseDefaultPathfindingMovement) { return; }
-
-			Projectile.velocity = CachedVelocity;
-			Projectile.position = CachedPosition;
-			Player.position = CachedPlayerPosition;
+			UncacheProjectileState();
 		}
 
-		public void AfterMoving() 
+		public virtual void AfterMoving() 
 		{
 			// no op
 		}
 
-		public bool DoVanillaAI() => true;
+		public virtual bool DoVanillaAI() => true;
 
-		public Vector2 IdleBehavior()
+		public virtual Vector2 IdleBehavior()
 		{
 			// no op
 			return default;
 		}
 
 
-		public bool MinionContactDamage() => false;
+		public virtual bool MinionContactDamage() => false;
 
-		public void TargetedMovement(Vector2 vectorToTargetPosition)
+		public virtual void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
 			// No op
 		}

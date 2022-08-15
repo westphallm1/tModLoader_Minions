@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		internal MinionBehavior MinionBehavior;
 
-		public Player Player { get => MinionBehavior.Player; set => MinionBehavior.Player = value; }
+		public Player Player => MinionBehavior.Player;
 
 		public int? TargetNPCIndex { get => MinionBehavior.TargetNPCIndex; set => MinionBehavior.TargetNPCIndex = value; }
 		public int TargetNPCCacheFrames { get => MinionBehavior.TargetNPCCacheFrames; set => MinionBehavior.TargetNPCCacheFrames = value; }
@@ -66,7 +66,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		}
 		public override void AI()
 		{
-			Player = Main.player[Projectile.owner];
 			CheckActive();
 			if (!Spawned)
 			{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.CrossModSystem.Samples
@@ -14,7 +15,21 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 		{
 			ACTRegisterSlimePathfinding();
 			ACTRegisterDronePathfinding();
+			ACTRegisterFlyingPets();
 		}
+
+		internal ModBuff FindBuff(string buffName)
+		{
+			if (!ModLoader.TryGetMod("AssortedCrazyThings", out Mod actMod)) { return null; }
+			return actMod.Find<ModBuff>(buffName);
+		}
+
+		internal ModProjectile FindProj(string projName)
+		{
+			if (!ModLoader.TryGetMod("AssortedCrazyThings", out Mod actMod)) { return null; }
+			return actMod.Find<ModProjectile>(projName);
+		}
+
 
 		/// <summary>
 		/// Register ACT's SlimePackMinion for AoMM's pathfinding. AoMM will override the projectile's
@@ -56,7 +71,19 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 			amuletOfManyMinions.Call("RegisterPathfinder", actDroneMinion, actDroneBuff, travelSpeed);
 			amuletOfManyMinions.Call("RegisterPathfinder", actDroneMinion2, actDroneBuff, travelSpeed);
 			// TODO the rest of the drone types
-
 		}
+
+		/// <summary>
+		/// Register ACT's Flying pets as AoMM flying combat pets
+		/// </summary>
+		private void ACTRegisterFlyingPets()
+		{
+			if (!ModLoader.TryGetMod("AssortedCrazyThings", out Mod actMod)) { return; }
+			var aomm = Mod; // this mod
+			aomm.Call("RegisterFlyingPet", FindProj("AnimatedTomeProj"), FindBuff("AnimatedTomeBuff"), (int?)ProjectileID.BookStaffShot);
+			aomm.Call("RegisterFlyingPet", FindProj("DrumstickElementalProj"), FindBuff("DrumstickElementalBuff"), null);
+		}
+
+
 	}
 }

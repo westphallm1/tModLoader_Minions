@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 
 	public class MinionBehavior
 	{
-		public Player Player { get; set; }
+		public Player Player => Main.player[Projectile.owner];
 
 		public int? TargetNPCIndex { get; set; }
 		public int TargetNPCCacheFrames { get; set; }

@@ -58,7 +58,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public override void AI()
 		{
-			Player = Main.player[Projectile.owner];
 			if (velocity == default)
 			{
 				velocity = Projectile.velocity;

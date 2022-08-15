@@ -1,5 +1,7 @@
 ﻿using AmuletOfManyMinions.Core.Minions.CrossModAI;
+using AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI;
 using AmuletOfManyMinions.Core.Minions.Tactics;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +24,29 @@ namespace AmuletOfManyMinions.CrossModSystem
 			}
 		}
 	}
+
+	internal class ArgsUnpacker
+	{
+		private object[] Args;
+		private int Idx;
+		public ArgsUnpacker(object [] args, int startIdx = 0)
+		{
+			Args = args;
+			Idx = startIdx;
+		}
+
+		public T Arg<T>(T defaultVal = default)
+		{
+			if(Args.Length > Idx)
+			{
+				return (T)Args[Idx++] ?? defaultVal;
+			} else
+			{
+				return defaultVal;
+			}
+		}
+
+	}
 	internal class ModCallHandler
 	{
 
@@ -37,12 +62,16 @@ namespace AmuletOfManyMinions.CrossModSystem
 				throw new ArgumentException("First argument to Mod.Call must be a string");
 			}
 
+			var a = new ArgsUnpacker(args, 1);
 			switch ((string)args[0])
 			{
 				case "RegisterPathfinder":
 					return RegisterPathfinder(
-						args.Get<ModProjectile>(1), args.Get<ModBuff>(2), 
-						args.Get(3, 8), args.Get(4, 12), args.Get(5, 600));
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(8), a.Arg(12), a.Arg(600));
+				case "RegisterFlyingPet":
+					return RegisterFlyingPet(
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), 
+						a.Arg(8), a.Arg(12), a.Arg(600));
 				default:
 					break;
 			}
@@ -64,6 +93,17 @@ namespace AmuletOfManyMinions.CrossModSystem
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 			{
 				return new BasicCrossModAI(proj, buff.Type, travelSpeed, inertia, searchRange, defaultPathfinding: true);
+			};
+			return default;
+		}
+
+		internal static object RegisterFlyingPet(ModProjectile proj, ModBuff buff, int? projType, int travelSpeed, int inertia, int searchRange)
+		{
+			AddBuffMappingIdempotent(buff);
+			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
+			{
+				return new FlyingCrossModAI(proj, buff.Type, projType);
 			};
 			return default;
 		}
