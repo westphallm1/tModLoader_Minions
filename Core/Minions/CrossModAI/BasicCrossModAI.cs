@@ -10,6 +10,40 @@ using Terraria;
 
 namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 {
+	internal class ProjectileStateCache
+	{
+		internal Vector2? Position { get; private set; }
+		internal Vector2? Velocity { get; private set; }
+
+		internal Vector2? PlayerPosition { get; private set; }
+		internal bool? TileCollide { get; private set; }
+
+		public void Clear()
+		{
+			Position = null;
+			Velocity = null;
+			TileCollide = null;
+			PlayerPosition = null;
+		}
+
+		public void Cache(Projectile proj)
+		{
+			Position ??= proj.position;
+			Velocity ??= proj.velocity;
+			TileCollide ??= proj.tileCollide;
+			PlayerPosition ??= Main.player[proj.owner].position;
+		}
+
+		public void Uncache(Projectile proj)
+		{
+			proj.position = Position ?? proj.position;
+			proj.velocity = Velocity ?? proj.velocity;
+			proj.tileCollide = TileCollide ?? proj.tileCollide;
+			Main.player[proj.owner].position = PlayerPosition ?? Main.player[proj.owner].position;
+			Clear();
+		}
+	}
+
 	/// <summary>
 	/// Basic cross-mod AI that allows for exposing AoMM-tracked state to other mods. Also include
 	/// the basic "follow waypoint" code here, since it's pretty simple.
@@ -29,13 +63,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		internal bool UseDefaultPathfindingMovement { get; set; }
 
-		/// <summary>
-		/// Cache the projectile's velocity
-		/// </summary>
-		private Vector2 CachedVelocity { get; set; }
-		private Vector2 CachedPosition { get; set; }
-
-		private Vector2 CachedPlayerPosition { get; set; }
+		internal ProjectileStateCache ProjCache { get; set; } = new();
 
 		public BasicCrossModAI(
 			Projectile projectile, int buffId, int maxSpeed = 8, int inertia = 8, int searchRange = 600, bool defaultPathfinding = false)
@@ -53,18 +81,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
 
 
-		internal void CacheProjectileState()
+		internal void FakePlayerFlyingHeight()
 		{
-			CachedVelocity = Projectile.velocity;
-			CachedPosition = Projectile.position;
-			CachedPlayerPosition = Player.position;
-		}
-
-		internal void UncacheProjectileState()
-		{
-			Projectile.velocity = CachedVelocity;
-			Projectile.position = CachedPosition;
-			Player.position = CachedPlayerPosition;
+			ProjCache.Cache(Projectile);
+			Player.position.Y = Projectile.position.Y - 320;
 		}
 
 		public virtual void IdleMovement(Vector2 vectorToIdlePosition)
@@ -84,10 +104,9 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			{
 				Projectile.velocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
 			}
-			CacheProjectileState();
 			// trick to force many vanilla-styled minions into their flying animation
 			// Would be surprised if this did not have unintended side effects
-			Player.position.Y = CachedPosition.Y + 300;
+			FakePlayerFlyingHeight();
 		}
 		
 		public virtual Vector2? FindTarget()
@@ -97,8 +116,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public virtual void PostAI()
 		{
-			if(!Behavior.IsFollowingBeacon || !UseDefaultPathfindingMovement) { return; }
-			UncacheProjectileState();
+			ProjCache.Uncache(Projectile);
 		}
 
 		public virtual void AfterMoving() 
@@ -110,6 +128,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public virtual Vector2 IdleBehavior()
 		{
+
 			// no op
 			return default;
 		}

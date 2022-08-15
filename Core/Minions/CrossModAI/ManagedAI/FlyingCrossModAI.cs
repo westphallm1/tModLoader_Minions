@@ -21,8 +21,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal HoverShooterHelper HsHelper { get; set; }
 
-		internal bool IsPet { get; set; } = true;
-
 		internal int FramesSinceLastHit { get; set; }
 
 		private int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
@@ -41,38 +39,23 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			if(IsPet) { ApplyPetDefaults(); }
 		}
 
-		private void ApplyPetDefaults()
+		internal override void ApplyPetDefaults()
 		{
-			Projectile.minion = true;
-			Projectile.friendly = true;
-			Projectile.DamageType = DamageClass.Summon;
+			base.ApplyPetDefaults();
 			HsHelper.targetInnerRadius = 96;
 			HsHelper.targetOuterRadius = 128;
 			HsHelper.targetShootProximityRadius = 96;
-			// go slower and smaller circle than minions since it's a cute little pet
-			CircleHelper.idleBumbleFrames = 90;
-			CircleHelper.idleBumbleRadius = 96;
 		}
 
-		private void UpdatePetState()
+		internal override void UpdatePetState()
 		{
+			base.UpdatePetState();
 			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
-			SearchRange = info.BaseSearchRange;
-			Inertia = info.Level < 6 ? 10 : 15 - info.Level;
-			MaxSpeed = (int)info.BaseSpeed;
-			Projectile.originalDamage = leveledPetPlayer.PetDamage;
-
-			HsHelper.projectileVelocity = (int)(info.BaseSpeed + 3);
+			HsHelper.projectileVelocity = MaxSpeed + 3;
 			HsHelper.attackFrames = Math.Max(30, 60 - 6 * info.Level);
 			HsHelper.travelSpeed = MaxSpeed;
 			HsHelper.inertia = Inertia;
-		}
-
-		public override Vector2 IdleBehavior()
-		{
-			if(IsPet) { UpdatePetState(); }
-			return base.IdleBehavior();
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -84,17 +67,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			{
 				BumblingMovement(vectorToTargetPosition);
 			}
-			CacheProjectileState();
 			// Main.NewText($"{Projectile.friendly} {Projectile.minion} {Projectile.damage} {Projectile.originalDamage}");
 		}
 
 
 		internal virtual void AfterFiringProjectile()
 		{
-			//if(ShootSound.HasValue)
-			//{
-			//	SoundEngine.PlaySound(ShootSound.Value, Projectile.Center);
-			//}
 		}
 
 		public void OnHitTarget(NPC target)
@@ -130,17 +108,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		internal void ModifyTargetVector(ref Vector2 target)
 		{
 			Behavior.DistanceFromGroup(ref target);
-		}
-
-		public override void PostAI()
-		{
-			base.PostAI();
-			if(IsPet && FiredProjectileId == null)
-			{
-				Projectile.minion = true;
-				Projectile.friendly = true;
-				Projectile.DamageType = DamageClass.Summon;
-			}
 		}
 	}
 }

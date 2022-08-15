@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 {
@@ -19,13 +21,37 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 	{
 		internal HeadCirclingHelper CircleHelper { get; set; }
 
+		internal bool IsPet { get; set; } = true;
+
 		public GroupAwareCrossModAI(Projectile proj, int buffId) : base(proj, buffId)
 		{
 			CircleHelper = new HeadCirclingHelper(this);
 		}
 
+		internal virtual void ApplyPetDefaults()
+		{
+			Projectile.minion = true;
+			Projectile.friendly = true;
+			Projectile.DamageType = DamageClass.Summon;
+			// go slower and smaller circle than minions since it's a cute little pet
+			CircleHelper.idleBumbleFrames = 90;
+			CircleHelper.idleBumbleRadius = 96;
+		}
+
+		internal virtual void UpdatePetState()
+		{
+			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
+			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
+			SearchRange = info.BaseSearchRange;
+			Inertia = info.Level < 6 ? 10 : 15 - info.Level;
+			MaxSpeed = (int)info.BaseSpeed;
+			Projectile.originalDamage = leveledPetPlayer.PetDamage;
+		}
+
 		public override Vector2 IdleBehavior()
 		{
+			if(IsPet) { UpdatePetState(); }
+
 			if(CircleHelper.IdleBumble && Player.velocity.Length() < 4)
 			{
 				return CircleHelper.BumblingHeadCircle();
@@ -47,13 +73,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			{
 				Projectile.velocity = vectorToIdlePosition;
 			}
-			CacheProjectileState();
 		}
 
-		public override void PostAI()
+		public override void AfterMoving()
 		{
-			// Always uncache the state
-			UncacheProjectileState();
+			base.AfterMoving();
+			// Always cache the projectile position, since we're always overriding it
+			ProjCache.Cache(Projectile);
 		}
 	}
 }
