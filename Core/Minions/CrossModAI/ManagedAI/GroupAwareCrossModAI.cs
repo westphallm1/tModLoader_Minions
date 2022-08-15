@@ -49,5 +49,11 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			}
 			CacheProjectileState();
 		}
+
+		public override void PostAI()
+		{
+			// Always uncache the state
+			UncacheProjectileState();
+		}
 	}
 }

@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				BumblingMovement(vectorToTargetPosition);
 			}
 			CacheProjectileState();
-			Main.NewText($"{Projectile.friendly} {Projectile.minion} {Projectile.damage} {Projectile.originalDamage}");
+			// Main.NewText($"{Projectile.friendly} {Projectile.minion} {Projectile.damage} {Projectile.originalDamage}");
 		}
 
 
@@ -130,6 +130,17 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		internal void ModifyTargetVector(ref Vector2 target)
 		{
 			Behavior.DistanceFromGroup(ref target);
+		}
+
+		public override void PostAI()
+		{
+			base.PostAI();
+			if(IsPet && FiredProjectileId == null)
+			{
+				Projectile.minion = true;
+				Projectile.friendly = true;
+				Projectile.DamageType = DamageClass.Summon;
+			}
 		}
 	}
 }
