@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -26,6 +27,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public FlyingCrossModAI(Projectile proj, int buffId, int? projId) : base(proj, buffId, projId)
 		{
+			IdleLocationSets.circlingHead.Add(Projectile.type);
 			HsHelper = new HoverShooterHelper(this, FiredProjectileId)
 			{
 				AfterFiringProjectile = AfterFiringProjectile,

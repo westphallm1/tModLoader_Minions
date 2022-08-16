@@ -31,6 +31,12 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 			return actMod.Find<ModProjectile>(projName);
 		}
 
+		internal void Call(params object[] args)
+		{
+			args[1] = FindProj((string)args[1]);
+			args[2] = FindBuff((string)args[2]);
+			Mod.Call(args);
+		}
 
 		/// <summary>
 		/// Register ACT's SlimePackMinion for AoMM's pathfinding. AoMM will override the projectile's
@@ -50,9 +56,9 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 			int inertia = 14;
 			int searchRange = 700;
 
-			amuletOfManyMinions.Call("RegisterPathfinder", actSlimeMinion, actSlimeBuff, travelSpeed, inertia, searchRange);
-			amuletOfManyMinions.Call("RegisterPathfinder", actSlimeMinion2, actSlimeBuff, travelSpeed, inertia, searchRange);
-			amuletOfManyMinions.Call("RegisterPathfinder", actSlimeMinion3, actSlimeBuff, travelSpeed, inertia, searchRange);
+			Call("RegisterPathfinder", "SlimePackMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
+			Call("RegisterPathfinder", "SlimePackAssortedMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
+			Call("RegisterPathfinder", "SlimePackSpikedMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
 		}
 
 
@@ -80,9 +86,9 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 		private void ACTRegisterFlyingPets()
 		{
 			if (!ModLoader.TryGetMod("AssortedCrazyThings", out Mod actMod)) { return; }
-			var aomm = Mod; // this mod
-			aomm.Call("RegisterFlyingPet", FindProj("AnimatedTomeProj"), FindBuff("AnimatedTomeBuff"), (int?)ProjectileID.BookStaffShot);
-			aomm.Call("RegisterFlyingPet", FindProj("DrumstickElementalProj"), FindBuff("DrumstickElementalBuff"), null);
+			Call("RegisterFlyingPet", "AnimatedTomeProj", "AnimatedTomeBuff", (int?)ProjectileID.BookStaffShot);
+			Call("RegisterFlyingPet", "PetGolemHeadProj", "PetGolemHeadBuff", FindProj("PetGolemHeadFireball")?.Type);
+			Call("RegisterFlyingPet", "DrumstickElementalProj", "DrumstickElementalBuff", null);
 		}
 
 		/// <summary>
@@ -91,8 +97,7 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 		private void ACTRegisterGroundedPets()
 		{
 			if (!ModLoader.TryGetMod("AssortedCrazyThings", out Mod actMod)) { return; }
-			var aomm = Mod; // this mod
-			aomm.Call("RegisterGroundedPet", FindProj("CuteLamiaPetProj"), FindBuff("CuteLamiaPetBuff"), (int?)ProjectileID.AmethystBolt);
+			Call("RegisterGroundedPet", "CuteLamiaPetProj", "CuteLamiaPetBuff", (int?)ProjectileID.AmethystBolt);
 		}
 
 

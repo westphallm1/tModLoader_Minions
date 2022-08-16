@@ -506,4 +506,34 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override bool CanUseItem(Player player) => CombatPetItemUtils.CanUseItem(player, Item);
 	}
+
+	/// <summary>
+	/// Utility class for running the pet buff juggling code when a cross-mod registered 
+	/// pet summoning item is used.
+	/// </summary>
+	public class CrossModCombatPetMinionItem : GlobalItem
+	{
+
+		bool IsCrossModPetItem(Item item) => item.ModItem?.Mod is Mod mod && mod != Mod &&
+				CombatPetBuff.CombatPetBuffTypes.Contains(item.buffType);
+
+		public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+		{
+			if (IsCrossModPetItem(item))
+			{
+				CombatPetItemUtils.AddCombatPetTooltip(Mod, 0, tooltips);
+			}
+		}
+
+		public override bool CanUseItem(Item item, Player player)
+		{
+			// Only run on items not from this mod, that have a buff registered as a pet buff
+			if(IsCrossModPetItem(item))
+			{
+				CombatPetItemUtils.CanUseItem(player, item);
+			}
+			return true;
+		}
+
+	}
 }

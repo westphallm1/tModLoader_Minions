@@ -18,12 +18,16 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		internal Vector2? PlayerPosition { get; private set; }
 		internal bool? TileCollide { get; private set; }
 
+		// this one is a bit contentious, appears to get set erroneously
+		internal float? GfxOffY { get; private set; }
+
 		public void Clear()
 		{
 			Position = null;
 			Velocity = null;
 			TileCollide = null;
 			PlayerPosition = null;
+			GfxOffY = null;
 		}
 
 		public void Cache(Projectile proj)
@@ -31,6 +35,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			Position ??= proj.position;
 			Velocity ??= proj.velocity;
 			TileCollide ??= proj.tileCollide;
+			GfxOffY ??= proj.gfxOffY;
 			PlayerPosition ??= Main.player[proj.owner].position;
 		}
 
@@ -39,6 +44,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			proj.position = Position ?? proj.position;
 			proj.velocity = Velocity ?? proj.velocity;
 			proj.tileCollide = TileCollide ?? proj.tileCollide;
+			proj.gfxOffY = GfxOffY ?? proj.gfxOffY;
 			Main.player[proj.owner].position = PlayerPosition ?? Main.player[proj.owner].position;
 			Clear();
 		}
