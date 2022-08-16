@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			{
 				vectorToTarget += 4 * Main.npc[idx].velocity; // track the target NPC a bit
 			}
-			if(gHelper.didJustLand && vectorToTarget.Y > -Math.Abs(vectorToTarget.X/4))
+			if(GHelper.didJustLand && vectorToTarget.Y > -Math.Abs(vectorToTarget.X/4))
 			{
 				vectorToTarget.Y = -Math.Abs(vectorToTarget.X / 4);
 			}

@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			if(flameRing != default && flameRing.localAI[0] > 0)
 			{
 				base.IdleFlyingMovement(vectorToIdlePosition);
-				gHelper.isFlying = true;
+				GHelper.isFlying = true;
 				Projectile.tileCollide = false;
 			} else
 			{

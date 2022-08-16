@@ -243,7 +243,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				return Vector2.Zero;
 			}
 
-			if(gHelper.isFlying)
+			if(GHelper.isFlying)
 			{
 				float idleAngle = MathHelper.TwoPi * AnimationFrame / 90f;
 				target = Player.Center + 42 * idleAngle.ToRotationVector2() - Projectile.Center;
@@ -312,7 +312,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			var animState = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			var animState = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			if(animState == GroundAnimationState.FLYING)
 			{
 				Projectile.rotation = Math.Sign(Projectile.velocity.X) * MathHelper.TwoPi * AnimationFrame / 15;

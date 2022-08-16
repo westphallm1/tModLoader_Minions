@@ -183,7 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if(gHelper.isFlying)
+			if(GHelper.isFlying)
 			{
 				Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.5f);
 				for(int i = 0; i < 2; i++)

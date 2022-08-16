@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			int idleCycle = AnimationFrame % 180;
-			if(gHelper.isFlying) { base.Animate(6, 14); }
+			if(GHelper.isFlying) { base.Animate(6, 14); }
 			else if(ShouldBounce) { base.Animate(4, 6); }
 			else if (idleCycle < 150) 
 			{
@@ -61,15 +61,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 			}
 
-			if(gHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
+			if(GHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
 			{
 				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-			} else if (!gHelper.isFlying)
+			} else if (!GHelper.isFlying)
 			{
 				Projectile.rotation = 0;
 			}
 
-			if(gHelper.isFlying)
+			if(GHelper.isFlying)
 			{
 				Vector2 offsetVector = (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2() * 8;
 				Vector2 spawnVector = Projectile.Center + offsetVector;

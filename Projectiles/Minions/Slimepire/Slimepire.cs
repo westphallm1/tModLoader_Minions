@@ -65,16 +65,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			DrawOriginOffsetY = 0;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			maxJumpVelocity = 12;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
+			MaxJumpVelocity = 12;
 			searchDistance = 825;
 		}
 
 		protected override bool DoPreStuckCheckGroundedMovement()
 		{
-			if (!gHelper.didJustLand)
+			if (!GHelper.didJustLand)
 			{
 				Projectile.velocity.X = intendedX;
 				// only path after landing
@@ -90,11 +90,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 			// always jump "long" if we're far away from the enemy
-			if (Math.Abs(vector.X) > startFlyingAtTargetDist && vector.Y < -32)
+			if (Math.Abs(vector.X) > StartFlyingDist && vector.Y < -32)
 			{
 				vector.Y = -32;
 			}
-			gHelper.DoJump(vector);
+			GHelper.DoJump(vector);
 			int maxHorizontalSpeed = vector.Y < -64 ? 4 : 8;
 			if(TargetNPCIndex is int idx && vector.Length() < 64)
 			{
@@ -111,8 +111,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			minFrame = gHelper.isFlying ? 0 : 4;
-			maxFrame = gHelper.isFlying ? 4 : 6;
+			minFrame = GHelper.isFlying ? 0 : 4;
+			maxFrame = GHelper.isFlying ? 4 : 6;
 			base.Animate(minFrame, maxFrame);
 		}
 

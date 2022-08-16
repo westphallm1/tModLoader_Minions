@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if(gHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
+			if(GHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
 			{
 				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			} else 
@@ -64,12 +64,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			if(!wasFlyingThisFrame && gHelper.isFlying)
+			if(!wasFlyingThisFrame && GHelper.isFlying)
 			{
 				var source = Projectile.GetSource_FromThis();
 				Gore.NewGore(source, Projectile.Center, Vector2.Zero, GoreID.PlanteroSombrero);
 			}
-			wasFlyingThisFrame = gHelper.isFlying;
+			wasFlyingThisFrame = GHelper.isFlying;
 
 			bool didDrawHands = shouldDrawHands;
 			shouldDrawHands = VectorToTarget is Vector2 target && target.LengthSquared() < 

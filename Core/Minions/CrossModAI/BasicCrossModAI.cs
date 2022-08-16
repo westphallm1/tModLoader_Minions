@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public int BuffId { get; set; }
 		public SimpleMinionBehavior Behavior { get; set; }
 
-		internal int MaxSpeed { get; set; }
+		public int MaxSpeed { get; set; }
 		internal int Inertia { get; set; }
 		internal int SearchRange { get; set; }
 

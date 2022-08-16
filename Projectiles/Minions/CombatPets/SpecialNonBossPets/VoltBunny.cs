@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override Vector2 IdleBehavior()
 		{
 			Vector2 target = base.IdleBehavior();
-			if(gHelper.isFlying)
+			if(GHelper.isFlying)
 			{
 				float idleAngle = MathHelper.TwoPi * AnimationFrame / 120f;
 				target += 36 * idleAngle.ToRotationVector2();
@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 				base.IdleFlyingMovement(vector);
 			} else
 			{
-				gHelper.DropThroughPlatform();
+				GHelper.DropThroughPlatform();
 				Projectile.tileCollide = false;
 				Projectile.velocity = dashVector;
 			}
@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		{
 			if(vectorToTargetPosition.LengthSquared() < 128 * 128)
 			{
-				gHelper.isFlying = true;
+				GHelper.isFlying = true;
 				IdleFlyingMovement(vectorToTargetPosition);
 			} else
 			{

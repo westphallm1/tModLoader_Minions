@@ -38,14 +38,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(gHelper.isFlying) { base.Animate(6, 8); }
+			if(GHelper.isFlying) { base.Animate(6, 8); }
 			else if(ShouldBounce) { base.Animate(0, 5); }
 			else { Projectile.frame = 3; }
 
-			if(gHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
+			if(GHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
 			{
 				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-			} else if (!gHelper.isFlying)
+			} else if (!GHelper.isFlying)
 			{
 				Projectile.rotation = 0;
 			}

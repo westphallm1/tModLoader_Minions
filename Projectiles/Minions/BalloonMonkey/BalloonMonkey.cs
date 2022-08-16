@@ -217,11 +217,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			DrawOriginOffsetY = -14;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
 			searchDistance = 650;
-			maxJumpVelocity = 12;
+			MaxJumpVelocity = 12;
 			DealsContactDamage = false;
 		}
 
@@ -230,9 +230,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			if(AnimationFrame - lastFiredFrame < 10)
 			{
 				// don't fly while throwing the spear
-				gHelper.didJustLand = false;
-				gHelper.isFlying = false;
-				gHelper.ApplyGravity();
+				GHelper.didJustLand = false;
+				GHelper.isFlying = false;
+				GHelper.ApplyGravity();
 			} else
 			{
 				base.IdleFlyingMovement(vector);
@@ -242,11 +242,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 8;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -323,16 +323,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		{
 			if (AnimationFrame - lastFiredFrame < 5)
 			{
-				Projectile.frame = gHelper.didJustLand ? 4 : 7;
+				Projectile.frame = GHelper.didJustLand ? 4 : 7;
 			} else if (AnimationFrame - lastFiredFrame < 10)
 			{
-				Projectile.frame = gHelper.didJustLand ? 5 : 8;
+				Projectile.frame = GHelper.didJustLand ? 5 : 8;
 			} else if (AnimationFrame - lastFiredFrame < 15)
 			{
-				Projectile.frame = gHelper.didJustLand ? 6 : 9;
+				Projectile.frame = GHelper.didJustLand ? 6 : 9;
 			} else
 			{
-				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+				GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
 			if (TargetNPCIndex is int idx && AnimationFrame - lastFiredFrame < 30)
 			{

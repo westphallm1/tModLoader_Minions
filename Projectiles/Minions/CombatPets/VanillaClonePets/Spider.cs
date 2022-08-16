@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			base.Animate(minFrame, maxFrame);
-			if(gHelper.isFlying && !onWall && !isClinging && Projectile.velocity.LengthSquared() > 1)
+			if(GHelper.isFlying && !onWall && !isClinging && Projectile.velocity.LengthSquared() > 1)
 			{
 				Projectile.rotation = Projectile.velocity.ToRotation();
 			}

@@ -85,11 +85,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			Projectile.height = 32;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
 			searchDistance = 900;
-			maxJumpVelocity = 12;
+			MaxJumpVelocity = 12;
 		}
 
 		public override void OnSpawn()
@@ -103,11 +103,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 11;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -135,7 +135,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 			{
 				vectorToTarget += 4 * Main.npc[idx].velocity; // track the target NPC a bit
 			}
-			if(gHelper.didJustLand && vectorToTarget.Y > -Math.Abs(vectorToTarget.X/4))
+			if(GHelper.didJustLand && vectorToTarget.Y > -Math.Abs(vectorToTarget.X/4))
 			{
 				vectorToTarget.Y = -Math.Abs(vectorToTarget.X / 4);
 			}
@@ -224,7 +224,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		private void DrawLegs(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
 			// used for both idle and active
-			if(gHelper.isFlying && !IsBouncing)
+			if(GHelper.isFlying && !IsBouncing)
 			{
 				return;
 			}
@@ -240,7 +240,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 
 		private void DrawClouds(SpriteCompositionHelper helper, int frame, float cycleAngle)
 		{
-			if(IsBouncing || !gHelper.isFlying)
+			if(IsBouncing || !GHelper.isFlying)
 			{
 				return;
 			}

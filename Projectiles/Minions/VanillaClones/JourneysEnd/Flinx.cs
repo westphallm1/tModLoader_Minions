@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			DoSimpleFlyingDust();
 		}
 

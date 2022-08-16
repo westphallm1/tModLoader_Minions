@@ -81,10 +81,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			DrawOriginOffsetY = 2;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			maxJumpVelocity = 12;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
+			MaxJumpVelocity = 12;
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
@@ -92,7 +92,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 			Vector2 pos = Projectile.Center;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			float brightness = (lightColor.R + lightColor.G + lightColor.B) / (3f * 255f);
-			if (gHelper.isFlying)
+			if (GHelper.isFlying)
 			{
 				texture = ExtraTextures[0].Value;
 				Main.EntitySpriteDraw(texture, pos + new Vector2(0, -36) - Main.screenPosition,
@@ -119,11 +119,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
-			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 8;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -131,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (AnimationFrame - lastHitFrame > 15)
+			if (AnimationFrame - LastHitFrame > 15)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -143,7 +143,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if (gHelper.didJustLand)
+			if (GHelper.didJustLand)
 			{
 				Projectile.rotation = 0;
 			}
@@ -156,7 +156,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if (gHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4 && AnimationFrame % 5 == 0)
+			if (GHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4 && AnimationFrame % 5 == 0)
 			{
 				Vector2 pos = Projectile.Bottom;
 				pos.Y -= 4;

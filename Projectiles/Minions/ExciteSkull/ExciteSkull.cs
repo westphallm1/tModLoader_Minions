@@ -70,10 +70,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 			DrawOffsetX = -2;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			maxJumpVelocity = 13;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
+			MaxJumpVelocity = 13;
 			searchDistance = 700;
 		}
 		public override void PostDraw(Color lightColor)
@@ -91,11 +91,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
-			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
 			int xMaxSpeed = 9;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -103,7 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (AnimationFrame - lastHitFrame > 10)
+			if (AnimationFrame - LastHitFrame > 10)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -115,7 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if (gHelper.didJustLand)
+			if (GHelper.didJustLand)
 			{
 				Projectile.rotation = 0;
 			}
@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 				return;
 			}
 			base.Animate(minFrame, maxFrame);
-			if (((gHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4) || gHelper.isFlying) && AnimationFrame % 3 == 0)
+			if (((GHelper.didJustLand && Math.Abs(Projectile.velocity.X) > 4) || GHelper.isFlying) && AnimationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);
 				Main.dust[idx].alpha = 112;

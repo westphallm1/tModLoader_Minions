@@ -94,10 +94,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			DrawOriginOffsetY = -6;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			maxJumpVelocity = 12;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
+			MaxJumpVelocity = 12;
 		}
 
 		protected override void DoGroundedMovement(Vector2 vector)
@@ -110,11 +110,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			{
 				vector.Y -= 16;
 			}
-			if (vector.Y < 0 && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < 0 && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 7;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8 && Math.Abs(Player.velocity.X) > 4)
 			{
@@ -122,7 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (AnimationFrame - lastHitFrame > 15)
+			if (AnimationFrame - LastHitFrame > 15)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -145,8 +145,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 				clusterIdx = rats.IndexOf(Projectile);
 				head = rats[0];
 			}
-			gHelper.SetIsOnGround();
-			NoLOSPursuitTime = gHelper.isFlying ? 15 : 300;
+			GHelper.SetIsOnGround();
+			NoLOSPursuitTime = GHelper.isFlying ? 15 : 300;
 			Vector2 idlePosition = Player.Center;
 			// every rat should gather around the first rat
 			idlePosition.X += -Player.direction * (8 + IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, head));
@@ -182,7 +182,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 		}
 	}
 }

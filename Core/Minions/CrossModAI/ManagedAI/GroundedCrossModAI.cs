@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				ai0: ai0 ?? Projectile.whoAmI);
 		}
 
-		internal override void DoGroundedMovement(Vector2 vector)
+		public override void DoGroundedMovement(Vector2 vector)
 		{
 			if(!ShouldDoShootingMovement)
 			{

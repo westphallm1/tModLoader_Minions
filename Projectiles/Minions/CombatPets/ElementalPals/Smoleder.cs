@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			GroundAnimationState state = gHelper.GetAnimationState();
+			GroundAnimationState state = GHelper.GetAnimationState();
 			FrameSpeed = (state == GroundAnimationState.WALKING) ? 5 : 10;
 			base.Animate(minFrame, maxFrame);
 			if(state == GroundAnimationState.JUMPING)

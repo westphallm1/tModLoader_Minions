@@ -54,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(!gHelper.isFlying && VectorToTarget is Vector2 target && target.Length() < 48)
+			if(!GHelper.isFlying && VectorToTarget is Vector2 target && target.Length() < 48)
 			{
 				frameInfo[GroundAnimationState.WALKING] = (4, 7);
 				frameInfo[GroundAnimationState.JUMPING] = (7, 10);
@@ -133,21 +133,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			if(!wasFlyingThisFrame && gHelper.isFlying)
+			if(!wasFlyingThisFrame && GHelper.isFlying)
 			{
 				var source = Projectile.GetSource_FromThis();
 				Gore.NewGore(source, Projectile.Center, Vector2.Zero, GoreID.KingSlimePetCrown);
 			}
-			wasFlyingThisFrame = gHelper.isFlying;
+			wasFlyingThisFrame = GHelper.isFlying;
 		}
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(gHelper.isFlying) { base.Animate(6, 12); }
+			if(GHelper.isFlying) { base.Animate(6, 12); }
 			else if(ShouldBounce) { base.Animate(0, 6); }
 			else { Projectile.frame = 0; }
 
-			if(gHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
+			if(GHelper.isFlying && Projectile.velocity.LengthSquared() > 2)
 			{
 				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			} else

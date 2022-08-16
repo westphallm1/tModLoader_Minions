@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
             if (Projectile.velocity.X > 1)
 			{
 				Projectile.spriteDirection = forwardDir;
@@ -120,11 +120,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				base.DoGroundedMovement(vector);
 				return;
 			}
-			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{

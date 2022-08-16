@@ -238,11 +238,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			DrawOriginOffsetY = -14;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
 			searchDistance = 850;
-			maxJumpVelocity = 12;
+			MaxJumpVelocity = 12;
 		}
 		public override void OnSpawn()
 		{
@@ -252,11 +252,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
 			int xMaxSpeed = 10;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -264,7 +264,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (AnimationFrame - lastHitFrame > 10)
+			if (AnimationFrame - LastHitFrame > 10)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -294,9 +294,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			if(!gHelper.isFlying && VectorToTarget is Vector2 target && target.Length() < 48)
+			if(!GHelper.isFlying && VectorToTarget is Vector2 target && target.Length() < 48)
 			{
-				if(gHelper.didJustLand)
+				if(GHelper.didJustLand)
 				{
 					base.Animate(4, 7);
 				} else
@@ -305,7 +305,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 				}
 			} else
 			{
-				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+				GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
 		}
 	}
@@ -341,9 +341,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			if(AnimationFrame - lastFiredFrame < 10)
 			{
 				// don't fly while throwing the spear
-				gHelper.didJustLand = false;
-				gHelper.isFlying = false;
-				gHelper.ApplyGravity();
+				GHelper.didJustLand = false;
+				GHelper.isFlying = false;
+				GHelper.ApplyGravity();
 			} else
 			{
 				base.IdleFlyingMovement(vector);
@@ -418,13 +418,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 				{
 					Projectile.frame = 5;
 				}
-				if(!gHelper.didJustLand)
+				if(!GHelper.didJustLand)
 				{
 					Projectile.frame += 3;
 				}
 			} else
 			{
-				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+				GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
 			if (VectorToTarget is Vector2 target && Math.Abs(target.X) < 3 * preferredDistanceFromTarget)
 			{

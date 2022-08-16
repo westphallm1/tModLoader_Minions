@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			DoSimpleFlyingDust(DustID.Grass);
 			if(VectorToTarget is Vector2 target && AnimationFrame - lastFiredFrame < 45)
 			{

@@ -195,21 +195,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			DrawOriginOffsetY = -6;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
 			DealsContactDamage = false;
-			maxJumpVelocity = 12;
+			MaxJumpVelocity = 12;
 		}
 
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 7;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -271,7 +271,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			if (VectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{
 				Projectile.spriteDirection = Math.Sign(target.X);

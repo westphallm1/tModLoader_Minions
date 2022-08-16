@@ -184,11 +184,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			DrawOriginOffsetY = -18;
 			attackFrames = 30;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
 			searchDistance = 900;
-			maxJumpVelocity = 12;
+			MaxJumpVelocity = 12;
 			DealsContactDamage = false;
 		}
 
@@ -197,9 +197,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			if(AnimationFrame - lastFiredFrame < 10)
 			{
 				// don't fly while throwing the spear
-				gHelper.didJustLand = false;
-				gHelper.isFlying = false;
-				gHelper.ApplyGravity();
+				GHelper.didJustLand = false;
+				GHelper.isFlying = false;
+				GHelper.ApplyGravity();
 			} else
 			{
 				base.IdleFlyingMovement(vector);
@@ -209,11 +209,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			int xMaxSpeed = 11;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -299,7 +299,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				Projectile.frame = 3;
 			} else
 			{
-				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+				GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
 			if (VectorToTarget is Vector2 target && Math.Abs(target.X) < 1.5 * preferredDistanceFromTarget)
 			{

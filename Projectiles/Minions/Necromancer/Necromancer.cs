@@ -411,10 +411,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			DrawOriginOffsetX = -1;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			maxJumpVelocity = 12;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
+			MaxJumpVelocity = 12;
 			searchDistance = 900;
 			maxSpeed = 14;
 			idleInertia = 6;
@@ -497,11 +497,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 3f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 3f : 8;
 			float xMaxSpeed = 14f;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -578,7 +578,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				Projectile.frame = 4;
 				return;
 			}
-			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			if (state == GroundAnimationState.FLYING && AnimationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);

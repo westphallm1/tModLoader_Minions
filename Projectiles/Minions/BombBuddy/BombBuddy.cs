@@ -85,10 +85,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 			DrawOriginOffsetY = -4;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			maxJumpVelocity = 12;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
+			MaxJumpVelocity = 12;
 		}
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -128,11 +128,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 8;
 			float xMaxSpeed = 9.5f;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
@@ -221,7 +221,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			if (state == GroundAnimationState.FLYING && AnimationFrame % 3 == 0)
 			{
 				int idx = Dust.NewDust(Projectile.Bottom, 8, 8, 16, -Projectile.velocity.X / 2, -Projectile.velocity.Y / 2);

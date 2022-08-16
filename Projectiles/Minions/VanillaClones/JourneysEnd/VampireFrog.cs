@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
-			var animState = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+			var animState = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			FrameSpeed = animState == GroundAnimationState.WALKING ? 2 : 5;
 			int croakCycle = 200;
 			int croakStartFrame = croakCycle - 8 * 5;

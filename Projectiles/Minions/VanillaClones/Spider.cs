@@ -109,11 +109,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			DrawOriginOffsetY = -6;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
 			searchDistance = 800;
-			maxJumpVelocity = 12;
+			MaxJumpVelocity = 12;
 		}
 
 		public override void OnSpawn()
@@ -151,18 +151,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		protected override void DoGroundedMovement(Vector2 vector)
 		{
 
-			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < startFlyingAtTargetHeight)
+			if (vector.Y < -Projectile.height && Math.Abs(vector.X) < StartFlyingHeight)
 			{
-				gHelper.DoJump(vector);
+				GHelper.DoJump(vector);
 			}
-			float xInertia = gHelper.stuckInfo.overLedge && !gHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
+			float xInertia = GHelper.stuckInfo.overLedge && !GHelper.didJustLand && Math.Abs(Projectile.velocity.X) < 2 ? 1.25f : 7;
 			if (VectorToTarget is null && Math.Abs(vector.X) < 8)
 			{
 				Projectile.velocity.X = Player.velocity.X;
 				return;
 			}
 			DistanceFromGroup(ref vector);
-			if (AnimationFrame - lastHitFrame > 10)
+			if (AnimationFrame - LastHitFrame > 10)
 			{
 				Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 			}
@@ -251,7 +251,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			} else
 			{
 				Projectile.rotation = 0;
-				GroundAnimationState state = gHelper.DoGroundAnimation(frameInfo, base.Animate);
+				GroundAnimationState state = GHelper.DoGroundAnimation(frameInfo, base.Animate);
 			}
 			if (Projectile.velocity.X > 1)
 			{

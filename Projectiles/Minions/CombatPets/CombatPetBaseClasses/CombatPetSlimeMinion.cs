@@ -31,16 +31,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			Projectile.minionSlots = 0;
 			attackFrames = 60;
 			NoLOSPursuitTime = 300;
-			startFlyingAtTargetHeight = 96;
-			startFlyingAtTargetDist = 64;
-			defaultJumpVelocity = 4;
-			maxJumpVelocity = 12;
+			StartFlyingHeight = 96;
+			StartFlyingDist = 64;
+			DefaultJumpVelocity = 4;
+			MaxJumpVelocity = 12;
 			searchDistance = 600;
 		}
 
 		protected override bool DoPreStuckCheckGroundedMovement()
 		{
-			if (!gHelper.didJustLand)
+			if (!GHelper.didJustLand)
 			{
 				Projectile.velocity.X = intendedX;
 				// only path after landing
@@ -74,11 +74,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 				return;
 			}
 			// always jump "long" if we're far away from the enemy
-			if (Math.Abs(vector.X) > startFlyingAtTargetDist && vector.Y < -32)
+			if (Math.Abs(vector.X) > StartFlyingDist && vector.Y < -32)
 			{
 				vector.Y = -32;
 			}
-			gHelper.DoJump(vector);
+			GHelper.DoJump(vector);
 			int baseSpeed = (int)leveledPetPlayer.PetLevelInfo.BaseSpeed;
 			int maxHorizontalSpeed = vector.Y < -64 ? baseSpeed/2 : baseSpeed;
 			if(TargetNPCIndex is int idx && vector.Length() < 64)
