@@ -118,9 +118,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		{
 			base.AfterMoving();
 			Projectile.friendly &= !ShouldDoShootingMovement;
-			// having a slightly negative velocity messes with the vanilla frame determination
+			// having a slightly positive velocity from constant gravity messes with the vanilla frame
+			// determination
 			// This occurs after the velocity cache, so it should be ignored for actual calculations
-			if(Math.Abs(Projectile.velocity.Y) < 1)
+			if(Projectile.velocity.Y == 0.5f)
 			{
 				Projectile.velocity.Y = 0;
 			}

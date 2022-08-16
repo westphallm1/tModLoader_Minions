@@ -89,6 +89,7 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 			Call("RegisterFlyingPet", "AnimatedTomeProj", "AnimatedTomeBuff", (int?)ProjectileID.BookStaffShot);
 			Call("RegisterFlyingPet", "PetGolemHeadProj", "PetGolemHeadBuff", FindProj("PetGolemHeadFireball")?.Type);
 			Call("RegisterFlyingPet", "DrumstickElementalProj", "DrumstickElementalBuff", null);
+			Call("RegisterFlyingPet", "PigronataProj", "PigronataBuff", null);
 		}
 
 		/// <summary>
@@ -98,6 +99,10 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 		{
 			if (!ModLoader.TryGetMod("AssortedCrazyThings", out Mod actMod)) { return; }
 			Call("RegisterGroundedPet", "CuteLamiaPetProj", "CuteLamiaPetBuff", (int?)ProjectileID.AmethystBolt);
+			Call("RegisterGroundedPet", "MiniAntlionProj", "MiniAntlionBuff", null);
+			Call("RegisterGroundedPet", "DynamiteBunnyProj", "DynamiteBunnyBuff", null);
+			Call("RegisterGroundedPet", "StrangeRobotProj", "StrangeRobotBuff", null);
+			Call("RegisterGroundedPet", "SuspiciousNuggetProj", "SuspiciousNuggetBuff", null);
 		}
 
 

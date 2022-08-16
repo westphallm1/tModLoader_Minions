@@ -28,15 +28,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		public Player Player => MinionBehavior.Player;
 
 		public int? TargetNPCIndex { get => MinionBehavior.TargetNPCIndex; set => MinionBehavior.TargetNPCIndex = value; }
-		public int TargetNPCCacheFrames { get => MinionBehavior.TargetNPCCacheFrames; set => MinionBehavior.TargetNPCCacheFrames = value; }
 
 
 		public bool UseBeacon { get => MinionBehavior.UseBeacon; set => MinionBehavior.UseBeacon = value; }
 
 		public bool UsingBeacon { get => MinionBehavior.UsingBeacon; set => MinionBehavior.UsingBeacon = value; }
-
-		public PlayerTargetSelectionTactic CurrentTactic { get => MinionBehavior.CurrentTactic; set => MinionBehavior.CurrentTactic = value; }
-		public PlayerTargetSelectionTactic PreviousTactic { get => MinionBehavior.PreviousTactic; set => MinionBehavior.PreviousTactic = value; }
 
 		public bool Spawned { get => MinionBehavior.Spawned; private set => MinionBehavior.Spawned = value; }
 

@@ -23,7 +23,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 	{
 		public Vector2 VectorToIdle { get => Behavior.VectorToIdle; set => Behavior.VectorToIdle = value; }
 		public Vector2? VectorToTarget { get => Behavior.VectorToTarget; set => Behavior.VectorToTarget = value; }
-		public Vector2 OldVectorToIdle { get => Behavior.OldVectorToIdle; set => Behavior.OldVectorToIdle = value; }
 		public Vector2? OldVectorToTarget { get => Behavior.OldVectorToTarget; set => Behavior.OldVectorToTarget = value; }
 		public int? OldTargetNpcIndex { get => Behavior.OldTargetNpcIndex; set => Behavior.OldTargetNpcIndex = value; }
 		public int FramesSinceHadTarget { get => Behavior.FramesSinceHadTarget; set => Behavior.FramesSinceHadTarget = value; }

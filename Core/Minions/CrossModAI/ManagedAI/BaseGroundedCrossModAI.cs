@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public virtual void IdleFlyingMovement(Vector2 vector)
 		{
-			if (!GHelper.DropThroughPlatform() && Behavior.AnimationFrame - LastHitFrame > 15)
+			if (!(vector.Y > 8 && GHelper.DropThroughPlatform()) && Behavior.AnimationFrame - LastHitFrame > 15)
 			{
 				base.IdleMovement(vector);
 			}

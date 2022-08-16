@@ -67,6 +67,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public override void IdleMovement(Vector2 vectorToIdlePosition)
 		{
 			// Always calculate an cache a 
+			Projectile.tileCollide = false;
 			if (vectorToIdlePosition.LengthSquared() > MaxSpeed * MaxSpeed)
 			{
 				vectorToIdlePosition.SafeNormalize();

@@ -72,5 +72,16 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		{
 			CrossModAI?.PostAI();
 		}
+
+
+		public override bool MinionContactDamage(Projectile projectile)
+		{
+			// Ensure that pets that are turned into enemies deal contact damage
+			if(CrossModAI != default)
+			{
+				return true;
+			}
+			return base.MinionContactDamage(projectile);
+		}
 	}
 }
