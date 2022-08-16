@@ -93,17 +93,9 @@ namespace AmuletOfManyMinions.Items.Consumables
 
 		public override bool CanUseItem(Player player) {
 			var quizPlayer = player.GetModPlayer<CombatPetsQuizModPlayer>();
-			if(quizPlayer.IsTakingQuiz)
-			{
-				return false;
-			}
-			if(!quizPlayer.HasTakenQuiz)
-			{
-				Main.NewText(FriendshipBowRequirement);
-				return false;
-			}
-			return true;
-		} 
+			return !quizPlayer.IsTakingQuiz;
+		}
+
 		public override void SetStaticDefaults()
 		{
 			Tooltip.SetDefault(
@@ -116,7 +108,17 @@ namespace AmuletOfManyMinions.Items.Consumables
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				player.GetModPlayer<CombatPetsQuizModPlayer>().StartPartnerQuiz(Type);
+				var quizPlayer = player.GetModPlayer<CombatPetsQuizModPlayer>();
+				if (!quizPlayer.HasTakenQuiz)
+				{
+					if (player.ItemAnimationJustStarted)
+					{
+						//By returning null, item will not be consumed, but item animation still runs, so this check ensures the text only shows up on first tick of use
+						Main.NewText(FriendshipBowRequirement);
+					}
+					return null;
+				}
+				quizPlayer.StartPartnerQuiz(Type);
 			}
 			return null;
 		}

@@ -154,13 +154,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 			base.TargetedMovement(vectorToTargetPosition);
 		}
 
-		public override void CheckActive()
+		public override bool CheckActive()
 		{
-			base.CheckActive();
-			if(!Player.GetModPlayer<MinionSpawningItemPlayer>().lilEntAccessoryEquipped)
+			if (base.CheckActive() && !Player.GetModPlayer<MinionSpawningItemPlayer>().lilEntAccessoryEquipped)
 			{
 				Projectile.Kill();
+				return false;
 			}
+
+			return true;
 		}
 	}
 }

@@ -34,23 +34,6 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		internal bool HasTakenQuiz => LastUsedTypes.Any(t => t != PersonalityType.NONE);
 
-		// TODO can't seem to get the SetStaticDefaults hook on ModSystem working, do it here instead
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			QuizResult.ResultsMap = QuizResult.MakeResultsMap();
-			if(Main.dedServ)
-			{
-				return;
-			}
-			string TextureBasePath = GetType().Namespace.Replace('.', '/') + "/Portrait_";
-			foreach(var personalityType in QuizResult.ResultsMap.Keys)
-			{
-				string TexturePath = TextureBasePath + Enum.GetName(personalityType);
-				QuizResult.ResultsMap[personalityType].PortraitTexture = ModContent.Request<Texture2D>(TexturePath);
-			}
-		}
-
 		internal void StartPersonalityQuiz(int itemType)
 		{
 			IsTakingQuiz = true;

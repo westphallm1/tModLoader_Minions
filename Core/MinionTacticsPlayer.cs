@@ -31,24 +31,30 @@ namespace AmuletOfManyMinions.Core.Minions
 		public static int MAX_TACTICS_GROUP = TACTICS_GROUPS_COUNT -1;
 
 		// The list of tactics "teams" belonging to the player
-		public PlayerTargetSelectionTactic[] PlayerTacticsGroups = new PlayerTargetSelectionTactic[TACTICS_GROUPS_COUNT];
-		public byte[] TacticsIDs = new byte[TACTICS_GROUPS_COUNT];
+		public PlayerTargetSelectionTactic[] PlayerTacticsGroups;
+		public byte[] TacticIDByGroup;
 
 		// The active tactics group
 		public int CurrentTacticGroup = 0;
 
 		// map from minion buff to tactics group
-		public Dictionary<int, int> MinionTacticsMap = new Dictionary<int, int>();
+		public Dictionary<int, int> MinionTacticsMap;
 		private bool setInstancedCollections;
 
-		public byte TacticID { get => TacticsIDs[CurrentTacticGroup]; private set => TacticsIDs[CurrentTacticGroup] = value; }
-
+		public byte TacticID
+		{
+			get => TacticIDByGroup[CurrentTacticGroup];
+			private set => TacticIDByGroup[CurrentTacticGroup] = value;
+		}
 
 		public TargetSelectionTactic SelectedTactic => TargetSelectionTacticHandler.GetTactic(TacticID);
 
 
-		public PlayerTargetSelectionTactic PlayerTactic { get => PlayerTacticsGroups[CurrentTacticGroup]; set => PlayerTacticsGroups[CurrentTacticGroup] = value; }
-
+		public PlayerTargetSelectionTactic PlayerTactic
+		{
+			get => PlayerTacticsGroups[CurrentTacticGroup];
+			set => PlayerTacticsGroups[CurrentTacticGroup] = value;
+		}
 
 		private List<byte> TacticIDCycle;
 
@@ -56,20 +62,7 @@ namespace AmuletOfManyMinions.Core.Minions
 		/// The list of buffs that have been altered for this modplayer since the last 
 		/// sync.
 		/// </summary>
-		private List<int> BuffIdsToSync = new List<int>();
-		/// <summary>
-		/// String array used to hold on to saved tactic names until OnEnterWorld is called
-		/// There seems to be a very strange interplay between Initialize and Load that causes
-		/// tactics to be overwritten back and forth between them, this is the simplest way 
-		/// to resolve.
-		/// </summary>
-		private string[] savedTacticsNames;
-
-		/// <summary>
-		/// byte array used to hold saved minion buff groups, for a similar workaround as 
-		/// savedTacticsNames
-		/// </summary>
-		private byte[] buffsToLoad;
+		private List<int> BuffIdsToSync;
 
 		private int PreviousTacticGroup = 0;
 		private byte PreviousTacticID = TargetSelectionTacticHandler.DefaultTacticID;
@@ -126,16 +119,16 @@ namespace AmuletOfManyMinions.Core.Minions
 		/// Update every tactic for the modplayer, and also their selected tactic.
 		/// Only used to update non-Main.myPlayer ModPlayers via netcode.
 		/// </summary>
-		/// <param name="tacticsIds"></param>
-		/// <param name="selectedTactic"></param>
-		internal void SetAllTactics(byte[] tacticsIds, byte? selectedTactic = null)
+		/// <param name="tacticIDByGroup"></param>
+		/// <param name="selectedTacticGroup"></param>
+		internal void SetAllTactics(byte[] tacticIDByGroup, byte? selectedTacticGroup = null)
 		{
 			// don't reallocate, not sure it really matters though
 			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{
-				TacticsIDs[i] = tacticsIds[i];
+				TacticIDByGroup[i] = tacticIDByGroup[i];
 			}
-			if(selectedTactic is byte selected)
+			if(selectedTacticGroup is byte selected)
 			{
 				CurrentTacticGroup = selected;
 			}
@@ -165,6 +158,10 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		public override void Initialize()
 		{
+			PlayerTacticsGroups = new PlayerTargetSelectionTactic[TACTICS_GROUPS_COUNT];
+			MinionTacticsMap = new Dictionary<int, int>();
+			BuffIdsToSync = new List<int>();
+
 			CurrentTacticGroup = 0;
 			SyncTimer = 0;
 			TacticIDCycle = new List<byte>
@@ -178,12 +175,19 @@ namespace AmuletOfManyMinions.Core.Minions
 				TargetSelectionTacticHandler.GetTactic<SpreadOut>().ID,
 				TargetSelectionTacticHandler.GetTactic<AttackGroups>().ID,
 			};
-		}
 
+			TacticIDByGroup = new byte[TACTICS_GROUPS_COUNT];
+			for (int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+			{
+				//Initialize all tactic IDs with the first element from the cycle
+				TacticIDByGroup[i] = TacticIDCycle[0];
+			}
+		}
 
 		public override void SaveData(TagCompound tag)
 		{
-			string tacticsNameList = string.Join(",", TacticsIDs.Select(id => TargetSelectionTacticHandler.GetTactic(id).Name));
+			//Transform selected tactic per group into comma separated string of the tactic name (so in case of renames/removals, it will revert back to default)
+			string tacticsNameList = string.Join(",", TacticIDByGroup.Select(id => TargetSelectionTacticHandler.GetTactic(id).Name));
 			// 256 is probably generous enough to not require any resizing in most cases
 			MemoryStream stream = new MemoryStream(256);
 			MinionTacticsGroupMapper.WriteBuffMap(new BinaryWriter(stream), MinionTacticsMap);
@@ -219,40 +223,25 @@ namespace AmuletOfManyMinions.Core.Minions
 				TacticID = TargetSelectionTacticHandler.GetTactic(tacticName).ID;
 			} else
 			{
-				// extremely odd class of bug here where load is called multiple times, try to 
-				// make things as idempotent as possible
 				if(tacticsTag.ContainsKey("names"))
 				{
-					savedTacticsNames = tacticsTag.GetString("names").Split(',');
+					var savedTacticsNames = tacticsTag.GetString("names").Split(',');
+					for (int i = 0; i < TACTICS_GROUPS_COUNT; i++)
+					{
+						TacticIDByGroup[i] = TargetSelectionTacticHandler.GetTactic(savedTacticsNames[i]).ID;
+					}
 				}
-				if(tacticsTag.ContainsKey("minionGroups") && MinionTacticsMap.Count == 0)
+				if(tacticsTag.ContainsKey("minionGroups"))
 				{
-					buffsToLoad = tacticsTag.GetByteArray("minionGroups");
+					MemoryStream savedMinionsStream = new MemoryStream(tacticsTag.GetByteArray("minionGroups"));
+					MinionTacticsGroupMapper.ReadBuffMap(new BinaryReader(savedMinionsStream), MinionTacticsMap);
 				}
 			}
 		}
 
-		// set collections per-mod player
+		// init tactics collections per-mod player
 		private void SetInstancedCollections()
 		{
-			PlayerTacticsGroups = new PlayerTargetSelectionTactic[TACTICS_GROUPS_COUNT];
-			TacticsIDs = new byte[TACTICS_GROUPS_COUNT];
-			CurrentTacticGroup = 0;
-			MinionTacticsMap = new Dictionary<int, int>();
-
-			// this needs to be late-initialized for some reason
-			if(savedTacticsNames != null)
-			{
-				for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
-				{
-					TacticsIDs[i] = TargetSelectionTacticHandler.GetTactic(savedTacticsNames[i]).ID;
-				}
-			}
-			if(buffsToLoad != null)
-			{
-				MemoryStream savedMinionsStream = new MemoryStream(buffsToLoad);
-				MinionTacticsGroupMapper.ReadBuffMap(new BinaryReader(savedMinionsStream), MinionTacticsMap);
-			}
 			for(int i = 0; i < TACTICS_GROUPS_COUNT; i++)
 			{
 				CurrentTacticGroup = i;
@@ -314,7 +303,7 @@ namespace AmuletOfManyMinions.Core.Minions
 						SyncTimer = 0; //Stop timer from incrementing
 						if(syncTactic)
 						{
-							new TacticPacket(Player, TacticsIDs).Send();
+							new TacticPacket(Player, TacticIDByGroup).Send();
 							syncTactic = false;
 						}
 						if(syncConfig)

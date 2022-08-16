@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Items.Accessories.CombatPetAccessories;
 using AmuletOfManyMinions.Items.Materials;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,22 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			base.Load();
 			BasicQuestions = MakeQuestions();
 			ClassSpecificQuestions = MakeClassSpecificQuestions();
+		}
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			QuizResult.ResultsMap = QuizResult.MakeResultsMap();
+			if (Main.dedServ)
+			{
+				return;
+			}
+			string TextureBasePath = GetType().Namespace.Replace('.', '/') + "/Portrait_";
+			foreach (var personalityType in QuizResult.ResultsMap.Keys)
+			{
+				string TexturePath = TextureBasePath + Enum.GetName(personalityType);
+				QuizResult.ResultsMap[personalityType].PortraitTexture = ModContent.Request<Texture2D>(TexturePath);
+			}
 		}
 
 		public override void Unload()

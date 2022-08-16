@@ -66,7 +66,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		}
 		public override void AI()
 		{
-			CheckActive();
+			if (!CheckActive())
+			{
+				//Projectile despawned, don't continue with AI
+				return;
+			}
 			if (!Spawned)
 			{
 				Spawned = true;
@@ -81,7 +85,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		}
 
-		public virtual void CheckActive()
+		/// <summary>
+		/// Returns false if the projectile was manually despawned
+		/// </summary>
+		public virtual bool CheckActive()
 		{
 			// This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
 			if (Player.dead || !Player.active)
@@ -96,7 +103,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			else if (Main.projPet[Projectile.type])
 			{
 				Projectile.Kill(); // pets don't die naturally for some reason
+				return false;
 			}
+
+			return true;
 		}
 
 		/// <summary>

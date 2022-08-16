@@ -119,21 +119,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			}
 		}
 
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		public override void IdleMovement(Vector2 VectorToIdlePosition)
 		{
-			isCloseToCenter = vectorToIdlePosition.LengthSquared() < 16 * 16;
-			base.IdleMovement(vectorToIdlePosition);
+			isCloseToCenter = VectorToIdlePosition.LengthSquared() < 16 * 16;
+			base.IdleMovement(VectorToIdlePosition);
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void TargetedMovement(Vector2 VectorToTargetPosition)
 		{
 			int travelSpeed = 14;
 			int projectileVelocity = 20;
 			int inertia = 10;
 			Projectile.spriteDirection = 1;
-			Projectile.rotation = (-vectorToTargetPosition).ToRotation();
-			Vector2 lineOfFire = vectorToTargetPosition;
-			Vector2 oppositeVector = -vectorToTargetPosition;
+			Projectile.rotation = (-VectorToTargetPosition).ToRotation();
+			Vector2 lineOfFire = VectorToTargetPosition;
+			Vector2 oppositeVector = -VectorToTargetPosition;
 			oppositeVector.SafeNormalize();
 			float targetDistanceFromFoe = 64f;
 			if (TargetNPCIndex is int targetIdx && Main.npc[targetIdx].active)
@@ -143,10 +143,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 				Rectangle hitbox = npc.Hitbox;
 				targetDistanceFromFoe += (hitbox.Width + hitbox.Height) / 4;
 			}
-			vectorToTargetPosition += targetDistanceFromFoe * oppositeVector;
+			VectorToTargetPosition += targetDistanceFromFoe * oppositeVector;
 			if (Player.whoAmI == Main.myPlayer && IsMyTurn() &&
 				AnimationFrame - lastShootFrame >= attackFrames &&
-				vectorToTargetPosition.LengthSquared() < 96 * 96)
+				VectorToTargetPosition.LengthSquared() < 96 * 96)
 			{
 				lineOfFire.SafeNormalize();
 				lineOfFire *= projectileVelocity;
@@ -161,13 +161,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 					Main.myPlayer);
 				SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
 			}
-			DistanceFromGroup(ref vectorToTargetPosition);
-			if (vectorToTargetPosition.Length() > travelSpeed)
+			DistanceFromGroup(ref VectorToTargetPosition);
+			if (VectorToTargetPosition.Length() > travelSpeed)
 			{
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= travelSpeed;
+				VectorToTargetPosition.SafeNormalize();
+				VectorToTargetPosition *= travelSpeed;
 			}
-			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToTargetPosition) / inertia;
+			Projectile.velocity = (Projectile.velocity * (inertia - 1) + VectorToTargetPosition) / inertia;
 		}
 	}
 
@@ -308,19 +308,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Vector2 idlePosition = Player.Top;
 			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -24 + 8 * (float)Math.Sin(MathHelper.TwoPi * (AnimationFrame % 120) / 120);
-			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
+			Vector2 VectorToIdlePosition = idlePosition - Projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
 				idlePosition.X = Player.Top.X;
 				idlePosition.Y = Player.Top.Y - 16;
 			}
-			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			return vectorToIdlePosition;
+			TeleportToPlayer(ref VectorToIdlePosition, 2000f);
+			return VectorToIdlePosition;
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void TargetedMovement(Vector2 VectorToTargetPosition)
 		{
-			// stay floating behind the player at all times
+			// stay floating behind the Player at all times
 			IdleMovement(VectorToIdle);
 			framesSinceLastHit++;
 			int rateOfFire = Math.Max(25, 60 - 5 * EmpowerCount);
@@ -329,20 +329,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			{
 				NPC target = Main.npc[npcIdx];
 				// try to predict the position at the time of impact a bit
-				lastShotVector = vectorToTargetPosition;
+				lastShotVector = VectorToTargetPosition;
 				lastShotVector.Y *= -1;
-				vectorToTargetPosition += (vectorToTargetPosition.Length() / projectileVelocity) * target.velocity;
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= projectileVelocity;
+				VectorToTargetPosition += (VectorToTargetPosition.Length() / projectileVelocity) * target.velocity;
+				VectorToTargetPosition.SafeNormalize();
+				VectorToTargetPosition *= projectileVelocity;
 				Vector2 pos = Projectile.Center;
 				framesSinceLastHit = 0;
-				Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
+				Projectile.spriteDirection = VectorToTargetPosition.X > 0 ? 1 : -1;
 				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
 						pos,
-						VaryLaunchVelocity(vectorToTargetPosition),
+						VaryLaunchVelocity(VectorToTargetPosition),
 						ProjectileType<GoblinGunnerBullet>(),
 						Projectile.damage,
 						Projectile.knockBack,
@@ -403,13 +403,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 			Projectile.rotation = Projectile.velocity.X * 0.025f;
 		}
 
-		public override void CheckActive()
+		public override bool CheckActive()
 		{
-			base.CheckActive();
-			if(Player.ownedProjectileCounts[CounterType] == 0 && AnimationFrame > 2)
+			if (base.CheckActive() && Player.ownedProjectileCounts[CounterType] == 0 && AnimationFrame > 2)
 			{
 				Projectile.Kill();
+				return false;
 			}
+
+			return true;
 		}
 	}
 }

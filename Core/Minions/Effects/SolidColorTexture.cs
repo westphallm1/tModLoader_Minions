@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core.Minions.Effects
 {
+	[Autoload(true, Side = ModSide.Client)]
 	internal class SolidColorTexture : ModSystem
 	{
 		private static Dictionary<string, Texture2D> textureCache;
@@ -32,11 +33,6 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 		public static Texture2D GetSolidTexture(string key, Texture2D baseTexture)
 		{
-			if(Main.dedServ)
-			{
-				return default;
-			}
-
 			if(textureCache.TryGetValue(key, out var cachedTexture))
 			{
 				// don't re-process already processed textures

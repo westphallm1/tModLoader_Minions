@@ -144,14 +144,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				if (Projectile.owner == Main.myPlayer && timeElapsed - lastShotFrame > 20 && AnyEnemyInRange(400f) is Vector2 target)
 				{
 					lastShotFrame = timeElapsed;
-					Vector2 vectorToTarget = target - Projectile.Center;
-					vectorToTarget.Normalize();
-					vectorToTarget *= 12;
-					vectorToTarget += Main.npc[(int)TargetNPCIndex].velocity;
+					Vector2 VectorToTarget = target - Projectile.Center;
+					VectorToTarget.Normalize();
+					VectorToTarget *= 12;
+					VectorToTarget += Main.npc[(int)TargetNPCIndex].velocity;
 					Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
 						Projectile.Center,
-						vectorToTarget,
+						VectorToTarget,
 						ProjectileType<BoneSphereBoneProjectile>(),
 						3 * Projectile.damage / 4,
 						Projectile.knockBack,
@@ -194,12 +194,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			return default;
 		}
 
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		public override void IdleMovement(Vector2 VectorToIdlePosition)
 		{
 			// no op
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void TargetedMovement(Vector2 VectorToTargetPosition)
 		{
 			// no op
 		}
@@ -249,46 +249,46 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			Vector2 idlePosition = Player.Top;
 			idlePosition.X += -Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingInAir, Projectile);
 			idlePosition.Y += -24 + 8 * (float)Math.Sin(MathHelper.TwoPi * (AnimationFrame % 120) / 120);
-			Vector2 vectorToIdlePosition = idlePosition - Projectile.Center;
+			Vector2 VectorToIdlePosition = idlePosition - Projectile.Center;
 			if (!Collision.CanHitLine(idlePosition, 1, 1, Player.Center, 1, 1))
 			{
 				idlePosition.X = Player.Top.X;
 				idlePosition.Y = Player.Top.Y - 16;
 			}
-			TeleportToPlayer(ref vectorToIdlePosition, 2000f);
-			return vectorToIdlePosition;
+			TeleportToPlayer(ref VectorToIdlePosition, 2000f);
+			return VectorToIdlePosition;
 		}
 
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		public override void IdleMovement(Vector2 VectorToIdlePosition)
 		{
-			base.IdleMovement(vectorToIdlePosition);
+			base.IdleMovement(VectorToIdlePosition);
 			if (VectorToTarget is null)
 			{
 				framesSinceLastHit = rateOfFire;
 			}
 			Lighting.AddLight(Projectile.position, Color.White.ToVector3() * 0.5f);
 		}
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void TargetedMovement(Vector2 VectorToTargetPosition)
 		{
-			// stay floating behind the player at all times
+			// stay floating behind the Player at all times
 			IdleMovement(VectorToIdle);
 			framesSinceLastHit++;
 			int projectileVelocity = 6 + EmpowerCount / 2;
 			if (framesSinceLastHit++ > rateOfFire)
 			{
 				// try to predict the position at the time of impact a bit
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= projectileVelocity;
+				VectorToTargetPosition.SafeNormalize();
+				VectorToTargetPosition *= projectileVelocity;
 				Vector2 pos = Projectile.Center;
 				framesSinceLastHit = 0;
-				Projectile.spriteDirection = vectorToTargetPosition.X > 0 ? 1 : -1;
+				Projectile.spriteDirection = VectorToTargetPosition.X > 0 ? 1 : -1;
 				SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
 				if (Main.myPlayer == Player.whoAmI)
 				{
 					projId = Projectile.NewProjectile(
 						Projectile.GetSource_FromThis(),
 						pos,
-						VaryLaunchVelocity(vectorToTargetPosition),
+						VaryLaunchVelocity(VectorToTargetPosition),
 						ProjectileType<BoneSphereProjectile>(),
 						Projectile.damage,
 						Projectile.knockBack,
@@ -297,9 +297,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			}
 			else if (Main.myPlayer == Player.whoAmI && framesSinceLastHit == 30 && Main.projectile[projId].active)
 			{
-				vectorToTargetPosition.SafeNormalize();
-				vectorToTargetPosition *= projectileVelocity;
-				Main.projectile[projId].velocity = vectorToTargetPosition;
+				VectorToTargetPosition.SafeNormalize();
+				VectorToTargetPosition *= projectileVelocity;
+				Main.projectile[projId].velocity = VectorToTargetPosition;
 			}
 		}
 
@@ -362,13 +362,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				Projectile.spriteDirection = Projectile.velocity.X > 0 ? 1 : -1;
 			}
 		}
-		public override void CheckActive()
+		public override bool CheckActive()
 		{
-			base.CheckActive();
-			if(Player.ownedProjectileCounts[CounterType] == 0 && AnimationFrame > 2)
+			if (base.CheckActive() && Player.ownedProjectileCounts[CounterType] == 0 && AnimationFrame > 2)
 			{
 				Projectile.Kill();
+				return false;
 			}
+
+			return true;
 		}
 	}
 
@@ -454,11 +456,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			}
 		}
 
-		public override void IdleMovement(Vector2 vectorToIdlePosition)
+		public override void IdleMovement(Vector2 VectorToIdlePosition)
 		{
 			if (!DoInactiveMovement())
 			{
-				base.IdleMovement(vectorToIdlePosition);
+				base.IdleMovement(VectorToIdlePosition);
 			}
 		}
 
@@ -510,13 +512,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			Projectile.velocity.X = (Projectile.velocity.X * (xInertia - 1) + Math.Sign(vector.X) * xMaxSpeed) / xInertia;
 		}
 
-		public override void TargetedMovement(Vector2 vectorToTargetPosition)
+		public override void TargetedMovement(Vector2 VectorToTargetPosition)
 		{
 			if (DoInactiveMovement() || isDropping)
 			{
 				return;
 			}
-			else if (vectorToTargetPosition.Length() < explosionRadius / 2 && !UsingBeacon)
+			else if (VectorToTargetPosition.Length() < explosionRadius / 2 && !UsingBeacon)
 			{
 				lastExplosionFrame = AnimationFrame;
 				explosionLocation = Projectile.Center;
@@ -526,7 +528,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			}
 			else
 			{
-				base.TargetedMovement(canAttack ? vectorToTargetPosition : VectorToIdle);
+				base.TargetedMovement(canAttack ? VectorToTargetPosition : VectorToIdle);
 			}
 		}
 
