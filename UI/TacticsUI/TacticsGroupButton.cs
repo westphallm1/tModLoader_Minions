@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			base.DrawSelf(spriteBatch);
 			// draw a little icon in the bottem left corner the current tactic for the given group
 			MinionTacticsPlayer tacticsPlayer = Main.player[Main.myPlayer].GetModPlayer<MinionTacticsPlayer>();
-			byte tacticsId = tacticsPlayer.TacticsIDs[index];
+			byte tacticsId = tacticsPlayer.TacticIDByGroup[index];
 			Texture2D tacticSmallTexture = TargetSelectionTacticHandler.SmallTextures[tacticsId].Value;
 			CalculatedStyle dimensions = GetDimensions();
 			float scale = 0.75f;

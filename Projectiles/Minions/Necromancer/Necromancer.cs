@@ -363,13 +363,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 				Projectile.spriteDirection = Projectile.velocity.X > 0 ? 1 : -1;
 			}
 		}
-		public override void CheckActive()
+		public override bool CheckActive()
 		{
-			base.CheckActive();
-			if(player.ownedProjectileCounts[CounterType] == 0 && animationFrame > 2)
+			if (base.CheckActive() && player.ownedProjectileCounts[CounterType] == 0 && animationFrame > 2)
 			{
 				Projectile.Kill();
+				return false;
 			}
+
+			return true;
 		}
 	}
 

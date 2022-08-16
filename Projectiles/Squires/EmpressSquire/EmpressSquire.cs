@@ -137,8 +137,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		{
 			base.OnSpawn();
 			// run this as late as possible, hope to avoid issues with asset loading
-			solidTexture = SolidColorTexture.GetSolidTexture(Type);
-			solidWeaponTexture = SolidColorTexture.GetSolidTexture("EmpressWeapon", WeaponTexture.Value);
+			if (!Main.dedServ)
+			{
+				solidTexture = SolidColorTexture.GetSolidTexture(Type);
+				solidWeaponTexture = SolidColorTexture.GetSolidTexture("EmpressWeapon", WeaponTexture.Value);
+			}
 		}
 
 		public override void SpecialTargetedMovement(Vector2 vectorToTargetPosition)

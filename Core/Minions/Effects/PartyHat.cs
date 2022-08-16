@@ -64,6 +64,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		}
 	}
 
+	[Autoload(true, Side = ModSide.Client)]
 	public class PartyHatSystem: GlobalProjectile
 	{
 		public static Dictionary<int, PartyHatConfig> ManualHats;
@@ -75,13 +76,8 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 		public override void SetStaticDefaults()
 		{
 			// load all configurations in a single file to make backporting to 1.3 easier (ugh)
-			if(!Main.dedServ)
-			{
-				Main.instance.LoadItem(ItemID.PartyHat);
-			}
 			PostDrawHats = new Dictionary<int, PartyHatConfig>
 			{
-
 				/////////////
 				// minions //
 				/////////////
@@ -139,6 +135,7 @@ namespace AmuletOfManyMinions.Core.Minions.Effects
 
 		public static void DrawHat(Projectile projectile, PartyHatConfig config, Color lightColor)
 		{
+			Main.instance.LoadItem(ItemID.PartyHat);
 			Texture2D hatTexture = Terraria.GameContent.TextureAssets.Item[ItemID.PartyHat].Value;
 			float r = projectile.rotation;
 			SpriteEffects effects = projectile.spriteDirection * config.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0;

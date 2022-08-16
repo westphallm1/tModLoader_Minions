@@ -55,9 +55,10 @@ namespace AmuletOfManyMinions.Projectiles.NonMinionSummons
 			return;
 		}
 
-		public override void CheckActive()
+		public override bool CheckActive()
 		{
 			// no-op
+			return true;
 		}
 	}
 }

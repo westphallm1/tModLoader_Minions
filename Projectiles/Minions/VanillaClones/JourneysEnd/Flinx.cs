@@ -66,14 +66,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			Projectile.minionSlots = 0;
 		}
 
-		public override void CheckActive()
+		public override bool CheckActive()
 		{
-			base.CheckActive();
-			if(!player.GetModPlayer<MinionSpawningItemPlayer>().flinxArmorSetEquipped)
+			if (base.CheckActive() && !player.GetModPlayer<MinionSpawningItemPlayer>().flinxArmorSetEquipped)
 			{
 				Projectile.Kill();
+				return false;
 			}
-		}
 
+			return true;
+		}
 	}
 }
