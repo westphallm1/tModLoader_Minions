@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Core.Minions.Pathfinding;
+﻿using AmuletOfManyMinions.Core.Minions.CrossModAI;
+using AmuletOfManyMinions.Core.Minions.Pathfinding;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Minions;
 using Microsoft.Xna.Framework;
@@ -82,6 +83,10 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 
 		internal bool IsFollowingBeacon { get; set; }
 
+		internal Vector2? NextPathfindingTarget { get; set; }
+
+		internal Vector2? PathfindingDestination { get; set; }
+
 		private readonly int ProximityForOnHitTarget = 24;
 
 		public int GroupAnimationFrames = 180;
@@ -98,10 +103,18 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			Pathfinder = new(minion);
 		}
 
-		public void MainBehavior()
+		private void ResetState()
 		{
 			TargetNPCIndex = null;
 			GroupState.Clear();
+			IsFollowingBeacon = false;
+			PathfindingDestination = null;
+			NextPathfindingTarget = null;
+		}
+
+		public void MainBehavior()
+		{
+			ResetState();
 			VectorToIdle = Minion.IdleBehavior();
 
 			// Determine whether to update tactic selection, and whether th change pathfinding state
@@ -109,7 +122,6 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			var tacticsPlayer = Player.GetModPlayer<MinionTacticsPlayer>();
 			var waypointsPlayer = Player.GetModPlayer<MinionPathfindingPlayer>();
 			bool didChangePathfindingState = false;
-			IsFollowingBeacon = false;
 			bool tacticMissing = false;
 			if (UseBeacon && UsesTactics)
 			{
@@ -171,6 +183,8 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			else if (useBeaconThisFrame && Pathfinder.NextPathfindingTarget() is Vector2 pathNode)
 			{
 				IsFollowingBeacon = true;
+				NextPathfindingTarget = pathNode;
+				PathfindingDestination = Pathfinder.pathfinder.waypointPosition;
 				Projectile.friendly = false;
 				if (Pathfinder.isStuck)
 				{

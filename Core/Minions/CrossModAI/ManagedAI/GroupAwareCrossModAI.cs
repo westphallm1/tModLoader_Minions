@@ -21,12 +21,11 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 	{
 		internal HeadCirclingHelper CircleHelper { get; set; }
 
-		internal bool IsPet { get; set; } = true;
-
 		internal int? FiredProjectileId { get; set; }
 
 		public GroupAwareCrossModAI(Projectile proj, int buffId, int? projId) : base(proj, buffId)
 		{
+			IsPet = true;
 			CircleHelper = new HeadCirclingHelper(this);
 			FiredProjectileId = projId;
 		}

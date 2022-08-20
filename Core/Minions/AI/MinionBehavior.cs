@@ -36,6 +36,9 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 		public Player Player => Main.player[Projectile.owner];
 
 		public int? TargetNPCIndex { get; set; }
+
+		// TODO this doesn't refresh every frame, might cause cross mod issues
+		public List<NPC> PossibleTargets; 
 		public int TargetNPCCacheFrames { get; set; }
 
 
@@ -132,7 +135,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			{
 				rangeCheckCenter = Player.Center;
 			}
-			List<NPC> possibleTargets = new List<NPC>();
+			PossibleTargets = new List<NPC>();
 			for (int i = 0; i < Main.maxNPCs; i++)
 			{
 				NPC npc = Main.npc[i];
@@ -145,11 +148,11 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 				bool lineOfSight = inNoLOSRange || inRange && Collision.CanHitLine(losCenterVector, 1, 1, npc.position, npc.width, npc.height);
 				if (inNoLOSRange || lineOfSight && inRange)
 				{
-					possibleTargets.Add(npc);
+					PossibleTargets.Add(npc);
 				}
 			}
 			int tacticsGroup = tacticsPlayer.GetGroupForMinion(Minion);
-			NPC chosen = CurrentTactic.ChooseTargetNPC(Projectile, tacticsGroup, possibleTargets);
+			NPC chosen = CurrentTactic.ChooseTargetNPC(Projectile, tacticsGroup, PossibleTargets);
 			if (chosen != default)
 			{
 				TargetNPCIndex = chosen.whoAmI;
