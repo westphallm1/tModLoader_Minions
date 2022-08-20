@@ -65,15 +65,30 @@ namespace AmuletOfManyMinions.CrossModSystem
 			var a = new ArgsUnpacker(args, 1);
 			switch ((string)args[0])
 			{
-				case "RegisterPathfinder":
-					return RegisterPathfinder(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(8), a.Arg(12), a.Arg(600));
+				// Access the state of a projectile that has been registered for cross mod AI
+
+				// Register projectiles for different configurations of the cross mod AI
+				case "RegisterInfoMinion":
+					return RegisterInformationalMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(600));
+				case "RegisterInfoPet":
+					return RegisterInformationalPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
+
+				case "RegisterPathfindingMinion":
+					return RegisterPathfindingMinion(
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(600), a.Arg(8), a.Arg(12));
+				case "RegisterPathfindingPet":
+					return RegisterPathfindingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
+
+				case "RegisterFlyingMinion":
+					return RegisterFlyingMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12));
 				case "RegisterFlyingPet":
-					return RegisterFlyingPet(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(8), a.Arg(12), a.Arg(600));
+					return RegisterFlyingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>());
+
+				case "RegisterGroundedMinion":
+					return RegisterGroundedMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12));
 				case "RegisterGroundedPet":
-					return RegisterGroundedPet(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(8), a.Arg(12), a.Arg(600));
+					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>());
+
 				default:
 					break;
 			}
@@ -89,35 +104,80 @@ namespace AmuletOfManyMinions.CrossModSystem
 			}
 		}
 
-		internal static object RegisterPathfinder(ModProjectile proj, ModBuff buff, int travelSpeed, int inertia, int searchRange)
+		internal static object RegisterInformationalMinion(ModProjectile proj, ModBuff buff, int searchRange)
 		{
 			AddBuffMappingIdempotent(buff);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
-			{
-				return new BasicCrossModAI(proj, buff.Type, travelSpeed, inertia, searchRange, defaultPathfinding: true);
-			};
+				new BasicCrossModAI(proj, buff.Type,defaultPathfinding: false) { SearchRange = searchRange };
 			return default;
 		}
 
-		internal static object RegisterFlyingPet(ModProjectile proj, ModBuff buff, int? projType, int travelSpeed, int inertia, int searchRange)
+		internal static object RegisterInformationalPet(ModProjectile proj, ModBuff buff)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
-			{
-				return new FlyingCrossModAI(proj, buff.Type, projType);
-			};
+				new BasicCrossModAI(proj, buff.Type, defaultPathfinding: false) { IsPet = true };
 			return default;
 		}
 
-		internal static object RegisterGroundedPet(ModProjectile proj, ModBuff buff, int? projType, int travelSpeed, int inertia, int searchRange)
+		internal static object RegisterPathfindingMinion(ModProjectile proj, ModBuff buff, int searchRange, int travelSpeed, int inertia)
+		{
+			AddBuffMappingIdempotent(buff);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
+				new BasicCrossModAI(proj, buff.Type, defaultPathfinding: true)
+				{ 
+					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia
+				};
+			return default;
+		}
+
+		internal static object RegisterPathfindingPet(ModProjectile proj, ModBuff buff)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
-			{
-				return new GroundedCrossModAI(proj, buff.Type, projType);
-			};
+				new BasicCrossModAI(proj, buff.Type, defaultPathfinding: true, true);
+			return default;
+		}
+
+		internal static object RegisterFlyingPet(ModProjectile proj, ModBuff buff, int? projType)
+		{
+			AddBuffMappingIdempotent(buff);
+			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new FlyingCrossModAI(proj, buff.Type, projType, true);
+			return default;
+		}
+
+		internal static object RegisterFlyingMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia)
+		{
+			AddBuffMappingIdempotent(buff);
+			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
+				new FlyingCrossModAI(proj, buff.Type, projType, false) 
+				{ 
+					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia
+				};
+			return default;
+		}
+
+		internal static object RegisterGroundedPet(ModProjectile proj, ModBuff buff, int? projType)
+		{
+			AddBuffMappingIdempotent(buff);
+			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new GroundedCrossModAI(proj, buff.Type, projType, true);
+			return default;
+		}
+
+		internal static object RegisterGroundedMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia)
+		{
+			AddBuffMappingIdempotent(buff);
+			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
+				new GroundedCrossModAI(proj, buff.Type, projType, false) 
+				{ 
+					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia
+				};
 			return default;
 		}
 	}

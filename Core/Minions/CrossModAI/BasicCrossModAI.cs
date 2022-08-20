@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 {
@@ -122,15 +123,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 
 		public BasicCrossModAI(
-			Projectile projectile, int buffId, int maxSpeed = 8, int inertia = 8, int searchRange = 600, bool defaultPathfinding = false)
+			Projectile projectile, 
+			int buffId, bool defaultPathfinding = false, bool isPet = false)
 		{
 			Projectile = projectile;
 			BuffId = buffId;
-			MaxSpeed = maxSpeed;
-			Inertia = inertia;
-			SearchRange = searchRange;
 			UseDefaultPathfindingMovement = defaultPathfinding;
-			
+			IsPet = isPet;
 			Behavior = new(this);
 		}
 
@@ -141,6 +140,35 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		{
 			ProjCache.Cache(Projectile);
 			Player.position.Y = Projectile.position.Y - 320;
+		}
+
+		internal virtual void ApplyPetDefaults()
+		{
+			Projectile.minion = true;
+			Projectile.friendly = true;
+			Projectile.DamageType = DamageClass.Summon;
+		}
+
+		internal virtual void UpdatePetState()
+		{
+			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
+			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
+			SearchRange = info.BaseSearchRange;
+			Inertia = info.Level < 6 ? 10 : 15 - info.Level;
+			MaxSpeed = (int)info.BaseSpeed;
+			Projectile.originalDamage = leveledPetPlayer.PetDamage;
+		}
+
+		public virtual void OnSpawn()
+		{
+			if(IsPet) { ApplyPetDefaults(); }
+		}
+
+		public virtual Vector2 IdleBehavior()
+		{
+			if(IsPet) { UpdatePetState(); }
+			// no op
+			return default;
 		}
 
 		public virtual void IdleMovement(Vector2 vectorToIdlePosition)
@@ -188,13 +216,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		}
 
 		public virtual bool DoVanillaAI() => true;
-
-		public virtual Vector2 IdleBehavior()
-		{
-
-			// no op
-			return default;
-		}
 
 
 		public virtual bool MinionContactDamage() => false;

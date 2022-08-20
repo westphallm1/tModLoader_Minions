@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		internal int LastFiredFrame { get; set; }
 
 		internal virtual bool ShouldDoShootingMovement => FiredProjectileId != null;
-		public GroundedCrossModAI(Projectile proj, int buffId, int? projId) : base(proj, buffId, projId)
+		public GroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
 		{
 		}
 

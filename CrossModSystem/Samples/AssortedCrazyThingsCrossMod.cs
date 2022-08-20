@@ -46,19 +46,13 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 		internal void ACTRegisterSlimePathfinding()
 		{
 			if (!ModLoader.TryGetMod("AssortedCrazyThings", out Mod actMod)) { return; }
-			var amuletOfManyMinions = Mod; // this mod
-
-			ModProjectile actSlimeMinion = actMod.Find<ModProjectile>("SlimePackMinion");
-			ModProjectile actSlimeMinion2 = actMod.Find<ModProjectile>("SlimePackAssortedMinion");
-			ModProjectile actSlimeMinion3 = actMod.Find<ModProjectile>("SlimePackSpikedMinion");
-			ModBuff actSlimeBuff = actMod.Find<ModBuff>("SlimePackMinionBuff");
 			int travelSpeed = 8;
 			int inertia = 14;
 			int searchRange = 700;
 
-			Call("RegisterPathfinder", "SlimePackMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
-			Call("RegisterPathfinder", "SlimePackAssortedMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
-			Call("RegisterPathfinder", "SlimePackSpikedMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
+			Call("RegisterPathfindingMinion", "SlimePackMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
+			Call("RegisterPathfindingMinion", "SlimePackAssortedMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
+			Call("RegisterPathfindingMinion", "SlimePackSpikedMinion", "SlimePackMinionBuff", travelSpeed, inertia, searchRange);
 		}
 
 
@@ -75,8 +69,8 @@ namespace AmuletOfManyMinions.CrossModSystem.Samples
 			ModBuff actDroneBuff = actMod.Find<ModBuff>("DroneControllerBuff");
 			int travelSpeed = 8;
 
-			amuletOfManyMinions.Call("RegisterPathfinder", actDroneMinion, actDroneBuff, travelSpeed);
-			amuletOfManyMinions.Call("RegisterPathfinder", actDroneMinion2, actDroneBuff, travelSpeed);
+			amuletOfManyMinions.Call("RegisterPathfindingMinion", actDroneMinion, actDroneBuff, travelSpeed);
+			amuletOfManyMinions.Call("RegisterPathfindingMinion", actDroneMinion2, actDroneBuff, travelSpeed);
 			// TODO the rest of the drone types
 		}
 

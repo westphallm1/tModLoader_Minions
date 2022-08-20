@@ -23,36 +23,24 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal int? FiredProjectileId { get; set; }
 
-		public GroupAwareCrossModAI(Projectile proj, int buffId, int? projId) : base(proj, buffId)
+		public GroupAwareCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, isPet: isPet)
 		{
 			IsPet = true;
 			CircleHelper = new HeadCirclingHelper(this);
 			FiredProjectileId = projId;
 		}
 
-		internal virtual void ApplyPetDefaults()
+		internal override void ApplyPetDefaults()
 		{
-			Projectile.minion = true;
-			Projectile.friendly = true;
-			Projectile.DamageType = DamageClass.Summon;
+			base.ApplyPetDefaults();
 			// go slower and smaller circle than minions since it's a cute little pet
 			CircleHelper.idleBumbleFrames = 90;
 			CircleHelper.idleBumbleRadius = 96;
 		}
 
-		internal virtual void UpdatePetState()
-		{
-			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
-			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
-			SearchRange = info.BaseSearchRange;
-			Inertia = info.Level < 6 ? 10 : 15 - info.Level;
-			MaxSpeed = (int)info.BaseSpeed;
-			Projectile.originalDamage = leveledPetPlayer.PetDamage;
-		}
-
 		public override Vector2 IdleBehavior()
 		{
-			if(IsPet) { UpdatePetState(); }
+			base.IdleBehavior();
 
 			if(CircleHelper.IdleBumble && Player.velocity.Length() < 4)
 			{

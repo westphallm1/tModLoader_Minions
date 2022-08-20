@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public int DefaultJumpVelocity { get; set; } = 4;
 		public int MaxJumpVelocity { get; set; } = 12;
 
-		public BaseGroundedCrossModAI(Projectile proj, int buffId, int? projId) : base(proj, buffId, projId)
+		public BaseGroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
 		{
 			IdleLocationSets.trailingOnGround.Add(Projectile.type);
 			Behavior.NoLOSPursuitTime = 300;
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				base.IdleMovement(vector);
 			}
 			// ensure that the minion is in its flying animation while flying
-			if(Behavior.IsFollowingBeacon)
+			if(Behavior.IsFollowingBeacon || GHelper.isFlying)
 			{
 				FakePlayerFlyingHeight();
 			}
