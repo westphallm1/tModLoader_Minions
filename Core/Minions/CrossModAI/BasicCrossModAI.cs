@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
@@ -84,6 +85,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		internal ProjectileStateCache ProjCache { get; set; } = new();
 
+		public WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
+
 		// A block of properties used exclusively for generating the cross mod state dictionary
 		// TODO it is a bit roundabout to implement this
 
@@ -120,6 +123,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public float PetMoveSpeed => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.BaseSpeed;
 
 
+		// Cache the names of cross mod properties for faster lookup
+		private Dictionary<string, PropertyInfo> CrossModProperties { get; set; }
+
+		// Cache for the values of cross mod properties, reset every frame
+		private Dictionary<string, object> CrossModStateDict { get; set; }
+
+
 
 
 		public BasicCrossModAI(
@@ -131,9 +141,16 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			UseDefaultPathfindingMovement = defaultPathfinding;
 			IsPet = isPet;
 			Behavior = new(this);
+			FindCrossModProperties();
 		}
 
-		public WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
+		private void FindCrossModProperties()
+		{
+			CrossModProperties = GetType().GetProperties()
+				.Where(p => p.IsDefined(typeof(CrossModProperty), false))
+				.ToDictionary(p => p.Name, p => p);
+		}
+
 
 
 		internal void FakePlayerFlyingHeight()
@@ -166,6 +183,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public virtual Vector2 IdleBehavior()
 		{
+			CrossModStateDict = null;
 			if(IsPet) { UpdatePetState(); }
 			// no op
 			return default;
@@ -198,12 +216,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			return Behavior.SelectedEnemyInRange(SearchRange) is Vector2 target ? target - Projectile.Center : null;
 		}
 
-		// Utility method that can be called from within the AI() of a cross mod minion
-		// to prevent AoMM from overriding changes made to its velocity this frame
-		public void ReleaseControl()
-		{
-			ProjCache.ClearProjectile();
-		}
 
 		public virtual void PostAI()
 		{
@@ -224,5 +236,21 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		{
 			// No op
 		}
+
+		// Utility method that can be called from within the AI() of a cross mod minion
+		// to prevent AoMM from overriding changes made to its velocity this frame
+		public void ReleaseControl()
+		{
+			ProjCache.ClearProjectile();
+		}
+
+		public Dictionary<string, object> GetCrossModState()
+		{
+			// TODO evaluate the efficiency of using reflection here
+			// TODO make some of these writable in some capacity
+			CrossModStateDict ??= CrossModProperties.ToDictionary(kv => kv.Key, kv => kv.Value.GetValue(this, null));
+			return CrossModStateDict;
+		}
+			
 	}
 }

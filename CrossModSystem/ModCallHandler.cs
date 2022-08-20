@@ -66,6 +66,12 @@ namespace AmuletOfManyMinions.CrossModSystem
 			switch ((string)args[0])
 			{
 				// Access the state of a projectile that has been registered for cross mod AI
+				case "GetState":
+					return GetCrossModState(a.Arg<ModProjectile>());
+				case "GetStateValue":
+					return GetCrossModStateValue(a.Arg<ModProjectile>(), a.Arg<string>());
+				case "ReleaseControl":
+					return ReleaseControl(a.Arg<ModProjectile>());
 
 				// Register projectiles for different configurations of the cross mod AI
 				case "RegisterInfoMinion":
@@ -95,7 +101,6 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return default;
 		}
 
-
 		private static void AddBuffMappingIdempotent(ModBuff buff)
 		{
 			if(!MinionTacticsGroupMapper.TypeToHashDict.ContainsKey(buff.Type))
@@ -104,6 +109,53 @@ namespace AmuletOfManyMinions.CrossModSystem
 			}
 		}
 
+		/// <summary>
+		/// Get the entire <key, object> mapping of the projectile's cross-mod exposed state, if it has one.
+		/// Cross mod state variables are annotated with [CrossModProperty]
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		internal static Dictionary<string, object> GetCrossModState(ModProjectile proj)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			return result.CrossModAI?.GetCrossModState();
+		}
+
+		/// <summary>
+		/// Get the specified key from the projectile's cross-mod exposed state, if the key exists.
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		/// <param name="key">The name of the property to read</param>
+		internal static object GetCrossModStateValue(ModProjectile proj, string key)
+		{
+			return GetCrossModState(proj)?.TryGetValue(key, out var result) ?? false ? result : default;
+		}
+
+		/// <summary>
+		/// For the following frame, do not apply AoMM's pre-calculated position and velocity changes 
+		/// to the projectile in PostAI(). Used to temporarily override behavior in fully managed minion AIs
+		/// </summary>
+		/// <param name="proj">The ModProjectile to release for this frame</param>
+		internal static object ReleaseControl(ModProjectile proj)
+		{
+			if(proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				result.CrossModAI?.ReleaseControl();
+			}
+			return default;
+		}
+
+		/// <summary>
+		/// Register a read-only cross mod minion. AoMM will run its state calculations for this minion every frame,
+		/// but will not perform any actions based on those state calculations. The ModProjectile may read AoMM's 
+		/// calculated state using mod.Call("GetState",this), and act on that state as it pleases.
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// <param name="searchRange">The range (in pixels) over which the tactic enemy selection should search.</param>
+		/// <returns></returns>
 		internal static object RegisterInformationalMinion(ModProjectile proj, ModBuff buff, int searchRange)
 		{
 			AddBuffMappingIdempotent(buff);
@@ -112,6 +164,15 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return default;
 		}
 
+		/// <summary>
+		/// Register a read-only cross mod combat pet. AoMM will run its state calculations for this combat pet every frame,
+		/// but will not perform any actions based on those state calculations. The ModProjectile may read AoMM's 
+		/// calculated state using mod.Call("GetState",this), and act on that state as it pleases.
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this combat pet type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the pet</param>
+		/// <param name="searchRange">The range (in pixels) over which the tactic enemy selection should search.</param>
+		/// <returns></returns>
 		internal static object RegisterInformationalPet(ModProjectile proj, ModBuff buff)
 		{
 			AddBuffMappingIdempotent(buff);
@@ -121,6 +182,21 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return default;
 		}
 
+		/// <summary>
+		/// Register a basic cross mod minion. AoMM will run its state calculations for this minion every frame,
+		/// and take over its position and velocity while the pathfinding node is present.
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// <param name="searchRange">
+		/// The range (in pixels) over which the tactic enemy selection should search. AoMM will release the 
+		/// minion from the pathfinding AI as soon as an enemy is detected in range.
+		/// </param>
+		/// <param name="travelSpeed">The speed at which the minion should travel while following the pathfinder</param>
+		/// <param name="inertia">
+		/// How quickly the minion should change directions while following the pathfinder. Higher values lead to
+		/// slower turning.
+		/// </param>
 		internal static object RegisterPathfindingMinion(ModProjectile proj, ModBuff buff, int searchRange, int travelSpeed, int inertia)
 		{
 			AddBuffMappingIdempotent(buff);
@@ -132,6 +208,16 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return default;
 		}
 
+
+		/// <summary>
+		/// Register a basic cross mod combat pet. AoMM will run its state calculations for this minion every frame,
+		/// and take over its position and velocity while the pathfinding node is present.
+		/// The pet's movement speed and search range will automatically scale with the player's combat
+		/// pet level.
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// </param>
 		internal static object RegisterPathfindingPet(ModProjectile proj, ModBuff buff)
 		{
 			AddBuffMappingIdempotent(buff);
@@ -141,6 +227,15 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return default;
 		}
 
+		/// <summary>
+		/// Register a fully managed flying cross mod combat pet. AoMM will take over this projectile's 
+		/// AI every frame, and will cause it to behave like a basic flying minion (eg. the Raven staff).
+		/// The pet's damage, movement speed, and search range will automatically scale with the player's combat
+		/// pet level.
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// <param name="projType">Which projectile the minion should shoot. If null, the minion will do a melee attack</param>
 		internal static object RegisterFlyingPet(ModProjectile proj, ModBuff buff, int? projType)
 		{
 			AddBuffMappingIdempotent(buff);
@@ -149,6 +244,19 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return default;
 		}
 
+		/// <summary>
+		/// Register a fully managed flying cross mod minion. AoMM will take over this projectile's 
+		/// AI every frame, and will cause it to behave like a basic flying minion (eg. the Raven staff).
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// <param name="projType">Which projectile the minion should shoot. If null, the minion will do a melee attack</param>
+		/// <param name="searchRange">The range (in pixels) over which the tactic enemy selection should search.</param>
+		/// <param name="travelSpeed">The speed at which the minion should travel while following the pathfinder</param>
+		/// <param name="inertia">
+		/// How quickly the minion should change directions while following the pathfinder. Higher values lead to
+		/// slower turning.
+		/// </param>
 		internal static object RegisterFlyingMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia)
 		{
 			AddBuffMappingIdempotent(buff);
@@ -161,6 +269,15 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return default;
 		}
 
+		/// <summary>
+		/// Register a fully managed grounded cross mod combat pet. AoMM will take over this projectile's 
+		/// AI every frame, and will cause it to behave like a basic flying minion (eg. the Flinx staff).
+		/// The pet's damage, movement speed, and search range will automatically scale with the player's combat
+		/// pet level.
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// <param name="projType">Which projectile the minion should shoot. If null, the minion will do a melee attack</param>
 		internal static object RegisterGroundedPet(ModProjectile proj, ModBuff buff, int? projType)
 		{
 			AddBuffMappingIdempotent(buff);
@@ -169,6 +286,19 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return default;
 		}
 
+		/// <summary>
+		/// Register a fully managed grounded cross mod minion. AoMM will take over this projectile's 
+		/// AI every frame, and will cause it to behave like a basic flying minion (eg. the Flinx staff).
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// <param name="projType">Which projectile the minion should shoot. If null, the minion will do a melee attack</param>
+		/// <param name="searchRange">The range (in pixels) over which the tactic enemy selection should search.</param>
+		/// <param name="travelSpeed">The speed at which the minion should travel while following the pathfinder</param>
+		/// <param name="inertia">
+		/// How quickly the minion should change directions while following the pathfinder. Higher values lead to
+		/// slower turning.
+		/// </param>
 		internal static object RegisterGroundedMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia)
 		{
 			AddBuffMappingIdempotent(buff);

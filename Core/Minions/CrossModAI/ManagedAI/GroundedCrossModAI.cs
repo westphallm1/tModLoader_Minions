@@ -13,7 +13,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 	{
 		internal int PreferredTargetDist { get; set; } = 128;
 		internal int LaunchVelocity { get; set; } = 12;
-		internal int AttackFrames { get; set; }
 		internal int LastFiredFrame { get; set; }
 
 		internal virtual bool ShouldDoShootingMovement => FiredProjectileId != null;
