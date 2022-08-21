@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions
 	{
 		public static bool SummonersAssociationLoaded { get; private set; }
 
-		public static bool SummonersShineLoaded { get; private set; }
+		public static bool SummonersShineLoaded => true;
 
 		public static HashSet<int> MinionBuffTypes;
 
@@ -185,7 +185,6 @@ namespace AmuletOfManyMinions
 			const int COUNTS_AS_WHIP_FOR_INSTASTRIKE = 14;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				SummonersShineLoaded = true;
 				int projType = MinionWaypoint.Type;
 				summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, projType);
 				summonersShine.Call(ADD_FILTER, DONT_COUNT_AS_MINION, projType);
