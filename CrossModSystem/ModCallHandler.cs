@@ -68,8 +68,8 @@ namespace AmuletOfManyMinions.CrossModSystem
 				// Access the state of a projectile that has been registered for cross mod AI
 				case "GetState":
 					return GetState(a.Arg<ModProjectile>());
-				case "GetStateValue":
-					return GetStateValue(a.Arg<ModProjectile>(), a.Arg<string>());
+				case "GetStateDirect":
+					return GetStateDirect(a.Arg<ModProjectile>(), a.Arg<object>());
 				case "ReleaseControl":
 					return ReleaseControl(a.Arg<ModProjectile>());
 
@@ -123,14 +123,32 @@ namespace AmuletOfManyMinions.CrossModSystem
 			return result.CrossModAI?.GetCrossModState();
 		}
 
+
 		/// <summary>
-		/// Get the specified key from the projectile's cross-mod exposed state, if the key exists.
+		/// Copy the projectile's entire cross-mod exposed state directly into another object using 
+		/// reflection. The object is expected to have properties of the correct types.
+		/// Cross mod state variables are annotated with [CrossModProperty].
 		/// </summary>
 		/// <param name="proj">The ModProjectile to access the state for</param>
-		/// <param name="key">The name of the property to read</param>
-		internal static object GetStateValue(ModProjectile proj, string key)
+		/// <param name="destination">The object to copy AoMM's state into</param>
+		internal static object GetStateDirect(ModProjectile proj, object destination)
 		{
-			return GetState(proj)?.TryGetValue(key, out var result) ?? false ? result : default;
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			var modState = result.CrossModAI;
+			// TODO will definitely want a more defensive/safe implementation than copying every
+			// available property with a matching name and type
+			foreach (var property in destination.GetType().GetProperties())
+			{
+				var modProperty = modState.GetType().GetProperty(property.Name);
+				if(modProperty?.PropertyType == property.PropertyType && modProperty?.GetValue(modState) is var propertyState)
+				{
+					property.SetValue(destination, propertyState);
+				}
+			}
+			return default;
 		}
 
 		/// <summary>
