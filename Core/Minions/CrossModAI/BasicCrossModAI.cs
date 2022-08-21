@@ -123,6 +123,17 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public float PetMoveSpeed => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.BaseSpeed;
 
 
+		// Basic state variables for the three things a minion can do (attack, pathfind, and idle)
+		[CrossModProperty]
+		public bool IsPathfinding => Behavior.IsFollowingBeacon;
+
+		[CrossModProperty]
+		public bool IsAttacking => Behavior.VectorToTarget != default && !IsPathfinding;
+
+		[CrossModProperty]
+		public bool IsIdle => !IsAttacking && !IsPathfinding;
+
+
 		// Cache the names of cross mod properties for faster lookup
 		private Dictionary<string, PropertyInfo> CrossModProperties { get; set; }
 
