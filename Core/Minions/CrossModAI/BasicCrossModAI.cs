@@ -15,6 +15,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 {
 	internal class ProjectileStateCache
 	{
+		internal Vector2 InitialPosition { get; private set; }
+		internal Vector2 InitialVelocity { get; private set; }
 		internal Vector2? Position { get; private set; }
 		internal Vector2? Velocity { get; private set; }
 
@@ -45,6 +47,19 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			TileCollide ??= proj.tileCollide;
 			GfxOffY ??= proj.gfxOffY;
 			PlayerPosition ??= Main.player[proj.owner].position;
+		}
+
+		public void Rollback(Projectile proj)
+		{
+			proj.position = InitialPosition;
+			proj.velocity = InitialVelocity;
+			ClearProjectile();
+		}
+
+		public void CacheInitial(Projectile proj)
+		{
+			InitialPosition = proj.position;
+			InitialVelocity = proj.velocity;
 		}
 
 		public void Uncache(Projectile proj)
@@ -111,17 +126,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public bool IsPet { get; set; }
 
 		[CrossModProperty]
-		public float PetLevel => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.Level;
+		public int PetLevel => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.Level;
 
 		[CrossModProperty]
 		public int PetDamage => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.BaseDamage;
-
-		[CrossModProperty]
-		public int PetSearchRange => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.BaseSearchRange;
-
-		[CrossModProperty]
-		public float PetMoveSpeed => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.BaseSpeed;
-
 
 		// Basic state variables for the three things a minion can do (attack, pathfind, and idle)
 		[CrossModProperty]
@@ -195,6 +203,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public virtual Vector2 IdleBehavior()
 		{
 			CrossModStateDict = null;
+			ProjCache.CacheInitial(Projectile);
 			if(IsPet) { UpdatePetState(); }
 			// no op
 			return default;
@@ -252,7 +261,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		// to prevent AoMM from overriding changes made to its velocity this frame
 		public void ReleaseControl()
 		{
-			ProjCache.ClearProjectile();
+			ProjCache.Rollback(Projectile);
 		}
 
 		public Dictionary<string, object> GetCrossModState()
