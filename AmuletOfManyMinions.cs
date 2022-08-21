@@ -15,6 +15,7 @@ using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Items.Accessories.CombatPetAccessories;
 using AmuletOfManyMinions.CrossModSystem;
+using System;
 
 namespace AmuletOfManyMinions
 {
@@ -53,7 +54,14 @@ namespace AmuletOfManyMinions
 
 		public override object Call(params object[] args)
 		{
-			return ModCallHandler.HandleCall(args);
+			try
+			{
+				return ModCallHandler.HandleCall(args);
+			} catch(Exception e)
+			{
+				Logger.Error("Exception in mod.Call", e);
+				return default;
+			}
 		}
 		public override void Unload()
 		{
