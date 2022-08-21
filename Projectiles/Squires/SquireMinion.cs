@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 
-			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+			//ProjectileID.Sets.MinionShot[Projectile.type] = true;
 
 			// These below are needed for a minion
 			// Denotes that this projectile is a pet or minion
