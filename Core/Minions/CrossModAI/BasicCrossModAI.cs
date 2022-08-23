@@ -106,7 +106,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		// TODO it is a bit roundabout to implement this
 
 		[CrossModProperty]
-		public Vector2? NextPathfindingTaret => Behavior.NextPathfindingTarget;
+		public Vector2? NextPathfindingTaret => 
+			Behavior.NextPathfindingTarget is Vector2 target ? Projectile.Center + target : null;
 
 		[CrossModProperty]
 		public Vector2? PathfindingDestination => Behavior.PathfindingDestination;
