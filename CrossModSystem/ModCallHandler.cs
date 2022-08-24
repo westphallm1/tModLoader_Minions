@@ -95,6 +95,9 @@ namespace AmuletOfManyMinions.CrossModSystem
 				case "RegisterGroundedPet":
 					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>());
 
+				case "RegisterSlimePet":
+					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
+
 				default:
 					break;
 			}
@@ -326,6 +329,23 @@ namespace AmuletOfManyMinions.CrossModSystem
 				{ 
 					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia
 				};
+			return default;
+		}
+
+		/// <summary>
+		/// Register a fully managed slime cross mod combat pet. AoMM will take over this projectile's 
+		/// AI every frame, and will cause it to behave like a basic slime minion (eg. the Baby Slime staff).
+		/// The pet's damage, movement speed, and search range will automatically scale with the player's combat
+		/// pet level.
+		/// TODO: This currently doesn't support projectiles
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		internal static object RegisterSlimePet(ModProjectile proj, ModBuff buff)
+		{
+			AddBuffMappingIdempotent(buff);
+			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new SlimeCrossModAI(proj, buff.Type, null, true);
 			return default;
 		}
 	}
