@@ -49,4 +49,9 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal.AssortedCrazyThings
 		internal override int VanillaProjID => ProjectileID.Bee;
 	}
 
+	internal class CursedFlameCloneProj : MinionShotVanillaCloneProjectile
+	{
+		internal override int VanillaProjID => ProjectileID.CursedFlameFriendly;
+	}
+
 }
