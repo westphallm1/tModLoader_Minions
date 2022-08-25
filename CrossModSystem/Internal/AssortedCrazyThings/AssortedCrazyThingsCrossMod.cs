@@ -21,6 +21,10 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal.AssortedCrazyThings
 		private InternalCrossModCallWrapper Calls;
 		public override void PostSetupContent()
 		{
+			if(!ServerConfig.Instance.EnableACTCombatPets)
+			{
+				return;
+			}
 			Calls = new InternalCrossModCallWrapper(Mod, "AssortedCrazyThings");
 
 			// Register ACT's flying pets

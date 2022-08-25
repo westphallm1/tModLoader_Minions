@@ -168,7 +168,13 @@ namespace AmuletOfManyMinions
 		public bool AllowMultipleCombatPets;
 
 		[Header("Cross-Mod Compatibility")]
-		[Label("Disable Summoner's Shine AI Changes")]
+		[Label("Assorted Crazy Things: Enable Combat Pet AI")]
+		[Tooltip("If true, turns most pets from Assorted Crazy Things into combat pets.")]
+		[DefaultValue(true)]
+		[ReloadRequired]
+		public bool EnableACTCombatPets;
+
+		[Label("Summoner's Shine: Disable AI Changes")]
 		[Tooltip("If true, disable AI changes to minions from this mod made by Summoner's Shine.")]
 		[DefaultValue(false)]
 		[ReloadRequired]

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 
 namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 {
@@ -31,6 +33,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			if(FiredProjectileId is not int projId) { return; }
+			// TODO make this customizeable
+			SoundEngine.PlaySound(SoundID.Item43);
 			launchVector *= 1.15f;
 			Projectile.NewProjectile(
 				Projectile.GetSource_FromThis(),

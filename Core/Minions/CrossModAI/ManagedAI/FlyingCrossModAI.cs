@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
@@ -77,6 +79,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal virtual void AfterFiringProjectile()
 		{
+			// TODO make this customizeable
+			SoundEngine.PlaySound(SoundID.Item43);
 		}
 
 		public void OnHitTarget(NPC target)
