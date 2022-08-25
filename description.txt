@@ -11,11 +11,9 @@ Please report any bugs to the #bug-reports channel of the mod discord: https://d
 
 === Version History ===
 
-v0.16.0 - Cross-Mod AI Beta (feat. Assorted Crazy Things!)
-    - Internal rework to support applying some mod AI features to minions from other mods
-    - Add cross-mod Combat Pet AI to most pets from Assorted Crazy Things
-    - Add config option to disable cross mod AI in case of major breakage
-    - Be sure to try Assorted Crazy Things!
+v0.16.0 - Cross-Mod AI Beta
+    - Large internal rework to support applying AoMM AI features to minions from other mods
+    - Please report any newfound bugs to the mod discord: https://discord.gg/D7wpRZC
 v0.15.0 - Balance Changes!
     - Add a prehardmode minion and a prehardmode accessory
     - Add Empress of Light Squire
