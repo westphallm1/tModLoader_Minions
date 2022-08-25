@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				new CombatPetLevelInfo(2, 15, 700, 9, 1, "Demonite"), // EoC - tier
 				new CombatPetLevelInfo(3, 18, 750, 10, 2, "Skeletal"), // Dungeon Tier
 				new CombatPetLevelInfo(4, 30, 900, 12, 2, "Soulful"), // Post WoF
-				new CombatPetLevelInfo(5, 36, 950, 14, 2, "Hallowed"), // Post Mech
+				new CombatPetLevelInfo(5, 36, 950, 14, 3, "Hallowed"), // Post Mech
 				new CombatPetLevelInfo(6, 42, 1000, 15, 3, "Spectre"), // Post Plantera
 				new CombatPetLevelInfo(7, 52, 1050, 16, 4, "Stardust"), // Post Pillars
 				new CombatPetLevelInfo(8, 80, 1100, 18, 6, "Celestial") // Post Moon Lord

@@ -18,10 +18,12 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal
 		}
 
 		internal bool ModLoaded { get; set; } = false;
+		internal Mod Aomm { get; set; }
 		internal Mod Mod { get; set; }
 
-		public InternalCrossModCallWrapper(string modName)
+		public InternalCrossModCallWrapper(Mod aomm, string modName)
 		{
+			Aomm = aomm;
 			if(ModLoader.TryGetMod(modName, out Mod mod))
 			{
 				ModLoaded = true;
@@ -42,18 +44,26 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal
 		}
 
 
-		private void RegisterCombatPet(string method, string projName, string buffName, int? projId)
+		private void RegisterCombatPet(string method, string projName, string buffName, int? projId, params object[] args)
 		{
 			if (!ModLoaded) { return; }
-			var projInstance = FindProj(projName);
-			var buffInstance = FindBuff(buffName);
-
-			// Don't override any cross-mod AI added by the mod itself
-			if(CrossModAIGlobalProjectile.CrossModAISuppliers.ContainsKey(projInstance.Type))
+			// Code this defensively, don't stop mods from loading if cross-mod registration fails
+			try
 			{
-				return;
+				var projInstance = FindProj(projName);
+				var buffInstance = FindBuff(buffName);
+
+				// Don't override any cross-mod AI added by the mod itself
+				if(CrossModAIGlobalProjectile.CrossModAISuppliers.ContainsKey(projInstance.Type))
+				{
+					return;
+				}
+				object[] allArgs = (new object[] { method, projInstance, buffInstance, projId }).Concat(args).ToArray();
+				ModCallHandler.HandleCall(allArgs);
+			} catch(Exception e)
+			{
+				Aomm.Logger.Error($"Unable to register cross-mod minion for {Mod.Name}: {projName}/{buffName}. Reason: {e.Message}");
 			}
-			ModCallHandler.HandleCall(method, projInstance, buffInstance, projId);
 		}
 
 		public void RegisterFlyingPet(string projName, string buffName, int? projId)
@@ -66,9 +76,9 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal
 			RegisterCombatPet("RegisterGroundedPet", projName, buffName, projId);
 		}
 
-		public void RegisterSlimePet(string projName, string buffName, int? projId)
+		public void RegisterSlimePet(string projName, string buffName, int? projId, bool alwaysBounce = false)
 		{
-			RegisterCombatPet("RegisterSlimePet", projName, buffName, projId);
+			RegisterCombatPet("RegisterSlimePet", projName, buffName, projId, alwaysBounce);
 		}
 	}
 }

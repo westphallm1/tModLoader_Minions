@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.CrossModSystem
 					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>());
 
 				case "RegisterSlimePet":
-					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
+					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(false));
 
 				default:
 					break;
@@ -341,11 +341,14 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// </summary>
 		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
-		internal static object RegisterSlimePet(ModProjectile proj, ModBuff buff)
+		/// <param name="projType">Which projectile the minion should shoot. Currently unused</param>
+		/// <param name="alwaysBounce">Whether to always bounce while idling</param>
+		internal static object RegisterSlimePet(ModProjectile proj, ModBuff buff, int? projType, bool alwaysBounce)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
-			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new SlimeCrossModAI(proj, buff.Type, null, true);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => 
+				new SlimeCrossModAI(proj, buff.Type, null, true) { AlwaysBounce = alwaysBounce };
 			return default;
 		}
 	}

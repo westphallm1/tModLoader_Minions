@@ -10,10 +10,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 {
 	internal class SlimeCrossModAI : BaseGroundedCrossModAI
 	{
-		protected bool ShouldBounce => Behavior.VectorToTarget != null || Behavior.VectorToIdle.LengthSquared() > 32 * 32;
+		protected bool ShouldBounce => AlwaysBounce || Behavior.VectorToTarget != null || 
+			Behavior.VectorToIdle.LengthSquared() > 32 * 32;
 
 		// Intended x velocity while jumping, restore to this value if we get stuck
 		private float intendedX;
+
+		internal bool AlwaysBounce { get; set; }
 
 		public SlimeCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
 		{

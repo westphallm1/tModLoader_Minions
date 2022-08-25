@@ -63,11 +63,15 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			if(FiredProjectileId != null)
 			{
 				HsHelper.TargetedMovement(vectorToTargetPosition);
+				// suggest to the minion that it should face towards the enemy while shooting
+				ProjCache.Cache(Projectile);
+				vectorToTargetPosition.SafeNormalize();
+				vectorToTargetPosition *= 4;
+				Projectile.velocity = vectorToTargetPosition;
 			} else
 			{
 				BumblingMovement(vectorToTargetPosition);
 			}
-			// Main.NewText($"{Projectile.friendly} {Projectile.minion} {Projectile.damage} {Projectile.originalDamage}");
 		}
 
 

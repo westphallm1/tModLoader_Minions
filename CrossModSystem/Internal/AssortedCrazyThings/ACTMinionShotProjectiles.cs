@@ -52,6 +52,13 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal.AssortedCrazyThings
 	internal class CursedFlameCloneProj : MinionShotVanillaCloneProjectile
 	{
 		internal override int VanillaProjID => ProjectileID.CursedFlameFriendly;
+
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.timeLeft = 90;
+			Projectile.penetrate = 2;
+		}
 	}
 
 }

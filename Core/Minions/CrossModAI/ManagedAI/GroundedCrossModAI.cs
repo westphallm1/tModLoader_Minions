@@ -102,7 +102,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				vectorToTargetPosition.X = 0;
 			} else if (Math.Abs(vectorToTargetPosition.X) < 0.5f * PreferredTargetDist)
 			{
-				vectorToTargetPosition.X -= Math.Sign(vectorToTargetPosition.X) * 0.75f * PreferredTargetDist;
+				// TODO: For cross mod AI only (not normal), this has an issue with triggering the "get unstuck"
+				// AI. As a quick fix, explicitly guard against attempting to move into an occupied block.
+				Vector2 nextTarget = vectorToTargetPosition - Vector2.UnitX * Math.Sign(vectorToTargetPosition.X) * 0.75f * PreferredTargetDist;
+				if(Collision.CanHitLine(Projectile.Center, 1, 1, Projectile.Center + nextTarget, 1, 1))
+				{
+					vectorToTargetPosition = nextTarget;
+				}
 			}
 
 			if(Math.Abs(vectorToTargetPosition.Y) < 1.25f * PreferredTargetDist && 
