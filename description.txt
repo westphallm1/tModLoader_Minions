@@ -11,8 +11,8 @@ Please report any bugs to the #bug-reports channel of the mod discord: https://d
 
 === Version History ===
 
-v0.16.0 - Cross-Mod AI Beta
-    - Large internal rework to support applying AoMM AI features to minions from other mods
+v0.16.0 - Cross-Mod AI Beta!
+    - Large internal rework to support future cross-mod AI capabilities
     - Please report any newfound bugs to the mod discord: https://discord.gg/D7wpRZC
 v0.15.0 - Balance Changes!
     - Add a prehardmode minion and a prehardmode accessory
