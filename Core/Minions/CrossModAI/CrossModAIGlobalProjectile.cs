@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public override bool PreAI(Projectile projectile)
 		{
-			if(CrossModAI == default) { return true; }
+			if(CrossModAI == default || !CrossModAI.Player.HasBuff(CrossModAI.BuffId)) { return true; }
 			CrossModAI.Behavior.MainBehavior();
 			// This feels a little roundabout
 			return CrossModAI.DoVanillaAI();
@@ -65,13 +65,15 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
 		{
+			if(CrossModAI == default || !CrossModAI.Player.HasBuff(CrossModAI.BuffId)) { return true; }
 			CrossModAI?.OnTileCollide(oldVelocity);
-			return base.OnTileCollide(projectile, oldVelocity);
+			return true;
 		}
 
 		public override void PostAI(Projectile projectile)
 		{
-			CrossModAI?.PostAI();
+			if(CrossModAI == default || !CrossModAI.Player.HasBuff(CrossModAI.BuffId)) { return; }
+			CrossModAI.PostAI();
 		}
 
 
