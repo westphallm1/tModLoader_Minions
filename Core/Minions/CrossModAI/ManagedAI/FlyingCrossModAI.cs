@@ -21,11 +21,28 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 	internal class FlyingCrossModAI : GroupAwareCrossModAI, ICrossModSimpleMinion
 	{
 
-		internal HoverShooterHelper HsHelper { get; set; }
+		internal HoverShooterHelper HsHelper { get; set; } = new();
 
 		internal int FramesSinceLastHit { get; set; }
 
 		private int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
+
+		// This is a bit clunky, but need to keep HoverShooterHelper in sync with cross mod properties
+		public override int MaxSpeed 
+		{
+			get => base.MaxSpeed; 
+			internal set { base.MaxSpeed = value; HsHelper.travelSpeed = value; }
+		}
+		public override int Inertia 
+		{ 
+			get => base.Inertia;
+			internal set { base.Inertia = value; HsHelper.inertia = value; }
+		}
+		internal override int AttackFrames 
+		{ 
+			get => base.AttackFrames; 
+			set { base.AttackFrames = value; HsHelper.attackFrames = value; }
+		}
 
 		public FlyingCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
 		{

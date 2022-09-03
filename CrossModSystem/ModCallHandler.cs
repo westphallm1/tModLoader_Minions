@@ -113,8 +113,8 @@ namespace AmuletOfManyMinions.CrossModSystem
 		}
 
 		/// <summary>
-		/// Get the entire <key, object> mapping of the projectile's cross-mod exposed state, if it has one.
-		/// Cross mod state variables are annotated with [CrossModProperty]
+		/// Get the entire <key, object> mapping of the projectile's cross-mod exposed state (read-only variables),
+		/// if it has one. Cross mod state variables are annotated with [CrossModState]
 		/// </summary>
 		/// <param name="proj">The ModProjectile to access the state for</param>
 		internal static Dictionary<string, object> GetState(ModProjectile proj)
@@ -140,17 +140,70 @@ namespace AmuletOfManyMinions.CrossModSystem
 			{
 				return default;
 			}
-			var modState = result.CrossModAI;
-			// TODO will definitely want a more defensive/safe implementation than copying every
-			// available property with a matching name and type
-			foreach (var property in destination.GetType().GetProperties())
+			result.CrossModAI?.PopulateStateObject(destination);
+			return default;
+		}
+
+		/// <summary>
+		/// Get the entire <key, object> mapping of the projectile's cross-mod exposed params (read/write variables),
+		/// if it has one. Cross mod param variables are annotated with [CrossModParam]
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		internal static Dictionary<string, object> GetParams(ModProjectile proj)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
 			{
-				var modProperty = modState.GetType().GetProperty(property.Name);
-				if(modProperty?.PropertyType == property.PropertyType && modProperty?.GetValue(modState) is var propertyState)
-				{
-					property.SetValue(destination, propertyState);
-				}
+				return default;
 			}
+			return result.CrossModAI?.GetCrossModParams();
+		}
+
+
+		/// <summary>
+		/// Copy the projectile's entire cross-mod exposed state directly into another object using 
+		/// reflection. The object is expected to have properties of the correct types.
+		/// Cross mod state variables are annotated with [CrossModProperty].
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		/// <param name="destination">The object to copy AoMM's state into</param>
+		internal static object GetParamsDirect(ModProjectile proj, object destination)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			result.CrossModAI?.PopulateParamsObject(destination);
+			return default;
+		}
+
+		/// <summary>
+		/// Update theprojectile's cross-mod exposed params (read/write variables) based on a
+		/// given dictionary of <key, object> pairs.
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		internal static object UpdateParams(ModProjectile proj, Dictionary<string, object> values)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			result.CrossModAI?.UpdateCrossModParams(values);
+			return default;
+		}
+
+		/// <summary>
+		/// Update the projectile's cross-mod exposed params via reflection based on an
+		/// arbitrary object that contains properties with matching names and types.
+		/// </summary>
+		/// <param name="proj">The ModProjectile to update the parameters for</param>
+		/// <param name="source">The object containing </param>
+		internal static object UpdateParamsDirect(ModProjectile proj, object source)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			result.CrossModAI?.UpdateCrossModParams(source);
 			return default;
 		}
 

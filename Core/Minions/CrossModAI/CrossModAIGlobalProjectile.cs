@@ -19,10 +19,20 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		bool DoVanillaAI();
 		void PostAI();
 		Dictionary<string, object> GetCrossModState();
+		Dictionary<string, object> GetCrossModParams();
 
 		void ReleaseControl();
 
+		void PopulateStateObject(object stateObject);
+
+		void PopulateParamsObject(object stateObject);
+
+		void UpdateCrossModParams(object source);
+
+		void UpdateCrossModParams(Dictionary<string, object> source);
+
 		public void OnTileCollide(Vector2 oldVelocity) { }
+
 
 	}
 

@@ -85,6 +85,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 
 
+		public HoverShooterHelper()
+		{
+
+		}
+
 		public HoverShooterHelper(ISimpleMinion minion, int? firedProjectileType)
 		{
 			this.minion = minion;

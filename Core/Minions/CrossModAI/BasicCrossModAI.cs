@@ -87,13 +87,16 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public SimpleMinionBehavior Behavior { get; set; }
 
-		[CrossModProperty]
-		public int MaxSpeed { get; internal set; }
+		[CrossModParam]
+		[CrossModState]
+		public virtual int MaxSpeed { get; internal set; }
 
-		[CrossModProperty]
-		public int Inertia { get; internal set; }
+		[CrossModParam]
+		[CrossModState]
+		public virtual int Inertia { get; internal set; }
 
-		[CrossModProperty]
+		[CrossModParam]
+		[CrossModState]
 		public int SearchRange { get; internal set; }
 
 		internal bool UseDefaultPathfindingMovement { get; set; }
@@ -105,49 +108,55 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		// A block of properties used exclusively for generating the cross mod state dictionary
 		// TODO it is a bit roundabout to implement this
 
-		[CrossModProperty]
+		[CrossModState]
 		public Vector2? NextPathfindingTaret => 
 			Behavior.NextPathfindingTarget is Vector2 target ? Projectile.Center + target : null;
 
-		[CrossModProperty]
+		[CrossModState]
 		public Vector2? PathfindingDestination => Behavior.PathfindingDestination;
 
-		[CrossModProperty]
+		[CrossModState]
 		public NPC TargetNPC => Behavior.TargetNPCIndex is int idx ? Main.npc[idx] : default;
 
 		// TODO this is a lazy implementation, doesn't sort wholly correctly
 		// TODO enemies will gradually disappear from this list as they die, until a full refresh is done
-		[CrossModProperty]
+		[CrossModState]
 		public List<NPC> PossibleTargetNPCs => Behavior.PossibleTargets?
 			.Where(npc=>npc.active)
 			.OrderBy(npc => Vector2.DistanceSquared(npc.Center, TargetNPC?.Center ?? Player.Center))
 			.ToList();
 
-		[CrossModProperty]
+		[CrossModState]
 		public bool IsPet { get; set; }
 
-		[CrossModProperty]
+		[CrossModState]
 		public int PetLevel => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.Level;
 
-		[CrossModProperty]
+		[CrossModState]
 		public int PetDamage => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.BaseDamage;
 
 		// Basic state variables for the three things a minion can do (attack, pathfind, and idle)
-		[CrossModProperty]
+		[CrossModState]
 		public bool IsPathfinding => Behavior.IsFollowingBeacon;
 
-		[CrossModProperty]
+		[CrossModState]
 		public bool IsAttacking => Behavior.VectorToTarget != default && !IsPathfinding;
 
-		[CrossModProperty]
+		[CrossModState]
 		public bool IsIdle => !IsAttacking && !IsPathfinding;
 
 
-		// Cache the names of cross mod properties for faster lookup
-		private Dictionary<string, PropertyInfo> CrossModProperties { get; set; }
+		// Cache the names of cross mod state properties for faster lookup
+		private Dictionary<string, PropertyInfo> CrossModStateProperties { get; set; }
 
-		// Cache for the values of cross mod properties, reset every frame
+		// Cache for the values of cross mod state properties, reset every frame
 		private Dictionary<string, object> CrossModStateDict { get; set; }
+
+		// Cache the names of cross mod parameter properties for faster lookup
+		private Dictionary<string, PropertyInfo> CrossModParamProperties { get; set; }
+
+		// Cache for the values of cross mod parameter properties, reset every frame
+		private Dictionary<string, object> CrossModParamDict { get; set; }
 
 
 
@@ -166,8 +175,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		private void FindCrossModProperties()
 		{
-			CrossModProperties = GetType().GetProperties()
-				.Where(p => p.IsDefined(typeof(CrossModProperty), false))
+			CrossModStateProperties = GetType().GetProperties()
+				.Where(p => p.IsDefined(typeof(CrossModState), false))
+				.ToDictionary(p => p.Name, p => p);
+
+			CrossModParamProperties = GetType().GetProperties()
+				.Where(p => p.IsDefined(typeof(CrossModParam), false))
 				.ToDictionary(p => p.Name, p => p);
 		}
 
@@ -204,6 +217,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public virtual Vector2 IdleBehavior()
 		{
 			CrossModStateDict = null;
+			CrossModParamDict = null;
 			ProjCache.CacheInitial(Projectile);
 			if(IsPet) { UpdatePetState(); }
 			// no op
@@ -265,13 +279,68 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			ProjCache.Rollback(Projectile);
 		}
 
+		// Set of methods for getting/setting read-only and read/write variables from mod.Calls
 		public Dictionary<string, object> GetCrossModState()
 		{
 			// TODO evaluate the efficiency of using reflection here
-			// TODO make some of these writable in some capacity
-			CrossModStateDict ??= CrossModProperties.ToDictionary(kv => kv.Key, kv => kv.Value.GetValue(this, null));
+			CrossModStateDict ??= CrossModStateProperties.ToDictionary(kv => kv.Key, kv => kv.Value.GetValue(this, null));
 			return CrossModStateDict;
 		}
-			
+
+		public Dictionary<string, object> GetCrossModParams()
+		{
+			// TODO evaluate the efficiency of using reflection here
+			CrossModParamDict ??= CrossModParamProperties.ToDictionary(kv => kv.Key, kv => kv.Value.GetValue(this, null));
+			return CrossModParamDict;
+		}
+
+		public void UpdateCrossModParams(Dictionary<string, object> source)
+		{
+			// TODO check that the properties being set are actually CrossModParams
+			foreach(var kv in source)
+			{
+				if(!CrossModParamProperties.TryGetValue(kv.Key, out var modProperty)) { continue; }
+				if(modProperty?.PropertyType == kv.Value.GetType())
+				{
+					modProperty.SetValue(this, kv.Value);
+				}
+			}
+		}
+
+		public void UpdateCrossModParams(object source)
+		{
+			foreach (var property in source.GetType().GetProperties())
+			{
+				if(!CrossModParamProperties.TryGetValue(property.Name, out var modProperty)) { continue; }
+				if(modProperty?.PropertyType == property.PropertyType && property?.GetValue(source) is var propertyState)
+				{
+					modProperty.SetValue(this, propertyState);
+				}
+			}
+		}
+
+		public void PopulateStateObject(object destination)
+		{
+			foreach (var property in destination.GetType().GetProperties())
+			{
+				if(!CrossModStateProperties.TryGetValue(property.Name, out var modProperty)) { continue; }
+				if(modProperty?.PropertyType == property.PropertyType && modProperty?.GetValue(this) is var propertyState)
+				{
+					property.SetValue(destination, propertyState);
+				}
+			}
+		}
+
+		public void PopulateParamsObject(object destination)
+		{
+			foreach (var property in destination.GetType().GetProperties())
+			{
+				if(!CrossModParamProperties.TryGetValue(property.Name, out var modProperty)) { continue; }
+				if(modProperty?.PropertyType == property.PropertyType && modProperty?.GetValue(this) is var propertyState)
+				{
+					property.SetValue(destination, propertyState);
+				}
+			}
+		}
 	}
 }
