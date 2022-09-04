@@ -27,22 +27,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		private int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
 
-		// This is a bit clunky, but need to keep HoverShooterHelper in sync with cross mod properties
-		public override int MaxSpeed 
-		{
-			get => base.MaxSpeed; 
-			internal set { base.MaxSpeed = value; HsHelper.travelSpeed = value; }
-		}
-		public override int Inertia 
-		{ 
-			get => base.Inertia;
-			internal set { base.Inertia = value; HsHelper.inertia = value; }
-		}
-		public override int AttackFrames 
-		{ 
-			get => base.AttackFrames; 
-			set { base.AttackFrames = value; HsHelper.attackFrames = value; }
-		}
 
 		public FlyingCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
 		{
@@ -66,15 +50,14 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			HsHelper.targetShootProximityRadius = 96;
 		}
 
-		internal override void UpdatePetState()
+		public override Vector2 IdleBehavior()
 		{
-			base.UpdatePetState();
-			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
-			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
+			// This is a bit clunky, but need to keep HoverShooterHelper in sync with cross mod properties
 			HsHelper.projectileVelocity = MaxSpeed + 3;
-			HsHelper.attackFrames = Math.Max(30, 60 - 6 * info.Level);
+			HsHelper.attackFrames = AttackFrames;
 			HsHelper.travelSpeed = MaxSpeed;
 			HsHelper.inertia = Inertia;
+			return base.IdleBehavior();
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
