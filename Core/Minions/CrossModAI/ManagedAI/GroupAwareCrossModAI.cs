@@ -23,12 +23,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		[CrossModParam]
 		[CrossModState]
-		internal int? FiredProjectileId { get; set; }
+		public int? FiredProjectileId { get; set; }
 
 
 		[CrossModParam]
 		[CrossModState]
-		internal virtual int AttackFrames { get; set; }
+		public virtual int AttackFrames { get; set; }
 
 		public GroupAwareCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, isPet: isPet)
 		{

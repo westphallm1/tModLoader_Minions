@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			get => base.Inertia;
 			internal set { base.Inertia = value; HsHelper.inertia = value; }
 		}
-		internal override int AttackFrames 
+		public override int AttackFrames 
 		{ 
 			get => base.AttackFrames; 
 			set { base.AttackFrames = value; HsHelper.attackFrames = value; }
