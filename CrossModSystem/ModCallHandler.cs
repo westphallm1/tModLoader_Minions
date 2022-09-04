@@ -70,8 +70,20 @@ namespace AmuletOfManyMinions.CrossModSystem
 					return GetState(a.Arg<ModProjectile>());
 				case "GetStateDirect":
 					return GetStateDirect(a.Arg<ModProjectile>(), a.Arg<object>());
+
+				// Revert any AoMM-made changes to the state of the projectile made this frame
 				case "ReleaseControl":
 					return ReleaseControl(a.Arg<ModProjectile>());
+
+				// Access the constructor params of a projectile that has been registered for cross mod AI
+				case "GetParams":
+					return GetParams(a.Arg<ModProjectile>());
+				case "GetParamsDirect":
+					return GetParamsDirect(a.Arg<ModProjectile>(), a.Arg<object>());
+				case "UpdateParams":
+					return UpdateParams(a.Arg<ModProjectile>(), a.Arg<Dictionary<string, object>>());
+				case "UpdateParamsDirect":
+					return UpdateParamsDirect(a.Arg<ModProjectile>(), a.Arg<object>());
 
 				// Register projectiles for different configurations of the cross mod AI
 				case "RegisterInfoMinion":
@@ -86,12 +98,12 @@ namespace AmuletOfManyMinions.CrossModSystem
 					return RegisterPathfindingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
 
 				case "RegisterFlyingMinion":
-					return RegisterFlyingMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12));
+					return RegisterFlyingMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30));
 				case "RegisterFlyingPet":
 					return RegisterFlyingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>());
 
 				case "RegisterGroundedMinion":
-					return RegisterGroundedMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12));
+					return RegisterGroundedMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30));
 				case "RegisterGroundedPet":
 					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>());
 
@@ -331,14 +343,14 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// How quickly the minion should change directions while following the pathfinder. Higher values lead to
 		/// slower turning.
 		/// </param>
-		internal static object RegisterFlyingMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia)
+		internal static object RegisterFlyingMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia, int attackFrames)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 				new FlyingCrossModAI(proj, buff.Type, projType, false) 
 				{ 
-					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia
+					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia, AttackFrames = attackFrames
 				};
 			return default;
 		}
@@ -373,14 +385,14 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// How quickly the minion should change directions while following the pathfinder. Higher values lead to
 		/// slower turning.
 		/// </param>
-		internal static object RegisterGroundedMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia)
+		internal static object RegisterGroundedMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia, int attackFrames)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 				new GroundedCrossModAI(proj, buff.Type, projType, false) 
 				{ 
-					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia
+					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia, AttackFrames = attackFrames
 				};
 			return default;
 		}
