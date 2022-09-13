@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Core;
 
 namespace AmuletOfManyMinions.Core.Minions.Tactics
 {
@@ -85,7 +86,9 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		private static void RegisterTacticDatas()
 		{
 			Type targetSelectionTacticDataType = typeof(TargetSelectionTactic);
-			IEnumerable<Type> tacticDataTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(targetSelectionTacticDataType));
+			IEnumerable<Type> tacticDataTypes =
+				AssemblyManager.GetLoadableTypes(ModContent.GetInstance<AmuletOfManyMinions>().Code)
+				.Where(t => !t.IsAbstract && t.IsSubclassOf(targetSelectionTacticDataType));
 
 			foreach (var type in tacticDataTypes)
 			{

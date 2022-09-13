@@ -7,6 +7,7 @@ using System.Reflection;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Core;
 
 namespace AmuletOfManyMinions.Core.Netcode
 {
@@ -40,7 +41,9 @@ namespace AmuletOfManyMinions.Core.Netcode
 		private static void RegisterPackets()
 		{
 			Type mpPacketType = typeof(MPPacket);
-			IEnumerable<Type> mpPacketTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(mpPacketType));
+			IEnumerable<Type> mpPacketTypes =
+				AssemblyManager.GetLoadableTypes(ModContent.GetInstance<AmuletOfManyMinions>().Code)
+				.Where(t => !t.IsAbstract && t.IsSubclassOf(mpPacketType));
 
 			foreach (var type in mpPacketTypes)
 			{
