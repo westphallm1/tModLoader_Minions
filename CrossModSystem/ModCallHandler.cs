@@ -52,18 +52,30 @@ namespace AmuletOfManyMinions.CrossModSystem
 
 		internal static object HandleCall(params object[] args)
 		{
-			if(args.Length == 0)
+			if(args.Length <= 2)
 			{
-				throw new ArgumentException("Mod.Call must have at least one argument");
+				throw new ArgumentException("Mod.Call must have at least two arguments");
 			}
 
-			if(args[0] is not string)
+			if(args[0] is not string message)
 			{
-				throw new ArgumentException("First argument to Mod.Call must be a string");
+				throw new ArgumentException("First argument to Mod.Call must be a message string");
 			}
 
-			var a = new ArgsUnpacker(args, 1);
-			switch ((string)args[0])
+			//Future-proofing. Allowing new info to be returned or old info to be handled differently while maintaining backwards compat if necessary
+			if(args[1] is not string versionString)
+			{
+				throw new ArgumentException("Second argument to Mod.Call must be a version string");
+			}
+
+			Version latestVersion = ModContent.GetInstance<AmuletOfManyMinions>().Version;
+			Version apiVersion = new Version(versionString);
+			//Example usage:
+			//if (apiVersion < new Version(1, 3, 4))
+			//propagate to submethods if needed
+
+			var a = new ArgsUnpacker(args, 2);
+			switch (message)
 			{
 				// Access the state of a projectile that has been registered for cross mod AI
 				case "GetState":
