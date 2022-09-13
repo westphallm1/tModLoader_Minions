@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		bool DoVanillaAI();
 		void PostAI();
 
-		IEntitySource Source { get; set; }
+		void CheckEntitySource(IEntitySource source);
 
 		bool IsActive { get; }
 
@@ -74,10 +74,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public override void OnSpawn(Projectile projectile, IEntitySource source)
 		{
 			base.OnSpawn(projectile, source);
-			if(CrossModAI != default)
-			{
-				CrossModAI.Source = source;
-			}
+			CrossModAI?.CheckEntitySource(source);
 		}
 
 		public override bool PreAI(Projectile projectile)

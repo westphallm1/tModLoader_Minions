@@ -85,7 +85,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public Player Player => Main.player[Projectile.owner];
 		public int BuffId { get; set; }
-		public IEntitySource Source { get; set; }
 
 		public SimpleMinionBehavior Behavior { get; set; }
 
@@ -107,13 +106,15 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
 
+		// On spawn, check whether this projectile's source is a cross-mod registered buff or item
+		internal bool IsSpawnedFromCrossModBuff { get; private set; }
+
 		// Check for whether cross mod AI should be applied to this specific projectile
 		// - For minions, just check that the cross mod buff is active
 		// - For pets, also check that this projecile was spawned specifically from the cross
 		// mod buff
 		[CrossModState]
-		public bool IsActive => Player.HasBuff(BuffId) && (
-			!IsPet || (Source is EntitySource_Buff buffSrc && buffSrc.BuffId == BuffId));
+		public bool IsActive => Player.HasBuff(BuffId) && (!IsPet || IsSpawnedFromCrossModBuff);
 
 		// A block of properties used exclusively for generating the cross mod state dictionary
 		// TODO it is a bit roundabout to implement this
@@ -287,6 +288,15 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public void ReleaseControl()
 		{
 			ProjCache.Rollback(Projectile);
+		}
+
+		// Update the "spawned from cross mod buff" flag with whether the buff
+		// that spawned the projectile, or the buff of the item that spawned the projectile,
+		// is a cross-mod registered buff
+		public void CheckEntitySource(IEntitySource source)
+		{
+			IsSpawnedFromCrossModBuff = (source is EntitySource_Buff buff && buff.BuffId == BuffId) ||
+				(source is EntitySource_ItemUse_WithAmmo item && item.Item.buffType == BuffId);
 		}
 
 		// Set of methods for getting/setting read-only and read/write variables from mod.Calls
