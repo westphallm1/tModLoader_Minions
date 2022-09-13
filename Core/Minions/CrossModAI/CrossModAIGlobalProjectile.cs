@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,6 +19,11 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 	{
 		bool DoVanillaAI();
 		void PostAI();
+
+		IEntitySource Source { get; set; }
+
+		bool IsActive { get; }
+
 		Dictionary<string, object> GetCrossModState();
 		Dictionary<string, object> GetCrossModParams();
 
@@ -65,9 +71,18 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			}
 		}
 
+		public override void OnSpawn(Projectile projectile, IEntitySource source)
+		{
+			base.OnSpawn(projectile, source);
+			if(CrossModAI != default)
+			{
+				CrossModAI.Source = source;
+			}
+		}
+
 		public override bool PreAI(Projectile projectile)
 		{
-			if(CrossModAI == default || !CrossModAI.Player.HasBuff(CrossModAI.BuffId)) { return true; }
+			if(CrossModAI == default || !CrossModAI.IsActive) { return true; }
 			CrossModAI.Behavior.MainBehavior();
 			// This feels a little roundabout
 			return CrossModAI.DoVanillaAI();
@@ -75,14 +90,14 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
 		{
-			if(CrossModAI == default || !CrossModAI.Player.HasBuff(CrossModAI.BuffId)) { return true; }
+			if(CrossModAI == default || !CrossModAI.IsActive) { return true; }
 			CrossModAI?.OnTileCollide(oldVelocity);
 			return true;
 		}
 
 		public override void PostAI(Projectile projectile)
 		{
-			if(CrossModAI == default || !CrossModAI.Player.HasBuff(CrossModAI.BuffId)) { return; }
+			if(CrossModAI == default || !CrossModAI.IsActive) { return; }
 			CrossModAI.PostAI();
 		}
 
