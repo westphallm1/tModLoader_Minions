@@ -106,15 +106,19 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
 
-		// On spawn, check whether this projectile's source is a cross-mod registered buff or item
-		internal bool IsSpawnedFromCrossModBuff { get; private set; }
+
+		// Track whether the projectile was active at the start of the frame,
+		// so we can run rollback/cleanup in the case that the projectile became
+		// inactive during this frame
+		private bool wasActive;
 
 		// Check for whether cross mod AI should be applied to this specific projectile
 		// - For minions, just check that the cross mod buff is active
 		// - For pets, also check that this projecile was spawned specifically from the cross
 		// mod buff
+		[CrossModParam]
 		[CrossModState]
-		public bool IsActive => Player.HasBuff(BuffId) && (!IsPet || IsSpawnedFromCrossModBuff);
+		public bool IsActive { get; set; } 
 
 		// A block of properties used exclusively for generating the cross mod state dictionary
 		// TODO it is a bit roundabout to implement this
@@ -265,6 +269,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public virtual void PostAI()
 		{
+			// Uncache one last time after unsetting IsActive to prevent the
+			// case where a cross-mod computed state is only partially applied
+			if(!IsActive && !wasActive) { return; }
+			wasActive = IsActive;
 			ProjCache.Uncache(Projectile);
 		}
 
@@ -290,13 +298,16 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			ProjCache.Rollback(Projectile);
 		}
 
-		// Update the "spawned from cross mod buff" flag with whether the buff
-		// that spawned the projectile, or the buff of the item that spawned the projectile,
-		// is a cross-mod registered buff
-		public void CheckEntitySource(IEntitySource source)
+		// Based on the projectile's spawn conditions, determine whether it should have cross-mod
+		// AI applied. Check both that the cross-mod buff registered to the minion is present,
+		// and that this projectile was spawned by that buff, or an item that creates that buff.
+		// Can be manually updated by another mod via SetParameters for more complicated use cases
+		public void SetActiveFlag(IEntitySource source)
 		{
-			IsSpawnedFromCrossModBuff = (source is EntitySource_Buff buff && buff.BuffId == BuffId) ||
+			bool hasCrossModBuff = Player.HasBuff(BuffId);
+			bool spawnedFromCrossModBuff = (source is EntitySource_Buff buff && buff.BuffId == BuffId) ||
 				(source is EntitySource_ItemUse_WithAmmo item && item.Item.buffType == BuffId);
+			IsActive = hasCrossModBuff && spawnedFromCrossModBuff;
 		}
 
 		// Set of methods for getting/setting read-only and read/write variables from mod.Calls
