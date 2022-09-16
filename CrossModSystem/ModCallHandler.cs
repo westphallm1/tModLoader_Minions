@@ -358,7 +358,6 @@ namespace AmuletOfManyMinions.CrossModSystem
 		internal static object RegisterFlyingMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia, int attackFrames)
 		{
 			AddBuffMappingIdempotent(buff);
-			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 				new FlyingCrossModAI(proj, buff.Type, projType, false) 
 				{ 
@@ -400,7 +399,6 @@ namespace AmuletOfManyMinions.CrossModSystem
 		internal static object RegisterGroundedMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia, int attackFrames)
 		{
 			AddBuffMappingIdempotent(buff);
-			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 				new GroundedCrossModAI(proj, buff.Type, projType, false) 
 				{ 

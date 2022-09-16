@@ -73,7 +73,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public override void OnSpawn(Projectile projectile, IEntitySource source)
 		{
-			base.OnSpawn(projectile, source);
 			CrossModAI?.SetActiveFlag(source);
 		}
 
