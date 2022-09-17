@@ -22,17 +22,9 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		{
 		}
 
-		internal override void UpdatePetState()
-		{
-			base.UpdatePetState();
-			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
-			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
-			AttackFrames = Math.Max(30, 60 - 6 * info.Level);
-		}
-
 		public void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
-			if(FiredProjectileId is not int projId) { return; }
+			if(FiredProjectileId is not int projId || projId <= 0) { return; }
 			// TODO make this customizeable
 			SoundEngine.PlaySound(SoundID.Item43);
 			launchVector *= 1.15f;

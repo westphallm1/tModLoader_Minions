@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Core.Minions.AI;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -39,6 +40,15 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			Behavior.Pathfinder.modifyPath = GHelper.ModifyPathfinding;
 			if(IsPet) { ApplyPetDefaults(); }
 		}
+
+		internal override void UpdatePetState()
+		{
+			base.UpdatePetState();
+			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
+			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
+			AttackFrames = Math.Max(30, 60 - 6 * info.Level);
+		}
+
 
 		public override Vector2 IdleBehavior()
 		{

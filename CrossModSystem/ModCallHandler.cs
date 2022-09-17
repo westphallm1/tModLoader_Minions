@@ -423,7 +423,7 @@ namespace AmuletOfManyMinions.CrossModSystem
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => 
-				new SlimeCrossModAI(proj, buff.Type, null, true) { AlwaysBounce = alwaysBounce };
+				new SlimeCrossModAI(proj, buff.Type, projType, true) { AlwaysBounce = alwaysBounce };
 			return default;
 		}
 	}

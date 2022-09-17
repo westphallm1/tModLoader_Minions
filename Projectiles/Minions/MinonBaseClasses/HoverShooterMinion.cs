@@ -148,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 					lineOfFire += Main.npc[idx].velocity * leadShotsFraction;
 				}
 				lastShootFrame = Behavior.AnimationFrame;
-				if(Main.myPlayer == minion.Player.whoAmI && firedProjectileId is int projId)
+				if(Main.myPlayer == minion.Player.whoAmI && firedProjectileId is int projId && projId > 0)
 				{
 					(CustomFireProjectile ?? FireProjectile).Invoke(lineOfFire, projId, 0);
 				}
