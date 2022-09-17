@@ -139,5 +139,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			}
 			base.TargetedMovement(vectorToTargetPosition);
 		}
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			Projectile.friendly &= !ShouldDoShootingMovement;
+		}
 	}
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.CrossModSystem
@@ -122,6 +123,9 @@ namespace AmuletOfManyMinions.CrossModSystem
 				case "RegisterSlimePet":
 					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(false));
 
+				// One-off utility functions
+				case "GetPetLevel":
+					return GetPetLevel(a.Arg<Player>());
 				default:
 					break;
 			}
@@ -416,7 +420,7 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// </summary>
 		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
-		/// <param name="projType">Which projectile the minion should shoot. Currently unused</param>
+		/// <param name="projType">Which projectile the minion should shoot.</param>
 		/// <param name="alwaysBounce">Whether to always bounce while idling</param>
 		internal static object RegisterSlimePet(ModProjectile proj, ModBuff buff, int? projType, bool alwaysBounce)
 		{
@@ -425,6 +429,18 @@ namespace AmuletOfManyMinions.CrossModSystem
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => 
 				new SlimeCrossModAI(proj, buff.Type, projType, true) { AlwaysBounce = alwaysBounce };
 			return default;
+		}
+
+
+		/// <summary>
+		/// Get the combat pet level of a player directly. Most stats on managed combat pets
+		/// scale automatically with the player's combat pet level. 
+		/// </summary>
+		/// <param name="player">The player whose combat pet level should be retireved</param>
+		/// <returns>The combat pet level of that player, based on the strongest pet emblem in their inventory</returns>
+		internal static int GetPetLevel(Player player)
+		{
+			return player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevel;
 		}
 	}
 }
