@@ -112,13 +112,23 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		// inactive during this frame
 		private bool wasActive;
 
+		private bool spawnedFromCrossModBuff;
+
+		// Tri-state backing variable for the active flag. While undefined, determine
+		// active state automatically. Otherwise, return non-null value directly 
+		private bool? isActiveTriState;
+
 		// Check for whether cross mod AI should be applied to this specific projectile
-		// - For minions, just check that the cross mod buff is active
-		// - For pets, also check that this projecile was spawned specifically from the cross
+		// - For pets, just check that the cross mod buff is active
+		// - For minions, also check that this projecile was spawned specifically from the cross
 		// mod buff
 		[CrossModParam]
 		[CrossModState]
-		public bool IsActive { get; set; } 
+		public bool IsActive 
+		{ 
+			get => isActiveTriState ?? Player.HasBuff(BuffId) && (IsPet || spawnedFromCrossModBuff); 
+			set => isActiveTriState = value; 
+		} 
 
 		// A block of properties used exclusively for generating the cross mod state dictionary
 		// TODO it is a bit roundabout to implement this
@@ -304,10 +314,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		// Can be manually updated by another mod via SetParameters for more complicated use cases
 		public void SetActiveFlag(IEntitySource source)
 		{
-			bool hasCrossModBuff = Player.HasBuff(BuffId);
-			bool spawnedFromCrossModBuff = (source is EntitySource_Buff buff && buff.BuffId == BuffId) ||
+			spawnedFromCrossModBuff = (source is EntitySource_Buff buff && buff.BuffId == BuffId) ||
 				(source is EntitySource_ItemUse_WithAmmo item && item.Item.buffType == BuffId);
-			IsActive = hasCrossModBuff && spawnedFromCrossModBuff;
 		}
 
 		// Set of methods for getting/setting read-only and read/write variables from mod.Calls
