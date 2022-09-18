@@ -78,8 +78,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public void LaunchProjectile(Vector2 launchVector, float? ai0 = null)
 		{
 			if(FiredProjectileId is not int projId || projId <= 0) { return; }
-			// TODO make this customizeable
-			SoundEngine.PlaySound(SoundID.Item43);
 			launchVector *= 1.15f;
 			Projectile.NewProjectile(
 				Projectile.GetSource_FromThis(),
@@ -89,7 +87,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				Projectile.damage,
 				Projectile.knockBack,
 				Player.whoAmI,
-				ai0: ai0 ?? Projectile.whoAmI);
+				ai0: ai0 ?? 0);
 		}
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
@@ -143,6 +141,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		{
 			base.AfterMoving();
 			Projectile.friendly &= !ShouldDoShootingMovement;
+			// having a slightly positive velocity from constant gravity messes with the vanilla frame
+			// determination
+			// This occurs after the velocity cache, so it should be ignored for actual calculations
+			if(Projectile.velocity.Y > 0.8f && Projectile.velocity.Y < 1f)
+			{
+				Projectile.velocity.Y = 0.8f;
+			}
 		}
 	}
 }
