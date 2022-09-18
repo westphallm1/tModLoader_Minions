@@ -41,14 +41,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			if(IsPet) { ApplyPetDefaults(); }
 		}
 
-		internal override void UpdatePetState()
-		{
-			base.UpdatePetState();
-			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
-			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
-			AttackFrames = Math.Max(30, 60 - 6 * info.Level);
-		}
-
 
 		public override Vector2 IdleBehavior()
 		{

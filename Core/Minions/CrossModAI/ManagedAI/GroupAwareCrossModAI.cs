@@ -66,11 +66,16 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			{
 				vectorToIdlePosition.SafeNormalize();
 				vectorToIdlePosition *= MaxSpeed;
-				Projectile.velocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
-			} else
-			{
-				Projectile.velocity = vectorToIdlePosition;
-			}
+			} 
+			Projectile.velocity = (Projectile.velocity * (Inertia - 1) + vectorToIdlePosition) / Inertia;
+		}
+
+		internal override void UpdatePetState()
+		{
+			base.UpdatePetState();
+			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
+			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
+			AttackFrames = Math.Max(30, 60 - 6 * info.Level);
 		}
 
 		public override void AfterMoving()
