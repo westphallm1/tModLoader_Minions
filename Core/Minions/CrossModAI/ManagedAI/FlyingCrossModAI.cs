@@ -33,7 +33,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 			HsHelper = new HoverShooterHelper(this, FiredProjectileId)
 			{
-				AfterFiringProjectile = AfterFiringProjectile,
 				ExtraAttackConditionsMet = Behavior.IsMyTurn,
 				ModifyTargetVector = ModifyTargetVector,
 				travelSpeed = MaxSpeed,
@@ -76,12 +75,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			}
 		}
 
-
-		internal virtual void AfterFiringProjectile()
-		{
-			// TODO make this customizeable
-			SoundEngine.PlaySound(SoundID.Item43);
-		}
 
 		public void OnHitTarget(NPC target)
 		{
