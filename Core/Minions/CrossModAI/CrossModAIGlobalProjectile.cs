@@ -80,7 +80,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		{
 			if(CrossModAI == default || !CrossModAI.IsActive) { return true; }
 			CrossModAI.Behavior.MainBehavior();
-			// This feels a little roundabout
 			return CrossModAI.DoVanillaAI();
 		}
 

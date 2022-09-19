@@ -222,6 +222,9 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			Projectile.minion = true;
 			Projectile.friendly = true;
 			Projectile.DamageType = DamageClass.Summon;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.usesIDStaticNPCImmunity = false;
+			Projectile.localNPCHitCooldown = 20;
 		}
 
 		internal virtual void UpdatePetState()

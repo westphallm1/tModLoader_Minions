@@ -144,9 +144,9 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			// having a slightly positive velocity from constant gravity messes with the vanilla frame
 			// determination
 			// This occurs after the velocity cache, so it should be ignored for actual calculations
-			if(Projectile.velocity.Y > 0.8f && Projectile.velocity.Y < 1f)
+			if(Projectile.velocity.Y == 0.5f && Math.Abs(Projectile.velocity.X) < 0.25f)
 			{
-				Projectile.velocity.Y = 0.8f;
+				Projectile.velocity = Vector2.Zero;
 			}
 		}
 	}
