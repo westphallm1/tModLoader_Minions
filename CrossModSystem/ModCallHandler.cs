@@ -111,17 +111,18 @@ namespace AmuletOfManyMinions.CrossModSystem
 					return RegisterPathfindingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
 
 				case "RegisterFlyingMinion":
-					return RegisterFlyingMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30));
+					return RegisterFlyingMinion(
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(false));
 				case "RegisterFlyingPet":
-					return RegisterFlyingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>());
-
+					return RegisterFlyingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(),  a.Arg(true));
 				case "RegisterGroundedMinion":
-					return RegisterGroundedMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30));
+					return RegisterGroundedMinion(
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(false));
 				case "RegisterGroundedPet":
-					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>());
+					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true));
 
 				case "RegisterSlimePet":
-					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(false));
+					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(true));
 
 				// One-off utility functions
 				case "GetPetLevel":
@@ -273,7 +274,6 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// </summary>
 		/// <param name="proj">The singleton instance of the ModProjectile for this combat pet type</param>
 		/// <param name="buff">The singleton instance of the ModBuff associated with the pet</param>
-		/// <param name="searchRange">The range (in pixels) over which the tactic enemy selection should search.</param>
 		/// <returns></returns>
 		internal static object RegisterInfoPet(ModProjectile proj, ModBuff buff)
 		{
@@ -338,11 +338,12 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
 		/// <param name="projType">Which projectile the minion should shoot. If null, the minion will do a melee attack</param>
-		internal static object RegisterFlyingPet(ModProjectile proj, ModBuff buff, int? projType)
+		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
+		internal static object RegisterFlyingPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
-			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new FlyingCrossModAI(proj, buff.Type, projType, true);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new FlyingCrossModAI(proj, buff.Type, projType, true, defaultIdle);
 			return default;
 		}
 
@@ -359,11 +360,13 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// How quickly the minion should change directions while following the pathfinder. Higher values lead to
 		/// slower turning.
 		/// </param>
-		internal static object RegisterFlyingMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia, int attackFrames)
+		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
+		internal static object RegisterFlyingMinion(
+			ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia, int attackFrames, bool defaultIdle)
 		{
 			AddBuffMappingIdempotent(buff);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
-				new FlyingCrossModAI(proj, buff.Type, projType, false) 
+				new FlyingCrossModAI(proj, buff.Type, projType, false, defaultIdle) 
 				{ 
 					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia, AttackFrames = attackFrames
 				};
@@ -379,11 +382,12 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
 		/// <param name="projType">Which projectile the minion should shoot. If null, the minion will do a melee attack</param>
-		internal static object RegisterGroundedPet(ModProjectile proj, ModBuff buff, int? projType)
+		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
+		internal static object RegisterGroundedPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
-			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new GroundedCrossModAI(proj, buff.Type, projType, true);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new GroundedCrossModAI(proj, buff.Type, projType, true, defaultIdle);
 			return default;
 		}
 
@@ -400,11 +404,13 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// How quickly the minion should change directions while following the pathfinder. Higher values lead to
 		/// slower turning.
 		/// </param>
-		internal static object RegisterGroundedMinion(ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia, int attackFrames)
+		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
+		internal static object RegisterGroundedMinion(
+			ModProjectile proj, ModBuff buff, int? projType, int searchRange, int travelSpeed, int inertia, int attackFrames, bool defaultIdle)
 		{
 			AddBuffMappingIdempotent(buff);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
-				new GroundedCrossModAI(proj, buff.Type, projType, false) 
+				new GroundedCrossModAI(proj, buff.Type, projType, false, defaultIdle) 
 				{ 
 					SearchRange = searchRange, MaxSpeed = travelSpeed, Inertia = inertia, AttackFrames = attackFrames
 				};
@@ -421,13 +427,13 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
 		/// <param name="projType">Which projectile the minion should shoot.</param>
-		/// <param name="alwaysBounce">Whether to always bounce while idling</param>
-		internal static object RegisterSlimePet(ModProjectile proj, ModBuff buff, int? projType, bool alwaysBounce)
+		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
+		internal static object RegisterSlimePet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
-			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => 
-				new SlimeCrossModAI(proj, buff.Type, projType, true) { AlwaysBounce = alwaysBounce };
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
+				new SlimeCrossModAI(proj, buff.Type, projType, true, defaultIdle);
 			return default;
 		}
 

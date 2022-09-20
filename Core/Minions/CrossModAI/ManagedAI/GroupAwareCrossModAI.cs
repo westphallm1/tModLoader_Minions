@@ -30,11 +30,20 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		[CrossModState]
 		public virtual int AttackFrames { get; set; }
 
-		public GroupAwareCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, isPet: isPet)
+		[CrossModParam]
+		[CrossModState]
+		internal bool UseDefaultIdleAnimation { get; set; }
+
+		protected bool IsIdlingNearPlayer =>
+			UseDefaultIdleAnimation && IsIdle && Vector2.DistanceSquared(Projectile.Center, Player.Center) < 164 * 164 &&
+			Collision.CanHitLine(Projectile.Center, 1, 1, Player.Center, 1, 1);
+
+		public GroupAwareCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : base(proj, buffId, isPet: isPet)
 		{
 			IsPet = true;
 			CircleHelper = new HeadCirclingHelper(this);
 			FiredProjectileId = projId;
+			UseDefaultIdleAnimation = defaultIdle;
 		}
 
 		internal override void ApplyPetDefaults()
@@ -81,8 +90,14 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public override void AfterMoving()
 		{
 			base.AfterMoving();
-			// Always cache the projectile position, since we're always overriding it
+			// Cache the projectile's position and velocity before applying vanilla AI
 			ProjCache.Cache(Projectile);
+			// Unless the minion/pet is idling and close to the player, and is configured to
+			// use its default AI while not attacking
+			if(IsIdlingNearPlayer)
+			{
+				ProjCache.Rollback(Projectile);
+			}
 		}
 	}
 }

@@ -58,7 +58,7 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal
 				{
 					return;
 				}
-				object[] allArgs = (new object[] { method, projInstance, buffInstance, projId }).Concat(args).ToArray();
+				object[] allArgs = (new object[] { method, "0.16.1", projInstance, buffInstance, projId }).Concat(args).ToArray();
 				ModCallHandler.HandleCall(allArgs);
 			} catch(Exception e)
 			{
@@ -66,19 +66,19 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal
 			}
 		}
 
-		public void RegisterFlyingPet(string projName, string buffName, int? projId)
+		public void RegisterFlyingPet(string projName, string buffName, int? projId, bool defaultIdle = true)
 		{
-			RegisterCombatPet("RegisterFlyingPet", projName, buffName, projId);
+			RegisterCombatPet("RegisterFlyingPet", projName, buffName, projId, defaultIdle);
 		}
 
-		public void RegisterGroundedPet(string projName, string buffName, int? projId)
+		public void RegisterGroundedPet(string projName, string buffName, int? projId, bool defaultIdle = true)
 		{
-			RegisterCombatPet("RegisterGroundedPet", projName, buffName, projId);
+			RegisterCombatPet("RegisterGroundedPet", projName, buffName, projId, defaultIdle);
 		}
 
-		public void RegisterSlimePet(string projName, string buffName, int? projId, bool alwaysBounce = false)
+		public void RegisterSlimePet(string projName, string buffName, int? projId, bool defaultIdle = true)
 		{
-			RegisterCombatPet("RegisterSlimePet", projName, buffName, projId, alwaysBounce);
+			RegisterCombatPet("RegisterSlimePet", projName, buffName, projId, defaultIdle);
 		}
 	}
 }

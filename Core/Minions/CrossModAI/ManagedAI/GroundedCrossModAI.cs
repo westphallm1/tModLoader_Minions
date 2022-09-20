@@ -18,7 +18,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		internal int LastFiredFrame { get; set; }
 
 		internal virtual bool ShouldDoShootingMovement => FiredProjectileId != null;
-		public GroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
+		public GroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
+			base(proj, buffId, projId, isPet, defaultIdle)
 		{
 		}
 
@@ -120,7 +121,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			// having a slightly positive velocity from constant gravity messes with the vanilla frame
 			// determination
 			// This occurs after the velocity cache, so it should be ignored for actual calculations
-			if(Projectile.velocity.Y == 0.5f)
+			if(Projectile.velocity.Y == 0.5f && !IsIdlingNearPlayer)
 			{
 				Projectile.velocity.Y = 0;
 			}

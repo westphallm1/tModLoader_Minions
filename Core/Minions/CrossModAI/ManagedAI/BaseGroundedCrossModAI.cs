@@ -23,7 +23,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public int DefaultJumpVelocity { get; set; } = 4;
 		public int MaxJumpVelocity { get; set; } = 12;
 
-		public BaseGroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
+		public BaseGroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
+			base(proj, buffId, projId, isPet, defaultIdle)
 		{
 			IdleLocationSets.trailingOnGround.Add(Projectile.type);
 			Behavior.NoLOSPursuitTime = 300;
@@ -44,6 +45,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public override Vector2 IdleBehavior()
 		{
+			base.IdleBehavior();
 			if(IsPet) { UpdatePetState(); }
 			return GroundedBehavior.FindIdlePosition();
 		}

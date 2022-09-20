@@ -16,17 +16,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		internal int LaunchVelocity { get; set; } = 12;
 		internal int LastFiredFrame { get; set; }
 
-		protected bool ShouldBounce => AlwaysBounce || Behavior.VectorToTarget != null || 
-			Behavior.VectorToIdle.LengthSquared() > 32 * 32;
-
 		internal virtual bool ShouldDoShootingMovement => FiredProjectileId != null;
 
 		// Intended x velocity while jumping, restore to this value if we get stuck
 		private float intendedX;
 
-		internal bool AlwaysBounce { get; set; }
-
-		public SlimeCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
+		public SlimeCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
+			base(proj, buffId, projId, isPet, defaultIdle)
 		{
 		}
 
@@ -48,12 +44,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public override void DoGroundedMovement(Vector2 vector)
 		{
-			if(!ShouldBounce)
-			{
-				// slide to a halt
-				Projectile.velocity.X *= 0.75f;
-				return;
-			}
 			// always jump "long" if we're far away from the enemy
 			if (Math.Abs(vector.X) > StartFlyingDist && vector.Y < -32)
 			{
@@ -141,13 +131,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		{
 			base.AfterMoving();
 			Projectile.friendly &= !ShouldDoShootingMovement;
-			// having a slightly positive velocity from constant gravity messes with the vanilla frame
-			// determination
-			// This occurs after the velocity cache, so it should be ignored for actual calculations
-			if(Projectile.velocity.Y == 0.5f && Math.Abs(Projectile.velocity.X) < 0.25f)
-			{
-				Projectile.velocity = Vector2.Zero;
-			}
 		}
 	}
 }

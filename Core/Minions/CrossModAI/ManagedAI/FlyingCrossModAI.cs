@@ -28,7 +28,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		private int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
 
 
-		public FlyingCrossModAI(Projectile proj, int buffId, int? projId, bool isPet) : base(proj, buffId, projId, isPet)
+		public FlyingCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : base(proj, buffId, projId, isPet, defaultIdle)
 		{
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 			HsHelper = new HoverShooterHelper(this, FiredProjectileId)
