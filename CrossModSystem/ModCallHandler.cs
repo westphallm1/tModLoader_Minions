@@ -112,12 +112,12 @@ namespace AmuletOfManyMinions.CrossModSystem
 
 				case "RegisterFlyingMinion":
 					return RegisterFlyingMinion(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(false));
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(true));
 				case "RegisterFlyingPet":
 					return RegisterFlyingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(),  a.Arg(true));
 				case "RegisterGroundedMinion":
 					return RegisterGroundedMinion(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(false));
+						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(true));
 				case "RegisterGroundedPet":
 					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true));
 
