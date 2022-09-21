@@ -83,6 +83,15 @@ namespace AmuletOfManyMinions.CrossModSystem
 					return GetState(a.Arg<ModProjectile>());
 				case "GetStateDirect":
 					return GetStateDirect(a.Arg<ModProjectile>(), a.Arg<object>());
+				// Quick, non-reflective state access for several high-priority state variables
+				case "IsActive":
+					return GetState(a.Arg<ModProjectile>());
+				case "IsIdle":
+					return GetState(a.Arg<ModProjectile>());
+				case "IsAttacking":
+					return GetState(a.Arg<ModProjectile>());
+				case "IsPathfinding":
+					return GetState(a.Arg<ModProjectile>());
 
 				// Revert any AoMM-made changes to the state of the projectile made this frame
 				case "ReleaseControl":
@@ -139,6 +148,58 @@ namespace AmuletOfManyMinions.CrossModSystem
 			{
 				MinionTacticsGroupMapper.AddBuffMapping(buff);
 			}
+		}
+
+		/// <summary>
+		/// Quick, non-reflective getter for the cross-mod IsActive flag. See `GetParams` for more details.
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		internal static bool IsActive(ModProjectile proj)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			return result.CrossModAI?.IsActive ?? false;
+		}
+
+		/// <summary>
+		/// Quick, non-reflective getter for the cross-mod IsIdle flag. See `GetState` for more details.
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		internal static bool IsIdle(ModProjectile proj)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			return result.CrossModAI?.IsIdle ?? false;
+		}
+
+		/// <summary>
+		/// Quick, non-reflective getter for the cross-mod IsAttacking flag. See `GetState` for more details.
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		internal static bool IsAttacking(ModProjectile proj)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			return result.CrossModAI?.IsAttacking ?? false;
+		}
+
+		/// <summary>
+		/// Quick, non-reflective getter for the cross-mod IsPathfinding flag. See `GetState` for more details.
+		/// </summary>
+		/// <param name="proj">The ModProjectile to access the state for</param>
+		internal static bool IsPathfinding(ModProjectile proj)
+		{
+			if(!proj.Projectile.TryGetGlobalProjectile<CrossModAIGlobalProjectile>(out var result))
+			{
+				return default;
+			}
+			return result.CrossModAI?.IsPathfinding ?? false;
 		}
 
 		/// <summary>

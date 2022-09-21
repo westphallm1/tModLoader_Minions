@@ -24,6 +24,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		bool IsActive { get; }
 
+		bool IsIdle { get; }
+
+		bool IsAttacking { get; }
+
+		bool IsPathfinding { get; }
+
 		Dictionary<string, object> GetCrossModState();
 		Dictionary<string, object> GetCrossModParams();
 
