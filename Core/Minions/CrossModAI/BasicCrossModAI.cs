@@ -14,66 +14,6 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 {
-	internal class ProjectileStateCache
-	{
-		internal Vector2 InitialPosition { get; private set; }
-		internal Vector2 InitialVelocity { get; private set; }
-		internal Vector2? Position { get; private set; }
-		internal Vector2? Velocity { get; private set; }
-
-		internal Vector2? PlayerPosition { get; private set; }
-		internal bool? TileCollide { get; private set; }
-
-		// this one is a bit contentious, appears to get set erroneously
-		internal float? GfxOffY { get; private set; }
-
-		public void ClearProjectile()
-		{
-			Position = null;
-			Velocity = null;
-			TileCollide = null;
-			GfxOffY = null;
-		}
-
-		public void Clear()
-		{
-			ClearProjectile();
-			PlayerPosition = null;
-		}
-
-		public void Cache(Projectile proj)
-		{
-			Position ??= proj.position;
-			Velocity ??= proj.velocity;
-			TileCollide ??= proj.tileCollide;
-			GfxOffY ??= proj.gfxOffY;
-			PlayerPosition ??= Main.player[proj.owner].position;
-		}
-
-		public void Rollback(Projectile proj)
-		{
-			proj.position = InitialPosition;
-			proj.velocity = InitialVelocity;
-			ClearProjectile();
-		}
-
-		public void CacheInitial(Projectile proj)
-		{
-			InitialPosition = proj.position;
-			InitialVelocity = proj.velocity;
-		}
-
-		public void Uncache(Projectile proj)
-		{
-			proj.position = Position ?? proj.position;
-			proj.velocity = Velocity ?? proj.velocity;
-			proj.tileCollide = TileCollide ?? proj.tileCollide;
-			proj.gfxOffY = GfxOffY ?? proj.gfxOffY;
-			Main.player[proj.owner].position = PlayerPosition ?? Main.player[proj.owner].position;
-			Clear();
-		}
-	}
-
 	/// <summary>
 	/// Basic cross-mod AI that allows for exposing AoMM-tracked state to other mods. Also include
 	/// the basic "follow waypoint" code here, since it's pretty simple.
@@ -103,6 +43,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		internal bool UseDefaultPathfindingMovement { get; set; }
 
 		internal ProjectileStateCache ProjCache { get; set; } = new();
+
+		internal ProjectileDefaultsCache ProjDefaultsCache { get; set; }
 
 		public WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
 
@@ -219,6 +161,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		internal virtual void ApplyPetDefaults()
 		{
+			ProjDefaultsCache ??= new ProjectileDefaultsCache(Projectile);
 			Projectile.minion = true;
 			Projectile.friendly = true;
 			Projectile.DamageType = DamageClass.Summon;
@@ -239,7 +182,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public virtual void OnSpawn()
 		{
-			if(IsPet) { ApplyPetDefaults(); }
+			//if(IsPet) { ApplyPetDefaults(); }
 		}
 
 		public virtual Vector2 IdleBehavior()
@@ -247,7 +190,14 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			CrossModStateDict = null;
 			CrossModParamDict = null;
 			ProjCache.CacheInitial(Projectile);
-			if(IsPet) { UpdatePetState(); }
+			if(IsPet && IsActive && !wasActive) 
+			{ 
+				ApplyPetDefaults(); 
+			}
+			if(IsPet) 
+			{ 
+				UpdatePetState(); 
+			}
 			// no op
 			return default;
 		}
@@ -285,6 +235,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			// Uncache one last time after unsetting IsActive to prevent the
 			// case where a cross-mod computed state is only partially applied
 			if(!IsActive && !wasActive) { return; }
+			if(IsPet && wasActive && !IsActive)
+			{
+				// Before deactivating, restore the original values of SetDefaults to the
+				// projectile
+				ProjDefaultsCache?.RestoreDefaults(Projectile);
+			}
 			wasActive = IsActive;
 			ProjCache.Uncache(Projectile);
 		}

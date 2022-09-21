@@ -39,7 +39,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				transformRateLimit = 60
 			};
 			Behavior.Pathfinder.modifyPath = GHelper.ModifyPathfinding;
-			if(IsPet) { ApplyPetDefaults(); }
 		}
 
 

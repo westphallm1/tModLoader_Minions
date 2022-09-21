@@ -38,7 +38,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				travelSpeed = MaxSpeed,
 				inertia = Inertia
 			};
-			if(IsPet) { ApplyPetDefaults(); }
 		}
 
 		internal override void ApplyPetDefaults()

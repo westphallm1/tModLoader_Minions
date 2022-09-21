@@ -1,0 +1,112 @@
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Terraria;
+using Terraria.ModLoader;
+
+namespace AmuletOfManyMinions.Core.Minions.CrossModAI
+{
+	/// <summary>
+	/// Helper class for storing and retrieving the state of a projectile
+	/// Used for overwriting base AI initiated changes to a projectile while
+	/// cross-mod AI is interactive, and vice versa while cross-mod AI is inactive
+	/// </summary>
+	internal class ProjectileStateCache
+	{
+		internal Vector2 InitialPosition { get; private set; }
+		internal Vector2 InitialVelocity { get; private set; }
+		internal Vector2? Position { get; private set; }
+		internal Vector2? Velocity { get; private set; }
+
+		internal Vector2? PlayerPosition { get; private set; }
+		internal bool? TileCollide { get; private set; }
+
+		// this one is a bit contentious, appears to get set erroneously
+		internal float? GfxOffY { get; private set; }
+
+		public void ClearProjectile()
+		{
+			Position = null;
+			Velocity = null;
+			TileCollide = null;
+			GfxOffY = null;
+		}
+
+		public void Clear()
+		{
+			ClearProjectile();
+			PlayerPosition = null;
+		}
+
+		public void Cache(Projectile proj)
+		{
+			Position ??= proj.position;
+			Velocity ??= proj.velocity;
+			TileCollide ??= proj.tileCollide;
+			GfxOffY ??= proj.gfxOffY;
+			PlayerPosition ??= Main.player[proj.owner].position;
+		}
+
+		public void Rollback(Projectile proj)
+		{
+			proj.position = InitialPosition;
+			proj.velocity = InitialVelocity;
+			ClearProjectile();
+		}
+
+		public void CacheInitial(Projectile proj)
+		{
+			InitialPosition = proj.position;
+			InitialVelocity = proj.velocity;
+		}
+
+		public void Uncache(Projectile proj)
+		{
+			proj.position = Position ?? proj.position;
+			proj.velocity = Velocity ?? proj.velocity;
+			proj.tileCollide = TileCollide ?? proj.tileCollide;
+			proj.gfxOffY = GfxOffY ?? proj.gfxOffY;
+			Main.player[proj.owner].position = PlayerPosition ?? Main.player[proj.owner].position;
+			Clear();
+		}
+	}
+
+	/// <summary>
+	/// Helper class for storing and retrieving the defaults of a projectile
+	/// Used for overwriting SetDefatults values while cross-mod AI is 
+	/// active, and restoring those values while cross-mod AI is inactive
+	/// </summary>
+	internal class ProjectileDefaultsCache
+	{
+		public bool IsMinion { get; private set; }
+		public bool IsFriendly { get; private set; }
+		public DamageClass DamageType { get; private set; }
+		public bool UsesLocalImmunity { get; private set; }
+		public bool UsesIdStaticImmunity { get; private set; }
+		public int LocalHitCooldown { get; private set; }
+
+		public ProjectileDefaultsCache(Projectile projectile)
+		{
+			IsMinion = projectile.minion;
+			IsFriendly = projectile.friendly;
+			DamageType = projectile.DamageType;
+			UsesLocalImmunity = projectile.usesLocalNPCImmunity;
+			UsesIdStaticImmunity = projectile.usesIDStaticNPCImmunity;
+			LocalHitCooldown = projectile.localNPCHitCooldown;
+		}
+
+		internal void RestoreDefaults(Projectile projectile)
+		{
+			projectile.minion = IsMinion;
+			projectile.friendly = IsFriendly;
+			projectile.DamageType = DamageType;
+			projectile.usesLocalNPCImmunity = UsesLocalImmunity;
+			projectile.usesIDStaticNPCImmunity = UsesIdStaticImmunity;
+			projectile.localNPCHitCooldown = LocalHitCooldown;
+		}
+	}
+
+}
