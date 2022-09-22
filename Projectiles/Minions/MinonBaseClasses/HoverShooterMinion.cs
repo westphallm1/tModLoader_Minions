@@ -111,6 +111,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
+			if(this.travelSpeed == 0 || this.inertia == 0)
+			{
+				return;
+			}
 			int travelSpeed = this.travelSpeed;
 			Vector2 lineOfFire = vectorToTargetPosition;
 			Vector2 oppositeVector = -vectorToTargetPosition;
