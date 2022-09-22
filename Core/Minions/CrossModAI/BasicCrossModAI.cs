@@ -40,6 +40,16 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		[CrossModState]
 		public int SearchRange { get; internal set; }
 
+		// For combat pets, apply a fixed multipier to the automatically scaling
+		// movement parameters
+		[CrossModParam]
+		[CrossModState]
+		public virtual float MaxSpeedScaleFactor { get; internal set; } = 1f;
+
+		[CrossModParam]
+		[CrossModState]
+		public virtual float InertiaScaleFactor { get; internal set; } = 1f;
+
 		internal bool UseDefaultPathfindingMovement { get; set; }
 
 		internal ProjectileStateCache ProjCache { get; set; } = new();
@@ -60,6 +70,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		// active state automatically. Otherwise, return non-null value directly 
 		private bool? isActiveTriState;
 
+		private bool DefaultIsActiveValue => Player.HasBuff(BuffId) && (IsPet || spawnedFromCrossModBuff);
+
 		// Check for whether cross mod AI should be applied to this specific projectile
 		// - For pets, just check that the cross mod buff is active
 		// - For minions, also check that this projecile was spawned specifically from the cross
@@ -68,8 +80,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		[CrossModState]
 		public bool IsActive 
 		{ 
-			get => isActiveTriState ?? Player.HasBuff(BuffId) && (IsPet || spawnedFromCrossModBuff); 
-			set => isActiveTriState = value; 
+			get => isActiveTriState ?? DefaultIsActiveValue;
+			// To prevent the default `UpdateParams` call from automatically updating IsActive,
+			// ensure the call specifically changes the value of IsActive first
+			set { if (isActiveTriState != default || value != DefaultIsActiveValue) { isActiveTriState = value; } }
 		} 
 
 		// A block of properties used exclusively for generating the cross mod state dictionary
@@ -175,8 +189,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
 			SearchRange = info.BaseSearchRange;
-			Inertia = info.Level < 6 ? 10 : 15 - info.Level;
-			MaxSpeed = (int)info.BaseSpeed;
+			Inertia = (int)(InertiaScaleFactor * (info.Level < 6 ? 10 : 15 - info.Level));
+			MaxSpeed = (int)(MaxSpeedScaleFactor * info.BaseSpeed);
 			Projectile.originalDamage = leveledPetPlayer.PetDamage;
 		}
 

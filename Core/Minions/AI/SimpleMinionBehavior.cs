@@ -226,8 +226,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 			}
 
 			// Perform a Multiplayer-safe approximation of OnHitNPC() against just the target NPC
-			if (TargetNPCIndex is int idx &&
-				TargetFrameCounter++ > Projectile.localNPCHitCooldown &&
+			if (TargetFrameCounter++ > Projectile.localNPCHitCooldown && TargetNPCIndex is int idx &&
 				VectorToTarget is Vector2 target && target.LengthSquared() < ProximityForOnHitTarget * ProximityForOnHitTarget)
 			{
 				TargetFrameCounter = 0;

@@ -25,7 +25,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal int FramesSinceLastHit { get; set; }
 
-		private int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
+		internal virtual int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
 
 
 		public FlyingCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : base(proj, buffId, projId, isPet, defaultIdle)
@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		}
 
 
-		internal void BumblingMovement(Vector2 vectorToTargetPosition)
+		internal virtual void BumblingMovement(Vector2 vectorToTargetPosition)
 		{
 
 			vectorToTargetPosition.SafeNormalize();

@@ -56,9 +56,9 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal
 				// Don't override any cross-mod AI added by the mod itself
 				if(CrossModAIGlobalProjectile.CrossModAISuppliers.ContainsKey(projInstance.Type))
 				{
-					return;
+					// return;
 				}
-				object[] allArgs = (new object[] { method, "0.16.1", projInstance, buffInstance, projId }).Concat(args).ToArray();
+				object[] allArgs = (new object[] { method, Mod.Version.ToString(), projInstance, buffInstance, projId }).Concat(args).ToArray();
 				ModCallHandler.HandleCall(allArgs);
 			} catch(Exception e)
 			{
@@ -79,6 +79,11 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal
 		public void RegisterSlimePet(string projName, string buffName, int? projId, bool defaultIdle = true)
 		{
 			RegisterCombatPet("RegisterSlimePet", projName, buffName, projId, defaultIdle);
+		}
+
+		public void RegisterWormPet(string projName, string buffName, int? projId, bool defaultIdle = true)
+		{
+			RegisterCombatPet("RegisterWormPet", projName, buffName, projId, defaultIdle);
 		}
 	}
 }

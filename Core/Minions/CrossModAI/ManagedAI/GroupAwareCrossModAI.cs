@@ -32,6 +32,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		[CrossModParam]
 		[CrossModState]
+		public virtual float AttackFramesScaleFactor { get; set; } = 1f;
+
+		[CrossModParam]
+		[CrossModState]
 		internal bool UseDefaultIdleAnimation { get; set; }
 
 		protected bool IsIdlingNearPlayer =>
@@ -84,7 +88,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			base.UpdatePetState();
 			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
-			AttackFrames = Math.Max(30, 60 - 6 * info.Level);
+			AttackFrames = (int)( AttackFramesScaleFactor * Math.Max(30, 60 - 6 * info.Level));
 		}
 
 		public override void AfterMoving()

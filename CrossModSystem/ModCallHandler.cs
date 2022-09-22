@@ -85,13 +85,13 @@ namespace AmuletOfManyMinions.CrossModSystem
 					return GetStateDirect(a.Arg<ModProjectile>(), a.Arg<object>());
 				// Quick, non-reflective state access for several high-priority state variables
 				case "IsActive":
-					return GetState(a.Arg<ModProjectile>());
+					return IsActive(a.Arg<ModProjectile>());
 				case "IsIdle":
-					return GetState(a.Arg<ModProjectile>());
+					return IsIdle(a.Arg<ModProjectile>());
 				case "IsAttacking":
-					return GetState(a.Arg<ModProjectile>());
+					return IsAttacking(a.Arg<ModProjectile>());
 				case "IsPathfinding":
-					return GetState(a.Arg<ModProjectile>());
+					return IsPathfinding(a.Arg<ModProjectile>());
 
 				// Revert any AoMM-made changes to the state of the projectile made this frame
 				case "ReleaseControl":
@@ -132,6 +132,8 @@ namespace AmuletOfManyMinions.CrossModSystem
 
 				case "RegisterSlimePet":
 					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(true));
+				case "RegisterWormPet":
+					return RegisterWormPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true));
 
 				// One-off utility functions
 				case "GetPetLevel":
@@ -495,6 +497,26 @@ namespace AmuletOfManyMinions.CrossModSystem
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 				new SlimeCrossModAI(proj, buff.Type, projType, true, defaultIdle);
+			return default;
+		}
+
+		/// <summary>
+		/// Register a fully managed slime cross mod combat pet. AoMM will take over this projectile's 
+		/// AI every frame, and will cause it to behave like a basic slime minion (eg. the Baby Slime staff).
+		/// The pet's damage, movement speed, and search range will automatically scale with the player's combat
+		/// pet level.
+		/// TODO: This currently doesn't support projectiles
+		/// </summary>
+		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
+		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// <param name="projType">Which projectile the minion should shoot.</param>
+		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
+		internal static object RegisterWormPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle)
+		{
+			AddBuffMappingIdempotent(buff);
+			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
+			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
+				new WormCrossModAI(proj, buff.Type, projType, true, defaultIdle);
 			return default;
 		}
 
