@@ -30,7 +30,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public FlyingCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : base(proj, buffId, projId, isPet, defaultIdle)
 		{
-			IdleLocationSets.circlingHead.Add(Projectile.type);
+			if(!defaultIdle)
+			{
+				IdleLocationSets.circlingHead.Add(Projectile.type);
+			}
 			HsHelper = new HoverShooterHelper(this, FiredProjectileId)
 			{
 				ExtraAttackConditionsMet = Behavior.IsMyTurn,

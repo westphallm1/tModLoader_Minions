@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			{
 				Projectile.timeLeft = 2;
 			}
-			else if (Main.projPet[Projectile.type])
+			else if (Main.myPlayer == Projectile.owner && Main.projPet[Projectile.type])
 			{
 				Projectile.Kill(); // pets don't die naturally for some reason
 				return false;

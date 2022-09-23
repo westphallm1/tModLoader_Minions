@@ -26,7 +26,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public BaseGroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
 			base(proj, buffId, projId, isPet, defaultIdle)
 		{
-			IdleLocationSets.trailingOnGround.Add(Projectile.type);
+			if(!defaultIdle)
+			{
+				IdleLocationSets.trailingOnGround.Add(Projectile.type);
+			}
 			Behavior.NoLOSPursuitTime = 300;
 			GroundedBehavior = new(this);
 			GHelper = new GroundAwarenessHelper(this)

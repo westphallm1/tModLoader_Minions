@@ -81,9 +81,9 @@ namespace AmuletOfManyMinions.CrossModSystem.Internal
 			RegisterCombatPet("RegisterSlimePet", projName, buffName, projId, defaultIdle);
 		}
 
-		public void RegisterWormPet(string projName, string buffName, int? projId, bool defaultIdle = true)
+		public void RegisterWormPet(string projName, string buffName, int? projId, bool defaultIdle = true, int segmentCount = 8)
 		{
-			RegisterCombatPet("RegisterWormPet", projName, buffName, projId, defaultIdle);
+			RegisterCombatPet("RegisterWormPet", projName, buffName, projId, defaultIdle, segmentCount);
 		}
 	}
 }

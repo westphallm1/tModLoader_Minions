@@ -133,7 +133,7 @@ namespace AmuletOfManyMinions.CrossModSystem
 				case "RegisterSlimePet":
 					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(true));
 				case "RegisterWormPet":
-					return RegisterWormPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true));
+					return RegisterWormPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true), a.Arg(64));
 
 				// One-off utility functions
 				case "GetPetLevel":
@@ -511,12 +511,13 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
 		/// <param name="projType">Which projectile the minion should shoot.</param>
 		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
-		internal static object RegisterWormPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle)
+		/// <param name="wormLength">The approximate length of this worm. Largely cosmetic, used in idle animation</param>
+		internal static object RegisterWormPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle, int wormLength)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
-				new WormCrossModAI(proj, buff.Type, projType, true, defaultIdle);
+				new WormCrossModAI(proj, buff.Type, projType, true, defaultIdle) { WormLength = wormLength };
 			return default;
 		}
 
