@@ -6,13 +6,25 @@ Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-many-minio
 
 Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 
+=== NEW: Cross Mod API! ===
+
+Amulet of Many Minions now has a cross-mod API, and cross-mod Combat Pet compatibility with Assorted Crazy Things!
+Check out Assorted Crazy Things here: https://steamcommunity.com/sharedfiles/filedetails/?id=2795859323
+
+If you are a mod author and would like to add cross-mod compatibility with AoMM, consult the cross-mod sample
+and reach out on Discord with any questions.
+Cross-mod sample mod: https://github.com/westphallm1/AoMM-Cross-Mod-Sample
+Mod discord: https://discord.gg/D7wpRZC
+
+
 === Bug Reports ===
 Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
 
 === Version History ===
 
-v0.16.0 - Cross-Mod AI Beta!
-    - Large internal rework to support future cross-mod AI capabilities
+v0.16.1 - Cross-Mod AI!
+    - Add a mod.Call API that allows other mods to register pets and minions for AoMM AI
+    - Add Cross-Mod compatibility with Assorted Crazy Things!
     - Please report any newfound bugs to the mod discord: https://discord.gg/D7wpRZC
 v0.15.0 - Balance Changes!
     - Add a prehardmode minion and a prehardmode accessory
