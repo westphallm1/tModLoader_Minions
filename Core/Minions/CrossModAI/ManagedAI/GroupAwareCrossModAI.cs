@@ -38,6 +38,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		[CrossModState]
 		internal bool UseDefaultIdleAnimation { get; set; }
 
+		[CrossModState]
+		public bool IsInFiringRange { get; set; }
+
+		[CrossModState]
+		public bool ShouldFireThisFrame { get; set; }
+
 		protected bool IsIdlingNearPlayer =>
 			UseDefaultIdleAnimation && IsIdle && Vector2.DistanceSquared(Projectile.Center, Player.Center) < 164 * 164 &&
 			Collision.CanHitLine(Projectile.Center, 1, 1, Player.Center, 1, 1);
@@ -61,6 +67,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
+			IsInFiringRange = false;
+			ShouldFireThisFrame = false;
 
 			if(CircleHelper.IdleBumble && Player.velocity.Length() < 4)
 			{

@@ -38,6 +38,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			{
 				ExtraAttackConditionsMet = Behavior.IsMyTurn,
 				ModifyTargetVector = ModifyTargetVector,
+				AfterFiringProjectile = () => ShouldFireThisFrame = true,
 				travelSpeed = MaxSpeed,
 				inertia = Inertia
 			};
@@ -58,6 +59,9 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			HsHelper.attackFrames = AttackFrames;
 			HsHelper.travelSpeed = MaxSpeed;
 			HsHelper.inertia = Inertia;
+			// launch projectiles as long as the target is within range, to accommodate cross mod customizations
+			// that modify the targeted movement significantly. This is a bit hacky
+			HsHelper.targetShootProximityRadius = SearchRange;
 			return base.IdleBehavior();
 		}
 
@@ -65,6 +69,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		{
 			if(FiredProjectileId != null)
 			{
+				IsInFiringRange = vectorToTargetPosition.LengthSquared() < HsHelper.targetShootProximityRadius * HsHelper.targetShootProximityRadius;
 				HsHelper.TargetedMovement(vectorToTargetPosition);
 				// suggest to the minion that it should face towards the enemy while shooting
 				ProjCache.Cache(Projectile);

@@ -261,45 +261,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			squireBuffTypes = null;
 			squireDebuffTypes = null;
 		}
-		private void doBuffDust(Projectile projectile, int dustType)
-		{
-			Vector2 dustVelocity = new Vector2(0, -Main.rand.NextFloat() * 0.25f - 0.5f);
-			for (int i = 0; i < 3; i++)
-			{
-				Vector2 offset = new Vector2(10 * (i - 1), (i == 1 ? -4 : 4) + Main.rand.Next(-2, 2));
-				Dust dust = Dust.NewDustPerfect(projectile.Top + offset, dustType, dustVelocity, Scale: 1f);
-				dust.customData = projectile.whoAmI;
-			}
-		}
-
-		// add buff/debuff dusts if we've got a squire affecting buff or debuff
-		public override void PostAI(Projectile projectile)
-		{
-			if (!SquireMinionTypes.Contains(projectile.type))
-			{
-				return;
-			}
-			Player player = Main.player[projectile.owner];
-			foreach (int buffType in player.buffType)
-			{
-				bool debuff = false;
-
-				if (squireDebuffTypes.Contains(buffType))
-				{
-					debuff = true;
-				}
-				else if (!squireBuffTypes.Contains(buffType))
-				{
-					continue;
-				}
-				int timeLeft = player.buffTime[player.FindBuffIndex(buffType)];
-				if (timeLeft % 60 == 0)
-				{
-					doBuffDust(projectile, debuff ? DustType<MinusDust>() : DustType<PlusDust>());
-				}
-				break;
-			}
-		}
 
 		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{

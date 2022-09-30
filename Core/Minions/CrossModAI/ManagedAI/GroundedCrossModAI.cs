@@ -73,11 +73,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				base.TargetedMovement(vectorToTargetPosition);
 				return;
 			}
-			bool inLaunchRange = 
+			IsInFiringRange = 
 				Math.Abs(vectorToTargetPosition.X) < 4 * PreferredTargetDist &&
 				Math.Abs(vectorToTargetPosition.Y) < 4 * PreferredTargetDist;
-			if (Player.whoAmI == Main.myPlayer && inLaunchRange && Behavior.AnimationFrame - LastFiredFrame >= AttackFrames)
+			if (Player.whoAmI == Main.myPlayer && IsInFiringRange && Behavior.AnimationFrame - LastFiredFrame >= AttackFrames)
 			{
+				ShouldFireThisFrame = true;
 				LastFiredFrame = Behavior.AnimationFrame;
 				Vector2 launchVector = vectorToTargetPosition;
 				// lead shot a little bit
