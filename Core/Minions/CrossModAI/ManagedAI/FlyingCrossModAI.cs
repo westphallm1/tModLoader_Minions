@@ -55,6 +55,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public override Vector2 IdleBehavior()
 		{
 			// This is a bit clunky, but need to keep HoverShooterHelper in sync with cross mod properties
+			HsHelper.firedProjectileId = FiredProjectileId;
 			HsHelper.projectileVelocity = MaxSpeed + 3;
 			HsHelper.attackFrames = AttackFrames;
 			HsHelper.travelSpeed = MaxSpeed;
@@ -116,6 +117,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		internal void ModifyTargetVector(ref Vector2 target)
 		{
 			Behavior.DistanceFromGroup(ref target);
+		}
+
+		public override void AfterMoving()
+		{
+			base.AfterMoving();
+			Projectile.friendly &= FiredProjectileId == default;
 		}
 	}
 }
