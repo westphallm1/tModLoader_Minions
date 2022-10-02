@@ -77,7 +77,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				base.TargetedMovement(vectorToTargetPosition);
 				return;
 			}
-			if (Player.whoAmI == Main.myPlayer && IsInFiringRange && Behavior.AnimationFrame - LastFiredFrame >= AttackFrames)
+			if (Player.whoAmI == Main.myPlayer && IsInFiringRange && Behavior.AnimationFrame - LastFiredFrame >= AttackFrames &&
+				(Behavior.AnimationFrame - LastFiredFrame) % AttackFrames == 0)
 			{
 				ShouldFireThisFrame = true;
 				LastFiredFrame = Behavior.AnimationFrame;

@@ -39,7 +39,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			}
 			HsHelper = new HoverShooterHelper(this, FiredProjectileId)
 			{
-				ExtraAttackConditionsMet = Behavior.IsMyTurn,
+				ExtraAttackConditionsMet = ()=> Behavior.IsMyTurn() && 
+					(Behavior.AnimationFrame - HsHelper.lastShootFrame) % AttackFrames == 0,
 				ModifyTargetVector = ModifyTargetVector,
 				AfterFiringProjectile = () => ShouldFireThisFrame = true,
 				travelSpeed = MaxSpeed,
@@ -73,6 +74,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		{
 			if(FiredProjectileId != null)
 			{
+				Projectile.friendly = false;
 				HsHelper.TargetedMovement(vectorToTargetPosition);
 				// suggest to the minion that it should face towards the enemy while shooting
 				ProjCache.Cache(Projectile);
