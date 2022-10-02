@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		internal bool UseDefaultIdleAnimation { get; set; }
 
 		[CrossModState]
-		public bool IsInFiringRange { get; set; }
+		public abstract bool IsInFiringRange { get; }
 
 		[CrossModState]
 		public bool ShouldFireThisFrame { get; set; }
@@ -79,7 +79,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public override Vector2 IdleBehavior()
 		{
 			base.IdleBehavior();
-			IsInFiringRange = false;
 			ShouldFireThisFrame = false;
 
 			if(CircleHelper.IdleBumble && Player.velocity.Length() < 4)

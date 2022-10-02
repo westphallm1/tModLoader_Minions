@@ -27,6 +27,9 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal virtual int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
 
+		public override bool IsInFiringRange => IsAttacking && Behavior.VectorToTarget is Vector2 target && 
+			target.LengthSquared() < HsHelper.targetShootProximityRadius * HsHelper.targetShootProximityRadius;
+
 
 		public FlyingCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : base(proj, buffId, projId, isPet, defaultIdle)
 		{
@@ -70,8 +73,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		{
 			if(FiredProjectileId != null)
 			{
-				IsInFiringRange = IsAttacking &&
-					vectorToTargetPosition.LengthSquared() < HsHelper.targetShootProximityRadius * HsHelper.targetShootProximityRadius;
 				HsHelper.TargetedMovement(vectorToTargetPosition);
 				// suggest to the minion that it should face towards the enemy while shooting
 				ProjCache.Cache(Projectile);

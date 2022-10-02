@@ -16,6 +16,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		internal int LastFiredFrame { get; set; }
 
 		internal virtual bool ShouldDoShootingMovement => FiredProjectileId != null;
+
+		public override bool IsInFiringRange => IsAttacking && Behavior.VectorToTarget is Vector2 target &&
+				Math.Abs(target.X) < 4 * PreferredTargetDistance &&
+				Math.Abs(target.Y) < 4 * PreferredTargetDistance &&
+				Collision.CanHitLine(Projectile.Center, 1, 1, Projectile.Center + target, 1, 1);
+
 		public GroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
 			base(proj, buffId, projId, isPet, defaultIdle)
 		{
@@ -71,10 +77,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				base.TargetedMovement(vectorToTargetPosition);
 				return;
 			}
-			IsInFiringRange = IsAttacking && 
-				Math.Abs(vectorToTargetPosition.X) < 4 * PreferredTargetDistance &&
-				Math.Abs(vectorToTargetPosition.Y) < 4 * PreferredTargetDistance &&
-				Collision.CanHitLine(Projectile.Center, 1, 1, Projectile.Center + vectorToTargetPosition, 1, 1);
 			if (Player.whoAmI == Main.myPlayer && IsInFiringRange && Behavior.AnimationFrame - LastFiredFrame >= AttackFrames)
 			{
 				ShouldFireThisFrame = true;
