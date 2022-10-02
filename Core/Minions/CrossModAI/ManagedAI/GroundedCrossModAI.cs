@@ -13,7 +13,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 {
 	internal class GroundedCrossModAI : BaseGroundedCrossModAI
 	{
-		internal int LaunchVelocity { get; set; } = 12;
 		internal int LastFiredFrame { get; set; }
 
 		internal virtual bool ShouldDoShootingMovement => FiredProjectileId != null;
@@ -74,7 +73,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			}
 			IsInFiringRange = IsAttacking && 
 				Math.Abs(vectorToTargetPosition.X) < 4 * PreferredTargetDistance &&
-				Math.Abs(vectorToTargetPosition.Y) < 4 * PreferredTargetDistance;
+				Math.Abs(vectorToTargetPosition.Y) < 4 * PreferredTargetDistance &&
+				Collision.CanHitLine(Projectile.Center, 1, 1, Projectile.Center + vectorToTargetPosition, 1, 1);
 			if (Player.whoAmI == Main.myPlayer && IsInFiringRange && Behavior.AnimationFrame - LastFiredFrame >= AttackFrames)
 			{
 				ShouldFireThisFrame = true;
@@ -116,8 +116,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public override void AfterMoving()
 		{
-			base.AfterMoving();
 			Projectile.friendly &= !ShouldDoShootingMovement;
+			base.AfterMoving();
 			// having a slightly positive velocity from constant gravity messes with the vanilla frame
 			// determination
 			// This occurs after the velocity cache, so it should be ignored for actual calculations

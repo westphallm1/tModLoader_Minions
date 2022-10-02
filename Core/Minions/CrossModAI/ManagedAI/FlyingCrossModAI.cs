@@ -57,8 +57,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			HsHelper.attackFrames = AttackFrames;
 			HsHelper.travelSpeed = MaxSpeed;
 			HsHelper.inertia = Inertia;
-			HsHelper.targetInnerRadius = PreferredTargetDistance - 16;
-			HsHelper.targetOuterRadius = PreferredTargetDistance + 16;
+			HsHelper.targetInnerRadius = PreferredTargetDistance - 24;
+			HsHelper.targetOuterRadius = PreferredTargetDistance + 24;
 			HsHelper.projectileVelocity = (int)LaunchVelocity;
 			// launch projectiles as long as the target is within range, to accommodate cross mod customizations
 			// that modify the targeted movement significantly. This is a bit hacky
@@ -122,8 +122,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public override void AfterMoving()
 		{
-			base.AfterMoving();
 			Projectile.friendly &= FiredProjectileId == default;
+			base.AfterMoving();
 		}
 	}
 }

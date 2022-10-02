@@ -36,11 +36,11 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		[CrossModParam]
 		[CrossModState]
-		public virtual float LaunchVelocity { get; set; } = 14;
+		public float LaunchVelocity { get; set; } = 14;
 
 		[CrossModParam]
 		[CrossModState]
-		public virtual float LaunchVelocityScaleFactor { get; set; } = 1f;
+		public float LaunchVelocityScaleFactor { get; set; } = 1f;
 
 
 
@@ -63,7 +63,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public GroupAwareCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : base(proj, buffId, isPet: isPet)
 		{
-			IsPet = true;
 			CircleHelper = new HeadCirclingHelper(this);
 			FiredProjectileId = projId;
 			UseDefaultIdleAnimation = defaultIdle;
@@ -110,7 +109,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
 			AttackFrames = (int)( AttackFramesScaleFactor * Math.Max(30, 60 - 6 * info.Level));
-			LaunchVelocity = (int)( LaunchVelocityScaleFactor * (MaxSpeed + 3));
+			LaunchVelocity = (int)( LaunchVelocityScaleFactor * (info.BaseSpeed + 3));
 		}
 
 		public override void AfterMoving()
