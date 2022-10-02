@@ -57,9 +57,17 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public void Rollback(Projectile proj)
 		{
-			proj.position = InitialPosition;
-			proj.velocity = InitialVelocity;
-			ClearProjectile();
+			if(Position != default && Velocity != default)
+			{
+				proj.position = InitialPosition;
+				proj.velocity = InitialVelocity;
+				ClearProjectile();
+			}
+			if(PlayerPosition is Vector2 playerPosition)
+			{
+				Main.player[proj.owner].position = playerPosition;
+				Clear();
+			}
 		}
 
 		public void CacheInitial(Projectile proj)
