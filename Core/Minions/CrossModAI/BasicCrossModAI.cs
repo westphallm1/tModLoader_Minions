@@ -278,7 +278,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		// to prevent AoMM from overriding changes made to its velocity this frame
 		public void ReleaseControl()
 		{
-			ProjCache.Rollback(Projectile);
+			if(IsActive || wasActive)
+			{
+				ProjCache.Rollback(Projectile);
+			}
 		}
 
 		// Based on the projectile's spawn conditions, determine whether it should have cross-mod
