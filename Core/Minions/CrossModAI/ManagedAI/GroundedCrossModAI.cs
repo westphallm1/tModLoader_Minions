@@ -13,7 +13,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 {
 	internal class GroundedCrossModAI : BaseGroundedCrossModAI
 	{
-		internal int PreferredTargetDist { get; set; } = 128;
 		internal int LaunchVelocity { get; set; } = 12;
 		internal int LastFiredFrame { get; set; }
 
@@ -73,9 +72,9 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				base.TargetedMovement(vectorToTargetPosition);
 				return;
 			}
-			IsInFiringRange = 
-				Math.Abs(vectorToTargetPosition.X) < 4 * PreferredTargetDist &&
-				Math.Abs(vectorToTargetPosition.Y) < 4 * PreferredTargetDist;
+			IsInFiringRange = IsAttacking && 
+				Math.Abs(vectorToTargetPosition.X) < 4 * PreferredTargetDistance &&
+				Math.Abs(vectorToTargetPosition.Y) < 4 * PreferredTargetDistance;
 			if (Player.whoAmI == Main.myPlayer && IsInFiringRange && Behavior.AnimationFrame - LastFiredFrame >= AttackFrames)
 			{
 				ShouldFireThisFrame = true;
@@ -92,23 +91,23 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			}
 
 			// don't move if we're in range-ish of the target
-			if (Math.Abs(vectorToTargetPosition.X) < 1.25f * PreferredTargetDist && 
-				Math.Abs(vectorToTargetPosition.X) > 0.5f * PreferredTargetDist)
+			if (Math.Abs(vectorToTargetPosition.X) < 1.25f * PreferredTargetDistance && 
+				Math.Abs(vectorToTargetPosition.X) > 0.5f * PreferredTargetDistance)
 			{
 				vectorToTargetPosition.X = 0;
-			} else if (Math.Abs(vectorToTargetPosition.X) < 0.5f * PreferredTargetDist)
+			} else if (Math.Abs(vectorToTargetPosition.X) < 0.5f * PreferredTargetDistance)
 			{
 				// TODO: For cross mod AI only (not normal), this has an issue with triggering the "get unstuck"
 				// AI. As a quick fix, explicitly guard against attempting to move into an occupied block.
-				Vector2 nextTarget = vectorToTargetPosition - Vector2.UnitX * Math.Sign(vectorToTargetPosition.X) * 0.75f * PreferredTargetDist;
+				Vector2 nextTarget = vectorToTargetPosition - Vector2.UnitX * Math.Sign(vectorToTargetPosition.X) * 0.75f * PreferredTargetDistance;
 				if(Collision.CanHitLine(Projectile.Center, 1, 1, Projectile.Center + nextTarget, 1, 1))
 				{
 					vectorToTargetPosition = nextTarget;
 				}
 			}
 
-			if(Math.Abs(vectorToTargetPosition.Y) < 1.25f * PreferredTargetDist && 
-				Math.Abs(vectorToTargetPosition.Y) > 0.5 * PreferredTargetDist)
+			if(Math.Abs(vectorToTargetPosition.Y) < 1.25f * PreferredTargetDistance && 
+				Math.Abs(vectorToTargetPosition.Y) > 0.5 * PreferredTargetDistance)
 			{
 				vectorToTargetPosition.Y = 0;
 			}

@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 					(tacticsPlayer.DidUpdateAttackTarget || waypointsPlayer.DidUpdateWaypoint) &&
 					!Pathfinder.PrecheckPathCompletion();
 			}
-			// don't allow finding the target while travelling along path
+			// don't allow finding the target while traveling along path
 			if (tacticMissing || (useBeaconThisFrame && (didChangePathfindingState || Pathfinder.InTransit)))
 			{
 				VectorToTarget = null;
@@ -162,7 +162,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 				OldVectorToTarget = VectorToTarget;
 				OldTargetNpcIndex = TargetNPCIndex;
 			}
-			// For several frames after losing the target, contine doing targeted movement against the previous cached target
+			// For several frames after losing the target, continue doing targeted movement against the previous cached target
 			else if (AttackState != AttackState.RETURNING && 
 				OldTargetNpcIndex is int previousIndex && FramesSinceHadTarget < NoLOSPursuitTime)
 			{
@@ -175,6 +175,7 @@ namespace AmuletOfManyMinions.Core.Minions.AI
 				else if (previousIndex < Main.maxNPCs)
 				{
 					VectorToTarget = Main.npc[previousIndex].Center - Projectile.Center;
+					TargetNPCIndex = OldTargetNpcIndex;
 					Projectile.friendly = DealsContactDamage;
 					Minion.TargetedMovement((Vector2)VectorToTarget); // don't immediately give up if losing LOS
 				}

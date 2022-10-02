@@ -121,7 +121,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public bool IsPathfinding => Behavior.IsFollowingBeacon;
 
 		[CrossModState]
-		public bool IsAttacking => Behavior.VectorToTarget != default && !IsPathfinding;
+		public bool IsAttacking => TargetNPC != default && Behavior.VectorToTarget != default && !IsPathfinding;
 
 		[CrossModState]
 		public bool IsIdle => !IsAttacking && !IsPathfinding;

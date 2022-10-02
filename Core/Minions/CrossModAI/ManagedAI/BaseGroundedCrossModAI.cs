@@ -30,8 +30,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			{
 				IdleLocationSets.trailingOnGround.Add(Projectile.type);
 			}
-			Behavior.NoLOSPursuitTime = 300;
-			GroundedBehavior = new(this);
+			GroundedBehavior = new(this) { GroundedNoLOSPursuitTime = 60 };
 			GHelper = new GroundAwarenessHelper(this)
 			{
 				IdleFlyingMovement = IdleFlyingMovement,

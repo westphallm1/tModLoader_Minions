@@ -38,6 +38,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		private Projectile Projectile => Minion.Projectile;
 		private GroundAwarenessHelper GHelper => Minion.GHelper;
 
+		internal int GroundedNoLOSPursuitTime = 300;
+
 		public DefaultGroundedBehavior(IGroundedMinion minion)
 		{
 			Minion = minion;
@@ -49,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			GHelper.SetIsOnGround();
 			// the ground-based minions can sometimes jump/bounce to get themselves unstuck
 			// , but the flying versions can't
-			Behavior.NoLOSPursuitTime = GHelper.isFlying ? 15 : 300;
+			Behavior.NoLOSPursuitTime = GHelper.isFlying ? 15 : GroundedNoLOSPursuitTime;
 			Vector2 idlePosition = Minion.Player.Center;
 			idlePosition.X += -Minion.Player.direction * IdleLocationSets.GetXOffsetInSet(IdleLocationSets.trailingOnGround, Projectile);
 			if (!Collision.CanHitLine(idlePosition, 1, 1, Minion.Player.Center, 1, 1))

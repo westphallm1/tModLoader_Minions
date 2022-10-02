@@ -36,6 +36,19 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		[CrossModParam]
 		[CrossModState]
+		public virtual float LaunchVelocity { get; set; } = 14;
+
+		[CrossModParam]
+		[CrossModState]
+		public virtual float LaunchVelocityScaleFactor { get; set; } = 1f;
+
+
+
+		[CrossModParam]
+		public int PreferredTargetDistance { get; set; } = 128;
+
+		[CrossModParam]
+		[CrossModState]
 		internal bool UseDefaultIdleAnimation { get; set; }
 
 		[CrossModState]
@@ -97,6 +110,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
 			AttackFrames = (int)( AttackFramesScaleFactor * Math.Max(30, 60 - 6 * info.Level));
+			LaunchVelocity = (int)( LaunchVelocityScaleFactor * (MaxSpeed + 3));
 		}
 
 		public override void AfterMoving()
