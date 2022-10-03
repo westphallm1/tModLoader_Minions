@@ -51,7 +51,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		[CrossModState]
 		internal bool UseDefaultIdleAnimation { get; set; }
 
-		[CrossModState]
 		public abstract bool IsInFiringRange { get; }
 
 		[CrossModState]

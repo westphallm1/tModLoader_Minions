@@ -17,6 +17,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal virtual bool ShouldDoShootingMovement => FiredProjectileId != null;
 
+		[CrossModState]
 		public override bool IsInFiringRange => IsAttacking && Behavior.VectorToTarget is Vector2 target &&
 				Math.Abs(target.X) < 4 * PreferredTargetDistance &&
 				Math.Abs(target.Y) < 4 * PreferredTargetDistance &&

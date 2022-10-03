@@ -27,6 +27,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal virtual int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
 
+		[CrossModState]
 		public override bool IsInFiringRange => IsAttacking && Behavior.VectorToTarget is Vector2 target && 
 			target.LengthSquared() < HsHelper.targetShootProximityRadius * HsHelper.targetShootProximityRadius;
 
