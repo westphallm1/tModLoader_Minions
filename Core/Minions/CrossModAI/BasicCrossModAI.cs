@@ -208,10 +208,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			{ 
 				ApplyPetDefaults(); 
 			}
-			if(IsPet) 
-			{ 
-				UpdatePetState(); 
-			}
 			// no op
 			return default;
 		}
@@ -261,7 +257,12 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public virtual void AfterMoving() 
 		{
-			// no op
+			// Update pet state after running rest of AI, allows overrides from SetParameters to
+			// affect AI for a single frame
+			if(IsPet) 
+			{ 
+				UpdatePetState(); 
+			}
 		}
 
 		public virtual bool DoVanillaAI() => true;
