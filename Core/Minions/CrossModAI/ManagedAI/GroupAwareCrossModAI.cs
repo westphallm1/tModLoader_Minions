@@ -57,8 +57,9 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public bool ShouldFireThisFrame { get; set; }
 
 		protected bool IsIdlingNearPlayer =>
-			UseDefaultIdleAnimation && IsIdle && Vector2.DistanceSquared(Projectile.Center, Player.Center) < 164 * 164 &&
-			Collision.CanHitLine(Projectile.Center, 1, 1, Player.Center, 1, 1);
+			UseDefaultIdleAnimation && IsIdle && 
+			Vector2.DistanceSquared(Projectile.Center, ProjCache.PlayerPosition ?? Player.Center) < 164 * 164 &&
+			Collision.CanHitLine(Projectile.Center, 1, 1, ProjCache.PlayerPosition ?? Player.Center, 1, 1);
 
 		public GroupAwareCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : base(proj, buffId, isPet: isPet)
 		{
