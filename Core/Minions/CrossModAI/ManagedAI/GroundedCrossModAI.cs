@@ -17,11 +17,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal virtual bool ShouldDoShootingMovement => FiredProjectileId != null;
 
+		internal override Vector2 LOSCenter => new(Projectile.Center.X, Math.Min(Projectile.Center.Y, Projectile.Bottom.Y - 18));
+
 		[CrossModState]
 		public override bool IsInFiringRange => IsAttacking && Behavior.VectorToTarget is Vector2 target &&
 				Math.Abs(target.X) < 4 * PreferredTargetDistance &&
 				Math.Abs(target.Y) < 4 * PreferredTargetDistance &&
-				Collision.CanHitLine(Projectile.Center, 1, 1, Projectile.Center + target, 1, 1);
+				Collision.CanHitLine(LOSCenter, 1, 1, LOSCenter + target, 1, 1);
 
 		public GroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
 			base(proj, buffId, projId, isPet, defaultIdle)

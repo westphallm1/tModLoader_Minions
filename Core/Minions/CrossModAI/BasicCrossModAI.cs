@@ -56,6 +56,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		internal ProjectileDefaultsCache ProjDefaultsCache { get; set; }
 
+		// position to run line of sight calculations from. Issues have been observed with using the 
+		// center for small minions
+		internal virtual Vector2 LOSCenter => Projectile.Center;
+
 		public WaypointMovementStyle WaypointMovementStyle => WaypointMovementStyle.IDLE;
 
 
@@ -236,7 +240,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		
 		public virtual Vector2? FindTarget()
 		{
-			return Behavior.SelectedEnemyInRange(SearchRange) is Vector2 target ? target - Projectile.Center : null;
+			return Behavior.SelectedEnemyInRange(SearchRange, losCenter: LOSCenter) is Vector2 target ? target - Projectile.Center : null;
 		}
 
 
