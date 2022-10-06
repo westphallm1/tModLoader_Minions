@@ -117,9 +117,6 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		[CrossModState]
 		public int PetLevel => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.Level;
 
-		[CrossModState]
-		public int PetDamage => Player.GetModPlayer<LeveledCombatPetModPlayer>().PetLevelInfo.BaseDamage;
-
 		// Basic state variables for the three things a minion can do (attack, pathfind, and idle)
 		[CrossModState]
 		public bool IsPathfinding => Behavior.IsFollowingBeacon;
@@ -196,6 +193,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			Inertia = (int)(InertiaScaleFactor * (info.Level < 6 ? 10 : 15 - info.Level));
 			MaxSpeed = (int)(MaxSpeedScaleFactor * info.BaseSpeed);
 			Projectile.originalDamage = leveledPetPlayer.PetDamage;
+			Projectile.knockBack = 2f + 0.25f * info.Level;
 		}
 
 		public virtual void OnSpawn()
@@ -303,7 +301,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		public Dictionary<string, object> GetCrossModState()
 		{
 			// TODO evaluate the efficiency of using reflection here
-			CrossModStateDict ??= CrossModStateProperties.ToDictionary(kv => kv.Key, kv => kv.Value.GetValue(this, null));
+			bool isActive = IsActive;
+			CrossModStateDict ??= CrossModStateProperties.ToDictionary(
+				kv => kv.Key, 
+				kv => isActive ? kv.Value.GetValue(this, null) : default);
 			return CrossModStateDict;
 		}
 
@@ -341,12 +342,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public void PopulateStateObject(object destination)
 		{
+			bool isActive = IsActive;
 			foreach (var property in destination.GetType().GetProperties())
 			{
 				if(!CrossModStateProperties.TryGetValue(property.Name, out var modProperty)) { continue; }
 				if(modProperty?.PropertyType == property.PropertyType && modProperty?.GetValue(this) is var propertyState)
 				{
-					property.SetValue(destination, propertyState);
+					property.SetValue(destination, isActive ? propertyState : default);
 				}
 			}
 		}

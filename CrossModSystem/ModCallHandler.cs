@@ -175,7 +175,7 @@ namespace AmuletOfManyMinions.CrossModSystem
 			{
 				return default;
 			}
-			return result.CrossModAI?.IsIdle ?? false;
+			return (result.CrossModAI?.IsActive ?? false) && (result.CrossModAI?.IsIdle ?? false);
 		}
 
 		/// <summary>
@@ -188,7 +188,7 @@ namespace AmuletOfManyMinions.CrossModSystem
 			{
 				return default;
 			}
-			return result.CrossModAI?.IsAttacking ?? false;
+			return (result.CrossModAI?.IsActive ?? false) && (result.CrossModAI?.IsAttacking ?? false);
 		}
 
 		/// <summary>
@@ -201,7 +201,7 @@ namespace AmuletOfManyMinions.CrossModSystem
 			{
 				return default;
 			}
-			return result.CrossModAI?.IsPathfinding ?? false;
+			return (result.CrossModAI?.IsActive ?? false) && (result.CrossModAI?.IsPathfinding ?? false);
 		}
 
 		/// <summary>
