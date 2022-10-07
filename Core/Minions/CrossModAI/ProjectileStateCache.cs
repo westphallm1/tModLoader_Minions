@@ -16,8 +16,11 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 	/// </summary>
 	internal class ProjectileStateCache
 	{
+		// store the initial state, in case we need to roll back
 		internal Vector2 InitialPosition { get; private set; }
 		internal Vector2 InitialVelocity { get; private set; }
+		internal bool InitialTileCollide { get; private set; }
+
 		internal Vector2? Position { get; private set; }
 		internal Vector2? Velocity { get; private set; }
 
@@ -61,6 +64,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			{
 				proj.position = InitialPosition;
 				proj.velocity = InitialVelocity;
+				proj.tileCollide = InitialTileCollide;
 				ClearProjectile();
 			}
 			if(PlayerPosition is Vector2 playerPosition)
@@ -74,6 +78,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		{
 			InitialPosition = proj.position;
 			InitialVelocity = proj.velocity;
+			InitialTileCollide = proj.tileCollide;
 		}
 
 		public void Uncache(Projectile proj)
@@ -90,7 +95,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 	/// <summary>
 	/// Helper class for storing and retrieving the defaults of a projectile
-	/// Used for overwriting SetDefatults values while cross-mod AI is 
+	/// Used for overwriting SetDefaults values while cross-mod AI is 
 	/// active, and restoring those values while cross-mod AI is inactive
 	/// </summary>
 	internal class ProjectileDefaultsCache

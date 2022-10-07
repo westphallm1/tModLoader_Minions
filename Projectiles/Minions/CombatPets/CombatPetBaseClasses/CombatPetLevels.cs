@@ -420,8 +420,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 	}
 
-	internal static class CombatPetItemUtils
+	internal class CombatPetItemUtils : ModSystem
 	{
+
+		public override void Load()
+		{
+			On.Terraria.Player.AddBuff += Player_AddBuff;
+		}
+
+		// hack to temporarily un-flag buffs as pet type to prevent vanilla removal code from running
+		// depending on how many open combat pet slots the player has
+		private void Player_AddBuff(On.Terraria.Player.orig_AddBuff orig, Player self, int type, int timeToAdd, bool quiet, bool foodHack)
+		{
+			if(self.whoAmI == Main.myPlayer && CombatPetBuff.CombatPetBuffTypes.Contains(type))
+			{
+				LeveledCombatPetModPlayer petPlayer = self.GetModPlayer<LeveledCombatPetModPlayer>();
+				petPlayer.TemporarilyUnflagPetBuff(type);
+			}
+			orig.Invoke(self, type, timeToAdd, quiet, foodHack);
+		}
+
 		public static void AddCombatPetTooltip(Mod mod,int attackPatternUpdateTier, List<TooltipLine> tooltips)
 		{
 			tooltips.Add(new TooltipLine(mod, "CombatPetDescription", 
@@ -454,16 +472,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				});
 			}
 		}
-
-		// hack to temporarily un-flag buffs as pet type to prevent vanilla removal code from running
-		// depending on how many open combat pet slots the player has
-		// TODO figure out how to move the hack to avoid using CanUseItem entirely, possibly look into how and what EmpoweredMinionSacrificeCircumventionSystem does (if applicable vanilla method to detour exists)
-		public static bool CanUseItem(Player player, Item item)
-		{
-			LeveledCombatPetModPlayer petPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
-			petPlayer.TemporarilyUnflagPetBuff(item.buffType);
-			return true;
-		}
 	}
 
 	/**
@@ -486,9 +494,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			ApplyBuff(player);
 			return false;
 		}
-
-		public override bool CanUseItem(Player player) => CombatPetItemUtils.CanUseItem(player, Item);
-
 	}
 
 	public abstract class CombatPetMinionItem<TBuff, TProj> : VanillaCloneMinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion
@@ -503,8 +508,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			ApplyBuff(player);
 			return false;
 		}
-
-		public override bool CanUseItem(Player player) => CombatPetItemUtils.CanUseItem(player, Item);
 	}
 
 	/// <summary>
@@ -524,16 +527,5 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				CombatPetItemUtils.AddCombatPetTooltip(Mod, 0, tooltips);
 			}
 		}
-
-		public override bool CanUseItem(Item item, Player player)
-		{
-			// Only run on items not from this mod, that have a buff registered as a pet buff
-			if(IsCrossModPetItem(item))
-			{
-				CombatPetItemUtils.CanUseItem(player, item);
-			}
-			return true;
-		}
-
 	}
 }

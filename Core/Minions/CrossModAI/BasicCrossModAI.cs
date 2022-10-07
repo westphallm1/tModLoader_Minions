@@ -183,6 +183,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.usesIDStaticNPCImmunity = false;
 			Projectile.localNPCHitCooldown = 20;
+			UpdatePetState();
 		}
 
 		internal virtual void UpdatePetState()

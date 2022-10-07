@@ -107,7 +107,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			base.UpdatePetState();
 			var leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
 			var info = CombatPetLevelTable.PetLevelTable[leveledPetPlayer.PetLevel];
-			AttackFrames = (int)( AttackFramesScaleFactor * Math.Max(30, 60 - 6 * info.Level));
+			AttackFrames = (int)( AttackFramesScaleFactor * Math.Max(20, 45 - 5 * info.Level));
 			LaunchVelocity = (int)( LaunchVelocityScaleFactor * (info.BaseSpeed + 3));
 		}
 
