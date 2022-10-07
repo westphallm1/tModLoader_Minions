@@ -23,7 +23,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public override bool IsInFiringRange => IsAttacking && Behavior.VectorToTarget is Vector2 target &&
 				Math.Abs(target.X) < 4 * PreferredTargetDistance &&
 				Math.Abs(target.Y) < 4 * PreferredTargetDistance &&
-				Collision.CanHitLine(LOSCenter, 1, 1, LOSCenter + target, 1, 1);
+				(Collision.CanHitLine(LOSCenter, 1, 1, LOSCenter + target, 1, 1) ||
+				Collision.CanHitLine(LOSTop, 1, 1, LOSTop + target, 1, 1));
 
 		public GroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
 			base(proj, buffId, projId, isPet, defaultIdle)
@@ -36,7 +37,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			launchVector *= 1.15f;
 			Projectile.NewProjectile(
 				Projectile.GetSource_FromThis(),
-				Projectile.Center,
+				LOSCenter,
 				Behavior.VaryLaunchVelocity(launchVector),
 				projId,
 				Projectile.damage,

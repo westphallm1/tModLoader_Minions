@@ -211,7 +211,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			{ 
 				ApplyPetDefaults(); 
 			}
-			// no op
+			// Guard to handle the corner case where vanilla AI sets projectile velocity to greater
+			// than the expected maximum while the cross-mod AI is not active.
+			if(Projectile.velocity.LengthSquared() > MaxSpeed * MaxSpeed)
+			{
+				Projectile.velocity.Normalize();
+				Projectile.velocity *= MaxSpeed;
+			}
 			return default;
 		}
 

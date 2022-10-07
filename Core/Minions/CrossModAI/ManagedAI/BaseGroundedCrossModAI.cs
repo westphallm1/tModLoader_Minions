@@ -23,6 +23,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public int DefaultJumpVelocity { get; set; } = 4;
 		public int MaxJumpVelocity { get; set; } = 12;
 
+		// Also try pathfinding from 2.5 blocks above the ground, since small obstacles can obscure
+		// LOS checks that should otherwise work
+		internal Vector2 LOSTop => new(Projectile.Bottom.X, Projectile.Bottom.Y - 40);
+
 		public BaseGroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
 			base(proj, buffId, projId, isPet, defaultIdle)
 		{
@@ -52,6 +56,15 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		}
 		public override void IdleMovement(Vector2 vectorToIdlePosition) =>
 			GHelper.DoIdleMovement(vectorToIdlePosition, Behavior.VectorToTarget, SearchRange, 180f);
+
+		public override Vector2? FindTarget()
+		{
+			return base.FindTarget() ?? 
+				// low obstacles can obscure vision to enemies while LOS checking from the center of the
+				// projectile. also try from the top in a smaller range
+				(Behavior.SelectedEnemyInRange(SearchRange/2, losCenter: LOSTop) is Vector2 target ? target - Projectile.Center : null);
+				;
+		}
 
 		public virtual bool DoPreStuckCheckGroundedMovement() => true;
 
