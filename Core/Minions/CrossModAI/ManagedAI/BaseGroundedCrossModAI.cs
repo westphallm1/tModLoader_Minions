@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			{
 				IdleLocationSets.trailingOnGround.Add(Projectile.type);
 			}
-			GroundedBehavior = new(this) { GroundedNoLOSPursuitTime = 60 };
+			GroundedBehavior = new(this) { GroundedNoLOSPursuitTime = 180 };
 			GHelper = new GroundAwarenessHelper(this)
 			{
 				IdleFlyingMovement = IdleFlyingMovement,
@@ -79,11 +79,11 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 			{
 				base.IdleMovement(vector);
 			}
-			// ensure that the minion is in its flying animation while flying
+			// ensure that the minion is in its flying animation while flying, and not in its flying animation otherwise
 			if(Behavior.IsFollowingBeacon || GHelper.isFlying)
 			{
 				FakePlayerFlyingHeight();
-			}
+			} 
 		}
 
 		public void OnHitTarget(NPC target)

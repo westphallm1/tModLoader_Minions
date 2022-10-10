@@ -23,8 +23,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public override bool IsInFiringRange => IsAttacking && Behavior.VectorToTarget is Vector2 target &&
 				Math.Abs(target.X) < 4 * PreferredTargetDistance &&
 				Math.Abs(target.Y) < 4 * PreferredTargetDistance &&
-				(Collision.CanHitLine(LOSCenter, 1, 1, LOSCenter + target, 1, 1) ||
-				Collision.CanHitLine(LOSTop, 1, 1, LOSTop + target, 1, 1));
+				Behavior.FramesSinceHadTarget < 60;
 
 		public GroundedCrossModAI(Projectile proj, int buffId, int? projId, bool isPet, bool defaultIdle) : 
 			base(proj, buffId, projId, isPet, defaultIdle)
@@ -124,6 +123,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 		public override void AfterMoving()
 		{
 			Projectile.friendly &= !ShouldDoShootingMovement;
+
+			// force the vanilla pet AI into the "not flying" state while the minion is doing grounded movement
+			if(Behavior.VectorToTarget != null && !GHelper.isFlying)
+			{
+				FakePetNotFlyingState();
+			}
+
 			base.AfterMoving();
 			// having a slightly positive velocity from constant gravity messes with the vanilla frame
 			// determination

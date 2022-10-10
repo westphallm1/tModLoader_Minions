@@ -168,10 +168,28 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 
 
+		/**
+		 * Most pets enter the flying animation state automatically if they are too far below the player.
+		 * Tricking the pet into thinking it is 300 px below the player automatically triggers this scenario,
+		 * with some other potential side effects.
+		 */
 		internal void FakePlayerFlyingHeight()
 		{
 			ProjCache.Cache(Projectile);
 			Player.position.Y = Projectile.position.Y - 320;
+		}
+
+		/**
+		 * Pets may enter the flying animation state automatically if they are too far away from the player,
+		 * or under certain circumstances if line of sight is broken with the player. Tricking the pet into thinking
+		 * it is on top of the player, and the player is not moving, typically circumvents this scenario, with a 
+		 * couple potential side effects.
+		 */
+		internal void FakePetNotFlyingState()
+		{
+			ProjCache.Cache(Projectile);
+			Player.Center = Projectile.Center;
+			Player.velocity.Y = 0;
 		}
 
 		internal virtual void ApplyPetDefaults()

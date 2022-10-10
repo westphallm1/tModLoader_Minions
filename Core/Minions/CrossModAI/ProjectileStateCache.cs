@@ -25,6 +25,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		internal Vector2? Velocity { get; private set; }
 
 		internal Vector2? PlayerPosition { get; private set; }
+		internal Vector2? PlayerVelocity { get; private set; }
 
 		internal bool? IsFriendly { get; private set; }
 
@@ -46,6 +47,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 		{
 			ClearProjectile();
 			PlayerPosition = null;
+			PlayerVelocity = null;
 		}
 
 		public void Cache(Projectile proj)
@@ -56,6 +58,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			GfxOffY ??= proj.gfxOffY;
 			IsFriendly ??= proj.friendly;
 			PlayerPosition ??= Main.player[proj.owner].position;
+			PlayerVelocity ??= Main.player[proj.owner].velocity;
 		}
 
 		public void Rollback(Projectile proj)
@@ -67,9 +70,10 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 				proj.tileCollide = InitialTileCollide;
 				ClearProjectile();
 			}
-			if(PlayerPosition is Vector2 playerPosition)
+			if(PlayerPosition is Vector2 playerPosition && PlayerVelocity is Vector2 playerVelocity)
 			{
 				Main.player[proj.owner].position = playerPosition;
+				Main.player[proj.owner].velocity = playerVelocity;
 				Clear();
 			}
 		}
