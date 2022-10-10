@@ -93,6 +93,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			proj.gfxOffY = GfxOffY ?? proj.gfxOffY;
 			proj.friendly = IsFriendly ?? proj.friendly;
 			Main.player[proj.owner].position = PlayerPosition ?? Main.player[proj.owner].position;
+			Main.player[proj.owner].velocity = PlayerVelocity ?? Main.player[proj.owner].velocity;
 			Clear();
 		}
 	}

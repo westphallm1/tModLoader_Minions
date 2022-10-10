@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.Core.Minions.CrossModAI;
 using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
@@ -296,6 +297,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				return;
 			}
 
+			// prevent player's regular pet buff from being removed by combat pets
 			if(PetSlotsUsed < AvailablePetSlots)
 			{
 				Main.vanityPet[buffId] = false;
@@ -426,6 +428,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void Load()
 		{
 			On.Terraria.Player.AddBuff += Player_AddBuff;
+			On.Terraria.Player.FreeUpPetsAndMinions += Player_FreeUpPetsAndMinions;
+		}
+
+		private void Player_FreeUpPetsAndMinions(On.Terraria.Player.orig_FreeUpPetsAndMinions orig, Player self, Item sItem)
+		{
+			// Hack to fix a rather tricky bug that arises from AoMM and non-AoMM versions of cross-mod pet buffs
+			// spawning the same projectile. By default, the vanilla pet-free-up code will remove any existing instances of the
+			// projectile spawned by either the main buff or AoMM version buff, but not remove the buff themselves. This
+			// will leave the player in a state where both pet spawning buffs are active, and no copies of the pet are active.
+			// Both copies of the buff will then spawn the pet on the next frame, leaving the player with a duplicate.
+			// To circumvent this, temporarily un-flag the item as shooting the pet if the player already has one copy
+			// of the pet active, so that the single active copy will not despawn in the first place.
+			// We would ideally want to remove one buff as soon as the other version becomes active, but this does not
+			// appear to be easily accomplished.
+			int origShoot = sItem.shoot;
+			
+			if(Main.vanityPet[sItem.buffType] && self.ownedProjectileCounts[origShoot] > 0 && 
+				CrossModAIGlobalProjectile.CrossModAISuppliers.ContainsKey(sItem.shoot))
+			{
+				sItem.shoot = ProjectileID.None;
+			}
+			orig.Invoke(self, sItem);
+			sItem.shoot = origShoot;
 		}
 
 		// hack to temporarily un-flag buffs as pet type to prevent vanilla removal code from running
