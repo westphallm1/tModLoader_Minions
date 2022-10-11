@@ -108,25 +108,25 @@ namespace AmuletOfManyMinions.CrossModSystem
 					return UpdateParamsDirect(a.Arg<ModProjectile>(), a.Arg<object>());
 
 				// Register projectiles for different configurations of the cross mod AI
-				case "RegisterInfoMinion":
-					return RegisterInfoMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(600));
-				case "RegisterInfoPet":
-					return RegisterInfoPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
+				//case "RegisterInfoMinion":
+				//	return RegisterInfoMinion(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(600));
+				//case "RegisterInfoPet":
+				//	return RegisterInfoPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
 
-				case "RegisterPathfindingMinion":
-					return RegisterPathfindingMinion(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(600), a.Arg(8), a.Arg(12));
+				//case "RegisterPathfindingMinion":
+				//	return RegisterPathfindingMinion(
+				//		a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(600), a.Arg(8), a.Arg(12));
 				case "RegisterPathfindingPet":
 					return RegisterPathfindingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
 
-				case "RegisterFlyingMinion":
-					return RegisterFlyingMinion(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(true));
+				//case "RegisterFlyingMinion":
+				//	return RegisterFlyingMinion(
+				//		a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(true));
 				case "RegisterFlyingPet":
 					return RegisterFlyingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(),  a.Arg(true));
-				case "RegisterGroundedMinion":
-					return RegisterGroundedMinion(
-						a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(true));
+				//case "RegisterGroundedMinion":
+				//	return RegisterGroundedMinion(
+				//		a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(true));
 				case "RegisterGroundedPet":
 					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true));
 
