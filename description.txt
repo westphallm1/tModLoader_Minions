@@ -1,131 +1,68 @@
-The Amulet of Many Minions is designed to add variety to the vanilla summoner progression while staying at least somewhat
-in line with vanilla balance. It adds a new, directly controllable minion type called the Squire,
-over 30 new minions, and several armor sets and accessories for both Squires and minions. 
+== The Amulet of Many Minions! ==
 
-Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-many-minions.97188/
+The Amulet of Many Minions is a mid-sized content mod that adds variety to the vanilla summoner progression while trying to stay at least somewhat
+true to vanilla balance. It adds a new, directly controllable minion type called the Squire,
+over 30 new minions, and a minion form for every vanilla pet! 
+
+Forums Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-many-minions.97188/]Terraria
 
 Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 
-=== NEW: Cross Mod API! ===
+== New in v0.16.1: Cross-Mod Support for Assorted Crazy Things! ==
 
-Amulet of Many Minions now has a cross-mod API, and cross-mod Combat Pet compatibility with Assorted Crazy Things!
-Check out Assorted Crazy Things here: https://steamcommunity.com/sharedfiles/filedetails/?id=2795859323
+As of v0.16.1, cross-mod Combat Pet support has been added for Assorted Crazy Things!(https://steamcommunity.com/sharedfiles/filedetails/?id=2795859323).
+While both mods are enabled, all 60+ of ACT’s pets will gain a craftable minion version! For a detailed list of every cross-mod combat pet, see Assorted Crazy 
+Things’ wiki. (https://github.com/Werebearguy/AssortedCrazyThings/wiki/Cross-Mod-Content#the-amulet-of-many-minions)
 
-If you are a mod author and would like to add cross-mod compatibility with AoMM, consult the cross-mod sample
-and reach out on Discord with any questions.
-Cross-mod sample mod: https://github.com/westphallm1/AoMM-Cross-Mod-Sample
-Mod discord: https://discord.gg/D7wpRZC
+ == Bug Reports ==
 
+Please report any bugs to the #bug-reports channel of the mod discord (https://discord.gg/D7wpRZC)
 
-=== Bug Reports ===
-Please report any bugs to the #bug-reports channel of the mod discord: https://discord.gg/D7wpRZC
-
-=== Version History ===
+=== Version History === 
 
 v0.16.1 - Cross-Mod AI!
-    - Add a mod.Call API that allows other mods to register pets and minions for AoMM AI
-    - Add Cross-Mod compatibility with Assorted Crazy Things!
-    - Please report any newfound bugs to the mod discord: https://discord.gg/D7wpRZC
+[*] Add Cross-Mod combat-pet compatibility with Assorted Crazy Things!
+
 v0.15.0 - Balance Changes!
-    - Add a prehardmode minion and a prehardmode accessory
-    - Add Empress of Light Squire
-    - Fix very large and longstanding bug where squires benefited from damage bonuses twice
-    - Add unique AI to Squashling and Cursed Sapling combat pets
-    - Adjust the balance of a number of items, mostly early prehardmode minions and hardmode squires
-    - Full list of changes: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions/0.15.0
-v0.14.0 - Combat Pets: Part 2!
-    - Add the Elemental Pals, a group of 8 consistently obtainable combat pets
-      - Obtained via Bows of Friendship found in wooden + shadow chests
-      - One random Elemental Pal given per bow
-      - Bows can be crafted renewably post-Plantera with Solar Tablet Fragments
-    - Add a series of accessories to enhance Combat Pet Stats
-      - Stylish Teamwork Bow: increases max Combat Pet slots by 1
-        - Obtained after second use of a Bow of Friendship
-      - Chaotic Chew Toy: Increases Combat Pet movement speed
-        - Crafted from evil boss drops
-    - More sprite updates from SkyanUltra and Frogpage
-    - Slightly Buff Pre-Skeletron Combat Pet Tiers
-    - Combat Pets now count for Minion Variety Bonus
-    - Nerf Damage Bonuses from Hardmode Squire Armors
-    - Fix number of bugs related to 1.4 port
-      - Titanium and Granite (Hallowed) Squire Armors now give correct 1.4 buff
-      - Minions that dealt a multiple of the listed damage now correctly deal that multiple
-        - Buffs Tumblesheep, Squire Specials
-        - Nerfs Rat Staff, Optic Staff
-v0.13.0 - Combat Pets!
-    - Available for every vanilla pet, crafted from vanilla pet items at a demon altar
-    - Cost 1 minion slot per pet
-    - Powered up by new weapon class called "Combat Pet Emblem"
-      - Craftable from many ore tiers
-    - All combat pets scale with best emblem in inventory
-v0.12.0 - Alpha Port!
-    - Mod fully ported, feature-complete compared with v0.11.0
-    - Some minor cosmetic bugs known
+[*] Add a prehardmode minion and a prehardmode accessory
+[*] Add Empress of Light Squire
+[*] Fix very large and longstanding bug where squires benefited from damage bonuses twice
+[*] Add unique AI to Squashling and Cursed Sapling combat pets
+[*] Adjust the balance of a number of items, mostly early prehardmode minions and hardmode squires
+[*] [url=https://terrariamods.fandom.com/wiki/AmuletOfManyMinions/0.15.0]Full list of changes[/url]
+
 ~~ See the Wiki for older changelogs ~~
 
 
-=== Credits === 
+== Credits == 
 Developers: Billybobmcbo, direwolf420, Metallumere
 Artists: SkyanUltra, frogpage
-Ideas/Feedback: Spatula Lemmy and everyone on the mod discord
+Ideas/Feedback: Everyone on the mod discord
 
 A cheat sheet for getting started is given below. A complete list mod content can be found from the homepage.
 
-=== Pathfinding Rods ===
---- Pre Hardmode ---
-Wooden - Sunflowers + wood @ Workbench
-Granite - Granite Elemental Drops + Granite @ anywhere
---- Hardmode ---
-Crystal - Granite Rod + Crystals + Souls of Light @ Anvil
-Hallowed - Boss Souls + Hallowed Bars @ Mythril Anvil
+== Early Game Item Guide ==
+The following mod items can be found in early pre-hardmode, and will get you started on your journey towards the Amulet. 
 
-=== Minions ===
---- Pre Hardmode ---
-Flying Acorn - 6 Acorn, 12 Wood @ Workbench
-Miner Slime - Mining Helmet + Minecart + Silver/Tungsten Bars @ Anvil 
-Corrupt/Crimson Cell - 12 Demonite/Crimtane Bars + 6 Shadow Scales/Tissue Samples @ Anvil
-Starry Skysword - 8 Feathers, 3 Fallen Stars @ Sky Forge
-Meteor Fist - 14 Meteor Bars @ Anvil
-Balloon Buddy - Sold by Party Girl
---- Hardmode ---
-Magic Mole - 5 Stars in a Bottle, 15 Pixie Dust, 10 Souls of Light @ Anvil
-Star Surfer - Big Hallowed Mimic
-Void Knife/Null Hatchet - Big Corrupt/Crimson Mimic
-Goblin Gunner - Goblin Summoner (33%)
-The Clarent - 12 Hallowed Bars, 10 Souls of Flight @ Mythril Anvil
-Charred Chimera - Hell Armored Bones (2.5%)
-Spirit Revolver - 12 Spectre Bars, 1 Illegal Gun Parts @ Mythril Anvil
+== Pathfinding Rods == 
+[*] Wooden - Sunflowers + wood @ Workbench
+[*] Granite - Granite Elemental Drops + Granite @ anywhere
 
+== Minions ==
+[*] Flying Acorn - 6 Acorn, 12 Wood @ Workbench
+[*] Miner Slime - Mining Helmet + Minecart + Silver/Tungsten Bars @ Anvil 
+[*] Corrupt/Crimson Cell - 12 Demonite/Crimtane Bars + 6 Shadow Scales/Tissue Samples @ Anvil
+[*] Starry Skysword - 8 Feathers, 3 Fallen Stars @ Sky Forge
+[*] Meteor Fist - 14 Meteor Bars @ Anvil
 
-=== Squires ===
---- Pre Hardmode ---
-Mushroom Squire - 8 Mushrooms, 18 Wood @ Anvil
-Sea Squire - 3 Starfish + 3 Sea Shells + 3 Coral + 1 Shark Fin @ Anvil
-Shadow/Crimson Squire - 12 Demonite/Crimtane Bars + 6 Shadow Scales/Tissue Samples @ Anvil
-Ancient Cobalt Squire - 12% drop from Man Eaters
-Golden Rogue Squire - Shadow Chests
---- Hardmode ---
-Soulbound Sword - 1 Shadewood Sword or Ebonwood Sword, 10 Souls of Night @ Anvil
-Soulbound Bow - 1 Pearlwood Bow , 10 Souls of Light @ Anvil
-Adamantite/Titanium Squire - 14 Adamantite/Titanium Bars @ Mythril Anvil
-Soulbound Arsenal - 1 Soulbound Sword + 1 Soulbound Bow + 1 Broken Hero's Sword @ Mythril Anvil
-Potted Pal - Plantera (25%)
-Stardust Squire - 18 Stardust Fragments @ Mythril Anvil
+== Squires ==
+[*] Mushroom Squire - 8 Mushrooms, 18 Wood @ Anvil
+[*] Sea Squire - 3 Starfish + 3 Sea Shells + 3 Coral + 1 Shark Fin @ Anvil
+[*] Ancient Cobalt Squire - 6% drop from Man Eaters
 
+== Combat Pets ==
+[*] The elemental pals - Found in a wooden chest near spawn
 
-=== Armor ===
---- Pre Hardmode ---
-Mildew Set - Mushrooms + Daybloom + Wood @ Workbench
-Royal Squire Set (Helmet + Chestplate) - King Slime
-Arid Set - Antlion Mandibles + Sturdy Fossils + Ancient Cloth (Sold by Clothier)
-Illusionist Armor - Bones + Shadow Scales/Tissue Samples 
-
-=== Accessories ===
---- Pre Hardmode ---
-Squire Scope - Gold Bars + Lenses
-Necro Pendant - Skeletron (50%)
---- Hardmode ---
-Charm of Many Minions - 1 Light Shard + 8 Soul of Night @ Anvil
-Charm of Mighty Minions - 1 Dark Shard + 8 Soul of Light @ Anvil
-Techno Pendant - Necro Pendant + Avenger Emblem
-Amulet of Many Minions - Charm of Many Minions + others (See the Guide for more info!)
+== Armor ==
+[*] Mildew Set - Mushrooms + Daybloom + Wood @ Workbench
+[*] Royal Squire Set (Helmet + Chestplate) - King Slime
