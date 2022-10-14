@@ -8,11 +8,13 @@ Forums Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-man
 
 Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
 
-== New in v0.16.1: Cross-Mod Support for Assorted Crazy Things! ==
+== New in v0.16.1: Cross-Mod Compatibility with Assorted Crazy Things! ==
 
-As of v0.16.1, cross-mod Combat Pet support has been added for Assorted Crazy Things!(https://steamcommunity.com/sharedfiles/filedetails/?id=2795859323).
-While both mods are enabled, all 60+ of ACT’s pets will gain a craftable minion version! For a detailed list of every cross-mod combat pet, see Assorted Crazy 
-Things’ wiki. (https://github.com/Werebearguy/AssortedCrazyThings/wiki/Cross-Mod-Content#the-amulet-of-many-minions)
+As the latest version of both mods, Assorted Crazy Things (https://steamcommunity.com/sharedfiles/filedetails/?id=2795859323)
+has added cross-mod Combat Pet support! While both mods are enabled, 60+ of ACT’s pets will gain a craftable minion version! 
+For a detailed list of every cross-mod combat pet, see Assorted Crazy Things’ wiki. 
+(https://github.com/Werebearguy/AssortedCrazyThings/wiki/Cross-Mod-Content#the-amulet-of-many-minions)
+You will need at least v0.16.1 of this mod, and at least v1.4.1 of Assorted Crazy Things installed.
 
  == Bug Reports ==
 

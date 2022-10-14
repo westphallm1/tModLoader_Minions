@@ -8,9 +8,13 @@ over 30 new minions, and a minion form for every vanilla pet!
 
 [url=https://terrariamods.fandom.com/wiki/AmuletOfManyMinions]Wiki[/url]
 
-[b]== New in v0.16.1: Cross-Mod Support for Assorted Crazy Things! ==[/b]
+[b]== New in v0.16.1: Cross-Mod Compatibility with Assorted Crazy Things! ==[/b]
 
-As of v0.16.1, cross-mod Combat Pet support has been added for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2795859323]Assorted Crazy Things![/url] While both mods are enabled, all 60+ of ACT’s pets will gain a craftable minion version! For a detailed list of every cross-mod combat pet, see Assorted Crazy Things’ [url=https://github.com/Werebearguy/AssortedCrazyThings/wiki/Cross-Mod-Content#the-amulet-of-many-minions]wiki.[/url]
+As the latest version of both mods, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2795859323]Assorted Crazy Things[/url]
+has added cross-mod Combat Pet support for this mod! While both mods are enabled, 60+ of ACT’s pets will gain a craftable minion version! 
+For a detailed list of every cross-mod combat pet, see Assorted Crazy Things’ 
+[url=https://github.com/Werebearguy/AssortedCrazyThings/wiki/Cross-Mod-Content#the-amulet-of-many-minionsi]wiki[/url]. 
+You will need at least v0.16.1 of this mod, and at least v1.4.1 of Assorted Crazy Things installed.
 
 [hr][/hr]
 
