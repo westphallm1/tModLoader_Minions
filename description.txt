@@ -23,7 +23,10 @@ Please report any bugs to the #bug-reports channel of the mod discord (https://d
 === Version History === 
 
 v0.16.1 - Cross-Mod AI!
-[*] Add Cross-Mod combat-pet compatibility with Assorted Crazy Things!
+[*] Update Cross-mod API to support custom cross-mod behavior added by Assorted Crazy Things
+
+v0.16.0 - Cross-Mod AI!
+[*] Add mod.Call-based Cross-Mod combat-pet API.
 
 v0.15.0 - Balance Changes!
 [*] Add a prehardmode minion and a prehardmode accessory

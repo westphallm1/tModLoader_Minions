@@ -23,8 +23,12 @@ Please report any bugs to the #bug-reports channel of the [url=https://discord.g
 
 v0.16.1 - Cross-Mod AI!
 [list]
-[*] Add Cross-Mod combat-pet compatibility with Assorted Crazy Things!
-[*]Please report any newfound bugs to the [url=https://discord.gg/D7wpRZC]mod discord.[/url]
+[*] Update Cross-mod API to support custom cross-mod behavior added by Assorted Crazy Things
+[*] Please report any newfound bugs to the [url=https://discord.gg/D7wpRZC]mod discord.[/url]
+[/list]
+v0.16.0 - Cross-Mod AI!
+[list]
+[*] Add mod.Call-based Cross-Mod combat-pet API.
 [/list]
 v0.15.0 - Balance Changes!
 [list]
