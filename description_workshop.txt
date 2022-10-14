@@ -1,0 +1,71 @@
+﻿[b]== The Amulet of Many Minions! ==[/b]
+
+The Amulet of Many Minions is a mid-sized content mod that adds variety to the vanilla summoner progression while trying to stay at least somewhat
+true to vanilla balance. It adds a new, directly controllable minion type called the [b]Squire[/b],
+over 30 new minions, and a minion form for every vanilla pet! 
+
+[url=https://forums.terraria.org/index.php?threads/the-amulet-of-many-minions.97188/]Terraria Forums Homepage[/url]
+
+[url=https://terrariamods.fandom.com/wiki/AmuletOfManyMinions]Wiki[/url]
+
+[b]== New in v0.16.1: Cross-Mod Support for Assorted Crazy Things! ==[/b]
+
+As of v0.16.1, cross-mod Combat Pet support has been added for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2795859323]Assorted Crazy Things![/url] While both mods are enabled, all 60+ of ACT’s pets will gain a craftable minion version! For a detailed list of every cross-mod combat pet, see Assorted Crazy Things’ [url=https://github.com/Werebearguy/AssortedCrazyThings/wiki/Cross-Mod-Content#the-amulet-of-many-minions]wiki.[/url]
+
+[hr][/hr]
+
+[b] == Bug Reports ==[/b]
+
+Please report any bugs to the #bug-reports channel of the [url=https://discord.gg/D7wpRZC]mod discord.[/url]
+
+[b] === Version History === [/b]
+
+v0.16.1 - Cross-Mod AI!
+[*] Add Cross-Mod combat-pet compatibility with Assorted Crazy Things!
+[*]Please report any newfound bugs to the [url=https://discord.gg/D7wpRZC]mod discord.[/url]
+
+v0.15.0 - Balance Changes!
+[*] Add a prehardmode minion and a prehardmode accessory
+[*] Add Empress of Light Squire
+[*] Fix very large and longstanding bug where squires benefited from damage bonuses twice
+[*] Add unique AI to Squashling and Cursed Sapling combat pets
+[*] Adjust the balance of a number of items, mostly early prehardmode minions and hardmode squires
+[*] [url=https://terrariamods.fandom.com/wiki/AmuletOfManyMinions/0.15.0]Full list of changes[/url]
+
+~~ See the Wiki for older changelogs ~~
+
+
+[b]== Credits ==[/b] 
+Developers: Billybobmcbo, direwolf420, Metallumere
+Artists: SkyanUltra, frogpage
+Ideas/Feedback: Everyone on the mod discord
+
+A cheat sheet for getting started is given below. A complete list mod content can be found from the homepage.
+
+[hr][/hr]
+
+[b]== Early Game Item Guide ==[/b]
+The following mod items can be found in early pre-hardmode, and will get you started on your journey towards the Amulet. 
+
+[b]== Pathfinding Rods ==[/b] 
+[*] Wooden - Sunflowers + wood @ Workbench
+[*] Granite - Granite Elemental Drops + Granite @ anywhere
+
+[b]== Minions ==[/b]
+[*] Flying Acorn - 6 Acorn, 12 Wood @ Workbench
+[*] Miner Slime - Mining Helmet + Minecart + Silver/Tungsten Bars @ Anvil 
+[*] Corrupt/Crimson Cell - 12 Demonite/Crimtane Bars + 6 Shadow Scales/Tissue Samples @ Anvil
+[*] Starry Skysword - 8 Feathers, 3 Fallen Stars @ Sky Forge
+[*] Meteor Fist - 14 Meteor Bars @ Anvil
+
+[b]== Squires ==[/b]
+[*] Mushroom Squire - 8 Mushrooms, 18 Wood @ Anvil
+[*] Sea Squire - 3 Starfish + 3 Sea Shells + 3 Coral + 1 Shark Fin @ Anvil
+[*] Ancient Cobalt Squire - 6% drop from Man Eaters
+
+[b]== Combat Pets ==[/b]
+[*] The elemental pals - Found in a wooden chest near spawn
+
+[b]== Armor ==[/b]
+[*] Mildew Set - Mushrooms + Daybloom + Wood @ Workbench
+[*] Royal Squire Set (Helmet + Chestplate) - King Slime
