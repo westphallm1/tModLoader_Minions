@@ -230,7 +230,7 @@ namespace AmuletOfManyMinions
 					
 					
             		summonersShine.Call(ADD_FILTER, SET_SUMMON_MINION_WEAPON_STAT_SOURCE, minion.Type, ItemType);
-            		summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, ProjectileType, ItemType);
+            		summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, p.CounterType, ItemType);
 					ItemType++;
 				}
 				
