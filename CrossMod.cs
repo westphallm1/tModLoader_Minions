@@ -183,6 +183,8 @@ namespace AmuletOfManyMinions
 			const int BLACKLIST_PROJECTILE = 1;
 			const int DONT_COUNT_AS_MINION = 4;
 			const int COUNTS_AS_WHIP_FOR_INSTASTRIKE = 14;
+			const int SET_SUMMON_MINION_WEAPON_STAT_SOURCE = 15;
+			const int SET_SUMMON_WEAPON_STAT_SOURCE_MINION = 16;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
 				SummonersShineLoaded = true;
@@ -213,6 +215,17 @@ namespace AmuletOfManyMinions
 				foreach (var minion in counterMinions)
 				{
 					summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, minion.Type);
+				}
+					
+				IEnumerable<ModProjectile> empoweredMinions = mod.GetContent<ModProjectile>().Where(p => p is EmpoweredMinion);
+				foreach (var minion in empoweredMinions)
+				{
+					//set stat source
+					
+					EmpoweredMinion empoweredMinion = p as EmpoweredMinion;
+					
+            		summonersShine.Call(ADD_FILTER, SET_SUMMON_MINION_WEAPON_STAT_SOURCE, minion.Type, ItemType);
+            		summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, ProjectileType, ItemType);
 				}
 				
 				IEnumerable<ModItem> squireItems = mod.GetContent<ModItem>().Where(p => p is SquireMinionItemDetector);
