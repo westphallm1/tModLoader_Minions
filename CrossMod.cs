@@ -219,19 +219,20 @@ namespace AmuletOfManyMinions
 					
 				IEnumerable<ModProjectile> empoweredMinions = mod.GetContent<ModProjectile>().Where(p => p is EmpoweredMinion);
 				
-				//hacky method. ItemType don't matter as long as it doesn't collide and is valid - hence it starts at the very first item with the first index.
-				ItemType = ModContent.GetInstance<AmuletOfManyMinions.Items.Accessories.AmuletOfManyMinions>().Type;
-				
 				foreach (var minion in empoweredMinions)
 				{
 					//set stat source
-					
+
 					EmpoweredMinion empoweredMinion = p as EmpoweredMinion;
-					
-					
-            		summonersShine.Call(ADD_FILTER, SET_SUMMON_MINION_WEAPON_STAT_SOURCE, minion.Type, ItemType);
-            		summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, p.CounterType, ItemType);
-					ItemType++;
+
+					ModItem[] modItemArray = GetContent<Terraria.ModLoader.ModItem>().Where(i => { i.SetDefaults(); return i.Item.shoot == empoweredMinion.CounterType; }).ToArray();
+					if (modItemArray.Length > 0)
+					{
+						int ItemType = modItemArray[0].Type;
+
+						summonersShine.Call(ADD_FILTER, SET_SUMMON_MINION_WEAPON_STAT_SOURCE, minion.Type, ItemType);
+						summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, empoweredMinion.CounterType, ItemType);
+					}
 				}
 				
 				IEnumerable<ModItem> squireItems = mod.GetContent<ModItem>().Where(p => p is SquireMinionItemDetector);
