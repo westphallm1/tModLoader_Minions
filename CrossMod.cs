@@ -311,7 +311,7 @@ namespace AmuletOfManyMinions
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<SanguineBatMinion>(), ProjectileID.BatOfLight);
 
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<SharknadoMinionItem>(), ItemID.TempestStaff);
-            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<SharknadoMinion>(), ProjectileID.Sharknado);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<SharknadoMinion>(), ProjectileID.Tempest);
 
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<TwinsMinionItem>(), ItemID.OpticStaff);
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<MiniRetinazerMinion>(), ProjectileID.Retanimini);
