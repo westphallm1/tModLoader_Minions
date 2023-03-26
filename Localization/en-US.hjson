@@ -1,5 +1,8 @@
 Mods: {
 	AmuletOfManyMinions: {
+		SummonSpecialDefault: {
+			SquireLacerate: "{1}% squire tag minion armor negation"
+		}
 
 		SummonSpecial: {
 			AdamantiteSquireMinionItem:
