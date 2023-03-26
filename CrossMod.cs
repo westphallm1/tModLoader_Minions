@@ -287,8 +287,8 @@ namespace AmuletOfManyMinions
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<VampireFrogMinionItem>(), ItemID.VampireFrogStaff);
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<VampireFrogMinion>(), ProjectileID.VampireFrog);
 
-            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<HornetMinionItem>(), ItemID.HornetStaff);
-            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<HornetMinion>(), ProjectileID.Hornet);
+            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<HornetMinionItem>(), ItemID.HornetStaff);
+            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<HornetMinion>(), ProjectileID.Hornet);
 
             //summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.ImpStaff);
             //summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.FlyingImp);
