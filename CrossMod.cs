@@ -264,6 +264,71 @@ namespace AmuletOfManyMinions
 				false, //multishot
 				true) //enrage (safe)
 		};
+		
+		public static void BakeAoMMVersionSpecialAbilities()
+		{
+            const int SET_CONFIG = 0;
+            const int SET_SPECIAL_ITEM_DUPE = 18;
+            const int SET_SPECIAL_PROJ_DUPE = 19;
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.BabyBirdStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.BabyBird);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.SlimeStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.BabySlime);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.FlinxStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.FlinxMinion);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.VampireFrogStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.VampireFrog);
+
+            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.HornetStaff);
+            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.Hornet);
+
+            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.ImpStaff);
+            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.FlyingImp);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.SpiderStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.DangerousSpider);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.PirateStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.OneEyedPirate);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.Smolstar);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.Smolstar);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.SanguineStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.BatOfLight);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.TempestStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.Sharknado);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.OpticStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.Retanimini);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.Spazmamini);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.PygmyStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.Pygmy);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.DeadlySphereStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.DeadlySphere);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.RavenStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.Raven);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.XenoStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.UFOMinion);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.StardustCellStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.StardustCellMinion);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.StardustDragonStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.StardustDragon1);
+			
+			
+		}
+		
 		public static void WhitelistSummonersShineMinionDefaultSpecialAbility(int ItemType, SummonersShineDefaultSpecialWhitelistType specialWhitelistType)
 		{
 			if (SummonersShineLoaded && !ServerConfig.Instance.DisableSummonersShineAI && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
