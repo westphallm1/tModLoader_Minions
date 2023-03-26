@@ -58,6 +58,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
 			Main.projFrames[Projectile.type] = 2;
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			base.ApplyCrossModChanges();
+			const int CHANGECONFIG = 0;
+			const int COUNTASMINION = 5;
+			if (CrossMod.SummonersShineLoaded && !ServerConfig.Instance.DisableSummonersShineAI && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				summonersShine.Call(CHANGECONFIG, COUNTASMINION, Projectile.type);
+				return;
+			}
+			return;
+		}
 
 		public override void SetDefaults()
 		{
