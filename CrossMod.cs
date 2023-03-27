@@ -275,10 +275,14 @@ namespace AmuletOfManyMinions
             const int SET_SPECIAL_ITEM_DUPE = 18;
             const int SET_SPECIAL_PROJ_DUPE = 19;
 
-            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<BabyFinchMinionItem>(), ItemID.BabyBirdStaff);
-            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<BabyFinchMinion>(), ProjectileID.BabyBird);
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<AbigailMinionItem>(), ItemID.AbigailsFlower);
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<AbigailCounterMinion>(), ProjectileID.AbigailCounter);
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<AbigailMinion>(), ProjectileID.AbigailMinion);
 
-            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<BabySlimeMinionItem>(), ItemID.SlimeStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<BabyFinchMinionItem>(), ItemID.BabyBirdStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<BabyFinchMinion>(), ProjectileID.BabyBird);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<BabySlimeMinionItem>(), ItemID.SlimeStaff);
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<BabySlimeMinion>(), ProjectileID.BabySlime);
 
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.FlinxStaff);
@@ -287,13 +291,13 @@ namespace AmuletOfManyMinions
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<VampireFrogMinionItem>(), ItemID.VampireFrogStaff);
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<VampireFrogMinion>(), ProjectileID.VampireFrog);
 
-            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<HornetMinionItem>(), ItemID.HornetStaff);
-            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<HornetMinion>(), ProjectileID.Hornet);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<HornetMinionItem>(), ItemID.HornetStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<HornetMinion>(), ProjectileID.Hornet);
 
-            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.ImpStaff);
-            //summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ItemType<FlinxMinion>(), ProjectileID.FlyingImp);
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<ImpMinionItem>(), ItemID.ImpStaff);
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<ImpMinion>(), ProjectileID.FlyingImp);
 
-            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<SpiderMinionItem>(), ItemID.SpiderStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<SpiderMinionItem>(), ItemID.SpiderStaff);
 			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<DangerousSpiderMinion>(), ProjectileID.DangerousSpider);
 			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<JumperSpiderMinion>(), ProjectileID.JumperSpider);
 			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<VenomSpiderMinion>(), ProjectileID.VenomSpider);
@@ -303,7 +307,7 @@ namespace AmuletOfManyMinions
 			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<PirateDeadeyeMinion>(), ProjectileID.OneEyedPirate);
 			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<ParrotMinion>(), ProjectileID.OneEyedPirate);
 			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<FlyingDutchmanMinion>(), ProjectileID.OneEyedPirate);
-			
+
 			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<EnchantedDaggerMinionItem>(), ItemID.Smolstar);
             summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<EnchantedDaggerMinion>(), ProjectileID.Smolstar);
 
@@ -722,6 +726,16 @@ namespace AmuletOfManyMinions
 			{
 				summonersShine.Call(HOOKBUFFCONSTS, BuffType, DISPLAYOVERRIDE, SummonersShineEmblemDisplayOverride);
 			}
+		}
+		public static bool GetSummonersShineIsCastingSpecialAbility(Projectile projectile, int SourceItemID)
+		{
+			const int USEFULFUNCS = 10;
+			const int ISCASTINGSPECIAL = 8;
+			if (SummonersShineLoaded && !ServerConfig.Instance.DisableSummonersShineAI && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				return (bool)summonersShine.Call(USEFULFUNCS, ISCASTINGSPECIAL, projectile, SourceItemID);
+			}
+			return false;
 		}
 	}
 }
