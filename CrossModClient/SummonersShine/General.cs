@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 		internal static bool SummonersShineDisabled(out Mod summonersShine)
 		{
 			Mod rvMod = null;
-			bool rv = !CrossMod.SummonersShineLoaded || ServerConfig.Instance.DisableSummonersShineAI || !ModLoader.TryGetMod("SummonersShine", out rvMod);
+			bool rv = !CrossMod.SummonersShineLoaded || !ModLoader.TryGetMod("SummonersShine", out rvMod) || ServerConfig.Instance.DisableSummonersShineAI;
 			summonersShine = rvMod;
 			return rv;
 		}
