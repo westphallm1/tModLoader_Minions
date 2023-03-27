@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -82,6 +82,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Hornet;
 		internal override int? FiredProjectileId => ProjectileType<HornetStinger>();
 		internal override SoundStyle? ShootSound => SoundID.Item17;
+
+		internal static int ModSupport_SummonersShineHornetCystID;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -89,7 +91,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.projFrames[Projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
-		
+		public override void ApplyCrossModChanges()
+		{
+			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+				ModSupport_SummonersShineHornetCystID = summonersShine.Find<ModProjectile>("HornetCyst").Type;
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -104,7 +111,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 128;
 			hsHelper.targetOuterRadius = 176;
 			hsHelper.targetShootProximityRadius = 96;
+			hsHelper.CustomFireProjectile = Hornet_CustomFireProjectile;
 		}
+
+		private void Hornet_CustomFireProjectile(Vector2 lineOfFire, int projId, float ai0)
+		{
+			if (!CrossMod.GetSummonersShineIsCastingSpecialAbility(Projectile, ItemType<HornetMinionItem>()))
+			{
+				hsHelper.FireProjectile(lineOfFire, projId, ai0);
+				return;
+			}
+			Projectile.NewProjectile(
+				Projectile.GetSource_FromThis(),
+				Projectile.Center,
+				Behavior.VaryLaunchVelocity(lineOfFire),
+				ModSupport_SummonersShineHornetCystID,
+				Projectile.damage,
+				Projectile.knockBack,
+				Projectile.owner,
+				ai0: ai0);
+		}
+
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 
