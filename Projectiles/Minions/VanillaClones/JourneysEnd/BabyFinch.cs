@@ -76,7 +76,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				return true;
 			}
 			int myOrder = GetMinionsOfType(Type)
-				.Where(p=>Vector2.DistanceSquared(Player.Top, p.Center) < 24 * 24)
+				.Where(p=>(
+					!CrossMod.GetSummonersShineIsCastingSpecialAbility(p, ItemType<BabyFinchMinionItem>()) &&
+					Vector2.DistanceSquared(Player.Top, p.Center) < 24 * 24
+				))
 				.ToList().FindIndex(p=>p.whoAmI == Projectile.whoAmI);
 
 			Vector2 offset = Projectile.AI_158_GetHomeLocation(Player, myOrder) - new Vector2(0, 6);
