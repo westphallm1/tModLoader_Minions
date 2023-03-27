@@ -77,14 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		public override void ApplyCrossModChanges()
 		{
 			base.ApplyCrossModChanges();
-			const int CHANGECONFIG = 0;
-			const int COUNTASMINION = 5;
-			if (CrossMod.SummonersShineLoaded && !ServerConfig.Instance.DisableSummonersShineAI && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
-			{
-				summonersShine.Call(CHANGECONFIG, COUNTASMINION, Projectile.type);
-				return;
-			}
-			return;
+			CrossModClient.SummonersShine.General.ApplyChanges_COUNTASMINION(Type);
 		}
 		
 		public override void SetDefaults()
