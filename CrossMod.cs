@@ -14,6 +14,7 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Squires;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -373,7 +374,7 @@ namespace AmuletOfManyMinions
 				summonersShine.Call(ADD_FILTER, DEFAULTSPECIALABILITYWHITELIST, ItemType, enabledData);
 			}
 		}
-		
+
 		public static void BakeSummonersShineMinionPower_NoHooks(int ItemType, SummonersShineMinionPowerCollection minionPowers)
 		{
 			const int ADD_ITEM_STATICS = 2;
@@ -382,7 +383,52 @@ namespace AmuletOfManyMinions
 				summonersShine.Call(ADD_ITEM_STATICS, ItemType, null, null, minionPowers.BakeToTupleArray(), 0, true);
 			}
 		}
-		
+
+
+		public static void BakeSummonersShineMinionPower_WithHooks(int ItemType, int ProjectileType, int rechargeTime, SummonersShineMinionPowerCollection minionPowers,
+			Action<Projectile, Entity, int, bool> MinionOnSpecialAbilityUsed,
+			Action<Projectile, Player> MinionTerminateSpecialAbility = null,
+			Func<Player, Vector2, Entity> SpecialAbilityFindTarget = null,
+			Func<Player, int, List<Projectile>, List<Projectile>> SpecialAbilityFindMinions = null
+			)
+		{
+			const int PROJ_STATICS = 1;
+			const int MAXENERGY = 0;
+			const int ONSPECIALABILUSED = 4;
+			const int TERMINATESPECIAL = 5; //for config changes
+			const int ADD_ITEM_STATICS = 2;
+			if (!ServerConfig.Instance.DisableSummonersShineAI && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				if (SpecialAbilityFindTarget == null)
+					SpecialAbilityFindTarget = SummonersShine_SpecialAbilityFindTarget;
+				if (SpecialAbilityFindMinions == null)
+					SpecialAbilityFindMinions = SummonersShine_SpecialAbilityFindMinions;
+
+				summonersShine.Call(ADD_ITEM_STATICS, ItemType, SpecialAbilityFindTarget, SpecialAbilityFindMinions, minionPowers.BakeToTupleArray(), rechargeTime, true);
+
+				summonersShine.Call(PROJ_STATICS, ProjectileType, ONSPECIALABILUSED, MinionOnSpecialAbilityUsed);
+				if (MinionTerminateSpecialAbility != null)
+					summonersShine.Call(PROJ_STATICS, ProjectileType, TERMINATESPECIAL, MinionTerminateSpecialAbility);
+				summonersShine.Call(PROJ_STATICS, ProjectileType, MAXENERGY, (float)rechargeTime);
+			}
+		}
+
+		internal static Entity SummonersShine_SpecialAbilityFindTarget(Player player, Vector2 mousePos)
+		{
+			int num = -1;
+			for (int i = 0; i < Main.maxNPCs; i++)
+			{
+				bool flag = Main.npc[i].CanBeChasedBy(player, false) && Main.npc[i].Hitbox.Distance(player.Center) <= 1400 && (num == -1 || Main.npc[i].Hitbox.Distance(mousePos) < Main.npc[num].Hitbox.Distance(mousePos));
+				if (flag)
+				{
+					num = i;
+				}
+			}
+			if (num == -1)
+				return null;
+			return Main.npc[num];
+		}
+		internal static List<Projectile> SummonersShine_SpecialAbilityFindMinions(Player player, int itemType, List<Projectile> valid) { return valid; }
 		public class SummonersShineMinionPowerCollection
 		{
 			List<Tuple<float, int, int, bool>> minionPowers = new();
