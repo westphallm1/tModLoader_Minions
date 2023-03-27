@@ -35,19 +35,15 @@ namespace AmuletOfManyMinions
 
 		public static bool SummonersShineLoaded { get; private set; }
 
-		public static Texture2D SummonersShineThoughtBubble;
-
 		public static HashSet<int> MinionBuffTypes;
 
 		public override void Load()
 		{
 			MinionBuffTypes = new HashSet<int>();
-			SummonersShineThoughtBubble = ModContent.Request<Texture2D>("AmuletOfManyMinions/ThoughtBubble", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		}
 		public override void Unload()
 		{
 			MinionBuffTypes = null;
-			SummonersShineThoughtBubble = null;
 		}
 
 		public static bool SharknadoFunc(Projectile p)
@@ -232,7 +228,7 @@ namespace AmuletOfManyMinions
 
 				BakeAoMMVersionSpecialAbilities(summonersShine);
 
-				summonersShine.Call(THOUGHTBUBBLE, SummonersShine_GetEnergyThoughtTexture);
+				summonersShine.Call(THOUGHTBUBBLE, CrossModClient.SummonersShine.Bubble.SummonersShine_GetEnergyThoughtTexture);
 			}
 		}
 
@@ -790,22 +786,6 @@ namespace AmuletOfManyMinions
 				return (bool)summonersShine.Call(USEFULFUNCS, ISCASTINGSPECIAL, projectile, SourceItemID);
 			}
 			return false;
-		}
-		public static Tuple<Texture2D, Rectangle> SummonersShine_GetEnergyThoughtTexture(int itemID, int frame)
-		{
-			int offsetNum;
-			if (itemID == ModContent.ItemType<AbigailMinionItem>())
-			{
-				offsetNum = 21;
-			}
-			else
-			{
-				return null;
-			}
-
-			Texture2D value = SummonersShineThoughtBubble;
-			Rectangle rectangle = value.Frame(6, 46, frame, offsetNum, 0, 0);
-			return new Tuple<Texture2D, Rectangle>(value, rectangle);
 		}
 	}
 }
