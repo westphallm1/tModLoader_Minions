@@ -15,6 +15,7 @@ using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Squires;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,15 +35,19 @@ namespace AmuletOfManyMinions
 
 		public static bool SummonersShineLoaded { get; private set; }
 
+		public static Texture2D SummonersShineThoughtBubble;
+
 		public static HashSet<int> MinionBuffTypes;
 
 		public override void Load()
 		{
 			MinionBuffTypes = new HashSet<int>();
+			SummonersShineThoughtBubble = ModContent.Request<Texture2D>("AmuletOfManyMinions/ThoughtBubble", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		}
 		public override void Unload()
 		{
 			MinionBuffTypes = null;
+			SummonersShineThoughtBubble = null;
 		}
 
 		public static bool SharknadoFunc(Projectile p)
@@ -183,6 +188,7 @@ namespace AmuletOfManyMinions
 		public static void AddSummonersShineMetadata(Mod mod)
 		{
 			const int ADD_FILTER = 0;
+			const int THOUGHTBUBBLE = 3;
 			const int BLACKLIST_PROJECTILE = 1;
 			const int DONT_COUNT_AS_MINION = 4;
 			const int COUNTS_AS_WHIP_FOR_INSTASTRIKE = 14;
@@ -225,6 +231,8 @@ namespace AmuletOfManyMinions
 				}
 
 				BakeAoMMVersionSpecialAbilities(summonersShine);
+
+				summonersShine.Call(THOUGHTBUBBLE, SummonersShine_GetEnergyThoughtTexture);
 			}
 		}
 
@@ -782,6 +790,22 @@ namespace AmuletOfManyMinions
 				return (bool)summonersShine.Call(USEFULFUNCS, ISCASTINGSPECIAL, projectile, SourceItemID);
 			}
 			return false;
+		}
+		public static Tuple<Texture2D, Rectangle> SummonersShine_GetEnergyThoughtTexture(int itemID, int frame)
+		{
+			int offsetNum;
+			if (itemID == ModContent.ItemType<AbigailMinionItem>())
+			{
+				offsetNum = 21;
+			}
+			else
+			{
+				return null;
+			}
+
+			Texture2D value = SummonersShineThoughtBubble;
+			Rectangle rectangle = value.Frame(6, 46, frame, offsetNum, 0, 0);
+			return new Tuple<Texture2D, Rectangle>(value, rectangle);
 		}
 	}
 }
