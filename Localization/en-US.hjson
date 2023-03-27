@@ -1,7 +1,20 @@
 Mods: {
 	AmuletOfManyMinions: {
+		SummonSpecialCompressed: {
+			AbigailMinionItem:
+				'''
+				{1} blocks {$Mods.SummonersShine.Summon.RightClickSpecial} attack range
+				'''
+		}
 
 		SummonSpecial: {
+			AbigailMinionItem:
+				'''
+				Each summon adds a Mourning Glory to keep Abigail company
+				Press {$Mods.SummonersShine.Summon.RightclickSpecialUncompressed} for your Mourning Glories to periodically summon damaging wisps!
+				Mourning Glories can target enemies within {1} blocks
+				{$Mods.SummonersShine.Summon.RequiresEnergy}
+				'''
 			AdamantiteSquireMinionItem:
 				'''
 				While jousting, the Adamantite Squire deals {1}x damage!
