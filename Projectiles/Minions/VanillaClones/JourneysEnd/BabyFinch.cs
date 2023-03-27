@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			bool isNested = Vector2.DistanceSquared(Player.Top, Projectile.Center) < 24 * 24;
+			bool isNested = !CrossMod.GetSummonersShineIsCastingSpecialAbility(Projectile, ItemType<BabyFinchMinionItem>()) && Vector2.DistanceSquared(Player.Top, Projectile.Center) < 24 * 24;
 			if(!isNested)
 			{
 				return true;
