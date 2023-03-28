@@ -21,10 +21,8 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 		public static int ModSupport_SummonersShine_MourningGloryShot;
 		public static void CrossModChanges(int Type)
 		{
-			bool shouldReturn = false;
-			if (General.SummonersShineDisabled(out Mod summonersShine)) shouldReturn = true;
+			if (General.SummonersShineDisabled(out Mod summonersShine)) return;
 			ModSupport_SummonersShine_MourningGloryShot = summonersShine.Find<ModProjectile>("MourningGloryBolt").Type;
-			if (shouldReturn) return;
 			const int PROJ_STATICS = 1;
 			const int ONSPECIALABIL = 4;
 
