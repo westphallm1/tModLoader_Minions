@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 		const int POST_AI = 11;
 		public static void Abigail_ApplyStatics(int Type)
 		{
-			if (General.SummonersShineDisabled(out Mod summonersShine)) return;
+			if (!ModLoader.TryGetMod("SummonersShine", out Mod summonersShine)) return;
 			summonersShine.Call(PROJ_STATICS, Type, POST_AI, Abigail_PositionFlowers);
 		}
 
