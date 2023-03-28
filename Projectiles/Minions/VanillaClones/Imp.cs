@@ -1,4 +1,6 @@
-﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core.Minions.AI;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets;
@@ -187,7 +189,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
-
+		public override void ApplyCrossModChanges()
+		{
+			CrossModClient.SummonersShine.Imp.CrossModChanges(Type);
+		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -198,6 +203,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			attackFrames = 60;
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.targetShootProximityRadius = 128;
+
+			CrossModClient.SummonersShine.Imp.SetDeaults_Imp(this);
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -262,10 +269,29 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if(isBeingUsedAsToken)
+			if (!General.SummonersShineDisabled(out Mod _))
+			{
+				Vector2 OrigPos = Projectile.position;
+				int oldMinionTargetAttackNPC = Player.MinionAttackTargetNPC;
+				vectorToTargetPosition = CrossModClient.SummonersShine.Imp.ImpTargetedMovement(vectorToTargetPosition, Projectile, this, out int TempTarget);
+				if (TempTarget != -1) //summoner shine teleporty shooty
+				{
+					int? saved = Behavior.TargetNPCIndex;
+					Behavior.TargetNPCIndex = TempTarget;
+					base.TargetedMovement(vectorToTargetPosition);
+					Behavior.TargetNPCIndex = saved;
+					Player.MinionAttackTargetNPC = oldMinionTargetAttackNPC;
+					if(isBeingUsedAsToken)
+						Projectile.position = OrigPos;
+					return;
+				}
+				Player.MinionAttackTargetNPC = oldMinionTargetAttackNPC;
+			}
+			if (isBeingUsedAsToken)
 			{
 				IdleMovement(VectorToIdle);	
-			} else
+			}
+			else
 			{
 				base.TargetedMovement(vectorToTargetPosition);
 			}
