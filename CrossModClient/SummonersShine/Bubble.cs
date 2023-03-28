@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -17,7 +18,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 		public static Texture2D SummonersShineThoughtBubble;
 		public void Load(Mod mod)
 		{
-			SummonersShineThoughtBubble = ModContent.Request<Texture2D>("AmuletOfManyMinions/ThoughtBubble", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			SummonersShineThoughtBubble = ModContent.Request<Texture2D>("AmuletOfManyMinions/CrossModClient/SummonersShine/ThoughtBubble", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		}
 		public void Unload()
 		{
@@ -29,6 +30,10 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			if (itemID == ModContent.ItemType<AbigailMinionItem>())
 			{
 				offsetNum = 21;
+			}
+			else if (itemID == ModContent.ItemType<ImpMinionItem>())
+			{
+				offsetNum = 6;
 			}
 			else
 			{
