@@ -76,8 +76,8 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 					{
 						int ItemType = modItemArray[0].Type;
 
-						summonersShine.Call(ADD_FILTER, SET_SUMMON_MINION_WEAPON_STAT_SOURCE, minion.Type, ItemType);
-						summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, new int[] { empoweredMinion.CounterType }, ItemType);
+						summonersShine.Call(ADD_FILTER, SET_SUMMON_MINION_WEAPON_STAT_SOURCE, ItemType, minion.Type);
+						summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, ItemType, new int[] { empoweredMinion.CounterType });
 					}
 				}
 				
