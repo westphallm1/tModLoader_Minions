@@ -112,6 +112,19 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 					Dust.NewDustDirect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), 0, 0, DustID.SteampunkSteam, newColor: Color.GhostWhite, Alpha: 50).shader = GameShaders.Armor.GetSecondaryShader(player.cMinion, player);
 		}
 
+		internal static void SetCrossModDefaults(Projectile projectile)
+		{
+			if(!CrossModSetup.SummonersShineLoaded)
+			{
+				return;
+			}
+			Main.projFrames[projectile.type] = 4;
+			projectile.scale = 2;
+			projectile.width = 8;
+			projectile.height = 8;
+			projectile.alpha = 100;
+		}
+
 		//Summoner's Shine content
 
 		const int PROJ_STATICS = 1;

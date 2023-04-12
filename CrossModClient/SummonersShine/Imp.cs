@@ -98,20 +98,39 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			return valid;
 		}
 
-		public static Vector2 ImpTargetedMovement(Vector2 vectorToTargetPosition, Projectile projectile, ImpMinion imp, out int TempTarget)
+		public static Vector2 ImpTargetedMovement(Vector2 vectorToTargetPosition, Projectile projectile, ImpMinion minion)
 		{
-			TempTarget = -1;
+			int TempTarget = -1;
+			Vector2 OrigPos = projectile.position;
+			int oldMinionTargetAttackNPC = minion.Player.MinionAttackTargetNPC;
+
 			if (GetSummonersShineIsCastingSpecialAbility(projectile, ItemType<ImpMinionItem>()))
 			{
-				if (ImpPreSpecialTeleportShoot(projectile, imp.hsHelper))
+				if (ImpPreSpecialTeleportShoot(projectile, minion.hsHelper))
 				{
 					Mod summonersShine = ModLoader.GetMod("SummonersShine");
 					const int GET_PROJDATA = 7;
 					const int SPECIALCASTTARGET = 6;
 					NPC npc = (NPC)summonersShine.Call(GET_PROJDATA, projectile, SPECIALCASTTARGET);
 					TempTarget = npc.whoAmI;
-					return npc.Center - projectile.Center;
+					vectorToTargetPosition = npc.Center - projectile.Center;
 				}
+			}
+			if(TempTarget != -1)
+			{
+				int? saved = minion.Behavior.TargetNPCIndex;
+				minion.Behavior.TargetNPCIndex = TempTarget;
+				minion.TargetedMovement(vectorToTargetPosition);
+				minion.TargetNPCIndex = saved;
+				minion.Player.MinionAttackTargetNPC = oldMinionTargetAttackNPC;
+				if(minion.isBeingUsedAsToken)
+				{
+					projectile.position = OrigPos;
+				}
+			} 
+			else
+			{
+				minion.Player.MinionAttackTargetNPC = oldMinionTargetAttackNPC;
 			}
 			return vectorToTargetPosition;
 		}

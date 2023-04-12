@@ -44,40 +44,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override int BuffId => BuffType<AbigailMinionBuff>();
 		protected override int MinionType => ProjectileType<AbigailMinion>();
 
-		static int ModSupport_SummonersShine_MourningGloryShot;
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			Main.projFrames[Projectile.type] = 4;
-		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Projectile.scale = 2;
-			Projectile.width = 8;
-			Projectile.height = 8;
-			Projectile.alpha = 100;
+			AbigailFlower.SetCrossModDefaults(Projectile);
 		}
 
 		public override void ApplyCrossModChanges()
 		{
 			AbigailFlower.CrossModChanges(Projectile.type);
 		}
-		public override bool PreDraw(ref Color lightColor)
-		{
-			return CrossModSetup.SummonersShineLoaded;
-		}
+		public override bool PreDraw(ref Color lightColor) => CrossModSetup.SummonersShineLoaded;
+
 		public override void DoAI()
 		{
-			if (!CrossModSetup.SummonersShineLoaded)
-			{
-				base.DoAI();
-				return;
-			}
 			Vector2 savedPos = Projectile.position;
 			base.DoAI();
-			CrossModClient.SummonersShine.AbigailFlower.DoAI(this, Projectile, savedPos);
+			if(CrossModSetup.SummonersShineLoaded)
+			{
+				AbigailFlower.DoAI(this, Projectile, savedPos);
+			}
 		}
 	}
 

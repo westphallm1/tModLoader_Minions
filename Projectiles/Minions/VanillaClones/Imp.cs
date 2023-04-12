@@ -269,24 +269,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
-			if (!General.SummonersShineDisabled(out Mod _))
+
+			if (CrossModSetup.SummonersShineLoaded)
 			{
-				Vector2 OrigPos = Projectile.position;
-				int oldMinionTargetAttackNPC = Player.MinionAttackTargetNPC;
-				vectorToTargetPosition = CrossModClient.SummonersShine.Imp.ImpTargetedMovement(vectorToTargetPosition, Projectile, this, out int TempTarget);
-				if (TempTarget != -1) //summoner shine teleporty shooty
-				{
-					int? saved = Behavior.TargetNPCIndex;
-					Behavior.TargetNPCIndex = TempTarget;
-					base.TargetedMovement(vectorToTargetPosition);
-					Behavior.TargetNPCIndex = saved;
-					Player.MinionAttackTargetNPC = oldMinionTargetAttackNPC;
-					if(isBeingUsedAsToken)
-						Projectile.position = OrigPos;
-					return;
-				}
-				Player.MinionAttackTargetNPC = oldMinionTargetAttackNPC;
+				Imp.ImpTargetedMovement(vectorToTargetPosition, Projectile, this);
 			}
+
 			if (isBeingUsedAsToken)
 			{
 				IdleMovement(VectorToIdle);	
