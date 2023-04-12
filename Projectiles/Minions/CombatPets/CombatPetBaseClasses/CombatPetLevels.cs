@@ -1,5 +1,6 @@
 using AmuletOfManyMinions.Core.Minions.CrossModAI;
 using AmuletOfManyMinions.Core.Netcode.Packets;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
@@ -227,7 +228,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				return true;
 			if (DamageDiff < 0)
 				return false;
-			return CrossMod.GetCrossModEmblemSuperiority(replacer.Item, old.Item);
+			return CrossModSetup.GetCrossModEmblemSuperiority(replacer.Item, old.Item);
 		}
 
 		// look for the best Combat Pet Emblem in the player's inventory, use that
@@ -274,7 +275,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				}
 			}
 			UpdatePetLevel(maxLevel, maxDamage);
-			UpdatePetLevelModded(maxEmblemItem, CrossMod.GetCrossModEmblemStats(maxItem));
+			UpdatePetLevelModded(maxEmblemItem, CrossModSetup.GetCrossModEmblemStats(maxItem));
 		}
 
 		private void ReflagPetBuffs()
@@ -381,7 +382,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			Main.vanityPet[Type] = true;
 			Main.buffNoSave[Type] = false;
 			CombatPetBuffTypes.Add(Type);
-			CrossMod.HookCombatPetBuffToEmblemSourceItem(Type);
+			CrossModSetup.HookCombatPetBuffToEmblemSourceItem(Type);
 		}
 
 		public override void Update(Player player, ref int buffIndex)

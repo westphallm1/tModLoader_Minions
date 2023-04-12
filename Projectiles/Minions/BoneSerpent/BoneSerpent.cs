@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 {
@@ -31,7 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		}
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+			CrossModSetup.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()

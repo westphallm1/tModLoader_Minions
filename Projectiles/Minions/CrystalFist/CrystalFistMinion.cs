@@ -7,6 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 {
@@ -43,7 +44,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		}
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

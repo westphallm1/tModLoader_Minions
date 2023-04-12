@@ -9,6 +9,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 {
@@ -36,9 +37,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			var minionCollection = new SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(5f/4);
-			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -145,7 +146,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			if(usingSpecial)
 			{
-				damage = (int)(CrossMod.ApplyCrossModScaling(5 * damage / 4, Projectile, 0));
+				damage = (int)(ApplyCrossModScaling(5 * damage / 4, Projectile, 0));
 			}
 		}
 

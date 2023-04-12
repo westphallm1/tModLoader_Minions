@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 using AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
@@ -7,6 +8,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 using static Terraria.ModLoader.ModContent;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
@@ -33,7 +35,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		}
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()

@@ -1,4 +1,5 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
+﻿using AmuletOfManyMinions.CrossModClient.SummonersShine;
+using AmuletOfManyMinions.Projectiles.Minions.BoneSerpent;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -45,7 +46,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			{
 				Projectile.localNPCHitCooldown = 25;
 			}
-			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
+			CrossModSetup.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return target;
 		}
 
@@ -126,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		public override Vector2 IdleBehavior()
 		{
 			leveledPetPlayer = Player.GetModPlayer<LeveledCombatPetModPlayer>();
-			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
+			CrossModSetup.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return base.IdleBehavior();
 		}
 

@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.GameContent;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
@@ -31,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		}
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGED);
+			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
 		}
 
 		public override void SetDefaults()

@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 {
@@ -31,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		}
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.MELEE);
+			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
 		}
 
 		public override void SetDefaults()

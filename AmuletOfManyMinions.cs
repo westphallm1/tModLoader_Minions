@@ -16,6 +16,7 @@ using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Items.Accessories.CombatPetAccessories;
 using AmuletOfManyMinions.CrossModSystem;
 using System;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 
 namespace AmuletOfManyMinions
 {
@@ -41,7 +42,7 @@ namespace AmuletOfManyMinions
 		public override void PostSetupContent()
 		{
 			CrossMod.AddSummonersAssociationMetadata(this);
-			CrossMod.AddSummonersShineMetadata(this);
+			CrossModSetup.AddSummonersShineMetadata(this);
 			// add Journey Mode support to any item which doesn't explicitly reference it
 			var catalog = CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId;
 			IEnumerable<ModItem> items = GetContent<ModItem>().Where(i=>!catalog.ContainsKey(i.Type));

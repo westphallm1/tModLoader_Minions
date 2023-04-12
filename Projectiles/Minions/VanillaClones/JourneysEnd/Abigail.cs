@@ -13,6 +13,7 @@ using AmuletOfManyMinions.Core;
 using Terraria.Graphics.Shaders;
 using System.Collections.Generic;
 using Terraria.ModLoader;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 {
@@ -61,15 +62,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void ApplyCrossModChanges()
 		{
-			CrossModClient.SummonersShine.AbigailFlower.CrossModChanges(Projectile.type);
+			AbigailFlower.CrossModChanges(Projectile.type);
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-			return CrossMod.SummonersShineLoaded;
+			return CrossModSetup.SummonersShineLoaded;
 		}
 		public override void DoAI()
 		{
-			if (!CrossMod.SummonersShineLoaded)
+			if (!CrossModSetup.SummonersShineLoaded)
 			{
 				base.DoAI();
 				return;

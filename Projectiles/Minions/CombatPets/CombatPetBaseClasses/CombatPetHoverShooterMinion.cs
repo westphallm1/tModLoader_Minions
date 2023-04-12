@@ -1,5 +1,6 @@
 ﻿using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -55,7 +56,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
 			UpdateHsHelperWithPetLevel(leveledPetPlayer.PetLevel);
 			DealsContactDamage = DoBumblingMovement;
-			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
+			CrossModSetup.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return base.IdleBehavior();
 		}
 
@@ -214,7 +215,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		{
 			Vector2 target = base.IdleBehavior();
 			DealsContactDamage = true;
-			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
+			CrossModSetup.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return target;
 		}
 

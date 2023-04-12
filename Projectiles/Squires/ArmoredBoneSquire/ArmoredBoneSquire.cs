@@ -10,6 +10,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 {
@@ -36,9 +37,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			var minionCollection = new SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(100);
-			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -208,7 +209,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 
 		private void SpawnWisps()
 		{
-			int workingAttackFrames = (int)(CrossMod.ApplyCrossModScaling(attackFrames, Projectile, 0, true));
+			int workingAttackFrames = (int)(ApplyCrossModScaling(attackFrames, Projectile, 0, true));
 			int attackFrame = AnimationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{
@@ -396,7 +397,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			Vector2 flailPosition = Projectile.Center +
 				WeaponCenterOfRotation + angleVector * WeaponDistanceFromCenter();
 
-			int workingAttackFrames = (int)(CrossMod.ApplyCrossModScaling(AttackFrames, Projectile, 0));
+			int workingAttackFrames = (int)(ApplyCrossModScaling(AttackFrames, Projectile, 0));
 			int attackFrame = AnimationFrame % workingAttackFrames;
 			if (attackFrame == 0)
 			{

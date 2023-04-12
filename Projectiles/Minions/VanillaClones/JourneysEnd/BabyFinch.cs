@@ -1,5 +1,6 @@
 using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Minions.Effects;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -70,14 +71,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			bool isNested = !CrossMod.GetSummonersShineIsCastingSpecialAbility(Projectile, ItemType<BabyFinchMinionItem>()) && Vector2.DistanceSquared(Player.Top, Projectile.Center) < 24 * 24;
+			bool isNested = !CrossModSetup.GetSummonersShineIsCastingSpecialAbility(Projectile, ItemType<BabyFinchMinionItem>()) && Vector2.DistanceSquared(Player.Top, Projectile.Center) < 24 * 24;
 			if(!isNested)
 			{
 				return true;
 			}
 			int myOrder = GetMinionsOfType(Type)
 				.Where(p=>(
-					!CrossMod.GetSummonersShineIsCastingSpecialAbility(p, ItemType<BabyFinchMinionItem>()) &&
+					!CrossModSetup.GetSummonersShineIsCastingSpecialAbility(p, ItemType<BabyFinchMinionItem>()) &&
 					Vector2.DistanceSquared(Player.Top, p.Center) < 24 * 24
 				))
 				.ToList().FindIndex(p=>p.whoAmI == Projectile.whoAmI);

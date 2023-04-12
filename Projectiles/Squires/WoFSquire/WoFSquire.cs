@@ -16,6 +16,7 @@ using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using ReLogic.Content;
 using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 {
@@ -39,7 +40,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Main.buffNoTimeDisplay[Type] = false;
 			DisplayName.SetDefault("Wall of Flesh Squire");
 			Description.SetDefault("You can guide the Wall of Flesh!");
-			CrossMod.HookBuffToItemCrossMod(Type, ItemType<GuideVoodooSquireMinionItem>());
+			CrossModSetup.HookBuffToItemCrossMod(Type, ItemType<GuideVoodooSquireMinionItem>());
 		}
 		public override void Update(Player player, ref int buffIndex)
 		{

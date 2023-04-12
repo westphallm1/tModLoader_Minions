@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 {
@@ -27,7 +28,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 		}
 		private static void Hornet_CustomFireProjectile(Projectiles.Minions.VanillaClones.HornetMinion Hornet, Vector2 lineOfFire, int projId, float ai0)
 		{
-			if (!CrossMod.GetSummonersShineIsCastingSpecialAbility(Hornet.Projectile, ItemType<HornetMinionItem>()))
+			if (!GetSummonersShineIsCastingSpecialAbility(Hornet.Projectile, ItemType<HornetMinionItem>()))
 			{
 				Hornet.hsHelper.FireProjectile(lineOfFire, projId, ai0);
 				return;

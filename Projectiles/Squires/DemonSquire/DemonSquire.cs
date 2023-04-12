@@ -10,6 +10,7 @@ using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 using Terraria.Audio;
 using AmuletOfManyMinions.Core;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 {
@@ -36,9 +37,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(1.5f);
-			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -146,7 +147,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 				}
 				Vector2 angleVector = horizonVector - Projectile.Center;
 				angleVector.SafeNormalize();
-				angleVector *= CrossMod.ApplyCrossModScaling(24f, Projectile, 0);
+				angleVector *= ApplyCrossModScaling(24f, Projectile, 0);
 				Projectile.NewProjectile(
 					Projectile.GetSource_FromThis(),
 					Projectile.Center,

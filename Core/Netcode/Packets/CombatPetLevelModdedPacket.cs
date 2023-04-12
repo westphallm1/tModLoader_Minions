@@ -1,3 +1,4 @@
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,13 @@ namespace AmuletOfManyMinions.Core.Netcode.Packets
 		protected override void PostSend(BinaryWriter writer, Player player)
 		{
 			writer.Write7BitEncodedInt(petEmblemItem);
-			CrossMod.CombatPetSendCrossModData(writer, petModdedData);
+			CrossModSetup.CombatPetSendCrossModData(writer, petModdedData);
 		}
 
 		protected override void PostReceive(BinaryReader reader, int sender, Player player)
 		{
 			int petEmblemItem = reader.Read7BitEncodedInt();
-			object[] petModdedStats = CrossMod.CombatPetReceiveCrossModData(reader);
+			object[] petModdedStats = CrossModSetup.CombatPetReceiveCrossModData(reader);
       
 			LeveledCombatPetModPlayer modPlayer = player.GetModPlayer<LeveledCombatPetModPlayer>();
 			modPlayer.UpdatePetLevelModded(petEmblemItem, petModdedStats, fromSync: true);

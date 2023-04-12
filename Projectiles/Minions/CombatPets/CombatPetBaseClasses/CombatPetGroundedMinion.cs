@@ -1,4 +1,5 @@
 ﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.CrossModClient.SummonersShine;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -40,7 +41,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			Projectile.originalDamage = (int)(DamageMult * leveledPetPlayer.PetDamage);
 			int petLevel = leveledPetPlayer.PetLevel;
 			idleInertia = petLevel < 4 ? 15 : 18 - petLevel;
-			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
+			CrossModSetup.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return base.IdleBehavior();
 		}
 
@@ -110,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 		{
 			Vector2 target = base.IdleBehavior();
 			attackFrames = GetAttackFrames(leveledPetPlayer.PetLevelInfo);
-			CrossMod.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
+			CrossModSetup.CombatPetComputeMinionStats(Projectile, leveledPetPlayer);
 			return target;
 		}
 		protected override void DoGroundedMovement(Vector2 vector)

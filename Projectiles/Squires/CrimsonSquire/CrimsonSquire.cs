@@ -9,6 +9,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 {
@@ -35,9 +36,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(5);
-			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -239,7 +240,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 					Projectile.knockBack,
 					Main.myPlayer,
 					8);
-				proj.originalDamage = (int)(CrossMod.ApplyCrossModScaling(60, Projectile, 0));
+				proj.originalDamage = (int)(ApplyCrossModScaling(60, Projectile, 0));
 			}
 		}
 

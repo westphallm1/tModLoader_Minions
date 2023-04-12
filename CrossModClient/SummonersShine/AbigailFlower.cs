@@ -27,10 +27,10 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			const int PROJ_STATICS = 1;
 			const int ONSPECIALABIL = 4;
 
-			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			CrossModSetup.SummonersShineMinionPowerCollection minionCollection = new CrossModSetup.SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(10);
 			const int RECHARGE_TIME = 300;
-			CrossMod.BakeSummonersShineMinionPower_WithHooks(ItemType<AbigailMinionItem>(), Type, RECHARGE_TIME, minionCollection, AbigailCounterOnSpecialAbility);
+			CrossModSetup.BakeSummonersShineMinionPower_WithHooks(ItemType<AbigailMinionItem>(), Type, RECHARGE_TIME, minionCollection, AbigailCounterOnSpecialAbility);
 		}
 		public static void AbigailCounterOnSpecialAbility(Projectile projectile, Entity _target, int specialType, bool fromServer)
 		{
@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 
 			Lighting.AddLight(Projectile.Center, TorchID.Bone);
 
-			if (CrossMod.GetSummonersShineIsCastingSpecialAbility(Projectile, ItemType<AbigailMinionItem>()) && Main.myPlayer == Projectile.owner)
+			if (CrossModSetup.GetSummonersShineIsCastingSpecialAbility(Projectile, ItemType<AbigailMinionItem>()) && Main.myPlayer == Projectile.owner)
 			{
 				Mod summonersShine = ModLoader.GetMod("SummonersShine");
 				const int USEFUL_FUNCS = 10;

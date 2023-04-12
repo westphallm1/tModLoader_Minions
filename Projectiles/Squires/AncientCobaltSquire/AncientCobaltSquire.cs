@@ -6,6 +6,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 {
@@ -32,11 +33,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			var minionCollection = new SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(100f);
-			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 			
-			CrossMod.WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, CrossMod.SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
+			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
 
 		public override void SetDefaults()
@@ -194,7 +195,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 			{
 				float angleOffset = Main.rand.NextFloat(MathHelper.Pi / 16) - MathHelper.Pi / 32;
 				Vector2 angleVector = UnitVectorFromWeaponAngle().RotatedBy(angleOffset);
-				angleVector *= CrossMod.ApplyCrossModScaling(ModifiedProjectileVelocity() * 2, Projectile, 0);
+				angleVector *= ApplyCrossModScaling(ModifiedProjectileVelocity() * 2, Projectile, 0);
 				if (Main.myPlayer == Player.whoAmI)
 				{
 					Projectile.NewProjectile(

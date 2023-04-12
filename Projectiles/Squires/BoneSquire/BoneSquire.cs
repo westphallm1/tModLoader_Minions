@@ -7,6 +7,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 using Terraria.Audio;
 using ReLogic.Content;
 
@@ -35,9 +36,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(3.75f);
-			CrossMod.BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
+			BakeSummonersShineMinionPower_NoHooks(Item.type, minionCollection);
 		}
 
 		public override void SetDefaults()
@@ -193,7 +194,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void OnStopUsingSpecial() => OnStartUsingSpecial();
 
 
-		protected override float WeaponDistanceFromCenter() => CrossMod.ApplyCrossModScaling(60, Projectile, 0);
+		protected override float WeaponDistanceFromCenter() => ApplyCrossModScaling(60, Projectile, 0);
 
 		protected override int WeaponHitboxStart() => (int)WeaponDistanceFromCenter() - 10;
 		protected override int WeaponHitboxEnd() => (int)WeaponDistanceFromCenter() + 10;

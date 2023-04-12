@@ -13,6 +13,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 {
@@ -27,10 +28,10 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			const int PROJ_STATICS = 1;
 			const int ONSPECIALABIL = 4;
 
-			CrossMod.SummonersShineMinionPowerCollection minionCollection = new CrossMod.SummonersShineMinionPowerCollection();
+			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();
 			minionCollection.AddMinionPower(5);
 			const int RECHARGE_TIME = 300;
-			CrossMod.BakeSummonersShineMinionPower_WithHooks(ItemType<ImpMinionItem>(), Type, RECHARGE_TIME, minionCollection, ImpOnSpecialAbility, SpecialAbilityFindMinions: PreAbility_Imp);
+			BakeSummonersShineMinionPower_WithHooks(ItemType<ImpMinionItem>(), Type, RECHARGE_TIME, minionCollection, ImpOnSpecialAbility, SpecialAbilityFindMinions: PreAbility_Imp);
 		}
 		internal static void SetDeaults_Imp(Projectiles.Minions.VanillaClones.ImpMinion Imp)
 		{
@@ -39,7 +40,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 		}
 		public static void ImpOnShootProjectile(ImpMinion minion, Vector2 lineOfFire, int projId, float ai0)
 		{
-			if (!CrossMod.GetSummonersShineIsCastingSpecialAbility(minion.Projectile, ItemType<ImpMinionItem>()))
+			if (!GetSummonersShineIsCastingSpecialAbility(minion.Projectile, ItemType<ImpMinionItem>()))
 			{
 				minion.hsHelper.FireProjectile(lineOfFire, projId, ai0);
 				return;
@@ -53,7 +54,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 				minion.Projectile.knockBack,
 				minion.Projectile.owner,
 				ai0: ai0,
-				CrossMod.ReplaceValueWithSummonersShineMinionPower(5, minion.Projectile, 0));
+				ReplaceValueWithSummonersShineMinionPower(5, minion.Projectile, 0));
 		}
 		public static void ImpOnSpecialAbility(Projectile projectile, Entity _target, int specialType, bool fromServer)
 		{
@@ -100,7 +101,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 		public static Vector2 ImpTargetedMovement(Vector2 vectorToTargetPosition, Projectile projectile, ImpMinion imp, out int TempTarget)
 		{
 			TempTarget = -1;
-			if (CrossMod.GetSummonersShineIsCastingSpecialAbility(projectile, ItemType<ImpMinionItem>()))
+			if (GetSummonersShineIsCastingSpecialAbility(projectile, ItemType<ImpMinionItem>()))
 			{
 				if (ImpPreSpecialTeleportShoot(projectile, imp.hsHelper))
 				{

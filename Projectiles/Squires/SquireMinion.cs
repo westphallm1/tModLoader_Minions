@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
 {
@@ -93,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		
 		public override void ApplyCrossModChanges()
 		{
-			CrossMod.SetSummonersShineProjMaxEnergy(Projectile.type, 0);
+			SetSummonersShineProjMaxEnergy(Projectile.type, 0);
 		}
 		
 		public override void SetDefaults()
@@ -181,7 +182,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			if(Player.whoAmI == Main.myPlayer && !usingSpecial && !SpecialOnCooldown && usingSpecialEnabledItem && Main.mouseRight)
 			{
 				StartSpecial();
-			} else if (usingSpecial && specialFrame >= CrossMod.GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))
+			} else if (usingSpecial && specialFrame >= GetCrossModNormalizedSpecialDuration(SpecialDuration, Projectile))
 			{
 				usingSpecial = false;
 				OnStopUsingSpecial();
