@@ -18,7 +18,18 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 {
 	internal class CrossModSetup
 	{
-		public static bool SummonersShineLoaded { get; private set; }
+		public static bool SummonersShineLoaded {
+			get {
+				if (summonersShineLoaded) return true;
+				if (summonersShineChecked) return false;
+				summonersShineLoaded = ModLoader.TryGetMod("SummonersShine", out Mod summonersShine) != null;
+				summonersShineChecked = true;
+				return summonersShineLoaded;
+			}
+		}
+
+		static bool summonersShineLoaded;
+		static bool summonersShineChecked;
 		/// <summary>
 		/// Blacklist problem projectiles from summoner's shine's globalitems
 		/// </summary>
@@ -33,7 +44,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			const int SET_SUMMON_WEAPON_STAT_SOURCE_MINION = 16;
 			if (ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
 			{
-				SummonersShineLoaded = true;
+				summonersShineLoaded = true;
 				int projType = MinionWaypoint.Type;
 				summonersShine.Call(ADD_FILTER, BLACKLIST_PROJECTILE, projType);
 				summonersShine.Call(ADD_FILTER, DONT_COUNT_AS_MINION, projType);
