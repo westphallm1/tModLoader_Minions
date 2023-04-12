@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			get {
 				if (summonersShineLoaded) return true;
 				if (summonersShineChecked) return false;
-				summonersShineLoaded = ModLoader.TryGetMod("SummonersShine", out Mod summonersShine) != null;
+				summonersShineLoaded = ModLoader.TryGetMod("SummonersShine", out Mod summonersShine);
 				summonersShineChecked = true;
 				return summonersShineLoaded;
 			}
