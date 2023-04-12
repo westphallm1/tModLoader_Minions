@@ -84,6 +84,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			base.ApplyCrossModChanges();
+			CrossModClient.SummonersShine.General.ApplyChanges_STEPPED(Type);
+		}
 
 		public sealed override void SetDefaults()
 		{

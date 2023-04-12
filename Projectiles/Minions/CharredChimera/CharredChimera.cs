@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ModLoader;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 
@@ -72,6 +73,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
+		
+		public override void ApplyCrossModChanges()
+		{
+			base.ApplyCrossModChanges();
+			CrossModClient.SummonersShine.General.ApplyChanges_COUNTASMINION(Type);
+		}
+		
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
