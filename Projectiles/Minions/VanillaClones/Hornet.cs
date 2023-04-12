@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Dusts;
+using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using System;
@@ -89,7 +89,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			Main.projFrames[Projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
-		
+		public override void ApplyCrossModChanges()
+		{
+			CrossModClient.SummonersShine.Hornet.ApplyCrossModChanges();
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -104,7 +108,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.targetInnerRadius = 128;
 			hsHelper.targetOuterRadius = 176;
 			hsHelper.targetShootProximityRadius = 96;
+			CrossModClient.SummonersShine.Hornet.SetDeaults_Hornet(this);
 		}
+
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 

@@ -1,4 +1,4 @@
-﻿using static Terraria.ModLoader.ModContent;
+using static Terraria.ModLoader.ModContent;
 using Terraria.ID;
 using Terraria;
 using Terraria.Localization;
@@ -10,6 +10,9 @@ using Terraria.Audio;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Core;
+using Terraria.Graphics.Shaders;
+using System.Collections.Generic;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 {
@@ -36,8 +39,45 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 	public class AbigailCounterMinion : CounterMinion
 	{
+		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/VanillaClones/JourneysEnd/MourningGlory";
 		public override int BuffId => BuffType<AbigailMinionBuff>();
 		protected override int MinionType => ProjectileType<AbigailMinion>();
+
+		static int ModSupport_SummonersShine_MourningGloryShot;
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+			Main.projFrames[Projectile.type] = 4;
+		}
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			Projectile.scale = 2;
+			Projectile.width = 8;
+			Projectile.height = 8;
+			Projectile.alpha = 100;
+		}
+
+		public override void ApplyCrossModChanges()
+		{
+			CrossModClient.SummonersShine.AbigailFlower.CrossModChanges(Projectile.type);
+		}
+		public override bool PreDraw(ref Color lightColor)
+		{
+			return CrossMod.SummonersShineLoaded;
+		}
+		public override void DoAI()
+		{
+			if (!CrossMod.SummonersShineLoaded)
+			{
+				base.DoAI();
+				return;
+			}
+			Vector2 savedPos = Projectile.position;
+			base.DoAI();
+			CrossModClient.SummonersShine.AbigailFlower.DoAI(this, Projectile, savedPos);
+		}
 	}
 
 	public class AbigailMinion : EmpoweredMinion
@@ -86,6 +126,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				targetInnerRadius = 48,
 				targetOuterRadius = 64,
 			};
+		}
+
+		public override void ApplyCrossModChanges()
+		{
+			CrossModClient.SummonersShine.AbigailFlower.Abigail_ApplyStatics(Type);
 		}
 
 		public override Vector2 IdleBehavior()
@@ -207,7 +252,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 				bounds.GetOrigin(), 1, effects, 0);
 			return false;
 		}
-
 
 	}
 }

@@ -11,8 +11,11 @@ using AmuletOfManyMinions.Projectiles.Minions.Necromancer;
 using AmuletOfManyMinions.Projectiles.Minions.SpiritGun;
 using AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate;
 using AmuletOfManyMinions.Projectiles.Squires;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,6 +24,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions
@@ -180,6 +184,7 @@ namespace AmuletOfManyMinions
 		public static void AddSummonersShineMetadata(Mod mod)
 		{
 			const int ADD_FILTER = 0;
+			const int THOUGHTBUBBLE = 3;
 			const int BLACKLIST_PROJECTILE = 1;
 			const int DONT_COUNT_AS_MINION = 4;
 			const int COUNTS_AS_WHIP_FOR_INSTASTRIKE = 14;
@@ -240,6 +245,10 @@ namespace AmuletOfManyMinions
 				{
 					summonersShine.Call(ADD_FILTER, COUNTS_AS_WHIP_FOR_INSTASTRIKE, squireItem.Type);
 				}
+
+				BakeAoMMVersionSpecialAbilities(summonersShine);
+
+				summonersShine.Call(THOUGHTBUBBLE, CrossModClient.SummonersShine.Bubble.SummonersShine_GetEnergyThoughtTexture);
 			}
 		}
 
@@ -284,6 +293,83 @@ namespace AmuletOfManyMinions
 				false, //multishot
 				true) //enrage (safe)
 		};
+		
+		public static void BakeAoMMVersionSpecialAbilities(Mod summonersShine)
+		{
+            const int SET_CONFIG = 0;
+            const int SET_SPECIAL_ITEM_DUPE = 18;
+            const int SET_SPECIAL_PROJ_DUPE = 19;
+
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<AbigailMinionItem>(), ItemID.AbigailsFlower);
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<AbigailCounterMinion>(), ProjectileID.AbigailCounter);
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<AbigailMinion>(), ProjectileID.AbigailMinion);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<BabyFinchMinionItem>(), ItemID.BabyBirdStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<BabyFinchMinion>(), ProjectileID.BabyBird);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<BabySlimeMinionItem>(), ItemID.SlimeStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<BabySlimeMinion>(), ProjectileID.BabySlime);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<FlinxMinionItem>(), ItemID.FlinxStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<FlinxMinion>(), ProjectileID.FlinxMinion);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<VampireFrogMinionItem>(), ItemID.VampireFrogStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<VampireFrogMinion>(), ProjectileID.VampireFrog);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<HornetMinionItem>(), ItemID.HornetStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<HornetMinion>(), ProjectileID.Hornet);
+
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<ImpMinionItem>(), ItemID.ImpStaff);
+			//summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<ImpMinion>(), ProjectileID.FlyingImp);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<SpiderMinionItem>(), ItemID.SpiderStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<DangerousSpiderMinion>(), ProjectileID.DangerousSpider);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<JumperSpiderMinion>(), ProjectileID.JumperSpider);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<VenomSpiderMinion>(), ProjectileID.VenomSpider);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<PirateMinionItem>(), ItemID.PirateStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<PirateMinion>(), ProjectileID.SoulscourgePirate);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<PirateDeadeyeMinion>(), ProjectileID.OneEyedPirate);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<ParrotMinion>(), ProjectileID.OneEyedPirate);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<FlyingDutchmanMinion>(), ProjectileID.OneEyedPirate);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<EnchantedDaggerMinionItem>(), ItemID.Smolstar);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<EnchantedDaggerMinion>(), ProjectileID.Smolstar);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<SanguineBatMinionItem>(), ItemID.SanguineStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<SanguineBatMinion>(), ProjectileID.BatOfLight);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<SharknadoMinionItem>(), ItemID.TempestStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<SharknadoMinion>(), ProjectileID.Tempest);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<TwinsMinionItem>(), ItemID.OpticStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<MiniRetinazerMinion>(), ProjectileID.Retanimini);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<MiniSpazmatismMinion>(), ProjectileID.Spazmamini);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<PygmyMinionItem>(), ItemID.PygmyStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<Pygmy1Minion>(), ProjectileID.Pygmy);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<Pygmy2Minion>(), ProjectileID.Pygmy2);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<Pygmy3Minion>(), ProjectileID.Pygmy3);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<Pygmy4Minion>(), ProjectileID.Pygmy4);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<DeadlySphereMinionItem>(), ItemID.DeadlySphereStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<DeadlySphereMinion>(), ProjectileID.DeadlySphere);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<DeadlySphereFireMinion>(), ProjectileID.DeadlySphere);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<DeadlySphereClingerMinion>(), ProjectileID.DeadlySphere);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<RavenMinionItem>(), ItemID.RavenStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<RavenMinion>(), ProjectileID.Raven);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<UFOMinionItem>(), ItemID.XenoStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<UFOMinion>(), ProjectileID.UFOMinion);
+
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<StardustCellMinionItem>(), ItemID.StardustCellStaff);
+            summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<StardustCellMinion>(), ProjectileID.StardustCellMinion);
+
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_ITEM_DUPE, ModContent.ItemType<StardustDragonMinionItem>(), ItemID.StardustDragonStaff);
+			summonersShine.Call(SET_CONFIG, SET_SPECIAL_PROJ_DUPE, ModContent.ProjectileType<StardustDragonMinion>(), ProjectileID.StardustDragon1);
+		}
+		
 		public static void WhitelistSummonersShineMinionDefaultSpecialAbility(int ItemType, SummonersShineDefaultSpecialWhitelistType specialWhitelistType)
 		{
 			if (SummonersShineLoaded && !ServerConfig.Instance.DisableSummonersShineAI && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
@@ -312,7 +398,7 @@ namespace AmuletOfManyMinions
 				summonersShine.Call(ADD_FILTER, DEFAULTSPECIALABILITYWHITELIST, ItemType, enabledData);
 			}
 		}
-		
+
 		public static void BakeSummonersShineMinionPower_NoHooks(int ItemType, SummonersShineMinionPowerCollection minionPowers)
 		{
 			const int ADD_ITEM_STATICS = 2;
@@ -321,7 +407,52 @@ namespace AmuletOfManyMinions
 				summonersShine.Call(ADD_ITEM_STATICS, ItemType, null, null, minionPowers.BakeToTupleArray(), 0, true);
 			}
 		}
-		
+
+
+		public static void BakeSummonersShineMinionPower_WithHooks(int ItemType, int ProjectileType, int rechargeTime, SummonersShineMinionPowerCollection minionPowers,
+			Action<Projectile, Entity, int, bool> MinionOnSpecialAbilityUsed,
+			Action<Projectile, Player> MinionTerminateSpecialAbility = null,
+			Func<Player, Vector2, Entity> SpecialAbilityFindTarget = null,
+			Func<Player, int, List<Projectile>, List<Projectile>> SpecialAbilityFindMinions = null
+			)
+		{
+			const int PROJ_STATICS = 1;
+			const int MAXENERGY = 0;
+			const int ONSPECIALABILUSED = 4;
+			const int TERMINATESPECIAL = 5; //for config changes
+			const int ADD_ITEM_STATICS = 2;
+			if (!ServerConfig.Instance.DisableSummonersShineAI && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				if (SpecialAbilityFindTarget == null)
+					SpecialAbilityFindTarget = SummonersShine_SpecialAbilityFindTarget;
+				if (SpecialAbilityFindMinions == null)
+					SpecialAbilityFindMinions = SummonersShine_SpecialAbilityFindMinions;
+
+				summonersShine.Call(ADD_ITEM_STATICS, ItemType, SpecialAbilityFindTarget, SpecialAbilityFindMinions, minionPowers.BakeToTupleArray(), rechargeTime, true);
+
+				summonersShine.Call(PROJ_STATICS, ProjectileType, ONSPECIALABILUSED, MinionOnSpecialAbilityUsed);
+				if (MinionTerminateSpecialAbility != null)
+					summonersShine.Call(PROJ_STATICS, ProjectileType, TERMINATESPECIAL, MinionTerminateSpecialAbility);
+				summonersShine.Call(PROJ_STATICS, ProjectileType, MAXENERGY, (float)rechargeTime);
+			}
+		}
+
+		internal static Entity SummonersShine_SpecialAbilityFindTarget(Player player, Vector2 mousePos)
+		{
+			int num = -1;
+			for (int i = 0; i < Main.maxNPCs; i++)
+			{
+				bool flag = Main.npc[i].CanBeChasedBy(player, false) && Main.npc[i].Hitbox.Distance(player.Center) <= 1400 && (num == -1 || Main.npc[i].Hitbox.Distance(mousePos) < Main.npc[num].Hitbox.Distance(mousePos));
+				if (flag)
+				{
+					num = i;
+				}
+			}
+			if (num == -1)
+				return null;
+			return Main.npc[num];
+		}
+		internal static List<Projectile> SummonersShine_SpecialAbilityFindMinions(Player player, int itemType, List<Projectile> valid) { return valid; }
 		public class SummonersShineMinionPowerCollection
 		{
 			List<Tuple<float, int, int, bool>> minionPowers = new();
@@ -665,6 +796,16 @@ namespace AmuletOfManyMinions
 			{
 				summonersShine.Call(HOOKBUFFCONSTS, BuffType, DISPLAYOVERRIDE, SummonersShineEmblemDisplayOverride);
 			}
+		}
+		public static bool GetSummonersShineIsCastingSpecialAbility(Projectile projectile, int SourceItemID)
+		{
+			const int USEFULFUNCS = 10;
+			const int ISCASTINGSPECIAL = 8;
+			if (SummonersShineLoaded && !ServerConfig.Instance.DisableSummonersShineAI && ModLoader.TryGetMod("SummonersShine", out Mod summonersShine))
+			{
+				return (bool)summonersShine.Call(USEFULFUNCS, ISCASTINGSPECIAL, projectile, SourceItemID);
+			}
+			return false;
 		}
 	}
 }
