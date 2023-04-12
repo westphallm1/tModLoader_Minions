@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 						int ItemType = modItemArray[0].Type;
 
 						summonersShine.Call(ADD_FILTER, SET_SUMMON_MINION_WEAPON_STAT_SOURCE, minion.Type, ItemType);
-						summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, empoweredMinion.CounterType, ItemType);
+						summonersShine.Call(ADD_FILTER, SET_SUMMON_WEAPON_STAT_SOURCE_MINION, new int[] { empoweredMinion.CounterType }, ItemType);
 					}
 				}
 				
