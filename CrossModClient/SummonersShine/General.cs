@@ -1,3 +1,5 @@
+using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,16 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			if (SummonersShineDisabled(out Mod summonersShine))
 				return;
 			summonersShine.Call(CHANGECONFIG, COUNTASMINION, ProjType);
+		}
+
+		internal static void ApplyChanges_CHARREDCHIMERAMINIONHEAD(int ProjType, int ItemType)
+		{
+			if (SummonersShineDisabled(out Mod summonersShine))
+				return;
+			ApplyChanges_COUNTASMINION(ProjType);
+			const int ADD_FILTER = 0;
+			const int SET_SUMMON_MINION_WEAPON_STAT_SOURCE = 15;
+			summonersShine.Call(ADD_FILTER, SET_SUMMON_MINION_WEAPON_STAT_SOURCE, ProjType, ItemType);
 		}
 
 		internal static void ApplyChanges_STEPPED(int ProjType)
