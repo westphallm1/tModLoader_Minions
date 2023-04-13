@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -209,6 +209,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			trunkTileRowToDraw = (int)Math.Min(trunkHeight-1, trunkAnimFrame * heightPerFrame / (float)treeTileSize);
 			int maxHeight = TileTop + treeTileSize / 2 * trunkHeight;
 			trunkHeightOffset = Math.Min(maxHeight, heightPerFrame * trunkAnimFrame - treeTileSize);
+
+			if (Main.dedServ)
+				return;
+
+			// bottom of tree configs
+			if (trunkTileRowToDraw == trunkHeight - 1 && rootsConfig != 1)
+			{
+				// tile where roots connect
+				tiles[0, trunkTileRowToDraw, 1] = ((byte)(rootsConfig == 0 ? 0 : 3), (byte)(6 + trunkTileRowToDraw % 3));
+			}
+			else
+			{
+				// rest of trunk
+				tiles[0, trunkTileRowToDraw, 1] = TrunkTileForLocation(trunkTileRowToDraw);
+			}
 		}
 
 		public TreeDrawer(
@@ -253,16 +268,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			if(trunkAnimFrame < 0)
 			{
 				return;
-			}
-			// bottom of tree configs
-			if (trunkTileRowToDraw == trunkHeight - 1 && rootsConfig != 1)
-			{
-				// tile where roots connect
-				tiles[0, trunkTileRowToDraw, 1] = ((byte)(rootsConfig == 0 ? 0 : 3), (byte)(6 + trunkTileRowToDraw % 3));
-			} else
-			{
-				// rest of trunk
-				tiles[0, trunkTileRowToDraw, 1] = TrunkTileForLocation(trunkTileRowToDraw);
 			}
 			helper.AddTileSpritesToBatch(woodTexture, 0, tiles, Vector2.UnitY * -trunkHeightOffset, tileSize: treeTileSize);
 		}
