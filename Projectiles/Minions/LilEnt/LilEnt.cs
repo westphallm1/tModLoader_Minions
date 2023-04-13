@@ -19,19 +19,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 	{
 
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<LilEntMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Lil' Ent");
-			// Description.SetDefault("A lil' ent is fighting for you!");
-		}
 	}
 	public class LilEntAccessory : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Forager's Charm");
-			// Tooltip.SetDefault("A lil' ent will aid you!");
 		}
 
 		public override void SetDefaults()

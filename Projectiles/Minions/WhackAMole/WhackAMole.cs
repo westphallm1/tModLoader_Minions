@@ -15,22 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 	public class WhackAMoleMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<WhackAMoleCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Jellybean Mole");
-			// Description.SetDefault("A magic mole will fight for you!");
-		}
 	}
 
 	public class WhackAMoleMinionItem : MinionItem<WhackAMoleMinionBuff, WhackAMoleCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Magic Jelly Bean Jar");
-			// Tooltip.SetDefault("Summons a stack of magic moles to fight for you!");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -158,7 +146,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Whack-a-mole");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingOnGround.Add(Projectile.type);

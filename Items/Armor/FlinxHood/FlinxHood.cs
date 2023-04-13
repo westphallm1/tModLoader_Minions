@@ -16,7 +16,6 @@ namespace AmuletOfManyMinions.Items.Armor.FlinxHood
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Flinx Fur Hood");
 		}
 
 		public override void SetDefaults()

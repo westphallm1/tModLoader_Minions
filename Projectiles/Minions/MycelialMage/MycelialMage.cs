@@ -16,22 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 	public class MycelialMageMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<MycelialMageMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mycelial Mage");
-			// Description.SetDefault("A Mycelial Mage is fighting for you!");
-		}
 	}
 
 	public class MycelialMageMinionItem : MinionItem<MycelialMageMinionBuff, MycelialMageMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mycelial Staff");
-			// Tooltip.SetDefault("Summons a Mycelial Mage to fight for you!");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
@@ -64,7 +52,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mycelial Mage");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

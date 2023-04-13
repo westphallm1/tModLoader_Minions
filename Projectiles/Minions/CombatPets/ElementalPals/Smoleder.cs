@@ -14,22 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class SmolederMinionBuff : CombatPetBuff
     {
         internal override int[] ProjectileTypes => new int[] { ProjectileType<SmolederMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Smoleder");
-			// Description.SetDefault("A shy mole has joined your adventure!");
-		}
 	}
 
 	public class SmolederMinionItem : CombatPetCustomMinionItem<SmolederMinionBuff, SmolederMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Quiet Bow of Friendship");
-			// Tooltip.SetDefault("Summons a pet Smoleder!");
-		}
 	}
 
 	public class SmolederMinion : CombatPetGroundedRangedMinion

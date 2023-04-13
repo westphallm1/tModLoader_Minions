@@ -11,10 +11,6 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Titanium Admiral's Helm");
-			/* Tooltip.SetDefault(""
-				+ "Increases minion damage by 15%\n"
-				+ "Increases max minions by 1"); */
 		}
 
 		public override void SetDefaults()

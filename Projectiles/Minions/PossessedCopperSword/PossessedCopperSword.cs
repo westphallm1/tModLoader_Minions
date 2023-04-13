@@ -13,23 +13,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 	public class CopperSwordMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<CopperSwordMinion>(), ProjectileType<CopperSwordMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Starry SkySlasher");
-			// Description.SetDefault("An enchanted sword will fight for you!");
-		}
 	}
 
 	public class CopperSwordMinionItem : MinionItem<CopperSwordMinionBuff, CopperSwordMinion>
 	{
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Minions/PossessedCopperSword/CopperSwordMinion";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Starry SkySlasher");
-			// Tooltip.SetDefault("Summons an enchanted sword to fight for you!");
-		}
+
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -61,7 +50,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Starry SkySlasher");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

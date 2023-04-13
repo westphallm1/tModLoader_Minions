@@ -21,10 +21,6 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Royal Gown");
-			/* Tooltip.SetDefault(""
-				+ "Increases minion damage by 12%\n"
-				+ "Increases squire travel range by 2 blocks"); */
 		}
 
 		public override void SetDefaults()

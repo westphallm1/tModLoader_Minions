@@ -16,23 +16,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 	public class CrimsonSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<CrimsonSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crimson Squire");
-			// Description.SetDefault("A crimson squire will follow your orders!");
-		}
 	}
 
 	public class CrimsonSquireMinionItem : SquireMinionItem<CrimsonSquireMinionBuff, CrimsonSquireMinion>
 	{
 		protected override string SpecialName => "Flask of Ichor";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crest of the Crimson");
-			// Tooltip.SetDefault("Summons a squire\nA crimson squire will fight for you!\nClick and hold to guide its attacks");
-		}
 		
 		public override void ApplyCrossModChanges()
 		{
@@ -216,7 +204,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crimson Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

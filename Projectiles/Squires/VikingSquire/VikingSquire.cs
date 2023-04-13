@@ -13,23 +13,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 	public class VikingSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<VikingSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Viking Squire");
-			// Description.SetDefault("A dual-wielding viking squire will follow your orders!");
-		}
 	}
 
 	public class VikingSquireMinionItem : SquireMinionItem<VikingSquireMinionBuff, VikingSquireMinion>
 	{
 		protected override string SpecialName => "Icy Axe";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crest of the Frozen North");
-			// Tooltip.SetDefault("Summons a squire\nA viking squire will fight for you!\nClick and hold to guide its attacks");
-		}
 
 		public override void SetDefaults()
 		{
@@ -90,7 +78,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Viking Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

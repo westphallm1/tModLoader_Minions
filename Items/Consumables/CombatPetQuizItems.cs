@@ -22,9 +22,6 @@ namespace AmuletOfManyMinions.Items.Consumables
 	{
 		public override void SetStaticDefaults()
 		{
-			/* Tooltip.SetDefault("Grants you a special combat pet based on your personality!\n" +
-				"Your environment may influence the result..."); */
-			// DisplayName.SetDefault("Bow of Friendship");
 		}
 
 		public static void SetFriendshipBowDefaults(Item Item)
@@ -96,14 +93,6 @@ namespace AmuletOfManyMinions.Items.Consumables
 			return !quizPlayer.IsTakingQuiz;
 		}
 
-		public override void SetStaticDefaults()
-		{
-			/* Tooltip.SetDefault(
-				"Invites another special combat pet to your team!\n" +
-				"It will always be different from the last pet that joined."); */
-			// DisplayName.SetDefault("Bow of Teamwork");
-		}
-
 		public override bool? UseItem(Player player)
 		{
 			if(player.whoAmI == Main.myPlayer)
@@ -141,8 +130,6 @@ namespace AmuletOfManyMinions.Items.Consumables
 	{
 		public override void SetStaticDefaults()
 		{
-			// Tooltip.SetDefault("Grants you a special combat pet of your choosing!");
-			// DisplayName.SetDefault("Ancient Bow of Friendship");
 		}
 
 		public override void SetDefaults()

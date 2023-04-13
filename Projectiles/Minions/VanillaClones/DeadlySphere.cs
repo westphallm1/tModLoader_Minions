@@ -41,12 +41,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		[CloneByReference] //projTypes is fine to be shared across instances
 		public int[] projTypes;
 
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// Tooltip.SetDefault("");
-		}
-
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			ApplyBuff(player);

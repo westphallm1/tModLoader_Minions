@@ -15,12 +15,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	public class GoldenRogueSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<GoldenRogueSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Golden Rogue Squire");
-			// Description.SetDefault("A golden rogue squire will follow your orders!");
-		}
 	}
 	public class GoldenRogueSquireMinionItem : SquireMinionItem<GoldenRogueSquireMinionBuff, GoldenRogueSquireMinion>
 	{
@@ -28,12 +22,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		protected override string SpecialDescription =>
 			"Teleports to the enemy nearest the cursor\n" +
 			"and throws a barrage of knives at them";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Golden Rogue Crest");
-			// Tooltip.SetDefault("Summons a squire\nA golden rogue squire will fight for you!\nClick and hold to guide its attacks");
-		}
 		
 		public override void ApplyCrossModChanges()
 		{
@@ -209,7 +197,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Golden Rogue Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

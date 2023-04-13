@@ -11,8 +11,6 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mildew Breastplate");
-			// Tooltip.SetDefault("Increased minion knockback by 1");
 		}
 
 		public override void SetDefaults()

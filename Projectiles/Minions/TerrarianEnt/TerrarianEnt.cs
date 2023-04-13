@@ -19,23 +19,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 	public class TerrarianEntMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<TerrarianEntCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Ent of the Forest");
-			// Description.SetDefault("A powerful forest spirit will fight for you!");
-		}
 	}
 
 	public class TerrarianEntMinionItem : MinionItem<TerrarianEntMinionBuff, TerrarianEntCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Staff of the Sacred Sapling");
-			// Tooltip.SetDefault("Summons a powerful forest spirit to fight for you!");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -79,7 +66,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Ent of the Forest");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

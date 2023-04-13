@@ -16,23 +16,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 	public class BoneSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BoneSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bone Squire");
-			// Description.SetDefault("A bone squire will follow your orders!");
-		}
 	}
 
 	public class BoneSquireMinionItem : SquireMinionItem<BoneSquireMinionBuff, BoneSquireMinion>
 	{
 		protected override string SpecialName => "Flaming Flail";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crest of Bones");
-			// Tooltip.SetDefault("Summons a squire\nA bone squire will fight for you!\nClick and hold to guide its attacks");
-		}
 		
 		public override void ApplyCrossModChanges()
 		{
@@ -98,7 +86,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bone Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

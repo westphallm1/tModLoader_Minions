@@ -17,23 +17,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 	public class ArmoredBoneSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<ArmoredBoneSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Armored Bone Squire");
-			// Description.SetDefault("An armored bone squire will follow your orders!");
-		}
 	}
 
 	public class ArmoredBoneSquireMinionItem : SquireMinionItem<ArmoredBoneSquireMinionBuff, ArmoredBoneSquireMinion>
 	{
 		protected override string SpecialName => "Spirit of the Flail";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crest of Armored Bones");
-			// Tooltip.SetDefault("Summons a squire\nAn armored bone squire will fight for you!\nClick and hold to guide its attacks");
-		}
 		
 		public override void ApplyCrossModChanges()
 		{
@@ -159,7 +147,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Spirit Flail Chain");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 3;
 		}
@@ -362,7 +349,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Armored Bone Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

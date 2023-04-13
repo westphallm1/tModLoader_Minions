@@ -9,8 +9,6 @@ namespace AmuletOfManyMinions.Items.Armor
 	{
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Mildew Leggings");
-			// Tooltip.SetDefault("");
 		}
 
 		public override void SetDefaults()

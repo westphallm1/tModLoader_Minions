@@ -14,8 +14,6 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 	{
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Stylish Bow of Teamwork");
-			// Tooltip.SetDefault("Increases max number of combat pets by 1");
 		}
 
 		public override void SetDefaults()
@@ -35,16 +33,6 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 
 	class CombatPetMightyTeamworkBow : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			// DisplayName.SetDefault("Mighty Bow of Teamwork");
-			/* Tooltip.SetDefault(
-				"Increases max number of combat pets by 2,\n" +
-				"but decreases max number of non-combat pet minions by 1\n" +
-				"Increases combat pet movement speed\n" +
-				"Increases minion damage"); */
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -73,15 +61,6 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 	}
 	class CombatPetSpookyTeamworkBow : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			// DisplayName.SetDefault("Spooky Bow of Teamwork");
-			/* Tooltip.SetDefault(
-				"Increases max number of combat pets by 2\n" +
-				"Increases combat pet movement speed\n" +
-				"Increases minion damage"); */
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -109,8 +88,6 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 	{
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Chaotic Chew Toy");
-			// Tooltip.SetDefault("Increases combat pet movement speed");
 		}
 
 		public override void SetDefaults()
@@ -140,7 +117,6 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crimson Chew Toy");
 		}
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ItemID.CrimtaneBar, 12)

@@ -17,22 +17,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 	public class RatsMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<RatsMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Aww, Rats!");
-			// Description.SetDefault("A group of rats will fight for you!");
-		}
 	}
 
 	public class RatsMinionItem : MinionItem<RatsMinionBuff, RatsMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Rod of the Ratkeeper");
-			// Tooltip.SetDefault("Summons a hoarde of rats to fight for you!\nEach rat deals 1/3 of base damage,\nand ignores 10 enemy defense");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -81,7 +69,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Rat (Friendly)");
 			Main.projFrames[Projectile.type] = 9;
 		}
 

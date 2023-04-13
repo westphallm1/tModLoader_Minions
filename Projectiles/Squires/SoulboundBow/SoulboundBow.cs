@@ -16,12 +16,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 	public class SoulboundBowMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SoulboundBowMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Soulbound Bow");
-			// Description.SetDefault("A soulbound bow will follow your orders!");
-		}
 	}
 
 	public class SoulboundBowMinionItem : SquireMinionItem<SoulboundBowMinionBuff, SoulboundBowMinion>
@@ -30,12 +24,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundBow/SoulboundBow";
 		protected override string SpecialName => "Soulbound Companion";
 		protected override string SpecialDescription => "The Soulbound Sword will briefly assist you";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Soulbound Bow");
-			// Tooltip.SetDefault("Summons a squire\nAn enchanted bow will fight for you!\nClick and hold to guide its attacks");
-		}
 		
 		public override void ApplyCrossModChanges()
 		{
@@ -198,7 +186,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

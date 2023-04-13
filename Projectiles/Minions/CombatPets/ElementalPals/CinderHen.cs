@@ -16,23 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class CinderHenMinionBuff : CombatPetBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<CinderHenMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Cinder Hen");
-			// Description.SetDefault("A tiny phoenix has joined your adventure!");
-		}
-
 	}
 
 	public class CinderHenMinionItem : CombatPetCustomMinionItem<CinderHenMinionBuff, CinderHenMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bold Bow of Friendship");
-			// Tooltip.SetDefault("Summons a pet Cinder Hen!");
-		}
 	}
 
 	internal class FlareVortexDebuff : ModBuff

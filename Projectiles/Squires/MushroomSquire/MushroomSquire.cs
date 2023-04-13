@@ -15,23 +15,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 	public class MushroomSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<MushroomSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mushroom Squire");
-			// Description.SetDefault("A mushroom squire will follow your orders!");
-		}
 	}
 
 	public class MushroomSquireMinionItem : SquireMinionItem<MushroomSquireMinionBuff, MushroomSquireMinion>
 	{
 		protected override string SpecialName => "Mushroom Toss";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crest of the Forest");
-			// Tooltip.SetDefault("Summons a squire\nA mushroom squire will fight for you!\nClick and hold to guide its attacks");
-		}
 
 		public override void SetDefaults()
 		{
@@ -131,7 +119,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mushroom Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

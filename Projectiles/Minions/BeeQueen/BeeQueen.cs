@@ -15,22 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 	public class BeeQueenMinionBuff : CombatPetBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BeeQueenMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bumble Bombardier");
-			// Description.SetDefault("A bee assistant will fight for you!");
-		}
 	}
 
 	public class BeeQueenMinionItem : CombatPetCustomMinionItem<BeeQueenMinionBuff, BeeQueenMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bee Queen's Crown");
-			// Tooltip.SetDefault("Summons a bee assistant to fight for you!");
-		}
 	}
 
 	/// <summary>
@@ -166,7 +154,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bee Bombardier");
 			Main.projFrames[Projectile.type] = 6;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}

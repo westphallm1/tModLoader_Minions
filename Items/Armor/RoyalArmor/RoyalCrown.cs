@@ -14,11 +14,6 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Royal Crown");
-			/* Tooltip.SetDefault(""
-				+ "Increases minion damage by 8%\n" +
-				"Increaes attack speed by 10% while using a squire\n" +
-				"\"You dropped this, king.\""); */
 
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}

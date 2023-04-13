@@ -221,8 +221,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Squire Special Cooldown");
-			// Description.SetDefault("Your squire's special is on cooldown!");
 			Main.debuff[Type] = true;
 			Main.buffNoSave[Type] = true;
 		}
@@ -233,8 +231,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.BlandWhipEnemyDebuff;
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Squire Tag");
-			// Description.SetDefault("Take 10% increased damage from summoner weapons");
 			Main.debuff[Type] = true;
 			Main.buffNoSave[Type] = true;
 		}

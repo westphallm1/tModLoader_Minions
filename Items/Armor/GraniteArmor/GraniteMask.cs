@@ -18,11 +18,6 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Granite Mask");
-			/* Tooltip.SetDefault(""
-				+ "Increases minion damage by 10%\n"
-				+ "Increases your max number of minions by 1\n"
-				+ "Increases squire travel range by 4 blocks"); */
 		}
 		public override void SetDefaults()
 		{

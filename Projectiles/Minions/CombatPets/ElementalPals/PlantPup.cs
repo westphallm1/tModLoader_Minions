@@ -15,22 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class PlantPupMinionBuff : CombatPetBuff
     {
         internal override int[] ProjectileTypes => new int[] { ProjectileType<PlantPupMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Plant Pup");
-			// Description.SetDefault("A playful plant has joined your adventure!");
-		}
 	}
 
 	public class PlantPupMinionItem : CombatPetCustomMinionItem<PlantPupMinionBuff, PlantPupMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Calm Bow of Friendship");
-			// Tooltip.SetDefault("Summons a pet Plant Pup!");
-		}
 	}
 
 	public class LeafBlade : ModProjectile

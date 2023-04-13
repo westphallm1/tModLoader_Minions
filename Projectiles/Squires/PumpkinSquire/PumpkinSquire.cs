@@ -18,23 +18,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 	public class PumpkinSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<PumpkinSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Pumpkin Squire");
-			// Description.SetDefault("An pumpkin squire will follow your orders!");
-		}
 	}
 
 	public class PumpkinSquireMinionItem : SquireMinionItem<PumpkinSquireMinionBuff, PumpkinSquireMinion>
 	{
 		protected override string SpecialName => "Giant Pumpkin";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Pumpkin Crest");
-			// Tooltip.SetDefault("Summons a squire\nA pumpkin squire will fight for you!\nClick and hold to guide its attacks");
-		}public override void ApplyCrossModChanges()
+
+		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
 		}
@@ -256,7 +246,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Pumpkin Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

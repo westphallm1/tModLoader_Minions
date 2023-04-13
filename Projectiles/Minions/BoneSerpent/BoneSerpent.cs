@@ -14,23 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 	public class BoneSerpentMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BoneSerpentCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bone Serpent");
-			// Description.SetDefault("A skeletal dragon will fight for you!");
-		}
 	}
 
 	public class BoneSerpentMinionItem : MinionItem<BoneSerpentMinionBuff, BoneSerpentCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bone Serpent Staff");
-			// Tooltip.SetDefault("Summons a skeletal dragon to fight for you!");
-
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -155,7 +142,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BoneSerpent
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Bone Serpent");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 		}

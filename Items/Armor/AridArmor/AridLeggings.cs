@@ -10,9 +10,6 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Arid Leggings");
-			/* Tooltip.SetDefault("Increases minion damage by 6%\n" +
-				"Increases squire travel range by 1 block"); */
 		}
 
 		public override void SetDefaults()

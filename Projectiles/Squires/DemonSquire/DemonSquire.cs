@@ -17,23 +17,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 	public class DemonSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<DemonSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Demon Squire");
-			// Description.SetDefault("A demonic squire will follow your orders!");
-		}
 	}
 
 	public class DemonSquireMinionItem : SquireMinionItem<DemonSquireMinionBuff, DemonSquireMinion>
 	{
 		protected override string SpecialName => "Imp Assistants";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crest of the Underworld");
-			// Tooltip.SetDefault("Summons a squire\nA demon squire will fight for you!\nClick and hold to guide its attacks");
-		}
 		
 		public override void ApplyCrossModChanges()
 		{
@@ -228,7 +216,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Demon Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

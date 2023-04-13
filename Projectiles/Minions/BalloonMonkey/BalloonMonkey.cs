@@ -19,23 +19,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 	public class BalloonMonkeyMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BalloonMonkeyMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Dart Monkeys");
-			// Description.SetDefault("Dart-throwing Monkeys will fight for you!");
-		}
 	}
 
 	public class BalloonMonkeyMinionItem : MinionItem<BalloonMonkeyMinionBuff, BalloonMonkeyMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Staff of Darts");
-			// Tooltip.SetDefault("Summons a dart-throwing monkey to fight for you!");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
@@ -206,7 +193,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Balloon Monkey");
 			Main.projFrames[Projectile.type] = 15;
 		}
 

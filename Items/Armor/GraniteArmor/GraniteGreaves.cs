@@ -17,11 +17,6 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			// DisplayName.SetDefault("Granite Greaves");
-			/* Tooltip.SetDefault(""+
-			    "Increases minion damage by 10%\n" +
-			    "Increases squire travel range by 2 blocks\n" +
-				"10% increased movement speed"); */
 		}
 
 		public override void SetDefaults()

@@ -16,23 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class AxolotlMinionBuff : CombatPetBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<AxolotlMinion>() };
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Axolittl");
-			// Description.SetDefault("An amphibious friend has joined your adventure!");
-		}
 	}
 
 	public class AxolotlMinionItem : CombatPetCustomMinionItem<AxolotlMinionBuff, AxolotlMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Quirky Bow of Friendship");
-			// Tooltip.SetDefault("Summons a pet Axolittl!");
-		}
 	}
 
 	public class WaterBeam : MovableLaser

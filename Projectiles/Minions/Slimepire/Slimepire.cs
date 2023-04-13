@@ -11,22 +11,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 	public class SlimepireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimepireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Slimepire");
-			// Description.SetDefault("A vampire slime will fight for you!");
-		}
 	}
 
 	public class SlimepireMinionItem : MinionItem<SlimepireMinionBuff, SlimepireMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Slimepire Staff");
-			// Tooltip.SetDefault("Summons a vampire slime to fight for you!\nIgnores 10 enemy defense");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -53,7 +41,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Slimepire");
 			Main.projFrames[Projectile.type] = 6;
 		}
 

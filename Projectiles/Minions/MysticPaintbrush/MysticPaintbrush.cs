@@ -14,23 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 	public class MysticPaintbrushMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<MysticPaintbrushMinion>(), ProjectileType<MysticPaintbrushMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mystic Palette");
-			// Description.SetDefault("An ethereal painter's set will fight for you!");
-		}
 	}
 
 	public class MysticPaintbrushMinionItem : MinionItem<MysticPaintbrushMinionBuff, MysticPaintbrushMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mystic Palette");
-			// Tooltip.SetDefault("Summons an ethereal painter's set to fight for you!");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -66,7 +53,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MysticPaintbrush
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Mystic Palette");
 		}
 
 		public override void LoadAssets()

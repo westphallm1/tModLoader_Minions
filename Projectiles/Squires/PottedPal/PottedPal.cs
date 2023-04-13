@@ -17,12 +17,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 	public class PottedPalMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<PottedPalMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Potted Pal");
-			// Description.SetDefault("A friendly plant will follow your orders!");
-		}
 	}
 
 	public class PottedPalMinionItem : SquireMinionItem<PottedPalMinionBuff, PottedPalMinion>
@@ -31,12 +25,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		protected override string SpecialDescription => 
 			"Creates a short-lived Potted Pal, Jr.\n" +
 			"that automatically attacks enemies";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Potted Pal");
-			// Tooltip.SetDefault("Summons a squire\nA friendly plant will fight for you!\nClick and hold to guide its attacks");
-		}
 
 		public override void SetDefaults()
 		{
@@ -243,7 +231,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Potted Pal");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 		}

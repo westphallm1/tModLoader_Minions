@@ -18,12 +18,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 	public class StardustSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Stardust Squire");
-			// Description.SetDefault("A stardust squire will follow your orders!");
-		}
 	}
 
 	public class StardustSquireMinionItem : SquireMinionItem<StardustSquireMinionBuff, StardustSquireMinion>
@@ -32,12 +26,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		protected override string SpecialDescription => 
 			"Summons a lingering constellation\n" +
 			"to shoot stars at enemies.";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crest of Stardust");
-			// Tooltip.SetDefault("Summons a squire\nA stardust squire will fight for you!\nClick and hold to guide its attacks");
-		}
 
 		public override void SetDefaults()
 		{
@@ -291,7 +279,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

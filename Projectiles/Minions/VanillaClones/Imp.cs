@@ -185,7 +185,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Flying Imp");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -366,7 +365,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Copter-X");
 			Main.projFrames[Projectile.type] = 5;
 		}
 

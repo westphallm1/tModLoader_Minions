@@ -15,23 +15,11 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 	public class SeaSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SeaSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Sea Squire");
-			// Description.SetDefault("A flying fish will follow your fancies!");
-		}
 	}
 
 	public class SeaSquireMinionItem : SquireMinionItem<SeaSquireMinionBuff, SeaSquireMinion>
 	{
 		protected override string SpecialName => "Shark Form";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Crest of the Sea");
-			// Tooltip.SetDefault("Summons a squire\nA flying fish squire will fight for you!\nClick and hold to guide its attacks");
-		}
 
 		public override void SetDefaults()
 		{
@@ -100,7 +88,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Sea Squire Shark");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 2;
 		}
@@ -211,7 +198,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Sea Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

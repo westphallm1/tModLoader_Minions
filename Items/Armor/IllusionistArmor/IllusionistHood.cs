@@ -17,9 +17,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Illusionist Hood");
-			/* Tooltip.SetDefault("Increases your max number of minions by 1" +
-							   "\nIncreases minion damage by 4%"); */
 
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
@@ -91,8 +88,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 		{
 			Main.buffNoSave[Type] = true;
 			Main.buffNoTimeDisplay[Type] = true;
-			// DisplayName.SetDefault("Illusion Wisps");
-			// Description.SetDefault("Illusion Wisps are spawning around you...");
 		}
 	}
 

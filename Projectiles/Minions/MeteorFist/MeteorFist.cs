@@ -14,22 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 	public class MeteorFistMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<MeteorFistMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Meteor Fist");
-			// Description.SetDefault("A meteor fist will fight for you!");
-		}
 	}
 
 	public class MeteorFistMinionItem : MinionItem<MeteorFistMinionBuff, MeteorFistMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Meteor Fist");
-			// Tooltip.SetDefault("Summons a meteor fist to fight for you!");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -74,7 +62,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Meteor Fist");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 2;
 		}

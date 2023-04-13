@@ -15,14 +15,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public abstract class ReplicaCombatPetMinionItem<TBuff, TProj> : CombatPetMinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Replica " + Language.GetTextValue("ItemName." + VanillaItemName));
-			/* Tooltip.SetDefault(
-				"Legends say that only a true master is capable wielding this pet's power.\n" +
-				"But now you can too, for one easy payment of 50 gold!"); */
-		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

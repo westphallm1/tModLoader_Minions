@@ -14,22 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 	public class EclipseHeraldMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<EclipseHeraldCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Eclipse Herald");
-			// Description.SetDefault("A herald of the eclipse will fight for you!");
-		}
 	}
 
 	public class EclipseHeraldMinionItem : MinionItem<EclipseHeraldMinionBuff, EclipseHeraldCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Eclipse Herald Staff");
-			// Tooltip.SetDefault("Can't come to grips \nWith the total eclipse \nJust a slip of your lips \nand you're gone...");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
@@ -72,7 +60,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Eclipse Herald");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 9;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

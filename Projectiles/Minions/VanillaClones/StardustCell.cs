@@ -185,7 +185,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Flying StardustCell");
 			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.StardustCellMinion") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.circlingHead.Add(Projectile.type);

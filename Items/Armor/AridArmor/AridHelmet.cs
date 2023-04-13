@@ -16,10 +16,6 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Arid Helmet");
-			/* Tooltip.SetDefault(""
-				+ "Increases minion damage by 8%\n" +
-				"Increases squire travel range by 3 blocks"); */
 		}
 
 		public override void SetDefaults()

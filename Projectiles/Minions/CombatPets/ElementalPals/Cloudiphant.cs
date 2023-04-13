@@ -18,22 +18,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class CloudiphantMinionBuff : CombatPetBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<CloudiphantMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Cloudiphant");
-			// Description.SetDefault("An ethereal elephant has joined your adventure!");
-		}
 	}
 
 	public class CloudiphantMinionItem : CombatPetCustomMinionItem<CloudiphantMinionBuff, CloudiphantMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Relaxed Bow of Friendship");
-			// Tooltip.SetDefault("Summons a pet Cloudiphant!");
-		}
 	}
 
 	public class TwisterProjectile: ModProjectile

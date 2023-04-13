@@ -17,22 +17,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 	public class NecromancerMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<NecromancerMinion>(), ProjectileType<NecromancerSkeletonMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Necromancer");
-			// Description.SetDefault("A necromancer and his skeletal servants will fight for you!");
-		}
 	}
 
 	public class NecromancerMinionItem : MinionItem<NecromancerMinionBuff, NecromancerSkeletonMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Necro Doll");
-			// Tooltip.SetDefault("Summons a neromancer to fight for you!");
-		}
 		
 		public override void ApplyCrossModChanges()
 		{
@@ -224,7 +212,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Necromancer");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
@@ -399,7 +386,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Necromancer Skeleton");
 			Main.projFrames[Projectile.type] = 5;
 		}
 

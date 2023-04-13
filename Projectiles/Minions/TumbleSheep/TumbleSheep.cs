@@ -19,22 +19,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 	public class TumbleSheepMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<TumbleSheepMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Tumble Sheep");
-			// Description.SetDefault("A tumbling sheep will fight for you!");
-		}
 	}
 
 	public class TumbleSheepMinionItem : MinionItem<TumbleSheepMinionBuff, TumbleSheepMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Shepherd's Staff");
-			// Tooltip.SetDefault("Summons a tumbling sheep to fight for you!");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);

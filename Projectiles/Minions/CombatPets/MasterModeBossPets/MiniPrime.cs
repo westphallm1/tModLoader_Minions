@@ -48,10 +48,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 
 		internal override int GetAttackFrames(ICombatPetLevelInfo info) => Math.Max(20, 45 - 4 * info.Level);
 
+		public override LocalizedText DisplayName => Language.GetText("ProjectileName.MiniPrime");
+
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.MiniPrime"));
 			Main.projFrames[Projectile.type] = 11;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

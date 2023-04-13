@@ -219,7 +219,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 			Main.buffNoSave[Type] = true;
 			Main.debuff[Type] = true; // don't allow cancellation
 			Main.buffNoTimeDisplay[Type] = true;
-			// DisplayName.SetDefault("Minion Variety!");
 		}
 
 		public override void ModifyBuffText(ref string buffName, ref string tip, ref int rare)

@@ -16,24 +16,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 	public class AdamantiteSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<AdamantiteSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Adamantite Squire");
-			// Description.SetDefault("An adamantite squire will follow your orders!");
-		}
 	}
 
 	public class AdamantiteSquireMinionItem : SquireMinionItem<AdamantiteSquireMinionBuff, AdamantiteSquireMinion>
 	{
 
 		protected override string SpecialName => "Pegasus Knight";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Adamantite Crest");
-			// Tooltip.SetDefault("Summons a squire\nAn adamantite squire will fight for you!\nClick and hold to guide its attacks");
-		}
 		
 		public override void ApplyCrossModChanges()
 		{
@@ -87,7 +75,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault("Adamantite Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
