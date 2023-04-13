@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.VampireFrogMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.VampireFrogMinion"));
+			DisplayName.SetDefault(Language.GetTextValue("BuffName.VampireFrog") + " (AoMM Version)");
+			Description.SetDefault(Language.GetTextValue("BuffDescription.VampireFrog"));
 		}
 
 	}

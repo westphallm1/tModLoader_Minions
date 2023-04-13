@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 				"Click to place a minion guidance waypoint!\n" +
 				"Minions will automatically navigate to the waypoint\n" +
 				"Attacking with a non-summon weapon dispels the waypoint\n"+
-				"Minions deal less damage while attacking a far away waypoint\n");
+				"Minions deal less damage while attacking a far away waypoint");
 		}
 
 		public override void SetDefaults()

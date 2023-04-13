@@ -42,7 +42,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 				"Increases max number of combat pets by 2,\n" +
 				"but decreases max number of non-combat pet minions by 1\n" +
 				"Increases combat pet movement speed\n" +
-				"Increases minion damage\n");
+				"Increases minion damage");
 		}
 
 		public override void SetDefaults()
@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 			Tooltip.SetDefault(
 				"Increases max number of combat pets by 2\n" +
 				"Increases combat pet movement speed\n" +
-				"Increases minion damage\n");
+				"Increases minion damage");
 		}
 
 		public override void SetDefaults()
