@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Core;
+using AmuletOfManyMinions.Core;
 using AmuletOfManyMinions.Core.Minions.Effects;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using Microsoft.Xna.Framework;
@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		public override void ApplyCrossModChanges()
 		{
 			base.ApplyCrossModChanges();
-			CrossModClient.SummonersShine.General.ApplyChanges_COUNTASMINION(Type);
+			CrossModClient.SummonersShine.General.ApplyChanges_CHARREDCHIMERAMINIONHEAD(Type, ItemType<CharredChimeraMinionItem>());
 		}
 		
 		public override void SetDefaults()
