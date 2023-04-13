@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.Acorn;
+using AmuletOfManyMinions.Projectiles.Minions.Acorn;
 using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.NonMinionSummons;
 using Microsoft.Xna.Framework;
@@ -83,12 +83,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
-		}
-		
-		public override void ApplyCrossModChanges()
-		{
-			base.ApplyCrossModChanges();
-			CrossModClient.SummonersShine.General.ApplyChanges_STEPPED(Type);
 		}
 
 		public sealed override void SetDefaults()
