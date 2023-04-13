@@ -21,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Technomancer");
-			Description.SetDefault("A goblin Technomancer will fight for you!");
+			// DisplayName.SetDefault("Goblin Technomancer");
+			// Description.SetDefault("A goblin Technomancer will fight for you!");
 		}
 	}
 
@@ -31,8 +31,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Shadowflame Probe Controller");
-			Tooltip.SetDefault("Summons a goblin technomancer to fight for you!");
+			// DisplayName.SetDefault("Shadowflame Probe Controller");
+			// Tooltip.SetDefault("Summons a goblin technomancer to fight for you!");
 		}
 		
 		public override void ApplyCrossModChanges()
@@ -68,7 +68,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Technomancer Probe");
+			// DisplayName.SetDefault("Goblin Technomancer Probe");
 			Main.projFrames[Projectile.type] = 1;
 		}
 
@@ -185,7 +185,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinTechnomancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Technomancer");
+			// DisplayName.SetDefault("Goblin Technomancer");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

@@ -56,8 +56,8 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 			Append(questionPanel);
 			Append(answerPanel);
 			Append(nextButton);
-			answerPanel.OnMouseUp += this.AnswerPanel_OnMouseUp;
-			nextButton.OnMouseUp += this.NextButton_OnMouseUp;
+			answerPanel.OnLeftMouseUp += this.AnswerPanel_OnMouseUp;
+			nextButton.OnLeftMouseUp += this.NextButton_OnMouseUp;
 		}
 
 		private void NextButton_OnMouseUp(UIMouseEvent evt, UIElement listeningElement)

@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.SharknadoMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.SharknadoMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.SharknadoMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.SharknadoMinion"));
 		}
 	}
 
@@ -125,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
 			Main.projFrames[Projectile.type] = 6;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -319,7 +319,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
 			Main.projFrames[Projectile.type] = 6;
 		}
 

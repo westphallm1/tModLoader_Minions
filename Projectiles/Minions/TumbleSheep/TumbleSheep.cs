@@ -22,8 +22,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Tumble Sheep");
-			Description.SetDefault("A tumbling sheep will fight for you!");
+			// DisplayName.SetDefault("Tumble Sheep");
+			// Description.SetDefault("A tumbling sheep will fight for you!");
 		}
 	}
 
@@ -32,8 +32,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Shepherd's Staff");
-			Tooltip.SetDefault("Summons a tumbling sheep to fight for you!");
+			// DisplayName.SetDefault("Shepherd's Staff");
+			// Tooltip.SetDefault("Summons a tumbling sheep to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -70,7 +70,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TumbleSheep
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.TumbleSheep"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.TumbleSheep"));
 		}
 		public override void LoadAssets()
 		{

@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.FlinxMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.FlinxMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.FlinxMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.FlinxMinion"));
 		}
 
 	}

@@ -16,8 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Clarent");
-			Description.SetDefault("A flying sword will fight for you!");
+			// DisplayName.SetDefault("Clarent");
+			// Description.SetDefault("A flying sword will fight for you!");
 		}
 	}
 
@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Clarent");
-			Tooltip.SetDefault("Summons a flying sword to fight for you!");
+			// DisplayName.SetDefault("Clarent");
+			// Tooltip.SetDefault("Summons a flying sword to fight for you!");
 		}
 		
 		public override void ApplyCrossModChanges()
@@ -65,7 +65,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FlyingSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Clarent");
+			// DisplayName.SetDefault("Clarent");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

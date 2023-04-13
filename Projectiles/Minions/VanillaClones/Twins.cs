@@ -21,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.TwinEyesMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.TwinEyesMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.TwinEyesMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.TwinEyesMinion"));
 		}
 	}
 
@@ -89,7 +89,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.CursedInferno, 300);
 		}
@@ -142,7 +142,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Retanimini") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Retanimini") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -218,7 +218,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spazmamini") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spazmamini") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

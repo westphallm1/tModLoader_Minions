@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			// Get unique minion count for player
 			if(SummonersAssociationLoaded)
 			{
-				minionVarietyBonusCount = CrossMod.GetSummonersAssociationVarietyCount();
+				minionVarietyBonusCount = GetSummonersAssociationVarietyCount();
 			} else
 			{
 				uniqueMinionTypes.Clear();
@@ -219,10 +219,10 @@ namespace AmuletOfManyMinions.Items.Accessories
 			Main.buffNoSave[Type] = true;
 			Main.debuff[Type] = true; // don't allow cancellation
 			Main.buffNoTimeDisplay[Type] = true;
-			DisplayName.SetDefault("Minion Variety!");
+			// DisplayName.SetDefault("Minion Variety!");
 		}
 
-		public override void ModifyBuffTip(ref string tip, ref int rare)
+		public override void ModifyBuffText(ref string buffName, ref string tip, ref int rare)
 		{
 			// assuming this is only called client-side and it's always the owner who mouses over the buff tip
 			// this may not be the best way to update text
@@ -250,7 +250,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 				ProjectileID.Sets.MinionShot[projectile.type] ||
 				SquireGlobalProjectile.isSquireShot.Contains(projectile.type);
 		}
-		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (!DoesSummonDamage(projectile))
 			{
@@ -262,7 +262,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				if (accessory.IsEquipped(modPlayer))
 				{
-					accessory.SpawnProjectileOnChance(projectile, target, damage);
+					accessory.SpawnProjectileOnChance(projectile, target, hit.SourceDamage);
 				}
 			}
 			int wispType = ProjectileType<IllusionistWisp>();
@@ -276,7 +276,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			}
 		}
 
-		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
 		{
 			if (!DoesSummonDamage(projectile))
 			{
@@ -295,7 +295,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				damageMult += 0.1f;
 			}
-			damage = (int)(damage * damageMult);
+			modifiers.SourceDamage *= damageMult; //Rather use multiply since it's mostly reduction
 		}
 	}
 }

@@ -14,8 +14,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Lil' Gator");
-			Description.SetDefault("A surfing gator has joined your adventure!");
+			// DisplayName.SetDefault("Lil' Gator");
+			// Description.SetDefault("A surfing gator has joined your adventure!");
 		}
 	}
 
@@ -24,8 +24,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Jolly Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet Lil' Gator!");
+			// DisplayName.SetDefault("Jolly Bow of Friendship");
+			// Tooltip.SetDefault("Summons a pet Lil' Gator!");
 		}
 	}
 

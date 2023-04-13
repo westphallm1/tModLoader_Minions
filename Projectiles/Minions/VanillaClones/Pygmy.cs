@@ -22,8 +22,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.Pygmies") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.Pygmies"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.Pygmies") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.Pygmies"));
 		}
 
 	}
@@ -107,12 +107,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 			if(stickNPC != null && Projectile.owner != Main.myPlayer && stickNPC.Hitbox.Contains(Projectile.Center.ToPoint()))
 			{
-				OnHitNPC(stickNPC, 0, 0, false);
+				var info = new NPC.HitInfo()
+				{
+					//Technically more info should be provided here but don't care since it's calling our own method only
+					Damage = 1,
+					Knockback = 0,
+					Crit = false
+				};
+				OnHitNPC(stickNPC, info, 0);
 			}
 			return true;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			stickNPC = target;
 			if (stickNPC.GetGlobalNPC<DebuffGlobalNPC>().pygmySpearStack < 5)
@@ -171,7 +178,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Pygmy"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Pygmy"));
 			Main.projFrames[Projectile.type] = 18;
 		}
 

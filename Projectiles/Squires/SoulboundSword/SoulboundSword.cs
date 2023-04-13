@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Sword");
-			Description.SetDefault("A soulbound sword will follow your orders!");
+			// DisplayName.SetDefault("Soulbound Sword");
+			// Description.SetDefault("A soulbound sword will follow your orders!");
 		}
 	}
 
@@ -31,8 +31,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Sword");
-			Tooltip.SetDefault("Summons a squire\nAn enchanted sword will fight for you!\nClick and hold to guide its attacks");
+			// DisplayName.SetDefault("Soulbound Sword");
+			// Tooltip.SetDefault("Summons a squire\nAn enchanted sword will fight for you!\nClick and hold to guide its attacks");
 		}
 		
 		public override void ApplyCrossModChanges()
@@ -86,7 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Sword");
+			// DisplayName.SetDefault("Soulbound Sword");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
@@ -123,7 +123,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			base.PostDraw(translucentColor);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			// nice little dust effect on hit, but not actually shadowflame
 			for (int i = 0; i < 3; i++)

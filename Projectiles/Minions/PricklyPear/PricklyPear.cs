@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Prickly Pear Hedgehog");
-			Description.SetDefault("A prickly pear pal will fight for you!");
+			// DisplayName.SetDefault("Prickly Pear Hedgehog");
+			// Description.SetDefault("A prickly pear pal will fight for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Prickly Pear Staff");
-			Tooltip.SetDefault("Summons a prickly pear hedgehog to fight for you!");
+			// DisplayName.SetDefault("Prickly Pear Staff");
+			// Tooltip.SetDefault("Summons a prickly pear hedgehog to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -183,7 +183,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("PricklyPear");
+			// DisplayName.SetDefault("PricklyPear");
 			Main.projFrames[Projectile.type] = 10;
 		}
 

@@ -344,30 +344,33 @@ namespace AmuletOfManyMinions.NPCs
 		}
 		*/
 
-		public override void SetupShop(int type, Chest shop, ref int nextSlot)
+		public override void ModifyShop(NPCShop shop)
 		{
-			if (type == NPCID.PartyGirl && NPC.downedBoss3)
+			int type = shop.NpcType;
+			switch (type)
 			{
-				shop.item[nextSlot].SetDefaults(ItemType<BalloonBuddyMinionItem>());
-				nextSlot++;
-			}
-
-			if (type == NPCID.Clothier)
-			{
-				shop.item[nextSlot].SetDefaults(ItemID.AncientCloth);
-				nextSlot++;
-			}
-
-			if (type == NPCID.Painter && NPC.downedBoss1)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<MysticPaintbrushMinionItem>());
-				nextSlot++;
-			}
-
-			if (type == NPCID.GoblinTinkerer && NPC.downedMartians)
-			{
-				shop.item[nextSlot].SetDefaults(ItemType<GoblinTechnomancerMinionItem>());
-				nextSlot++;
+				case NPCID.PartyGirl:
+					{
+						shop.Add(ItemType<BalloonBuddyMinionItem>(), Condition.DownedSkeletron);
+					}
+					break;
+				case NPCID.Clothier:
+					{
+						shop.Add(ItemID.AncientCloth);
+					}
+					break;
+				case NPCID.Painter:
+					{
+						shop.Add(ItemType<MysticPaintbrushMinionItem>(), Condition.DownedEyeOfCthulhu);
+					}
+					break;
+				case NPCID.GoblinTinkerer:
+					{
+						shop.Add(ItemType<GoblinTechnomancerMinionItem>(), Condition.DownedMartians);
+					}
+					break;
+				default:
+					break;
 			}
 		}
 	}

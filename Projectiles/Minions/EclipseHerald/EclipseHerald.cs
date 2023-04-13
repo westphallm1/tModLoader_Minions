@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Eclipse Herald");
-			Description.SetDefault("A herald of the eclipse will fight for you!");
+			// DisplayName.SetDefault("Eclipse Herald");
+			// Description.SetDefault("A herald of the eclipse will fight for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Eclipse Herald Staff");
-			Tooltip.SetDefault("Can't come to grips \nWith the total eclipse \nJust a slip of your lips \nand you're gone...");
+			// DisplayName.SetDefault("Eclipse Herald Staff");
+			// Tooltip.SetDefault("Can't come to grips \nWith the total eclipse \nJust a slip of your lips \nand you're gone...");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -72,7 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Eclipse Herald");
+			// DisplayName.SetDefault("Eclipse Herald");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 9;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
@@ -118,7 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			pos.Y -= 4; // don't know why this offset needs to exist
 			Rectangle bounds = new Rectangle(0, 52 * Projectile.frame, 66, 52);
 			Color shadowColor = ShadowColor(lightColor);
-			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
 			SpriteEffects effects = Projectile.spriteDirection == 1 ? 0 : SpriteEffects.FlipHorizontally;
 			// echo 1
 			float offset = 2f * (float)Math.Sin(Math.PI * (Projectile.ai[1] % 60) / 30);

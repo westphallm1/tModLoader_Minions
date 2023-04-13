@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Titanium Squire");
-			Description.SetDefault("A titanium squire will follow your orders!");
+			// DisplayName.SetDefault("Titanium Squire");
+			// Description.SetDefault("A titanium squire will follow your orders!");
 		}
 	}
 
@@ -28,8 +28,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Titanium Crest");
-			Tooltip.SetDefault("Summons a squire\nA titanium squire will fight for you!\nClick and hold to guide its attacks");
+			// DisplayName.SetDefault("Titanium Crest");
+			// Tooltip.SetDefault("Summons a squire\nA titanium squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults()
@@ -202,7 +202,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Titanium Squire");
+			// DisplayName.SetDefault("Titanium Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

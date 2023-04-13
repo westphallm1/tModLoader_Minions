@@ -19,8 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Squeyere");
-			Description.SetDefault("A Squeyere will follow your orders!");
+			// DisplayName.SetDefault("Squeyere");
+			// Description.SetDefault("A Squeyere will follow your orders!");
 		}
 	}
 
@@ -30,9 +30,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of Eyes");
-			Tooltip.SetDefault("Summons a squire\nA Squeyere will fight for you!\nClick and hold to guide its attacks\n" +
-				"'Squ-Eye-Re. Get it?'");
+			// DisplayName.SetDefault("Crest of Eyes");
+			/* Tooltip.SetDefault("Summons a squire\nA Squeyere will fight for you!\nClick and hold to guide its attacks\n" +
+				"'Squ-Eye-Re. Get it?'"); */
 		}
 		
 		public override void ApplyCrossModChanges()
@@ -244,7 +244,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Ancient Cobalt Squire");
+			// DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

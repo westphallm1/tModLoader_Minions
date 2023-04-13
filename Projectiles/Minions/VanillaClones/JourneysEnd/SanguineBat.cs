@@ -21,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.BatOfLight") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.BatOfLight"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.BatOfLight") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.BatOfLight"));
 		}
 
 	}
@@ -47,7 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BatOfLight") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BatOfLight") + " (AoMM Version)");
 			IdleLocationSets.circlingHead.Add(Type);
 			Main.projFrames[Projectile.type] = 5;
 		}

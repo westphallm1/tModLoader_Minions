@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Paper Surfer");
+			// DisplayName.SetDefault("Paper Surfer");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 6;
 			IdleLocationSets.circlingHead.Add(Projectile.type);

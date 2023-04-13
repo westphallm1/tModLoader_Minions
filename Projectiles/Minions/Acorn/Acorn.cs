@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Acorn");
-			Description.SetDefault("A winged acorn will fight for you!");
+			// DisplayName.SetDefault("Acorn");
+			// Description.SetDefault("A winged acorn will fight for you!");
 		}
 	}
 
@@ -28,8 +28,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Acorn Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
+			// DisplayName.SetDefault("Acorn Staff");
+			// Tooltip.SetDefault("Summons a winged acorn to fight for you!");
 		}
 		
 		public override void ApplyCrossModChanges()
@@ -97,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Acorn");
+			// DisplayName.SetDefault("Flying Acorn");
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

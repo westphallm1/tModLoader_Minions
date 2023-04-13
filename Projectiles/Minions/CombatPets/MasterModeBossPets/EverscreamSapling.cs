@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.EverscreamSapling"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.EverscreamSapling"));
 			Main.projFrames[Projectile.type] = 11;
 		}
 

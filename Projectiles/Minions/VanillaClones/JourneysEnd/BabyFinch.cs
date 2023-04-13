@@ -22,8 +22,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.BabyBird") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.BabyBird"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.BabyBird") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.BabyBird"));
 		}
 
 	}
@@ -45,7 +45,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BabyFinch") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BabyFinch") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 5;
 		}
 

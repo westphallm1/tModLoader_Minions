@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Potted Pal");
-			Description.SetDefault("A friendly plant will follow your orders!");
+			// DisplayName.SetDefault("Potted Pal");
+			// Description.SetDefault("A friendly plant will follow your orders!");
 		}
 	}
 
@@ -34,8 +34,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Potted Pal");
-			Tooltip.SetDefault("Summons a squire\nA friendly plant will fight for you!\nClick and hold to guide its attacks");
+			// DisplayName.SetDefault("Potted Pal");
+			// Tooltip.SetDefault("Summons a squire\nA friendly plant will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults()
@@ -243,7 +243,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Potted Pal");
+			// DisplayName.SetDefault("Potted Pal");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 		}
@@ -284,7 +284,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 		}
 
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			Projectile.velocity = -Projectile.velocity;
 			Projectile.velocity.SafeNormalize();

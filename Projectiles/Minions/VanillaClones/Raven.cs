@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.Ravens") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.Ravens"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.Ravens") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.Ravens"));
 		}
 
 	}
@@ -87,7 +87,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Raven") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Raven") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -210,7 +210,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			blurHelper.Update(Projectile.Center, isDashing);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if(Player.whoAmI == Main.myPlayer && Player.ownedProjectileCounts[ProjectileType<RavenGreekFire>()] < 8 && Main.rand.NextBool(5))
 			{

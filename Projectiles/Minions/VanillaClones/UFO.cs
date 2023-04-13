@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.UFOMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.UFOMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.UFOMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.UFOMinion"));
 		}
 	}
 
@@ -60,7 +60,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.UFOMinion") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.UFOMinion") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

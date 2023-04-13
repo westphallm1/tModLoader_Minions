@@ -21,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Pumpkin Squire");
-			Description.SetDefault("An pumpkin squire will follow your orders!");
+			// DisplayName.SetDefault("Pumpkin Squire");
+			// Description.SetDefault("An pumpkin squire will follow your orders!");
 		}
 	}
 
@@ -32,8 +32,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Pumpkin Crest");
-			Tooltip.SetDefault("Summons a squire\nA pumpkin squire will fight for you!\nClick and hold to guide its attacks");
+			// DisplayName.SetDefault("Pumpkin Crest");
+			// Tooltip.SetDefault("Summons a squire\nA pumpkin squire will fight for you!\nClick and hold to guide its attacks");
 		}public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
@@ -158,7 +158,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			Projectile.velocity.X = -Math.Sign(oldVelocity.X) * 1.5f * bouncesLeft;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			Projectile.damage = (int)(Projectile.damage * 0.9f);
 		}
@@ -256,7 +256,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Pumpkin Squire");
+			// DisplayName.SetDefault("Pumpkin Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
@@ -327,10 +327,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			}
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// 50% chance to crit when hitting enemy with tip
-			crit |= Main.rand.NextBool(5) && whipTipCrit;
+			if (whipTipCrit && Main.rand.NextBool(5))
+			{
+				modifiers.SetCrit();
+			}
 		}
 
 		private Rectangle GetVineFrame(int frameIdx, bool isLast)

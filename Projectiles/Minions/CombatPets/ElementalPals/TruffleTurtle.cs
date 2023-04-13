@@ -15,8 +15,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Axolittl");
-			Description.SetDefault("A mushroom-shelled turtle has joined your adventure!");
+			// DisplayName.SetDefault("Axolittl");
+			// Description.SetDefault("A mushroom-shelled turtle has joined your adventure!");
 		}
 	}
 
@@ -25,8 +25,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Hardy Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet Truffle Turtle!");
+			// DisplayName.SetDefault("Hardy Bow of Friendship");
+			// Tooltip.SetDefault("Summons a pet Truffle Turtle!");
 		}
 	}
 

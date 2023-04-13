@@ -78,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			return null;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			returnedToHeadFrame = null;
 			returning = true;

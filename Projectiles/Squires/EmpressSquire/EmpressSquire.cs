@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crowned by the Empress of Light");
-			Description.SetDefault("Check THIS out!");
+			// DisplayName.SetDefault("Crowned by the Empress of Light");
+			// Description.SetDefault("Check THIS out!");
 		}
 	}
 
@@ -31,8 +31,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Chalice of the Empress");
-			Tooltip.SetDefault("Summons a squire\nThe priestess of light will fight for you!\nClick and hold to guide its attacks");
+			// DisplayName.SetDefault("Chalice of the Empress");
+			// Tooltip.SetDefault("Summons a squire\nThe priestess of light will fight for you!\nClick and hold to guide its attacks");
 		}
 		
 		public override void SetDefaults()
@@ -94,7 +94,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Priestess of Light");
+			// DisplayName.SetDefault("Priestess of Light");
 			Main.projFrames[Projectile.type] = 5;
 		}
 

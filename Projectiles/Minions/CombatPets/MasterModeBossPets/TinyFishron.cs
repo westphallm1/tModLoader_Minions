@@ -164,10 +164,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		}
 
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			base.OnHitNPC(target, damage, knockback, crit);
-			if(Player.whoAmI == Main.myPlayer && AnimationFrame - lastHitFrame > attackFrames && 
+			base.OnHitNPC(target, hit, damageDone);
+			if (Player.whoAmI == Main.myPlayer && AnimationFrame - lastHitFrame > attackFrames && 
 			   leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
 			{
 				lastHitFrame = AnimationFrame;

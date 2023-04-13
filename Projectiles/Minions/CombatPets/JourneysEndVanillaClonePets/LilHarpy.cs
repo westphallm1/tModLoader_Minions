@@ -34,7 +34,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaC
 		}
 
 		public override void SpawnDust() { } // no-op
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit) { } // no-op
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) { } // no-op
 	}
 
 	public class LilHarpyMinion : CombatPetHoverShooterMinion

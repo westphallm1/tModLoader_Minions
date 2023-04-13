@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bomb Buddy");
-			Description.SetDefault("A bomb buddy will explode for you!");
+			// DisplayName.SetDefault("Bomb Buddy");
+			// Description.SetDefault("A bomb buddy will explode for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Unstable Detonator");
-			Tooltip.SetDefault("Summons a bomb buddy to fight for you!");
+			// DisplayName.SetDefault("Unstable Detonator");
+			// Tooltip.SetDefault("Summons a bomb buddy to fight for you!");
 		}
 
 		public override void SetDefaults()
@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bomb Buddy");
+			// DisplayName.SetDefault("Bomb Buddy");
 			Main.projFrames[Projectile.type] = 12;
 		}
 

@@ -86,7 +86,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			openCloseButton = new OpenCloseButton(closeTexture);
 			openCloseButton.Top.Pixels = tacticsPanel.Top.Pixels + tacticsPanel.Height.Pixels; //Attach at the bottom of the panel
 			openCloseButton.HAlign = 0.65f; //Center aligns with center-ish of parent
-			openCloseButton.OnClick += OpenCloseButton_OnClick;
+			openCloseButton.OnLeftClick += OpenCloseButton_OnClick;
 			Append(openCloseButton);
 
 			//After all childrens widths and heights are determined, adjust the element one so it covers everything that got appended to
@@ -254,9 +254,9 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			}
 		}
 
-		public override void MouseDown(UIMouseEvent evt)
+		public override void LeftMouseDown(UIMouseEvent evt)
 		{
-			base.MouseDown(evt);
+			base.LeftMouseDown(evt);
 			// don't start click-and-dragging if the UI is hidden
 			// todo a better way to detect if the UI is hidden
 			// (these two booleans aren't complete coverage)
@@ -268,9 +268,9 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			clickAndDragging = true;
 		}
 
-		public override void MouseUp(UIMouseEvent evt)
+		public override void LeftMouseUp(UIMouseEvent evt)
 		{
-			base.MouseUp(evt);
+			base.LeftMouseUp(evt);
 			clickAndDragging = false;
 		}
 

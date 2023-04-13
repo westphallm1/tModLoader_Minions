@@ -69,7 +69,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 
 		public static float GetAngleOffsetInSet(HashSet<int> matchingSet, Projectile self)
 		{
-			List<Projectile> others = IdleLocationSets.GetProjectilesInSet(matchingSet, self.owner);
+			List<Projectile> others = GetProjectilesInSet(matchingSet, self.owner);
 			if(others.Count > 0)
 			{
 				int myPos = others.FindIndex(o => o.whoAmI == self.whoAmI);

@@ -26,7 +26,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slime Train Passenger");
+			// DisplayName.SetDefault("Slime Train Passenger");
 			Main.projFrames[Projectile.type] = 6;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;

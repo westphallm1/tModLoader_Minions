@@ -236,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			CometTrailDrawer.AddImpactEffects(Projectile);
 			if(Projectile.owner == Main.myPlayer && AnimationFrame - lastShootFrame > attackFrames / 2 && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful)

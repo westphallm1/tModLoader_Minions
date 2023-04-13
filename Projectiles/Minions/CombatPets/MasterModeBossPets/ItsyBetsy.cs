@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.OnFire, 300);
 		}
@@ -86,7 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.ItsyBetsy"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.ItsyBetsy"));
 			Main.projFrames[Projectile.type] = 12;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

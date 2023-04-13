@@ -171,15 +171,25 @@ Mods: {
 					'''
 			}
 
-			FlinxFurHood.DisplayName: Flinx Fur Hood
+			FlinxFurHood: {
+				DisplayName: Flinx Fur Hood
+				Tooltip: ""
+			}
 
 			ForagerBreastplate: {
 				DisplayName: Mildew Breastplate
 				Tooltip: Increased minion knockback by 1
 			}
 
-			ForagerHelmet.DisplayName: Mildew Cap
-			ForagerLeggings.DisplayName: Mildew Leggings
+			ForagerHelmet: {
+				DisplayName: Mildew Cap
+				Tooltip: ""
+			}
+
+			ForagerLeggings: {
+				DisplayName: Mildew Leggings
+				Tooltip: ""
+			}
 
 			GraniteChestguard: {
 				DisplayName: Granite Chestguard
@@ -1363,7 +1373,10 @@ Mods: {
 				Tooltip: Summons a baby slime to fight for you
 			}
 
-			DeadlySphereMinionItem.DisplayName: Deadly Sphere Staff (AoMM Version)
+			DeadlySphereMinionItem: {
+				DisplayName: Deadly Sphere Staff (AoMM Version)
+				Tooltip: ""
+			}
 
 			HornetMinionItem: {
 				DisplayName: Hornet Staff (AoMM Version)
@@ -2813,6 +2826,13 @@ Mods: {
 			VikingSquireMinion.DisplayName: Viking Squire
 			GuideVoodooSquireMinion.DisplayName: Guide Squire
 			WoFSquireMinion.DisplayName: Squire of Flesh
+			SoulboundArsenalBowMinion.DisplayName: Soulbound Arsenal Bow Minion
+		}
+
+		Keybinds: {
+			"Cycle Minion Tactic.DisplayName": Mods.AmuletOfManyMinions.Keybinds.Cycle Minion Tactic.DisplayName
+			"Cycle Tactics Group.DisplayName": Mods.AmuletOfManyMinions.Keybinds.Cycle Tactics Group.DisplayName
+			"Minion Quick Defend.DisplayName": Mods.AmuletOfManyMinions.Keybinds.Minion Quick Defend.DisplayName
 		}
 	}
 }

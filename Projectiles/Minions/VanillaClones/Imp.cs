@@ -25,8 +25,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.ImpMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.ImpMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.ImpMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.ImpMinion"));
 		}
 	}
 
@@ -86,7 +86,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				Main.dust[dustId].noLight = true;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.OnFire, 240);
 		}
@@ -142,7 +142,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.OnFire, 240);
 		}
@@ -185,13 +185,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Imp");
+			// DisplayName.SetDefault("Flying Imp");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
 		public override void ApplyCrossModChanges()
 		{
-			CrossModClient.SummonersShine.Imp.CrossModChanges(Type);
+			Imp.CrossModChanges(Type);
 		}
 		public override void SetDefaults()
 		{
@@ -204,7 +204,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			hsHelper.attackFrames = attackFrames;
 			hsHelper.targetShootProximityRadius = 128;
 
-			CrossModClient.SummonersShine.Imp.SetDeaults_Imp(this);
+			Imp.SetDeaults_Imp(this);
 		}
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
@@ -366,7 +366,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X");
+			// DisplayName.SetDefault("Copter-X");
 			Main.projFrames[Projectile.type] = 5;
 		}
 

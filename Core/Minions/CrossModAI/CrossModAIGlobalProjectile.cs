@@ -144,8 +144,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 
 		public override void Load()
 		{
-			On.Terraria.Player.FreeUpPetsAndMinions += Player_FreeUpPetsAndMinions;
-			On.Terraria.Player.AddBuff += Player_AddBuff;
+			On_Player.FreeUpPetsAndMinions += Player_FreeUpPetsAndMinions;
+			On_Player.AddBuff += Player_AddBuff;
 		}
 
 		public override void Unload()
@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			CrossModCombatPetMutuallyExclusiveBuffs = null;
 		}
 
-		private void Player_AddBuff(On.Terraria.Player.orig_AddBuff orig, Player self, int type, int timeToAdd, bool quiet, bool foodHack)
+		private void Player_AddBuff(On_Player.orig_AddBuff orig, Player self, int type, int timeToAdd, bool quiet, bool foodHack)
 		{
 			orig.Invoke(self, type, timeToAdd, quiet, foodHack);
 			if(CrossModCombatPetMutuallyExclusiveBuffs.TryGetValue(type, out var otherTypes))
@@ -165,7 +165,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI
 			}
 		}
 
-		private void Player_FreeUpPetsAndMinions(On.Terraria.Player.orig_FreeUpPetsAndMinions orig, Player self, Item sItem)
+		private void Player_FreeUpPetsAndMinions(On_Player.orig_FreeUpPetsAndMinions orig, Player self, Item sItem)
 		{
 			// Hack to fix a rather tricky bug that arises from AoMM and non-AoMM versions of cross-mod pet buffs
 			// spawning the same projectile. By default, the vanilla pet-free-up code will remove any existing instances of the

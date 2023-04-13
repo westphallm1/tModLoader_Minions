@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Smoleder");
-			Description.SetDefault("A shy mole has joined your adventure!");
+			// DisplayName.SetDefault("Smoleder");
+			// Description.SetDefault("A shy mole has joined your adventure!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Quiet Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet Smoleder!");
+			// DisplayName.SetDefault("Quiet Bow of Friendship");
+			// Tooltip.SetDefault("Summons a pet Smoleder!");
 		}
 	}
 

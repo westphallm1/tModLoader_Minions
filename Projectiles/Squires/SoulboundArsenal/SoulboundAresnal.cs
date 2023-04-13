@@ -21,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Arsenal");
-			Description.SetDefault("A soulbound bow and sword will follow your orders!");
+			// DisplayName.SetDefault("Soulbound Arsenal");
+			// Description.SetDefault("A soulbound bow and sword will follow your orders!");
 		}
 	}
 
@@ -36,8 +36,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Arsenal");
-			Tooltip.SetDefault("Summons a squire\nA soulbound bow and sword will fight for you!\nClick and hold to guide their attacks");
+			// DisplayName.SetDefault("Soulbound Arsenal");
+			// Tooltip.SetDefault("Summons a squire\nA soulbound bow and sword will fight for you!\nClick and hold to guide their attacks");
 		}
 		
 		public override void ApplyCrossModChanges()
@@ -236,7 +236,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("");
+			// DisplayName.SetDefault("");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
@@ -313,7 +313,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Arsenal");
+			// DisplayName.SetDefault("Soulbound Arsenal");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

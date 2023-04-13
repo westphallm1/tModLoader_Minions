@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Axolittl");
-			Description.SetDefault("A wyvern hatchling has joined your adventure!");
+			// DisplayName.SetDefault("Axolittl");
+			// Description.SetDefault("A wyvern hatchling has joined your adventure!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Hasty Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet WyvernFly!");
+			// DisplayName.SetDefault("Hasty Bow of Friendship");
+			// Tooltip.SetDefault("Summons a pet WyvernFly!");
 		}
 	}
 

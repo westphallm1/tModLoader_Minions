@@ -16,8 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.BabySlime") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.BabySlime"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.BabySlime") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.BabySlime"));
 		}
 
 	}
@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BabySlime") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BabySlime") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 6;
 		}
 

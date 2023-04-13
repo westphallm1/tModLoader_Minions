@@ -19,8 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Cinder Hen");
-			Description.SetDefault("A tiny phoenix has joined your adventure!");
+			// DisplayName.SetDefault("Cinder Hen");
+			// Description.SetDefault("A tiny phoenix has joined your adventure!");
 		}
 
 	}
@@ -30,8 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bold Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet Cinder Hen!");
+			// DisplayName.SetDefault("Bold Bow of Friendship");
+			// Tooltip.SetDefault("Summons a pet Cinder Hen!");
 		}
 	}
 
@@ -68,16 +68,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffType<FlareVortexDebuff>(), 240);
 			DebuffGlobalNPC debuffNPC = target.GetGlobalNPC<DebuffGlobalNPC>();
 			debuffNPC.flameVortexStack = (short)Math.Min(debuffNPC.flameVortexStack + 1, 5);
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			damage = 1;
+			modifiers.ModifyHitInfo += Modifiers_ModifyHitInfo;
+		}
+
+		private void Modifiers_ModifyHitInfo(ref NPC.HitInfo info)
+		{
+			info.Damage = 1;
 		}
 
 		public override void Kill(int timeLeft)

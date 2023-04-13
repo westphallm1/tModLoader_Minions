@@ -16,8 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skull Biker");
-			Description.SetDefault("A skeletal motorcyclist is fighting for you!");
+			// DisplayName.SetDefault("Skull Biker");
+			// Description.SetDefault("A skeletal motorcyclist is fighting for you!");
 		}
 	}
 
@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skeletal Keychain");
-			Tooltip.SetDefault("Summons a skull biker to fight for you!");
+			// DisplayName.SetDefault("Skeletal Keychain");
+			// Tooltip.SetDefault("Summons a skull biker to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -54,7 +54,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.ExciteSkull
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("ExciteSkull");
+			// DisplayName.SetDefault("ExciteSkull");
 			Main.projFrames[Projectile.type] = 4;
 		}
 		public override void LoadAssets()

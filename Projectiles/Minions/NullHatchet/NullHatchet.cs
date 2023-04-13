@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Null Hatchet");
-			Description.SetDefault("An ethereal axe will fight for you!");
+			// DisplayName.SetDefault("Null Hatchet");
+			// Description.SetDefault("An ethereal axe will fight for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Null Hatchet");
-			Tooltip.SetDefault("Summons an ethereal axe to fight for you!");
+			// DisplayName.SetDefault("Null Hatchet");
+			// Tooltip.SetDefault("Summons an ethereal axe to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.NullHatchet
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Null Hatchet");
+			// DisplayName.SetDefault("Null Hatchet");
 		}
 
 

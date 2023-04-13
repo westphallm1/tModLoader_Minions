@@ -23,7 +23,7 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Mildew Cap");
+			// DisplayName.SetDefault("Mildew Cap");
 
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}

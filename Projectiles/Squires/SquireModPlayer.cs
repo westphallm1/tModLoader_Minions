@@ -221,8 +221,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Squire Special Cooldown");
-			Description.SetDefault("Your squire's special is on cooldown!");
+			// DisplayName.SetDefault("Squire Special Cooldown");
+			// Description.SetDefault("Your squire's special is on cooldown!");
 			Main.debuff[Type] = true;
 			Main.buffNoSave[Type] = true;
 		}
@@ -233,8 +233,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.BlandWhipEnemyDebuff;
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Squire Tag");
-			Description.SetDefault("Take 10% increased damage from summoner weapons");
+			// DisplayName.SetDefault("Squire Tag");
+			// Description.SetDefault("Take 10% increased damage from summoner weapons");
 			Main.debuff[Type] = true;
 			Main.buffNoSave[Type] = true;
 		}
@@ -262,7 +262,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 			squireDebuffTypes = null;
 		}
 
-		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
 		{
 			if (!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
 			{
@@ -274,10 +274,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				return;
 			}
 			// may need to manually apply defense formula
-			damage = (int)(damage * multiplier);
+			modifiers.SourceDamage += 1 - multiplier;
 		}
 
-		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (!SquireMinionTypes.Contains(projectile.type) && !isSquireShot.Contains(projectile.type))
 			{

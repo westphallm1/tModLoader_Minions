@@ -115,7 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SpiderBrain"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SpiderBrain"));
 			Main.projFrames[Projectile.type] = 14;
 			Main.projPet[Projectile.type] = true;
 		}

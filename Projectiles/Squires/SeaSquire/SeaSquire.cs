@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Sea Squire");
-			Description.SetDefault("A flying fish will follow your fancies!");
+			// DisplayName.SetDefault("Sea Squire");
+			// Description.SetDefault("A flying fish will follow your fancies!");
 		}
 	}
 
@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of the Sea");
-			Tooltip.SetDefault("Summons a squire\nA flying fish squire will fight for you!\nClick and hold to guide its attacks");
+			// DisplayName.SetDefault("Crest of the Sea");
+			// Tooltip.SetDefault("Summons a squire\nA flying fish squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults()
@@ -66,7 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			Projectile.DamageType = DamageClass.Summon;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Wet, 300);
 		}
@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Sea Squire Shark");
+			// DisplayName.SetDefault("Sea Squire Shark");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 2;
 		}
@@ -211,7 +211,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Sea Squire");
+			// DisplayName.SetDefault("Sea Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

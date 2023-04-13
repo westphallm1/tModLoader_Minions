@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Shadow Squire");
-			Description.SetDefault("A shadow squire will follow your orders!");
+			// DisplayName.SetDefault("Shadow Squire");
+			// Description.SetDefault("A shadow squire will follow your orders!");
 		}
 	}
 
@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of Shadows");
-			Tooltip.SetDefault("Summons a squire\nA shadow squire will fight for you!\nClick and hold to guide its attacks");
+			// DisplayName.SetDefault("Crest of Shadows");
+			// Tooltip.SetDefault("Summons a squire\nA shadow squire will fight for you!\nClick and hold to guide its attacks");
 		}
 
 		public override void SetDefaults()
@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Shadow Squire");
+			// DisplayName.SetDefault("Shadow Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

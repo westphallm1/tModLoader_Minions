@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.HornetMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.HornetMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.HornetMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.HornetMinion"));
 		}
 	}
 
@@ -63,7 +63,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 				Main.dust[dustId].velocity *= 0.5f;
 			}
 		}
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Poisoned, 300);
 		}
@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Hornet"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Hornet"));
 			Main.projFrames[Projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

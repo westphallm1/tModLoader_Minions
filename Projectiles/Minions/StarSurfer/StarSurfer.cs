@@ -16,8 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Star Surfer");
-			Description.SetDefault("A star surfer will fight for you!");
+			// DisplayName.SetDefault("Star Surfer");
+			// Description.SetDefault("A star surfer will fight for you!");
 		}
 	}
 
@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Star Surfer Staff");
-			Tooltip.SetDefault("Summons a star surfer to fight for you!");
+			// DisplayName.SetDefault("Star Surfer Staff");
+			// Tooltip.SetDefault("Summons a star surfer to fight for you!");
 		}
 
 		public override void SetDefaults()
@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StarSurfer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Star Surfer");
+			// DisplayName.SetDefault("Star Surfer");
 		}
 
 		public override void SetDefaults()

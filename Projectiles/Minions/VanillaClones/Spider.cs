@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.SpiderMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.SpiderMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.SpiderMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.SpiderMinion"));
 		}
 
 		public override void Update(Player player, ref int buffIndex)
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spider") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spider") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 11;
 		}
 
@@ -222,7 +222,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Venom, 300);
 		}

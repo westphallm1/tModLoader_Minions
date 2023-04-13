@@ -8,8 +8,8 @@ namespace AmuletOfManyMinions.Items.Materials
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Lock of the Guide's Hair");
-			Tooltip.SetDefault("Can fetch a high price on the black market,\namong other nefarious purposes");
+			// DisplayName.SetDefault("Lock of the Guide's Hair");
+			// Tooltip.SetDefault("Can fetch a high price on the black market,\namong other nefarious purposes");
 		}
 
 		public override void SetDefaults()
@@ -24,10 +24,10 @@ namespace AmuletOfManyMinions.Items.Materials
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Granite Spark");
-			Tooltip.SetDefault(
+			// DisplayName.SetDefault("Granite Spark");
+			/* Tooltip.SetDefault(
 				"A fragment of energy from a granite elemental.\n" +
-				"Used to craft tools that enhance your minions' AI.");
+				"Used to craft tools that enhance your minions' AI."); */
 		}
 
 		public override void SetDefaults()
@@ -44,10 +44,10 @@ namespace AmuletOfManyMinions.Items.Materials
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Inert Bow of Friendship");
-			Tooltip.SetDefault(
+			// DisplayName.SetDefault("Inert Bow of Friendship");
+			/* Tooltip.SetDefault(
 				"A Bow of Friendship that's lost its magical powers.\n" +
-				"It can be restored when combined with ingredients from various biomes.");
+				"It can be restored when combined with ingredients from various biomes."); */
 		}
 
 		public override void SetDefaults()

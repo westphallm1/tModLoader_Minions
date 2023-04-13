@@ -8,8 +8,8 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Illusionist Leggings");
-			Tooltip.SetDefault("10% increased movement speed");
+			// DisplayName.SetDefault("Illusionist Leggings");
+			// Tooltip.SetDefault("10% increased movement speed");
 		}
 
 		public override void SetDefaults()

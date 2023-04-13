@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Void Dagger");
-			Description.SetDefault("An ethereal dagger will fight for you!");
+			// DisplayName.SetDefault("Void Dagger");
+			// Description.SetDefault("An ethereal dagger will fight for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Void Dagger");
-			Tooltip.SetDefault("Summons an ethereal dagger to fight for you!");
+			// DisplayName.SetDefault("Void Dagger");
+			// Tooltip.SetDefault("Summons an ethereal dagger to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -66,7 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VoidKnife
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Void Dagger");
+			// DisplayName.SetDefault("Void Dagger");
 		}
 
 		public sealed override void SetDefaults()

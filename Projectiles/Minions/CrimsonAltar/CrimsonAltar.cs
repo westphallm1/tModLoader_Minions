@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crimson Cell");
-			Description.SetDefault("A crimson cell will fight for you!");
+			// DisplayName.SetDefault("Crimson Cell");
+			// Description.SetDefault("A crimson cell will fight for you!");
 		}
 	}
 
@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crimson Cell Staff");
-			Tooltip.SetDefault("Summons a crimson cell to fight for you!");
+			// DisplayName.SetDefault("Crimson Cell Staff");
+			// Tooltip.SetDefault("Summons a crimson cell to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -127,7 +127,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			return false;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Ichor, 90);
 		}
@@ -154,7 +154,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crimson Cell");
+			// DisplayName.SetDefault("Crimson Cell");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

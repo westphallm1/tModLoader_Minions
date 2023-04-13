@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Axolittl");
-			Description.SetDefault("An amphibious friend has joined your adventure!");
+			// DisplayName.SetDefault("Axolittl");
+			// Description.SetDefault("An amphibious friend has joined your adventure!");
 		}
 	}
 
@@ -30,8 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Quirky Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet Axolittl!");
+			// DisplayName.SetDefault("Quirky Bow of Friendship");
+			// Tooltip.SetDefault("Summons a pet Axolittl!");
 		}
 	}
 

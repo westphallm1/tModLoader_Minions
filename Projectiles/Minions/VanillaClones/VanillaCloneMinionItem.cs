@@ -23,8 +23,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName." + VanillaItemName) + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip." + VanillaItemName));
+			// DisplayName.SetDefault(Language.GetTextValue("ItemName." + VanillaItemName) + " (AoMM Version)");
+			// Tooltip.SetDefault(Language.GetTextValue("ItemTooltip." + VanillaItemName));
 		}
 
 		public override void SetDefaults()

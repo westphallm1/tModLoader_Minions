@@ -12,9 +12,9 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Compass of Minion Guidance");
-			Tooltip.SetDefault(
-				"Allows your minions to automatically attack around corners in a 16 tile radius.");
+			// DisplayName.SetDefault("Compass of Minion Guidance");
+			/* Tooltip.SetDefault(
+				"Allows your minions to automatically attack around corners in a 16 tile radius."); */
 		}
 
 		public override void SetDefaults()

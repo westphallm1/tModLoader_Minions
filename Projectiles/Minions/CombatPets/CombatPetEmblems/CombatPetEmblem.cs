@@ -21,10 +21,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			Tooltip.SetDefault(
+			/* Tooltip.SetDefault(
 				"An emblem that increases the power of your combat pets!\n" +
 				"As long as this item is in your inventory, your combat pet will deal\n" +
-				"additional damage, and will receive a bonus to movement speed and attack range.");
+				"additional damage, and will receive a bonus to movement speed and attack range."); */
 		}
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Golden Combat Pet Emblem");
+			// DisplayName.SetDefault("Golden Combat Pet Emblem");
 		}
 		public override void SetDefaults()
 		{
@@ -79,7 +79,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Platinum Combat Pet Emblem");
+			// DisplayName.SetDefault("Platinum Combat Pet Emblem");
 		}
 		public override void SetDefaults()
 		{
@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Corrupt Combat Pet Emblem");
+			// DisplayName.SetDefault("Corrupt Combat Pet Emblem");
 		}
 
 		public override void SetDefaults()
@@ -115,7 +115,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crimson Combat Pet Emblem");
+			// DisplayName.SetDefault("Crimson Combat Pet Emblem");
 		}
 
 		public override void SetDefaults()
@@ -134,7 +134,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skeletal Combat Pet Emblem");
+			// DisplayName.SetDefault("Skeletal Combat Pet Emblem");
 		}
 		public override void SetDefaults()
 		{
@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulful Combat Pet Emblem");
+			// DisplayName.SetDefault("Soulful Combat Pet Emblem");
 		}
 		public override void SetDefaults()
 		{
@@ -175,7 +175,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Hallowed Combat Pet Emblem");
+			// DisplayName.SetDefault("Hallowed Combat Pet Emblem");
 		}
 		public override void SetDefaults()
 		{
@@ -198,7 +198,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spectre Combat Pet Emblem");
+			// DisplayName.SetDefault("Spectre Combat Pet Emblem");
 		}
 
 		public override void SetDefaults()
@@ -219,7 +219,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Stardust Combat Pet Emblem");
+			// DisplayName.SetDefault("Stardust Combat Pet Emblem");
 		}
 		public override void SetDefaults()
 		{
@@ -239,7 +239,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Celestial Combat Pet Emblem");
+			// DisplayName.SetDefault("Celestial Combat Pet Emblem");
 		}
 
 		public override void SetDefaults()

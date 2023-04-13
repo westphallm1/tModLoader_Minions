@@ -37,11 +37,11 @@ namespace AmuletOfManyMinions.UI.Common
 			//TODO 1.4 remove
 		}
 
-		public override void Click(UIMouseEvent evt)
+		public override void LeftClick(UIMouseEvent evt)
 		{
 			if (evt.MousePosition.X < 0 || evt.MousePosition.Y < 0) return;
 
-			base.Click(evt);
+			base.LeftClick(evt);
 		}
 
 		public override void MouseOver(UIMouseEvent evt)

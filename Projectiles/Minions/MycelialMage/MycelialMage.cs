@@ -19,8 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Mycelial Mage");
-			Description.SetDefault("A Mycelial Mage is fighting for you!");
+			// DisplayName.SetDefault("Mycelial Mage");
+			// Description.SetDefault("A Mycelial Mage is fighting for you!");
 		}
 	}
 
@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Mycelial Staff");
-			Tooltip.SetDefault("Summons a Mycelial Mage to fight for you!");
+			// DisplayName.SetDefault("Mycelial Staff");
+			// Tooltip.SetDefault("Summons a Mycelial Mage to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Mycelial Mage");
+			// DisplayName.SetDefault("Mycelial Mage");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.PlanteraSeedling"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.PlanteraSeedling"));
 			Main.projFrames[Projectile.type] = 12;
 		}
 

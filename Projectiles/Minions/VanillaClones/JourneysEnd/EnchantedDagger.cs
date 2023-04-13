@@ -21,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.Smolstar") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.Smolstar"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.Smolstar") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.Smolstar"));
 		}
 
 	}
@@ -48,7 +48,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Smolstar") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Smolstar") + " (AoMM Version)");
 			IdleLocationSets.circlingHead.Add(Type);
 			Main.projFrames[Projectile.type] = 2;
 		}
@@ -155,13 +155,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			framesSinceLastHit = 0;
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			// manually bypass defense
-			// this may not be wholly correct
-			int defenseBypass = 25;
-			int defense = Math.Min(target.defense, defenseBypass);
-			damage += defense / 2;
+			modifiers.ArmorPenetration += 25;
 		}
 
 		public override void AfterMoving()

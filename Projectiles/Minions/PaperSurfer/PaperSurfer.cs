@@ -12,8 +12,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Paper Surfer");
-			Description.SetDefault("A paper surfer will fight for you!");
+			// DisplayName.SetDefault("Paper Surfer");
+			// Description.SetDefault("A paper surfer will fight for you!");
 		}
 	}
 
@@ -22,8 +22,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Paper Surfer Staff");
-			Tooltip.SetDefault("Summons a paper surfer to fight for you!");
+			// DisplayName.SetDefault("Paper Surfer Staff");
+			// Tooltip.SetDefault("Summons a paper surfer to fight for you!");
 		}
 
 		public override void SetDefaults()

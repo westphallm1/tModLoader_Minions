@@ -205,7 +205,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SkeletronJr"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SkeletronJr"));
 			Main.projFrames[Projectile.type] = 10;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

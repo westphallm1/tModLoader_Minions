@@ -11,8 +11,8 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spooky Mask");
-			Tooltip.SetDefault("Increases minion damage by 12%, but decreases max minions");
+			// DisplayName.SetDefault("Spooky Mask");
+			// Tooltip.SetDefault("Increases minion damage by 12%, but decreases max minions");
 		}
 
 		public override void SetDefaults()

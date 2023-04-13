@@ -16,8 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X");
-			Description.SetDefault("A flexible helicopter will fight for you!");
+			// DisplayName.SetDefault("Copter-X");
+			// Description.SetDefault("A flexible helicopter will fight for you!");
 		}
 	}
 
@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X Staff");
-			Tooltip.SetDefault("Summons a flexible helicopter to fight for you!");
+			// DisplayName.SetDefault("Copter-X Staff");
+			// Tooltip.SetDefault("Summons a flexible helicopter to fight for you!");
 
 		}
 		public override void ApplyCrossModChanges()
@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X");
+			// DisplayName.SetDefault("Copter-X");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

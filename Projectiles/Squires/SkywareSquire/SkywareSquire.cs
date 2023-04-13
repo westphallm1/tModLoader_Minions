@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skyware Centurion");
-			Description.SetDefault("A Skyware Centurion is fighting for you!");
+			// DisplayName.SetDefault("Skyware Centurion");
+			// Description.SetDefault("A Skyware Centurion is fighting for you!");
 		}
 	}
 
@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of the Sky");
-			Tooltip.SetDefault("Summons a squire\nA skyware centurion will fight for you\nClick and hold to guide its attacks!");
+			// DisplayName.SetDefault("Crest of the Sky");
+			// Tooltip.SetDefault("Summons a squire\nA skyware centurion will fight for you\nClick and hold to guide its attacks!");
 		}
 
 		public override void SetDefaults()
@@ -179,7 +179,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skyware Squire");
+			// DisplayName.SetDefault("Skyware Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

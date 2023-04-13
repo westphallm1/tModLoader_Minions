@@ -16,8 +16,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Starry SkySlasher");
-			Description.SetDefault("An enchanted sword will fight for you!");
+			// DisplayName.SetDefault("Starry SkySlasher");
+			// Description.SetDefault("An enchanted sword will fight for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Starry SkySlasher");
-			Tooltip.SetDefault("Summons an enchanted sword to fight for you!");
+			// DisplayName.SetDefault("Starry SkySlasher");
+			// Tooltip.SetDefault("Summons an enchanted sword to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -61,7 +61,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PossessedCopperSword
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Starry SkySlasher");
+			// DisplayName.SetDefault("Starry SkySlasher");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

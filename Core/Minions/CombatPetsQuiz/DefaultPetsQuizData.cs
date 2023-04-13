@@ -198,7 +198,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				"What sort of friend would you like to have join you on your journey?",
 				usedIndices.Select(idx => (allAnswerTexts[idx], NONE)).ToArray())
 			{
-				AddFollowUpQuestion = idx => DefaultPetsQuizData.ClassSpecificQuestions[usedIndices[idx]]
+				AddFollowUpQuestion = idx => ClassSpecificQuestions[usedIndices[idx]]
 			};
 			var quiz = new CombatPetsQuiz
 			{

@@ -24,12 +24,12 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		{
 			ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
 			ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
-			Tooltip.SetDefault(
+			/* Tooltip.SetDefault(
 				"Tool\n"+
 				"Click to place a minion guidance waypoint!\n" +
 				"Minions will automatically navigate to the waypoint\n" +
 				"Attacking with a non-summon weapon dispels the waypoint\n"+
-				"Minions deal less damage while attacking a far away waypoint");
+				"Minions deal less damage while attacking a far away waypoint"); */
 		}
 
 		public override void SetDefaults()
@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Wooden Rod of Minion Guidance");
+			// DisplayName.SetDefault("Wooden Rod of Minion Guidance");
 		}
 
 		public override void SetDefaults()
@@ -114,7 +114,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Granite Rod of Minion Guidance");
+			// DisplayName.SetDefault("Granite Rod of Minion Guidance");
 		}
 
 		public override void SetDefaults()
@@ -136,7 +136,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skeletal Rod of Minion Guidance");
+			// DisplayName.SetDefault("Skeletal Rod of Minion Guidance");
 		}
 
 		public override void SetDefaults()
@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crystal Rod of Minion Guidance");
+			// DisplayName.SetDefault("Crystal Rod of Minion Guidance");
 		}
 
 		public override void SetDefaults()
@@ -175,7 +175,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Hallowed Rod of Minion Guidance");
+			// DisplayName.SetDefault("Hallowed Rod of Minion Guidance");
 		}
 
 		public override void SetDefaults()
@@ -197,7 +197,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Cthulhu's Eye of Minion Vision");
+			// DisplayName.SetDefault("Cthulhu's Eye of Minion Vision");
 		}
 
 		public override void SetDefaults()

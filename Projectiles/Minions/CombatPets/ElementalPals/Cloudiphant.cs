@@ -21,8 +21,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Cloudiphant");
-			Description.SetDefault("An ethereal elephant has joined your adventure!");
+			// DisplayName.SetDefault("Cloudiphant");
+			// Description.SetDefault("An ethereal elephant has joined your adventure!");
 		}
 	}
 
@@ -31,8 +31,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Relaxed Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet Cloudiphant!");
+			// DisplayName.SetDefault("Relaxed Bow of Friendship");
+			// Tooltip.SetDefault("Summons a pet Cloudiphant!");
 		}
 	}
 
@@ -92,9 +92,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			return target == default;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			base.OnHitNPC(target, damage, knockback, crit);
+			base.OnHitNPC(target, hit, damageDone);
 			this.target ??= target;
 			Projectile.damage = (int)(Projectile.damage * 0.85f);
 		}
@@ -175,7 +175,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 				Projectile.velocity = (Projectile.velocity * (inertia - 1) + targetVector) / inertia;
 			}
 		}
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			// no-op
 		}

@@ -48,10 +48,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			bounces = 3;
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// damage comes from explosion rather than projectile itself
-			damage = 1;
+			modifiers.ModifyHitInfo += Modifiers_ModifyHitInfo;
+		}
+
+		private void Modifiers_ModifyHitInfo(ref NPC.HitInfo info)
+		{
+			info.Damage = 1;
 		}
 
 		public override void Kill(int timeLeft)
@@ -85,7 +90,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition,
 				texture.Bounds, Color.White, Projectile.rotation, texture.Bounds.Center.ToVector2(), 1, 0, 0);
 			return false;
@@ -132,10 +137,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			}
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// damage comes from explosion rather than projectile itself
-			damage = 1;
+			modifiers.ModifyHitInfo += Modifiers_ModifyHitInfo;
+		}
+
+		private void Modifiers_ModifyHitInfo(ref NPC.HitInfo info)
+		{
+			info.Damage = 1;
 		}
 
 		public override void ModifyDamageHitbox(ref Rectangle hitbox)

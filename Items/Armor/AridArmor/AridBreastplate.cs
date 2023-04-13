@@ -11,10 +11,10 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Arid Breastplate");
-			Tooltip.SetDefault(""
+			// DisplayName.SetDefault("Arid Breastplate");
+			/* Tooltip.SetDefault(""
 				+ "Increases minion damage by 8%\n"
-				+ "Increases attack speed by 10% while using a squire");
+				+ "Increases attack speed by 10% while using a squire"); */
 		}
 
 		public override void SetDefaults()

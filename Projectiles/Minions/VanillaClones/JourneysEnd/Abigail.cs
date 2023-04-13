@@ -25,8 +25,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.AbigailMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.AbigailMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.AbigailMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.AbigailMinion"));
 		}
 
 	}
@@ -85,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.AbigailMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.AbigailMinion"));
 			Main.projFrames[Projectile.type] = 13;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
@@ -117,7 +117,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void ApplyCrossModChanges()
 		{
-			CrossModClient.SummonersShine.AbigailFlower.Abigail_ApplyStatics(Type);
+			AbigailFlower.Abigail_ApplyStatics(Type);
 		}
 
 		public override Vector2 IdleBehavior()

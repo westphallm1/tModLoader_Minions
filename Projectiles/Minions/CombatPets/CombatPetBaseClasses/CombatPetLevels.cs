@@ -346,7 +346,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			return true;
 		}
 
-		public override void OnRespawn(Player player)
+		public override void OnRespawn()
 		{
 			if(Player.whoAmI != Main.myPlayer || BuffsToAddOnRespawn.Count == 0)
 			{
@@ -355,7 +355,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			foreach(int buffId in BuffsToAddOnRespawn)
 			{
 				TemporarilyUnflagPetBuff(buffId);
-				player.AddBuff(buffId, 2);
+				Player.AddBuff(buffId, 2);
 			}
 			BuffsToAddOnRespawn.Clear();
 		}
@@ -417,8 +417,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName." + VanillaBuffName) + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription." + VanillaBuffName));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName." + VanillaBuffName) + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription." + VanillaBuffName));
 		}
 
 	}
@@ -428,12 +428,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override void Load()
 		{
-			On.Terraria.Player.AddBuff += Player_AddBuff;
+			On_Player.AddBuff += Player_AddBuff;
 		}
 
 		// hack to temporarily un-flag buffs as pet type to prevent vanilla removal code from running
 		// depending on how many open combat pet slots the player has
-		private void Player_AddBuff(On.Terraria.Player.orig_AddBuff orig, Player self, int type, int timeToAdd, bool quiet, bool foodHack)
+		private void Player_AddBuff(On_Player.orig_AddBuff orig, Player self, int type, int timeToAdd, bool quiet, bool foodHack)
 		{
 			if(self.whoAmI == Main.myPlayer && CombatPetBuff.CombatPetBuffTypes.Contains(type))
 			{

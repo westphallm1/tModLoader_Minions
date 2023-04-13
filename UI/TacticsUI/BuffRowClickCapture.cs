@@ -161,7 +161,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			radialMenu.StartShowing();
 		}
 
-		public override void MouseDown(UIMouseEvent evt)
+		public override void LeftMouseDown(UIMouseEvent evt)
 		{
 			// another menu is open, so don't check
 			if(Main.ingameOptionsWindow || Main.playerInventory || CaptureManager.Instance.Active ||
@@ -197,9 +197,9 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			}
 		}
 
-		public override void MouseUp(UIMouseEvent evt)
+		public override void LeftMouseUp(UIMouseEvent evt)
 		{
-			base.MouseUp(evt);
+			base.LeftMouseUp(evt);
 			// only care about mouse-ups in the click + drag action after selecting a buff
 			if(clickedBuffIdx == -1)
 			{

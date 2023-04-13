@@ -18,8 +18,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Plant Pup");
-			Description.SetDefault("A playful plant has joined your adventure!");
+			// DisplayName.SetDefault("Plant Pup");
+			// Description.SetDefault("A playful plant has joined your adventure!");
 		}
 	}
 
@@ -28,8 +28,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Calm Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet Plant Pup!");
+			// DisplayName.SetDefault("Calm Bow of Friendship");
+			// Tooltip.SetDefault("Summons a pet Plant Pup!");
 		}
 	}
 
@@ -98,7 +98,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			ModProjectileExtensions.ClientSideNPCHitCheck(this);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if(circleStartFrame == default)
 			{

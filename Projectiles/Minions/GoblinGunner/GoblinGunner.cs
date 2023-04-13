@@ -19,8 +19,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Gunner");
-			Description.SetDefault("A goblin gunner will fight for you!");
+			// DisplayName.SetDefault("Goblin Gunner");
+			// Description.SetDefault("A goblin gunner will fight for you!");
 		}
 	}
 
@@ -29,8 +29,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Radio Beacon");
-			Tooltip.SetDefault("Summons a goblin gunship to fight for you!");
+			// DisplayName.SetDefault("Goblin Radio Beacon");
+			// Tooltip.SetDefault("Summons a goblin gunship to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -95,7 +95,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Goblin Gunner");
+			// DisplayName.SetDefault("Goblin Gunner");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

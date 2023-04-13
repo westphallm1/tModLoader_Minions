@@ -26,8 +26,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.StormTiger") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.StormTiger"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.StormTiger") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.StormTiger"));
 		}
 
 	}
@@ -159,9 +159,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			targetList = targetList.Where(npc => npc.whoAmI != target.whoAmI).ToList();
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			base.OnHitNPC(target, damage, knockback, crit);
+			base.OnHitNPC(target, hit, damageDone);
 			targetList = targetList.Where(npc => npc.whoAmI != target.whoAmI).ToList();
 		}
 

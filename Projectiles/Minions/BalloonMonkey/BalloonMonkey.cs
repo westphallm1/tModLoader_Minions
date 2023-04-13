@@ -22,8 +22,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Dart Monkeys");
-			Description.SetDefault("Dart-throwing Monkeys will fight for you!");
+			// DisplayName.SetDefault("Dart Monkeys");
+			// Description.SetDefault("Dart-throwing Monkeys will fight for you!");
 		}
 	}
 
@@ -32,8 +32,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Staff of Darts");
-			Tooltip.SetDefault("Summons a dart-throwing monkey to fight for you!");
+			// DisplayName.SetDefault("Staff of Darts");
+			// Tooltip.SetDefault("Summons a dart-throwing monkey to fight for you!");
 		}
 		
 		public override void ApplyCrossModChanges()
@@ -168,7 +168,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			Projectile.penetrate = 1;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			// float in the same approximate direction that the npc is travelling
 			Vector2 launchVector = target.velocity;
@@ -206,7 +206,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Balloon Monkey");
+			// DisplayName.SetDefault("Balloon Monkey");
 			Main.projFrames[Projectile.type] = 15;
 		}
 

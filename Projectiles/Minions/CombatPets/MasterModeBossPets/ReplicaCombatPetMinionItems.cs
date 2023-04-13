@@ -18,10 +18,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Replica " + Language.GetTextValue("ItemName." + VanillaItemName));
-			Tooltip.SetDefault(
+			// DisplayName.SetDefault("Replica " + Language.GetTextValue("ItemName." + VanillaItemName));
+			/* Tooltip.SetDefault(
 				"Legends say that only a true master is capable wielding this pet's power.\n" +
-				"But now you can too, for one easy payment of 50 gold!");
+				"But now you can too, for one easy payment of 50 gold!"); */
 		}
 		public override void SetDefaults()
 		{

@@ -9,9 +9,9 @@ namespace AmuletOfManyMinions.Items.Accessories
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Increases max number of minions by 1\n" +
+			/* Tooltip.SetDefault("Increases max number of minions by 1\n" +
 				"and increases minion variety bonus by 1%\n" +
-				"but each minion deals slightly less damage");
+				"but each minion deals slightly less damage"); */
 		}
 
 		public override void SetDefaults()

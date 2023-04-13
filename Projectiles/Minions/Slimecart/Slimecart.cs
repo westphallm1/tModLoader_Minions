@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slimecart");
-			Description.SetDefault("A slime miner will fight for you!");
+			// DisplayName.SetDefault("Slimecart");
+			// Description.SetDefault("A slime miner will fight for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slimecart Staff");
-			Tooltip.SetDefault("Summons slime miner to fight for you!");
+			// DisplayName.SetDefault("Slimecart Staff");
+			// Tooltip.SetDefault("Summons slime miner to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -62,7 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slimecart");
+			// DisplayName.SetDefault("Slimecart");
 			Main.projFrames[Projectile.type] = 4;
 		}
 		public override void LoadAssets()

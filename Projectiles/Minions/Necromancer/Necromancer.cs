@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Necromancer");
-			Description.SetDefault("A necromancer and his skeletal servants will fight for you!");
+			// DisplayName.SetDefault("Necromancer");
+			// Description.SetDefault("A necromancer and his skeletal servants will fight for you!");
 		}
 	}
 
@@ -30,8 +30,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Necro Doll");
-			Tooltip.SetDefault("Summons a neromancer to fight for you!");
+			// DisplayName.SetDefault("Necro Doll");
+			// Tooltip.SetDefault("Summons a neromancer to fight for you!");
 		}
 		
 		public override void ApplyCrossModChanges()
@@ -224,7 +224,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Necromancer");
+			// DisplayName.SetDefault("Necromancer");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
@@ -399,7 +399,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Necromancer Skeleton");
+			// DisplayName.SetDefault("Necromancer Skeleton");
 			Main.projFrames[Projectile.type] = 5;
 		}
 
@@ -449,7 +449,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			return projHitbox.Intersects(targetHitbox);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (Main.rand.NextBool(2))
 			{

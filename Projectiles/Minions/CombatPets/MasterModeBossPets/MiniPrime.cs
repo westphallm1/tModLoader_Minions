@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.MiniPrime"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.MiniPrime"));
 			Main.projFrames[Projectile.type] = 11;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

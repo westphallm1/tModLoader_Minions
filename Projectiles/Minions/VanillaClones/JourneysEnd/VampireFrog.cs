@@ -20,8 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.VampireFrog") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.VampireFrog"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.VampireFrog") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.VampireFrog"));
 		}
 
 	}
@@ -96,10 +96,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			DoDefaultGroundedMovement(vector);
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// deal slightly more damage than listed
-			damage = (int)(damage * 1.25f);
+			modifiers.SourceDamage += 0.25f;
 		}
 
 		public override bool PreDraw(ref Color lightColor)

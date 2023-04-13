@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Meteor Fist");
-			Description.SetDefault("A meteor fist will fight for you!");
+			// DisplayName.SetDefault("Meteor Fist");
+			// Description.SetDefault("A meteor fist will fight for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Meteor Fist");
-			Tooltip.SetDefault("Summons a meteor fist to fight for you!");
+			// DisplayName.SetDefault("Meteor Fist");
+			// Tooltip.SetDefault("Summons a meteor fist to fight for you!");
 		}
 		public override void ApplyCrossModChanges()
 		{
@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Meteor Fist");
+			// DisplayName.SetDefault("Meteor Fist");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 2;
 		}
@@ -148,7 +148,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			framesInAir = Math.Max(framesInAir, 12); // force a return shortly after hitting a target
 			Dust.NewDust(Projectile.position, 16, 16, 6, Projectile.velocity.X / 2, Projectile.velocity.Y / 2);

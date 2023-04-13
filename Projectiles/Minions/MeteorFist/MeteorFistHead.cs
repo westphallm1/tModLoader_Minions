@@ -18,7 +18,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MeteorFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Meteor Fist");
+			// DisplayName.SetDefault("Meteor Fist");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 2;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

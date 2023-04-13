@@ -80,10 +80,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			Projectile.velocity *= 2; // slowly drift from place of impact
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			OnHitTarget();
-			base.OnHitNPC(target, damage, knockback, crit);
+			base.OnHitNPC(target, hit, damageDone);
 		}
 	}
 

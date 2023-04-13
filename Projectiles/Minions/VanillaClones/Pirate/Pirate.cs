@@ -22,8 +22,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.PirateMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.PirateMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("BuffName.PirateMinion") + " (AoMM Version)");
+			// Description.SetDefault(Language.GetTextValue("BuffDescription.PirateMinion"));
 		}
 
 	}
@@ -118,12 +118,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			Projectile.rotation += 0.01f;
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// damage comes from explosion rather than projectile itself
-			damage = 0;
-			knockback = 0;
-			crit = false;
+			modifiers.ModifyHitInfo += Modifiers_ModifyHitInfo;
+			modifiers.DisableCrit();
+		}
+
+		private void Modifiers_ModifyHitInfo(ref NPC.HitInfo info)
+		{
+			info.Damage = 1;
+			info.Knockback = 0;
 		}
 
 		public override void Kill(int timeLeft)
@@ -282,7 +287,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SoulscourgePirate") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SoulscourgePirate") + " (AoMM Version)");
 		}
 
 		public override void SetDefaults()
@@ -320,7 +325,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.OneEyedPirate") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.OneEyedPirate") + " (AoMM Version)");
 		}
 
 		public override void LoadAssets()
@@ -454,7 +459,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Parrot") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Parrot") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -537,7 +542,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.PirateCaptain") + " (AoMM Version)");
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.PirateCaptain") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}

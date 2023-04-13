@@ -17,8 +17,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crystal Fist");
-			Description.SetDefault("A crystal fist will fight for you!");
+			// DisplayName.SetDefault("Crystal Fist");
+			// Description.SetDefault("A crystal fist will fight for you!");
 		}
 	}
 
@@ -27,8 +27,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crystal Fist Staff");
-			Tooltip.SetDefault("Summons a crystal fist to fight for you!");
+			// DisplayName.SetDefault("Crystal Fist Staff");
+			// Tooltip.SetDefault("Summons a crystal fist to fight for you!");
 		}
 
 		public override void SetDefaults()
@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrystalFist
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crystal Fist");
+			// DisplayName.SetDefault("Crystal Fist");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 		}
