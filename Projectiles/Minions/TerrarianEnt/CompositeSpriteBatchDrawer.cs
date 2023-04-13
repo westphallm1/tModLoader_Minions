@@ -210,6 +210,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			int maxHeight = TileTop + treeTileSize / 2 * trunkHeight;
 			trunkHeightOffset = Math.Min(maxHeight, heightPerFrame * trunkAnimFrame - treeTileSize);
 
+			if (Main.dedServ)
+				return;
+
 			// bottom of tree configs
 			if (trunkTileRowToDraw == trunkHeight - 1 && rootsConfig != 1)
 			{
