@@ -36,7 +36,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		private int circleStartFrame;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			Main.projFrames[Projectile.type] = 5;
 		}

@@ -51,7 +51,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override string Texture => "Terraria/Images/Projectile_0";
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 1;
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
@@ -98,7 +97,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()

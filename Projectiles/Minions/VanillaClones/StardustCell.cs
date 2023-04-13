@@ -46,7 +46,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		bool hasHitTarget = false;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 4;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}

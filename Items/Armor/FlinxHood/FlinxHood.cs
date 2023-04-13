@@ -13,11 +13,6 @@ namespace AmuletOfManyMinions.Items.Armor.FlinxHood
 	[AutoloadEquip(EquipType.Head)]
 	public class FlinxFurHood : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 28;

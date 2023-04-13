@@ -13,8 +13,6 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
-
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
 

@@ -16,8 +16,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	{
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
-
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
 

@@ -51,7 +51,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		bool isFlopping = false;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			Main.projFrames[Projectile.type] = 6;
 		}

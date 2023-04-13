@@ -48,7 +48,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MagicDagger;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()
@@ -103,7 +102,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		private Vector2 baseVelocity;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 

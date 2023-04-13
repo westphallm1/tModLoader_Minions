@@ -17,7 +17,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		private NPC targetNPC => Main.npc[(int)Projectile.ai[1]];
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 6;
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;

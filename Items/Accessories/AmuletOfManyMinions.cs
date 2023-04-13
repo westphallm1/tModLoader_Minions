@@ -13,10 +13,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 	[AutoloadEquip(EquipType.Neck)]
 	class AmuletOfManyMinions : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

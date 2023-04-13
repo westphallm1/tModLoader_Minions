@@ -54,7 +54,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		protected int dustCount;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 

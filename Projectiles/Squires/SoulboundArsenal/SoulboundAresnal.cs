@@ -67,7 +67,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		protected virtual Color LightColor => Color.White;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 

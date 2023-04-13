@@ -46,7 +46,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 		const int TIME_TO_LIVE = 90;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 

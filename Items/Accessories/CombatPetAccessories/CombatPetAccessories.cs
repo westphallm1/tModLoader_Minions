@@ -12,10 +12,6 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 {
 	class CombatPetStylishTeamworkBow : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -86,10 +82,6 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 
 	abstract class CombatPetChewToy: ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -114,10 +106,6 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 	}
 	class CombatPetCrimsonChewToy : CombatPetChewToy
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ItemID.CrimtaneBar, 12)
 			.AddIngredient(ItemID.TissueSample, 6)

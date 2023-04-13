@@ -8,10 +8,6 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 	[AutoloadEquip(EquipType.Legs)]
 	public class AridLeggings : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 28;

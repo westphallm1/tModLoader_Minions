@@ -8,11 +8,6 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 	[AutoloadEquip(EquipType.Body)]
 	public class AridBreastplate : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

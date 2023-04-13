@@ -15,10 +15,6 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 	[AutoloadEquip(EquipType.Legs)]
 	class GraniteGreaves : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 28;

@@ -6,11 +6,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 {
 	public abstract class BaseIllusionistRobe : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

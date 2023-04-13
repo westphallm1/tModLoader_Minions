@@ -15,10 +15,6 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 	[AutoloadEquip(EquipType.Head)]
 	class GraniteMask : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 		public override void SetDefaults()
 		{
 			Item.width = 28;

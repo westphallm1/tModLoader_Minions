@@ -44,7 +44,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.GoblinGunner
 	{
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 1;
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;

@@ -13,11 +13,6 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 	[AutoloadEquip(EquipType.Head)]
 	public class AridHelmet : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 28;

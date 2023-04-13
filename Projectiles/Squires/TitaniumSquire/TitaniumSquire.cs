@@ -42,7 +42,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 		public override string Texture => "Terraria/Images/Item_0";
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 

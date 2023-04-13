@@ -8,11 +8,6 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 	[AutoloadEquip(EquipType.Head)]
 	class SpookyMask : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 28;

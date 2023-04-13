@@ -84,10 +84,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class WoodenWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 18;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
@@ -104,10 +100,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class GraniteWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 24;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
@@ -125,10 +117,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class BoneWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 32;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
@@ -141,10 +129,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class CrystalWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 40;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
@@ -162,10 +146,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class HallowedWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 48;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
@@ -183,10 +163,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class TrueEyeWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 80;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{

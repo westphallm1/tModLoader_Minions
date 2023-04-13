@@ -64,7 +64,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
@@ -123,7 +122,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 		protected virtual Color LightColor => new Color(1f, 0f, 0.8f, 1f);
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 

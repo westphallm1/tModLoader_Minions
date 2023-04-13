@@ -20,10 +20,6 @@ namespace AmuletOfManyMinions.Items.Consumables
 
 	public class CombatPetFriendshipBow: ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public static void SetFriendshipBowDefaults(Item Item)
 		{
 			Item.maxStack = 1;
@@ -128,10 +124,6 @@ namespace AmuletOfManyMinions.Items.Consumables
 
 	public class CombatPetAncientFriendshipBow: ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			CombatPetFriendshipBow.SetFriendshipBowDefaults(Item);

@@ -47,7 +47,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()

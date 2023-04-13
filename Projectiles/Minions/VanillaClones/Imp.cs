@@ -52,7 +52,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 

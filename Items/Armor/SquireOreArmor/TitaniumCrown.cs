@@ -8,11 +8,6 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 	[AutoloadEquip(EquipType.Head)]
 	class TitaniumCrown : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 28;

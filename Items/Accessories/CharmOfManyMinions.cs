@@ -7,10 +7,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 	[AutoloadEquip(EquipType.Neck)]
 	class CharmOfManyMinions : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

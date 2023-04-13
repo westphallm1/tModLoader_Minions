@@ -6,10 +6,6 @@ namespace AmuletOfManyMinions.Items.Accessories.VarietyCharm
 {
 	class VarietyCharm : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

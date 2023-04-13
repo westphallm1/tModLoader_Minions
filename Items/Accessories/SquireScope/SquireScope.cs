@@ -8,10 +8,6 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 {
 	class SquireScope : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

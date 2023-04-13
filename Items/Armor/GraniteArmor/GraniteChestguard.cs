@@ -15,11 +15,6 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 	[AutoloadEquip(EquipType.Body)]
 	class GraniteChestguard : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

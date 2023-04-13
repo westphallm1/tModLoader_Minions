@@ -22,10 +22,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.LilEnt
 	}
 	public class LilEntAccessory : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

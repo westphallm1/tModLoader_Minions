@@ -46,7 +46,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 1;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}

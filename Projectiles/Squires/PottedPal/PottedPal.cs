@@ -44,7 +44,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 

@@ -121,7 +121,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 4;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
@@ -410,7 +409,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 6;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}

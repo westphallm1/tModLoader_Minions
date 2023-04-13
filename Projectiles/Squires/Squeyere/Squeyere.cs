@@ -43,7 +43,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 	{
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 

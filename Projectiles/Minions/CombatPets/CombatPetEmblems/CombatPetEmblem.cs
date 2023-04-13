@@ -49,10 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class GoldenCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 1;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -65,10 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class PlatinumCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 1;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -81,10 +75,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class CorruptCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 2;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
@@ -99,10 +89,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class CrimsonCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 2;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
@@ -117,10 +103,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class SkeletalCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 3;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -135,10 +118,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class SoulfulCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 4;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -156,10 +136,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class HallowedCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 5;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -178,10 +155,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class SpectreCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 6;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
@@ -198,10 +171,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class StardustCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 7;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -217,10 +186,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class CelestialCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 8;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-		}
 
 		public override void SetDefaults()
 		{
