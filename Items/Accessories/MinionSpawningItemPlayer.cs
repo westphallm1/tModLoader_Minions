@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static AmuletOfManyMinions.CrossMod;
 using static Terraria.ModLoader.ModContent;
@@ -214,8 +215,14 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 	public class MinionVarietyBuff : ModBuff
 	{
+		public LocalizedText VarietyDamageBonusText { get; private set; }
+
+		public override LocalizedText Description => LocalizedText.Empty;
+
 		public override void SetStaticDefaults()
 		{
+			VarietyDamageBonusText = this.GetLocalization("VarietyDamageBonus");
+
 			Main.buffNoSave[Type] = true;
 			Main.debuff[Type] = true; // don't allow cancellation
 			Main.buffNoTimeDisplay[Type] = true;
@@ -223,12 +230,10 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void ModifyBuffText(ref string buffName, ref string tip, ref int rare)
 		{
-			// assuming this is only called client-side and it's always the owner who mouses over the buff tip
-			// this may not be the best way to update text
-			Player player = Main.player[Main.myPlayer];
+			Player player = Main.LocalPlayer;
 			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
 			float varietyBonus = modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus * 100;
-			tip = varietyBonus.ToString("0") + "% Minion Variety Damage Bonus";
+			tip = VarietyDamageBonusText.Format(varietyBonus.ToString("0"));
 		}
 
 		public override void Update(Player player, ref int buffIndex)

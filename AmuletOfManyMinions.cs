@@ -34,9 +34,9 @@ namespace AmuletOfManyMinions
 			SpriteCompositionManager.Load();
 			CritterConfigs.Load();
 
-			CycleTacticHotKey = KeybindLoader.RegisterKeybind(this, "Cycle Minion Tactic", "K");
-			CycleTacticsGroupHotKey = KeybindLoader.RegisterKeybind(this, "Cycle Tactics Group", "L");
-			QuickDefendHotKey = KeybindLoader.RegisterKeybind(this, "Minion Quick Defend", "V");
+			CycleTacticHotKey = KeybindLoader.RegisterKeybind(this, "CycleMinionTactic", "K");
+			CycleTacticsGroupHotKey = KeybindLoader.RegisterKeybind(this, "CycleTacticsGroup", "L");
+			QuickDefendHotKey = KeybindLoader.RegisterKeybind(this, "MinionQuickDefend", "V");
 		}
 
 		public override void PostSetupContent()

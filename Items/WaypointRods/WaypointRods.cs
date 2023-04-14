@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -20,10 +21,20 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		internal int placementRange;
 		internal abstract int placementRangeInBlocks { get; }
 
+		public static LocalizedText CommonTooltipText { get; private set; }
+
+		public static LocalizedText WaypointRangeText { get; private set; }
+
+		public override LocalizedText Tooltip => CommonTooltipText; //If need to adjust later individually, remove this and use system similar to squires in the lang file
+
 		public override void SetStaticDefaults()
 		{
 			ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
 			ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
+
+			string commonKey = "Common.WaypointRods.";
+			CommonTooltipText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}CommonTooltip"));
+			WaypointRangeText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}WaypointRange"));
 		}
 
 		public override void SetDefaults()
@@ -75,7 +86,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			tooltips.Add(new TooltipLine(Mod, "MinionWaypointRange", placementRangeInBlocks + " block range.")
+			tooltips.Add(new TooltipLine(Mod, nameof(WaypointRangeText), WaypointRangeText.Format(placementRangeInBlocks))
 			{
 				OverrideColor = Color.LimeGreen
 			});

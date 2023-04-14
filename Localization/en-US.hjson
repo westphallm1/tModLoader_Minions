@@ -358,77 +358,12 @@ Mods: {
 					'''
 			}
 
-			BoneWaypointRod: {
-				DisplayName: Skeletal Rod of Minion Guidance
-				Tooltip:
-					'''
-					Tool
-					Click to place a minion guidance waypoint!
-					Minions will automatically navigate to the waypoint
-					Attacking with a non-summon weapon dispels the waypoint
-					Minions deal less damage while attacking a far away waypoint
-					'''
-			}
-
-			CrystalWaypointRod: {
-				DisplayName: Crystal Rod of Minion Guidance
-				Tooltip:
-					'''
-					Tool
-					Click to place a minion guidance waypoint!
-					Minions will automatically navigate to the waypoint
-					Attacking with a non-summon weapon dispels the waypoint
-					Minions deal less damage while attacking a far away waypoint
-					'''
-			}
-
-			GraniteWaypointRod: {
-				DisplayName: Granite Rod of Minion Guidance
-				Tooltip:
-					'''
-					Tool
-					Click to place a minion guidance waypoint!
-					Minions will automatically navigate to the waypoint
-					Attacking with a non-summon weapon dispels the waypoint
-					Minions deal less damage while attacking a far away waypoint
-					'''
-			}
-
-			HallowedWaypointRod: {
-				DisplayName: Hallowed Rod of Minion Guidance
-				Tooltip:
-					'''
-					Tool
-					Click to place a minion guidance waypoint!
-					Minions will automatically navigate to the waypoint
-					Attacking with a non-summon weapon dispels the waypoint
-					Minions deal less damage while attacking a far away waypoint
-					'''
-			}
-
-			TrueEyeWaypointRod: {
-				DisplayName: Cthulhu's Eye of Minion Vision
-				Tooltip:
-					'''
-					Tool
-					Click to place a minion guidance waypoint!
-					Minions will automatically navigate to the waypoint
-					Attacking with a non-summon weapon dispels the waypoint
-					Minions deal less damage while attacking a far away waypoint
-					'''
-			}
-
-			WoodenWaypointRod: {
-				DisplayName: Wooden Rod of Minion Guidance
-				Tooltip:
-					'''
-					Tool
-					Click to place a minion guidance waypoint!
-					Minions will automatically navigate to the waypoint
-					Attacking with a non-summon weapon dispels the waypoint
-					Minions deal less damage while attacking a far away waypoint
-					'''
-			}
+			BoneWaypointRod.DisplayName: Skeletal Rod of Minion Guidance
+			CrystalWaypointRod.DisplayName: Crystal Rod of Minion Guidance
+			GraniteWaypointRod.DisplayName: Granite Rod of Minion Guidance
+			HallowedWaypointRod.DisplayName: Hallowed Rod of Minion Guidance
+			TrueEyeWaypointRod.DisplayName: Cthulhu's Eye of Minion Vision
+			WoodenWaypointRod.DisplayName: Wooden Rod of Minion Guidance
 
 			AcornMinionItem: {
 				DisplayName: Acorn Staff
@@ -1079,7 +1014,7 @@ Mods: {
 		Buffs: {
 			MinionVarietyBuff: {
 				DisplayName: Minion Variety!
-				Description: Mods.AmuletOfManyMinions.BuffDescription.MinionVarietyBuff
+				VarietyDamageBonus: "{0}% Minion Variety Damage Bonus"
 			}
 
 			IllusionistWispBuff: {
@@ -1138,8 +1073,8 @@ Mods: {
 			}
 
 			FlareVortexDebuff: {
-				DisplayName: Mods.AmuletOfManyMinions.BuffName.FlareVortexDebuff
-				Description: Mods.AmuletOfManyMinions.BuffDescription.FlareVortexDebuff
+				DisplayName: Flare Vortex
+				Description: Rapidly losing life
 			}
 
 			LilGatorMinionBuff: {
@@ -1745,9 +1680,9 @@ Mods: {
 		}
 
 		Keybinds: {
-			"Cycle Minion Tactic.DisplayName": Mods.AmuletOfManyMinions.Keybinds.Cycle Minion Tactic.DisplayName
-			"Cycle Tactics Group.DisplayName": Mods.AmuletOfManyMinions.Keybinds.Cycle Tactics Group.DisplayName
-			"Minion Quick Defend.DisplayName": Mods.AmuletOfManyMinions.Keybinds.Minion Quick Defend.DisplayName
+			CycleMinionTactic.DisplayName: Cycle Minion Tactic
+			CycleTacticsGroup.DisplayName: Cycle Tactics Group
+			MinionQuickDefend.DisplayName: Minion Quick Defend
 		}
 
 		Common: {
@@ -1765,6 +1700,18 @@ Mods: {
 				ClickAndHold: Click and hold to guide its attacks
 				ClickAndHoldPlural: Click and hold to guide their attacks
 				RightClickSpecial: Right-Click Special: {0}
+			}
+
+			WaypointRods: {
+				CommonTooltip:
+					'''
+					Tool
+					Click to place a minion guidance waypoint!
+					Minions will automatically navigate to the waypoint
+					Attacking with a non-summon weapon dispels the waypoint
+					Minions deal less damage while attacking a far away waypoint
+					'''
+				WaypointRange: "{0} block range"
 			}
 		}
 	}
