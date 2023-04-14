@@ -18,8 +18,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.TitaniumSquire
 
 	public class TitaniumSquireMinionItem : SquireMinionItem<TitaniumSquireMinionBuff, TitaniumSquireMinion>
 	{
-		protected override string SpecialName => "Titanium Drone";
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

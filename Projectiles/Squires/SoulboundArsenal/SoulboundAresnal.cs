@@ -22,11 +22,8 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 
 	public class SoulboundArsenalMinionItem : SquireMinionItem<SoulboundArsenalMinionBuff, SoulboundArsenalMinion>
 	{
-
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundArsenal/SoulboundArsenalItem";
 
-		protected override string SpecialName => "Soulbound Coalescence";
-		
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);

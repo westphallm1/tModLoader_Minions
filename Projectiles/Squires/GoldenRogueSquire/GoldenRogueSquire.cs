@@ -18,11 +18,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	}
 	public class GoldenRogueSquireMinionItem : SquireMinionItem<GoldenRogueSquireMinionBuff, GoldenRogueSquireMinion>
 	{
-		protected override string SpecialName => "Cloud of Knives";
-		protected override string SpecialDescription =>
-			"Teleports to the enemy nearest the cursor\n" +
-			"and throws a barrage of knives at them";
-		
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);

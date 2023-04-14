@@ -20,8 +20,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 	public class CrimsonSquireMinionItem : SquireMinionItem<CrimsonSquireMinionBuff, CrimsonSquireMinion>
 	{
-		protected override string SpecialName => "Flask of Ichor";
-		
 		public override void ApplyCrossModChanges()
 		{
 			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();

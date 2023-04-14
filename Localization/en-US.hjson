@@ -786,79 +786,99 @@ Mods: {
 				DisplayName: Adamantite Crest
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					An adamantite squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Pegasus Knight
+				SpecialDescription: ""
 			}
 
 			AncientCobaltSquireMinionItem: {
 				DisplayName: Ancient Crest of Cobalt
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					An ancient cobalt squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Magic Shotblast
+				SpecialDescription: ""
 			}
 
 			ArmoredBoneSquireMinionItem: {
 				DisplayName: Crest of Armored Bones
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					An armored bone squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Spirit of the Flail
+				SpecialDescription: ""
 			}
 
 			BoneSquireMinionItem: {
 				DisplayName: Crest of Bones
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A bone squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Flaming Flail
+				SpecialDescription: ""
 			}
 
 			CrimsonSquireMinionItem: {
 				DisplayName: Crest of the Crimson
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A crimson squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Flask of Ichor
+				SpecialDescription: ""
 			}
 
 			DemonSquireMinionItem: {
 				DisplayName: Crest of the Underworld
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A demon squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Imp Assistants
+				SpecialDescription: ""
 			}
 
 			EmpressSquireMinionItem: {
 				DisplayName: Chalice of the Empress
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					The priestess of light will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Spectrum Supreme
+				SpecialDescription: ""
 			}
 
 			GoldenRogueSquireMinionItem: {
 				DisplayName: Golden Rogue Crest
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A golden rogue squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Cloud of Knives
+				SpecialDescription:
+					'''
+					Teleports to the enemy nearest the cursor
+					and throws a barrage of knives at them
 					'''
 			}
 
@@ -866,29 +886,39 @@ Mods: {
 				DisplayName: Guide Friendship Bracelet
 				Tooltip:
 					'''
-					Summons a squire
-					Click and hold to guide its attacks!
+					{$Common.Squires.SummonsASquire}
+					{$Common.Squires.ClickAndHold}!
 					'Maybe you're not such a terrible person...'
 					'''
+				SpecialName: Flaming Arrow Volley
+				SpecialDescription: ""
 			}
 
 			MushroomSquireMinionItem: {
 				DisplayName: Crest of the Forest
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A mushroom squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Mushroom Toss
+				SpecialDescription: ""
 			}
 
 			PottedPalMinionItem: {
 				DisplayName: Potted Pal
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A friendly plant will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Pollination
+				SpecialDescription:
+					'''
+					Creates a short-lived Potted Pal, Jr.
+					that automatically attacks enemies
 					'''
 			}
 
@@ -896,90 +926,112 @@ Mods: {
 				DisplayName: Pumpkin Crest
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A pumpkin squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Giant Pumpkin
+				SpecialDescription: ""
 			}
 
 			SeaSquireMinionItem: {
 				DisplayName: Crest of the Sea
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A flying fish squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Shark Form
+				SpecialDescription: ""
 			}
 
 			ShadowSquireMinionItem: {
 				DisplayName: Crest of Shadows
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A shadow squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Flask of Cursed Flames
+				SpecialDescription: ""
 			}
 
 			SkywareSquireMinionItem: {
 				DisplayName: Crest of the Sky
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A skyware centurion will fight for you
-					Click and hold to guide its attacks!
+					{$Common.Squires.ClickAndHold}!
 					'''
+				SpecialName: Barrage
+				SpecialDescription: ""
 			}
 
 			SoulboundArsenalMinionItem: {
 				DisplayName: Soulbound Arsenal
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A soulbound bow and sword will fight for you!
-					Click and hold to guide their attacks
+					{$Common.Squires.ClickAndHoldPlural}
 					'''
+				SpecialName: Soulbound Coalescence
+				SpecialDescription: ""
 			}
 
 			SoulboundBowMinionItem: {
 				DisplayName: Soulbound Bow
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					An enchanted bow will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Soulbound Companion
+				SpecialDescription: The Soulbound Sword will briefly assist you
 			}
 
 			SoulboundSwordMinionItem: {
 				DisplayName: Soulbound Sword
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					An enchanted sword will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Soulbound Companion
+				SpecialDescription: The Soulbound Bow will briefly assist you
 			}
 
 			SqueyereMinionItem: {
 				DisplayName: Crest of Eyes
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A Squeyere will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'Squ-Eye-Re. Get it?'
 					'''
+				SpecialName: Seeing Double
+				SpecialDescription: ""
 			}
 
 			StardustSquireMinionItem: {
 				DisplayName: Crest of Stardust
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A stardust squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Stardust Constellation
+				SpecialDescription:
+					'''
+					Summons a lingering constellation
+					to shoot stars at enemies.
 					'''
 			}
 
@@ -987,29 +1039,39 @@ Mods: {
 				DisplayName: Titanium Crest
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A titanium squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Titanium Drone
+				SpecialDescription: ""
 			}
 
 			VikingSquireMinionItem: {
 				DisplayName: Crest of the Frozen North
 				Tooltip:
 					'''
-					Summons a squire
+					{$Common.Squires.SummonsASquire}
 					A viking squire will fight for you!
-					Click and hold to guide its attacks
+					{$Common.Squires.ClickAndHold}
 					'''
+				SpecialName: Icy Axe
+				SpecialDescription: ""
 			}
 
 			GuideVoodooSquireMinionItem: {
 				DisplayName: True Guide Voodoo Doll
 				Tooltip:
 					'''
-					Summons a squire
-					Click and hold to guide its attacks!
+					{$Common.Squires.SummonsASquire}
+					{$Common.Squires.ClickAndHold}
 					'You are a *REALLY* terrible person'
+					'''
+				SpecialName: Brutal Dash
+				SpecialDescription:
+					'''
+					Dashes across the whole screen horizontally,
+					hitting everything in its path
 					'''
 			}
 		}
@@ -1697,6 +1759,13 @@ Mods: {
 				Legends say that only a true master is capable wielding this pet's power.
 				But now you can too, for one easy payment of 50 gold!
 				'''
+
+			Squires: {
+				SummonsASquire: Summons a Squire
+				ClickAndHold: Click and hold to guide its attacks
+				ClickAndHoldPlural: Click and hold to guide their attacks
+				RightClickSpecial: Right-Click Special: {0}
+			}
 		}
 	}
 }

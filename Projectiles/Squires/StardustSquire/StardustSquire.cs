@@ -22,11 +22,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 
 	public class StardustSquireMinionItem : SquireMinionItem<StardustSquireMinionBuff, StardustSquireMinion>
 	{
-		protected override string SpecialName => "Stardust Constellation";
-		protected override string SpecialDescription => 
-			"Summons a lingering constellation\n" +
-			"to shoot stars at enemies.";
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

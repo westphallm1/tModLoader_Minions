@@ -21,8 +21,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.DemonSquire
 
 	public class DemonSquireMinionItem : SquireMinionItem<DemonSquireMinionBuff, DemonSquireMinion>
 	{
-		protected override string SpecialName => "Imp Assistants";
-		
 		public override void ApplyCrossModChanges()
 		{
 			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();

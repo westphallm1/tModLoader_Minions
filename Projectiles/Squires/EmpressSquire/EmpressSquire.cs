@@ -21,8 +21,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 
 	public class EmpressSquireMinionItem : SquireMinionItem<EmpressSquireMinionBuff, EmpressSquireMinion>
 	{
-		protected override string SpecialName => "Spectrum Supreme";
-		
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

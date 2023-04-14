@@ -17,8 +17,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 
 	public class GuideSquireMinionItem : SquireMinionItem<GuideSquireMinionBuff, GuideSquireMinion>
 	{
-		protected override string SpecialName => "Flaming Arrow Volley";
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

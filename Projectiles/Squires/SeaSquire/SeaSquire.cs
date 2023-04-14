@@ -19,8 +19,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 
 	public class SeaSquireMinionItem : SquireMinionItem<SeaSquireMinionBuff, SeaSquireMinion>
 	{
-		protected override string SpecialName => "Shark Form";
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

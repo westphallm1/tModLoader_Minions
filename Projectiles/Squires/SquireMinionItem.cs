@@ -5,6 +5,7 @@ using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Squires
@@ -12,9 +13,37 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 	public interface SquireMinionItemDetector { }
 	public abstract class SquireMinionItem<TBuff, TProj> : MinionItem<TBuff, TProj>, SquireMinionItemDetector where TBuff : ModBuff where TProj : SquireMinion
 	{
+		protected override bool CloneNewInstances => true;
 
-		protected abstract string SpecialName { get; }
-		protected virtual string SpecialDescription => null;
+		//Per-item texts
+		[field: CloneByReference]
+		public LocalizedText SpecialName { get; private set; }
+
+		[field: CloneByReference]
+		public LocalizedText SpecialDescription { get; private set; }
+
+		//Global texts
+		public static LocalizedText SummonsASquireText { get; private set; }
+		public static LocalizedText ClickAndHoldText { get; private set; }
+		public static LocalizedText ClickAndHoldPluralText { get; private set; }
+		public static LocalizedText RightClickSpecialText { get; private set; }
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+
+			SpecialName = this.GetLocalization("SpecialName"); //TODO local make it "forced" by detecting if its not translated
+
+			SpecialDescription = this.GetLocalization("SpecialDescription", () => string.Empty);
+
+			string commonKey = "Common.Squires.";
+			//Important to use ??= here so it only assigns it once
+			SummonsASquireText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}SummonsASquire"));
+			ClickAndHoldText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}ClickAndHold"));
+			ClickAndHoldPluralText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}ClickAndHoldPlural"));
+			RightClickSpecialText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}RightClickSpecial"));
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -106,13 +135,17 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 				}
 				index--;
 			}
-			tooltips.Insert(index + 1, new TooltipLine(Mod, "SquireSpecialName", "Right-Click Special: " + SpecialName)
+			tooltips.Insert(index + 1, new TooltipLine(Mod, "Squire" + nameof(SpecialName), RightClickSpecialText.Format(SpecialName.ToString()))
 			{
 				OverrideColor = Color.LimeGreen
 			});
-			if(SpecialDescription != null)
+			string specialdesc = SpecialDescription.ToString();
+			if (specialdesc != string.Empty)
 			{
-				tooltips.Insert(index + 2, new TooltipLine(Mod, "SquireSpecialDescription", SpecialDescription));
+				tooltips.Insert(index + 2, new TooltipLine(Mod, "Squire" + nameof(SpecialDescription), specialdesc)
+				{
+					OverrideColor = Color.Lerp(Color.White, Color.LimeGreen, 0.3f)
+				});
 			}
 		}
 	}

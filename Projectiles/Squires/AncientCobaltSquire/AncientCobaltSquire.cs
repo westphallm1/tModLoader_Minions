@@ -17,8 +17,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 
 	public class AncientCobaltSquireMinionItem : SquireMinionItem<AncientCobaltSquireMinionBuff, AncientCobaltSquireMinion>
 	{
-		protected override string SpecialName => "Magic Shotblast";
-		
 		public override void ApplyCrossModChanges()
 		{
 			var minionCollection = new SummonersShineMinionPowerCollection();

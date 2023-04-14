@@ -20,9 +20,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 
 	public class AdamantiteSquireMinionItem : SquireMinionItem<AdamantiteSquireMinionBuff, AdamantiteSquireMinion>
 	{
-
-		protected override string SpecialName => "Pegasus Knight";
-		
 		public override void ApplyCrossModChanges()
 		{
 			var minionCollection = new SummonersShineMinionPowerCollection();

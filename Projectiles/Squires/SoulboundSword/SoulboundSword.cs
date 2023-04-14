@@ -18,9 +18,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 
 	public class SoulboundSwordMinionItem : SquireMinionItem<SoulboundSwordMinionBuff, SoulboundSwordMinion>
 	{
-
-		protected override string SpecialName => "Soulbound Companion";
-		protected override string SpecialDescription => "The Soulbound Bow will briefly assist you";
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundSword/SoulboundSword";
 		
 		public override void ApplyCrossModChanges()

@@ -21,11 +21,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 
 	public class PottedPalMinionItem : SquireMinionItem<PottedPalMinionBuff, PottedPalMinion>
 	{
-		protected override string SpecialName => "Pollination";
-		protected override string SpecialDescription => 
-			"Creates a short-lived Potted Pal, Jr.\n" +
-			"that automatically attacks enemies";
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

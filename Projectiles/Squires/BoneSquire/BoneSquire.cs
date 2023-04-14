@@ -20,8 +20,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 
 	public class BoneSquireMinionItem : SquireMinionItem<BoneSquireMinionBuff, BoneSquireMinion>
 	{
-		protected override string SpecialName => "Flaming Flail";
-		
 		public override void ApplyCrossModChanges()
 		{
 			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();

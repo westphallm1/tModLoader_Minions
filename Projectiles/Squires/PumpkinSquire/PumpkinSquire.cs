@@ -22,8 +22,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 
 	public class PumpkinSquireMinionItem : SquireMinionItem<PumpkinSquireMinionBuff, PumpkinSquireMinion>
 	{
-		protected override string SpecialName => "Giant Pumpkin";
-
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
