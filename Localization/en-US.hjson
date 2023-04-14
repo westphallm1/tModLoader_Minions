@@ -400,105 +400,16 @@ Mods: {
 				Tooltip: Summons a charred chimera fight for you!
 			}
 
-			CelestialCombatPetEmblem: {
-				DisplayName: Celestial Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			CorruptCombatPetEmblem: {
-				DisplayName: Corrupt Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			CrimsonCombatPetEmblem: {
-				DisplayName: Crimson Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			GoldenCombatPetEmblem: {
-				DisplayName: Golden Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			HallowedCombatPetEmblem: {
-				DisplayName: Hallowed Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			PlatinumCombatPetEmblem: {
-				DisplayName: Platinum Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			SkeletalCombatPetEmblem: {
-				DisplayName: Skeletal Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			SoulfulCombatPetEmblem: {
-				DisplayName: Soulful Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			SpectreCombatPetEmblem: {
-				DisplayName: Spectre Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
-
-			StardustCombatPetEmblem: {
-				DisplayName: Stardust Combat Pet Emblem
-				Tooltip:
-					'''
-					An emblem that increases the power of your combat pets!
-					As long as this item is in your inventory, your combat pet will deal
-					additional damage, and will receive a bonus to movement speed and attack range.
-					'''
-			}
+			CelestialCombatPetEmblem.DisplayName: Celestial Combat Pet Emblem
+			CorruptCombatPetEmblem.DisplayName: Corrupt Combat Pet Emblem
+			CrimsonCombatPetEmblem.DisplayName: Crimson Combat Pet Emblem
+			GoldenCombatPetEmblem.DisplayName: Golden Combat Pet Emblem
+			HallowedCombatPetEmblem.DisplayName: Hallowed Combat Pet Emblem
+			PlatinumCombatPetEmblem.DisplayName: Platinum Combat Pet Emblem
+			SkeletalCombatPetEmblem.DisplayName: Skeletal Combat Pet Emblem
+			SoulfulCombatPetEmblem.DisplayName: Soulful Combat Pet Emblem
+			SpectreCombatPetEmblem.DisplayName: Spectre Combat Pet Emblem
+			StardustCombatPetEmblem.DisplayName: Stardust Combat Pet Emblem
 
 			AxolotlMinionItem: {
 				DisplayName: Quirky Bow of Friendship
@@ -1688,12 +1599,15 @@ Mods: {
 		Common: {
 			AoMMVersion: (AoMM Version)
 			ConcatenateTwo: "{0} {1}"
-			Replica: Replica
-			ReplicaTooltip:
-				'''
-				Legends say that only a true master is capable wielding this pet's power.
-				But now you can too, for one easy payment of 50 gold!
-				'''
+
+			Replicas: {
+				Replica: Replica
+				CommonTooltip:
+					'''
+					Legends say that only a true master is capable wielding this pet's power.
+					But now you can too, for one easy payment of 50 gold!
+					'''
+			}
 
 			Squires: {
 				SummonsASquire: Summons a Squire
@@ -1713,6 +1627,42 @@ Mods: {
 					'''
 				WaypointRange: "{0} block range"
 			}
+
+			CombatPetEmblems: {
+				CommonTooltip:
+					'''
+					An emblem that increases the power of your combat pets!
+					As long as this item is in your inventory, your combat pet will deal
+					additional damage, and will receive a bonus to movement speed and attack range.
+					'''
+				MinionSlotsToCombatPet: In addition, you can use up to {0} of your minion slots on combat pets.
+			}
+
+			CombatPets: {
+				CommonDescription:
+					'''
+					This pet's fighting spirit has been awakened!
+					It can be powered up by holding a Combat Pet Emblem.
+					'''
+				NotLeveledUp:
+					'''
+					This pet will gain a stronger attack pattern if you hold a
+					{0} Combat Pet Emblem or stronger!
+					'''
+				LeveledUp: Your emblem enables this pet's stronger attack pattern!
+			}
+		}
+
+		CombatPetLevels: {
+			Base: Base
+			Golden: Golden
+			Demonite: Demonite
+			Skeletal: Skeletal
+			Soulful: Soulful
+			Hallowed: Hallowed
+			Spectre: Spectre
+			Stardust: Stardust
+			Celestial: Celestial
 		}
 	}
 }

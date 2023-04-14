@@ -17,17 +17,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	{
 		internal abstract int PetLevel { get; }
 
-		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		public static LocalizedText CommonTooltipText { get; private set; }
+
+		public static LocalizedText MinionSlotsToCombatPetText { get; private set; }
+
+		public override LocalizedText Tooltip => CommonTooltipText;
+
+		public override void SetStaticDefaults()
 		{
-			int maxCombatPets = CombatPetLevelTable.PetLevelTable[PetLevel].MaxPets;
-			if(ServerConfig.Instance.AllowMultipleCombatPets &&  maxCombatPets > 1)
-			{
-			tooltips.Add(new TooltipLine(Mod, "MaxCombatPets", 
-				"In addition, you can use up to " + maxCombatPets + " of your minion slots on combat pets." )
-			{
-				OverrideColor = Color.LimeGreen
-			});
-			}
+			string commonKey = "Common.CombatPetEmblems.";
+			CommonTooltipText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}CommonTooltip"));
+			MinionSlotsToCombatPetText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}MinionSlotsToCombatPet"));
 		}
 
 		public override void SetDefaults()
@@ -38,6 +38,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			Item.shoot = ProjectileID.WoodenArrowFriendly; // don't actually shoot anything
 			Item.damage = CombatPetLevelTable.PetLevelTable[PetLevel].BaseDamage;
 			Item.knockBack = 1f; // make nonzero to allow more modifiers
+		}
+
+		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		{
+			int maxCombatPets = CombatPetLevelTable.PetLevelTable[PetLevel].MaxPets;
+			if (ServerConfig.Instance.AllowMultipleCombatPets && maxCombatPets > 1)
+			{
+				tooltips.Add(new TooltipLine(Mod, nameof(MinionSlotsToCombatPetText),
+					MinionSlotsToCombatPetText.Format(maxCombatPets))
+				{
+					OverrideColor = Color.LimeGreen
+				});
+			}
 		}
 
 		public override bool CanUseItem(Player player)

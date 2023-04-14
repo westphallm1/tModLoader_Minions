@@ -13,7 +13,7 @@ namespace AmuletOfManyMinions
 	{
 		public static LocalizedText AoMMVersionText { get; private set; }
 		public static LocalizedText ReplicaText { get; private set; }
-		public static LocalizedText ReplicaTooltipText { get; private set; }
+		public static LocalizedText ReplicaCommonTooltipText { get; private set; }
 
 		// The "mold" to combine two texts together
 		public static LocalizedText ConcatenateTwoText { get; private set; }
@@ -37,8 +37,8 @@ namespace AmuletOfManyMinions
 		{
 			string commonKey = "Common.";
 			AoMMVersionText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}AoMMVersion"));
-			ReplicaText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}Replica"));
-			ReplicaTooltipText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}ReplicaTooltip"));
+			ReplicaText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}Replicas.Replica"));
+			ReplicaCommonTooltipText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}Replicas.CommonTooltip"));
 
 			ConcatenateTwoText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}ConcatenateTwo"));
 		}

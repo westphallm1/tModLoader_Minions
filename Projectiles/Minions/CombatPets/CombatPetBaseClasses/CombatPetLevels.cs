@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public int BaseSearchRange { get; } // The base distance combat pets will seek from the player 
 		public float BaseSpeed { get; } // How the AI actually uses speed varies quite a bit from type to type ...
 		public int MaxPets { get; } // Maximum # of unique combat pets available
-		public string Description { get; }  // Used in combat pet item tooltips referring to level up points
+		public LocalizedText Description { get; }  // Used in combat pet item tooltips referring to level up points
 	}
 	internal struct CombatPetLevelInfo : ICombatPetLevelInfo
 	{
@@ -47,16 +47,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public int BaseSearchRange { get; private set; } // The base distance combat pets will seek from the player 
 		public float BaseSpeed { get; private set; } // How the AI actually uses speed varies quite a bit from type to type ...
 		public int MaxPets { get; private set; } // Maximum # of unique combat pets available
-		public string Description { get; private set; }  // Used in combat pet item tooltips referring to level up points
+		public LocalizedText Description { get; private set; }  // Used in combat pet item tooltips referring to level up points
 
-		public CombatPetLevelInfo(int level, int damage, int searchRange, int baseSpeed, int maxPets, string description)
+		public CombatPetLevelInfo(int level, int damage, int searchRange, int baseSpeed, int maxPets, string key)
 		{
 			Level = level;
 			BaseDamage = damage;
 			BaseSearchRange = searchRange;
 			BaseSpeed = baseSpeed;
 			MaxPets = maxPets;
-			Description = description;
+			Description = Language.GetOrRegister(key);
 		}
 	}
 
@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public int BaseSearchRange => RawInfo.BaseSearchRange + Player.SearchRangeBonus;
 		public float BaseSpeed => RawInfo.BaseSpeed + Player.PetSpeedBonus;
 		public int MaxPets => RawInfo.MaxPets;
-		public string Description => RawInfo.Description;
+		public LocalizedText Description => RawInfo.Description;
 
 		private readonly LeveledCombatPetModPlayer Player;
 		private ICombatPetLevelInfo RawInfo => CombatPetLevelTable.PetLevelTable[Level];
@@ -89,22 +89,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public override void Load()
 		{
+			string commonKey = Mod.GetLocalizationKey("CombatPetLevels.");
 			PetLevelTable = new ICombatPetLevelInfo[]{
-				new CombatPetLevelInfo(0, 7, 550, 8, 1, "Base"), // Base level
-				new CombatPetLevelInfo(1, 11, 600, 8, 1, "Golden"), // ore tier
-				new CombatPetLevelInfo(2, 15, 700, 9, 1, "Demonite"), // EoC - tier
-				new CombatPetLevelInfo(3, 18, 750, 10, 2, "Skeletal"), // Dungeon Tier
-				new CombatPetLevelInfo(4, 30, 900, 12, 2, "Soulful"), // Post WoF
-				new CombatPetLevelInfo(5, 36, 950, 14, 3, "Hallowed"), // Post Mech
-				new CombatPetLevelInfo(6, 42, 1000, 15, 3, "Spectre"), // Post Plantera
-				new CombatPetLevelInfo(7, 52, 1050, 16, 4, "Stardust"), // Post Pillars
-				new CombatPetLevelInfo(8, 80, 1100, 18, 6, "Celestial") // Post Moon Lord
+				new CombatPetLevelInfo(0, 7, 550, 8, 1, $"{commonKey}Base"), // Base level (no associated emblem)
+
+				new CombatPetLevelInfo(1, 11, 600, 8, 1, $"{commonKey}Golden"), // ore tier
+				new CombatPetLevelInfo(2, 15, 700, 9, 1, $"{commonKey}Demonite"), // EoC - tier
+				new CombatPetLevelInfo(3, 18, 750, 10, 2, $"{commonKey}Skeletal"), // Dungeon Tier
+				new CombatPetLevelInfo(4, 30, 900, 12, 2, $"{commonKey}Soulful"), // Post WoF
+				new CombatPetLevelInfo(5, 36, 950, 14, 3, $"{commonKey}Hallowed"), // Post Mech
+				new CombatPetLevelInfo(6, 42, 1000, 15, 3, $"{commonKey}Spectre"), // Post Plantera
+				new CombatPetLevelInfo(7, 52, 1050, 16, 4, $"{commonKey}Stardust"), // Post Pillars
+				new CombatPetLevelInfo(8, 80, 1100, 18, 6, $"{commonKey}Celestial") // Post Moon Lord
 			};
 		}
 
 		public override void Unload()
 		{
-			base.Unload();
+			PetLevelTable = null;
 		}
 	}
 
@@ -422,9 +424,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 	internal class CombatPetItemUtils : ModSystem
 	{
+		public static LocalizedText CommonDescriptionText { get; private set; }
+		public static LocalizedText NotLeveledUpText { get; private set; }
+		public static LocalizedText LeveledUpText { get; private set; }
 
 		public override void Load()
 		{
+			string commonKey = "Common.CombatPets.";
+			CommonDescriptionText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}CommonDescription"));
+			NotLeveledUpText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}NotLeveledUp"));
+			LeveledUpText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}LeveledUp"));
+
 			On_Player.AddBuff += Player_AddBuff;
 		}
 
@@ -442,31 +452,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public static void AddCombatPetTooltip(Mod mod,int attackPatternUpdateTier, List<TooltipLine> tooltips)
 		{
-			tooltips.Add(new TooltipLine(mod, "CombatPetDescription", 
-				"This pet's fighting spirit has been awakened!\n" +
-				"It can be powered up by holding a Combat Pet Emblem.")
+			tooltips.Add(new TooltipLine(mod, nameof(CommonDescriptionText), CommonDescriptionText.ToString())
 			{
 				OverrideColor = Color.LimeGreen
 			});
 
 
-			LeveledCombatPetModPlayer player = Main.player[Main.myPlayer].GetModPlayer<LeveledCombatPetModPlayer>();
+			LeveledCombatPetModPlayer player = Main.LocalPlayer.GetModPlayer<LeveledCombatPetModPlayer>();
 			if(attackPatternUpdateTier == 0)
 			{
 				return;
 			} else if (attackPatternUpdateTier > player.PetLevel)
 			{
-				tooltips.Add(new TooltipLine(mod, "CombatPetNotLeveledUp", 
-					"This pet will gain a stronger attack pattern if you hold a\n" +
-					CombatPetLevelTable.PetLevelTable[attackPatternUpdateTier].Description + 
-					" Combat Pet Emblem or stronger!")
+				tooltips.Add(new TooltipLine(mod, nameof(NotLeveledUpText),
+					NotLeveledUpText.Format(CombatPetLevelTable.PetLevelTable[attackPatternUpdateTier].Description))
 				{
 					OverrideColor = Color.Gray
 				});
 			} else
 			{
-				tooltips.Add(new TooltipLine(mod, "CombatPetLeveledUp", 
-					"Your emblem enables this pet's stronger attack pattern!")
+				tooltips.Add(new TooltipLine(mod, nameof(LeveledUpText), LeveledUpText.ToString())
 				{
 					OverrideColor = Color.LimeGreen
 				});
