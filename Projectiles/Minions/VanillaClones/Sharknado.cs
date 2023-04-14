@@ -17,12 +17,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class SharknadoMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SharknadoMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.SharknadoMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.SharknadoMinion"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.SharknadoMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.SharknadoMinion");
 	}
 
 	public class SharknadoMinionItem : VanillaCloneMinionItem<SharknadoMinionBuff, SharknadoMinion>

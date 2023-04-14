@@ -18,14 +18,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public class BabyFinchMinionBuff : MinionBuff
 	{
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.BabyBird;
-		internal override int[] ProjectileTypes => new int[] { ProjectileType<BabyFinchMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.BabyBird") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.BabyBird"));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.BabyBird"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.BabyBird");
+
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<BabyFinchMinion>() };
 	}
 
 	public class BabyFinchMinionItem : VanillaCloneMinionItem<BabyFinchMinionBuff, BabyFinchMinion>
@@ -38,6 +36,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public class BabyFinchMinion : HeadCirclingGroupAwareMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabyBird;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.BabyFinch"));
+
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 12;
 		public override int BuffId => BuffType<BabyFinchMinionBuff>();
@@ -45,7 +46,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BabyFinch") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 5;
 		}
 

@@ -34,15 +34,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class EaterOfWormsMinion : CombatPetGroundedWormMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.EaterOfWorldsPet;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.EaterOfWorms"));
+
 		public override int BuffId => BuffType<EaterOfWormsMinionBuff>();
 		public override int CounterType => -1;
 		protected override int dustType => 135;
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.EaterOfWorms") + " (AoMM Version)");
-		}
 
 		public sealed override void SetDefaults()
 		{

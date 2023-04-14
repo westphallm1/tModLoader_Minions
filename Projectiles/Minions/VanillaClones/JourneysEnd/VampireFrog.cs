@@ -16,14 +16,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	{
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.VampireFrog;
 
-		internal override int[] ProjectileTypes => new int[] { ProjectileType<VampireFrogMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.VampireFrog") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.VampireFrog"));
-		}
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.VampireFrog"));
 
+		public override LocalizedText Description => Language.GetText("BuffDescription.VampireFrog");
+
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<VampireFrogMinion>() };
 	}
 
 	public class VampireFrogMinionItem : VanillaCloneMinionItem<VampireFrogMinionBuff, VampireFrogMinion>

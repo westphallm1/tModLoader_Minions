@@ -414,13 +414,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public abstract string VanillaBuffName { get; }
 
 		public override string Texture => "Terraria/Images/Buff_" + VanillaBuffId;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName." + VanillaBuffName) + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription." + VanillaBuffName));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName." + VanillaBuffName));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription." + VanillaBuffName);
 	}
 
 	internal class CombatPetItemUtils : ModSystem

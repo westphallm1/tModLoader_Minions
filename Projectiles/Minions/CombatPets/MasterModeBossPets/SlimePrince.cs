@@ -108,6 +108,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 	public class SlimePrinceMinion : CombatPetSlimeMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.KingSlimePet;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.KingSlimePet"));
+
 		public override int BuffId => BuffType<SlimePrinceMinionBuff>();
 
 		private bool wasFlyingThisFrame = false;
@@ -117,7 +120,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.KingSlimePet") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 12;
 			Main.projPet[Projectile.type] = true;
 		}

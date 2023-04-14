@@ -16,13 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class StardustDragonMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustDragonCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.StardustDragonMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.StardustDragonMinion"));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.StardustDragonMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.StardustDragonMinion");
 	}
 
 	public class StardustDragonMinionItem : VanillaCloneMinionItem<StardustDragonMinionBuff, StardustDragonCounterMinion>
@@ -41,16 +38,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class StardustDragonMinion : WormMinion
 	{
 		public override string Texture => "Terraria/Images/Item_0";
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.StardustDragon"));
 		public override int BuffId => BuffType<StardustDragonMinionBuff>();
 		public override int CounterType => ProjectileType<StardustDragonCounterMinion>();
 		protected override int dustType => 135;
 		protected override float baseDamageRatio => 1.6f;
 		protected override float damageGrowthRatio => 0.45f;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.StardustDragon") + " (AoMM Version)");
-		}
 
 		public sealed override void SetDefaults()
 		{

@@ -14,12 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class HornetMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<HornetMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.HornetMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.HornetMinion"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.HornetMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.HornetMinion");
 	}
 
 	public class HornetMinionItem : VanillaCloneMinionItem<HornetMinionBuff, HornetMinion>

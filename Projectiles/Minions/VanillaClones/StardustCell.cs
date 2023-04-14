@@ -18,12 +18,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class StardustCellMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustCellMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.StardustMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.StardustMinion"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.StardustMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.StardustMinion");
 	}
 
 	public class StardustCellMinionItem : VanillaCloneMinionItem<StardustCellMinionBuff, StardustCellMinion>
@@ -175,6 +173,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.StardustCellMinion;
 		public override string GlowTexture => "Terraria/Images/Glow_189";
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.StardustCellMinion"));
+
 		internal override int? FiredProjectileId => ProjectileType<StardustCellClinger>();
 		internal override SoundStyle? ShootSound => SoundID.NPCDeath7 with { Volume = 0.5f };
 
@@ -184,7 +184,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.StardustCellMinion") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

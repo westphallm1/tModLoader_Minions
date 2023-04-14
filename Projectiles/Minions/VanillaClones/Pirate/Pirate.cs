@@ -18,14 +18,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 	public class PirateMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<PirateMinion>(), ProjectileType<ParrotMinion>(), ProjectileType<PirateDeadeyeMinion>(), ProjectileType<FlyingDutchmanMinion>() };
-			
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.PirateMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.PirateMinion"));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.PirateMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.PirateMinion");
 	}
 
 	public class PirateMinionItem : VanillaCloneMinionItem<PirateMinionBuff, PirateMinion>
@@ -281,11 +277,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SoulscourgePirate;
 
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.SoulscourgePirate") + " (AoMM Version)");
-		}
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.SoulscourgePirate"));
 
 		public override void SetDefaults()
 		{
@@ -314,16 +306,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 	public class PirateDeadeyeMinion : BasePirateMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.OneEyedPirate;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.OneEyedPirate"));
+
 		int lastFiredFrame = 0;
 		// don't get too close
 		int preferredDistanceFromTarget = 96;
 		private float shootAngle;
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.OneEyedPirate") + " (AoMM Version)");
-		}
 
 		public override void LoadAssets()
 		{
@@ -450,13 +439,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 	}
 	public class ParrotMinion : HeadCirclingGroupAwareMinion
 	{
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.Parrot"));
+
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 16;
 		public override int BuffId => BuffType<PirateMinionBuff>();
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Parrot") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -532,6 +522,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 
 	public class FlyingDutchmanMinion : HoverShooterMinion
 	{
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.PirateCaptain"));
+
 		public override int BuffId => BuffType<PirateMinionBuff>();
 
 		internal override int? FiredProjectileId => ProjectileType<PirateCannonball>();
@@ -539,7 +531,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.PirateCaptain") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}

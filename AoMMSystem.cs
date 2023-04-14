@@ -11,6 +11,38 @@ namespace AmuletOfManyMinions
 {
 	public class AoMMSystem : ModSystem
 	{
+		public static LocalizedText AoMMVersionText { get; private set; }
+		public static LocalizedText ReplicaText { get; private set; }
+		public static LocalizedText ReplicaTooltipText { get; private set; }
+
+		// The "mold" to combine two texts together
+		public static LocalizedText ConcatenateTwoText { get; private set; }
+
+		public static LocalizedText AppendAoMMVersion(LocalizedText text)
+		{
+			return ConcatenateTwoText.WithFormatArgs(text, AoMMVersionText);
+		}
+
+		public static LocalizedText PrependReplica(LocalizedText text)
+		{
+			return ConcatenateTwoText.WithFormatArgs(ReplicaText, text);
+		}
+
+		public override void Load()
+		{
+			LoadCommonLocalization();
+		}
+
+		private void LoadCommonLocalization()
+		{
+			string commonKey = "Common.";
+			AoMMVersionText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}AoMMVersion"));
+			ReplicaText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}Replica"));
+			ReplicaTooltipText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}ReplicaTooltip"));
+
+			ConcatenateTwoText = Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}ConcatenateTwo"));
+		}
+
 		public override void AddRecipeGroups()
 		{
 			RecipeGroup silverGroup = new RecipeGroup(

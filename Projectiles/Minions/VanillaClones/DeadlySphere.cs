@@ -23,13 +23,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			ProjectileType<DeadlySphereClingerMinion>(),
 			ProjectileType<DeadlySphereFireMinion>()
 		};
-		
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.DeadlySphere") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.DeadlySphere"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.DeadlySphere"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.DeadlySphere");
 	}
 
 	public class DeadlySphereMinionItem : VanillaCloneMinionItem<DeadlySphereMinionBuff, DeadlySphereMinion>
@@ -122,12 +119,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeadlySphere;
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.DeadlySphere"));
+
 		internal override int? FiredProjectileId => null;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.DeadlySphere") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 21;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -227,12 +225,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeadlySphere;
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.DeadlySphere"));
+
 		internal override int? FiredProjectileId => null;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.DeadlySphere") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 21;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -340,6 +339,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override int BuffId => BuffType<DeadlySphereMinionBuff>();
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.DeadlySphere;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.DeadlySphere"));
+
 		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
 
 		internal override int? FiredProjectileId => null;
@@ -347,7 +349,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.DeadlySphere") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 21;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

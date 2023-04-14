@@ -17,14 +17,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public class SanguineBatMinionBuff : MinionBuff
 	{
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.BatOfLight;
-		internal override int[] ProjectileTypes => new int[] { ProjectileType<SanguineBatMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.BatOfLight") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.BatOfLight"));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.BatOfLight"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.BatOfLight");
+
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<SanguineBatMinion>() };
 	}
 
 	public class SanguineBatMinionItem : VanillaCloneMinionItem<SanguineBatMinionBuff, SanguineBatMinion>
@@ -37,6 +35,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public class SanguineBatMinion : HeadCirclingGroupAwareMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BatOfLight;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.BatOfLight"));
+
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 12;
 		private NPC currentTarget;
@@ -47,7 +48,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BatOfLight") + " (AoMM Version)");
 			IdleLocationSets.circlingHead.Add(Type);
 			Main.projFrames[Projectile.type] = 5;
 		}

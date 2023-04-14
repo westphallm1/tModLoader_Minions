@@ -15,6 +15,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
 	public abstract class ReplicaCombatPetMinionItem<TBuff, TProj> : CombatPetMinionItem<TBuff, TProj> where TBuff: ModBuff where TProj: Minion
 	{
+		public override LocalizedText DisplayName => AoMMSystem.PrependReplica(Language.GetText("ItemName." + VanillaItemName));
+		public override LocalizedText Tooltip => AoMMSystem.ReplicaTooltipText;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

@@ -19,13 +19,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class PygmyMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] {  ProjectileType<Pygmy1Minion>(), ProjectileType<Pygmy2Minion>(), ProjectileType<Pygmy3Minion>(), ProjectileType<Pygmy4Minion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.Pygmies") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.Pygmies"));
-		}
+		
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.Pygmies"));
 
+		public override LocalizedText Description => Language.GetText("BuffDescription.Pygmies");
 	}
 
 	public class PygmyMinionItem : VanillaCloneMinionItem<PygmyMinionBuff, Pygmy1Minion>

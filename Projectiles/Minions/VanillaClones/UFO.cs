@@ -15,12 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class UFOMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<UFOMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.UFOMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.UFOMinion"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.UFOMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.UFOMinion");
 	}
 
 	public class UFOMinionItem : VanillaCloneMinionItem<UFOMinionBuff, UFOMinion>
@@ -54,12 +52,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.UFOMinion;
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.UFOMinion"));
+
 		internal int baseSpeed = 14;
 		internal int baseInertia = 10;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.UFOMinion") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

@@ -20,12 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal abstract string VanillaItemName { get;  }
 		public override string Texture => "Terraria/Images/Item_" + VanillaItemID;
 
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ItemName." + VanillaItemName) + " (AoMM Version)");
-			// Tooltip.SetDefault(Language.GetTextValue("ItemTooltip." + VanillaItemName));
-		}
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ItemName." + VanillaItemName));
+		public override LocalizedText Tooltip => Language.GetText("ItemTooltip." + VanillaItemName);
 
 		public override void SetDefaults()
 		{

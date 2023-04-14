@@ -17,12 +17,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class SpiderMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] {  ProjectileType<JumperSpiderMinion>(), ProjectileType<VenomSpiderMinion>(), ProjectileType<DangerousSpiderMinion>()  };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.SpiderMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.SpiderMinion"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.SpiderMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.SpiderMinion");
 
 		public override void Update(Player player, ref int buffIndex)
 		{
@@ -76,6 +74,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	{
 		public override int BuffId => BuffType<SpiderMinionBuff>();
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.Spider"));
+
 		internal bool isClinging = false;
 		internal bool onWall = false;
 		internal int xMaxSpeed = 10;
@@ -96,7 +96,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spider") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 11;
 		}
 

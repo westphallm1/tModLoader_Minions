@@ -22,12 +22,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class ImpMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<ImpMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.ImpMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.ImpMinion"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.ImpMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.ImpMinion");
 	}
 
 	public class ImpMinionItem : VanillaCloneMinionItem<ImpMinionBuff, ImpMinion>

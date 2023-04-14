@@ -17,14 +17,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public class EnchantedDaggerMinionBuff : MinionBuff
 	{
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.Smolstar;
-		internal override int[] ProjectileTypes => new int[] { ProjectileType<EnchantedDaggerMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.Smolstar") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.Smolstar"));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.Smolstar"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.Smolstar");
+
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<EnchantedDaggerMinion>() };
 	}
 
 	public class EnchantedDaggerMinionItem : VanillaCloneMinionItem<EnchantedDaggerMinionBuff, EnchantedDaggerMinion>
@@ -37,6 +35,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	public class EnchantedDaggerMinion : HeadCirclingGroupAwareMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Smolstar;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.Smolstar"));
+
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 12;
 		public override int BuffId => BuffType<EnchantedDaggerMinionBuff>();
@@ -48,7 +49,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Smolstar") + " (AoMM Version)");
 			IdleLocationSets.circlingHead.Add(Type);
 			Main.projFrames[Projectile.type] = 2;
 		}

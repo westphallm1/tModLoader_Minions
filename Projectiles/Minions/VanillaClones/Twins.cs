@@ -18,12 +18,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class TwinsMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<MiniRetinazerMinion>(), ProjectileType<MiniSpazmatismMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("BuffName.TwinEyesMinion") + " (AoMM Version)");
-			// Description.SetDefault(Language.GetTextValue("BuffDescription.TwinEyesMinion"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.TwinEyesMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.TwinEyesMinion");
 	}
 
 	public class TwinsMinionItem : VanillaCloneMinionItem<TwinsMinionBuff, MiniRetinazerMinion>
@@ -135,13 +133,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Retanimini;
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.Retanimini"));
+
 		internal override int? FiredProjectileId => ProjectileType<MiniTwinsLaser>();
 
 		internal override SoundStyle? ShootSound => SoundID.Item10 with { Volume = 0.5f };
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Retanimini") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -211,13 +210,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Spazmamini;
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.Spazmamini"));
+
 		internal override int? FiredProjectileId => ProjectileType<MiniEyeFire>();
 		internal override SoundStyle? ShootSound => SoundID.Item34 with { Volume = 0.5f };
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Spazmamini") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 3;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
