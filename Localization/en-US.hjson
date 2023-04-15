@@ -368,6 +368,11 @@ Mods: {
 					Invites another special combat pet to your team!
 					It will always be different from the last pet that joined.
 					'''
+				FriendshipBowRequirement:
+					'''
+					You must use the Bow of Friendship before using this item.
+					Try searching wooden chests near spawn!
+					'''
 			}
 
 			GraniteSpark: {

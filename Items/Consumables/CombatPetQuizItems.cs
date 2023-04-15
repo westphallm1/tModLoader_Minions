@@ -11,13 +11,10 @@ using AmuletOfManyMinions.Core.Minions.CombatPetsQuiz;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Items.Materials;
+using Terraria.Localization;
 
 namespace AmuletOfManyMinions.Items.Consumables
 {
-	class CombatPetQuizItems
-	{
-	}
-
 	public class CombatPetFriendshipBow: ModItem
 	{
 		public static void SetFriendshipBowDefaults(Item Item)
@@ -63,17 +60,20 @@ namespace AmuletOfManyMinions.Items.Consumables
 
 	public class CombatPetTeamworkBow: ModItem
 	{
-		internal static string FriendshipBowRequirement =
-			"You must use the Bow of Friendship before using this item.\n" +
-			"Try searching wooden chests near spawn!";
+		public static LocalizedText FriendshipBowRequirementText { get; private set; }
+
+		public override void SetStaticDefaults()
+		{
+			FriendshipBowRequirementText = this.GetLocalization("FriendshipBowRequirement");
+		}
+
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			base.ModifyTooltips(tooltips);
-			if(Main.player[Main.myPlayer].GetModPlayer<CombatPetsQuizModPlayer>().HasTakenQuiz)
+			if(Main.LocalPlayer.GetModPlayer<CombatPetsQuizModPlayer>().HasTakenQuiz)
 			{
 				return;
 			}
-			tooltips.Add(new TooltipLine(Mod, "FriendshipBowRequirement", FriendshipBowRequirement)
+			tooltips.Add(new TooltipLine(Mod, nameof(FriendshipBowRequirementText), FriendshipBowRequirementText.ToString())
 			{
 				OverrideColor = Color.Gray
 			});
@@ -99,7 +99,7 @@ namespace AmuletOfManyMinions.Items.Consumables
 					if (player.ItemAnimationJustStarted)
 					{
 						//By returning null, item will not be consumed, but item animation still runs, so this check ensures the text only shows up on first tick of use
-						Main.NewText(FriendshipBowRequirement);
+						Main.NewText(FriendshipBowRequirementText.ToString());
 					}
 					return null;
 				}
