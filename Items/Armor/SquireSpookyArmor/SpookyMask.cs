@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Squires;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
@@ -8,6 +9,16 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 	[AutoloadEquip(EquipType.Head)]
 	class SpookyMask : ModItem
 	{
+		public static readonly int SetBonusDamageIncrease = 32;
+		public static readonly int SetBonusSquireTravelRangeIncrease = 7;
+		public static readonly int SetBonusAttackSpeedIncrease = 20;
+		public static LocalizedText SetBonusText { get; private set; }
+
+		public override void SetStaticDefaults()
+		{
+			SetBonusText = this.GetLocalization("SetBonus").WithFormatArgs(SetBonusDamageIncrease, SetBonusSquireTravelRangeIncrease, SetBonusAttackSpeedIncrease);
+		}
+
 		public override void SetDefaults()
 		{
 			Item.width = 28;
@@ -30,14 +41,11 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases minion damage by 32%\n" +
-				"Increases squire travel range by 7 blocks\n" +
-				"Increases attack speed by 20% while using a squire\n" + 
-				"Decreases max minions";
-			player.GetDamage<SummonDamageClass>() += 0.32f;
+			player.setBonus = SetBonusText.ToString();
+			player.GetDamage<SummonDamageClass>() += SetBonusDamageIncrease / 100f;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
-			squirePlayer.SquireRangeFlatBonus += 112f;
-			squirePlayer.SquireAttackSpeedMultiplier *= 0.80f;
+			squirePlayer.SquireRangeFlatBonus += SetBonusSquireTravelRangeIncrease * 16f;
+			squirePlayer.SquireAttackSpeedMultiplier *= 1 - SetBonusAttackSpeedIncrease / 100f;
 			squirePlayer.spookyArmorSetEquipped = true;
 			player.maxMinions -= 1;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.

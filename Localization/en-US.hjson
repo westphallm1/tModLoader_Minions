@@ -160,6 +160,12 @@ Mods: {
 					Increases minion damage by 8%
 					Increases squire travel range by 3 blocks
 					'''
+				SetBonus:
+					'''
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					An Angry Tumbler will assist your squire in combat!
+					'''
 			}
 
 			AridLeggings: {
@@ -174,6 +180,7 @@ Mods: {
 			FlinxFurHood: {
 				DisplayName: Flinx Fur Hood
 				Tooltip: ""
+				SetBonus: Grants a free Flinx minion
 			}
 
 			ForagerBreastplate: {
@@ -184,6 +191,7 @@ Mods: {
 			ForagerHelmet: {
 				DisplayName: Mildew Cap
 				Tooltip: ""
+				SetBonus: Your minions will release damaging fungi while attacking
 			}
 
 			ForagerLeggings: {
@@ -218,6 +226,12 @@ Mods: {
 					Increases your max number of minions by 1
 					Increases squire travel range by 4 blocks
 					'''
+				SetBonus:
+					'''
+					Become immune after striking an enemy
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					'''
 			}
 
 			IllusionistCorruptHood: {
@@ -226,6 +240,11 @@ Mods: {
 					'''
 					Increases your max number of minions by 1
 					Increases minion damage by 4%
+					'''
+				SetBonus:
+					'''
+					+{0} Max Minions
+					Wisps will spawn as your minions deal damage!
 					'''
 			}
 
@@ -274,6 +293,7 @@ Mods: {
 					Increaes attack speed by 10% while using a squire
 					"You dropped this, king."
 					'''
+				SetBonus: A floating crown will assist your squire in combat!
 			}
 
 			RoyalGown: {
@@ -292,6 +312,11 @@ Mods: {
 					Increases minion damage by 15%
 					Increases max minions by 1
 					'''
+				SetBonus:
+					'''
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					'''
 			}
 
 			TitaniumCrown: {
@@ -301,11 +326,24 @@ Mods: {
 					Increases minion damage by 15%
 					Increases max minions by 1
 					'''
+				SetBonus:
+					'''
+					Become immune after striking an enemy
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					'''
 			}
 
 			SpookyMask: {
 				DisplayName: Spooky Mask
 				Tooltip: Increases minion damage by 12%, but decreases max minions
+				SetBonus:
+					'''
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					{$Common.Tooltips.IncreasesSquireAttackSpeedBy@2}
+					Decreases max minions
+					'''
 			}
 
 			CombatPetAncientFriendshipBow: {
@@ -1599,6 +1637,12 @@ Mods: {
 		Common: {
 			AoMMVersion: (AoMM Version)
 			ConcatenateTwo: "{0} {1}"
+
+			Tooltips: {
+				IncreasesMinionDamageBy: Increases minion damage by {0}%
+				IncreasesSquireTravelRangeBy: Increases squire travel range by {0} {^0:block;blocks}
+				IncreasesSquireAttackSpeedBy: Increases attack speed by {0}% while using a squire
+			}
 
 			Replicas: {
 				Replica: Replica

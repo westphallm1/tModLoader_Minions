@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Squires;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
@@ -8,6 +9,15 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 	[AutoloadEquip(EquipType.Head)]
 	class TitaniumCrown : ModItem
 	{
+		public static readonly int SetBonusDamageIncrease = 10;
+		public static readonly int SetBonusSquireTravelRangeIncrease = 5;
+		public static LocalizedText SetBonusText { get; private set; }
+
+		public override void SetStaticDefaults()
+		{
+			SetBonusText = this.GetLocalization("SetBonus").WithFormatArgs(SetBonusDamageIncrease, SetBonusSquireTravelRangeIncrease);
+		}
+
 		public override void SetDefaults()
 		{
 			Item.width = 28;
@@ -30,13 +40,11 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Become immune after striking an enemy\n" +
-				"Increases minion damage by 10%\n" +
-				"Increases squire travel range by 5 blocks";
-			player.GetDamage<SummonDamageClass>() += 0.10f;
+			player.setBonus = SetBonusText.ToString();
+			player.GetDamage<SummonDamageClass>() += SetBonusDamageIncrease / 100f;
 			player.onHitTitaniumStorm = true;
 			SquireModPlayer squirePlayer = player.GetModPlayer<SquireModPlayer>();
-			squirePlayer.SquireRangeFlatBonus += 80f;
+			squirePlayer.SquireRangeFlatBonus += SetBonusSquireTravelRangeIncrease * 16f;
 			squirePlayer.hardmodeOreSquireArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}

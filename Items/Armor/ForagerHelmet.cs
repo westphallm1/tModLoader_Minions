@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -12,6 +13,8 @@ namespace AmuletOfManyMinions.Items.Armor
 	[AutoloadEquip(EquipType.Head)]
 	public class ForagerHelmet : NecromancerAccessory
 	{
+		public static LocalizedText SetBonusText { get; private set; }
+
 		protected override float baseDamage => 8;
 		protected override float onHitChance => 0.075f;
 		protected override int maxTransientMinions => 2;
@@ -23,6 +26,8 @@ namespace AmuletOfManyMinions.Items.Armor
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
+
+			SetBonusText = this.GetLocalization("SetBonus");
 
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
@@ -43,7 +48,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Your minions will release damaging fungi while attacking";
+			player.setBonus = SetBonusText.ToString();
 			player.GetModPlayer<MinionSpawningItemPlayer>().foragerArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.
 		}

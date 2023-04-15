@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -14,8 +15,14 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 {
 	public abstract class BaseIllusionistHood : ModItem
 	{
+		public static readonly int SetBonusMaxMinionsIncrease = 1;
+		public static LocalizedText SetBonusText { get; private set; }
+
 		public override void SetStaticDefaults()
 		{
+			//Used by multiple classes
+			SetBonusText ??= this.GetLocalization("SetBonus").WithFormatArgs(SetBonusMaxMinionsIncrease);
+
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
 
@@ -50,8 +57,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "+1 Max Minions\n"
-				+ "Wisps will spawn as your minions deal damage!";
+			player.setBonus = SetBonusText.ToString();
 			player.maxMinions++;
 			player.GetModPlayer<MinionSpawningItemPlayer>().illusionistArmorSetEquipped = true;
 			// insert whatever variable needs to be activated so the player's minions will release homing fungi spores similar to the fungi bulb, but just recolored to look like a mushroom.

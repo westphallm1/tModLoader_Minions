@@ -11,6 +11,7 @@ namespace AmuletOfManyMinions
 {
 	public class AoMMSystem : ModSystem
 	{
+		//Not all localizations are "code-ified", i.e. those pertaining to gear stat changes as they are only used in the lang file itself
 		public static LocalizedText AoMMVersionText { get; private set; }
 		public static LocalizedText ReplicaText { get; private set; }
 		public static LocalizedText ReplicaCommonTooltipText { get; private set; }
