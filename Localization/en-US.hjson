@@ -243,7 +243,7 @@ Mods: {
 					'''
 				SetBonus:
 					'''
-					+{0} Max Minions
+					{$CommonItemTooltip.IncreasesMaxMinionsBy}
 					Wisps will spawn as your minions deal damage!
 					'''
 			}
@@ -1700,7 +1700,7 @@ Mods: {
 		CombatPetLevels: {
 			Base: Base
 			Golden: Golden
-			Demonite: Demonite
+			Demonite: Corrupt/Crimson
 			Skeletal: Skeletal
 			Soulful: Soulful
 			Hallowed: Hallowed
