@@ -19,6 +19,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		public static CombatPetsQuizQuestion[] ClassSpecificQuestions { get; private set; }
 
+		internal static Dictionary<PersonalityType, QuizResult> ResultsMap { get; private set; }
+
 		public override void Load()
 		{
 			base.Load();
@@ -29,16 +31,16 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			QuizResult.ResultsMap = QuizResult.MakeResultsMap();
+			ResultsMap = QuizResult.MakeResultsMap();
 			if (Main.dedServ)
 			{
 				return;
 			}
 			string TextureBasePath = GetType().Namespace.Replace('.', '/') + "/Portrait_";
-			foreach (var personalityType in QuizResult.ResultsMap.Keys)
+			foreach (var personalityType in ResultsMap.Keys)
 			{
 				string TexturePath = TextureBasePath + Enum.GetName(personalityType);
-				QuizResult.ResultsMap[personalityType].PortraitTexture = ModContent.Request<Texture2D>(TexturePath);
+				ResultsMap[personalityType].PortraitTexture = ModContent.Request<Texture2D>(TexturePath);
 			}
 		}
 
@@ -47,6 +49,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			base.Unload();
 			BasicQuestions = null;
 			ClassSpecificQuestions = null;
+			ResultsMap = null;
 		}
 
 		// generator function to workaround static load/unload constraints
@@ -223,7 +226,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		internal static void DebugPrintAnswerCounts()
 		{
-			foreach(var key in QuizResult.ResultsMap.Keys)
+			foreach(var key in ResultsMap.Keys)
 			{
 				int answerCount = BasicQuestions.Where(q => q.CanGivePointsForType(key)).Count();
 				Main.NewText(Enum.GetName(key) + ": " + answerCount);

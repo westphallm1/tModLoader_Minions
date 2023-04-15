@@ -64,7 +64,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		public void ComputeResult()
 		{
-			Result = QuizResult.ResultsMap[GetResultType()];
+			Result = DefaultPetsQuizData.ResultsMap[GetResultType()];
 			CurrentState = QuizState.OUTRO;
 			dialogIdx = 0;
 		}
@@ -110,7 +110,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		RELAXED // Cloudiphant
 	}
 
-	internal class QuizResult : ModSystem
+	internal class QuizResult
 	{
 		internal string Description { get; private set; }
 		// TODO these should probably be drawn directly from the ModItem. Not sure what the best way to reverse-lookup is
@@ -127,16 +127,6 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			ItemType = itemType;
 			BuffType = buffType;
 		}
-
-		public override void Unload()
-		{
-			base.Unload();
-			ResultsMap = null;
-		}
-
-
-		// TODO mod load hook
-		internal static Dictionary<PersonalityType, QuizResult> ResultsMap;
 		
 		
 		internal static Dictionary<PersonalityType, QuizResult> MakeResultsMap() => new()
