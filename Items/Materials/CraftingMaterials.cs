@@ -20,7 +20,7 @@ namespace AmuletOfManyMinions.Items.Materials
 		{
 			Item.width = 30;
 			Item.height = 32;
-			Item.maxStack = 999;
+			Item.maxStack = Item.CommonMaxStack;
 			Item.value = Item.sellPrice(copper: 50);
 			Item.rare = ItemRarityID.White;
 		}
@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Items.Materials
 		{
 			Item.width = 30;
 			Item.height = 32;
-			Item.maxStack = 999;
+			Item.maxStack = Item.CommonMaxStack;
 			Item.value = Item.sellPrice(copper: 50);
 			Item.rare = ItemRarityID.Orange;
 		}
