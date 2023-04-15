@@ -32,7 +32,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires
 		{
 			base.SetStaticDefaults();
 
-			SpecialName = this.GetLocalization("SpecialName"); //TODO local make it "forced" by detecting if its not translated
+			SpecialName = this.GetLocalization("SpecialName");
 
 			SpecialDescription = this.GetLocalization("SpecialDescription", () => string.Empty);
 

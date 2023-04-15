@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
+using Terraria.Localization;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 {
@@ -15,6 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 
 	public class SlimepireMinionItem : MinionItem<SlimepireMinionBuff, SlimepireMinion>
 	{
+		public static readonly int ArmorPen = 10;
+
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(ArmorPen);
+
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -106,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			modifiers.ArmorPenetration += 10;
+			modifiers.ArmorPenetration += SlimepireMinionItem.ArmorPen;
 		}
 	}
 }

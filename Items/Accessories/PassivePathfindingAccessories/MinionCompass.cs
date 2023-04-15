@@ -2,6 +2,7 @@
 using AmuletOfManyMinions.Items.Materials;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -9,6 +10,9 @@ namespace AmuletOfManyMinions.Items.Accessories.PassivePathfindingAccessories
 {
 	class MinionCompass : ModItem
 	{
+		public static readonly int PathfindingRange = 18;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(PathfindingRange);
+
 		public override void SetDefaults()
 		{
 			Item.width = 30;

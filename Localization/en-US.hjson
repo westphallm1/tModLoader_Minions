@@ -34,7 +34,7 @@ Mods: {
 				Tooltip:
 					'''
 					Increases your max number of minions by 2
-					Greatly improves minion damage,
+					Greatly improves summon damage,
 					and increases minion variety bonus by 2%
 					'''
 			}
@@ -53,7 +53,7 @@ Mods: {
 				DisplayName: Charm Of Mighty Minions
 				Tooltip:
 					'''
-					Greatly increases minion damage,
+					Greatly increases summon damage,
 					but reduces max number of minions by 1,
 					and reduces minion variety bonus by 2%
 					'''
@@ -61,12 +61,12 @@ Mods: {
 
 			CombatPetChaoticChewToy: {
 				DisplayName: Chaotic Chew Toy
-				Tooltip: Increases combat pet movement speed
+				Tooltip: "{$Common.Tooltips.IncreasesCombatPetMovementSpeed}"
 			}
 
 			CombatPetCrimsonChewToy: {
 				DisplayName: Crimson Chew Toy
-				Tooltip: Increases combat pet movement speed
+				Tooltip: "{$Common.Tooltips.IncreasesCombatPetMovementSpeed}"
 			}
 
 			CombatPetMightyTeamworkBow: {
@@ -75,8 +75,8 @@ Mods: {
 					'''
 					Increases max number of combat pets by 2,
 					but decreases max number of non-combat pet minions by 1
-					Increases combat pet movement speed
-					Increases minion damage
+					{$Common.Tooltips.IncreasesCombatPetMovementSpeed}
+					{$Common.Tooltips.IncreasesMinionDamage}
 					'''
 			}
 
@@ -85,8 +85,8 @@ Mods: {
 				Tooltip:
 					'''
 					Increases max number of combat pets by 2
-					Increases combat pet movement speed
-					Increases minion damage
+					{$Common.Tooltips.IncreasesCombatPetMovementSpeed}
+					{$Common.Tooltips.IncreasesMinionDamage}
 					'''
 			}
 
@@ -97,12 +97,12 @@ Mods: {
 
 			MinionCompass: {
 				DisplayName: Compass of Minion Guidance
-				Tooltip: Allows your minions to automatically attack around corners in a 16 tile radius.
+				Tooltip: "{$Common.Tooltips.AllowsMinionAttackAroundCornersIn}"
 			}
 
 			MinionGPS: {
 				DisplayName: GPS of Minion Guidance
-				Tooltip: Allows your minions to automatically attack around corners in a 30 tile radius.
+				Tooltip: "{$Common.Tooltips.AllowsMinionAttackAroundCornersIn}"
 			}
 
 			SquireScope: {
@@ -148,7 +148,7 @@ Mods: {
 				DisplayName: Arid Breastplate
 				Tooltip:
 					'''
-					Increases minion damage by 8%
+					Increases summon damage by 8%
 					Increases attack speed by 10% while using a squire
 					'''
 			}
@@ -157,7 +157,7 @@ Mods: {
 				DisplayName: Arid Helmet
 				Tooltip:
 					'''
-					Increases minion damage by 8%
+					Increases summon damage by 8%
 					Increases squire travel range by 3 blocks
 					'''
 				SetBonus:
@@ -172,7 +172,7 @@ Mods: {
 				DisplayName: Arid Leggings
 				Tooltip:
 					'''
-					Increases minion damage by 6%
+					Increases summon damage by 6%
 					Increases squire travel range by 1 block
 					'''
 			}
@@ -203,16 +203,17 @@ Mods: {
 				DisplayName: Granite Chestguard
 				Tooltip:
 					'''
-					Increases minion damage by 10%
+					Increases summon damage by 10%
 					Increases attack speed by 15% while using a squire
 					'''
 			}
 
 			GraniteGreaves: {
 				DisplayName: Granite Greaves
+				# TODO "{$CommonItemTooltip.PercentIncreasedMovementSpeed}"
 				Tooltip:
 					'''
-					Increases minion damage by 10%
+					Increases summon damage by 10%
 					Increases squire travel range by 2 blocks
 					10% increased movement speed
 					'''
@@ -222,7 +223,7 @@ Mods: {
 				DisplayName: Granite Mask
 				Tooltip:
 					'''
-					Increases minion damage by 10%
+					Increases summon damage by 10%
 					Increases your max number of minions by 1
 					Increases squire travel range by 4 blocks
 					'''
@@ -239,7 +240,7 @@ Mods: {
 				Tooltip:
 					'''
 					Increases your max number of minions by 1
-					Increases minion damage by 4%
+					Increases summon damage by 4%
 					'''
 				SetBonus:
 					'''
@@ -250,7 +251,7 @@ Mods: {
 
 			IllusionistCorruptLeggings: {
 				DisplayName: Illusionist Leggings
-				Tooltip: 10% increased movement speed
+				Tooltip: "{$CommonItemTooltip.PercentIncreasedMovementSpeed}"
 			}
 
 			IllusionistCorruptRobe: {
@@ -258,7 +259,7 @@ Mods: {
 				Tooltip:
 					'''
 					Increases your max number of minions by 1
-					Increases minion damage by 4%
+					Increases summon damage by 4%
 					'''
 			}
 
@@ -267,13 +268,13 @@ Mods: {
 				Tooltip:
 					'''
 					Increases your max number of minions by 1
-					Increases minion damage by 4%
+					Increases summon damage by 4%
 					'''
 			}
 
 			IllusionistCrimsonLeggings: {
 				DisplayName: Illusionist Leggings
-				Tooltip: 10% increased movement speed
+				Tooltip: "{$CommonItemTooltip.PercentIncreasedMovementSpeed}"
 			}
 
 			IllusionistCrimsonRobe: {
@@ -281,7 +282,7 @@ Mods: {
 				Tooltip:
 					'''
 					Increases your max number of minions by 1
-					Increases minion damage by 4%
+					Increases summon damage by 4%
 					'''
 			}
 
@@ -289,7 +290,7 @@ Mods: {
 				DisplayName: Royal Crown
 				Tooltip:
 					'''
-					Increases minion damage by 8%
+					Increases summon damage by 8%
 					Increaes attack speed by 10% while using a squire
 					"You dropped this, king."
 					'''
@@ -300,7 +301,7 @@ Mods: {
 				DisplayName: Royal Gown
 				Tooltip:
 					'''
-					Increases minion damage by 12%
+					Increases summon damage by 12%
 					Increases squire travel range by 2 blocks
 					'''
 			}
@@ -309,7 +310,7 @@ Mods: {
 				DisplayName: Adamantite Commander's Helm
 				Tooltip:
 					'''
-					Increases minion damage by 15%
+					Increases summon damage by 15%
 					Increases max minions by 1
 					'''
 				SetBonus:
@@ -323,7 +324,7 @@ Mods: {
 				DisplayName: Titanium Admiral's Helm
 				Tooltip:
 					'''
-					Increases minion damage by 15%
+					Increases summon damage by 15%
 					Increases max minions by 1
 					'''
 				SetBonus:
@@ -336,7 +337,7 @@ Mods: {
 
 			SpookyMask: {
 				DisplayName: Spooky Mask
-				Tooltip: Increases minion damage by 12%, but decreases max minions
+				Tooltip: Increases summon damage by 12%, but decreases max minions
 				SetBonus:
 					'''
 					{$Common.Tooltips.IncreasesMinionDamageBy}
@@ -594,8 +595,8 @@ Mods: {
 				Tooltip:
 					'''
 					Summons a hoarde of rats to fight for you!
-					Each rat deals 1/3 of base damage,
-					and ignores 10 enemy defense
+					Each rat deals {0}/{1} of base damage,
+					and ignores {2} enemy defense
 					'''
 			}
 
@@ -609,7 +610,7 @@ Mods: {
 				Tooltip:
 					'''
 					Summons a vampire slime to fight for you!
-					Ignores 10 enemy defense
+					Ignores {0} enemy defense
 					'''
 			}
 
@@ -1639,9 +1640,12 @@ Mods: {
 			ConcatenateTwo: "{0} {1}"
 
 			Tooltips: {
-				IncreasesMinionDamageBy: Increases minion damage by {0}%
+				IncreasesMinionDamageBy: Increases summon damage by {0}%
+				IncreasesMinionDamage: Increases summon damage
 				IncreasesSquireTravelRangeBy: Increases squire travel range by {0} {^0:block;blocks}
 				IncreasesSquireAttackSpeedBy: Increases attack speed by {0}% while using a squire
+				IncreasesCombatPetMovementSpeed: Increases combat pet movement speed
+				AllowsMinionAttackAroundCornersIn: Allows your minions to automatically attack around corners in a {0} block radius
 			}
 
 			Replicas: {

@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 	class GraniteMask : ModItem
 	{
 		public static readonly int SetBonusDamageIncrease = 12;
-		public static readonly int SetBonusSquireTravelRangeIncrease = 2; //TODO local in code it was 1
+		public static readonly int SetBonusSquireTravelRangeIncrease = 1;
 		public static LocalizedText SetBonusText { get; private set; }
 
 		public override void SetStaticDefaults()

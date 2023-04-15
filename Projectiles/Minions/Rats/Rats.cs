@@ -11,6 +11,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
+using Terraria.Localization;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 {
@@ -21,6 +22,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 
 	public class RatsMinionItem : MinionItem<RatsMinionBuff, RatsMinion>
 	{
+		public static readonly int DamageNumerator = 1;
+		public static readonly int DamageDenominator = 3;
+		public static readonly int ArmorPen = 10;
+
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(DamageNumerator, DamageDenominator, ArmorPen);
+
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -151,8 +158,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// each rat deals 1/3 damage, and ignores 10 defense
-			modifiers.SourceDamage /= 3;
-			modifiers.ArmorPenetration += 10;
+			modifiers.SourceDamage *= (float)RatsMinionItem.DamageNumerator / RatsMinionItem.DamageDenominator;
+			modifiers.ArmorPenetration += RatsMinionItem.ArmorPen;
 		}
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
