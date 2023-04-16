@@ -30,6 +30,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		internal static LocalizedText ClassSpecificQuizFirstQuestion { get; private set; }
 		internal static LocalizedText[] ClassSpecificQuizAnswers { get; private set; }
 
+		internal static LocalizedText NextButtonText { get; private set; }
+
 		public override void Load()
 		{
 			base.Load();
@@ -42,6 +44,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 			ClassSpecificQuizFirstQuestion = Language.GetOrRegister(Mod.GetLocalizationKey($"CombatPetQuiz.Quizzes.ClassSpecificQuiz.Text"));
 			ClassSpecificQuizAnswers = MakeClassSpecificQuizAnswers();
+
+			NextButtonText = Language.GetOrRegister(Mod.GetLocalizationKey($"CombatPetQuiz.NextButton.Text"));
 		}
 
 		private LocalizedText[] MakeClassSpecificQuizAnswers()

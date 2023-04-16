@@ -2008,6 +2008,8 @@ Mods: {
 					}
 				}
 			}
+
+			NextButton.Text: Next
 		}
 
 		TargetSelectionTactics: {
@@ -2063,6 +2065,13 @@ Mods: {
 			Both: Both Groups
 			Close: Close Minion Tactics
 			Open: Open Minion Tactics
+		}
+
+		DropConditions: {
+			SlimepireCondition.Description: Drops during Hardmode Blood Moon
+			AnyLunarEventCondition.Description: Drops during any Lunar Event
+			NoLunarEventCondition.Description: Does not drop during any Lunar Events
+			FirstBossDefeatedCondition.Description: Drops after first defeated boss
 		}
 	}
 }

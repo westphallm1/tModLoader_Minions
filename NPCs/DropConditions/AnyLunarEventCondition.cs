@@ -1,10 +1,20 @@
 ﻿using Terraria;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.NPCs.DropConditions
 {
 	public class AnyLunarEventCondition : IItemDropRuleCondition, IProvideItemConditionDescription
 	{
+		public static LocalizedText DescriptionText { get; private set; }
+
+		public AnyLunarEventCondition()
+		{
+			string category = $"DropConditions.";
+			DescriptionText ??= Language.GetOrRegister(ModContent.GetInstance<AmuletOfManyMinions>().GetLocalizationKey($"{category}{GetType().Name}.Description"));
+		}
+
 		public static bool AnyLunarEventActive()
 		{
 			for (int i = 0; i<Main.maxNPCs; i++)
@@ -21,6 +31,6 @@ namespace AmuletOfManyMinions.NPCs.DropConditions
 
 		public bool CanDrop(DropAttemptInfo info) => AnyLunarEventActive();
 		public bool CanShowItemDropInUI() => true;
-		public string GetConditionDescription() => "Drops during any Lunar Event";
+		public string GetConditionDescription() => DescriptionText.ToString();
 	}
 }
