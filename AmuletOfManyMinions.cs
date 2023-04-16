@@ -29,7 +29,6 @@ namespace AmuletOfManyMinions
 		public override void Load()
 		{
 			NetHandler.Load();
-			TargetSelectionTacticHandler.Load();
 			LandChunkConfigs.Load();
 			SpriteCompositionManager.Load();
 			CritterConfigs.Load();
@@ -67,7 +66,6 @@ namespace AmuletOfManyMinions
 		public override void Unload()
 		{
 			NetHandler.Unload();
-			TargetSelectionTacticHandler.Unload();
 			LandChunkConfigs.Unload();
 			SpriteCompositionManager.Unload();
 			CritterConfigs.Unload();

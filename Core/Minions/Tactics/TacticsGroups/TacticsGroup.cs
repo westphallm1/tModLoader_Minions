@@ -12,10 +12,8 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.TacticsGroups
 		// so 
 		internal int index;
 
-		internal static string[] GroupNames = new string[] { "Sun Group", "Moon Group", "Both Groups" };
-		internal string Name => GroupNames[index];
-		internal string Description => "Each tactics group can be assigned a distinct tactic and waypoint.\n" +
-			"Set a minion's tactic group by left clicking its buff icon";
+		internal static string[] GroupNameKeys = new string[] { "Sun", "Moon", "Both" };
+		internal string NameKey => GroupNameKeys[index];
 
 		public TacticsGroup(int index)
 		{

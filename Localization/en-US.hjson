@@ -2009,5 +2009,60 @@ Mods: {
 				}
 			}
 		}
+
+		TargetSelectionTactics: {
+			AttackGroups: {
+				DisplayName: Attack Groups
+				Description: Attack enemies that are close to each other
+			}
+
+			ClosestEnemyToMinion: {
+				DisplayName: Closest Enemy To Minion
+				Description: Attack closest enemy to minion
+			}
+
+			ClosestEnemyToPlayer: {
+				DisplayName: Closest Enemy To Player
+				Description: Attack closest enemy to player
+			}
+
+			LeastDamagedEnemy: {
+				DisplayName: Least Damaged Enemy
+				Description: Attack enemy with the [c/FF0000:highest current] health
+			}
+
+			MostDamagedEnemy: {
+				DisplayName: Most Damaged Enemy
+				Description: Attack enemy with the [c/FF0000:lowest current] health
+			}
+
+			SpreadOut: {
+				DisplayName: Spread Out
+				Description: Each minion attacks a different enemy if possible
+			}
+
+			StrongestEnemy: {
+				DisplayName: Strongest Enemy
+				Description: Attack enemy with the [c/FF0000:highest maximum] health
+			}
+
+			WeakestEnemy: {
+				DisplayName: Weakest Enemy
+				Description: Attack enemy with the [c/FF0000:lowest maximum] health
+			}
+		}
+
+		TacticsGroups: {
+			Description:
+				'''
+				Each tactics group can be assigned a distinct tactic and waypoint.
+				Set a minion's tactic group by left clicking its buff icon
+				'''
+			Sun: Sun Group
+			Moon: Moon Group
+			Both: Both Groups
+			Close: Close Minion Tactics
+			Open: Open Minion Tactics
+		}
 	}
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Core;
 
@@ -14,7 +15,7 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 	/// <summary>
 	/// Manages things around TargetSelectionTactic
 	/// </summary>
-	public static class TargetSelectionTacticHandler
+	public class TargetSelectionTacticHandler : ModSystem
 	{
 		/// <summary>
 		/// Represents both the limit and a special value that if an ID of this type is returned, it is treated as an assigned default tactic
@@ -28,13 +29,18 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		public static List<byte> OrderedIds { get; private set; }
 		private static List<TargetSelectionTactic> TacticDatas { get; set; }
 
-		internal static List<TacticsGroup> TacticsGroups { get; set; }
+		internal static List<TacticsGroup> TacticsGroups { get; private set; }
+		internal static LocalizedText TacticsGroupDescription { get; private set; }
+		internal static List<LocalizedText> TacticsGroupNames { get; private set; }
+		internal static LocalizedText CloseMinionTacticsText { get; private set; }
+		internal static LocalizedText OpenMinionTacticsText { get; private set; }
+
 		public static Dictionary<Type, byte> TypeToID { get; private set; }
 		public static Dictionary<string, byte> NameToID { get; private set; }
 
 		//"static" properties that are best to be cached
-		public static List<string> DisplayNames { get; private set; }
-		public static List<string> Descriptions { get; private set; }
+		public static List<LocalizedText> DisplayNames { get; private set; }
+		public static List<LocalizedText> Descriptions { get; private set; }
 		public static List<Asset<Texture2D>> Textures { get; private set; }
 		public static List<Asset<Texture2D>> OutlineTextures { get; private set; }
 		public static List<Asset<Texture2D>> SmallTextures { get; private set; }
@@ -43,16 +49,15 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 		public static List<Asset<Texture2D>> GroupOutlineTextures { get; private set; }
 		public static List<Asset<Texture2D>> GroupOverlayTextures { get; private set; }
 
-		public static Mod Mod { get; private set; }
-
-		public static void Load()
+		public override void OnModLoad()
 		{
 			TacticDatas = new List<TargetSelectionTactic>();
 			TacticsGroups = new List<TacticsGroup>();
+			TacticsGroupNames = new List<LocalizedText>();
 			TypeToID = new Dictionary<Type, byte>();
 			NameToID = new Dictionary<string, byte>();
-			DisplayNames = new List<string>();
-			Descriptions = new List<string>();
+			DisplayNames = new List<LocalizedText>();
+			Descriptions = new List<LocalizedText>();
 			Textures = new List<Asset<Texture2D>>();
 			OutlineTextures = new List<Asset<Texture2D>>();
 			SmallTextures = new List<Asset<Texture2D>>();
@@ -65,11 +70,12 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			RegisterTacticsGroups();
 		}
 
-		public static void Unload()
+		public override void OnModUnload()
 		{
 			Count = 0;
 			TacticDatas = null;
 			TacticsGroups = null;
+			TacticsGroupNames = null;
 			TypeToID = null;
 			NameToID = null;
 			DisplayNames = null;
@@ -139,25 +145,49 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics
 			};
 		}
 
-		private static void RegisterTacticsGroups()
+		private void RegisterTacticsGroups()
 		{
+			TacticsGroupDescription = Language.GetOrRegister(Mod.GetLocalizationKey($"TacticsGroups.Description"));
+			CloseMinionTacticsText = Language.GetOrRegister(Mod.GetLocalizationKey($"TacticsGroups.Close"));
+			OpenMinionTacticsText = Language.GetOrRegister(Mod.GetLocalizationKey($"TacticsGroups.Open"));
 			var immediate = AssetRequestMode.ImmediateLoad;
 			for (int i = 0; i < MinionTacticsPlayer.TACTICS_GROUPS_COUNT; i++)
 			{
 				TacticsGroup group = new TacticsGroup(i);
 				TacticsGroups.Add(group);
+				TacticsGroupNames.Add(Language.GetOrRegister(Mod.GetLocalizationKey($"TacticsGroups.{group.NameKey}")));
 				GroupTextures.Add(ModContent.Request<Texture2D>(group.Texture, immediate));
 				GroupOutlineTextures.Add(ModContent.Request<Texture2D>(group.Texture + "_Outline", immediate));
 				GroupOverlayTextures.Add(ModContent.Request<Texture2D>(group.Texture + "_Overlay", immediate));
 			}
 		}
 
-		public static string GetDisplayName(byte id)
+		public override void SetStaticDefaults()
+		{
+			////Need to "refresh" lang stuff here
+			//foreach (var item in TacticsGroupNames)
+			//{
+			//	_ = item;
+			//}
+			//_ = TacticsGroupDescription;
+			//_ = CloseMinionTacticsText;
+			//_ = OpenMinionTacticsText;
+			//foreach (var item in DisplayNames)
+			//{
+			//	_ = item;
+			//}
+			//foreach (var item in Descriptions)
+			//{
+			//	_ = item;
+			//}
+		}
+
+		public static LocalizedText GetDisplayName(byte id)
 		{
 			return DisplayNames[id];
 		}
 
-		public static string GetDescription(byte id)
+		public static LocalizedText GetDescription(byte id)
 		{
 			return Descriptions[id];
 		}

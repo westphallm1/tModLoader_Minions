@@ -32,11 +32,11 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		internal TargetSelectionTactic Tactic => TargetSelectionTacticHandler.GetTactic(ID);
 
-		internal override string ShortHoverText => TargetSelectionTacticHandler.GetDisplayName(ID);
+		internal override string ShortHoverText => TargetSelectionTacticHandler.GetDisplayName(ID).ToString();
 
-		internal override string LongHoverText => 
-			TargetSelectionTacticHandler.GetDisplayName(ID) + "\n" +
-			TargetSelectionTacticHandler.GetDescription(ID);
+		internal override string LongHoverText =>
+			ShortHoverText + "\n" +
+			TargetSelectionTacticHandler.GetDescription(ID).ToString();
 
 		internal override Asset<Texture2D> OutlineTexture => TargetSelectionTacticHandler.GetOutlineTexture(ID);
 

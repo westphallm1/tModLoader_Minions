@@ -25,10 +25,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 	/// </summary>
 	internal class TacticsUIMain : UIElement
 	{
-		//Localize this later, there are actually no vanilla keys for "Close" and "Open" anywhere by themselves
-		internal const string Close = "Close Minion Tactics";
-		internal const string Open = "Open Minion Tactics";
-
 		internal Asset<Texture2D> openTexture;
 		internal Asset<Texture2D> closeTexture;
 		internal Asset<Texture2D> bgSmallTexture;
@@ -294,7 +290,10 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			if(newState != OpenedTriState.HIDDEN)
 			{
 				openCloseButton.SetImage(opened == OpenedTriState.TRUE ? openTexture : closeTexture);
-				openCloseButton.SetHoverText(opened  == OpenedTriState.TRUE ? Close : Open);
+				openCloseButton.SetHoverText(
+					(opened  == OpenedTriState.TRUE ?
+					TargetSelectionTacticHandler.CloseMinionTacticsText :
+					TargetSelectionTacticHandler.OpenMinionTacticsText).ToString());
 			}
 		}
 
