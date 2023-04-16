@@ -18,27 +18,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 	public class StardustSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<StardustSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Stardust Squire");
-			Description.SetDefault("A stardust squire will follow your orders!");
-		}
 	}
 
 	public class StardustSquireMinionItem : SquireMinionItem<StardustSquireMinionBuff, StardustSquireMinion>
 	{
-		protected override string SpecialName => "Stardust Constellation";
-		protected override string SpecialDescription => 
-			"Summons a lingering constellation\n" +
-			"to shoot stars at enemies.";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of Stardust");
-			Tooltip.SetDefault("Summons a squire\nA stardust squire will fight for you!\nClick and hold to guide its attacks");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -72,7 +55,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Color translucentColor = new Color(lightColor.R, lightColor.G, lightColor.B, 100);
-			Texture2D texture = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
 
 			Rectangle bounds = new Rectangle(0, Projectile.frame * texture.Height / Main.projFrames[Projectile.type], Projectile.width, Projectile.height);
 
@@ -291,7 +274,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

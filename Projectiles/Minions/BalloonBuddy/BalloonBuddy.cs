@@ -14,23 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 	public class BalloonBuddyMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BalloonBuddyCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Balloon Buddy");
-			Description.SetDefault("A balloon buddy will fight for you!");
-		}
 	}
 
 	public class BalloonBuddyMinionItem : MinionItem<BalloonBuddyMinionBuff, BalloonBuddyCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Sorbet Staff");
-			Tooltip.SetDefault("Summons an enchanted balloon animal to fight for you!");
-
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -63,7 +50,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Balloon Buddy");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 1;
 		}
@@ -87,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonBuddy
 			return Math.Max(18, 22 - GetSegmentCount());
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (PartyHatSystem.IsParty && Main.rand.NextBool(3))
 			{

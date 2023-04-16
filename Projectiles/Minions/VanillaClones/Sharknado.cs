@@ -17,12 +17,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class SharknadoMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SharknadoMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.SharknadoMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.SharknadoMinion"));
-		}
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.SharknadoMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.SharknadoMinion");
 	}
 
 	public class SharknadoMinionItem : VanillaCloneMinionItem<SharknadoMinionBuff, SharknadoMinion>
@@ -37,7 +35,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MiniSharkron;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			Main.projFrames[Projectile.type] = 2;
 		}
@@ -125,7 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
 			Main.projFrames[Projectile.type] = 6;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -319,7 +316,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Tempest"));
 			Main.projFrames[Projectile.type] = 6;
 		}
 

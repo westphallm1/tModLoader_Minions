@@ -38,13 +38,13 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 
 		internal TacticsGroup TacticsGroup => TargetSelectionTacticHandler.TacticsGroups[index];
 
-		internal override string ShortHoverText => TacticsGroup.Name;
+		internal override string ShortHoverText => TargetSelectionTacticHandler.TacticsGroupNames[TacticsGroup.index].ToString();
 
 		internal override string LongHoverText => 
 			quiet ? 
 			ShortHoverText :
-			TacticsGroup.Name + "\n" +
-			TacticsGroup.Description;
+			ShortHoverText + "\n" +
+			TargetSelectionTacticHandler.TacticsGroupDescription.ToString();
 
 		internal override Asset<Texture2D> OutlineTexture => showOutline ? null : TargetSelectionTacticHandler.GroupOutlineTextures[index];
 

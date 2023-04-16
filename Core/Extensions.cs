@@ -33,7 +33,18 @@ namespace AmuletOfManyMinions.Core
 			}
 			if (modProjectile.Projectile.Hitbox.Intersects(npc.Hitbox))
 			{
-				modProjectile.OnHitNPC(npc, 0, 0, false);
+				var info = new NPC.HitInfo()
+				{
+					//Technically more info should be provided here but don't care since it's calling our own method only
+					DamageType = DamageClass.Summon,
+					HitDirection = 0,
+					Damage = 1,
+					Knockback = 0,
+					InstantKill = false,
+					HideCombatText = false,
+					Crit = false
+				};
+				modProjectile.OnHitNPC(npc, info, 0);
 			}
 		}
 

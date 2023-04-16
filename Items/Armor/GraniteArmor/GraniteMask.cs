@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -15,15 +16,15 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 	[AutoloadEquip(EquipType.Head)]
 	class GraniteMask : ModItem
 	{
+		public static readonly int SetBonusDamageIncrease = 12;
+		public static readonly int SetBonusSquireTravelRangeIncrease = 1;
+		public static LocalizedText SetBonusText { get; private set; }
+
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Granite Mask");
-			Tooltip.SetDefault(""
-				+ "Increases minion damage by 10%\n"
-				+ "Increases your max number of minions by 1\n"
-				+ "Increases squire travel range by 4 blocks");
+			SetBonusText = this.GetLocalization("SetBonus").WithFormatArgs(SetBonusDamageIncrease, SetBonusSquireTravelRangeIncrease);
 		}
+
 		public override void SetDefaults()
 		{
 			Item.width = 28;
@@ -54,13 +55,12 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 		}
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Become immune after striking an enemy\n"
-				+ "Increases minion damage by 12%\n"
-				+ "Increases squire travel range by 2 blocks";
-			player.GetDamage<SummonDamageClass>() += 0.12f;
+			player.setBonus = SetBonusText.ToString();
+			player.GetDamage<SummonDamageClass>() += SetBonusDamageIncrease / 100f;
 			player.onHitDodge = true;
-			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 16f;
-			player.GetModPlayer<SquireModPlayer>().graniteArmorEquipped = true;
+			SquireModPlayer squireModPlayer = player.GetModPlayer<SquireModPlayer>();
+			squireModPlayer.SquireRangeFlatBonus += SetBonusSquireTravelRangeIncrease * 16f;
+			squireModPlayer.graniteArmorEquipped = true;
 		}
 
 		public override void AddRecipes()

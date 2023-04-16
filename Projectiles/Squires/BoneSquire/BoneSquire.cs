@@ -16,24 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 	public class BoneSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BoneSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bone Squire");
-			Description.SetDefault("A bone squire will follow your orders!");
-		}
 	}
 
 	public class BoneSquireMinionItem : SquireMinionItem<BoneSquireMinionBuff, BoneSquireMinion>
 	{
-		protected override string SpecialName => "Flaming Flail";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of Bones");
-			Tooltip.SetDefault("Summons a squire\nA bone squire will fight for you!\nClick and hold to guide its attacks");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();
@@ -98,7 +84,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bone Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
@@ -160,18 +145,18 @@ namespace AmuletOfManyMinions.Projectiles.Squires.BoneSquire
 			}
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+			base.ModifyHitNPC(target, ref modifiers);
 			if(usingSpecial)
 			{
-				damage = 5 * damage / 4; // 25% damage boost
+				modifiers.SourceDamage += 0.25f; // 25% damage boost
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			base.OnHitNPC(target, damage, knockback, crit);
+			base.OnHitNPC(target, hit, damageDone);
 			if(usingSpecial)
 			{
 				target.AddBuff(BuffID.OnFire, 300);

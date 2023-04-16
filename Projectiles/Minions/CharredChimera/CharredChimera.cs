@@ -16,23 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 	public class CharredChimeraMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<CharredChimeraCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Charred Chimera");
-			Description.SetDefault("A charred chimera will fight for you!");
-		}
 	}
 
 	public class CharredChimeraMinionItem : MinionItem<CharredChimeraMinionBuff, CharredChimeraCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Charred Spinal Cord");
-			Tooltip.SetDefault("Summons a charred chimera fight for you!");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -112,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 			return null;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			framesSinceLastHit = 0;
 			Projectile.velocity = -Projectile.oldVelocity;
@@ -202,7 +189,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CharredChimera
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Charred Chimera");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

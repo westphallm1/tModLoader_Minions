@@ -9,23 +9,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PaperSurfer
 	public class PaperSurferMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<PaperSurferMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Paper Surfer");
-			Description.SetDefault("A paper surfer will fight for you!");
-		}
 	}
 
 	public class PaperSurferMinionItem : MinionItem<PaperSurferMinionBuff, PaperSurferMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Paper Surfer Staff");
-			Tooltip.SetDefault("Summons a paper surfer to fight for you!");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();

@@ -16,22 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 	public class SpiritGunMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SpiritGunCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spirit Revolver");
-			Description.SetDefault("A group of sentient bullets will fight for you!");
-		}
 	}
 
 	public class SpiritGunMinionItem : MinionItem<SpiritGunMinionBuff, SpiritGunCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spirit Revolver");
-			Tooltip.SetDefault("Summons sentient bullets to fight for you.\nMake sure they don't get hungry...");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOMULTISHOT);
@@ -82,7 +70,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spirit Revolver");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 2;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

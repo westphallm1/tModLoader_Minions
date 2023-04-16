@@ -14,23 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 	public class BombBuddyMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BombBuddyMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bomb Buddy");
-			Description.SetDefault("A bomb buddy will explode for you!");
-		}
 	}
 
 	public class BombBuddyMinionItem : MinionItem<BombBuddyMinionBuff, BombBuddyMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Unstable Detonator");
-			Tooltip.SetDefault("Summons a bomb buddy to fight for you!");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -73,7 +60,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Bomb Buddy");
 			Main.projFrames[Projectile.type] = 12;
 		}
 

@@ -12,6 +12,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using static AmuletOfManyMinions.UI.CombatPetsQuizUI.CombatPetsQuizUIMain;
@@ -52,12 +53,12 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 			LineHeight = TextFont.MeasureString(" ").Y;
 			questionPanel = new CombatPetsQuizUIPanel();
 			answerPanel = new CombatPetsQuizUIPanel() { AllowClickText = true };
-			nextButton = new TextButton() { Text = "Next" };
+			nextButton = new TextButton() { Text = DefaultPetsQuizData.NextButtonText };
 			Append(questionPanel);
 			Append(answerPanel);
 			Append(nextButton);
-			answerPanel.OnMouseUp += this.AnswerPanel_OnMouseUp;
-			nextButton.OnMouseUp += this.NextButton_OnMouseUp;
+			answerPanel.OnLeftMouseUp += this.AnswerPanel_OnMouseUp;
+			nextButton.OnLeftMouseUp += this.NextButton_OnMouseUp;
 		}
 
 		private void NextButton_OnMouseUp(UIMouseEvent evt, UIElement listeningElement)
@@ -111,7 +112,7 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 					currentText.Substring(0, charactersToDisplay), MaxTextboxWidth - 4 * MarginSize).Split('\n');
 				if(charactersToDisplay == currentText.Length && ModPlayer.CurrentQuiz.CurrentState == QuizState.QUIZ)
 				{
-					answerPanel.TextLines = ModPlayer.CurrentQuiz.CurrentQuestion.AnswerTexts;
+					answerPanel.TextLines = ModPlayer.CurrentQuiz.CurrentQuestion.AnswerTexts.Select(t => t.ToString()).ToArray();
 				} else
 				{
 					answerPanel.TextLines = default;
@@ -197,7 +198,7 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 	
 	class TextButton : UIElement
 	{
-		internal string Text { get; set; }
+		internal LocalizedText Text { get; set; }
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
@@ -207,10 +208,10 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 			Vector2 pos = new(xPos, yPos);
 			// budget text outline
 			Color textColor = IsMouseHovering ? Color.Yellow : Color.White;
-			CombatPetsQuizUIPanel.DrawText(spriteBatch, Text, pos, textColor);
+			CombatPetsQuizUIPanel.DrawText(spriteBatch, Text.ToString(), pos, textColor);
 		}
 
-		internal Vector2 MeasureText() => TextFont.MeasureString(Text);
+		internal Vector2 MeasureText() => TextFont.MeasureString(Text.ToString());
 
 	}
 

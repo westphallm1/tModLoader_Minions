@@ -20,24 +20,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 	public class SlimeTrainMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimeTrainCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Celestial Slime Train");
-			Description.SetDefault("A celestial train and its passengers will fight for you!");
-		}
 	}
 
 	public class SlimeTrainMinionItem : MinionItem<SlimeTrainMinionBuff, SlimeTrainCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Staff of the Celestial Slime Train");
-			Tooltip.SetDefault("Summons a celestial train to fight for you!");
-
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -87,7 +73,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Celestial Steam Train");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 		}
@@ -319,7 +304,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 
 		public void Update(int frame, List<int> summonedSlimes)
 		{
-			base.Update(frame);
+			Update(frame);
 			this.summonedSlimes = summonedSlimes;
 		}
 		public override void Draw(Asset<Texture2D> texture, Color lightColor)

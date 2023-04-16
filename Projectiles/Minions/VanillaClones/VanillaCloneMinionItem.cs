@@ -20,12 +20,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		internal abstract string VanillaItemName { get;  }
 		public override string Texture => "Terraria/Images/Item_" + VanillaItemID;
 
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ItemName." + VanillaItemName) + " (AoMM Version)");
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip." + VanillaItemName));
-		}
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ItemName." + VanillaItemName));
+		public override LocalizedText Tooltip => Language.GetText("ItemTooltip." + VanillaItemName);
 
 		public override void SetDefaults()
 		{
@@ -35,20 +31,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 
 		public override void AddRecipes()
 		{
-#if TML_2022_05
-			Recipe recipe = Mod.CreateRecipe(VanillaItemID);
-#else
 			Recipe recipe = Recipe.Create(VanillaItemID);
-#endif
 			recipe.AddIngredient(Type, 1);
 			recipe.AddTile(TileID.DemonAltar);
 			recipe.Register();
 
-#if TML_2022_05
-			Recipe reciprocal = Mod.CreateRecipe(Type);
-#else
 			Recipe reciprocal = Recipe.Create(Type);
-#endif
 			reciprocal.AddIngredient(VanillaItemID, 1);
 			reciprocal.AddTile(TileID.DemonAltar);
 			reciprocal.Register();

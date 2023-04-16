@@ -7,11 +7,6 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSpyglass
 {
 	class SquireSpyglass : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			Tooltip.SetDefault("Increases squire travel range by 3 blocks");
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

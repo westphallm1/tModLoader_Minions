@@ -21,14 +21,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	{
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.AbigailMinion;
 
-		internal override int[] ProjectileTypes => new int[] { ProjectileType<AbigailCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.AbigailMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.AbigailMinion"));
-		}
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.AbigailMinion"));
 
+		public override LocalizedText Description => Language.GetText("BuffDescription.AbigailMinion");
+
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<AbigailCounterMinion>() };
 	}
 
 	public class AbigailMinionItem : VanillaCloneMinionItem<AbigailMinionBuff, AbigailCounterMinion>
@@ -85,7 +82,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.AbigailMinion"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.AbigailMinion"));
 			Main.projFrames[Projectile.type] = 13;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
 		}
@@ -117,7 +114,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 
 		public override void ApplyCrossModChanges()
 		{
-			CrossModClient.SummonersShine.AbigailFlower.Abigail_ApplyStatics(Type);
+			AbigailFlower.Abigail_ApplyStatics(Type);
 		}
 
 		public override Vector2 IdleBehavior()

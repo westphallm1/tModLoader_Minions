@@ -8,13 +8,6 @@ namespace AmuletOfManyMinions.Items.Armor
 	[AutoloadEquip(EquipType.Body)]
 	public class ForagerBreastplate : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Mildew Breastplate");
-			Tooltip.SetDefault("Increased minion knockback by 1");
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

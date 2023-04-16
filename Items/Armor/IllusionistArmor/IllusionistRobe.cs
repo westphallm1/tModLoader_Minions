@@ -6,14 +6,6 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 {
 	public abstract class BaseIllusionistRobe : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Illusionist Robe");
-			Tooltip.SetDefault("Increases your max number of minions by 1" +
-							   "\nIncreases minion damage by 4%");
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

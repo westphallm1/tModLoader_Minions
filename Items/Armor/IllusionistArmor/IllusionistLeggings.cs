@@ -1,16 +1,15 @@
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 {
 	public abstract class BaseIllusionistLeggings : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Illusionist Leggings");
-			Tooltip.SetDefault("10% increased movement speed");
-		}
+		public static readonly int MoveSpeedIncrease = 10;
+
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MoveSpeedIncrease);
 
 		public override void SetDefaults()
 		{
@@ -23,7 +22,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.moveSpeed += 0.1f;
+			player.moveSpeed += MoveSpeedIncrease / 100f;
 		}
 	}
 

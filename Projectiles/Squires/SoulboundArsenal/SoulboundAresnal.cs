@@ -18,28 +18,12 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 	public class SoulboundArsenalMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SoulboundArsenalMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Arsenal");
-			Description.SetDefault("A soulbound bow and sword will follow your orders!");
-		}
 	}
 
 	public class SoulboundArsenalMinionItem : SquireMinionItem<SoulboundArsenalMinionBuff, SoulboundArsenalMinion>
 	{
-
 		public override string Texture => "AmuletOfManyMinions/Projectiles/Squires/SoulboundArsenal/SoulboundArsenalItem";
 
-		protected override string SpecialName => "Soulbound Coalescence";
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Arsenal");
-			Tooltip.SetDefault("Summons a squire\nA soulbound bow and sword will fight for you!\nClick and hold to guide their attacks");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
@@ -80,7 +64,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		protected virtual Color LightColor => Color.White;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
@@ -236,7 +219,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
@@ -313,7 +295,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulbound Arsenal");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

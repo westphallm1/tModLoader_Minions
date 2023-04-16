@@ -13,24 +13,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 	public class VikingSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<VikingSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Viking Squire");
-			Description.SetDefault("A dual-wielding viking squire will follow your orders!");
-		}
 	}
 
 	public class VikingSquireMinionItem : SquireMinionItem<VikingSquireMinionBuff, VikingSquireMinion>
 	{
-		protected override string SpecialName => "Icy Axe";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of the Frozen North");
-			Tooltip.SetDefault("Summons a squire\nA viking squire will fight for you!\nClick and hold to guide its attacks");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -90,7 +76,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Viking Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
@@ -137,13 +122,13 @@ namespace AmuletOfManyMinions.Projectiles.Squires.VikingSquire
 			}
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+			base.ModifyHitNPC(target, ref modifiers);
 			if(usingSpecial)
 			{
-				damage = 3 * damage / 2;
-				knockback *= 0.75f;
+				modifiers.SourceDamage += 0.5f;
+				modifiers.Knockback *= 0.75f;
 			}
 		}
 

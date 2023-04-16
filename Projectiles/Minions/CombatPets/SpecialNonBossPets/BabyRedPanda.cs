@@ -224,15 +224,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			return base.ShouldIgnoreNPC(npc) || markedNPCs.Contains(npc.whoAmI);
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful)
 			{
-				damage = 1;
+				modifiers.ModifyHitInfo += Modifiers_ModifyHitInfo;
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		private void Modifiers_ModifyHitInfo(ref NPC.HitInfo info)
+		{
+			info.Damage = 1;
+		}
+
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			int projType = ProjectileType<BabyRedPandaBambooSpikeController>();
 			if(leveledPetPlayer.PetLevel >= (int)CombatPetTier.Soulful && Player.whoAmI == Main.myPlayer && 

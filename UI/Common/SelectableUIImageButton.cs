@@ -36,6 +36,12 @@ namespace AmuletOfManyMinions.UI.Common
 			SetHoverText(ShortHoverText);
 		}
 
+		public override void MouseOver(UIMouseEvent evt)
+		{
+			SetHoverText(ShortHoverText);
+			base.MouseOver(evt);
+		}
+
 		public override void MouseOut(UIMouseEvent evt)
 		{
 			hoverTime = 0;

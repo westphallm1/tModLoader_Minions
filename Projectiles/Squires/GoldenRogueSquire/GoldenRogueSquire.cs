@@ -15,26 +15,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 	public class GoldenRogueSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<GoldenRogueSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Golden Rogue Squire");
-			Description.SetDefault("A golden rogue squire will follow your orders!");
-		}
 	}
 	public class GoldenRogueSquireMinionItem : SquireMinionItem<GoldenRogueSquireMinionBuff, GoldenRogueSquireMinion>
 	{
-		protected override string SpecialName => "Cloud of Knives";
-		protected override string SpecialDescription =>
-			"Teleports to the enemy nearest the cursor\n" +
-			"and throws a barrage of knives at them";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Golden Rogue Crest");
-			Tooltip.SetDefault("Summons a squire\nA golden rogue squire will fight for you!\nClick and hold to guide its attacks");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
@@ -60,7 +43,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.MagicDagger;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()
@@ -98,13 +80,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 			return false;
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			// manually bypass defense
-			// this may not be wholly correct
-			int defenseBypass = 20;
-			int defense = Math.Min(target.defense, defenseBypass);
-			damage += defense / 2;
+			modifiers.ArmorPenetration += 20;
 		}
 	}
 
@@ -119,7 +97,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		private Vector2 baseVelocity;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
@@ -172,13 +149,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 				Projectile.velocity.X *= 0.99f;
 			}
 		}
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			// manually bypass defense
-			// this may not be wholly correct
-			int defenseBypass = 20;
-			int defense = Math.Min(target.defense, defenseBypass);
-			damage += defense / 2;
+			modifiers.ArmorPenetration += 20;
 		}
 	}
 
@@ -217,7 +190,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GoldenRogueSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Golden Rogue Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

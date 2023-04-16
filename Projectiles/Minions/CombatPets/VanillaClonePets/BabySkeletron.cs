@@ -74,7 +74,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			StartFalling();
 		}
@@ -117,12 +117,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 		}
 
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			 // lots more knockback and damage, but applied after initial damage reduction from defense
-			knockback += 5;
-			damage *= 8;
-			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+			// lots more knockback and damage, but applied after initial damage reduction from defense
+			modifiers.Knockback += 5;
+			modifiers.FinalDamage += 8f;
+			base.ModifyHitNPC(target, ref modifiers);
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)

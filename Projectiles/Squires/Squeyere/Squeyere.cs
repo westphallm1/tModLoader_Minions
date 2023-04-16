@@ -16,25 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 	public class SqueyereMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SqueyereMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Squeyere");
-			Description.SetDefault("A Squeyere will follow your orders!");
-		}
 	}
 
 	public class SqueyereMinionItem : SquireMinionItem<SqueyereMinionBuff, SqueyereMinion>
 	{
-		protected override string SpecialName => "Seeing Double";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of Eyes");
-			Tooltip.SetDefault("Summons a squire\nA Squeyere will fight for you!\nClick and hold to guide its attacks\n" +
-				"'Squ-Eye-Re. Get it?'");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOINSTASTRIKE);
@@ -56,7 +41,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 	{
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
@@ -244,7 +228,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.Squeyere
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

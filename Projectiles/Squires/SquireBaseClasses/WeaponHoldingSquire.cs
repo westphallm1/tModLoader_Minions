@@ -130,9 +130,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SquireBaseClasses
 			return false;
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			hitDirection = Projectile.spriteDirection; // always knock projectile away from player
+			modifiers.HitDirectionOverride = Projectile.spriteDirection; // always knock projectile away from player
 		}
 
 		protected virtual float GetFixedWeaponAngle()

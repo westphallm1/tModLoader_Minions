@@ -17,23 +17,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 	public class FishBowlMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<FishBowlMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Fishbowl");
-			Description.SetDefault("A flying fishbowl will fight for you!");
-		}
 	}
 
 	public class FishBowlMinionItem : MinionItem<FishBowlMinionBuff, FishBowlMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Fishbowl Staff");
-			Tooltip.SetDefault("Summons a flying fishbowl to fight for you!\n"+
-				"Most effective against flying enemies");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
@@ -64,7 +51,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		bool isFlopping = false;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			Main.projFrames[Projectile.type] = 6;
 		}
@@ -124,7 +110,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.FishBowl
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying FishBowl");
 			Main.projFrames[Projectile.type] = 17;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

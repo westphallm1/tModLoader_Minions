@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.NPCs.DropRules
 
 			float dropRate = finalChance * ratesInfo.parentDroprateChance;
 			drops.Add(new DropRateInfo(itemId, amountDroppedMinimum, amountDroppedMaximum, dropRate, ratesInfo.conditions));
-			Chains.ReportDroprates(base.ChainedRules, finalChance, drops, ratesInfo);
+			Chains.ReportDroprates(ChainedRules, finalChance, drops, ratesInfo);
 		}
 	}
 }

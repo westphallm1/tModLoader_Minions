@@ -41,7 +41,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		private int orphanedFrames;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			Main.projFrames[Projectile.type] = 8;
 		}
@@ -170,7 +169,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			int projType = ProjectileType<AncientVisionProjectile>();
 			// redirect any orphaned ancient visions to this new target

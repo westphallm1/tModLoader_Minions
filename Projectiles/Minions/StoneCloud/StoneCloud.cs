@@ -14,22 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 	public class StoneCloudMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<StoneCloudMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Stonecloud");
-			Description.SetDefault("An extremely dense cloud will fight for you!");
-		}
 	}
 
 	public class StoneCloudMinionItem : MinionItem<StoneCloudMinionBuff, StoneCloudMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Cloud in a Boulder");
-			Tooltip.SetDefault("Summons an extremely dense cloud to fight for you!\nDeals high damage, but attacks very slowly");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -74,7 +62,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Stone Cloud");
 			Main.projFrames[Projectile.type] = 6;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -322,9 +309,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.StoneCloud
 			Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorAbove) / inertia;
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			hitDirection = Math.Sign(target.Center.X - Projectile.Center.X);
+			modifiers.HitDirectionOverride = Math.Sign(target.Center.X - Projectile.Center.X);
 		}
 	}
 }

@@ -13,24 +13,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 	public class GuideSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<GuideSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Guide Squire");
-			Description.SetDefault("You can guide the Guide!");
-		}
 	}
 
 	public class GuideSquireMinionItem : SquireMinionItem<GuideSquireMinionBuff, GuideSquireMinion>
 	{
-		protected override string SpecialName => "Flaming Arrow Volley";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Guide Friendship Bracelet");
-			Tooltip.SetDefault("Summons a squire\nClick and hold to guide its attacks!\n'Maybe you're not such a terrible person...'");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -102,7 +88,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			return base.OnTileCollide(oldVelocity);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (Main.rand.NextBool(3))
 			{
@@ -186,7 +172,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Guide Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

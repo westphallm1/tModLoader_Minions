@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -20,16 +21,20 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 		internal int placementRange;
 		internal abstract int placementRangeInBlocks { get; }
 
+		public static LocalizedText CommonTooltipText { get; private set; }
+
+		public static LocalizedText WaypointRangeText { get; private set; }
+
+		public override LocalizedText Tooltip => CommonTooltipText; //If need to adjust later individually, remove this and use system similar to squires in the lang file
+
 		public override void SetStaticDefaults()
 		{
 			ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller.
 			ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
-			Tooltip.SetDefault(
-				"Tool\n"+
-				"Click to place a minion guidance waypoint!\n" +
-				"Minions will automatically navigate to the waypoint\n" +
-				"Attacking with a non-summon weapon dispels the waypoint\n"+
-				"Minions deal less damage while attacking a far away waypoint\n");
+
+			string commonKey = "Common.WaypointRods.";
+			CommonTooltipText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}CommonTooltip"));
+			WaypointRangeText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}WaypointRange"));
 		}
 
 		public override void SetDefaults()
@@ -81,7 +86,7 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			tooltips.Add(new TooltipLine(Mod, "MinionWaypointRange", placementRangeInBlocks + " block range.")
+			tooltips.Add(new TooltipLine(Mod, nameof(WaypointRangeText), WaypointRangeText.Format(placementRangeInBlocks))
 			{
 				OverrideColor = Color.LimeGreen
 			});
@@ -90,11 +95,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class WoodenWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 18;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Wooden Rod of Minion Guidance");
-		}
 
 		public override void SetDefaults()
 		{
@@ -111,11 +111,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class GraniteWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 24;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Granite Rod of Minion Guidance");
-		}
 
 		public override void SetDefaults()
 		{
@@ -133,11 +128,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class BoneWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 32;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skeletal Rod of Minion Guidance");
-		}
 
 		public override void SetDefaults()
 		{
@@ -150,11 +140,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class CrystalWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 40;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crystal Rod of Minion Guidance");
-		}
 
 		public override void SetDefaults()
 		{
@@ -172,11 +157,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class HallowedWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 48;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Hallowed Rod of Minion Guidance");
-		}
 
 		public override void SetDefaults()
 		{
@@ -194,11 +174,6 @@ namespace AmuletOfManyMinions.Items.WaypointRods
 	public class TrueEyeWaypointRod : WaypointRod
 	{
 		internal override int placementRangeInBlocks => 80;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Cthulhu's Eye of Minion Vision");
-		}
 
 		public override void SetDefaults()
 		{

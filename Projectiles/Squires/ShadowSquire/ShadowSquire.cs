@@ -15,24 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 	public class ShadowSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<ShadowSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Shadow Squire");
-			Description.SetDefault("A shadow squire will follow your orders!");
-		}
 	}
 
 	public class ShadowSquireMinionItem : SquireMinionItem<ShadowSquireMinionBuff, ShadowSquireMinion>
 	{
-		protected override string SpecialName => "Flask of Cursed Flames";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of Shadows");
-			Tooltip.SetDefault("Summons a squire\nA shadow squire will fight for you!\nClick and hold to guide its attacks");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -77,7 +63,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ShadowSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Shadow Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

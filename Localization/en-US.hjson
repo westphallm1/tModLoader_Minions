@@ -1,20 +1,15 @@
+
 Mods: {
 	AmuletOfManyMinions: {
 		SummonSpecialCompressed: {
-			AbigailMinionItem:
-				'''
-				{1} blocks {$Mods.SummonersShine.Summon.RightClickSpecial} attack range
-				'''
-			ImpMinionItem:
-				'''
-				{1} Blocks {$Mods.SummonersShine.Summon.RightClickSpecial} explosion radius
-				'''
+			AbigailMinionItem: "{1} blocks {$Mods.SummonersShine.Summon.RightClickSpecial} attack range"
+			ImpMinionItem: "{1} blocks {$Mods.SummonersShine.Summon.RightClickSpecial} explosion radius"
 		}
 
 		SummonSpecial: {
 			AbigailMinionItem:
 				'''
-				Each summon adds a Mourning Glory to keep Abigail company
+				Each summon adds a Mourning Glory to keep {$BuffName.AbigailMinion} company
 				Press {$Mods.SummonersShine.Summon.RightclickSpecialUncompressed} for your Mourning Glories to periodically summon damaging wisps!
 				Mourning Glories can target enemies within {1} blocks
 				{$Mods.SummonersShine.Summon.RequiresEnergy}
@@ -25,30 +20,2058 @@ Mods: {
 				Exploding Fireball explosions have {1} blocks radius
 				{$Mods.SummonersShine.Summon.RequiresEnergy}
 				'''
-			AdamantiteSquireMinionItem:
+			AdamantiteSquireMinionItem: While jousting, the Adamantite Squire deals {1}x damage!
+			AncientCobaltSquireMinionItem: Magic Shotblast travels {1}% distance
+			ArmoredBoneSquireMinionItem: Spawns wisps at a {1}% rate
+			BoneSquireMinionItem: Flail length is {1} blocks
+			CrimsonSquireMinionItem: "{$ItemName.IchorFlask}'s {$BuffName.Ichor} lasts {1} seconds"
+			DemonSquireMinionItem: Special Ability Imp Fireballs have {1}% velocity
+		}
+
+		Items: {
+			AmuletOfManyMinions: {
+				DisplayName: Amulet Of Many Minions
+				Tooltip:
+					'''
+					Increases your max number of minions by 2
+					Greatly improves summon damage,
+					and increases minion variety bonus by 2%
+					'''
+			}
+
+			CharmOfManyMinions: {
+				DisplayName: Charm Of Many Minions
+				Tooltip:
+					'''
+					Increases max number of minions by 1
+					and increases minion variety bonus by 1%
+					but each minion deals slightly less damage
+					'''
+			}
+
+			CharmOfMightyMinions: {
+				DisplayName: Charm Of Mighty Minions
+				Tooltip:
+					'''
+					Greatly increases summon damage,
+					but reduces max number of minions by 1,
+					and reduces minion variety bonus by 2%
+					'''
+			}
+
+			CombatPetChaoticChewToy: {
+				DisplayName: Chaotic Chew Toy
+				Tooltip: "{$Common.Tooltips.IncreasesCombatPetMovementSpeed}"
+			}
+
+			CombatPetCrimsonChewToy: {
+				DisplayName: Crimson Chew Toy
+				Tooltip: "{$Common.Tooltips.IncreasesCombatPetMovementSpeed}"
+			}
+
+			CombatPetMightyTeamworkBow: {
+				DisplayName: Mighty Bow of Teamwork
+				Tooltip:
+					'''
+					Increases max number of combat pets by 2,
+					but decreases max number of non-combat pet minions by 1
+					{$Common.Tooltips.IncreasesCombatPetMovementSpeed}
+					{$Common.Tooltips.IncreasesMinionDamage}
+					'''
+			}
+
+			CombatPetSpookyTeamworkBow: {
+				DisplayName: Spooky Bow of Teamwork
+				Tooltip:
+					'''
+					Increases max number of combat pets by 2
+					{$Common.Tooltips.IncreasesCombatPetMovementSpeed}
+					{$Common.Tooltips.IncreasesMinionDamage}
+					'''
+			}
+
+			CombatPetStylishTeamworkBow: {
+				DisplayName: Stylish Bow of Teamwork
+				Tooltip: Increases max number of combat pets by 1
+			}
+
+			MinionCompass: {
+				DisplayName: Compass of Minion Guidance
+				Tooltip: "{$Common.Tooltips.AllowsMinionAttackAroundCornersIn}"
+			}
+
+			MinionGPS: {
+				DisplayName: GPS of Minion Guidance
+				Tooltip: "{$Common.Tooltips.AllowsMinionAttackAroundCornersIn}"
+			}
+
+			SquireScope: {
+				DisplayName: Squire Scope
+				Tooltip:
+					'''
+					Increases view range for squires (Right Click to zoom out)
+					Increases squire travel range by 8 blocks
+					'''
+			}
+
+			SquireSkullAccessory: {
+				DisplayName: Necro Pendant
+				Tooltip:
+					'''
+					Increases squire damage by 10%
+					Increases attack speed by 5% while using a squire
+					Summons a cursed skull that grants a rotating debuff to squire attacks
+					'''
+			}
+
+			SquireSpyglass: {
+				DisplayName: Squire Spyglass
+				Tooltip: Increases squire travel range by 3 blocks
+			}
+
+			TechnoCharmAccessory: {
+				DisplayName: Techno Pendant
+				Tooltip:
+					'''
+					Increases squire damage by 12%
+					Increases attack speed by 10% while using a squire
+					Summons a mechanical skull that grants a rotating debuff to squire attacks
+					'''
+			}
+
+			VarietyCharm: {
+				DisplayName: Lockbox of Many Minions
+				Tooltip: Increases minion variety bonus by 1%
+			}
+
+			AridBreastplate: {
+				DisplayName: Arid Breastplate
+				Tooltip:
+					'''
+					Increases summon damage by 8%
+					Increases attack speed by 10% while using a squire
+					'''
+			}
+
+			AridHelmet: {
+				DisplayName: Arid Helmet
+				Tooltip:
+					'''
+					Increases summon damage by 8%
+					Increases squire travel range by 3 blocks
+					'''
+				SetBonus:
+					'''
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					An Angry Tumbler will assist your squire in combat!
+					'''
+			}
+
+			AridLeggings: {
+				DisplayName: Arid Leggings
+				Tooltip:
+					'''
+					Increases summon damage by 6%
+					Increases squire travel range by 1 block
+					'''
+			}
+
+			FlinxFurHood: {
+				DisplayName: Flinx Fur Hood
+				Tooltip: ""
+				SetBonus: Grants a free Flinx minion
+			}
+
+			ForagerBreastplate: {
+				DisplayName: Mildew Breastplate
+				Tooltip: Increased minion knockback by 1
+			}
+
+			ForagerHelmet: {
+				DisplayName: Mildew Cap
+				Tooltip: ""
+				SetBonus: Your minions will release damaging fungi while attacking
+			}
+
+			ForagerLeggings: {
+				DisplayName: Mildew Leggings
+				Tooltip: ""
+			}
+
+			GraniteChestguard: {
+				DisplayName: Granite Chestguard
+				Tooltip:
+					'''
+					Increases summon damage by 10%
+					Increases attack speed by 15% while using a squire
+					'''
+			}
+
+			GraniteGreaves: {
+				DisplayName: Granite Greaves
+				# TODO "{$CommonItemTooltip.PercentIncreasedMovementSpeed}"
+				Tooltip:
+					'''
+					Increases summon damage by 10%
+					Increases squire travel range by 2 blocks
+					10% increased movement speed
+					'''
+			}
+
+			GraniteMask: {
+				DisplayName: Granite Mask
+				Tooltip:
+					'''
+					Increases summon damage by 10%
+					Increases your max number of minions by 1
+					Increases squire travel range by 4 blocks
+					'''
+				SetBonus:
+					'''
+					Become immune after striking an enemy
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					'''
+			}
+
+			IllusionistCorruptHood: {
+				DisplayName: Illusionist Hood
+				Tooltip:
+					'''
+					Increases your max number of minions by 1
+					Increases summon damage by 4%
+					'''
+				SetBonus:
+					'''
+					{$CommonItemTooltip.IncreasesMaxMinionsBy}
+					Wisps will spawn as your minions deal damage!
+					'''
+			}
+
+			IllusionistCorruptLeggings: {
+				DisplayName: Illusionist Leggings
+				Tooltip: "{$CommonItemTooltip.PercentIncreasedMovementSpeed}"
+			}
+
+			IllusionistCorruptRobe: {
+				DisplayName: Illusionist Robe
+				Tooltip:
+					'''
+					Increases your max number of minions by 1
+					Increases summon damage by 4%
+					'''
+			}
+
+			IllusionistCrimsonHood: {
+				DisplayName: Illusionist Hood
+				Tooltip:
+					'''
+					Increases your max number of minions by 1
+					Increases summon damage by 4%
+					'''
+			}
+
+			IllusionistCrimsonLeggings: {
+				DisplayName: Illusionist Leggings
+				Tooltip: "{$CommonItemTooltip.PercentIncreasedMovementSpeed}"
+			}
+
+			IllusionistCrimsonRobe: {
+				DisplayName: Illusionist Robe
+				Tooltip:
+					'''
+					Increases your max number of minions by 1
+					Increases summon damage by 4%
+					'''
+			}
+
+			RoyalCrown: {
+				DisplayName: Royal Crown
+				Tooltip:
+					'''
+					Increases summon damage by 8%
+					Increaes attack speed by 10% while using a squire
+					"You dropped this, king."
+					'''
+				SetBonus: A floating crown will assist your squire in combat!
+			}
+
+			RoyalGown: {
+				DisplayName: Royal Gown
+				Tooltip:
+					'''
+					Increases summon damage by 12%
+					Increases squire travel range by 2 blocks
+					'''
+			}
+
+			AdamantiteBicorn: {
+				DisplayName: Adamantite Commander's Helm
+				Tooltip:
+					'''
+					Increases summon damage by 15%
+					Increases max minions by 1
+					'''
+				SetBonus:
+					'''
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					'''
+			}
+
+			TitaniumCrown: {
+				DisplayName: Titanium Admiral's Helm
+				Tooltip:
+					'''
+					Increases summon damage by 15%
+					Increases max minions by 1
+					'''
+				SetBonus:
+					'''
+					Become immune after striking an enemy
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					'''
+			}
+
+			SpookyMask: {
+				DisplayName: Spooky Mask
+				Tooltip: Increases summon damage by 12%, but decreases max minions
+				SetBonus:
+					'''
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					{$Common.Tooltips.IncreasesSquireAttackSpeedBy@2}
+					Decreases max minions
+					'''
+			}
+
+			CombatPetAncientFriendshipBow: {
+				DisplayName: Ancient Bow of Friendship
+				Tooltip: Grants you a special combat pet of your choosing!
+			}
+
+			CombatPetFriendshipBow: {
+				DisplayName: Bow of Friendship
+				Tooltip:
+					'''
+					Grants you a special combat pet based on your personality!
+					Your environment may influence the result...
+					'''
+			}
+
+			CombatPetTeamworkBow: {
+				DisplayName: Bow of Teamwork
+				Tooltip:
+					'''
+					Invites another special combat pet to your team!
+					It will always be different from the last pet that joined.
+					'''
+				FriendshipBowRequirement:
+					'''
+					You must use the Bow of Friendship before using this item.
+					Try searching wooden chests near spawn!
+					'''
+			}
+
+			GraniteSpark: {
+				DisplayName: Granite Spark
+				Tooltip:
+					'''
+					A fragment of energy from a granite elemental.
+					Used to craft tools that enhance your minions' AI.
+					'''
+			}
+
+			GuideHair: {
+				DisplayName: Lock of the Guide's Hair
+				Tooltip:
+					'''
+					Can fetch a high price on the black market,
+					among other nefarious purposes
+					'''
+			}
+
+			InertCombatPetFriendshipBow: {
+				DisplayName: Inert Bow of Friendship
+				Tooltip:
+					'''
+					A Bow of Friendship that's lost its magical powers.
+					It can be restored when combined with ingredients from various biomes.
+					'''
+			}
+
+			BoneWaypointRod.DisplayName: Skeletal Rod of Minion Guidance
+			CrystalWaypointRod.DisplayName: Crystal Rod of Minion Guidance
+			GraniteWaypointRod.DisplayName: Granite Rod of Minion Guidance
+			HallowedWaypointRod.DisplayName: Hallowed Rod of Minion Guidance
+			TrueEyeWaypointRod.DisplayName: Cthulhu's Eye of Minion Vision
+			WoodenWaypointRod.DisplayName: Wooden Rod of Minion Guidance
+
+			AcornMinionItem: {
+				DisplayName: Acorn Staff
+				Tooltip: Summons a winged acorn to fight for you!
+			}
+
+			BalloonBuddyMinionItem: {
+				DisplayName: Sorbet Staff
+				Tooltip: Summons an enchanted balloon animal to fight for you!
+			}
+
+			BalloonMonkeyMinionItem: {
+				DisplayName: Staff of Darts
+				Tooltip: Summons a dart-throwing monkey to fight for you!
+			}
+
+			BeeQueenMinionItem: {
+				DisplayName: Bee Queen's Crown
+				Tooltip: Summons a bee assistant to fight for you!
+			}
+
+			BombBuddyMinionItem: {
+				DisplayName: Unstable Detonator
+				Tooltip: Summons a bomb buddy to fight for you!
+			}
+
+			BoneSerpentMinionItem: {
+				DisplayName: Bone Serpent Staff
+				Tooltip: Summons a skeletal dragon to fight for you!
+			}
+
+			CharredChimeraMinionItem: {
+				DisplayName: Charred Spinal Cord
+				Tooltip: Summons a charred chimera fight for you!
+			}
+
+			CelestialCombatPetEmblem.DisplayName: Celestial Combat Pet Emblem
+			CorruptCombatPetEmblem.DisplayName: Corrupt Combat Pet Emblem
+			CrimsonCombatPetEmblem.DisplayName: Crimson Combat Pet Emblem
+			GoldenCombatPetEmblem.DisplayName: Golden Combat Pet Emblem
+			HallowedCombatPetEmblem.DisplayName: Hallowed Combat Pet Emblem
+			PlatinumCombatPetEmblem.DisplayName: Platinum Combat Pet Emblem
+			SkeletalCombatPetEmblem.DisplayName: Skeletal Combat Pet Emblem
+			SoulfulCombatPetEmblem.DisplayName: Soulful Combat Pet Emblem
+			SpectreCombatPetEmblem.DisplayName: Spectre Combat Pet Emblem
+			StardustCombatPetEmblem.DisplayName: Stardust Combat Pet Emblem
+
+			AxolotlMinionItem: {
+				DisplayName: Quirky Bow of Friendship
+				Tooltip: Summons a pet Axolittl!
+			}
+
+			CinderHenMinionItem: {
+				DisplayName: Bold Bow of Friendship
+				Tooltip: Summons a pet Cinder Hen!
+			}
+
+			CloudiphantMinionItem: {
+				DisplayName: Relaxed Bow of Friendship
+				Tooltip: Summons a pet Cloudiphant!
+			}
+
+			LilGatorMinionItem: {
+				DisplayName: Jolly Bow of Friendship
+				Tooltip: Summons a pet Lil' Gator!
+			}
+
+			PlantPupMinionItem: {
+				DisplayName: Calm Bow of Friendship
+				Tooltip: Summons a pet Plant Pup!
+			}
+
+			SmolederMinionItem: {
+				DisplayName: Quiet Bow of Friendship
+				Tooltip: Summons a pet Smoleder!
+			}
+
+			TruffleTurtleMinionItem: {
+				DisplayName: Hardy Bow of Friendship
+				Tooltip: Summons a pet Truffle Turtle!
+			}
+
+			WyvernFlyMinionItem: {
+				DisplayName: Hasty Bow of Friendship
+				Tooltip: Summons a pet WyvernFly!
+			}
+
+			CorruptionAltarMinionItem: {
+				DisplayName: Corruption Cell Staff
+				Tooltip: Summons a corrupt cell to fight for you!
+			}
+
+			CrimsonAltarMinionItem: {
+				DisplayName: Crimson Cell Staff
+				Tooltip: Summons a crimson cell to fight for you!
+			}
+
+			CrystalFistMinionItem: {
+				DisplayName: Crystal Fist Staff
+				Tooltip: Summons a crystal fist to fight for you!
+			}
+
+			EclipseHeraldMinionItem: {
+				DisplayName: Eclipse Herald Staff
+				Tooltip:
+					'''
+					Can't come to grips 
+					With the total eclipse 
+					Just a slip of your lips 
+					and you're gone...
+					'''
+			}
+
+			ExciteSkullMinionItem: {
+				DisplayName: Skeletal Keychain
+				Tooltip: Summons a skull biker to fight for you!
+			}
+
+			FishBowlMinionItem: {
+				DisplayName: Fishbowl Staff
+				Tooltip:
+					'''
+					Summons a flying fishbowl to fight for you!
+					Most effective against flying enemies
+					'''
+			}
+
+			FlyingSwordMinionItem: {
+				DisplayName: Clarent
+				Tooltip: Summons a flying sword to fight for you!
+			}
+
+			GoblinGunnerMinionItem: {
+				DisplayName: Goblin Radio Beacon
+				Tooltip: Summons a goblin gunship to fight for you!
+			}
+
+			GoblinTechnomancerMinionItem: {
+				DisplayName: Shadowflame Probe Controller
+				Tooltip: Summons a goblin technomancer to fight for you!
+			}
+
+			LilEntAccessory: {
+				DisplayName: Forager's Charm
+				Tooltip: A lil' ent will aid you!
+			}
+
+			MeteorFistMinionItem: {
+				DisplayName: Meteor Fist
+				Tooltip: Summons a meteor fist to fight for you!
+			}
+
+			MycelialMageMinionItem: {
+				DisplayName: Mycelial Staff
+				Tooltip: Summons a Mycelial Mage to fight for you!
+			}
+
+			MysticPaintbrushMinionItem: {
+				DisplayName: Mystic Palette
+				Tooltip: Summons an ethereal painter's set to fight for you!
+			}
+
+			NecromancerMinionItem: {
+				DisplayName: Necro Doll
+				Tooltip: Summons a neromancer to fight for you!
+			}
+
+			NullHatchetMinionItem: {
+				DisplayName: Null Hatchet
+				Tooltip: Summons an ethereal axe to fight for you!
+			}
+
+			PaperSurferMinionItem: {
+				DisplayName: Paper Surfer Staff
+				Tooltip: Summons a paper surfer to fight for you!
+			}
+
+			CopperSwordMinionItem: {
+				DisplayName: Starry SkySlasher
+				Tooltip: Summons an enchanted sword to fight for you!
+			}
+
+			PricklyPearMinionItem: {
+				DisplayName: Prickly Pear Staff
+				Tooltip: Summons a prickly pear hedgehog to fight for you!
+			}
+
+			RatsMinionItem: {
+				DisplayName: Rod of the Ratkeeper
+				Tooltip:
+					'''
+					Summons a hoarde of rats to fight for you!
+					Each rat deals {0}/{1} of base damage,
+					and ignores {2} enemy defense
+					'''
+			}
+
+			SlimecartMinionItem: {
+				DisplayName: Slimecart Staff
+				Tooltip: Summons slime miner to fight for you!
+			}
+
+			SlimepireMinionItem: {
+				DisplayName: Slimepire Staff
+				Tooltip:
+					'''
+					Summons a vampire slime to fight for you!
+					Ignores {0} enemy defense
+					'''
+			}
+
+			SlimeTrainMinionItem: {
+				DisplayName: Staff of the Celestial Slime Train
+				Tooltip: Summons a celestial train to fight for you!
+			}
+
+			SpiritGunMinionItem: {
+				DisplayName: Spirit Revolver
+				Tooltip:
+					'''
+					Summons sentient bullets to fight for you.
+					Make sure they don't get hungry...
+					'''
+			}
+
+			StarSurferMinionItem: {
+				DisplayName: Star Surfer Staff
+				Tooltip: Summons a star surfer to fight for you!
+			}
+
+			StoneCloudMinionItem: {
+				DisplayName: Cloud in a Boulder
+				Tooltip:
+					'''
+					Summons an extremely dense cloud to fight for you!
+					Deals high damage, but attacks very slowly
+					'''
+			}
+
+			TerrarianEntMinionItem: {
+				DisplayName: Staff of the Sacred Sapling
+				Tooltip: Summons a powerful forest spirit to fight for you!
+			}
+
+			TumbleSheepMinionItem: {
+				DisplayName: Shepherd's Staff
+				Tooltip: Summons a tumbling sheep to fight for you!
+			}
+
+			VoidKnifeMinionItem: {
+				DisplayName: Void Dagger
+				Tooltip: Summons an ethereal dagger to fight for you!
+			}
+
+			WhackAMoleMinionItem: {
+				DisplayName: Magic Jelly Bean Jar
+				Tooltip: Summons a stack of magic moles to fight for you!
+			}
+
+			XCXCopterMinionItem: {
+				DisplayName: Copter-X Staff
+				Tooltip: Summons a flexible helicopter to fight for you!
+			}
+
+			AdamantiteSquireMinionItem: {
+				DisplayName: Adamantite Crest
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					An adamantite squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Pegasus Knight
+				SpecialDescription: ""
+			}
+
+			AncientCobaltSquireMinionItem: {
+				DisplayName: Ancient Crest of Cobalt
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					An ancient cobalt squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Magic Shotblast
+				SpecialDescription: ""
+			}
+
+			ArmoredBoneSquireMinionItem: {
+				DisplayName: Crest of Armored Bones
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					An armored bone squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Spirit of the Flail
+				SpecialDescription: ""
+			}
+
+			BoneSquireMinionItem: {
+				DisplayName: Crest of Bones
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A bone squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Flaming Flail
+				SpecialDescription: ""
+			}
+
+			CrimsonSquireMinionItem: {
+				DisplayName: Crest of the Crimson
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A crimson squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Flask of Ichor
+				SpecialDescription: ""
+			}
+
+			DemonSquireMinionItem: {
+				DisplayName: Crest of the Underworld
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A demon squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Imp Assistants
+				SpecialDescription: ""
+			}
+
+			EmpressSquireMinionItem: {
+				DisplayName: Chalice of the Empress
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					The priestess of light will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Spectrum Supreme
+				SpecialDescription: ""
+			}
+
+			GoldenRogueSquireMinionItem: {
+				DisplayName: Golden Rogue Crest
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A golden rogue squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Cloud of Knives
+				SpecialDescription:
+					'''
+					Teleports to the enemy nearest the cursor
+					and throws a barrage of knives at them
+					'''
+			}
+
+			GuideSquireMinionItem: {
+				DisplayName: Guide Friendship Bracelet
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					{$Common.Squires.ClickAndHold}!
+					'Maybe you're not such a terrible person...'
+					'''
+				SpecialName: Flaming Arrow Volley
+				SpecialDescription: ""
+			}
+
+			MushroomSquireMinionItem: {
+				DisplayName: Crest of the Forest
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A mushroom squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Mushroom Toss
+				SpecialDescription: ""
+			}
+
+			PottedPalMinionItem: {
+				DisplayName: Potted Pal
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A friendly plant will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Pollination
+				SpecialDescription:
+					'''
+					Creates a short-lived Potted Pal, Jr.
+					that automatically attacks enemies
+					'''
+			}
+
+			PumpkinSquireMinionItem: {
+				DisplayName: Pumpkin Crest
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A pumpkin squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Giant Pumpkin
+				SpecialDescription: ""
+			}
+
+			SeaSquireMinionItem: {
+				DisplayName: Crest of the Sea
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A flying fish squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Shark Form
+				SpecialDescription: ""
+			}
+
+			ShadowSquireMinionItem: {
+				DisplayName: Crest of Shadows
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A shadow squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Flask of Cursed Flames
+				SpecialDescription: ""
+			}
+
+			SkywareSquireMinionItem: {
+				DisplayName: Crest of the Sky
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A skyware centurion will fight for you
+					{$Common.Squires.ClickAndHold}!
+					'''
+				SpecialName: Barrage
+				SpecialDescription: ""
+			}
+
+			SoulboundArsenalMinionItem: {
+				DisplayName: Soulbound Arsenal
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A soulbound bow and sword will fight for you!
+					{$Common.Squires.ClickAndHoldPlural}
+					'''
+				SpecialName: Soulbound Coalescence
+				SpecialDescription: ""
+			}
+
+			SoulboundBowMinionItem: {
+				DisplayName: Soulbound Bow
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					An enchanted bow will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Soulbound Companion
+				SpecialDescription: The Soulbound Sword will briefly assist you
+			}
+
+			SoulboundSwordMinionItem: {
+				DisplayName: Soulbound Sword
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					An enchanted sword will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Soulbound Companion
+				SpecialDescription: The Soulbound Bow will briefly assist you
+			}
+
+			SqueyereMinionItem: {
+				DisplayName: Crest of Eyes
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A Squeyere will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'Squ-Eye-Re. Get it?'
+					'''
+				SpecialName: Seeing Double
+				SpecialDescription: ""
+			}
+
+			StardustSquireMinionItem: {
+				DisplayName: Crest of Stardust
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A stardust squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Stardust Constellation
+				SpecialDescription:
+					'''
+					Summons a lingering constellation
+					to shoot stars at enemies.
+					'''
+			}
+
+			TitaniumSquireMinionItem: {
+				DisplayName: Titanium Crest
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A titanium squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Titanium Drone
+				SpecialDescription: ""
+			}
+
+			VikingSquireMinionItem: {
+				DisplayName: Crest of the Frozen North
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					A viking squire will fight for you!
+					{$Common.Squires.ClickAndHold}
+					'''
+				SpecialName: Icy Axe
+				SpecialDescription: ""
+			}
+
+			GuideVoodooSquireMinionItem: {
+				DisplayName: True Guide Voodoo Doll
+				Tooltip:
+					'''
+					{$Common.Squires.SummonsASquire}
+					{$Common.Squires.ClickAndHold}
+					'You are a *REALLY* terrible person'
+					'''
+				SpecialName: Brutal Dash
+				SpecialDescription:
+					'''
+					Dashes across the whole screen horizontally,
+					hitting everything in its path
+					'''
+			}
+		}
+
+		Buffs: {
+			MinionVarietyBuff: {
+				DisplayName: Minion Variety!
+				VarietyDamageBonus: "{0}% Minion Variety Damage Bonus"
+			}
+
+			IllusionistWispBuff: {
+				DisplayName: Illusion Wisps
+				Description: Illusion Wisps are spawning around you...
+			}
+
+			AcornMinionBuff: {
+				DisplayName: Acorn
+				Description: A winged acorn will fight for you!
+			}
+
+			BalloonBuddyMinionBuff: {
+				DisplayName: Balloon Buddy
+				Description: A balloon buddy will fight for you!
+			}
+
+			BalloonMonkeyMinionBuff: {
+				DisplayName: Dart Monkeys
+				Description: Dart-throwing Monkeys will fight for you!
+			}
+
+			BeeQueenMinionBuff: {
+				DisplayName: Bumble Bombardier
+				Description: A bee assistant will fight for you!
+			}
+
+			BombBuddyMinionBuff: {
+				DisplayName: Bomb Buddy
+				Description: A bomb buddy will explode for you!
+			}
+
+			BoneSerpentMinionBuff: {
+				DisplayName: Bone Serpent
+				Description: A skeletal dragon will fight for you!
+			}
+
+			CharredChimeraMinionBuff: {
+				DisplayName: Charred Chimera
+				Description: A charred chimera will fight for you!
+			}
+
+			AxolotlMinionBuff: {
+				DisplayName: Axolittl
+				Description: An amphibious friend has joined your adventure!
+			}
+
+			CinderHenMinionBuff: {
+				DisplayName: Cinder Hen
+				Description: A tiny phoenix has joined your adventure!
+			}
+
+			CloudiphantMinionBuff: {
+				DisplayName: Cloudiphant
+				Description: An ethereal elephant has joined your adventure!
+			}
+
+			FlareVortexDebuff: {
+				DisplayName: Flare Vortex
+				Description: Rapidly losing life
+			}
+
+			LilGatorMinionBuff: {
+				DisplayName: Lil' Gator
+				Description: A surfing gator has joined your adventure!
+			}
+
+			PlantPupMinionBuff: {
+				DisplayName: Plant Pup
+				Description: A playful plant has joined your adventure!
+			}
+
+			SmolederMinionBuff: {
+				DisplayName: Smoleder
+				Description: A shy mole has joined your adventure!
+			}
+
+			TruffleTurtleMinionBuff: {
+				DisplayName: Axolittl
+				Description: A mushroom-shelled turtle has joined your adventure!
+			}
+
+			WyvernFlyMinionBuff: {
+				DisplayName: Axolittl
+				Description: A wyvern hatchling has joined your adventure!
+			}
+
+			CorruptionAltarMinionBuff: {
+				DisplayName: Corrupt Cell
+				Description: A corrupt cell will fight for you!
+			}
+
+			CrimsonAltarMinionBuff: {
+				DisplayName: Crimson Cell
+				Description: A crimson cell will fight for you!
+			}
+
+			CrystalFistMinionBuff: {
+				DisplayName: Crystal Fist
+				Description: A crystal fist will fight for you!
+			}
+
+			EclipseHeraldMinionBuff: {
+				DisplayName: Eclipse Herald
+				Description: A herald of the eclipse will fight for you!
+			}
+
+			ExciteSkullMinionBuff: {
+				DisplayName: Skull Biker
+				Description: A skeletal motorcyclist is fighting for you!
+			}
+
+			FishBowlMinionBuff: {
+				DisplayName: Flying Fishbowl
+				Description: A flying fishbowl will fight for you!
+			}
+
+			FlyingSwordMinionBuff: {
+				DisplayName: Clarent
+				Description: A flying sword will fight for you!
+			}
+
+			GoblinGunnerMinionBuff: {
+				DisplayName: Goblin Gunner
+				Description: A goblin gunner will fight for you!
+			}
+
+			GoblinTechnomancerMinionBuff: {
+				DisplayName: Goblin Technomancer
+				Description: A goblin Technomancer will fight for you!
+			}
+
+			LilEntMinionBuff: {
+				DisplayName: Lil' Ent
+				Description: A lil' ent is fighting for you!
+			}
+
+			MeteorFistMinionBuff: {
+				DisplayName: Meteor Fist
+				Description: A meteor fist will fight for you!
+			}
+
+			MycelialMageMinionBuff: {
+				DisplayName: Mycelial Mage
+				Description: A Mycelial Mage is fighting for you!
+			}
+
+			MysticPaintbrushMinionBuff: {
+				DisplayName: Mystic Palette
+				Description: An ethereal painter's set will fight for you!
+			}
+
+			NecromancerMinionBuff: {
+				DisplayName: Necromancer
+				Description: A necromancer and his skeletal servants will fight for you!
+			}
+
+			NullHatchetMinionBuff: {
+				DisplayName: Null Hatchet
+				Description: An ethereal axe will fight for you!
+			}
+
+			PaperSurferMinionBuff: {
+				DisplayName: Paper Surfer
+				Description: A paper surfer will fight for you!
+			}
+
+			CopperSwordMinionBuff: {
+				DisplayName: Starry SkySlasher
+				Description: An enchanted sword will fight for you!
+			}
+
+			PricklyPearMinionBuff: {
+				DisplayName: Prickly Pear Hedgehog
+				Description: A prickly pear pal will fight for you!
+			}
+
+			RatsMinionBuff: {
+				DisplayName: Aww, Rats!
+				Description: A group of rats will fight for you!
+			}
+
+			SlimecartMinionBuff: {
+				DisplayName: Slimecart
+				Description: A slime miner will fight for you!
+			}
+
+			SlimepireMinionBuff: {
+				DisplayName: Slimepire
+				Description: A vampire slime will fight for you!
+			}
+
+			SlimeTrainMinionBuff: {
+				DisplayName: Celestial Slime Train
+				Description: A celestial train and its passengers will fight for you!
+			}
+
+			SpiritGunMinionBuff: {
+				DisplayName: Spirit Revolver
+				Description: A group of sentient bullets will fight for you!
+			}
+
+			StarSurferMinionBuff: {
+				DisplayName: Star Surfer
+				Description: A star surfer will fight for you!
+			}
+
+			StoneCloudMinionBuff: {
+				DisplayName: Stonecloud
+				Description: An extremely dense cloud will fight for you!
+			}
+
+			TerrarianEntMinionBuff: {
+				DisplayName: Ent of the Forest
+				Description: A powerful forest spirit will fight for you!
+			}
+
+			TumbleSheepMinionBuff: {
+				DisplayName: Tumble Sheep
+				Description: A tumbling sheep will fight for you!
+			}
+
+			VoidKnifeMinionBuff: {
+				DisplayName: Void Dagger
+				Description: An ethereal dagger will fight for you!
+			}
+
+			WhackAMoleMinionBuff: {
+				DisplayName: Jellybean Mole
+				Description: A magic mole will fight for you!
+			}
+
+			XCXCopterMinionBuff: {
+				DisplayName: Copter-X
+				Description: A flexible helicopter will fight for you!
+			}
+
+			AdamantiteSquireMinionBuff: {
+				DisplayName: Adamantite Squire
+				Description: An adamantite squire will follow your orders!
+			}
+
+			AncientCobaltSquireMinionBuff: {
+				DisplayName: Ancient Cobalt Squire
+				Description: An ancient cobalt squire will follow your orders!
+			}
+
+			ArmoredBoneSquireMinionBuff: {
+				DisplayName: Armored Bone Squire
+				Description: An armored bone squire will follow your orders!
+			}
+
+			BoneSquireMinionBuff: {
+				DisplayName: Bone Squire
+				Description: A bone squire will follow your orders!
+			}
+
+			CrimsonSquireMinionBuff: {
+				DisplayName: Crimson Squire
+				Description: A crimson squire will follow your orders!
+			}
+
+			DemonSquireMinionBuff: {
+				DisplayName: Demon Squire
+				Description: A demonic squire will follow your orders!
+			}
+
+			EmpressSquireMinionBuff: {
+				DisplayName: Crowned by the Empress of Light
+				Description: Check THIS out!
+			}
+
+			GoldenRogueSquireMinionBuff: {
+				DisplayName: Golden Rogue Squire
+				Description: A golden rogue squire will follow your orders!
+			}
+
+			GuideSquireMinionBuff: {
+				DisplayName: Guide Squire
+				Description: You can guide the Guide!
+			}
+
+			MushroomSquireMinionBuff: {
+				DisplayName: Mushroom Squire
+				Description: A mushroom squire will follow your orders!
+			}
+
+			PottedPalMinionBuff: {
+				DisplayName: Potted Pal
+				Description: A friendly plant will follow your orders!
+			}
+
+			PumpkinSquireMinionBuff: {
+				DisplayName: Pumpkin Squire
+				Description: An pumpkin squire will follow your orders!
+			}
+
+			SeaSquireMinionBuff: {
+				DisplayName: Sea Squire
+				Description: A flying fish will follow your fancies!
+			}
+
+			ShadowSquireMinionBuff: {
+				DisplayName: Shadow Squire
+				Description: A shadow squire will follow your orders!
+			}
+
+			SkywareSquireMinionBuff: {
+				DisplayName: Skyware Centurion
+				Description: A Skyware Centurion is fighting for you!
+			}
+
+			SoulboundArsenalMinionBuff: {
+				DisplayName: Soulbound Arsenal
+				Description: A soulbound bow and sword will follow your orders!
+			}
+
+			SoulboundBowMinionBuff: {
+				DisplayName: Soulbound Bow
+				Description: A soulbound bow will follow your orders!
+			}
+
+			SoulboundSwordMinionBuff: {
+				DisplayName: Soulbound Sword
+				Description: A soulbound sword will follow your orders!
+			}
+
+			SqueyereMinionBuff: {
+				DisplayName: Squeyere
+				Description: A Squeyere will follow your orders!
+			}
+
+			SquireCooldownBuff: {
+				DisplayName: Squire Special Cooldown
+				Description: Your squire's special is on cooldown!
+			}
+
+			SquireTagDamageBuff: {
+				DisplayName: Squire Tag
+				Description: Take 10% increased damage from summoner weapons
+			}
+
+			StardustSquireMinionBuff: {
+				DisplayName: Stardust Squire
+				Description: A stardust squire will follow your orders!
+			}
+
+			TitaniumSquireMinionBuff: {
+				DisplayName: Titanium Squire
+				Description: A titanium squire will follow your orders!
+			}
+
+			VikingSquireMinionBuff: {
+				DisplayName: Viking Squire
+				Description: A dual-wielding viking squire will follow your orders!
+			}
+
+			GuideVoodooSquireMinionBuff: {
+				DisplayName: Guide Squire
+				Description: You can guide the Guide!
+			}
+
+			WoFSquireMinionBuff: {
+				DisplayName: Wall of Flesh Squire
+				Description: You can guide the Wall of Flesh!
+			}
+		}
+
+		Projectiles: {
+			SquireSkullProjectile.DisplayName: Squire Skull Projectile
+			TechnoCharmProjectile.DisplayName: Techno Charm Projectile
+			AridTumblerProjectile.DisplayName: Arid Tumbler Projectile
+			ForagerMushroom.DisplayName: Forager Mushroom
+			IllusionistWisp.DisplayName: Illusionist Wisp
+			RoyalCrownProjectile.DisplayName: Royal Crown Projectile
+			AcornBomb.DisplayName: Acorn Bomb
+			AcornMinion.DisplayName: Flying Acorn
+			BalloonBuddyCounterMinion.DisplayName: Balloon Buddy Counter Minion
+			BalloonBuddyMinion.DisplayName: Balloon Buddy
+			BalloonMonkeyBalloon.DisplayName: Balloon Monkey Balloon
+			BalloonMonkeyDart.DisplayName: Balloon Monkey Dart
+			BalloonMonkeyMinion.DisplayName: Balloon Monkey
+			BeeQueenBucket.DisplayName: Bee Queen Bucket
+			BeeQueenMinion.DisplayName: Bee Bombardier
+			HoneySlime.DisplayName: Honey Slime
+			BombBuddyMinion.DisplayName: Bomb Buddy
+			BoneSerpentCounterMinion.DisplayName: Bone Serpent Counter Minion
+			BoneSerpentMinion.DisplayName: Bone Serpent
+			CharredChimeraCounterMinion.DisplayName: Charred Chimera Counter Minion
+			CharredChimeraMinion.DisplayName: Charred Chimera
+			CharredChimeraMinionHead.DisplayName: Charred Chimera Minion Head
+			AxolotlMinion.DisplayName: Axolotl Minion
+			CinderHenMinion.DisplayName: Cinder Hen Minion
+			CloudiphantMinion.DisplayName: Cloudiphant Minion
+			CloudPuffProjectile.DisplayName: Cloud Puff Projectile
+			FlareVortexProjectile.DisplayName: Flare Vortex Projectile
+			LeafBlade.DisplayName: Leaf Blade
+			LilGatorMinion.DisplayName: Lil Gator Minion
+			PlantPupMinion.DisplayName: Plant Pup Minion
+			SmolederMinion.DisplayName: Smoleder Minion
+			TruffleTurtleMinion.DisplayName: Truffle Turtle Minion
+			TwisterProjectile.DisplayName: Twister Projectile
+			WaterBeam.DisplayName: Water Beam
+			WyvernFlyMinion.DisplayName: Wyvern Fly Minion
+			BabyWerewolfMinion.DisplayName: Baby Werewolf Minion
+			BernieMinion.DisplayName: Bernie Minion
+			FennecFoxMinion.DisplayName: Fennec Fox Minion
+			LilHarpyFeather.DisplayName: Lil Harpy Feather
+			LilHarpyMinion.DisplayName: Lil Harpy Minion
+			PigManMinion.DisplayName: Pig Man Minion
+			SharkPupBubble.DisplayName: Shark Pup Bubble
+			SharkPupMinion.DisplayName: Shark Pup Minion
+			AlienSkaterMinion.DisplayName: Alien Skater Minion
+			AncientVisionProjectile.DisplayName: Ancient Vision Projectile
+			BabyOgreMinion.DisplayName: Baby Ogre Minion
+			DeerclopsIceBlock.DisplayName: Deerclops Ice Block
+			DeerclopsMinion.DisplayName: Deerclops Minion
+			DeerclopsShadowHand.DisplayName: Deerclops Shadow Hand
+			DestroyerLiteMinion.DisplayName: Destroyer Lite Minion
+			DestroyerLiteProbeProjectile.DisplayName: Destroyer Lite Probe Projectile
+			EverscreamSaplingMinion.DisplayName: ProjectileName.EverscreamSapling
+			EverscreamSaplingOrnament.DisplayName: Everscream Sapling Ornament
+			HoneyBeeBee.DisplayName: Honey Bee Bee
+			HoneyBeeMinion.DisplayName: ProjectileName.HoneyBee
+			HoneyPotProjectile.DisplayName: Honey Pot Projectile
+			IceQueenIcicle.DisplayName: Ice Queen Icicle
+			IceQueenMinion.DisplayName: ProjectileName.IceQueen
+			ItsyBetsyFire.DisplayName: Itsy Betsy Fire
+			ItsyBetsyMinion.DisplayName: ProjectileName.ItsyBetsy
+			MiniPrimeMinion.DisplayName: ProjectileName.MiniPrime
+			MoonlingLaser.DisplayName: Moonling Laser
+			MoonlingMinion.DisplayName: ProjectileName.Moonling
+			PhantasmalDragonMinion.DisplayName: Phantasmal Dragon Minion
+			PlanteraSeedlingMinion.DisplayName: ProjectileName.PlanteraSeedling
+			PlanteraSeedlingSeed.DisplayName: Plantera Seedling Seed
+			PlanteraSeedlingThornBall.DisplayName: Plantera Seedling Thorn Ball
+			RezMinion.DisplayName: Rez Minion
+			SkeletronJrMinion.DisplayName: ProjectileName.SkeletronJr
+			SlimePrinceNinjaMinion.DisplayName: Slime Prince Ninja Minion
+			SlimePrincessHelperSlimeMinion.DisplayName: Slime Princess Helper Slime Minion
+			SlimePrincessMinion.DisplayName: Slime Princess Minion
+			SpazMinion.DisplayName: Spaz Minion
+			SpiderBrainEyeProjectile.DisplayName: Spider Brain Eye Projectile
+			SpiderBrainMinion.DisplayName: ProjectileName.SpiderBrain
+			TinyFishronMinion.DisplayName: Tiny Fishron Minion
+			TinyFishronWhirlpool.DisplayName: Tiny Fishron Whirlpool
+			BabyImpFireBall.DisplayName: Baby Imp Fire Ball
+			BabyImpMinion.DisplayName: Baby Imp Minion
+			BabyRedPandaBambooSpike.DisplayName: Baby Red Panda Bamboo Spike
+			BabyRedPandaBambooSpikeController.DisplayName: Baby Red Panda Bamboo Spike Controller
+			BabyRedPandaMinion.DisplayName: Baby Red Panda Minion
+			CompanionCubeMinion.DisplayName: Companion Cube Minion
+			CursedSaplingBranchProjectile.DisplayName: Cursed Sapling Branch Projectile
+			CursedSaplingMinion.DisplayName: Cursed Sapling Minion
+			EsteeFallenStarProjectile.DisplayName: Estee Fallen Star Projectile
+			EsteeMinion.DisplayName: Estee Minion
+			PlanteroMinion.DisplayName: Plantero Minion
+			SquashlingMinion.DisplayName: Squashling Minion
+			SquashlingPumpkinBomb.DisplayName: Squashling Pumpkin Bomb
+			SugarGliderMinion.DisplayName: Sugar Glider Minion
+			VoltBunnyMinion.DisplayName: Volt Bunny Minion
+			BabyDinosaurMinion.DisplayName: Baby Dinosaur Minion
+			BabyEaterMinion.DisplayName: Baby Eater Minion
+			BabyFaceMonsterMinion.DisplayName: Baby Face Monster Minion
+			BabyGrinchMinion.DisplayName: Baby Grinch Minion
+			BabyHornetMinion.DisplayName: Baby Hornet Minion
+			BabyPenguinMinion.DisplayName: Baby Penguin Minion
+			BabySkeletronHeadMinion.DisplayName: Baby Skeletron Head Minion
+			BabySnowmanMinion.DisplayName: Baby Snowman Minion
+			BabyTruffleMinion.DisplayName: Baby Truffle Minion
+			BlackCatMeowsicalNote.DisplayName: Black Cat Meowsical Note
+			BlackCatMinion.DisplayName: Black Cat Minion
+			BlackCatShadowBeam.DisplayName: Black Cat Shadow Beam
+			BlackCatWaterBolt.DisplayName: Black Cat Water Bolt
+			DynamiteKittenBullet.DisplayName: Dynamite Kitten Bullet
+			DynamiteKittenGrenade.DisplayName: Dynamite Kitten Grenade
+			DynamiteKittenMinion.DisplayName: Dynamite Kitten Minion
+			DynamiteKittenRocket.DisplayName: Dynamite Kitten Rocket
+			EyeSpringMinion.DisplayName: Eye Spring Minion
+			GlitteryButterflyMinion.DisplayName: Glittery Butterfly Minion
+			GlommerMinion.DisplayName: Glommer Minion
+			HoardagronHeadMinion.DisplayName: Hoardagron Head Minion
+			MiniMinotaurAxeProjectile.DisplayName: Mini Minotaur Axe Projectile
+			MiniMinotaurMinion.DisplayName: Mini Minotaur Minion
+			ParrotPetMinion.DisplayName: Parrot Pet Minion
+			PenguinPetFishProjectile.DisplayName: Penguin Pet Fish Projectile
+			PetLizardMinion.DisplayName: Pet Lizard Minion
+			PropellerGatoMinion.DisplayName: Propeller Gato Minion
+			PuppyMinion.DisplayName: Puppy Minion
+			SaplingMinion.DisplayName: Sapling Minion
+			SaplingMinionLeafProjectile.DisplayName: Sapling Minion Leaf Projectile
+			ShadowMimicMinion.DisplayName: Shadow Mimic Minion
+			SnowmanPetSnowballProjectile.DisplayName: Snowman Pet Snowball Projectile
+			TikiSpiritMinion.DisplayName: Tiki Spirit Minion
+			TrufflePetGlowingMushroom.DisplayName: Truffle Pet Glowing Mushroom
+			TurtleMinion.DisplayName: Turtle Minion
+			ZephyrFishMinion.DisplayName: Zephyr Fish Minion
+			CorruptionAltarBigEater.DisplayName: Corruption Altar Big Eater
+			CorruptionAltarCounterMinion.DisplayName: Corruption Altar Counter Minion
+			CorruptionAltarEater.DisplayName: Corruption Altar Eater
+			CorruptionAltarMinion.DisplayName: Corruption Cell
+			CrimsonAltarBigCrimera.DisplayName: Crimson Altar Big Crimera
+			CrimsonAltarCounterMinion.DisplayName: Crimson Altar Counter Minion
+			CrimsonAltarCrimera.DisplayName: Crimson Altar Crimera
+			CrimsonAltarMinion.DisplayName: Crimson Cell
+			CrystalFistHeadMinion.DisplayName: Crystal Fist
+			CrystalFistMinion.DisplayName: Crystal Fist
+			EclipseHeraldCounterMinion.DisplayName: Eclipse Herald Counter Minion
+			EclipseHeraldMinion.DisplayName: Eclipse Herald
+			EclipseSphere.DisplayName: Eclipse Sphere
+			ExciteSkullMinion.DisplayName: ExciteSkull
+			FishBowlFish.DisplayName: Fish Bowl Fish
+			FishBowlMinion.DisplayName: Flying FishBowl
+			FlyingSwordMinion.DisplayName: Clarent
+			GoblinGunnerBullet.DisplayName: Goblin Gunner Bullet
+			GoblinGunnerCounterMinion.DisplayName: Goblin Gunner Counter Minion
+			GoblinGunnerMinion.DisplayName: Goblin Gunner
+			GoblinGunnerMinionGuns.DisplayName: Goblin Gunner Minion Guns
+			GoblinTechnomancerMinion.DisplayName: Goblin Technomancer
+			GoblinTechnomancerProbeMinion.DisplayName: Goblin Technomancer Probe
+			LilEntLeafProjectile.DisplayName: Lil Ent Leaf Projectile
+			LilEntMinion.DisplayName: Lil Ent Minion
+			MeteorFistHead.DisplayName: Meteor Fist
+			MeteorFistMinion.DisplayName: Meteor Fist
+			MinionWaypoint.DisplayName: Minion Waypoint
+			MycelialMageMinion.DisplayName: Mycelial Mage
+			MysticPaintbrushMinion.DisplayName: Mystic Palette
+			BoneSphereBoneProjectile.DisplayName: Bone Sphere Bone Projectile
+			BoneSphereProjectile.DisplayName: Bone Sphere Projectile
+			NecromancerMinion.DisplayName: Necromancer
+			NecromancerSkeletonMinion.DisplayName: Necromancer Skeleton
+			NullHatchetMinion.DisplayName: Null Hatchet
+			PaperSurferMinion.DisplayName: Paper Surfer
+			CopperSwordMinion.DisplayName: Starry SkySlasher
+			PricklyPearCactusProjectile.DisplayName: Prickly Pear Cactus Projectile
+			PricklyPearMinion.DisplayName: PricklyPear
+			PricklyPearSeedProjectile.DisplayName: Prickly Pear Seed Projectile
+			RatsMinion.DisplayName: Rat (Friendly)
+			SlimecartMinion.DisplayName: Slimecart
+			SlimepireMinion.DisplayName: Slimepire
+			SlimeTrainCartProjectile.DisplayName: Slime Train Cart Projectile
+			SlimeTrainCounterMinion.DisplayName: Slime Train Counter Minion
+			SlimeTrainMarkerProjectile.DisplayName: Slime Train Marker Projectile
+			SlimeTrainMinion.DisplayName: Celestial Steam Train
+			SlimeTrainSlimeMinion.DisplayName: Slime Train Passenger
+			SpiritGunCounterMinion.DisplayName: Spirit Gun Counter Minion
+			SpiritGunMinion.DisplayName: Spirit Revolver
+			SpiritGunMinionBullet.DisplayName: Spirit Gun Minion Bullet
+			StarSurferMinion.DisplayName: Star Surfer
+			StarSurferProjectile.DisplayName: Star Surfer Projectile
+			StoneCloudMinion.DisplayName: Stone Cloud
+			CritterSwarmProjectile.DisplayName: Critter Swarm Projectile
+			LandChunkProjectile.DisplayName: Land Chunk Projectile
+			TerrarianEntCounterMinion.DisplayName: Terrarian Ent Counter Minion
+			TerrarianEntMinion.DisplayName: Ent of the Forest
+			TumbleSheepMinion.DisplayName: ProjectileName.TumbleSheep
+			BigSharknadoMinion.DisplayName: Tempest
+			DeadlySphereFire.DisplayName: Deadly Sphere Fire
+			HornetMinion.DisplayName: Hornet
+			HornetStinger.DisplayName: Hornet Stinger
+			ImpFireball.DisplayName: Imp Fireball
+			ImpMinion.DisplayName: Flying Imp
+			ImpPortalMinion.DisplayName: Copter-X
+			ImpPortalUnholyTrident.DisplayName: Imp Portal Unholy Trident
+			AbigailCounterMinion.DisplayName: Abigail Counter Minion
+			AbigailMinion.DisplayName: Abigail
+			BonusFlinxMinion.DisplayName: Bonus Flinx Minion
+			DesertTigerCounterMinion.DisplayName: Desert Tiger Counter Minion
+			DesertTigerDashMinion.DisplayName: Desert Tiger Dash Minion
+			DesertTigerMinion.DisplayName: Desert Tiger Minion
+			FlinxMinion.DisplayName: Flinx Minion
+			VampireFrogMinion.DisplayName: Vampire Frog Minion
+			MiniEyeFire.DisplayName: Mini Eye Fire
+			MiniSharknado.DisplayName: Mini Sharknado
+			MiniTwinsLaser.DisplayName: Mini Twins Laser
+			PirateCannonball.DisplayName: Pirate Cannonball
+			PirateCannonballExplosion.DisplayName: Pirate Cannonball Explosion
+			PirateDeadeyeBullet.DisplayName: Pirate Deadeye Bullet
+			Pygmy1Minion.DisplayName: Pygmy
+			Pygmy2Minion.DisplayName: Pygmy
+			Pygmy3Minion.DisplayName: Pygmy
+			Pygmy4Minion.DisplayName: Pygmy
+			PygmySpear.DisplayName: Pygmy Spear
+			RavenGreekFire.DisplayName: Raven Greek Fire
+			SharknadoMinion.DisplayName: Tempest
+			StardustCellClinger.DisplayName: Stardust Cell Clinger
+			StardustDragonCounterMinion.DisplayName: Stardust Dragon Counter Minion
+			UfoDamageHitbox.DisplayName: Ufo Damage Hitbox
+			VoidKnifeMinion.DisplayName: Void Dagger
+			WhackAMoleCounterMinion.DisplayName: Whack A Mole Counter Minion
+			WhackAMoleMinion.DisplayName: Whack-a-mole
+			WhackAMoleMinionProjectile.DisplayName: Whack A Mole Minion Projectile
+			XCXCopterCounterMinion.DisplayName: X C X Copter Counter Minion
+			XCXCopterMinion.DisplayName: Copter-X
+			AdamantiteSquireMinion.DisplayName: Adamantite Squire
+			AncientCobaltBolt.DisplayName: Ancient Cobalt Bolt
+			AncientCobaltSquireMinion.DisplayName: Ancient Cobalt Squire
+			AncientCobaltStream.DisplayName: Ancient Cobalt Stream
+			ArmoredBoneSquireMinion.DisplayName: Armored Bone Squire
+			ArmoredBoneSquireSpiritProjectile.DisplayName: Armored Bone Squire Spirit Projectile
+			SpiritFlailWormMinion.DisplayName: Spirit Flail Chain
+			BoneSquireMinion.DisplayName: Bone Squire
+			CrimsonSquireMinion.DisplayName: Crimson Squire
+			EvilSquireExplosion.DisplayName: Evil Squire Explosion
+			IchorFlaskProjectile.DisplayName: Ichor Flask Projectile
+			DemonSquireImpFireball.DisplayName: Demon Squire Imp Fireball
+			DemonSquireImpMinion.DisplayName: Demon Squire Imp Minion
+			DemonSquireMinion.DisplayName: Demon Squire
+			DemonSquireUnholyTrident.DisplayName: Demon Squire Unholy Trident
+			EmpressSpecialOrbitProjectile.DisplayName: Empress Special Orbit Projectile
+			EmpressSquireMinion.DisplayName: Priestess of Light
+			EmpressStarlightProjectile.DisplayName: Empress Starlight Projectile
+			GoldenDagger.DisplayName: Golden Dagger
+			GoldenDaggerCloud.DisplayName: Golden Dagger Cloud
+			GoldenRogueSquireMinion.DisplayName: Golden Rogue Squire
+			AscendingGuideArrow.DisplayName: Ascending Guide Arrow
+			DescendingGuideArrow.DisplayName: Descending Guide Arrow
+			GuideArrow.DisplayName: Guide Arrow
+			GuideSquireMinion.DisplayName: Guide Squire
+			MushroomSquireMinion.DisplayName: Mushroom Squire
+			MushroomSquireMushroomProjectile.DisplayName: Mushroom Squire Mushroom Projectile
+			PottedPalJrMinion.DisplayName: Potted Pal Jr Minion
+			PottedPalMinion.DisplayName: Potted Pal
+			PottedPalSeedProjectile.DisplayName: Potted Pal Seed Projectile
+			BigPumpkinBomb.DisplayName: Big Pumpkin Bomb
+			PumpkinSquireMinion.DisplayName: Pumpkin Squire
+			SeaSquireBubble.DisplayName: Sea Squire Bubble
+			SeaSquireMinion.DisplayName: Sea Squire
+			SeaSquireSharkMinion.DisplayName: Sea Squire Shark
+			CorruptFlaskProjectile.DisplayName: Corrupt Flask Projectile
+			ShadowSquireMinion.DisplayName: Shadow Squire
+			SkywareArrow.DisplayName: Skyware Arrow
+			SkywareLargeArrow.DisplayName: Skyware Large Arrow
+			SkywareSquireMinion.DisplayName: Skyware Squire
+			SoulboundArsenalArrow.DisplayName: Soulbound Arsenal Arrow
+			SoulboundArsenalLaser.DisplayName: Soulbound Arsenal Laser
+			SoulboundArsenalMinion.DisplayName: Soulbound Arsenal
+			SoulboundArsenalSwordProjectile.DisplayName: Soulbound Arsenal Sword Projectile
+			SoulboundArrow.DisplayName: Soulbound Arrow
+			SoulboundBowMinion.DisplayName: Ancient Cobalt Squire
+			SoulboundSpecialSword.DisplayName: Soulbound Special Sword
+			SoulboundDescendingArrow.DisplayName: Soulbound Descending Arrow
+			SoulboundSpecialBow.DisplayName: Soulbound Special Bow
+			SoulboundSwordMinion.DisplayName: Soulbound Sword
+			SqueyereEyeLaser.DisplayName: Squeyere Eye Laser
+			SqueyereEyeMinion.DisplayName: Squeyere Eye Minion
+			SqueyereLaser.DisplayName: Squeyere Laser
+			SqueyereMinion.DisplayName: Ancient Cobalt Squire
+			ConstellationSeed.DisplayName: Constellation Seed
+			StardustBeastProjectile.DisplayName: Stardust Beast Projectile
+			StardustConstellation.DisplayName: Stardust Constellation
+			StardustGuardianProjectile.DisplayName: Stardust Guardian Projectile
+			StardustHomingStar.DisplayName: Stardust Homing Star
+			StardustSquireMinion.DisplayName: Ancient Cobalt Squire
+			StarFistProjectile.DisplayName: Star Fist Projectile
+			TitaniumDroneDamageHitbox.DisplayName: Titanium Drone Damage Hitbox
+			TitaniumSquireDrone.DisplayName: Titanium Squire Drone
+			TitaniumSquireMinion.DisplayName: Titanium Squire
+			VikingSquireMinion.DisplayName: Viking Squire
+			GuideVoodooSquireMinion.DisplayName: Guide Squire
+			WoFSquireMinion.DisplayName: Squire of Flesh
+			SoulboundArsenalBowMinion.DisplayName: Soulbound Arsenal Bow Minion
+		}
+
+		Keybinds: {
+			CycleMinionTactic.DisplayName: Cycle Minion Tactic
+			CycleTacticsGroup.DisplayName: Cycle Tactics Group
+			MinionQuickDefend.DisplayName: Minion Quick Defend
+		}
+
+		Common: {
+			AoMMVersion: (AoMM Version)
+			ConcatenateTwo: "{0} {1}"
+
+			Tooltips: {
+				IncreasesMinionDamageBy: Increases summon damage by {0}%
+				IncreasesMinionDamage: Increases summon damage
+				IncreasesSquireTravelRangeBy: Increases squire travel range by {0} {^0:block;blocks}
+				IncreasesSquireAttackSpeedBy: Increases attack speed by {0}% while using a squire
+				IncreasesCombatPetMovementSpeed: Increases combat pet movement speed
+				AllowsMinionAttackAroundCornersIn: Allows your minions to automatically attack around corners in a {0} block radius
+			}
+
+			Replicas: {
+				Replica: Replica
+				CommonTooltip:
+					'''
+					Legends say that only a true master is capable wielding this pet's power.
+					But now you can too, for one easy payment of 50 gold!
+					'''
+			}
+
+			Squires: {
+				SummonsASquire: Summons a Squire
+				ClickAndHold: Click and hold to guide its attacks
+				ClickAndHoldPlural: Click and hold to guide their attacks
+				RightClickSpecial: Right-Click Special: {0}
+			}
+
+			WaypointRods: {
+				CommonTooltip:
+					'''
+					Tool
+					Click to place a minion guidance waypoint!
+					Minions will automatically navigate to the waypoint
+					Attacking with a non-summon weapon dispels the waypoint
+					Minions deal less damage while attacking a far away waypoint
+					'''
+				WaypointRange: "{0} block range"
+			}
+
+			CombatPetEmblems: {
+				CommonTooltip:
+					'''
+					An emblem that increases the power of your combat pets!
+					As long as this item is in your inventory, your combat pet will deal
+					additional damage, and will receive a bonus to movement speed and attack range.
+					'''
+				MinionSlotsToCombatPet: In addition, you can use up to {0} of your minion slots on combat pets.
+			}
+
+			CombatPets: {
+				CommonDescription:
+					'''
+					This pet's fighting spirit has been awakened!
+					It can be powered up by holding a Combat Pet Emblem.
+					'''
+				NotLeveledUp:
+					'''
+					This pet will gain a stronger attack pattern if you hold a
+					{0} Combat Pet Emblem or stronger!
+					'''
+				LeveledUp: Your emblem enables this pet's stronger attack pattern!
+			}
+		}
+
+		CombatPetLevels: {
+			Base: Base
+			Golden: Golden
+			Demonite: Corrupt/Crimson
+			Skeletal: Skeletal
+			Soulful: Soulful
+			Hallowed: Hallowed
+			Spectre: Spectre
+			Stardust: Stardust
+			Celestial: Celestial
+		}
+
+		CombatPetQuiz: {
+			PersonalityTypes: {
+				NONE: none
+				CALM: calm
+				HARDY: hardy
+				QUIRKY: quirky
+				JOLLY: jolly
+				QUIET: quiet
+				BOLD: bold
+				HASTY: hasty
+				RELAXED: relaxed
+			}
+
+			QuizResults: {
+				CALM: Plant Pup
+				HARDY: Truffle Turtle
+				QUIRKY: Axolittl
+				JOLLY: Lil Gator
+				QUIET: Smoleder
+				BOLD: Cinder Hen
+				HASTY: Wyvernfly
+				RELAXED: Cloudiphant
+			}
+
+			Quizzes: {
+				QuizWithDominantTraits: {
+					IntroLines: {
+						0: Welcome, to the world of Terraria!
+						1: Terraria can be a dangerous place, but having a good friend at your side always makes it better!
+						2: To help you and your new friend get to know each other better, here's a few questions!
+						3: Be sure to answer sincerely. Let's begin!
+					}
+
+					OutroLines: {
+						0: Thank you for answering those questions!
+						1: Based on your answers, you appear to be... the {0} type!
+						2: A {0} person like yourself would be great friends with... the {1}!
+						3: May you and your new friend enjoy many adventures!
+					}
+				}
+
+				ClassSpecificQuiz: {
+					IntroLines: {
+						0: Welcome back, to the world of Terraria!
+						1: I hope you and your friends have been enjoying your adventures!
+						2: Do you know what the only thing better than having friends is? Having more friends!
+					}
+
+					OutroLines: {
+						0: Ah, a {0} friend will be great to have!
+						1: The {0} {1} is excited to join your team!
+						2: May you and your new friend enjoy many adventures!
+					}
+
+					Text: What sort of friend would you like to have join you on your journey?
+
+					Answers: {
+						0: A friend with a fiery passion!
+						1: A friend who can go with the flow!
+						2: A friend who's down to earth!
+						3: A friend with their head in the clouds!
+					}
+				}
+			}
+
+			Questions: {
+				0: {
+					Text: Ok, but what's really your favorite class to play as?
+
+					Answers: {
+						CALM: Summoner.
+						QUIRKY: Summoner?
+						BOLD: Summoner!
+					}
+				}
+
+				1: {
+					Text: What is your favorite class to play as?
+
+					Answers: {
+						HARDY: Melee.
+						BOLD: Ranged.
+						CALM: Mage.
+					}
+				}
+
+				2: {
+					Text: You accidentally clicked Reforge one too many times, now your Legendary Zenith is Broken! What do you do?
+
+					Answers: {
+						QUIET: Cry.
+						JOLLY: Keep mashing 'Reforge'.
+						QUIRKY: Install Consistent Reforging!
+					}
+				}
+
+				3: {
+					Text: The Clothier lost his hat, and claims the Guide stole it! How do you help out?
+
+					Answers: {
+						QUIET: Let them fight it out.
+						BOLD: Confront the Guide directly.
+						CALM: Try to mediate.
+					}
+				}
+
+				4: {
+					Text: You see an innocent Bunny chased by a group of Goblin Scouts! Do you intervene?
+
+					Answers: {
+						BOLD: Yes.
+						CALM: No.
+						JOLLY: Chase the bunny too!
+					}
+				}
+
+				5: {
+					Text: You just started a new world. How do you build a house for the Guide?
+
+					Answers: {
+						CALM: A lovely cabin.
+						QUIET: A prison cube.
+						HASTY: No house at all.
+					}
+				}
+
+				6: {
+					Text: Re-Logic just nerfed your favorite weapon! How do you adapt?
+
+					Answers: {
+						HARDY: Keep using it.
+						JOLLY: Try a new one!
+					}
+				}
+
+				7: {
+					Text: Do you prefer building or adventuring?
+
+					Answers: {
+						RELAXED: Building.
+						BOLD: Adventuring.
+						QUIRKY: Fishing!
+					}
+				}
+
+				8: {
+					Text: After looting a chest, do you take the chest with you?
+
+					Answers: {
+						HARDY: Yes.
+						QUIRKY: No.
+					}
+				}
+
+				9: {
+					Text: While exploring a cave, you see a treasure chest sitting out in the open.
+
+					Answers: {
+						QUIRKY: Yay, treasure!
+						HARDY: It's a mimic!
+						QUIET: It's a trapped chest!
+					}
+				}
+
+				10: {
+					Text: What's your favorite color?
+
+					Answers: {
+						BOLD: Red.
+						CALM: Green.
+						JOLLY: Blue.
+					}
+				}
+
+				11: {
+					Text: How well organized are your chests?
+
+					Answers: {
+						HASTY: Not at all.
+						QUIRKY: A little bit.
+						QUIET: Well organized.
+					}
+				}
+
+				12: {
+					Text: You've just arrived at the dungeon's entrance, but the night is already half way over! What do you do?
+
+					Answers: {
+						HASTY: Fight skeletron right away!
+						HARDY: Build a makeshift arena first.
+						RELAXED: Wait until the next night
+					}
+				}
+
+				13: {
+					Text: A Martian probe has caught you off guard and is now flying away! How do you respond?
+
+					Answers: {
+						QUIET: Quickly save and quit.
+						HASTY: Chase after it!
+						QUIRKY: Yay! Martian Invasion!
+					}
+				}
+
+				14: {
+					Text: Do you prefer sweet foods or savory foods?
+
+					Answers: {
+						JOLLY: Sweet!
+						RELAXED: Savory.
+					}
+				}
+
+				15: {
+					Text: What's your favorite difficulty to play on?
+
+					Answers: {
+						RELAXED: Normal.
+						HARDY: Expert.
+						BOLD: Master.
+					}
+				}
+
+				16: {
+					Text: You're playing multiplayer and just found a one-of-a-kind chest item! How do you handle sharing it?
+
+					Answers: {
+						HASTY: First come, first serve.
+						RELAXED: Divide the loot evenly.
+					}
+				}
+
+				17: {
+					Text: Do you prefer Squires or whips?
+
+					Answers: {
+						CALM: Squires.
+						QUIET: Squires?
+						JOLLY: Squires!
+					}
+				}
+
+				18: {
+					Text: Do you replant trees after chopping them down?
+
+					Answers: {
+						HASTY: Never!
+						CALM: Right away.
+						RELAXED: After a while.
+					}
+				}
+			}
+
+			ClassSpecificQuestions: {
+				0: {
+					Text: A fiery friend is a great choice! How should their disposition be?
+
+					Answers: {
+						BOLD: Outgoing and bold!
+						QUIET: Reserved and quiet.
+					}
+				}
+
+				1: {
+					Text: An easygoing friend is a great choice! How should their disposition be?
+
+					Answers: {
+						JOLLY: Jolly and carefree!
+						QUIRKY: Quirky and eccentric!
+					}
+				}
+
+				2: {
+					Text: A down to earth friend is a great choice! How should their disposition be?
+
+					Answers: {
+						HARDY: Hardy and resillient!
+						CALM: Calm and collected.
+					}
+				}
+
+				3: {
+					Text: A lofty friend is a great choice! How should their disposition be?
+
+					Answers: {
+						RELAXED: Easygoing and relaxed!
+						HASTY: Hasty and ambitious.
+					}
+				}
+			}
+
+			NextButton.Text: Next
+		}
+
+		TargetSelectionTactics: {
+			AttackGroups: {
+				DisplayName: Attack Groups
+				Description: Attack enemies that are close to each other
+			}
+
+			ClosestEnemyToMinion: {
+				DisplayName: Closest Enemy To Minion
+				Description: Attack closest enemy to minion
+			}
+
+			ClosestEnemyToPlayer: {
+				DisplayName: Closest Enemy To Player
+				Description: Attack closest enemy to player
+			}
+
+			LeastDamagedEnemy: {
+				DisplayName: Least Damaged Enemy
+				Description: Attack enemy with the [c/FF0000:highest current] health
+			}
+
+			MostDamagedEnemy: {
+				DisplayName: Most Damaged Enemy
+				Description: Attack enemy with the [c/FF0000:lowest current] health
+			}
+
+			SpreadOut: {
+				DisplayName: Spread Out
+				Description: Each minion attacks a different enemy if possible
+			}
+
+			StrongestEnemy: {
+				DisplayName: Strongest Enemy
+				Description: Attack enemy with the [c/FF0000:highest maximum] health
+			}
+
+			WeakestEnemy: {
+				DisplayName: Weakest Enemy
+				Description: Attack enemy with the [c/FF0000:lowest maximum] health
+			}
+		}
+
+		TacticsGroups: {
+			Description:
 				'''
-				While jousting, the Adamantite Squire deals {1}x damage!
+				Each tactics group can be assigned a distinct tactic and waypoint.
+				Set a minion's tactic group by left clicking its buff icon
 				'''
-			AncientCobaltSquireMinionItem:
-				'''
-				Magic Shotblast travels {1}% distance
-				'''
-			ArmoredBoneSquireMinionItem:
-				'''
-				Spawns wisps at a {1}% rate
-				'''
-			BoneSquireMinionItem:
-				'''
-				Flail length is {1} blocks
-				'''
-			CrimsonSquireMinionItem:
-				'''
-				Ichor Flask's Ichor lasts {1} seconds
-				'''
-			DemonSquireMinionItem:
-				'''
-				Special Ability Imp Fireballs have {1}% velocity
-				'''
+			Sun: Sun Group
+			Moon: Moon Group
+			Both: Both Groups
+			Close: Close Minion Tactics
+			Open: Open Minion Tactics
+		}
+
+		DropConditions: {
+			SlimepireCondition.Description: Drops during Hardmode Blood Moon
+			AnyLunarEventCondition.Description: Drops during any Lunar Event
+			NoLunarEventCondition.Description: Does not drop during any Lunar Events
+			FirstBossDefeatedCondition.Description: Drops after first defeated boss
 		}
 	}
 }

@@ -14,13 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.FlinxMinion;
 
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<FlinxMinion>(), ProjectileType<BonusFlinxMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.FlinxMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.FlinxMinion"));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.FlinxMinion"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.FlinxMinion");
 	}
 
 	public class FlinxMinionItem : VanillaCloneMinionItem<FlinxMinionBuff, FlinxMinion>

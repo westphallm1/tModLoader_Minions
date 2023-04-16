@@ -15,23 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 	public class AcornMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<AcornMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Acorn");
-			Description.SetDefault("A winged acorn will fight for you!");
-		}
 	}
 
 	public class AcornMinionItem : MinionItem<AcornMinionBuff, AcornMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Acorn Staff");
-			Tooltip.SetDefault("Summons a winged acorn to fight for you!");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGEDNOMULTISHOT);
@@ -59,7 +46,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 		const int TIME_TO_LIVE = 90;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
@@ -97,7 +83,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flying Acorn");
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

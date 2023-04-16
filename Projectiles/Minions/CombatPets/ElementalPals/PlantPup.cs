@@ -15,22 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class PlantPupMinionBuff : CombatPetBuff
     {
         internal override int[] ProjectileTypes => new int[] { ProjectileType<PlantPupMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Plant Pup");
-			Description.SetDefault("A playful plant has joined your adventure!");
-		}
 	}
 
 	public class PlantPupMinionItem : CombatPetCustomMinionItem<PlantPupMinionBuff, PlantPupMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Calm Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet Plant Pup!");
-		}
 	}
 
 	public class LeafBlade : ModProjectile
@@ -48,7 +36,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 		private int circleStartFrame;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			Main.projFrames[Projectile.type] = 5;
 		}
@@ -98,7 +85,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			ModProjectileExtensions.ClientSideNPCHitCheck(this);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if(circleStartFrame == default)
 			{

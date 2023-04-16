@@ -13,23 +13,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 	public class XCXCopterMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<XCXCopterCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X");
-			Description.SetDefault("A flexible helicopter will fight for you!");
-		}
 	}
 
 	public class XCXCopterMinionItem : MinionItem<XCXCopterMinionBuff, XCXCopterCounterMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X Staff");
-			Tooltip.SetDefault("Summons a flexible helicopter to fight for you!");
-
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -67,7 +54,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.XCXCopter
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Copter-X");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

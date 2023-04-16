@@ -17,24 +17,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 	public class EmpressSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<EmpressSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crowned by the Empress of Light");
-			Description.SetDefault("Check THIS out!");
-		}
 	}
 
 	public class EmpressSquireMinionItem : SquireMinionItem<EmpressSquireMinionBuff, EmpressSquireMinion>
 	{
-		protected override string SpecialName => "Spectrum Supreme";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Chalice of the Empress");
-			Tooltip.SetDefault("Summons a squire\nThe priestess of light will fight for you!\nClick and hold to guide its attacks");
-		}
-		
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -94,7 +80,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Priestess of Light");
 			Main.projFrames[Projectile.type] = 5;
 		}
 

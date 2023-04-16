@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -11,14 +12,11 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 	[AutoloadEquip(EquipType.Head)]
 	class RoyalCrown : ModItem
 	{
+		public static LocalizedText SetBonusText { get; private set; }
+
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Royal Crown");
-			Tooltip.SetDefault(""
-				+ "Increases minion damage by 8%\n" +
-				"Increaes attack speed by 10% while using a squire\n" +
-				"\"You dropped this, king.\"");
+			SetBonusText = this.GetLocalization("SetBonus");
 
 			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
 		}
@@ -45,7 +43,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "A floating crown will assist your squire in combat!";
+			player.setBonus = SetBonusText.ToString();
 			player.GetModPlayer<SquireModPlayer>().royalArmorSetEquipped = true;
 		}
 

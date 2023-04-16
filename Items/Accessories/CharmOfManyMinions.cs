@@ -7,13 +7,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 	[AutoloadEquip(EquipType.Neck)]
 	class CharmOfManyMinions : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			Tooltip.SetDefault("Increases max number of minions by 1\n" +
-				"and increases minion variety bonus by 1%\n" +
-				"but each minion deals slightly less damage");
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

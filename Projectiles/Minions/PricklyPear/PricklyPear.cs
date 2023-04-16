@@ -14,22 +14,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 	public class PricklyPearMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<PricklyPearMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Prickly Pear Hedgehog");
-			Description.SetDefault("A prickly pear pal will fight for you!");
-		}
 	}
 
 	public class PricklyPearMinionItem : MinionItem<PricklyPearMinionBuff, PricklyPearMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Prickly Pear Staff");
-			Tooltip.SetDefault("Summons a prickly pear hedgehog to fight for you!");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
@@ -56,7 +44,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		const int TIME_TO_LIVE = 90;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
@@ -110,7 +97,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		const int TIME_TO_LIVE = 180;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			Main.projFrames[Projectile.type] = 4;
 		}
@@ -183,7 +169,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("PricklyPear");
 			Main.projFrames[Projectile.type] = 10;
 		}
 

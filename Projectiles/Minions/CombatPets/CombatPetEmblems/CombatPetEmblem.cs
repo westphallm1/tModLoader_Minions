@@ -17,27 +17,17 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	{
 		internal abstract int PetLevel { get; }
 
+		public static LocalizedText CommonTooltipText { get; private set; }
+
+		public static LocalizedText MinionSlotsToCombatPetText { get; private set; }
+
+		public override LocalizedText Tooltip => CommonTooltipText;
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
-			Tooltip.SetDefault(
-				"An emblem that increases the power of your combat pets!\n" +
-				"As long as this item is in your inventory, your combat pet will deal\n" +
-				"additional damage, and will receive a bonus to movement speed and attack range.");
-		}
-
-		public override void ModifyTooltips(List<TooltipLine> tooltips)
-		{
-			int maxCombatPets = CombatPetLevelTable.PetLevelTable[PetLevel].MaxPets;
-			if(ServerConfig.Instance.AllowMultipleCombatPets &&  maxCombatPets > 1)
-			{
-			tooltips.Add(new TooltipLine(Mod, "MaxCombatPets", 
-				"In addition, you can use up to " + maxCombatPets + " of your minion slots on combat pets." )
-			{
-				OverrideColor = Color.LimeGreen
-			});
-			}
+			string commonKey = "Common.CombatPetEmblems.";
+			CommonTooltipText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}CommonTooltip"));
+			MinionSlotsToCombatPetText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}MinionSlotsToCombatPet"));
 		}
 
 		public override void SetDefaults()
@@ -50,6 +40,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			Item.knockBack = 1f; // make nonzero to allow more modifiers
 		}
 
+		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		{
+			int maxCombatPets = CombatPetLevelTable.PetLevelTable[PetLevel].MaxPets;
+			if (ServerConfig.Instance.AllowMultipleCombatPets && maxCombatPets > 1)
+			{
+				tooltips.Add(new TooltipLine(Mod, nameof(MinionSlotsToCombatPetText),
+					MinionSlotsToCombatPetText.Format(maxCombatPets))
+				{
+					OverrideColor = Color.LimeGreen
+				});
+			}
+		}
+
 		public override bool CanUseItem(Player player)
 		{
 			return false;
@@ -59,11 +62,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class GoldenCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 1;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Golden Combat Pet Emblem");
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -76,11 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class PlatinumCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 1;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Platinum Combat Pet Emblem");
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -93,11 +88,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class CorruptCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 2;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Corrupt Combat Pet Emblem");
-		}
 
 		public override void SetDefaults()
 		{
@@ -112,11 +102,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class CrimsonCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 2;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crimson Combat Pet Emblem");
-		}
 
 		public override void SetDefaults()
 		{
@@ -131,11 +116,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class SkeletalCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 3;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skeletal Combat Pet Emblem");
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -150,11 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class SoulfulCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 4;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Soulful Combat Pet Emblem");
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -172,11 +149,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class HallowedCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 5;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Hallowed Combat Pet Emblem");
-		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -195,11 +168,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class SpectreCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 6;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Spectre Combat Pet Emblem");
-		}
 
 		public override void SetDefaults()
 		{
@@ -216,11 +184,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class StardustCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 7;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Stardust Combat Pet Emblem");
-		}
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -236,11 +199,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 	class CelestialCombatPetEmblem : CombatPetEmblem
 	{
 		internal override int PetLevel => 8;
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Celestial Combat Pet Emblem");
-		}
 
 		public override void SetDefaults()
 		{

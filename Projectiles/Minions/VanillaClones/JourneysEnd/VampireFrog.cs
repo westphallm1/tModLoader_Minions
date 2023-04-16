@@ -16,14 +16,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 	{
 		public override string Texture => "Terraria/Images/Buff_" + BuffID.VampireFrog;
 
-		internal override int[] ProjectileTypes => new int[] { ProjectileType<VampireFrogMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.VampireFrogMinion") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.VampireFrogMinion"));
-		}
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.VampireFrog"));
 
+		public override LocalizedText Description => Language.GetText("BuffDescription.VampireFrog");
+
+		internal override int[] ProjectileTypes => new int[] { ProjectileType<VampireFrogMinion>() };
 	}
 
 	public class VampireFrogMinionItem : VanillaCloneMinionItem<VampireFrogMinionBuff, VampireFrogMinion>
@@ -96,10 +93,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd
 			DoDefaultGroundedMovement(vector);
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// deal slightly more damage than listed
-			damage = (int)(damage * 1.25f);
+			modifiers.SourceDamage += 0.25f;
 		}
 
 		public override bool PreDraw(ref Color lightColor)

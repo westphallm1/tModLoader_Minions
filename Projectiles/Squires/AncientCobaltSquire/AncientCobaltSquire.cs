@@ -13,24 +13,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 	public class AncientCobaltSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<AncientCobaltSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Ancient Cobalt Squire");
-			Description.SetDefault("An ancient cobalt squire will follow your orders!");
-		}
 	}
 
 	public class AncientCobaltSquireMinionItem : SquireMinionItem<AncientCobaltSquireMinionBuff, AncientCobaltSquireMinion>
 	{
-		protected override string SpecialName => "Magic Shotblast";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Ancient Crest of Cobalt");
-			Tooltip.SetDefault("Summons a squire\nAn ancient cobalt squire will fight for you!\nClick and hold to guide its attacks");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			var minionCollection = new SummonersShineMinionPowerCollection();
@@ -148,7 +134,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Ancient Cobalt Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

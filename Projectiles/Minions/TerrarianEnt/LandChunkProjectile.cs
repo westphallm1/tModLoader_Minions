@@ -349,7 +349,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 			scHelper.UpdateDrawers(false, drawFuncs);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			int maxSwarmSize = 4;
 			int projType = ProjectileType<CritterSwarmProjectile>();

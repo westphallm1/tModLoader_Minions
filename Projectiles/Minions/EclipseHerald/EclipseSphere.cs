@@ -17,7 +17,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 		private NPC targetNPC => Main.npc[(int)Projectile.ai[1]];
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 6;
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
@@ -80,10 +79,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.EclipseHerald
 			Projectile.velocity *= 2; // slowly drift from place of impact
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			OnHitTarget();
-			base.OnHitNPC(target, damage, knockback, crit);
+			base.OnHitNPC(target, hit, damageDone);
 		}
 	}
 

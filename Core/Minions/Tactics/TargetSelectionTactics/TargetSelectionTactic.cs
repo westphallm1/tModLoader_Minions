@@ -1,7 +1,10 @@
 ﻿using AmuletOfManyMinions.Core.Minions.Tactics.PlayerTargetSelectionTactics;
+using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics
 {
+	//TODO change to inherit from ModType
 	/// <summary>
 	/// Represents the tactic minions will use to attack enemies
 	/// </summary>
@@ -16,10 +19,12 @@ namespace AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics
 		public virtual string Texture => (GetType().Namespace + "." + Name).Replace('.', '/');
 
 		//Cached
-		public abstract string DisplayName { get; }
+		public virtual LocalizedText DisplayName =>
+			Language.GetOrRegister(ModContent.GetInstance<AmuletOfManyMinions>().GetLocalizationKey($"TargetSelectionTactics.{Name}.DisplayName"));
 
 		//Cached
-		public abstract string Description { get; }
+		public virtual LocalizedText Description =>
+			Language.GetOrRegister(ModContent.GetInstance<AmuletOfManyMinions>().GetLocalizationKey($"TargetSelectionTactics.{Name}.Description"));
 
 		public virtual PlayerTargetSelectionTactic CreatePlayerTactic()
 		{

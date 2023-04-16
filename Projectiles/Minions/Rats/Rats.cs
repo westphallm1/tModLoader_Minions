@@ -11,28 +11,23 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
+using Terraria.Localization;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 {
 	public class RatsMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<RatsMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Aww, Rats!");
-			Description.SetDefault("A group of rats will fight for you!");
-		}
 	}
 
 	public class RatsMinionItem : MinionItem<RatsMinionBuff, RatsMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Rod of the Ratkeeper");
-			Tooltip.SetDefault("Summons a hoarde of rats to fight for you!\nEach rat deals 1/3 of base damage,\nand ignores 10 enemy defense");
-		}
+		public static readonly int DamageNumerator = 1;
+		public static readonly int DamageDenominator = 3;
+		public static readonly int ArmorPen = 10;
+
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(DamageNumerator, DamageDenominator, ArmorPen);
+
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -81,7 +76,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Rat (Friendly)");
 			Main.projFrames[Projectile.type] = 9;
 		}
 
@@ -161,20 +155,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Rats
 			return vectorToIdlePosition;
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// each rat deals 1/3 damage, and ignores 10 defense
-			// manually bypass defense
-			// this may not be wholly correct
-			int defenseBypass = 10;
-			int defense = Math.Min(target.defense, defenseBypass);
-			damage = (int)Math.Ceiling(damage / 3f);
-			damage += defense / 2;
+			modifiers.SourceDamage *= (float)RatsMinionItem.DamageNumerator / RatsMinionItem.DamageDenominator;
+			modifiers.ArmorPenetration += RatsMinionItem.ArmorPen;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			base.OnHitNPC(target, damage, knockback, crit);
+			base.OnHitNPC(target, hit, damageDone);
 			// add poison
 			if(Main.rand.Next(0, 10) == 0)
 			{

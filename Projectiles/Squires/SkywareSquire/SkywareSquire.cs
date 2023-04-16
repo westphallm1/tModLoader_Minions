@@ -15,24 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 	public class SkywareSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SkywareSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skyware Centurion");
-			Description.SetDefault("A Skyware Centurion is fighting for you!");
-		}
 	}
 
 	public class SkywareSquireMinionItem : SquireMinionItem<SkywareSquireMinionBuff, SkywareSquireMinion>
 	{
-		protected override string SpecialName => "Barrage";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of the Sky");
-			Tooltip.SetDefault("Summons a squire\nA skyware centurion will fight for you\nClick and hold to guide its attacks!");
-		}
-
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -179,7 +165,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Skyware Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

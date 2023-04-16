@@ -13,13 +13,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class BabySlimeMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BabySlimeMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.BabySlime") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.BabySlime"));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.BabySlime"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.BabySlime");
 	}
 
 	public class BabySlimeMinionItem : VanillaCloneMinionItem<BabySlimeMinionBuff, BabySlimeMinion>
@@ -32,13 +29,15 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class BabySlimeMinion : SimpleGroundBasedMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.BabySlime;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.BabySlime"));
+
 		public override int BuffId => BuffType<BabySlimeMinionBuff>();
 		private float intendedX = 0;
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.BabySlime") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 6;
 		}
 

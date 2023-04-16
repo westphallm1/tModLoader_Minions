@@ -33,7 +33,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.TerrarianEnt
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 6;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}

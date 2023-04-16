@@ -13,23 +13,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 	public class WyvernFlyMinionBuff : CombatPetBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<WyvernFlyMinion>() };
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Axolittl");
-			Description.SetDefault("A wyvern hatchling has joined your adventure!");
-		}
 	}
 
 	public class WyvernFlyMinionItem : CombatPetCustomMinionItem<WyvernFlyMinionBuff, WyvernFlyMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Hasty Bow of Friendship");
-			Tooltip.SetDefault("Summons a pet WyvernFly!");
-		}
 	}
 
 	public class WyvernFlyMinion : CombatPetHoverShooterMinion

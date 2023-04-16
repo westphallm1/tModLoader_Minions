@@ -8,13 +8,6 @@ namespace AmuletOfManyMinions.Items.Accessories
 	[AutoloadEquip(EquipType.Neck)]
 	class CharmOfMightyMinions : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			Tooltip.SetDefault("Greatly increases minion damage,\n" +
-				"but reduces max number of minions by 1,\n" +
-				"and reduces minion variety bonus by 2%");
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

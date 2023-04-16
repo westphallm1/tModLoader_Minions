@@ -19,23 +19,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 	public class BalloonMonkeyMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<BalloonMonkeyMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Dart Monkeys");
-			Description.SetDefault("Dart-throwing Monkeys will fight for you!");
-		}
 	}
 
 	public class BalloonMonkeyMinionItem : MinionItem<BalloonMonkeyMinionBuff, BalloonMonkeyMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Staff of Darts");
-			Tooltip.SetDefault("Summons a dart-throwing monkey to fight for you!");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
@@ -61,7 +48,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		static int TIME_TO_LIVE = 80;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 			Main.projFrames[Projectile.type] = 3;
 		}
@@ -155,7 +141,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
 
@@ -168,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			Projectile.penetrate = 1;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			// float in the same approximate direction that the npc is travelling
 			Vector2 launchVector = target.velocity;
@@ -206,7 +191,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Balloon Monkey");
 			Main.projFrames[Projectile.type] = 15;
 		}
 

@@ -128,7 +128,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			wormDrawer = new DestroyerLiteDrawer();
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if(Player.whoAmI == Main.myPlayer && AnimationFrame - lastHitFrame > ProbeSpawnRate && leveledPetPlayer.PetLevel >= (int)CombatPetTier.Hallowed)
 			{

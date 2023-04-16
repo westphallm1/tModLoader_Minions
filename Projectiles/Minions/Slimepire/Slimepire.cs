@@ -5,28 +5,21 @@ using Terraria;
 using Terraria.ID;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
+using Terraria.Localization;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 {
 	public class SlimepireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<SlimepireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slimepire");
-			Description.SetDefault("A vampire slime will fight for you!");
-		}
 	}
 
 	public class SlimepireMinionItem : MinionItem<SlimepireMinionBuff, SlimepireMinion>
 	{
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slimepire Staff");
-			Tooltip.SetDefault("Summons a vampire slime to fight for you!\nIgnores 10 enemy defense");
-		}
+		public static readonly int ArmorPen = 10;
+
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(ArmorPen);
+
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.MELEE);
@@ -53,7 +46,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Slimepire");
 			Main.projFrames[Projectile.type] = 6;
 		}
 
@@ -117,13 +109,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimepire
 			base.Animate(minFrame, maxFrame);
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			// manually bypass defense
-			// this may not be wholly correct
-			int defenseBypass = 10;
-			int defense = Math.Min(target.defense, defenseBypass);
-			damage += defense / 2;
+			modifiers.ArmorPenetration += SlimepireMinionItem.ArmorPen;
 		}
 	}
 }

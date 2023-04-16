@@ -8,12 +8,6 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 {
 	class SquireScope : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			Tooltip.SetDefault("Increases view range for squires (Right Click to zoom out)" +
-							"\nIncreases squire travel range by 8 blocks");
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

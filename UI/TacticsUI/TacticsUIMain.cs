@@ -25,10 +25,6 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 	/// </summary>
 	internal class TacticsUIMain : UIElement
 	{
-		//Localize this later, there are actually no vanilla keys for "Close" and "Open" anywhere by themselves
-		internal const string Close = "Close Minion Tactics";
-		internal const string Open = "Open Minion Tactics";
-
 		internal Asset<Texture2D> openTexture;
 		internal Asset<Texture2D> closeTexture;
 		internal Asset<Texture2D> bgSmallTexture;
@@ -86,7 +82,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			openCloseButton = new OpenCloseButton(closeTexture);
 			openCloseButton.Top.Pixels = tacticsPanel.Top.Pixels + tacticsPanel.Height.Pixels; //Attach at the bottom of the panel
 			openCloseButton.HAlign = 0.65f; //Center aligns with center-ish of parent
-			openCloseButton.OnClick += OpenCloseButton_OnClick;
+			openCloseButton.OnLeftClick += OpenCloseButton_OnClick;
 			Append(openCloseButton);
 
 			//After all childrens widths and heights are determined, adjust the element one so it covers everything that got appended to
@@ -254,9 +250,9 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			}
 		}
 
-		public override void MouseDown(UIMouseEvent evt)
+		public override void LeftMouseDown(UIMouseEvent evt)
 		{
-			base.MouseDown(evt);
+			base.LeftMouseDown(evt);
 			// don't start click-and-dragging if the UI is hidden
 			// todo a better way to detect if the UI is hidden
 			// (these two booleans aren't complete coverage)
@@ -268,9 +264,9 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			clickAndDragging = true;
 		}
 
-		public override void MouseUp(UIMouseEvent evt)
+		public override void LeftMouseUp(UIMouseEvent evt)
 		{
-			base.MouseUp(evt);
+			base.LeftMouseUp(evt);
 			clickAndDragging = false;
 		}
 
@@ -294,7 +290,10 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 			if(newState != OpenedTriState.HIDDEN)
 			{
 				openCloseButton.SetImage(opened == OpenedTriState.TRUE ? openTexture : closeTexture);
-				openCloseButton.SetHoverText(opened  == OpenedTriState.TRUE ? Close : Open);
+				openCloseButton.SetHoverText(
+					(opened  == OpenedTriState.TRUE ?
+					TargetSelectionTacticHandler.CloseMinionTacticsText :
+					TargetSelectionTacticHandler.OpenMinionTacticsText).ToString());
 			}
 		}
 

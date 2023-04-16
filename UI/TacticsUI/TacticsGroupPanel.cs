@@ -33,7 +33,7 @@ namespace AmuletOfManyMinions.UI.TacticsUI
 		{
 			foreach (var button in buttons)
 			{
-				button.OnClick += Button_OnClick;
+				button.OnLeftClick += Button_OnClick;
 				//Padding of the panel screws up alignment for the buttons, so revert it
 				button.Top.Pixels -= this.PaddingTop;
 				button.Left.Pixels -= this.PaddingLeft;

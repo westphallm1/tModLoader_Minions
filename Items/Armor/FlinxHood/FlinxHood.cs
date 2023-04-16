@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -13,10 +14,11 @@ namespace AmuletOfManyMinions.Items.Armor.FlinxHood
 	[AutoloadEquip(EquipType.Head)]
 	public class FlinxFurHood : ModItem
 	{
+		public static LocalizedText SetBonusText { get; private set; }
+
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Flinx Fur Hood");
+			SetBonusText = this.GetLocalization("SetBonus");
 		}
 
 		public override void SetDefaults()
@@ -35,7 +37,7 @@ namespace AmuletOfManyMinions.Items.Armor.FlinxHood
 
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Grants a free Flinx minion";
+			player.setBonus = SetBonusText.ToString();
 			player.GetModPlayer<MinionSpawningItemPlayer>().flinxArmorSetEquipped = true;
 		}
 

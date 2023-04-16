@@ -16,24 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 	public class CrimsonSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<CrimsonSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crimson Squire");
-			Description.SetDefault("A crimson squire will follow your orders!");
-		}
 	}
 
 	public class CrimsonSquireMinionItem : SquireMinionItem<CrimsonSquireMinionBuff, CrimsonSquireMinion>
 	{
-		protected override string SpecialName => "Flask of Ichor";
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crest of the Crimson");
-			Tooltip.SetDefault("Summons a squire\nA crimson squire will fight for you!\nClick and hold to guide its attacks");
-		}
-		
 		public override void ApplyCrossModChanges()
 		{
 			SummonersShineMinionPowerCollection minionCollection = new SummonersShineMinionPowerCollection();
@@ -63,7 +49,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override string Texture => "Terraria/Images/Projectile_0";
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 1;
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
@@ -93,7 +78,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			return projHitbox.Intersects(targetHitbox);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			// pass buff type and duration in via ai
 			target.AddBuff((int)Projectile.ai[0], (int)Projectile.ai[1]);
@@ -110,7 +95,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 		public override void SetDefaults()
@@ -137,9 +121,15 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			Projectile.rotation += MathHelper.Pi / 16 * Math.Sign(Projectile.velocity.X);
 		}
 
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			damage = 0; // subsequent explosion does the damage
+			// subsequent explosion does the damage
+			modifiers.ModifyHitInfo += Modifiers_ModifyHitInfo;
+		}
+
+		private void Modifiers_ModifyHitInfo(ref NPC.HitInfo info)
+		{
+			info.Damage = 1;
 		}
 
 		public override void Kill(int timeLeft)
@@ -210,7 +200,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Crimson Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}

@@ -29,7 +29,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Twinkle;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 1;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}
@@ -86,7 +85,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 		MotionBlurDrawer blurDrawer;
 		public override void SetStaticDefaults()
 		{
-			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 1;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
 		}

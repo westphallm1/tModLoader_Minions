@@ -93,7 +93,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.IceQueen"));
+			// DisplayName.SetDefault(Language.GetTextValue("ProjectileName.IceQueen"));
 			Main.projFrames[Projectile.type] = 16;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}

@@ -11,22 +11,12 @@ using AmuletOfManyMinions.Core.Minions.CombatPetsQuiz;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using AmuletOfManyMinions.Items.Materials;
+using Terraria.Localization;
 
 namespace AmuletOfManyMinions.Items.Consumables
 {
-	class CombatPetQuizItems
-	{
-	}
-
 	public class CombatPetFriendshipBow: ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			Tooltip.SetDefault("Grants you a special combat pet based on your personality!\n" +
-				"Your environment may influence the result...");
-			DisplayName.SetDefault("Bow of Friendship");
-		}
-
 		public static void SetFriendshipBowDefaults(Item Item)
 		{
 			Item.maxStack = 1;
@@ -70,17 +60,20 @@ namespace AmuletOfManyMinions.Items.Consumables
 
 	public class CombatPetTeamworkBow: ModItem
 	{
-		internal static string FriendshipBowRequirement =
-			"You must use the Bow of Friendship before using this item.\n" +
-			"Try searching wooden chests near spawn!";
+		public static LocalizedText FriendshipBowRequirementText { get; private set; }
+
+		public override void SetStaticDefaults()
+		{
+			FriendshipBowRequirementText = this.GetLocalization("FriendshipBowRequirement");
+		}
+
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
-			base.ModifyTooltips(tooltips);
-			if(Main.player[Main.myPlayer].GetModPlayer<CombatPetsQuizModPlayer>().HasTakenQuiz)
+			if(Main.LocalPlayer.GetModPlayer<CombatPetsQuizModPlayer>().HasTakenQuiz)
 			{
 				return;
 			}
-			tooltips.Add(new TooltipLine(Mod, "FriendshipBowRequirement", FriendshipBowRequirement)
+			tooltips.Add(new TooltipLine(Mod, nameof(FriendshipBowRequirementText), FriendshipBowRequirementText.ToString())
 			{
 				OverrideColor = Color.Gray
 			});
@@ -96,29 +89,21 @@ namespace AmuletOfManyMinions.Items.Consumables
 			return !quizPlayer.IsTakingQuiz;
 		}
 
-		public override void SetStaticDefaults()
-		{
-			Tooltip.SetDefault(
-				"Invites another special combat pet to your team!\n" +
-				"It will always be different from the last pet that joined.");
-			DisplayName.SetDefault("Bow of Teamwork");
-		}
-
 		public override bool? UseItem(Player player)
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				var quizPlayer = player.GetModPlayer<CombatPetsQuizModPlayer>();
-				if (!quizPlayer.HasTakenQuiz)
+				if (player.ItemAnimationJustStarted)
 				{
-					if (player.ItemAnimationJustStarted)
+					var quizPlayer = player.GetModPlayer<CombatPetsQuizModPlayer>();
+					if (!quizPlayer.HasTakenQuiz)
 					{
 						//By returning null, item will not be consumed, but item animation still runs, so this check ensures the text only shows up on first tick of use
-						Main.NewText(FriendshipBowRequirement);
+						Main.NewText(FriendshipBowRequirementText.ToString());
+						return null;
 					}
-					return null;
+					quizPlayer.StartPartnerQuiz(Type);
 				}
-				quizPlayer.StartPartnerQuiz(Type);
 			}
 			return null;
 		}
@@ -139,12 +124,6 @@ namespace AmuletOfManyMinions.Items.Consumables
 
 	public class CombatPetAncientFriendshipBow: ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			Tooltip.SetDefault("Grants you a special combat pet of your choosing!");
-			DisplayName.SetDefault("Ancient Bow of Friendship");
-		}
-
 		public override void SetDefaults()
 		{
 			CombatPetFriendshipBow.SetFriendshipBowDefaults(Item);

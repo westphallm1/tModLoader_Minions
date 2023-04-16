@@ -110,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			maxSpeed = oldMaxSpeed; // may accidentally jump over enemies if we let it move too fast
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			int direction = Math.Sign(Projectile.velocity.X);
 			direction = direction == 0 ? 1 : direction;
@@ -119,7 +119,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			{
 				target.AddBuff(BuffID.Slow, 120);
 			}
-			base.OnHitNPC(target, damage, knockback, crit);
+			base.OnHitNPC(target, hit, damageDone);
 		}
 
 		public override void IdleMovement(Vector2 vectorToIdlePosition)

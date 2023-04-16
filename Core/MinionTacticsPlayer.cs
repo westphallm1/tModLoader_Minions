@@ -251,7 +251,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			setInstancedCollections = true;
 
 		}
-		public override void OnEnterWorld(Player player)
+		public override void OnEnterWorld()
 		{
 			if (Main.netMode == NetmodeID.Server) return; //Safety check, this hook shouldn't run serverside anyway
 			UserInterfaces.tacticsUI.detached = false;
@@ -390,7 +390,7 @@ namespace AmuletOfManyMinions.Core.Minions
 			}
 		}
 
-		public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if(ProjectileSetsWaypoint(proj.type))
 			{

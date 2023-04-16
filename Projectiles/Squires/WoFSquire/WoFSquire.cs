@@ -23,12 +23,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 	public class GuideVoodooSquireMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<GuideVoodooSquireMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Guide Squire");
-			Description.SetDefault("You can guide the Guide!");
-		}
 	}
 	public class WoFSquireMinionBuff : MinionBuff
 	{
@@ -38,8 +32,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			//TODO 1.4 did not call base before
 			base.SetStaticDefaults();
 			Main.buffNoTimeDisplay[Type] = false;
-			DisplayName.SetDefault("Wall of Flesh Squire");
-			Description.SetDefault("You can guide the Wall of Flesh!");
 			CrossModSetup.HookBuffToItemCrossMod(Type, ItemType<GuideVoodooSquireMinionItem>());
 		}
 		public override void Update(Player player, ref int buffIndex)
@@ -55,17 +47,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 	public class GuideVoodooSquireMinionItem : SquireMinionItem<GuideVoodooSquireMinionBuff, GuideVoodooSquireMinion>
 	{
-		protected override string SpecialName => "Brutal Dash";
-		protected override string SpecialDescription => 
-			"Dashes across the whole screen horizontally,\n" +
-			"hitting everything in its path";
 		private int wofType => ProjectileType<WoFSquireMinion>();
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("True Guide Voodoo Doll");
-			Tooltip.SetDefault("Summons a squire\nClick and hold to guide its attacks!\n'You are a *REALLY* terrible person'");
-		}
 
 		public override void SetDefaults()
 		{
@@ -141,7 +123,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Squire of Flesh");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 		}
@@ -525,7 +506,6 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Guide Squire");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 5;
 		}
@@ -555,7 +535,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			Projectile.originalDamage = 1;
 			Projectile.knockBack = 0;
 		}
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (knockbackCounter < 0)
 			{

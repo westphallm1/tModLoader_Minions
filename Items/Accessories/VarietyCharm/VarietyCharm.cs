@@ -6,12 +6,6 @@ namespace AmuletOfManyMinions.Items.Accessories.VarietyCharm
 {
 	class VarietyCharm : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Lockbox of Many Minions");
-			Tooltip.SetDefault("Increases minion variety bonus by 1%");
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 30;

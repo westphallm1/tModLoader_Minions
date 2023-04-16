@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static AmuletOfManyMinions.CrossMod;
 using static Terraria.ModLoader.ModContent;
@@ -81,7 +82,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			// Get unique minion count for player
 			if(SummonersAssociationLoaded)
 			{
-				minionVarietyBonusCount = CrossMod.GetSummonersAssociationVarietyCount();
+				minionVarietyBonusCount = GetSummonersAssociationVarietyCount();
 			} else
 			{
 				uniqueMinionTypes.Clear();
@@ -214,22 +215,25 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 	public class MinionVarietyBuff : ModBuff
 	{
+		public LocalizedText VarietyDamageBonusText { get; private set; }
+
+		public override LocalizedText Description => LocalizedText.Empty;
+
 		public override void SetStaticDefaults()
 		{
+			VarietyDamageBonusText = this.GetLocalization("VarietyDamageBonus");
+
 			Main.buffNoSave[Type] = true;
 			Main.debuff[Type] = true; // don't allow cancellation
 			Main.buffNoTimeDisplay[Type] = true;
-			DisplayName.SetDefault("Minion Variety!");
 		}
 
-		public override void ModifyBuffTip(ref string tip, ref int rare)
+		public override void ModifyBuffText(ref string buffName, ref string tip, ref int rare)
 		{
-			// assuming this is only called client-side and it's always the owner who mouses over the buff tip
-			// this may not be the best way to update text
-			Player player = Main.player[Main.myPlayer];
+			Player player = Main.LocalPlayer;
 			MinionSpawningItemPlayer modPlayer = player.GetModPlayer<MinionSpawningItemPlayer>();
 			float varietyBonus = modPlayer.minionVarietyBonusCount * modPlayer.minionVarietyDamageBonus * 100;
-			tip = varietyBonus.ToString("0") + "% Minion Variety Damage Bonus";
+			tip = VarietyDamageBonusText.Format(varietyBonus.ToString("0"));
 		}
 
 		public override void Update(Player player, ref int buffIndex)
@@ -250,7 +254,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 				ProjectileID.Sets.MinionShot[projectile.type] ||
 				SquireGlobalProjectile.isSquireShot.Contains(projectile.type);
 		}
-		public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (!DoesSummonDamage(projectile))
 			{
@@ -262,7 +266,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				if (accessory.IsEquipped(modPlayer))
 				{
-					accessory.SpawnProjectileOnChance(projectile, target, damage);
+					accessory.SpawnProjectileOnChance(projectile, target, hit.SourceDamage);
 				}
 			}
 			int wispType = ProjectileType<IllusionistWisp>();
@@ -276,7 +280,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			}
 		}
 
-		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
 		{
 			if (!DoesSummonDamage(projectile))
 			{
@@ -295,7 +299,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 			{
 				damageMult += 0.1f;
 			}
-			damage = (int)(damage * damageMult);
+			modifiers.SourceDamage *= damageMult; //Rather use multiply since it's mostly reduction
 		}
 	}
 }

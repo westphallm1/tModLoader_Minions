@@ -29,14 +29,13 @@ namespace AmuletOfManyMinions
 		public override void Load()
 		{
 			NetHandler.Load();
-			TargetSelectionTacticHandler.Load();
 			LandChunkConfigs.Load();
 			SpriteCompositionManager.Load();
 			CritterConfigs.Load();
 
-			CycleTacticHotKey = KeybindLoader.RegisterKeybind(this, "Cycle Minion Tactic", "K");
-			CycleTacticsGroupHotKey = KeybindLoader.RegisterKeybind(this, "Cycle Tactics Group", "L");
-			QuickDefendHotKey = KeybindLoader.RegisterKeybind(this, "Minion Quick Defend", "V");
+			CycleTacticHotKey = KeybindLoader.RegisterKeybind(this, "CycleMinionTactic", "K");
+			CycleTacticsGroupHotKey = KeybindLoader.RegisterKeybind(this, "CycleTacticsGroup", "L");
+			QuickDefendHotKey = KeybindLoader.RegisterKeybind(this, "MinionQuickDefend", "V");
 		}
 
 		public override void PostSetupContent()
@@ -67,7 +66,6 @@ namespace AmuletOfManyMinions
 		public override void Unload()
 		{
 			NetHandler.Unload();
-			TargetSelectionTacticHandler.Unload();
 			LandChunkConfigs.Unload();
 			SpriteCompositionManager.Unload();
 			CritterConfigs.Unload();
@@ -75,49 +73,6 @@ namespace AmuletOfManyMinions
 			CycleTacticHotKey = null;
 			CycleTacticsGroupHotKey = null;
 			QuickDefendHotKey = null;
-		}
-
-		public override void AddRecipeGroups()
-		{
-			RecipeGroup silverGroup = new RecipeGroup(
-				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.SilverBar"),
-				new int[] { ItemID.SilverBar, ItemID.TungstenBar });
-			RecipeGroup.RegisterGroup("AmuletOfManyMinions:Silvers", silverGroup);
-
-			RecipeGroup goldGroup = new RecipeGroup(
-				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.GoldBar"),
-				new int[] { ItemID.GoldBar, ItemID.PlatinumBar});
-			RecipeGroup.RegisterGroup("AmuletOfManyMinions:Golds", goldGroup);
-
-			RecipeGroup evilBarGroup = new RecipeGroup(
-				() => Language.GetTextValue("ItemName.DemoniteBar") + "/" + Language.GetTextValue("ItemName.CrimtaneBar") ,
-				new int[] { ItemID.DemoniteBar, ItemID.CrimtaneBar});
-			RecipeGroup.RegisterGroup("AmuletOfManyMinions:EvilBars", evilBarGroup);
-
-			RecipeGroup evilWoodSwordGroup = new RecipeGroup(
-				() => Language.GetTextValue("ItemName.EbonwoodSword") + "/" + Language.GetTextValue("ItemName.ShadewoodSword") ,
-				new int[] { ItemID.EbonwoodSword, ItemID.ShadewoodSword});
-			RecipeGroup.RegisterGroup("AmuletOfManyMinions:EvilWoodSwords", evilWoodSwordGroup);
-
-			RecipeGroup voidDaggerGroup = new RecipeGroup(
-				() => "Void Dagger/Null Hatchet",
-				new int[] { ModContent.ItemType<VoidKnifeMinionItem>(), ModContent.ItemType<NullHatchetMinionItem>()});
-			RecipeGroup.RegisterGroup("AmuletOfManyMinions:VoidDaggers", voidDaggerGroup);
-
-			RecipeGroup stardustDragonGroup = new RecipeGroup(
-				() => Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("ItemName.StardustDragonStaff"),
-				new int[] { ItemID.StardustDragonStaff, ModContent.ItemType<StardustDragonMinionItem>()});
-			RecipeGroup.RegisterGroup("AmuletOfManyMinions:StardustDragons", stardustDragonGroup);
-
-			RecipeGroup combatPetChewToyGroup = new RecipeGroup(
-				() => Language.GetTextValue("LegacyMisc.37") + " " + "Chaotic Chew Toy",
-				new int[] { ModContent.ItemType<CombatPetChaoticChewToy>(),ModContent.ItemType<CombatPetCrimsonChewToy>()  });
-			RecipeGroup.RegisterGroup("AmuletOfManyMinions:CombatPetChewToys", combatPetChewToyGroup);
-		}
-
-		public override void PostAddRecipes()
-		{
-			CrossMod.PopulateSummonersAssociationBuffSet(this);
 		}
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)

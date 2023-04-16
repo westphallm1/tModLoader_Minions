@@ -100,7 +100,7 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 
 				BakeAoMMVersionSpecialAbilities(summonersShine);
 
-				summonersShine.Call(THOUGHTBUBBLE, CrossModClient.SummonersShine.Bubble.SummonersShine_GetEnergyThoughtTexture);
+				summonersShine.Call(THOUGHTBUBBLE, Bubble.SummonersShine_GetEnergyThoughtTexture);
 			}
 		}
 

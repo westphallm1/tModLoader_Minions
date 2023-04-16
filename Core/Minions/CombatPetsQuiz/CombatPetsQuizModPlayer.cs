@@ -155,7 +155,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			if(CurrentQuiz.IsComplete())
 			{
 				CurrentQuiz.ComputeResult();
-				result = QuizResult.ResultsMap[CurrentQuiz.GetResultType()];
+				result = DefaultPetsQuizData.ResultsMap[CurrentQuiz.GetResultType()];
 			}
 		}
 	}

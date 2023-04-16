@@ -16,23 +16,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 	public class CorruptionAltarMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<CorruptionAltarCounterMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Corrupt Cell");
-			Description.SetDefault("A corrupt cell will fight for you!");
-		}
 	}
 
 	public class CorruptionAltarMinionItem : MinionItem<CorruptionAltarMinionBuff, CorruptionAltarCounterMinion>
 	{
-
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault("Corruption Cell Staff");
-			Tooltip.SetDefault("Summons a corrupt cell to fight for you!");
-		}
 		public override void ApplyCrossModChanges()
 		{
 			WhitelistSummonersShineMinionDefaultSpecialAbility(Item.type, SummonersShineDefaultSpecialWhitelistType.RANGED);
@@ -85,7 +72,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 			return false;
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.CursedInferno, 180);
 		}
@@ -112,7 +99,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CorruptionAltar
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault("Corruption Cell");
 			// Sets the amount of frames this minion has on its spritesheet
 			Main.projFrames[Projectile.type] = 4;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);

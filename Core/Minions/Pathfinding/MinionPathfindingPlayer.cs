@@ -94,10 +94,10 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 				}
 			}
 		}
-		public override void OnEnterWorld(Player player)
+		public override void OnEnterWorld()
 		{
 			// doesn't seem to like getting run in Initialize()
-			if(player.whoAmI == Main.myPlayer)
+			if(Player.whoAmI == Main.myPlayer)
 			{
 				SetupPathfinderMetas();
 			}
@@ -263,7 +263,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 	/// </summary>
 	internal class WaypointDamageFalloffProjectile: GlobalProjectile
 	{
-		public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
 		{
 			// nerf all minion damage, even if they're not following the waypoint. Maybe a bit iffy
 			if(!(projectile.minion ||
@@ -279,7 +279,7 @@ namespace AmuletOfManyMinions.Core.Minions.Pathfinding
 			}
 			float maxDist = player.WaypointPlacementRange;
 			float damageReduction = player.WaypointDamageFalloff * Math.Min(maxDist, Vector2.Distance(projectile.Center, player.Player.Center)) / maxDist;
-			damage = (int)((1 - damageReduction) * damage);
+			modifiers.SourceDamage *= 1 - damageReduction;
 		}
 	}
 

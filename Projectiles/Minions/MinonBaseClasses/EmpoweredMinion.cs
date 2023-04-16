@@ -209,10 +209,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 	{
 		public override void Load()
 		{
-			On.Terraria.Player.FreeUpPetsAndMinions += Player_FreeUpPetsAndMinions;
+			On_Player.FreeUpPetsAndMinions += Player_FreeUpPetsAndMinions;
 		}
 
-		private void Player_FreeUpPetsAndMinions(On.Terraria.Player.orig_FreeUpPetsAndMinions orig, Player self, Item sItem)
+		private void Player_FreeUpPetsAndMinions(On_Player.orig_FreeUpPetsAndMinions orig, Player self, Item sItem)
 		{
 			bool atleastOne = false;
 			if (ProjectileID.Sets.MinionSacrificable[sItem.shoot])

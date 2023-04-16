@@ -7,12 +7,6 @@ namespace AmuletOfManyMinions.Items.Armor
 	[AutoloadEquip(EquipType.Legs)]
 	public class ForagerLeggings : ModItem
 	{
-		public override void SetStaticDefaults()
-		{
-			DisplayName.SetDefault("Mildew Leggings");
-			Tooltip.SetDefault("");
-		}
-
 		public override void SetDefaults()
 		{
 			Item.width = 28;

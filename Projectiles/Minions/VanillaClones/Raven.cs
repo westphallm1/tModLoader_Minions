@@ -15,13 +15,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class RavenMinionBuff : MinionBuff
 	{
 		internal override int[] ProjectileTypes => new int[] { ProjectileType<RavenMinion>() };
-		public override void SetStaticDefaults()
-		{
-			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("BuffName.Ravens") + " (AoMM Version)");
-			Description.SetDefault(Language.GetTextValue("BuffDescription.Ravens"));
-		}
 
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("BuffName.Ravens"));
+
+		public override LocalizedText Description => Language.GetText("BuffDescription.Ravens");
 	}
 
 	public class RavenMinionItem : VanillaCloneMinionItem<RavenMinionBuff, RavenMinion>
@@ -77,6 +74,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 	public class RavenMinion : HeadCirclingGroupAwareMinion
 	{
 		public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.Raven;
+
+		public override LocalizedText DisplayName => AoMMSystem.AppendAoMMVersion(Language.GetText("ProjectileName.Raven"));
+
 		private int framesSinceLastHit;
 		private int cooldownAfterHitFrames = 16;
 		bool isDashing = false;
@@ -87,7 +87,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
-			DisplayName.SetDefault(Language.GetTextValue("ProjectileName.Raven") + " (AoMM Version)");
 			Main.projFrames[Projectile.type] = 8;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
 		}
@@ -210,7 +209,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			blurHelper.Update(Projectile.Center, isDashing);
 		}
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if(Player.whoAmI == Main.myPlayer && Player.ownedProjectileCounts[ProjectileType<RavenGreekFire>()] < 8 && Main.rand.NextBool(5))
 			{
