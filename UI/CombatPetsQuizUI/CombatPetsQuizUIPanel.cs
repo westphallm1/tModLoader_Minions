@@ -111,7 +111,7 @@ namespace AmuletOfManyMinions.UI.CombatPetsQuizUI
 					currentText.Substring(0, charactersToDisplay), MaxTextboxWidth - 4 * MarginSize).Split('\n');
 				if(charactersToDisplay == currentText.Length && ModPlayer.CurrentQuiz.CurrentState == QuizState.QUIZ)
 				{
-					answerPanel.TextLines = ModPlayer.CurrentQuiz.CurrentQuestion.AnswerTexts;
+					answerPanel.TextLines = ModPlayer.CurrentQuiz.CurrentQuestion.AnswerTexts.Select(t => t.ToString()).ToArray();
 				} else
 				{
 					answerPanel.TextLines = default;

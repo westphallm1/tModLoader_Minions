@@ -25,8 +25,10 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		internal static Dictionary<PersonalityType, LocalizedText> PersonalityTypeNames { get; private set; }
 
 		internal static (LocalizedText[] introLines, LocalizedText[] outroLines) QuizWithDominantTraitsLines { get; private set; }
-
 		internal static (LocalizedText[] introLines, LocalizedText[] outroLines) ClassSpecificQuizLines { get; private set; }
+
+		internal static LocalizedText ClassSpecificQuizFirstQuestion { get; private set; }
+		internal static LocalizedText[] ClassSpecificQuizAnswers { get; private set; }
 
 		public override void Load()
 		{
@@ -37,6 +39,21 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 			QuizWithDominantTraitsLines = MakeQuizLines("QuizWithDominantTraits", 4, 4);
 			ClassSpecificQuizLines = MakeQuizLines("ClassSpecificQuiz", 3, 3);
+
+			ClassSpecificQuizFirstQuestion = Language.GetOrRegister(Mod.GetLocalizationKey($"CombatPetQuiz.Quizzes.ClassSpecificQuiz.Text"));
+			ClassSpecificQuizAnswers = MakeClassSpecificQuizAnswers();
+		}
+
+		private LocalizedText[] MakeClassSpecificQuizAnswers()
+		{
+			var category = $"CombatPetQuiz.Quizzes.ClassSpecificQuiz.Answers.";
+			return new LocalizedText[]
+			{
+				Language.GetOrRegister(Mod.GetLocalizationKey($"{category}0")),
+				Language.GetOrRegister(Mod.GetLocalizationKey($"{category}1")),
+				Language.GetOrRegister(Mod.GetLocalizationKey($"{category}2")),
+				Language.GetOrRegister(Mod.GetLocalizationKey($"{category}3")),
+			};
 		}
 
 		private (LocalizedText[] introLines, LocalizedText[] outroLines) MakeQuizLines(string quizName, int introLineCount, int outroLineCount)
@@ -80,6 +97,13 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			BasicQuestions = null;
 			ClassSpecificQuestions = null;
 			ResultsMap = null;
+			PersonalityTypeNames = null;
+
+			QuizWithDominantTraitsLines = (null, null);
+			ClassSpecificQuizLines = (null, null);
+
+			ClassSpecificQuizFirstQuestion = null;
+			ClassSpecificQuizAnswers = null;
 		}
 
 		private Dictionary<PersonalityType, LocalizedText> MakePersonalityTypeNames()
@@ -96,103 +120,76 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		}
 
 		// generator function to workaround static load/unload constraints
-		private static CombatPetsQuizQuestion[] MakeQuestions() => new CombatPetsQuizQuestion[]
+		private static CombatPetsQuizQuestion[] MakeQuestions()
 		{
-			new("What is your favorite class to play as?",
-				("Melee.", HARDY), ("Ranged.", BOLD), ("Mage.", CALM))
+			int index = 0;
+			var category = "CombatPetQuiz.Questions.{0}.";
+			CombatPetsQuizQuestion initialFollowUpQuestion =
+				new(string.Format(category, index++), CALM, QUIRKY, BOLD);
+
+			//This system is not expandable at all :(, should be rewritten to identifiable objects (custom classes or string key)
+			var list = new CombatPetsQuizQuestion[]
 			{
-				AddFollowUpQuestion = idx => 
-				new ("Ok, but what's really your favorite class to play as?",
-					("Summoner.", CALM), ("Summoner?", QUIRKY), ("Summoner!", BOLD)),
-			},
+				new(string.Format(category, index++), HARDY, BOLD, CALM)
+				{
+					AddFollowUpQuestion = _ => initialFollowUpQuestion
+				},
 
-			new("You accidentally clicked Reforge one too many times, now your Legendary Zenith is Broken! What do you do?",
-				("Cry.", QUIET), 
-				("Keep mashing 'Reforge'.", JOLLY), 
-				("Install Consistent Reforging!", QUIRKY)),
+				new(string.Format(category, index++), QUIET, JOLLY, QUIRKY),
 
-			new ("The Clothier lost his hat, and claims the Guide stole it! How do you help out?",
-				 ("Let them fight it out.", QUIET),
-				 ("Confront the Guide directly.", BOLD),
-				 ("Try to mediate.", CALM)),
+				new(string.Format(category, index++), QUIET, BOLD, CALM),
 
-			new ("You see an innocent Bunny chased by a group of Goblin Scouts! Do you intervene?",
-				("Yes.", BOLD),
-				("No.", CALM),
-				("Chase the bunny too!", JOLLY)),
+				new(string.Format(category, index++), BOLD, CALM, JOLLY),
 
-			new ("You just started a new world. How do you build a house for the Guide?",
-				("A lovely cabin.", CALM),
-				("A prison cube.", QUIET),
-				("No house at all.", HASTY)),
+				new(string.Format(category, index++), CALM, QUIET, HASTY),
 
+				new(string.Format(category, index++), HARDY, JOLLY),
 
-			new ("Re-Logic just nerfed your favorite weapon! How do you adapt?",
-				("Keep using it.", HARDY), ("Try a new one!", JOLLY)),
+				new(string.Format(category, index++), RELAXED, BOLD, QUIRKY),
 
-			new ("Do you prefer building or adventuring?",
-				("Building.", RELAXED), ("Adventuring.", BOLD), ("Fishing!", QUIRKY)),
+				new(string.Format(category, index++), HARDY, QUIRKY),
 
-			new ("After looting a chest, do you take the chest with you?",
-				("Yes.", HARDY), ("No.", QUIRKY)),
+				new(string.Format(category, index++), QUIRKY, HARDY, QUIET),
 
-			new ("While exploring a cave, you see a treasure chest sitting out in the open.",
-				("Yay, treasure!", QUIRKY), ("It's a mimic!", HARDY), ("It's a trapped chest!", QUIET)),
+				new(string.Format(category, index++), BOLD, CALM, JOLLY),
 
-			new ("What's your favorite color?",
-				("Red.", BOLD), ("Green.", CALM), ("Blue.", JOLLY)),
+				new(string.Format(category, index++), HASTY, QUIRKY, QUIET),
 
-			new ("How well organized are your chests?",
-				("Not at all.", HASTY), ("A little bit.", QUIRKY), ("Well organized.", QUIET)),
+				new(string.Format(category, index++), HASTY, HARDY, RELAXED),
 
-			new ("You've just arrived at the dungeon's entrance, but the night is already half way over! What do you do?",
-				("Fight skeletron right away!", HASTY), 
-				("Build a makeshift arena first.", HARDY), 
-				("Wait until the next night", RELAXED)),
+				new(string.Format(category, index++), QUIET, HASTY, QUIRKY),
 
-			new ("A Martian probe has caught you off guard and is now flying away! How do you respond?",
-				("Quickly save and quit.", QUIET), 
-				("Chase after it!", HASTY), 
-				("Yay! Martian Invasion!", QUIRKY)),
+				new(string.Format(category, index++), JOLLY, RELAXED),
 
-			new ("Do you prefer sweet foods or savory foods?",
-				("Sweet!", JOLLY),
-				("Savory.", RELAXED)),
+				new(string.Format(category, index++), RELAXED, HARDY, BOLD),
 
-			new ("What's your favorite difficulty to play on?",
-				("Normal.", RELAXED),
-				("Expert.", HARDY),
-				("Master.", BOLD)),
+				new(string.Format(category, index++), HASTY, RELAXED),
 
-			new ("You're playing multiplayer and just found a one-of-a-kind chest item! How do you handle sharing it?",
-				("First come, first serve.", HASTY),
-				("Divide the loot evenly.", RELAXED)),
+				new(string.Format(category, index++), CALM, QUIET, JOLLY),
 
-			new ("Do you prefer Squires or whips?",
-				("Squires.", CALM),
-				("Squires?", QUIET),
-				("Squires!", JOLLY)),
+				new(string.Format(category, index++), HASTY, CALM, RELAXED)
+			};
 
-			new ("Do you replant trees after chopping them down?",
-				("Never!", HASTY),
-				("Right away.", CALM),
-				("After a while.", RELAXED))
-		};
+			return list;
+		}
 
-		private static CombatPetsQuizQuestion[] MakeClassSpecificQuestions() => new CombatPetsQuizQuestion[]
+		private static CombatPetsQuizQuestion[] MakeClassSpecificQuestions()
 		{
-			new ("A fiery friend is a great choice! How should their disposition be?",
-				("Outgoing and bold!", BOLD), ("Reserved and quiet.", QUIET)),
+			int index = 0;
+			var category = "CombatPetQuiz.ClassSpecificQuestions.{0}.";
+			var list = new CombatPetsQuizQuestion[]
+			{
+				new(string.Format(category, index++), BOLD, QUIET),
 
-			new ("An easygoing friend is a great choice! How should their disposition be?",
-				("Jolly and carefree!", JOLLY), ("Quirky and eccentric!", QUIRKY)),
+				new(string.Format(category, index++), JOLLY, QUIRKY),
 
-			new ("A down to earth friend is a great choice! How should their disposition be?",
-				("Hardy and resillient!", HARDY), ("Calm and collected.", CALM)),
+				new(string.Format(category, index++), HARDY, CALM),
 
-			new ("A lofty friend is a great choice! How should their disposition be?",
-				("Easygoing and relaxed!", RELAXED), ("Hasty and ambitious.", HASTY)),
-		};
+				new(string.Format(category, index++), RELAXED, HASTY),
+			};
+
+			return list;
+		}
 
 		public static CombatPetsQuiz MakeQuizWithDominantTraits(Player player, int questionCount)
 		{
@@ -213,22 +210,15 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		public static CombatPetsQuiz MakeClassSpecificQuiz(params PersonalityType[] disallowedTypes)
 		{
-			string[] allAnswerTexts =
-			{
-				"A friend with a fiery passion!",
-				"A friend who can go with the flow!",
-				"A friend who's down to earth!",
-				"A friend with their head in the clouds!",
-			};
 			List<int> usedIndices = ClassSpecificQuestions
 				.Select((q, idx) => (Question: q, Idx: idx))
 				.Where(q => !disallowedTypes.Any(t=>q.Question.CanGivePointsForType(t)))
 				.Select(q => q.Idx)
 				.ToList();
 
-			CombatPetsQuizQuestion question = new (
-				"What sort of friend would you like to have join you on your journey?",
-				usedIndices.Select(idx => (allAnswerTexts[idx], NONE)).ToArray())
+			CombatPetsQuizQuestion question = new("",
+				ClassSpecificQuizFirstQuestion,
+				usedIndices.Select(idx => (ClassSpecificQuizAnswers[idx], NONE)).ToArray())
 			{
 				AddFollowUpQuestion = idx => ClassSpecificQuestions[usedIndices[idx]]
 			};

@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		internal string CurrentDialogText => CurrentState switch
 		{
 			QuizState.INTRO => IntroLines[dialogIdx].ToString(),
-			QuizState.QUIZ => CurrentQuestion.QuestionText,
+			QuizState.QUIZ => CurrentQuestion.QuestionText.ToString(),
 			QuizState.OUTRO => string.Format(OutroLines[dialogIdx].Format(Result?.Description.ToString() ?? "", Result?.PetName.ToString() ?? "")),
 			_ => "",
 		};
@@ -111,9 +111,10 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 	internal class QuizResult
 	{
-		internal LocalizedText Description { get; private set; }
 		// TODO these should probably be drawn directly from the ModItem. Not sure what the best way to reverse-lookup is
 		internal Asset<Texture2D> PortraitTexture { get; set; }
+
+		internal LocalizedText Description { get; private set; }
 		internal LocalizedText PetName { get; private set; }
 
 		internal int ItemType { get; private set; }
@@ -148,19 +149,48 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 	internal class CombatPetsQuizQuestion
 	{
-		public string QuestionText { get; private set; }
-		public string[] AnswerTexts { get; private set; }
+		public LocalizedText QuestionText { get; private set; }
+		public LocalizedText[] AnswerTexts { get; private set; }
 		public PersonalityType[] AnswerValues { get; private set; }
 
-		public CombatPetsQuizQuestion(string questionText, params (string, PersonalityType)[] answers)
+		public CombatPetsQuizQuestion(string keyCategory, params (LocalizedText, PersonalityType)[] answers)
 		{
-			QuestionText = questionText;
-			AnswerTexts = new string[answers.Length];
-			AnswerValues = new PersonalityType[answers.Length];
-			for(int i = 0; i < answers.Length; i++)
+			//Goal is to only register/detect localizations for the given PersonalityTypes in the specific order
+			//Other personalities will not be detected
+			//Possible to supply own LocalizedText, skipping registration of question and answers
+
+			Init(keyCategory, null, answers);
+		}
+		public CombatPetsQuizQuestion(string keyCategory, LocalizedText question, params (LocalizedText, PersonalityType)[] answers)
+		{
+			Init(keyCategory, question, answers);
+		}
+
+		public CombatPetsQuizQuestion(string keyCategory, params PersonalityType[] answers)
+		{
+			var array = new (LocalizedText, PersonalityType)[answers.Length];
+			for (int i = 0; i < answers.Length; i++)
 			{
-				AnswerTexts[i] = answers[i].Item1;
-				AnswerValues[i] = answers[i].Item2;
+				//null to force localization registration
+				array[i] = (null, answers[i]);
+			}
+
+			Init(keyCategory, null, array);
+		}
+
+		private void Init(string keyCategory, LocalizedText question, params (LocalizedText, PersonalityType)[] answers)
+		{
+			Mod mod = GetInstance<AmuletOfManyMinions>();
+			QuestionText = question ?? Language.GetOrRegister(mod.GetLocalizationKey($"{keyCategory}Text"));
+
+			AnswerTexts = new LocalizedText[answers.Length];
+			AnswerValues = new PersonalityType[answers.Length];
+			for (int i = 0; i < answers.Length; i++)
+			{
+				var type = answers[i].Item2;
+				var text = answers[i].Item1 ?? Language.GetOrRegister(mod.GetLocalizationKey($"{keyCategory}Answers.{type}"));
+				AnswerTexts[i] = text;
+				AnswerValues[i] = type;
 			}
 		}
 
@@ -168,5 +198,4 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		internal Func<int, CombatPetsQuizQuestion> AddFollowUpQuestion;
 	}
-
 }

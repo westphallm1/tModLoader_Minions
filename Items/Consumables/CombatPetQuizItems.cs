@@ -93,17 +93,17 @@ namespace AmuletOfManyMinions.Items.Consumables
 		{
 			if(player.whoAmI == Main.myPlayer)
 			{
-				var quizPlayer = player.GetModPlayer<CombatPetsQuizModPlayer>();
-				if (!quizPlayer.HasTakenQuiz)
+				if (player.ItemAnimationJustStarted)
 				{
-					if (player.ItemAnimationJustStarted)
+					var quizPlayer = player.GetModPlayer<CombatPetsQuizModPlayer>();
+					if (!quizPlayer.HasTakenQuiz)
 					{
 						//By returning null, item will not be consumed, but item animation still runs, so this check ensures the text only shows up on first tick of use
 						Main.NewText(FriendshipBowRequirementText.ToString());
+						return null;
 					}
-					return null;
+					quizPlayer.StartPartnerQuiz(Type);
 				}
-				quizPlayer.StartPartnerQuiz(Type);
 			}
 			return null;
 		}
