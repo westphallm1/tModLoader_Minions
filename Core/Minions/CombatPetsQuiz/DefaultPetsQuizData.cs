@@ -24,12 +24,37 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		internal static Dictionary<PersonalityType, LocalizedText> PersonalityTypeNames { get; private set; }
 
+		internal static (LocalizedText[] introLines, LocalizedText[] outroLines) QuizWithDominantTraitsLines { get; private set; }
+
+		internal static (LocalizedText[] introLines, LocalizedText[] outroLines) ClassSpecificQuizLines { get; private set; }
+
 		public override void Load()
 		{
 			base.Load();
 			BasicQuestions = MakeQuestions();
 			ClassSpecificQuestions = MakeClassSpecificQuestions();
 			PersonalityTypeNames = MakePersonalityTypeNames();
+
+			QuizWithDominantTraitsLines = MakeQuizLines("QuizWithDominantTraits", 4, 4);
+			ClassSpecificQuizLines = MakeQuizLines("ClassSpecificQuiz", 3, 3);
+		}
+
+		private (LocalizedText[] introLines, LocalizedText[] outroLines) MakeQuizLines(string quizName, int introLineCount, int outroLineCount)
+		{
+			var category = $"CombatPetQuiz.Quizzes.{quizName}.";
+			var intro = new LocalizedText[introLineCount];
+			for (int i = 0; i < introLineCount; i++)
+			{
+				intro[i] = Language.GetOrRegister(Mod.GetLocalizationKey($"{category}IntroLines.{i}"));
+			}
+
+			var outro = new LocalizedText[outroLineCount];
+			for (int o = 0; o < outroLineCount; o++)
+			{
+				outro[o] = Language.GetOrRegister(Mod.GetLocalizationKey($"{category}OutroLines.{o}"));
+			}
+
+			return (intro, outro);
 		}
 
 		public override void SetStaticDefaults()
@@ -180,21 +205,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 					.Take(questionCount)
 					.ToList(),
 				ExtraResultItemID = ModContent.ItemType<InertCombatPetFriendshipBow>(),
-				IntroLines = new string[]
-				{
-					"Welcome, to the world of Terraria!",
-					"Terraria can be a dangerous place, but having a good friend at your side always makes it better!",
-					"To help you and your new friend get to know each other better, here's a few questions!",
-					"Be sure to answer sincerely. Let's begin!",
-				},
-
-				OutroLines = new string[]
-				{
-					"Thank you for answering those questions!",
-					"Based on your answers, you appear to be... the {0} type!",
-					"A {0} person like yourself would be great friends with... the {1}!",
-					"May you and your new friend enjoy many adventures!",
-				}
+				IntroLines = QuizWithDominantTraitsLines.introLines,
+				OutroLines = QuizWithDominantTraitsLines.outroLines
 			};
 			return quiz;
 		}
@@ -214,7 +226,6 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				.Select(q => q.Idx)
 				.ToList();
 
-
 			CombatPetsQuizQuestion question = new (
 				"What sort of friend would you like to have join you on your journey?",
 				usedIndices.Select(idx => (allAnswerTexts[idx], NONE)).ToArray())
@@ -226,18 +237,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 				Questions = new List<CombatPetsQuizQuestion>() { question },
 				ExtraResultItemID = disallowedTypes.Length > 0 ? 
 					ModContent.ItemType<CombatPetStylishTeamworkBow>() : ItemID.None,
-				IntroLines = new string[]
-				{
-					"Welcome back, to the world of Terraria!",
-					"I hope you and your friends have been enjoying your adventures!",
-					"Do you know what the only thing better than having friends is? Having more friends!",
-				},
-					OutroLines = new string[]
-				{
-					"Ah, a {0} friend will be great to have!",
-					"The {0} {1} is excited to join your team!",
-					"May you and your new friend enjoy many adventures!",
-				}
+				IntroLines = ClassSpecificQuizLines.introLines,
+				OutroLines = ClassSpecificQuizLines.outroLines
 			};
 			return quiz;
 		}

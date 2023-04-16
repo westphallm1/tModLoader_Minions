@@ -31,8 +31,8 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		private int currentQuestionIdx = 0;
 		private int dialogIdx = 0;
 
-		internal string[] IntroLines = Array.Empty<string>();
-		internal string[] OutroLines = Array.Empty<string>();
+		internal LocalizedText[] IntroLines = Array.Empty<LocalizedText>();
+		internal LocalizedText[] OutroLines = Array.Empty<LocalizedText>();
 
 		internal QuizState CurrentState { get; private set; } = QuizState.INTRO;
 		internal QuizResult Result { get; private set; }
@@ -75,13 +75,13 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 		internal bool OnLastLine => CurrentState == QuizState.OUTRO && dialogIdx == OutroLines.Length;
 
 		// Tenuous condition, check if any dialog shown so far says the name of the minion
-		internal bool ShouldShowPortrait => CurrentState == QuizState.OUTRO && OutroLines.Take(dialogIdx+1).Any(l=>l.Contains("{1}"));
+		internal bool ShouldShowPortrait => CurrentState == QuizState.OUTRO && OutroLines.Take(dialogIdx+1).Any(l=>l.ToString().Contains("{1}"));
 
 		internal string CurrentDialogText => CurrentState switch
 		{
-			QuizState.INTRO => IntroLines[dialogIdx],
+			QuizState.INTRO => IntroLines[dialogIdx].ToString(),
 			QuizState.QUIZ => CurrentQuestion.QuestionText,
-			QuizState.OUTRO => string.Format(OutroLines[dialogIdx], Result?.Description.ToString() ?? "", Result?.PetName.ToString() ?? ""),
+			QuizState.OUTRO => string.Format(OutroLines[dialogIdx].Format(Result?.Description.ToString() ?? "", Result?.PetName.ToString() ?? "")),
 			_ => "",
 		};
 

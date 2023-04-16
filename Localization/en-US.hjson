@@ -1741,6 +1741,38 @@ Mods: {
 				HASTY: Wyvernfly
 				RELAXED: Cloudiphant
 			}
+
+			Quizzes: {
+				QuizWithDominantTraits: {
+					IntroLines: {
+						0: Welcome, to the world of Terraria!
+						1: Terraria can be a dangerous place, but having a good friend at your side always makes it better!
+						2: To help you and your new friend get to know each other better, here's a few questions!
+						3: Be sure to answer sincerely. Let's begin!
+					}
+
+					OutroLines: {
+						0: Thank you for answering those questions!
+						1: Based on your answers, you appear to be... the {0} type!
+						2: A {0} person like yourself would be great friends with... the {1}!
+						3: May you and your new friend enjoy many adventures!
+					}
+				}
+
+				ClassSpecificQuiz: {
+					IntroLines: {
+						0: Welcome back, to the world of Terraria!
+						1: I hope you and your friends have been enjoying your adventures!
+						2: Do you know what the only thing better than having friends is? Having more friends!
+					}
+
+					OutroLines: {
+						0: Ah, a {0} friend will be great to have!
+						1: The {0} {1} is excited to join your team!
+						2: May you and your new friend enjoy many adventures!
+					}
+				}
+			}
 		}
 	}
 }
