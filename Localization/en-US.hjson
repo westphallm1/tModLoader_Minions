@@ -1717,5 +1717,30 @@ Mods: {
 			Stardust: Stardust
 			Celestial: Celestial
 		}
+
+		CombatPetQuiz: {
+			PersonalityTypes: {
+				NONE: none
+				CALM: calm
+				HARDY: hardy
+				QUIRKY: quirky
+				JOLLY: jolly
+				QUIET: quiet
+				BOLD: bold
+				HASTY: hasty
+				RELAXED: relaxed
+			}
+
+			QuizResults: {
+				CALM: Plant Pup
+				HARDY: Truffle Turtle
+				QUIRKY: Axolittl
+				JOLLY: Lil Gator
+				QUIET: Smoleder
+				BOLD: Cinder Hen
+				HASTY: Wyvernfly
+				RELAXED: Cloudiphant
+			}
+		}
 	}
 }

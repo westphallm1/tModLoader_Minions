@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static AmuletOfManyMinions.Core.Minions.CombatPetsQuiz.PersonalityType;
 
@@ -21,17 +22,21 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 
 		internal static Dictionary<PersonalityType, QuizResult> ResultsMap { get; private set; }
 
+		internal static Dictionary<PersonalityType, LocalizedText> PersonalityTypeNames { get; private set; }
+
 		public override void Load()
 		{
 			base.Load();
 			BasicQuestions = MakeQuestions();
 			ClassSpecificQuestions = MakeClassSpecificQuestions();
+			PersonalityTypeNames = MakePersonalityTypeNames();
 		}
 
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
 			ResultsMap = QuizResult.MakeResultsMap();
+
 			if (Main.dedServ)
 			{
 				return;
@@ -50,6 +55,19 @@ namespace AmuletOfManyMinions.Core.Minions.CombatPetsQuiz
 			BasicQuestions = null;
 			ClassSpecificQuestions = null;
 			ResultsMap = null;
+		}
+
+		private Dictionary<PersonalityType, LocalizedText> MakePersonalityTypeNames()
+		{
+			var dict = new Dictionary<PersonalityType, LocalizedText>();
+			var array = Enum.GetValues(typeof(PersonalityType));
+			string category = $"CombatPetQuiz.";
+			foreach (var item in array)
+			{
+				var self = (PersonalityType)item;
+				dict[self] = Language.GetOrRegister(Mod.GetLocalizationKey($"{category}PersonalityTypes.{self}"));
+			}
+			return dict;
 		}
 
 		// generator function to workaround static load/unload constraints
