@@ -1771,6 +1771,241 @@ Mods: {
 						1: The {0} {1} is excited to join your team!
 						2: May you and your new friend enjoy many adventures!
 					}
+
+					Text: What sort of friend would you like to have join you on your journey?
+
+					Answers: {
+						0: A friend with a fiery passion!
+						1: A friend who can go with the flow!
+						2: A friend who's down to earth!
+						3: A friend with their head in the clouds!
+					}
+				}
+			}
+
+			Questions: {
+				0: {
+					Text: Ok, but what's really your favorite class to play as?
+
+					Answers: {
+						CALM: Summoner.
+						QUIRKY: Summoner?
+						BOLD: Summoner!
+					}
+				}
+
+				1: {
+					Text: What is your favorite class to play as?
+
+					Answers: {
+						HARDY: Melee.
+						BOLD: Ranged.
+						CALM: Mage.
+					}
+				}
+
+				2: {
+					Text: You accidentally clicked Reforge one too many times, now your Legendary Zenith is Broken! What do you do?
+
+					Answers: {
+						QUIET: Cry.
+						JOLLY: Keep mashing 'Reforge'.
+						QUIRKY: Install Consistent Reforging!
+					}
+				}
+
+				3: {
+					Text: The Clothier lost his hat, and claims the Guide stole it! How do you help out?
+
+					Answers: {
+						QUIET: Let them fight it out.
+						BOLD: Confront the Guide directly.
+						CALM: Try to mediate.
+					}
+				}
+
+				4: {
+					Text: You see an innocent Bunny chased by a group of Goblin Scouts! Do you intervene?
+
+					Answers: {
+						BOLD: Yes.
+						CALM: No.
+						JOLLY: Chase the bunny too!
+					}
+				}
+
+				5: {
+					Text: You just started a new world. How do you build a house for the Guide?
+
+					Answers: {
+						CALM: A lovely cabin.
+						QUIET: A prison cube.
+						HASTY: No house at all.
+					}
+				}
+
+				6: {
+					Text: Re-Logic just nerfed your favorite weapon! How do you adapt?
+
+					Answers: {
+						HARDY: Keep using it.
+						JOLLY: Try a new one!
+					}
+				}
+
+				7: {
+					Text: Do you prefer building or adventuring?
+
+					Answers: {
+						RELAXED: Building.
+						BOLD: Adventuring.
+						QUIRKY: Fishing!
+					}
+				}
+
+				8: {
+					Text: After looting a chest, do you take the chest with you?
+
+					Answers: {
+						HARDY: Yes.
+						QUIRKY: No.
+					}
+				}
+
+				9: {
+					Text: While exploring a cave, you see a treasure chest sitting out in the open.
+
+					Answers: {
+						QUIRKY: Yay, treasure!
+						HARDY: It's a mimic!
+						QUIET: It's a trapped chest!
+					}
+				}
+
+				10: {
+					Text: What's your favorite color?
+
+					Answers: {
+						BOLD: Red.
+						CALM: Green.
+						JOLLY: Blue.
+					}
+				}
+
+				11: {
+					Text: How well organized are your chests?
+
+					Answers: {
+						HASTY: Not at all.
+						QUIRKY: A little bit.
+						QUIET: Well organized.
+					}
+				}
+
+				12: {
+					Text: You've just arrived at the dungeon's entrance, but the night is already half way over! What do you do?
+
+					Answers: {
+						HASTY: Fight skeletron right away!
+						HARDY: Build a makeshift arena first.
+						RELAXED: Wait until the next night
+					}
+				}
+
+				13: {
+					Text: A Martian probe has caught you off guard and is now flying away! How do you respond?
+
+					Answers: {
+						QUIET: Quickly save and quit.
+						HASTY: Chase after it!
+						QUIRKY: Yay! Martian Invasion!
+					}
+				}
+
+				14: {
+					Text: Do you prefer sweet foods or savory foods?
+
+					Answers: {
+						JOLLY: Sweet!
+						RELAXED: Savory.
+					}
+				}
+
+				15: {
+					Text: What's your favorite difficulty to play on?
+
+					Answers: {
+						RELAXED: Normal.
+						HARDY: Expert.
+						BOLD: Master.
+					}
+				}
+
+				16: {
+					Text: You're playing multiplayer and just found a one-of-a-kind chest item! How do you handle sharing it?
+
+					Answers: {
+						HASTY: First come, first serve.
+						RELAXED: Divide the loot evenly.
+					}
+				}
+
+				17: {
+					Text: Do you prefer Squires or whips?
+
+					Answers: {
+						CALM: Squires.
+						QUIET: Squires?
+						JOLLY: Squires!
+					}
+				}
+
+				18: {
+					Text: Do you replant trees after chopping them down?
+
+					Answers: {
+						HASTY: Never!
+						CALM: Right away.
+						RELAXED: After a while.
+					}
+				}
+			}
+
+			ClassSpecificQuestions: {
+				0: {
+					Text: A fiery friend is a great choice! How should their disposition be?
+
+					Answers: {
+						BOLD: Outgoing and bold!
+						QUIET: Reserved and quiet.
+					}
+				}
+
+				1: {
+					Text: An easygoing friend is a great choice! How should their disposition be?
+
+					Answers: {
+						JOLLY: Jolly and carefree!
+						QUIRKY: Quirky and eccentric!
+					}
+				}
+
+				2: {
+					Text: A down to earth friend is a great choice! How should their disposition be?
+
+					Answers: {
+						HARDY: Hardy and resillient!
+						CALM: Calm and collected.
+					}
+				}
+
+				3: {
+					Text: A lofty friend is a great choice! How should their disposition be?
+
+					Answers: {
+						RELAXED: Easygoing and relaxed!
+						HASTY: Hasty and ambitious.
+					}
 				}
 			}
 		}
