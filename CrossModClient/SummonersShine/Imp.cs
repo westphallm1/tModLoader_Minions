@@ -1,4 +1,4 @@
-﻿using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
+using AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones.JourneysEnd;
 using Microsoft.Xna.Framework;
@@ -14,6 +14,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
+using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Core;
 
 namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 {
@@ -134,6 +136,23 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			}
 			return vectorToTargetPosition;
 		}
+
+		public static void ForceShoot(Projectile projectile, HoverShooterHelper hoverShooterClass, Vector2 vectorToTargetPosition)
+		{
+			Vector2 lineOfFire = vectorToTargetPosition;
+			lineOfFire.SafeNormalize();
+			lineOfFire *= hoverShooterClass.projectileVelocity;
+			if (hoverShooterClass.Behavior.TargetNPCIndex is int idx && Main.npc[idx].active)
+			{
+				lineOfFire += Main.npc[idx].velocity * hoverShooterClass.leadShotsFraction;
+			}
+			hoverShooterClass.lastShootFrame = hoverShooterClass.Behavior.AnimationFrame;
+			if (Main.myPlayer == projectile.owner && hoverShooterClass.firedProjectileId is int projId && projId > 0)
+			{
+				(hoverShooterClass.CustomFireProjectile ?? hoverShooterClass.FireProjectile).Invoke(lineOfFire, projId, 0);
+			}
+			hoverShooterClass.AfterFiringProjectile?.Invoke();
+		}
 		public static bool ImpPreSpecialTeleportShoot(Projectile projectile, HoverShooterHelper hoverShooterClass)
 		{
 			Mod summonersShine = ModLoader.GetMod("SummonersShine");
@@ -143,14 +162,8 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 			const int SET_PROJDATA = 5;
 			const int GET_PROJDATA = 7;
 			const int SPECIALCASTTARGET = 6;
-			//if (ModUtils.IsCastingSpecialAbility(projData, projFuncs.SourceItem))
-			//{
 			Player player = Main.player[projectile.owner];
 			summonersShine.Call(USEFUL_FUNCS, INCREMENT_SPECIAL_TIMER, projectile, 420, (float)1);
-			//projectile.IncrementSpecialAbilityTimer(projFuncs, projData, 420);
-
-			//if (projData.specialCastTarget == null || projData.specialCastTarget.active == false || projData.specialCastTarget.DistanceSQ(player.Center) > 1000 * 1000)
-			//{
 			NPC npc = (NPC)summonersShine.Call(GET_PROJDATA, projectile, SPECIALCASTTARGET);
 			if (npc == null || npc.active == false || npc.DistanceSQ(player.Center) > 1000 * 1000)
 			{
@@ -158,19 +171,15 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 				projectile.Minion_FindTargetInRange(1400, ref newtarg, false);
 				if (newtarg != -1)
 					npc = Main.npc[newtarg];
-				//projData.specialCastTarget = Main.npc[newtarg];
 				else
 					npc = null;
-				//projData.specialCastTarget = null;
 				summonersShine.Call(SET_PROJDATA, projectile, SPECIALCASTTARGET, npc);
 			}
-			//if (projData.specialCastTarget == null)
 			if (npc == null)
 				return false;
 
 			bool? doAttack = hoverShooterClass.ExtraAttackConditionsMet?.Invoke();
 			if ((doAttack is null || doAttack == true) && hoverShooterClass.Behavior.AnimationFrame - hoverShooterClass.lastShootFrame >= hoverShooterClass.attackFrames)
-			//if (projectile.ai[1] > 88 || projectile.ai[1] == 0) //should shoot
 			{
 				Vector2 projOriginalPos = projectile.Center;
 
@@ -204,7 +213,6 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 				if (attackTarget != -1)
 				{
 					NPC target = Main.npc[attackTarget];
-					//SingleThreadExploitation.impTarget = player.MinionAttackTargetNPC;
 					player.MinionAttackTargetNPC = attackTarget;
 
 					line = targetPos - target.Center;
@@ -214,35 +222,11 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 				else
 				{
 					line = new Vector2(0, dist).RotatedBy(Main.rand.NextFloat(-MathF.PI, MathF.PI));
-					//SingleThreadExploitation.impTarget = player.MinionAttackTargetNPC;
 					player.MinionAttackTargetNPC = attackTarget;
 					failed = true;
 				}
 
 				line *= 16;
-				/*
-				bool tooCramped = true;
-				Vector2 endPos = Vector2.Zero;
-				int give = 48;
-				for (int i = 0; i < 16; i++) {
-					endPos = ModUtils.GetLineCollision(targetPos, line, out tooCramped, give);
-					if (!tooCramped)
-					{
-						NPC targ = projData.specialCastTarget;
-						tooCramped = !Collision.CanHitLine(projectile.position, projectile.width, projectile.height, targ.position, targ.width, targ.height);
-					}
-					if (!tooCramped)
-						break;
-					else
-					{
-						line = new Vector2(0, dist).RotatedBy(Main.rand.NextFloat(-MathF.PI, MathF.PI)) * 16;
-					}
-				}
-				if (tooCramped)
-				{
-					projectile.Center = projOriginalPos;
-					return true;
-				}*/
 
 
 				Vector2 endPos = FurthestCanHitLine(targetPos, line);
@@ -270,8 +254,6 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 				}
 
 				//insta shoot
-				//projectile.ai[1] = 90;
-				//projectile.ai[0] = 0;
 
 				projectile.velocity = Vector2.Zero;
 				//projData.lastRelativeVelocity = Vector2.Zero; //no need
@@ -282,13 +264,15 @@ namespace AmuletOfManyMinions.CrossModClient.SummonersShine
 				ImpDespawnEffect(projectile, player);
 
 				//shoot here
+				int? targetNPCIndex = hoverShooterClass.Behavior.TargetNPCIndex;
+				hoverShooterClass.Behavior.TargetNPCIndex = npc.whoAmI;
+				Vector2 diff = npc.Center - projectile.Center;
+				if (diff == Vector2.Zero)
+					diff = new(0, 1);
+				ForceShoot(projectile, hoverShooterClass, diff);
+				hoverShooterClass.Behavior.TargetNPCIndex = targetNPCIndex;
 				return true;
 			}
-			/*else
-			{
-				//SingleThreadExploitation.impTarget = player.MinionAttackTargetNPC;
-				//player.MinionAttackTargetNPC = projData.specialCastTarget.whoAmI;
-			}*/
 			return false;
 		}
 		public static void ImpDespawnEffect(Projectile projectile, Player player)
