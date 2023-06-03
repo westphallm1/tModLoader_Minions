@@ -6,6 +6,10 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using AmuletOfManyMinions.Items.Accessories.CombatPetAccessories;
+using System.Linq;
+using System.Collections.Generic;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using AmuletOfManyMinions.Projectiles.Minions;
 
 namespace AmuletOfManyMinions
 {
@@ -106,6 +110,30 @@ namespace AmuletOfManyMinions
 		public override void PostAddRecipes()
 		{
 			CrossMod.PopulateSummonersAssociationBuffSet(Mod);
+			//DebugCharacterPreview();
+		}
+
+		private void DebugCharacterPreview()
+		{
+			Dictionary<ModItem, ModProjectile> modItemToModProj = new Dictionary<ModItem, ModProjectile>();
+			foreach (var item in Mod.GetContent<ModItem>().Where(m => m.Item.buffType > -1 && Main.vanityPet[m.Item.buffType] && !Main.lightPet[m.Item.buffType] && m.Item.shoot > -1 && ProjectileLoader.GetProjectile(m.Item.shoot) is ModProjectile mProj))
+			{
+				modItemToModProj[item] = ProjectileLoader.GetProjectile(item.Item.shoot);
+			}
+
+			var uniqueProjs = modItemToModProj.Values.Distinct().ToList();
+
+			var leftover = new List<ModProjectile>();
+			foreach (var proj in uniqueProjs)
+			{
+				if (ProjectileID.Sets.CharacterPreviewAnimations[proj.Type] == ProjectileID.Sets.CharacterPreviewAnimations[0])
+				{
+					leftover.Add(proj);
+				}
+			}
+
+			var vanillaClones = modItemToModProj.Where(pair => pair.Key.Item.buffType >= BuffID.Count && BuffLoader.GetBuff(pair.Key.Item.buffType) is CombatPetVanillaCloneBuff).Select(pair => pair.Value).Distinct().ToList();
+			int HERE_breakpointandinspectthecollections = 0;
 		}
 	}
 }

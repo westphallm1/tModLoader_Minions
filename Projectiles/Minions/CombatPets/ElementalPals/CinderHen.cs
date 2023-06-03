@@ -112,10 +112,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			ProjectileType<FlareVortexProjectile>() :
 			ProjectileType<ImpFireball>();
 
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+
+			ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, 2, 10)
+				.WithSpriteDirection(-1)
+				.WithOffset(-6, 0)
+				.WhenSelected(2, 8, 5);
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			ConfigureDrawBox(24, 30, -4, -6, -1);
+			ConfigureDrawBox(24, 30, -4, -4, -1);
 			ConfigureFrames(14, (0, 1), (2, 9), (2, 2), (10, 13));
 		}
 

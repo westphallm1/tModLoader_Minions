@@ -132,6 +132,22 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		private int lastShootFrame;
 		private readonly int fireRate = 60;
 
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+
+			ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type]
+				.WithCode(Preview);
+		}
+
+		private static void Preview(Projectile proj, bool walking)
+		{
+			//TODO 1.4.4 need to do something with this to make it work
+			var worm = (PhantasmalDragonMinion)proj.ModProjectile;
+			worm.wormDrawer.AddPosition(proj.position);
+			worm.wormDrawer.Update(proj.frame);
+		}
+
 		public sealed override void SetDefaults()
 		{
 			base.SetDefaults();

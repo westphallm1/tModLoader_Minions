@@ -31,6 +31,11 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 6;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
+
+			ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 5)
+				.WithSpriteDirection(-1)
+				.WithOffset(-14, -12)
+				.WithCode(DelegateMethods.CharacterPreview.Float);
 		}
 
 		public override void SetDefaults()
