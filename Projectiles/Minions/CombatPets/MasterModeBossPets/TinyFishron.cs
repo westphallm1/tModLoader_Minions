@@ -29,7 +29,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override string VanillaBuffName => "DukeFishronPet";
 	}
 
-	public class TinyFishronMinionItem : CombatPetMinionItem<TinyFishronMinionBuff, MiniRetinazerMinion>
+	public class TinyFishronMinionItem : CombatPetMinionItem<TinyFishronMinionBuff, TinyFishronMinion>
 	{
 		internal override int VanillaItemID => ItemID.DukeFishronPetItem;
 		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Hallowed;

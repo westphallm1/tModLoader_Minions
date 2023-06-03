@@ -44,7 +44,7 @@ namespace AmuletOfManyMinions.Items.Armor.FlinxHood
 		public override void AddRecipes()
 		{
 			CreateRecipe(1).AddIngredient(ItemID.Silk, 8).AddIngredient(ItemID.FlinxFur, 6)
-				.AddRecipeGroup("AmuletOfManyMinions:Golds", 8).AddTile(TileID.Loom).Register();
+				.AddRecipeGroup(AoMMSystem.GoldBarRecipeGroup, 8).AddTile(TileID.Loom).Register();
 		}
 	}
 }

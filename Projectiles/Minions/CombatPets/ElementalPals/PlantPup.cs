@@ -113,10 +113,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			ProjectileType<LeafBlade>() :
 			ProjectileType<SaplingMinionLeafProjectile>();
 
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+
+			ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, 2, 10)
+				.WithSpriteDirection(-1)
+				.WithOffset(-2, 0)
+				.WhenSelected(2, 5, 5);
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			ConfigureDrawBox(30, 30, -6, -8, -1);
+			ConfigureDrawBox(30, 30, -6, -6, -1);
 			ConfigureFrames(10, (0, 1), (2, 6), (3, 3), (7, 9));
 		}
 

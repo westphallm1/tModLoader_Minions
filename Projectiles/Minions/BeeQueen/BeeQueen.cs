@@ -156,6 +156,19 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 6;
 			IdleLocationSets.trailingInAir.Add(Projectile.type);
+
+			ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, 2, FrameSpeed)
+				.WithSpriteDirection(-1)
+				.WithOffset(0, -16)
+				.WithCode(Preview);
+		}
+
+		private static void Preview(Projectile proj, bool walking)
+		{
+			DelegateMethods.CharacterPreview.Float(proj, walking);
+
+			var bee = (BeeQueenMinion)proj.ModProjectile;
+			bee.animationFrameCounter++;
 		}
 
 		public override void LoadAssets()

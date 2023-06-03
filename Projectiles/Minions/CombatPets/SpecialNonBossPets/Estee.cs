@@ -173,6 +173,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		internal override bool DoBumblingMovement => true;
 
 		internal float cometRotation;
+		internal float eyeRotation;
 		private int lastShootFrame;
 
 		public override void LoadAssets()
@@ -185,6 +186,24 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			base.SetStaticDefaults();
 			Main.projFrames[Projectile.type] = 15;
 			IdleLocationSets.circlingHead.Add(Projectile.type);
+
+			ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type]
+				.WithCode(Preview);
+		}
+
+		private static void Preview(Projectile proj, bool walking)
+		{
+			DelegateMethods.CharacterPreview.Float(proj, walking);
+			//Copied from vanillas, which uses localai[0] for self rotation. This uses self.rotation for that instead
+			if (walking)
+			{
+				float num = (float)Main.timeForVisualEffects % 90f / 90f;
+				proj.rotation = (float)Math.PI * 2f * num;
+			}
+			else
+			{
+				proj.rotation = 0f;
+			}
 		}
 
 		public override void SetDefaults()
@@ -211,7 +230,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 			Main.EntitySpriteDraw(starTexture, pos, starBounds, Color.White, 
 				Projectile.rotation, starBounds.GetOrigin(), 1, 0, 0);
 			// eyes
-			float eyeRotation = 0.05f * Projectile.velocity.X;
 			Main.EntitySpriteDraw(eyesTexture, pos, eyesTexture.Bounds, Color.White, 
 				eyeRotation, eyesTexture.Bounds.Center.ToVector2(), 1, 0, 0);
 			return false;
@@ -220,7 +238,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.SpecialNonBossPets
 		public override void Animate(int minFrame = 0, int? maxFrame = null)
 		{
 			Projectile.frame = (AnimationFrame / 5) % Main.projFrames[Projectile.type];
-			if(Projectile.velocity.LengthSquared() > 16)
+			eyeRotation = 0.05f * Projectile.velocity.X;
+			if (Projectile.velocity.LengthSquared() > 16)
 			{
 				Projectile.rotation += Math.Sign(Projectile.velocity.X) * MathHelper.Pi / 15f;
 			} else

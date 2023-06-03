@@ -8,12 +8,16 @@ using AmuletOfManyMinions.Core.Minions.Tactics.TargetSelectionTactics;
 using AmuletOfManyMinions.Dusts;
 using AmuletOfManyMinions.Items.Accessories;
 using AmuletOfManyMinions.Projectiles.Minions;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -43,7 +47,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 		// Many unsafe gets to this
 		protected List<Asset<Texture2D>> ExtraTextures;
 
-
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -52,6 +55,44 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 				LoadAssets();
 			}
 			ApplyCrossModChanges();
+			ApplyCombatPetVanillaClone_CharacterPreview_Automatically();
+		}
+
+		private void ApplyCombatPetVanillaClone_CharacterPreview_Automatically()
+		{
+			//Hardcode, but works with allowing combat pets to tweak their CharacterPreview in SetStaticDefaults
+			//This leaves only a handful of combat pets (from aomm itself) that need their preview created manually
+			//See AommSystem.DebugCharacterPreview for checking everything
+			if (BuffLoader.GetBuff(BuffId) is CombatPetVanillaCloneBuff cpvcbuff)
+			{
+				var vanillaProjType = ContentSamples.ItemsByType.Values.FirstOrDefault(item => item.buffType == cpvcbuff.VanillaBuffId).shoot;
+				for (int i = 0; i < cpvcbuff.ProjectileTypes.Length; i++)
+				{
+					var type = cpvcbuff.ProjectileTypes[i];
+
+					//Here it's important to create A COPY, assigning the reference will cause edits to one of them to affect both, which can cause crashes
+					var vanilla = ProjectileID.Sets.CharacterPreviewAnimations[vanillaProjType];
+					//TODO monitor if any fields were added/removed every game update
+					//As of 1.4.4.9, these are the fields:
+					/*
+					public Vector2 Offset;
+					public SelectionBasedSettings Selected;
+					public SelectionBasedSettings NotSelected;
+					public int SpriteDirection;
+					public CustomAnimationCode CustomAnimation;
+					 */
+					var copy = new SettingsForCharacterPreview()
+					{
+						Offset = vanilla.Offset,
+						Selected = vanilla.Selected,
+						NotSelected = vanilla.NotSelected,
+						SpriteDirection = vanilla.SpriteDirection,
+						CustomAnimation = vanilla.CustomAnimation, //Reference but it's generally passed in with the same method pointer anyway
+					};
+
+					ProjectileID.Sets.CharacterPreviewAnimations[type] = copy;
+				}
+			}
 		}
 
 		public override void SetDefaults()

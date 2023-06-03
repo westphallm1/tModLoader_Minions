@@ -17,7 +17,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		public override string VanillaBuffName => "EyeOfCthulhuPet";
 	}
 
-	public class SuspiciousEyeMinionItem : CombatPetMinionItem<SuspiciousEyeMinionBuff, MiniRetinazerMinion>
+	public class SuspiciousEyeMinionItem : CombatPetMinionItem<SuspiciousEyeMinionBuff, SuspiciousEyeMinion>
 	{
 		internal override int VanillaItemID => ItemID.EyeOfCthulhuPetItem;
 		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Skeletal;

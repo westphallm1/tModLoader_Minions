@@ -37,7 +37,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		}
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemID.LunarBar, 12).AddIngredient(ItemType<SlimecartMinionItem>(), 1).AddRecipeGroup("AmuletOfManyMinions:StardustDragons", 1).AddTile(TileID.LunarCraftingStation).Register();
+			CreateRecipe(1).AddIngredient(ItemID.LunarBar, 12).AddIngredient(ItemType<SlimecartMinionItem>(), 1).AddRecipeGroup(AoMMSystem.StardustDragonRecipeGroup, 1).AddTile(TileID.LunarCraftingStation).Register();
 		}
 	}
 

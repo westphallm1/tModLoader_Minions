@@ -38,7 +38,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MycelialMage
 		}
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemID.GlowingMushroom, 15).AddRecipeGroup("AmuletOfManyMinions:Golds", 10).AddTile(TileID.Anvils).Register();
+			CreateRecipe(1).AddIngredient(ItemID.GlowingMushroom, 15).AddRecipeGroup(AoMMSystem.GoldBarRecipeGroup, 10).AddTile(TileID.Anvils).Register();
 		}
 	}
 

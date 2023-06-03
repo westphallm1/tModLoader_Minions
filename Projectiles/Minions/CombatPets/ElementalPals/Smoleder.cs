@@ -30,10 +30,27 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			ProjectileType<FlareVortexProjectile>() :
 			ProjectileType<ImpFireball>();
 
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+
+			ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, 2, 10)
+				.WithSpriteDirection(-1)
+				.WithOffset(-2, 0)
+				.WhenSelected(2, 5, 5)
+				.WithCode(Preview);
+		}
+
+		private static void Preview(Projectile proj, bool walking)
+		{
+			var smol = (SmolederMinion)proj.ModProjectile;
+			smol.AnimationFrame++;
+		}
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			ConfigureDrawBox(30, 24, -6, -6, -1);
+			ConfigureDrawBox(30, 24, -6, -4, -1);
 			ConfigureFrames(8, (0, 1), (2, 6), (2, 2), (7, 7));
 		}
 
