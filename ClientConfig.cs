@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using Terraria;
@@ -15,7 +17,10 @@ namespace AmuletOfManyMinions
 		public override ConfigScope Mode => ConfigScope.ClientSide;
 		public static ClientConfig Instance => ModContent.GetInstance<ClientConfig>();
 
-		//TODO localize & enum-ify OptionStrings
+		//Old data and names for reference
+		[JsonExtensionData]
+		private IDictionary<string, JToken> _additionalData = new Dictionary<string, JToken>();
+
 		public const string AnchorInventory = "Inventory";
 		public const string AnchorHealth = "Health";
 		public const string AnchorDefault = AnchorHealth;
@@ -25,18 +30,28 @@ namespace AmuletOfManyMinions
 		public const string QuickDefendHold = "Hold";
 		public static readonly string[] QuickDefendOptions = new string[] { QuickDefendToggle, QuickDefendHold };
 
+		public enum TacticsUIAnchorType : byte
+		{
+			Health = 0,
+			Inventory = 1,
+		}
+
 		// Miscellaneous config options
 		[Header("GeneralConfiguration")]
 
 		[DrawTicks]
-		[OptionStrings(new string[] { AnchorInventory, AnchorHealth })]
-		[DefaultValue(AnchorDefault)]
-		public string TacticsUIAnchorPos;
+		[DefaultValue(TacticsUIAnchorType.Health)]
+		public TacticsUIAnchorType TacticsUIAnchor;
+
+		public enum QuickDefendHotkeyStyleType : byte
+		{
+			Toggle = 0,
+			Hold = 1,
+		}
 
 		[DrawTicks]
-		[OptionStrings(new string[] { QuickDefendToggle, QuickDefendHold})]
-		[DefaultValue(QuickDefendToggle)]
-		public string QuickDefendHotkeyStyle;
+		[DefaultValue(QuickDefendHotkeyStyleType.Toggle)]
+		public QuickDefendHotkeyStyleType QuickDefendHotkeyStyleNew;
 
 		[DefaultValue(true)]
 		public bool ShowMinionVarietyBonus;
@@ -50,25 +65,65 @@ namespace AmuletOfManyMinions
 		public bool WhipRightClickTacticsRadial;
 
 		[JsonIgnore] //Hides it in UI and file
-		public bool AnchorToInventory => TacticsUIAnchorPos == AnchorInventory;
+		public bool AnchorToInventory => TacticsUIAnchor == TacticsUIAnchorType.Inventory;
 
 		[JsonIgnore]
-		public bool AnchorToHealth => TacticsUIAnchorPos == AnchorHealth;
+		public bool AnchorToHealth => TacticsUIAnchor == TacticsUIAnchorType.Health;
 
+		[JsonIgnore] //Hides it in UI and file
+		public bool QuickDefendHotkeyToggle => QuickDefendHotkeyStyleNew == QuickDefendHotkeyStyleType.Toggle;
+
+		[JsonIgnore]
+		public bool QuickDefendHotkeyHold => QuickDefendHotkeyStyleNew == QuickDefendHotkeyStyleType.Hold;
 
 		[OnDeserialized]
 		internal void OnDeserializedMethod(StreamingContext context)
 		{
-			// Correct invalid names
-			if (Array.IndexOf(AnchorOptions, TacticsUIAnchorPos) <= -1)
-			{
-				TacticsUIAnchorPos = AnchorDefault;
-			}
+			PortOldMembers();
 
-			// Correct invalid names
-			if (Array.IndexOf(QuickDefendOptions, QuickDefendHotkeyStyle) <= -1)
+			//Correct invalid values to default fallback
+			EnumFallback(ref TacticsUIAnchor, TacticsUIAnchorType.Health);
+			EnumFallback(ref QuickDefendHotkeyStyleNew, QuickDefendHotkeyStyleType.Toggle);
+		}
+
+		private void PortOldMembers()
+		{
+			//port "TacticsUIAnchorPos": "Inventory"
+			//port "QuickDefendHotkeyStyle": "Hold"
+			//from string to enum, which requires (!) a member rename aswell
+			JToken token;
+			if (_additionalData.TryGetValue("TacticsUIAnchorPos", out token))
 			{
-				QuickDefendHotkeyStyle = QuickDefendToggle;
+				var tacticsUIAnchorPos = token.ToObject<string>();
+				if (tacticsUIAnchorPos == AnchorInventory)
+				{
+					TacticsUIAnchor = TacticsUIAnchorType.Inventory;
+				}
+				else
+				{
+					TacticsUIAnchor = TacticsUIAnchorType.Health;
+				}
+			}
+			if (_additionalData.TryGetValue("QuickDefendHotkeyStyle", out token))
+			{
+				var quickDefendHotkeyStyle = token.ToObject<string>();
+				if (quickDefendHotkeyStyle == QuickDefendHold)
+				{
+					QuickDefendHotkeyStyleNew = QuickDefendHotkeyStyleType.Hold;
+				}
+				else
+				{
+					QuickDefendHotkeyStyleNew = QuickDefendHotkeyStyleType.Toggle;
+				}
+			}
+			_additionalData.Clear(); //Clear this or it'll crash.
+		}
+
+		private static void EnumFallback<T>(ref T value, T defaultValue) where T : Enum
+		{
+			if (!Enum.IsDefined(typeof(T), value))
+			{
+				value = defaultValue;
 			}
 		}
 	}

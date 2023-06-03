@@ -543,9 +543,9 @@ namespace AmuletOfManyMinions.Core.Minions
 				UserInterfaces.tacticsUI.SetSelected(TacticID, CurrentTacticGroup);
 			}
 
-			if(AmuletOfManyMinions.QuickDefendHotKey.JustPressed )
+			if(AmuletOfManyMinions.QuickDefendHotKey.JustPressed)
 			{
-				if(ClientConfig.Instance.QuickDefendHotkeyStyle == ClientConfig.QuickDefendToggle)
+				if(ClientConfig.Instance.QuickDefendHotkeyToggle)
 				{
 					if(isQuickDefending)
 					{
@@ -558,7 +558,7 @@ namespace AmuletOfManyMinions.Core.Minions
 				{
 					StartQuickDefending();
 				}
-			} else if (AmuletOfManyMinions.QuickDefendHotKey.JustReleased && ClientConfig.Instance.QuickDefendHotkeyStyle == ClientConfig.QuickDefendHold)
+			} else if (AmuletOfManyMinions.QuickDefendHotKey.JustReleased && ClientConfig.Instance.QuickDefendHotkeyHold)
 			{
 				StopQuickDefending();
 			}
