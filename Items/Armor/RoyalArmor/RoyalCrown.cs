@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemID.Gel, 25).AddRecipeGroup("AmuletOfManyMinions:Golds", 10).AddIngredient(ItemID.Ruby, 4).AddTile(TileID.Solidifier).Register();
+			CreateRecipe(1).AddIngredient(ItemID.Gel, 25).AddRecipeGroup(AoMMSystem.GoldBarRecipeGroup, 10).AddIngredient(ItemID.Ruby, 4).AddTile(TileID.Solidifier).Register();
 		}
 	}
 

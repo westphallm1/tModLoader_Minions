@@ -41,7 +41,7 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemID.Gel, 30).AddRecipeGroup("AmuletOfManyMinions:Golds", 15).AddTile(TileID.Solidifier).Register();
+			CreateRecipe(1).AddIngredient(ItemID.Gel, 30).AddRecipeGroup(AoMMSystem.GoldBarRecipeGroup, 15).AddTile(TileID.Solidifier).Register();
 		}
 	}
 }

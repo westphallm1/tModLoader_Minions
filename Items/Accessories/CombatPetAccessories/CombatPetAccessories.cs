@@ -50,7 +50,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ModContent.ItemType<CharmOfMightyMinions>(), 1)
-			.AddRecipeGroup("AmuletOfManyMinions:CombatPetChewToys")
+			.AddRecipeGroup(AoMMSystem.CombatPetChewToyRecipeGroup)
 			.AddIngredient(ModContent.ItemType<CombatPetStylishTeamworkBow>(), 1)
 			.AddTile(TileID.TinkerersWorkbench)
 			.Register();

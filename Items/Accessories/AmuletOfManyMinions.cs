@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemType<CopperSwordMinionItem>(), 1).AddIngredient(ItemType<SpiritGunMinionItem>(), 1).AddIngredient(ItemType<FlyingSwordMinionItem>(), 1).AddRecipeGroup("AmuletOfManyMinions:VoidDaggers").AddIngredient(ItemType<CharmOfManyMinions>(), 1).AddIngredient(ItemType<CharmOfMightyMinions>(), 1).AddTile(TileID.MythrilAnvil).Register();
+			CreateRecipe(1).AddIngredient(ItemType<CopperSwordMinionItem>(), 1).AddIngredient(ItemType<SpiritGunMinionItem>(), 1).AddIngredient(ItemType<FlyingSwordMinionItem>(), 1).AddRecipeGroup(AoMMSystem.VoidDaggerRecipeGroup).AddIngredient(ItemType<CharmOfManyMinions>(), 1).AddIngredient(ItemType<CharmOfMightyMinions>(), 1).AddTile(TileID.MythrilAnvil).Register();
 		}
 
 	}

@@ -39,7 +39,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 		}
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemID.Pumpkin, 15).AddRecipeGroup("AmuletOfManyMinions:EvilBars", 12).AddTile(TileID.Anvils).Register();
+			CreateRecipe(1).AddIngredient(ItemID.Pumpkin, 15).AddRecipeGroup(AoMMSystem.EvilBarRecipeGroup, 12).AddTile(TileID.Anvils).Register();
 		}
 	}
 

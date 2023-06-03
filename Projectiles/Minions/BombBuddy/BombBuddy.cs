@@ -31,7 +31,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BombBuddy
 		}
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddRecipeGroup("AmuletOfManyMinions:EvilBars", 12).AddIngredient(ItemID.Bomb, 20).AddTile(TileID.Anvils).Register();
+			CreateRecipe(1).AddRecipeGroup(AoMMSystem.EvilBarRecipeGroup, 12).AddIngredient(ItemID.Bomb, 20).AddTile(TileID.Anvils).Register();
 		}
 	}
 

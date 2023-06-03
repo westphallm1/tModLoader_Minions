@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Slimecart
 		}
 		public override void AddRecipes()
 		{
-			CreateRecipe(1).AddIngredient(ItemID.Minecart, 1).AddIngredient(ItemID.MiningHelmet, 1).AddRecipeGroup("AmuletOfManyMinions:Silvers", 12).AddTile(TileID.Anvils).Register();
+			CreateRecipe(1).AddIngredient(ItemID.Minecart, 1).AddIngredient(ItemID.MiningHelmet, 1).AddRecipeGroup(AoMMSystem.SilverBarRecipeGroup, 12).AddTile(TileID.Anvils).Register();
 		}
 	}
 
