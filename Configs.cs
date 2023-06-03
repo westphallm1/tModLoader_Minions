@@ -23,12 +23,9 @@ namespace AmuletOfManyMinions
 
 		public const string AnchorInventory = "Inventory";
 		public const string AnchorHealth = "Health";
-		public const string AnchorDefault = AnchorHealth;
-		public static readonly string[] AnchorOptions = new string[] { AnchorInventory, AnchorHealth };
 
 		public const string QuickDefendToggle = "Toggle";
 		public const string QuickDefendHold = "Hold";
-		public static readonly string[] QuickDefendOptions = new string[] { QuickDefendToggle, QuickDefendHold };
 
 		public enum TacticsUIAnchorType : byte
 		{
