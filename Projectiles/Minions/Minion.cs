@@ -65,9 +65,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions
 			//See AommSystem.DebugCharacterPreview for checking everything
 			if (BuffLoader.GetBuff(BuffId) is CombatPetVanillaCloneBuff cpvcbuff)
 			{
-				var vanillaBuffName = Lang.GetBuffName(cpvcbuff.VanillaBuffId);
 				var vanillaProjType = ContentSamples.ItemsByType.Values.FirstOrDefault(item => item.buffType == cpvcbuff.VanillaBuffId).shoot;
-				var vanillaProjName = Lang.GetProjectileName(vanillaProjType);
 				for (int i = 0; i < cpvcbuff.ProjectileTypes.Length; i++)
 				{
 					var type = cpvcbuff.ProjectileTypes[i];
