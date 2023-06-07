@@ -80,7 +80,7 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void PreUpdate()
 		{
 			// Get unique minion count for player
-			if(SummonersAssociationLoaded)
+			if(SummonersAssociationMinionBuffTypesLoaded)
 			{
 				minionVarietyBonusCount = GetSummonersAssociationVarietyCount();
 			} else
