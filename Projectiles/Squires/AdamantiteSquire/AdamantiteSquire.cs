@@ -130,8 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AdamantiteSquire
 		{
 			if(usingSpecial)
 			{
-				//TODO 1.4.4 when summonersshine is ported
-				//damage = (int)(ApplyCrossModScaling(5 * damage / 4, Projectile, 0));
+				modifiers.SourceDamage *= ApplyCrossModScaling(5 / 4f, Projectile, 0);
 			}
 		}
 
