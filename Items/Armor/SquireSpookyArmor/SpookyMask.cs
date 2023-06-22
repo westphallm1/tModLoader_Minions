@@ -12,6 +12,8 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 		public static readonly int SetBonusDamageIncrease = 32;
 		public static readonly int SetBonusSquireTravelRangeIncrease = 7;
 		public static readonly int SetBonusAttackSpeedIncrease = 20;
+		public static readonly int MinionDamageIncrease = 12;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease);
 		public static LocalizedText SetBonusText { get; private set; }
 
 		public override void SetStaticDefaults()
@@ -35,7 +37,7 @@ namespace AmuletOfManyMinions.Items.Armor.SquireSpookyArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.12f;
+			player.GetDamage<SummonDamageClass>() += MinionDamageIncrease / 100f;
 			player.maxMinions -= 1;
 		}
 

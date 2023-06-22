@@ -11,6 +11,9 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 	{
 		public static readonly int SetBonusDamageIncrease = 10;
 		public static readonly int SetBonusSquireTravelRangeIncrease = 5;
+		public static readonly int MinionDamageIncrease = 15;
+		public static readonly int MaxMinionIncrease = 1;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease, MaxMinionIncrease);
 		public static LocalizedText SetBonusText { get; private set; }
 
 		public override void SetStaticDefaults()
@@ -34,8 +37,8 @@ namespace AmuletOfManyMinions.Items.Armor.SquireOreArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.15f;
-			player.maxMinions += 1;
+			player.GetDamage<SummonDamageClass>() += MinionDamageIncrease / 100f;
+			player.maxMinions += MaxMinionIncrease;
 		}
 
 		public override void UpdateArmorSet(Player player)

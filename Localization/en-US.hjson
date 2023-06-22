@@ -309,8 +309,8 @@ Mods: {
 				DisplayName: Adamantite Commander's Helm
 				Tooltip:
 					'''
-					Increases summon damage by 15%
-					Increases max minions by 1
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$CommonItemTooltip.IncreasesMaxMinionsBy@1}
 					'''
 				SetBonus:
 					'''
@@ -323,8 +323,8 @@ Mods: {
 				DisplayName: Titanium Admiral's Helm
 				Tooltip:
 					'''
-					Increases summon damage by 15%
-					Increases max minions by 1
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$CommonItemTooltip.IncreasesMaxMinionsBy@1}
 					'''
 				SetBonus:
 					'''
@@ -336,7 +336,7 @@ Mods: {
 
 			SpookyMask: {
 				DisplayName: Spooky Mask
-				Tooltip: Increases summon damage by 12%, but decreases max minions
+				Tooltip: "{$Common.Tooltips.IncreasesMinionDamageBy}, but decreases max minions"
 				SetBonus:
 					'''
 					{$Common.Tooltips.IncreasesMinionDamageBy}
