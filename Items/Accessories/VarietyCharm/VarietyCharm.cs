@@ -1,11 +1,14 @@
 ﻿using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Accessories.VarietyCharm
 {
 	class VarietyCharm : ModItem
 	{
+		public static readonly int MinionVarietyBonus = 1;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionVarietyBonus);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -17,7 +20,7 @@ namespace AmuletOfManyMinions.Items.Accessories.VarietyCharm
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus += .01f;
+			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus += MinionVarietyBonus / 100f;
 		}
 
 		public override void AddRecipes()

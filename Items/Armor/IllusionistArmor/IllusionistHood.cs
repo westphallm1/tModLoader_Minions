@@ -16,6 +16,10 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 	public abstract class BaseIllusionistHood : ModItem
 	{
 		public static readonly int SetBonusMaxMinionsIncrease = 1;
+
+		public static readonly int MinionDamageIncrease = 4;
+		public static readonly int MaxMinionIncrease = 1;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease, MaxMinionIncrease);
 		public static LocalizedText SetBonusText { get; private set; }
 
 		public override void SetStaticDefaults()
@@ -43,8 +47,8 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.maxMinions += 1;
-			player.GetDamage<SummonDamageClass>() += 0.04f;
+			player.maxMinions += MaxMinionIncrease;
+			player.GetDamage<SummonDamageClass>() += MinionDamageIncrease / 100f;
 		}
 
 		public override void ArmorSetShadows(Player player)

@@ -1,6 +1,7 @@
 using AmuletOfManyMinions.Items.Accessories;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Armor
@@ -8,6 +9,8 @@ namespace AmuletOfManyMinions.Items.Armor
 	[AutoloadEquip(EquipType.Body)]
 	public class ForagerBreastplate : ModItem
 	{
+		public static readonly int MinionKnockbackIncrease = 1;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionKnockbackIncrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -19,7 +22,7 @@ namespace AmuletOfManyMinions.Items.Armor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetKnockback<SummonDamageClass>().Base += 1;
+			player.GetKnockback<SummonDamageClass>().Base += MinionKnockbackIncrease;
 		}
 
 		public override void AddRecipes()

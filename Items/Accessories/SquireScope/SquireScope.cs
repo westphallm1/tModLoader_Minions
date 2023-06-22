@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Squires;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -8,6 +9,9 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 {
 	class SquireScope : ModItem
 	{
+
+		public static readonly int SquireRangeIncrease = 8;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(SquireRangeIncrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -19,7 +23,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireScope
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 128;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += SquireRangeIncrease * 16f;
 			if (SquireMinionTypes.Contains(player.HeldItem.shoot))
 			{
 				player.scope = true;

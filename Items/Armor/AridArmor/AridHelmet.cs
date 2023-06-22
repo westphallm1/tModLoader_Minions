@@ -16,6 +16,9 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 	{
 		public static readonly int SetBonusDamageIncrease = 15;
 		public static readonly int SetBonusSquireTravelRangeIncrease = 1;
+		public static readonly int MinionDamageIncrease = 8;
+		public static readonly int SquireRangeIncrease = 3;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease, SquireRangeIncrease);
 		public static LocalizedText SetBonusText { get; private set; }
 
 		public override void SetStaticDefaults()
@@ -39,8 +42,8 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.08f;
-			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 48;
+			player.GetDamage<SummonDamageClass>() += MinionDamageIncrease / 100f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += SquireRangeIncrease * 16f;
 		}
 
 		public override void UpdateArmorSet(Player player)

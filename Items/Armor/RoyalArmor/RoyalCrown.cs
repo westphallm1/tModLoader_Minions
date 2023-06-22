@@ -14,6 +14,10 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 	{
 		public static LocalizedText SetBonusText { get; private set; }
 
+		public static readonly int MinionDamageIncrease = 8;
+		public static readonly int SquireAttackSpeedIncrease = 10;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease, SquireAttackSpeedIncrease);
+
 		public override void SetStaticDefaults()
 		{
 			SetBonusText = this.GetLocalization("SetBonus");
@@ -37,8 +41,8 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= 0.9f;
-			player.GetDamage<SummonDamageClass>() += 0.08f;
+			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= (1f - SquireAttackSpeedIncrease / 100f);
+			player.GetDamage<SummonDamageClass>() +=  MinionDamageIncrease / 100f;
 		}
 
 		public override void UpdateArmorSet(Player player)

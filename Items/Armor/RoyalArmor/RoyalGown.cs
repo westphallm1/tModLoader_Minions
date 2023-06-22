@@ -1,6 +1,7 @@
 ﻿using AmuletOfManyMinions.Projectiles.Squires;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
@@ -8,6 +9,10 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 	[AutoloadEquip(EquipType.Body)]
 	class RoyalGown : ModItem
 	{
+		public static readonly int SummonDamageIncrease = 12;
+		public static readonly int SquireRangeIncrease = 2;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(SummonDamageIncrease, SquireRangeIncrease);
+
 		private int legsSlot = -1;
 
 		public override void Load()
@@ -29,8 +34,8 @@ namespace AmuletOfManyMinions.Items.Armor.RoyalArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 32f;
-			player.GetDamage<SummonDamageClass>() += 0.12f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += SquireRangeIncrease * 16f;
+			player.GetDamage<SummonDamageClass>() += SquireRangeIncrease / 100f;
 		}
 
 		public override void SetMatch(bool male, ref int equipSlot, ref bool robes)

@@ -18,6 +18,11 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 	{
 		public static readonly int SetBonusDamageIncrease = 12;
 		public static readonly int SetBonusSquireTravelRangeIncrease = 1;
+
+		public static readonly int MinionDamageIncrease = 10;
+		public static readonly int SquireRangeIncrease = 4;
+		public static readonly int MaxMinionIncrease = 1;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease, SquireRangeIncrease, MaxMinionIncrease);
 		public static LocalizedText SetBonusText { get; private set; }
 
 		public override void SetStaticDefaults()
@@ -41,9 +46,9 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.10f;
-			player.maxMinions += 1;
-			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 64;
+			player.GetDamage<SummonDamageClass>() += MinionDamageIncrease / 100f;
+			player.maxMinions += MaxMinionIncrease;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += SquireRangeIncrease * 16f;
 		}
 
 		public override void ArmorSetShadows(Player player)

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -15,6 +16,10 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 	[AutoloadEquip(EquipType.Body)]
 	class GraniteChestguard : ModItem
 	{
+
+		public static readonly int MinionDamageIncrease = 10;
+		public static readonly int SquireAttackSpeedIncrease = 15;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease, SquireAttackSpeedIncrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -26,8 +31,8 @@ namespace AmuletOfManyMinions.Items.Armor.GraniteArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.10f;
-			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= 0.85f;
+			player.GetDamage<SummonDamageClass>() += MinionDamageIncrease / 100f;
+			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= (1f - SquireAttackSpeedIncrease / 100f);
 		}
 
 		public override void AddRecipes()

@@ -1,6 +1,7 @@
 using AmuletOfManyMinions.Projectiles.Squires;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Armor.AridArmor
@@ -8,6 +9,9 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 	[AutoloadEquip(EquipType.Body)]
 	public class AridBreastplate : ModItem
 	{
+		public static readonly int MinionDamageIncrease = 8;
+		public static readonly int SquireAttackSpeedIncrease = 10;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease, SquireAttackSpeedIncrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -19,8 +23,8 @@ namespace AmuletOfManyMinions.Items.Armor.AridArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage<SummonDamageClass>() += 0.08f;
-			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= 0.9f;
+			player.GetDamage<SummonDamageClass>() += MinionDamageIncrease / 100f;
+			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= (1f - SquireAttackSpeedIncrease/100f);
 		}
 		public override void AddRecipes()
 		{

@@ -32,9 +32,9 @@ Mods: {
 				DisplayName: Amulet Of Many Minions
 				Tooltip:
 					'''
-					Increases your max number of minions by 2
-					Greatly improves summon damage,
-					and increases minion variety bonus by 2%
+					{$CommonItemTooltip.IncreasesMaxMinionsBy}
+					Greatly improves summon damage
+					{$Common.Tooltips.IncreasesMinionVarietyBonusBy@1}
 					'''
 			}
 
@@ -42,9 +42,9 @@ Mods: {
 				DisplayName: Charm Of Many Minions
 				Tooltip:
 					'''
-					Increases max number of minions by 1
-					and increases minion variety bonus by 1%
-					but each minion deals slightly less damage
+					{$CommonItemTooltip.IncreasesMaxMinionsBy}
+					{$Common.Tooltips.IncreasesMinionVarietyBonusBy@1}
+					Each minion deals slightly less damage
 					'''
 			}
 
@@ -52,9 +52,9 @@ Mods: {
 				DisplayName: Charm Of Mighty Minions
 				Tooltip:
 					'''
-					Greatly increases summon damage,
-					but reduces max number of minions by 1,
-					and reduces minion variety bonus by 2%
+					Greatly increases summon damage
+					{$Common.Tooltips.DecreasesMaxMinionsBy}
+					{$Common.Tooltips.DecreasesMinionVarietyBonusBy@1}
 					'''
 			}
 
@@ -72,8 +72,8 @@ Mods: {
 				DisplayName: Mighty Bow of Teamwork
 				Tooltip:
 					'''
-					Increases max number of combat pets by 2,
-					but decreases max number of non-combat pet minions by 1
+					Increases max number of combat pets by {0},
+					but decreases max number of non-combat pet minions by {1}
 					{$Common.Tooltips.IncreasesCombatPetMovementSpeed}
 					{$Common.Tooltips.IncreasesMinionDamage}
 					'''
@@ -83,7 +83,7 @@ Mods: {
 				DisplayName: Spooky Bow of Teamwork
 				Tooltip:
 					'''
-					Increases max number of combat pets by 2
+					{$Common.Tooltips.IncreasesMaxCombatPetsBy}
 					{$Common.Tooltips.IncreasesCombatPetMovementSpeed}
 					{$Common.Tooltips.IncreasesMinionDamage}
 					'''
@@ -91,7 +91,7 @@ Mods: {
 
 			CombatPetStylishTeamworkBow: {
 				DisplayName: Stylish Bow of Teamwork
-				Tooltip: Increases max number of combat pets by 1
+				Tooltip: "{$Common.Tooltips.IncreasesMaxCombatPetsBy}"
 			}
 
 			MinionCompass: {
@@ -109,7 +109,7 @@ Mods: {
 				Tooltip:
 					'''
 					Increases view range for squires (Right Click to zoom out)
-					Increases squire travel range by 8 blocks
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy}
 					'''
 			}
 
@@ -117,38 +117,38 @@ Mods: {
 				DisplayName: Necro Pendant
 				Tooltip:
 					'''
-					Increases squire damage by 10%
-					Increases attack speed by 5% while using a squire
+					{$Common.Tooltips.IncreasesSquireDamageBy}
+					{$Common.Tooltips.IncreasesSquireAttackSpeedBy@1}
 					Summons a cursed skull that grants a rotating debuff to squire attacks
 					'''
 			}
 
 			SquireSpyglass: {
 				DisplayName: Squire Spyglass
-				Tooltip: Increases squire travel range by 3 blocks
+				Tooltip: "{$Common.Tooltips.IncreasesSquireTravelRangeBy}"
 			}
 
 			TechnoCharmAccessory: {
 				DisplayName: Techno Pendant
 				Tooltip:
 					'''
-					Increases squire damage by 12%
-					Increases attack speed by 10% while using a squire
+					{$Common.Tooltips.IncreasesSquireDamageBy}
+					{$Common.Tooltips.IncreasesSquireAttackSpeedBy@1}
 					Summons a mechanical skull that grants a rotating debuff to squire attacks
 					'''
 			}
 
 			VarietyCharm: {
 				DisplayName: Lockbox of Many Minions
-				Tooltip: Increases minion variety bonus by 1%
+				Tooltip: "{$Common.Tooltips.IncreasesMinionVarietyBonusBy}"
 			}
 
 			AridBreastplate: {
 				DisplayName: Arid Breastplate
 				Tooltip:
 					'''
-					Increases summon damage by 8%
-					Increases attack speed by 10% while using a squire
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireAttackSpeedBy@1}
 					'''
 			}
 
@@ -156,8 +156,8 @@ Mods: {
 				DisplayName: Arid Helmet
 				Tooltip:
 					'''
-					Increases summon damage by 8%
-					Increases squire travel range by 3 blocks
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
 					'''
 				SetBonus:
 					'''
@@ -171,8 +171,8 @@ Mods: {
 				DisplayName: Arid Leggings
 				Tooltip:
 					'''
-					Increases summon damage by 6%
-					Increases squire travel range by 1 block
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
 					'''
 			}
 
@@ -184,7 +184,7 @@ Mods: {
 
 			ForagerBreastplate: {
 				DisplayName: Mildew Breastplate
-				Tooltip: Increased minion knockback by 1
+				Tooltip: Increases minion knockback by {0}
 			}
 
 			ForagerHelmet: {
@@ -202,8 +202,8 @@ Mods: {
 				DisplayName: Granite Chestguard
 				Tooltip:
 					'''
-					Increases summon damage by 10%
-					Increases attack speed by 15% while using a squire
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireAttackSpeedBy@1}
 					'''
 			}
 
@@ -212,9 +212,9 @@ Mods: {
 				# TODO "{$CommonItemTooltip.PercentIncreasedMovementSpeed}"
 				Tooltip:
 					'''
-					Increases summon damage by 10%
-					Increases squire travel range by 2 blocks
-					10% increased movement speed
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					{$CommonItemTooltip.PercentIncreasedMovementSpeed@2}
 					'''
 			}
 
@@ -222,9 +222,9 @@ Mods: {
 				DisplayName: Granite Mask
 				Tooltip:
 					'''
-					Increases summon damage by 10%
-					Increases your max number of minions by 1
-					Increases squire travel range by 4 blocks
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
+					{$CommonItemTooltip.IncreasesMaxMinionsBy@2}
 					'''
 				SetBonus:
 					'''
@@ -238,8 +238,8 @@ Mods: {
 				DisplayName: Illusionist Hood
 				Tooltip:
 					'''
-					Increases your max number of minions by 1
-					Increases summon damage by 4%
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$CommonItemTooltip.IncreasesMaxMinionsBy@1}
 					'''
 				SetBonus:
 					'''
@@ -257,8 +257,8 @@ Mods: {
 				DisplayName: Illusionist Robe
 				Tooltip:
 					'''
-					Increases your max number of minions by 1
-					Increases summon damage by 4%
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$CommonItemTooltip.IncreasesMaxMinionsBy@1}
 					'''
 			}
 
@@ -266,8 +266,8 @@ Mods: {
 				DisplayName: Illusionist Hood
 				Tooltip:
 					'''
-					Increases your max number of minions by 1
-					Increases summon damage by 4%
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$CommonItemTooltip.IncreasesMaxMinionsBy@1}
 					'''
 			}
 
@@ -280,8 +280,8 @@ Mods: {
 				DisplayName: Illusionist Robe
 				Tooltip:
 					'''
-					Increases your max number of minions by 1
-					Increases summon damage by 4%
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$CommonItemTooltip.IncreasesMaxMinionsBy@1}
 					'''
 			}
 
@@ -289,8 +289,8 @@ Mods: {
 				DisplayName: Royal Crown
 				Tooltip:
 					'''
-					Increases summon damage by 8%
-					Increaes attack speed by 10% while using a squire
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireAttackSpeedBy@1}
 					"You dropped this, king."
 					'''
 				SetBonus: A floating crown will assist your squire in combat!
@@ -300,8 +300,8 @@ Mods: {
 				DisplayName: Royal Gown
 				Tooltip:
 					'''
-					Increases summon damage by 12%
-					Increases squire travel range by 2 blocks
+					{$Common.Tooltips.IncreasesMinionDamageBy}
+					{$Common.Tooltips.IncreasesSquireTravelRangeBy@1}
 					'''
 			}
 
@@ -1644,8 +1644,13 @@ Mods: {
 			ConcatenateTwo: "{0} {1}"
 
 			Tooltips: {
+				DecreasesMaxMinionsBy: Decreases your max number of minions by {0}
+				DecreasesMinionVarietyBonusBy: Decreases minion variety bonus by {0}%
+				IncreasesMaxCombatPetsBy: Increases your max number of combat pets by {0}
 				IncreasesMinionDamageBy: Increases summon damage by {0}%
+				IncreasesSquireDamageBy: Increases squire damage by {0}%
 				IncreasesMinionDamage: Increases summon damage
+				IncreasesMinionVarietyBonusBy: Increases minion variety bonus by {0}%
 				IncreasesSquireTravelRangeBy: Increases squire travel range by {0} {^0:block;blocks}
 				IncreasesSquireAttackSpeedBy: Increases attack speed by {0}% while using a squire
 				IncreasesCombatPetMovementSpeed: Increases combat pet movement speed

@@ -1,11 +1,15 @@
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 {
 	public abstract class BaseIllusionistRobe : ModItem
 	{
+		public static readonly int MinionDamageIncrease = 4;
+		public static readonly int MaxMinionIncrease = 1;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MinionDamageIncrease, MaxMinionIncrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -17,8 +21,8 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 
 		public override void UpdateEquip(Player player)
 		{
-			player.maxMinions += 1;
-			player.GetDamage<SummonDamageClass>() += 0.04f;
+			player.maxMinions += MaxMinionIncrease;
+			player.GetDamage<SummonDamageClass>() += MinionDamageIncrease / 100f;
 		}
 	}
 

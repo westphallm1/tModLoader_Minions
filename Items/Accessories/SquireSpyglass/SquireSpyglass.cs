@@ -1,12 +1,15 @@
 ﻿using AmuletOfManyMinions.Projectiles.Squires;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Accessories.SquireSpyglass
 {
 	class SquireSpyglass : ModItem
 	{
+		public static readonly int SquireRangeIncrease = 3;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(SquireRangeIncrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -18,7 +21,7 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSpyglass
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += 48f;
+			player.GetModPlayer<SquireModPlayer>().SquireRangeFlatBonus += SquireRangeIncrease * 16f;
 		}
 
 		public override void AddRecipes()

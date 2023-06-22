@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -12,6 +13,9 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 {
 	class SquireSkullAccessory : ModItem
 	{
+		public static readonly int SquireDamageIncrease = 8;
+		public static readonly int SquireAttackSpeedIncrease = 5;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(SquireDamageIncrease, SquireAttackSpeedIncrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -24,8 +28,8 @@ namespace AmuletOfManyMinions.Items.Accessories.SquireSkull
 		public override void UpdateEquip(Player player)
 		{
 			player.GetModPlayer<SquireModPlayer>().squireSkullAccessory = true;
-			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= 0.95f;
-			player.GetModPlayer<SquireModPlayer>().squireDamageMultiplierBonus += 0.08f;
+			player.GetModPlayer<SquireModPlayer>().SquireAttackSpeedMultiplier *= (1f - SquireAttackSpeedIncrease/100f);
+			player.GetModPlayer<SquireModPlayer>().squireDamageMultiplierBonus += SquireDamageIncrease / 100f;
 		}
 		public override bool CanEquipAccessory(Player player, int slot, bool modded)
 		{

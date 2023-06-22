@@ -5,6 +5,7 @@ using AmuletOfManyMinions.Projectiles.Minions.SpiritGun;
 using AmuletOfManyMinions.Projectiles.Minions.VoidKnife;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -13,6 +14,14 @@ namespace AmuletOfManyMinions.Items.Accessories
 	[AutoloadEquip(EquipType.Neck)]
 	class AmuletOfManyMinions : ModItem
 	{
+		public static readonly int MaxMinionIncrease = 2;
+		public static readonly int MinionVarietyIncrease = 2;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MaxMinionIncrease, MinionVarietyIncrease);
+
+		public override void SetStaticDefaults()
+		{
+			base.SetStaticDefaults();
+		}
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -25,8 +34,8 @@ namespace AmuletOfManyMinions.Items.Accessories
 		public override void UpdateEquip(Player player)
 		{
 			player.GetDamage<SummonDamageClass>() += 0.2f;
-			player.maxMinions += 2;
-			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus += 0.02f;
+			player.maxMinions += MaxMinionIncrease;
+			player.GetModPlayer<MinionSpawningItemPlayer>().minionVarietyDamageBonus += MinionVarietyIncrease / 100f;
 		}
 
 		public override void AddRecipes()

@@ -6,12 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 {
 	class CombatPetStylishTeamworkBow : ModItem
 	{
+		public static readonly int MaxPetIncrease = 1;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MaxPetIncrease);
+
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -23,12 +27,15 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += 1;
+			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += MaxPetIncrease;
 		}
 	}
 
 	class CombatPetMightyTeamworkBow : ModItem
 	{
+		public static readonly int MaxPetIncrease = 1;
+		public static readonly int MaxMinionDecrease = 1;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MaxPetIncrease, MaxMinionDecrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -41,10 +48,10 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 		public override void UpdateEquip(Player player)
 		{
 			player.GetDamage<SummonDamageClass>() += 0.2f;
-			player.maxMinions = Math.Max(0, player.maxMinions - 1);
+			player.maxMinions = Math.Max(0, player.maxMinions - MaxMinionDecrease);
 			// Reducing max minions by one also decreases max combat pets by one,
 			// So increase max combat pets by 2 for a total increase of 1 combat pet (a bit confusing)
-			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += 2;
+			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += MaxPetIncrease + MaxMinionDecrease;
 			player.GetModPlayer<LeveledCombatPetModPlayer>().PetSpeedBonus += 2;
 		}
 
@@ -57,6 +64,8 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 	}
 	class CombatPetSpookyTeamworkBow : ModItem
 	{
+		public static readonly int MaxPetIncrease = 2;
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MaxPetIncrease);
 		public override void SetDefaults()
 		{
 			Item.width = 30;
@@ -70,7 +79,7 @@ namespace AmuletOfManyMinions.Items.Accessories.CombatPetAccessories
 		{
 			player.GetDamage<SummonDamageClass>() += 0.2f;
 			player.GetModPlayer<LeveledCombatPetModPlayer>().PetSpeedBonus += 2;
-			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += 2;
+			player.GetModPlayer<LeveledCombatPetModPlayer>().ExtraPetSlots += MaxPetIncrease;
 		}
 
 		public override void AddRecipes() => CreateRecipe(1)
