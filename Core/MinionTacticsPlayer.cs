@@ -87,9 +87,6 @@ namespace AmuletOfManyMinions.Core.Minions
 
 		internal bool IsNPCGroupActive(int groupIdx) => TargetNPCGroup == groupIdx || UsingGlobalNPCTarget;
 
-		// TODO localize
-		private static string TacticsUnlockedText = "Minions from the Amulet of Many Minions can now use Advanced Tactics!";
-
 		/// <summary>
 		/// Timer used for syncing TacticID when it is changed on the client, only registers the last change done within SyncTimerMax ticks
 		/// </summary>
