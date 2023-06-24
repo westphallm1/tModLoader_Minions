@@ -13,18 +13,18 @@ using Terraria.ModLoader;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 {
-	public class CombatPetEmblemNameLookup: ModSystem
+	public class CombatPetEmblemReverseLookup: ModSystem
 	{
-		internal static Dictionary<int, LocalizedText> NameLookup;
+		internal static Dictionary<int, int> LevelToTypeLookup;
 
 		public override void Load()
 		{
-			NameLookup = new();
+			LevelToTypeLookup = new();
 		}
 
 		public override void Unload()
 		{
-			NameLookup = null;
+			LevelToTypeLookup = null;
 		}
 	}
 
@@ -43,7 +43,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			string commonKey = "Common.CombatPetEmblems.";
 			CommonTooltipText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}CommonTooltip"));
 			MinionSlotsToCombatPetText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}MinionSlotsToCombatPet"));
-			CombatPetEmblemNameLookup.NameLookup[PetLevel] = Lang.GetItemName(Type);
+			CombatPetEmblemReverseLookup.LevelToTypeLookup[PetLevel] = Type;
 		}
 
 		public override void SetDefaults()

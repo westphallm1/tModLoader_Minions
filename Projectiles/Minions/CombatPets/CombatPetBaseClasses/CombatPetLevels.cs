@@ -465,7 +465,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			} else if (attackPatternUpdateTier > player.PetLevel)
 			{
 				tooltips.Add(new TooltipLine(mod, nameof(NotLeveledUpText),
-					NotLeveledUpText.Format(CombatPetEmblemNameLookup.NameLookup[attackPatternUpdateTier]))
+					NotLeveledUpText.Format(Lang.GetItemNameValue(CombatPetEmblemReverseLookup.LevelToTypeLookup[attackPatternUpdateTier])))
 				{
 					OverrideColor = Color.Gray
 				});
