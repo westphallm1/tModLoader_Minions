@@ -184,7 +184,7 @@ Mods: {
 
 			ForagerBreastplate: {
 				DisplayName: Mildew Breastplate
-				Tooltip: Increases minion knockback by {0}
+				Tooltip: "{$Common.Tooltips.IncreasesMinionKnockbackBy}"
 			}
 
 			ForagerHelmet: {
@@ -599,8 +599,8 @@ Mods: {
 				Tooltip:
 					'''
 					Summons a hoarde of rats to fight for you!
-					Each rat deals {0}/{1} of base damage,
-					and ignores {2} enemy defense
+					Each rat deals {0}/{1} of base damage
+					{$Common.Tooltips.IgnoresEnemyDefense@2}
 					'''
 			}
 
@@ -614,7 +614,7 @@ Mods: {
 				Tooltip:
 					'''
 					Summons a vampire slime to fight for you!
-					Ignores {0} enemy defense
+					{$Common.Tooltips.IgnoresEnemyDefense}
 					'''
 			}
 
@@ -1561,7 +1561,7 @@ Mods: {
 			WhackAMoleCounterMinion.DisplayName: Whack A Mole Counter Minion
 			WhackAMoleMinion.DisplayName: Whack-a-mole
 			WhackAMoleMinionProjectile.DisplayName: Whack A Mole Minion Projectile
-			XCXCopterCounterMinion.DisplayName: X C X Copter Counter Minion
+			XCXCopterCounterMinion.DisplayName: XCX Copter Counter Minion
 			XCXCopterMinion.DisplayName: Copter-X
 			AdamantiteSquireMinion.DisplayName: Adamantite Squire
 			AncientCobaltBolt.DisplayName: Ancient Cobalt Bolt
@@ -1648,12 +1648,14 @@ Mods: {
 				DecreasesMinionVarietyBonusBy: Decreases minion variety bonus by {0}%
 				IncreasesMaxCombatPetsBy: Increases your max number of combat pets by {0}
 				IncreasesMinionDamageBy: Increases summon damage by {0}%
+				IncreasesMinionKnockbackBy: Increases minion knockback by {0}
 				IncreasesSquireDamageBy: Increases squire damage by {0}%
 				IncreasesMinionDamage: Increases summon damage
 				IncreasesMinionVarietyBonusBy: Increases minion variety bonus by {0}%
 				IncreasesSquireTravelRangeBy: Increases squire travel range by {0} {^0:block;blocks}
 				IncreasesSquireAttackSpeedBy: Increases attack speed by {0}% while using a squire
 				IncreasesCombatPetMovementSpeed: Increases combat pet movement speed
+				IgnoresEnemyDefense: Ignores {0} enemy defense
 				AllowsMinionAttackAroundCornersIn: Allows your minions to automatically attack around corners in a {0} block radius
 			}
 
@@ -1704,7 +1706,7 @@ Mods: {
 				NotLeveledUp:
 					'''
 					This pet will gain a stronger attack pattern if you hold a
-					{0} Combat Pet Emblem or stronger!
+					{0} or stronger!
 					'''
 				LeveledUp: Your emblem enables this pet's stronger attack pattern!
 			}
