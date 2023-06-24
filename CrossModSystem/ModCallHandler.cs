@@ -117,23 +117,23 @@ namespace AmuletOfManyMinions.CrossModSystem
 				//	return RegisterPathfindingMinion(
 				//		a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg(600), a.Arg(8), a.Arg(12));
 				case "RegisterPathfindingPet":
-					return RegisterPathfindingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>());
+					return RegisterPathfindingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int>());
 
 				//case "RegisterFlyingMinion":
 				//	return RegisterFlyingMinion(
 				//		a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(true));
 				case "RegisterFlyingPet":
-					return RegisterFlyingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(),  a.Arg(true));
+					return RegisterFlyingPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true), a.Arg<int>());
 				//case "RegisterGroundedMinion":
 				//	return RegisterGroundedMinion(
 				//		a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(600), a.Arg(8), a.Arg(12), a.Arg(30), a.Arg(true));
 				case "RegisterGroundedPet":
-					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true));
+					return RegisterGroundedPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true), a.Arg<int>());
 
 				case "RegisterSlimePet":
-					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(true));
+					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(true), a.Arg<int>());
 				case "RegisterWormPet":
-					return RegisterWormPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true), a.Arg(64));
+					return RegisterWormPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true), a.Arg(64), a.Arg<int>());
 
 				// One-off utility functions
 				case "GetPetLevel":
@@ -382,13 +382,15 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// </summary>
 		/// <param name="proj">The singleton instance of the ModProjectile for this minion type</param>
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
+		/// <param name="levelUpTier">The combat pet emblem tier at which the pet's behavior changes</param>
 		/// </param>
-		internal static object RegisterPathfindingPet(ModProjectile proj, ModBuff buff)
+		internal static object RegisterPathfindingPet(ModProjectile proj, ModBuff buff, int levelUpTier)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 				new BasicCrossModAI(proj, buff.Type, defaultPathfinding: true, true);
+			CrossModCombatPetMinionItem.CrossModCombatPetLevelUpTiers[buff.Type] = levelUpTier;
 			return default;
 		}
 
@@ -402,11 +404,13 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
 		/// <param name="projType">Which projectile the minion should shoot. If null, the minion will do a melee attack</param>
 		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
-		internal static object RegisterFlyingPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle)
+		/// <param name="levelUpTier">The combat pet emblem tier at which the pet's behavior changes</param>
+		internal static object RegisterFlyingPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle, int levelUpTier)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new FlyingCrossModAI(proj, buff.Type, projType, true, defaultIdle);
+			CrossModCombatPetMinionItem.CrossModCombatPetLevelUpTiers[buff.Type] = levelUpTier;
 			return default;
 		}
 
@@ -446,11 +450,14 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
 		/// <param name="projType">Which projectile the minion should shoot. If null, the minion will do a melee attack</param>
 		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
-		internal static object RegisterGroundedPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle)
+		/// <param name="levelUpTier">The combat pet emblem tier at which the pet's behavior changes</param>
+		/// </param>
+		internal static object RegisterGroundedPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle, int levelUpTier)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj => new GroundedCrossModAI(proj, buff.Type, projType, true, defaultIdle);
+			CrossModCombatPetMinionItem.CrossModCombatPetLevelUpTiers[buff.Type] = levelUpTier;
 			return default;
 		}
 
@@ -491,12 +498,14 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// <param name="buff">The singleton instance of the ModBuff associated with the minion</param>
 		/// <param name="projType">Which projectile the minion should shoot.</param>
 		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
-		internal static object RegisterSlimePet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle)
+		/// <param name="levelUpTier">The combat pet emblem tier at which the pet's behavior changes</param>
+		internal static object RegisterSlimePet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle, int levelUpTier)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 				new SlimeCrossModAI(proj, buff.Type, projType, true, defaultIdle);
+			CrossModCombatPetMinionItem.CrossModCombatPetLevelUpTiers[buff.Type] = levelUpTier;
 			return default;
 		}
 
@@ -512,12 +521,14 @@ namespace AmuletOfManyMinions.CrossModSystem
 		/// <param name="projType">Which projectile the minion should shoot.</param>
 		/// <param name="defaultIdle">Whether to continue using default pet/minion AI while not attacking</param>
 		/// <param name="wormLength">The approximate length of this worm. Largely cosmetic, used in idle animation</param>
-		internal static object RegisterWormPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle, int wormLength)
+		/// <param name="levelUpTier">The combat pet emblem tier at which the pet's behavior changes</param>
+		internal static object RegisterWormPet(ModProjectile proj, ModBuff buff, int? projType, bool defaultIdle, int wormLength, int levelUpTier)
 		{
 			AddBuffMappingIdempotent(buff);
 			CombatPetBuff.CombatPetBuffTypes.Add(buff.Type);
 			CrossModAIGlobalProjectile.CrossModAISuppliers[proj.Type] = proj =>
 				new WormCrossModAI(proj, buff.Type, projType, true, defaultIdle) { WormLength = wormLength };
+			CrossModCombatPetMinionItem.CrossModCombatPetLevelUpTiers[buff.Type] = levelUpTier;
 			return default;
 		}
 

@@ -22,7 +22,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		protected virtual float baseDamageRatio => 0.67f;
 		protected virtual float damageGrowthRatio => 0.33f;
 
-		protected WormDrawer wormDrawer;
+		internal WormDrawer wormDrawer;
 		public override void SetStaticDefaults()
 		{
 			base.SetStaticDefaults();
@@ -49,7 +49,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 			return false;
 		}
 
-		protected virtual int GetSegmentCount()
+		internal virtual int GetSegmentCount()
 		{
 			return Math.Min(EmpowerCount, MAX_SEGMENT_COUNT);
 		}

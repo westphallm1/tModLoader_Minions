@@ -522,14 +522,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 	public class CrossModCombatPetMinionItem : GlobalItem
 	{
 
+		internal static Dictionary<int, int> CrossModCombatPetLevelUpTiers;
+
+		public override void Load()
+		{
+			CrossModCombatPetLevelUpTiers = new();
+		}
+
+		public override void Unload()
+		{
+			CrossModCombatPetLevelUpTiers = null;
+		}
+
 		bool IsCrossModPetItem(Item item) => item.ModItem?.Mod is Mod mod && mod != Mod &&
 				CombatPetBuff.CombatPetBuffTypes.Contains(item.buffType);
+
+		static int GetCrossModLevelUpTier(Item item) => CrossModCombatPetLevelUpTiers.GetValueOrDefault(item.buffType);
 
 		public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
 		{
 			if (IsCrossModPetItem(item))
 			{
-				CombatPetItemUtils.AddCombatPetTooltip(Mod, 0, tooltips);
+				CombatPetItemUtils.AddCombatPetTooltip(Mod, GetCrossModLevelUpTier(item), tooltips);
 			}
 		}
 	}

@@ -52,7 +52,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 
 		// don't grow
 		protected override int EmpowerCount => 1;
-		protected override int GetSegmentCount() => 6;
+		internal override int GetSegmentCount() => 6;
 
 		protected override int ComputeDamage() => (int)(DamageMult * leveledPetPlayer.PetDamage);
 
@@ -131,9 +131,21 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasse
 			return base.IdleBehavior();
 		}
 
+		// Make the worm pet wiggle a bit while the player is walking in the select screen
+		internal static void PreviewWormPet(Projectile proj, bool walking)
+		{
+			var worm = (WormMinion)proj.ModProjectile;
+			worm.wormDrawer.SegmentCount = worm.GetSegmentCount();
+			Vector2 offset = new(4f, -16f);
+			if (walking) {
+				offset.Y += 4 * MathF.Sin(MathHelper.TwoPi * proj.position.X / 180);
+			}
+			worm.wormDrawer.AddPosition(proj.position + offset);
+		}
+
 		// don't grow
 		protected override int EmpowerCount => 1;
-		protected override int GetSegmentCount() => 6;
+		internal override int GetSegmentCount() => 6;
 
 		protected override int ComputeDamage() => (int)(DamageMult * leveledPetPlayer.PetDamage);
 

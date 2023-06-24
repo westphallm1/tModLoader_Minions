@@ -122,15 +122,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			base.SetStaticDefaults();
 
 			ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type]
-				.WithCode(Preview);
-		}
-
-		private static void Preview(Projectile proj, bool walking)
-		{
-			//TODO 1.4.4 need to do something with this to make it work
-			var worm = (DestroyerLiteMinion)proj.ModProjectile;
-			worm.wormDrawer.AddPosition(proj.position);
-			worm.wormDrawer.Update(proj.frame);
+				.WithCode(CombatPetWormMinion.PreviewWormPet);
 		}
 
 		public sealed override void SetDefaults()
