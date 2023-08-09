@@ -33,6 +33,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SpiritGun
 
 		public override void SetDefaults()
 		{
+			MinionBehavior = new(this);
 			Projectile.width = 24;
 			Projectile.height = 2;
 			Projectile.friendly = true;

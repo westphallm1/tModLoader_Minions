@@ -184,7 +184,7 @@ Mods: {
 
 			ForagerBreastplate: {
 				DisplayName: Mildew Breastplate
-				Tooltip: "{$Common.Tooltips.IncreasesMinionKnockbackBy}"
+				Tooltip: "{$Common.Tooltips.IncreasesMinionKnockbackByFlat}"
 			}
 
 			ForagerHelmet: {
@@ -1648,7 +1648,7 @@ Mods: {
 				DecreasesMinionVarietyBonusBy: Decreases minion variety bonus by {0}%
 				IncreasesMaxCombatPetsBy: Increases your max number of combat pets by {0}
 				IncreasesMinionDamageBy: Increases summon damage by {0}%
-				IncreasesMinionKnockbackBy: Increases minion knockback by {0}
+				IncreasesMinionKnockbackByFlat: Increases minion knockback by {0}
 				IncreasesSquireDamageBy: Increases squire damage by {0}%
 				IncreasesMinionDamage: Increases summon damage
 				IncreasesMinionVarietyBonusBy: Increases minion variety bonus by {0}%
