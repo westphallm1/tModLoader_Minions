@@ -1,4 +1,4 @@
-using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
+﻿using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 {
 	public class CombatPetEmblemReverseLookup: ModSystem
 	{
-		public static Dictionary<int, int> LevelToTypeLookup;
+		internal static Dictionary<int, int> LevelToTypeLookup;
 
 		public override void Load()
 		{
@@ -28,12 +28,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 		}
 	}
 
-	public abstract class CombatPetEmblem : ModItem
+	abstract class CombatPetEmblem : ModItem
 	{
-		public abstract int PetLevel { get; }
+		internal abstract int PetLevel { get; }
 
 		public static LocalizedText CommonTooltipText { get; private set; }
+
 		public static LocalizedText MinionSlotsToCombatPetText { get; private set; }
+
 		public override LocalizedText Tooltip => CommonTooltipText;
 
 		public override void SetStaticDefaults()
@@ -46,11 +48,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 
 		public override void SetDefaults()
 		{
+			// These below are needed for a minion weapon
 			Item.noMelee = true;
 			Item.DamageType = DamageClass.Summon;
-			Item.shoot = ProjectileID.WoodenArrowFriendly;
+			Item.shoot = ProjectileID.WoodenArrowFriendly; // don't actually shoot anything
 			Item.damage = CombatPetLevelTable.PetLevelTable[PetLevel].BaseDamage;
-			Item.knockBack = 1f;
+			Item.knockBack = 1f; // make nonzero to allow more modifiers
 		}
 
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -66,12 +69,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			}
 		}
 
-		public override bool CanUseItem(Player player) => false;
+		public override bool CanUseItem(Player player)
+		{
+			return false;
+		}
 	}
 
-	public class GoldenCombatPetEmblem : CombatPetEmblem
+	class GoldenCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 1;
+		internal override int PetLevel => 1;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -81,9 +88,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			CreateRecipe(1).AddIngredient(ItemID.GoldBar, 12).AddTile(TileID.Anvils).Register();
 	}
 
-	public class PlatinumCombatPetEmblem : CombatPetEmblem
+	class PlatinumCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 1;
+		internal override int PetLevel => 1;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -93,9 +101,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			CreateRecipe(1).AddIngredient(ItemID.PlatinumBar, 12).AddTile(TileID.Anvils).Register();
 	}
 
-	public class CorruptCombatPetEmblem : CombatPetEmblem
+	class CorruptCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 2;
+		internal override int PetLevel => 2;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -106,9 +115,10 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			CreateRecipe(1).AddIngredient(ItemID.DemoniteBar, 12).AddTile(TileID.Anvils).Register();
 	}
 
-	public class CrimsonCombatPetEmblem : CombatPetEmblem
+	class CrimsonCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 2;
+		internal override int PetLevel => 2;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
@@ -119,43 +129,50 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			CreateRecipe(1).AddIngredient(ItemID.CrimtaneBar, 12).AddTile(TileID.Anvils).Register();
 	}
 
-	public class SkeletalCombatPetEmblem : CombatPetEmblem
+	class SkeletalCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 3;
+		internal override int PetLevel => 3;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			Item.value = Item.sellPrice(silver: 5);
 			Item.rare = ItemRarityID.Green;
 		}
+
 		public override void AddRecipes() =>
 			CreateRecipe(1).AddIngredient(ItemID.Bone, 50).AddTile(TileID.Anvils).Register();
 	}
 
-	public class SoulfulCombatPetEmblem : CombatPetEmblem
+	class SoulfulCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 4;
+		internal override int PetLevel => 4;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			Item.value = Item.sellPrice(silver: 50);
 			Item.rare = ItemRarityID.LightRed;
 		}
+
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ItemID.SoulofLight, 8)
 			.AddIngredient(ItemID.SoulofNight, 8)
 			.AddTile(TileID.Anvils).Register();
 	}
 
-	public class HallowedCombatPetEmblem : CombatPetEmblem
+
+	class HallowedCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 5;
+		internal override int PetLevel => 5;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			Item.value = Item.sellPrice(gold: 4);
 			Item.rare = ItemRarityID.Pink;
 		}
+
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ItemID.HallowedBar, 12)
 			.AddIngredient(ItemID.SoulofSight, 1)
@@ -164,43 +181,48 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			.AddTile(TileID.MythrilAnvil).Register();
 	}
 
-	public class SpectreCombatPetEmblem : CombatPetEmblem
+	class SpectreCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 6;
+		internal override int PetLevel => 6;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			Item.value = Item.sellPrice(gold: 11);
 			Item.rare = ItemRarityID.Yellow;
 		}
+
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ItemID.SpectreBar, 12)
 			.AddTile(TileID.MythrilAnvil).Register();
 	}
 
-	public class StardustCombatPetEmblem : CombatPetEmblem
+	class StardustCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 7;
+		internal override int PetLevel => 7;
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			Item.value = Item.sellPrice(gold: 8);
 			Item.rare = ItemRarityID.Red;
 		}
+
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ItemID.FragmentStardust, 12)
 			.AddTile(TileID.LunarCraftingStation).Register();
 	}
 
-	public class CelestialCombatPetEmblem : CombatPetEmblem
+	class CelestialCombatPetEmblem : CombatPetEmblem
 	{
-		public override int PetLevel => 8;
+		internal override int PetLevel => 8;
+
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			Item.value = Item.sellPrice(gold: 16);
 			Item.rare = ItemRarityID.Red;
 		}
+
 		public override void AddRecipes() => CreateRecipe(1)
 			.AddIngredient(ItemID.LunarBar, 12)
 			.AddIngredient(ModContent.ItemType<StardustCombatPetEmblem>(), 1)
