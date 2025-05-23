@@ -1,4 +1,4 @@
-== The Amulet of Many Minions! ==
+== The Amulet of Many Minions! == 
 
 The Amulet of Many Minions is a mid-sized content mod that adds variety to the vanilla summoner progression while trying to stay at least somewhat
 true to vanilla balance. It adds a new, directly controllable minion type called the Squire,
@@ -7,6 +7,8 @@ over 30 new minions, and a minion form for every vanilla pet!
 Forums Homepage: https://forums.terraria.org/index.php?threads/the-amulet-of-many-minions.97188/]Terraria
 
 Wiki: https://terrariamods.fandom.com/wiki/AmuletOfManyMinions
+
+== New in v0.16.3: Adding capability to the Cross-Mod compatibility to add new types of Combat Pet Emblems. ==
 
 == New in v0.16.1: Cross-Mod Compatibility with Assorted Crazy Things! ==
 

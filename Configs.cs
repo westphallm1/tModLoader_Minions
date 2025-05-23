@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
@@ -207,12 +208,15 @@ namespace AmuletOfManyMinions
 			return NetMessage.DoesPlayerSlotCountAsAHost(whoAmI);
 		}
 
-		public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message)
+		public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref NetworkText message)
 		{
 			if (Main.netMode == NetmodeID.SinglePlayer) return true;
 			else if (!IsPlayerLocalServerOwner(whoAmI))
 			{
-				message = AoMMSystem.AcceptClientChangesText.ToString();
+				// Line was throwing an error CS0029
+				//message = AoMMSystem.AcceptClientChangesText.ToString();
+				// New line should work as intended
+				message = NetworkText.FromLiteral(AoMMSystem.AcceptClientChangesText.Value);
 				return false;
 			}
 			return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);
