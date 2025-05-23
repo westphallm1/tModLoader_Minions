@@ -142,14 +142,26 @@ namespace AmuletOfManyMinions.CrossModSystem
 				// Register new Combat Pet Emblem
 				// First Argument is ItemType (int)
 				// Second argument is petLevel (int)
-				case "RegisterCombatPetEmblem":
+				case "RegisterCombatPetEmblem": // should allow multiple emblems to be registered to AOMM base tiers and custom tiers.
 				{
 					int itemType = a.Arg<int>();
 					int level = a.Arg<int>();
 
-					CombatPetEmblemReverseLookup.LevelToTypeLookup[level] = itemType;
-					return true;
+					if (!CombatPetEmblemReverseLookup.LevelToTypeLookup.TryGetValue(level, out var emblemList))
+					{
+						emblemList = new List<int>();
+						CombatPetEmblemReverseLookup.LevelToTypeLookup[level] = emblemList;
+					}
+					if (!emblemList.Contains(itemType))
+					{
+						emblemList.Add(itemType);
+					}
 					
+					// Safe item name retrieval
+					string itemName = Lang.GetItemNameValue(itemType) ?? $"ItemType({itemType})";
+					ModContent.GetInstance<AmuletOfManyMinions>().Logger.Info($"[ModCallHandler] Registered emblem {Lang.GetItemNameValue(itemType)} for level {level}.");
+
+					return true;
 				}
 				
 				case "RegisterCombatPetLevel":
@@ -587,8 +599,15 @@ namespace AmuletOfManyMinions.CrossModSystem
 					$"RegisterCombatPetEmblem received invalid data. ItemType: {itemType}, PetLevel: {petLevel}");
 				return default;
 			}
-
-			CombatPetEmblemReverseLookup.LevelToTypeLookup[petLevel] = itemType;
+			if (!CombatPetEmblemReverseLookup.LevelToTypeLookup.TryGetValue(petLevel, out var emblemList))
+					{
+						emblemList = new List<int>();
+						CombatPetEmblemReverseLookup.LevelToTypeLookup[petLevel] = emblemList;
+					}
+					if (!emblemList.Contains(itemType))
+					{
+						emblemList.Add(itemType);
+					}
 			return default;
 		}
 
