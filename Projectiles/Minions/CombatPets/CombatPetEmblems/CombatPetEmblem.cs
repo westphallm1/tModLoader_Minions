@@ -15,7 +15,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 {
 	public class CombatPetEmblemReverseLookup: ModSystem
 	{
-		internal static Dictionary<int, int> LevelToTypeLookup;
+		// internal static Dictionary<int, int> LevelToTypeLookup;
+		internal static Dictionary<int, List<int>> LevelToTypeLookup; // changed to allow multiple custom emblems to register to the same custom level
 
 		public override void Load()
 		{
@@ -43,7 +44,16 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems
 			string commonKey = "Common.CombatPetEmblems.";
 			CommonTooltipText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}CommonTooltip"));
 			MinionSlotsToCombatPetText ??= Language.GetOrRegister(Mod.GetLocalizationKey($"{commonKey}MinionSlotsToCombatPet"));
-			CombatPetEmblemReverseLookup.LevelToTypeLookup[PetLevel] = Type;
+			// CombatPetEmblemReverseLookup.LevelToTypeLookup[PetLevel] = Type;
+			if (!CombatPetEmblemReverseLookup.LevelToTypeLookup.TryGetValue(PetLevel, out var list))  // changed to allow multiple custom emblems to register to the same custom level
+			{
+				list = new List<int>();
+				CombatPetEmblemReverseLookup.LevelToTypeLookup[PetLevel] = list;
+			}
+			if (!list.Contains(Type))
+			{
+				list.Add(Type);
+			}
 		}
 
 		public override void SetDefaults()
