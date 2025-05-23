@@ -152,30 +152,27 @@ namespace AmuletOfManyMinions.CrossModSystem
 					
 				}
 				
-				// Register Combat Pet Level for Custom Combat Pet Emblems
-				// First arg is level # (cannot be 0-8) (int)
-				// 2nd arg is damage (int)
-				// 3rd arg is search range (int)
-				// 4th arg is speed (float)
-				// 5th arg is max unique minions (int)
-				// 6th arg is the name of the new level (ie. Thorium) (String)
 				case "RegisterCombatPetLevel":
 				{
-					int level = Convert.ToInt32(args[1]);
-					// Prevent overriding built-in AoMM levels (0 through 8)
-					if (level >= 0 && level <= 8)
-					{
-						throw new ArgumentException($"Level {level} is reserved by AmuletOfManyMinions and cannot be used for custom registration. Please use a unique level above 8.");
-					}
+					// skip the message and version string
+					var unpack = new ArgsUnpacker(args, 2);
+					int level     = unpack.Arg<int>(); // level # (cannot be 0-8) (int)
+					int damage    = unpack.Arg<int>(); // damage (int)
+					int range     = unpack.Arg<int>(); // search range (int)
+					float speed   = unpack.Arg<float>(); // speed (float)
+					int maxPets   = unpack.Arg<int>(); // max unique minions (int)
+					string key    = unpack.Arg<string>(); // name of the new level (ie. Thorium) (String)
 					
-					int damage = Convert.ToInt32(args[2]);
-					int range = Convert.ToInt32(args[3]);
-					float speed = Convert.ToSingle(args[4]);
-					int maxPets = Convert.ToInt32(args[5]);
-					string key = args[6].ToString(); // just "MyModKey" etc.
+					if (level >= 0 && level <= 8) // If Level 0-8 is used above, registration fails with an error
+						throw new ArgumentException($"Level {level} is reserved by AoMM; use a value > 8 for custom tiers.");
+					
+					if (CombatPetLevelTable.PetLevelTable != null && CombatPetLevelTable.PetLevelTable.Any(p => p.Level == level)) // If 2 or mods try to register the same new level, registration fails with an error
+							throw new ArgumentException($"[AoMM] Combat pet level {level} is already registered.");
+
 					CombatPetLevelTable.RegisterCustomCombatPetLevel(level, damage, range, speed, maxPets, key);
+					CombatPetLevelTable.RebuildPetLevelTable(); // This calls the CombatPetLevels PetLevelTable to be rebuilt with the new custom levels added
+					ModContent.GetInstance<AmuletOfManyMinions>().Logger.Info($"[ModCallHandler] Rebuilt pet level table after registering custom level {level}.");
 					return null;
-					
 				}
 
 				// One-off utility functions
