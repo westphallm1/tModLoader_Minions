@@ -323,7 +323,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 							maxEmblemItem = item.type;
 						}
 					}
-					else if(CombatPetEmblemReverseLookup.LevelToTypeLookup.ContainsValue(item.type))
+					/* else if(CombatPetEmblemReverseLookup.LevelToTypeLookup.ContainsValue(item.type))
 					{
 						
 						int level = CombatPetEmblemReverseLookup.LevelToTypeLookup.First(kv => kv.Value == item.type).Key;
@@ -335,6 +335,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 							maxDamage = item.damage;
 							maxItem = item;
 							maxEmblemItem = item.type;
+						}
+					}*/
+					else  // Replacement code to handle multiple new emblems per level and custom level
+					{
+						foreach (var kv in CombatPetEmblemReverseLookup.LevelToTypeLookup)
+						{
+							if (kv.Value.Contains(item.type))
+							{
+								int level = kv.Key;
+								if (maxItem == null || 
+									level > maxLevel ||
+									(level == maxLevel && item.damage > maxDamage))
+								{
+									maxLevel = level;
+									maxDamage = item.damage;
+									maxItem = item;
+									maxEmblemItem = item.type;
+								}
+								break;
+							}
 						}
 					}
 				}
@@ -357,7 +377,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 							maxEmblemItem = item.type;
 						}
 					}
-					else if(CombatPetEmblemReverseLookup.LevelToTypeLookup.ContainsValue(item.type))
+					/* else if(CombatPetEmblemReverseLookup.LevelToTypeLookup.ContainsValue(item.type))
 					{
 						
 						int level = CombatPetEmblemReverseLookup.LevelToTypeLookup.First(kv => kv.Value == item.type).Key;
@@ -369,6 +389,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 							maxDamage = item.damage;
 							maxItem = item;
 							maxEmblemItem = item.type;
+						}
+					}*/
+					else  // Replacement code to handle multiple new emblems per level and custom level
+					{
+						foreach (var kv in CombatPetEmblemReverseLookup.LevelToTypeLookup)
+						{
+							if (kv.Value.Contains(item.type))
+							{
+								int level = kv.Key;
+								if (maxItem == null || 
+									level > maxLevel ||
+									(level == maxLevel && item.damage > maxDamage))
+								{
+									maxLevel = level;
+									maxDamage = item.damage;
+									maxItem = item;
+									maxEmblemItem = item.type;
+								}
+								break;
+							}
 						}
 					}
 				}
@@ -559,14 +599,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			if(attackPatternUpdateTier == 0)
 			{
 				return;
-			} else if (attackPatternUpdateTier > player.PetLevel)
+			/*} else if (attackPatternUpdateTier > player.PetLevel)
 			{
 				tooltips.Add(new TooltipLine(mod, nameof(NotLeveledUpText),
 					NotLeveledUpText.Format(Lang.GetItemNameValue(CombatPetEmblemReverseLookup.LevelToTypeLookup[attackPatternUpdateTier])))
 				{
 					OverrideColor = Color.Gray
+				});*/
+			}	
+			else if (attackPatternUpdateTier > player.PetLevel)  // Replacement code to handle multiple new emblems per level and custom level
+			{
+				CombatPetEmblemReverseLookup.LevelToTypeLookup.TryGetValue(attackPatternUpdateTier, out var types);
+				string emblemNames = (types != null && types.Count > 0)
+					? string.Join(", ", types.Select(Lang.GetItemNameValue))
+					: $"Emblem (Level {attackPatternUpdateTier})";
+
+				tooltips.Add(new TooltipLine(mod, nameof(NotLeveledUpText),
+					NotLeveledUpText.Format(emblemNames))
+				{
+					OverrideColor = Color.Gray
 				});
-			} else
+			}	
+			else
 			{
 				tooltips.Add(new TooltipLine(mod, nameof(LeveledUpText), LeveledUpText.ToString())
 				{
