@@ -97,10 +97,31 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			string fullKey = ModContent.GetInstance<AmuletOfManyMinions>().GetLocalizationKey($"CombatPetLevels.{descriptionKey}");
 			CustomPetLevels.Add(new CombatPetLevelInfo(level, damage, range, speed, maxPets, fullKey));
 		}
-
-		public override void Load()
+		// Original Load method commented out and replaced by RebuildPetLevelTable
+		/*public override void Load()
 		{
 			string commonKey = Mod.GetLocalizationKey("CombatPetLevels.");
+			var baseLevels = new List<ICombatPetLevelInfo>
+			{
+				new CombatPetLevelInfo(0, 7, 550, 8, 1, $"{commonKey}Base"), // Base level (no associated emblem)
+				new CombatPetLevelInfo(1, 11, 600, 8, 1, $"{commonKey}Golden"), // ore tier
+				new CombatPetLevelInfo(2, 15, 700, 9, 1, $"{commonKey}Demonite"), // EoC - tier
+				new CombatPetLevelInfo(3, 18, 750, 10, 2, $"{commonKey}Skeletal"), // Dungeon Tier
+				new CombatPetLevelInfo(4, 30, 900, 12, 2, $"{commonKey}Soulful"), // Post WoF
+				new CombatPetLevelInfo(5, 36, 950, 14, 3, $"{commonKey}Hallowed"), // Post Mech
+				new CombatPetLevelInfo(6, 42, 1000, 15, 3, $"{commonKey}Spectre"), // Post Plantera
+				new CombatPetLevelInfo(7, 52, 1050, 16, 4, $"{commonKey}Stardust"), // Post Pillars
+				new CombatPetLevelInfo(8, 80, 1100, 18, 6, $"{commonKey}Celestial") // Post Moon Lord
+			};*/
+		public override void Load()
+		{
+			RebuildPetLevelTable(); // here to make sure the mod works even if no mods call the rebuild below
+		}		
+		public static void RebuildPetLevelTable()  // called when loading from inside this mod, and can also be called from the ModCallHandler if custom levels are added
+		{
+			var modInstance = ModContent.GetInstance<AmuletOfManyMinions>();
+			string commonKey = modInstance.GetLocalizationKey("CombatPetLevels.");
+			
 			var baseLevels = new List<ICombatPetLevelInfo>
 			{
 				new CombatPetLevelInfo(0, 7, 550, 8, 1, $"{commonKey}Base"), // Base level (no associated emblem)
@@ -116,6 +137,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 			baseLevels.AddRange(CustomPetLevels);
 			PetLevelTable = baseLevels.OrderBy(p => p.Level).ToArray();
+			
+			ModContent.GetInstance<AmuletOfManyMinions>().Logger.Info($"[CombatPetLevelTable] Rebuilt table with {PetLevelTable.Length} levels.");
 		}
 
 		public override void Unload()
