@@ -166,14 +166,18 @@ namespace AmuletOfManyMinions.CrossModSystem
 				
 				case "RegisterCombatPetLevel":
 				{
-					// skip the message and version string
-					var unpack = new ArgsUnpacker(args, 2);
+					var unpack = new ArgsUnpacker(args, 2); // import the message and version string
 					int level     = unpack.Arg<int>(); // level # (cannot be 0-8) (int)
 					int damage    = unpack.Arg<int>(); // damage (int)
 					int range     = unpack.Arg<int>(); // search range (int)
 					float speed   = unpack.Arg<float>(); // speed (float)
 					int maxPets   = unpack.Arg<int>(); // max unique minions (int)
 					string key    = unpack.Arg<string>(); // name of the new level (ie. Thorium) (String)
+					
+					if (!key.StartsWith("Mods."))
+					{
+						throw new ArgumentException($"[AoMM] Invalid localization key: '{key}'. Must be a fully qualified key like 'Mods.MyMod.CombatPetLevels.Xyz'");
+					}
 					
 					if (level >= 0 && level <= 8) // If Level 0-8 is used above, registration fails with an error
 						throw new ArgumentException($"Level {level} is reserved by AoMM; use a value > 8 for custom tiers.");
