@@ -95,6 +95,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		public static void RegisterCustomCombatPetLevel(int level, int damage, int range, float speed, int maxPets, string descriptionKey)
 		{
 			string fullKey = ModContent.GetInstance<AmuletOfManyMinions>().GetLocalizationKey($"CombatPetLevels.{descriptionKey}");
+			LocalizedText description = Language.GetOrRegister(fullKey);
+
+			// ✅ Check if the localization fallback triggered (the key is missing from the actual .hjson files)
+			if (description.Value.Contains(fullKey))
+			{
+				ModContent.GetInstance<AmuletOfManyMinions>().Logger.Warn(
+					$"[AoMM] WARNING: Missing localization key '{fullKey}'. Falling back to 'CombatPetLevels.Fallback'.");
+
+				// Replace with a known-safe fallback localization entry
+				fullKey = ModContent.GetInstance<AmuletOfManyMinions>().GetLocalizationKey("CombatPetLevels.Fallback");
+
+				// Optional: register the fallback text dynamically if it doesn't exist
+				var fallbackText = Language.GetTextValue(fullKey);
+				if (fallbackText.Contains(fullKey))
+				{
+					Language.GetOrRegister(fullKey).SetDefault($"Unknown custom pet level (Tier {level})");
+				}
+			}
+			
 			CustomPetLevels.Add(new CombatPetLevelInfo(level, damage, range, speed, maxPets, fullKey));
 		}
 		// Original Load method commented out and replaced by RebuildPetLevelTable
