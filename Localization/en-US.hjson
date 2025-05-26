@@ -1727,6 +1727,7 @@ Mods: {
 			Spectre: Spectre
 			Stardust: Stardust
 			Celestial: Celestial
+			Fallback: "This Custom Pet Level is missing a a localization key"
 		}
 
 		CombatPetQuiz: {
