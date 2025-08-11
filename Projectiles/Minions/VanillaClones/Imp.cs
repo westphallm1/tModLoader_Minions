@@ -123,7 +123,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			dust.velocity *= -0.25f;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
 			for (int i = 4; i < 31; i++)

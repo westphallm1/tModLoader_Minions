@@ -77,7 +77,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			float goreVel = 0.25f;
 			var source = Projectile.GetSource_Death();
@@ -91,7 +91,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += offset;
 			}
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 		}
 
 		public override void OnSpawn()

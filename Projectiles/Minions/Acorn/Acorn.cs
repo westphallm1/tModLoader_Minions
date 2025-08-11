@@ -66,7 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Acorn
 			Projectile.rotation += 0.2f * Math.Sign(Projectile.velocity.X);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			Vector2 direction = -Projectile.velocity;
 			direction.Normalize();

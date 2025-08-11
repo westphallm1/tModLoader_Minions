@@ -36,7 +36,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			base.AfterMoving();
 			Lighting.AddLight(Projectile.Center, Color.DeepSkyBlue.ToVector3() * 0.5f);
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for(int i = 0; i < 3; i++)
 			{

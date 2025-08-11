@@ -99,7 +99,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BalloonMonkey
 			return false;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			// todo more unique animation
 			Vector2 position = Projectile.Center;

@@ -59,7 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			info.Damage = 1;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			PirateCannonball.SpawnSmallExplosionOnProjDeath(Projectile);
 		}
@@ -153,7 +153,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
 			hitbox.Inflate(8, 8);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			PirateCannonball.SpawnSmallExplosionOnProjDeath(Projectile);
 		}

@@ -157,7 +157,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			hitbox.Inflate(24, 24);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for(int i = 0; i < 3; i++)
 			{

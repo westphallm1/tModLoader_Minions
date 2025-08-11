@@ -96,7 +96,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			return false;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			Vector2 center = Main.projectile[(int)Projectile.ai[1]].Center;
 			Vector2 end = endPoint;
@@ -185,9 +185,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.ElementalPals
 			}
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 			if(laser != default)
 			{
 				laser.Kill();

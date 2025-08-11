@@ -66,7 +66,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.GuideSquire
 			SquireGlobalProjectile.isSquireShot.Add(Projectile.type);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			// don't spawn the arrow
 			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);

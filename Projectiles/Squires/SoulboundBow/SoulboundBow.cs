@@ -137,7 +137,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundBow
 			Lighting.AddLight(Projectile.Center, Color.LightPink.ToVector3() * 0.5f);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			// don't spawn an arrow on kill

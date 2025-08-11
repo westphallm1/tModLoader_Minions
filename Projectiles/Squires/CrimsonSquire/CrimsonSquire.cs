@@ -132,7 +132,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.CrimsonSquire
 			info.Damage = 1;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item107, Projectile.Center);
 			Vector2 position = Projectile.Center;

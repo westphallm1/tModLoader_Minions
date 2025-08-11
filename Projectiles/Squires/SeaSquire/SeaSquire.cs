@@ -57,7 +57,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SeaSquire
 			target.AddBuff(BuffID.Wet, 300);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item54, Projectile.position);
 			for (int i = 0; i < 8; i++)

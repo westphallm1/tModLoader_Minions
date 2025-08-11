@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			return false;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			// don't spawn an arrow on kill
@@ -98,9 +98,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundSword
 			SpawnDust();
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 			SpawnDust();
 		}
 

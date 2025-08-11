@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			return VectorToTarget == null;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)

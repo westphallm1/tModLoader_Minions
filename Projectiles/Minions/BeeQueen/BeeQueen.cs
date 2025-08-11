@@ -130,7 +130,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.BeeQueen
 			Projectile.frame = Projectile.timeLeft > 60 ? 0 : 1;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for (int i = 0; i < 3; i++)
 			{

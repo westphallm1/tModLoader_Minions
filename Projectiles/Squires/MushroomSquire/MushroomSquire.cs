@@ -71,9 +71,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.MushroomSquire
 			Projectile.rotation += MathHelper.Pi / 16 * Math.Sign(Projectile.velocity.X);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 			for (int i = 0; i < 3; i++)
 			{
 				Dust.NewDust(Projectile.Center - Vector2.One * 16, 32, 32, DustID.Copper);

@@ -81,7 +81,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.EmpressSquire
 			blurDrawer.Update(Projectile.Center);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for (int i = 0; i < 10; i++)
 			{
