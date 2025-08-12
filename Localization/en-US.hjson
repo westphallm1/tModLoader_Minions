@@ -1633,6 +1633,10 @@ Mods: {
 			SoulboundArsenalBowMinion.DisplayName: Soulbound Arsenal Bow Minion
 			BlueChickenEggProjectile.DisplayName: Blue Chicken Egg Projectile
 			BlueChickenMinion.DisplayName: Blue Chicken Minion
+			JuminoMinion.DisplayName: Jumino Minion
+			JunimoMinion.DisplayName: Junimo Minion
+			SpiffoMinion.DisplayName: Spiffo Minion
+			CavelingGardenerMinion.DisplayName: Caveling Gardener Minion
 		}
 
 		Keybinds: {

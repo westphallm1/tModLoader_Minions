@@ -5,7 +5,7 @@ using AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets;
 using AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire;
 using Terraria;
 
-namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.VanillaClonePets
+namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.JourneysEndVanillaClonePets
 {
 	public class BlueChickenMinionBuff : CombatPetVanillaCloneBuff
 	{
