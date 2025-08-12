@@ -171,6 +171,14 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			player.AddBuff(BuffType<SlimePrincessMinionBuff>(), 3);
 			return false;
 		}
+
+		public override void AddRecipes()
+		{
+			CreateRecipe(1)
+				.AddIngredient(ItemType<SlimePrinceReplicaMinionItem>(), 1)
+				.AddIngredient(ItemType<SlimePrincessReplicaMinionItem>(), 1)
+				.Register();
+		}
 	}
 	public class SpiderBrainReplicaMinionItem : ReplicaCombatPetMinionItem<SpiderBrainMinionBuff, SpiderBrainMinion>
 	{
