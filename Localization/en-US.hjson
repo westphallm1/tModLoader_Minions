@@ -1663,6 +1663,11 @@ Mods: {
 				IncreasesCombatPetMovementSpeed: Increases combat pet movement speed
 				IgnoresEnemyDefense: Ignores {0} enemy defense
 				AllowsMinionAttackAroundCornersIn: Allows your minions to automatically attack around corners in a {0} block radius
+				OccupiesPetSlots:
+					'''
+
+					Occupies {0} Combat Pet slots
+					'''
 			}
 
 			Replicas: {
@@ -1721,6 +1726,8 @@ Mods: {
 				Any: "{0} {1}"
 				EitherOr: "{0}/{1}"
 			}
+
+			OccupiesPetSlots: Mods.AmuletOfManyMinions.Common.OccupiesPetSlots
 		}
 
 		CombatPetLevels: {
