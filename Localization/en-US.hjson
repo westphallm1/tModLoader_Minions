@@ -1631,6 +1631,8 @@ Mods: {
 			GuideVoodooSquireMinion.DisplayName: Guide Squire
 			WoFSquireMinion.DisplayName: Squire of Flesh
 			SoulboundArsenalBowMinion.DisplayName: Soulbound Arsenal Bow Minion
+			BlueChickenEggProjectile.DisplayName: Blue Chicken Egg Projectile
+			BlueChickenMinion.DisplayName: Blue Chicken Minion
 		}
 
 		Keybinds: {
