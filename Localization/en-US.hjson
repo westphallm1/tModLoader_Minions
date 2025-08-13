@@ -1637,6 +1637,7 @@ Mods: {
 			JunimoMinion.DisplayName: Junimo Minion
 			SpiffoMinion.DisplayName: Spiffo Minion
 			CavelingGardenerMinion.DisplayName: Caveling Gardener Minion
+			DirtiestBlockMinion.DisplayName: Dirtiest Block Minion
 		}
 
 		Keybinds: {
