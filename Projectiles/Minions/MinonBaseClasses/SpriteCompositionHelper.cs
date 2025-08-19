@@ -25,7 +25,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 		private static void OnPreDraw(GameTime gameTime)
 		{
 			// clear out all the helpers for despawned projectiles
-			foreach(SpriteCompositionHelper helper in activeHelpers.Where(h => h.projectile != null && !h.projectile.active && h.renderTarget != null))
+			if (activeHelpers == null)
+			{
+				return;
+			}
+
+			foreach(SpriteCompositionHelper helper in activeHelpers.Where(h => h != null && h.projectile != null && !h.projectile.active && h.renderTarget != null))
 			{
 				helper.renderTarget.Dispose();
 				helper.renderTarget = null;
