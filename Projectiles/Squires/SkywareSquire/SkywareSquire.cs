@@ -81,9 +81,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SkywareSquire
 			return false;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 6)
 			{
 				Vector2 velocity = 2f * new Vector2((float)Math.Cos(i), (float)Math.Sin(i));

@@ -80,9 +80,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CrimsonAltar
 			}
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 			for (int i = 0; i < 3; i++)
 			{
 				Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, dustType, Projectile.velocity.X / 2, Projectile.velocity.Y / 2);

@@ -23,6 +23,8 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		internal HoverShooterHelper HsHelper { get; set; } = new();
 
+		internal GroundAwarenessHelper GHelper { get; private set; }
+
 		internal int FramesSinceLastHit { get; set; }
 
 		internal virtual int CooldownAfterHitFrames => 144 / (int)MaxSpeed;
@@ -47,6 +49,7 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 				travelSpeed = MaxSpeed,
 				inertia = Inertia,
 			};
+			GHelper = new(this);
 		}
 
 		internal override void ApplyPetDefaults()
@@ -73,6 +76,13 @@ namespace AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI
 
 		public override void TargetedMovement(Vector2 vectorToTargetPosition)
 		{
+			// We do not directly control the tileCollide style of controlled projectiles,
+			// so we may need to manually move them through platforms
+			if(GHelper.StandingOnPlatform() && vectorToTargetPosition.Y > 8)
+			{
+				GHelper.DropThroughPlatform();
+			}
+
 			if(FiredProjectileId != null)
 			{
 				Projectile.friendly = false;

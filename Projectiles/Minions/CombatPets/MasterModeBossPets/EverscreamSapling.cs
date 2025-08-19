@@ -51,7 +51,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			Projectile.frame = Main.rand.Next(4);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			// TODO dust
 			SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);

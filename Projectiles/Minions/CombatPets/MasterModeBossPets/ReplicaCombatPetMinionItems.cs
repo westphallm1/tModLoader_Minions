@@ -10,6 +10,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.GameContent.Events;
 using static Terraria.ModLoader.ModContent;
+using Terraria.DataStructures;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 {
@@ -151,6 +152,33 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int VanillaItemID => ItemID.QueenSlimePetItem;
 		internal override int AttackPatternUpdateTier => 4;
 		internal override string VanillaItemName => "QueenSlimePetItem";
+	}
+
+	public class SlimeRoyalsReplicaMinionItem : ReplicaCombatPetMinionItem<SlimePrinceMinionBuff, SlimePrinceMinion>
+	{
+		internal override int VanillaItemID => ItemID.ResplendentDessert;
+		internal override int AttackPatternUpdateTier => 4;
+		internal override string VanillaItemName => "ResplendentDessert";
+
+		public override LocalizedText Tooltip => 
+			AoMMSystem.ConcatenateTwoText.WithFormatArgs(
+				base.Tooltip, 
+				Language.GetText(Mod.GetLocalizationKey($"Common.Tooltips.OccupiesPetSlots")).WithFormatArgs(2));
+
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		{
+			player.AddBuff(Item.buffType, 3);
+			player.AddBuff(BuffType<SlimePrincessMinionBuff>(), 3);
+			return false;
+		}
+
+		public override void AddRecipes()
+		{
+			CreateRecipe(1)
+				.AddIngredient(ItemType<SlimePrinceReplicaMinionItem>(), 1)
+				.AddIngredient(ItemType<SlimePrincessReplicaMinionItem>(), 1)
+				.Register();
+		}
 	}
 	public class SpiderBrainReplicaMinionItem : ReplicaCombatPetMinionItem<SpiderBrainMinionBuff, SpiderBrainMinion>
 	{

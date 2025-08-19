@@ -218,7 +218,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 		}
 
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			float goreVel = 0.25f;
 			var source = Projectile.GetSource_Death();
@@ -232,7 +232,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.SlimeTrain
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += offset;
 			}
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 		}
 	}
 

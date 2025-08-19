@@ -67,7 +67,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.WhackAMole
 			Projectile.rotation += 0.25f;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			int dustIdx = Dust.NewDust(Projectile.Center, 8, 8, 192, newColor: WhackAMoleMinion.shades[(int)Projectile.ai[0]], Scale: 1.2f);
 			Main.dust[dustIdx].velocity = Projectile.velocity / 2;

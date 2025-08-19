@@ -110,7 +110,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				var fallbackText = Language.GetTextValue(fullKey);
 				if (fallbackText.Contains(fullKey))
 				{
-					Language.GetOrRegister(fullKey).SetDefault($"Unknown custom pet level (Tier {level})");
+					Language.GetOrRegister(fullKey, ()=>$"Unknown custom pet level (Tier {level})");
 				}
 			}
 			
@@ -219,7 +219,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			PetModdedStats = newModdedStats;
 			if (didUpdate && !fromSync)
 			{
-				// TODO MP packet
 				new CombatPetLevelModdedPacket(Player, PetEmblemItem, PetModdedStats).Send();
 			}
 		}
@@ -516,6 +515,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				Player.AddBuff(buffId, 2);
 			}
 			BuffsToAddOnRespawn.Clear();
+		}
+
+		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+		{
+			base.SyncPlayer(toWho, fromWho, newPlayer);
+			new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage).Send(toWho, fromWho);
 		}
 	}
 

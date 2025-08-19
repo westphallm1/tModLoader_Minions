@@ -142,13 +142,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones
 			return true;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			if(stickOffset != default)
 			{
 				stickNPC.GetGlobalNPC<DebuffGlobalNPC>().pygmySpearStack--;
 			}
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 		}
 
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)

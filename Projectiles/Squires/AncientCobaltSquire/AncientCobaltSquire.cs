@@ -71,7 +71,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.AncientCobaltSquire
 				SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
 			}
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
 			for (int i = 0; i < 15; i++)

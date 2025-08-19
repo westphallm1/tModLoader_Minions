@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using static Terraria.ModLoader.ModContent;
@@ -26,6 +27,25 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 		internal override int VanillaItemID => ItemID.KingSlimePetItem;
 		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Skeletal;
 		internal override string VanillaItemName => "KingSlimePetItem";
+	}
+
+	public class SlimeRoyalsMinionItem : CombatPetMinionItem<SlimePrinceMinionBuff, SlimePrinceMinion>
+	{
+		internal override int VanillaItemID => ItemID.ResplendentDessert;
+		internal override int AttackPatternUpdateTier => (int)CombatPetTier.Skeletal;
+		internal override string VanillaItemName => "ResplendentDessert";
+
+		public override LocalizedText Tooltip => 
+			AoMMSystem.ConcatenateTwoText.WithFormatArgs(
+				base.Tooltip, 
+				Language.GetText(Mod.GetLocalizationKey($"Common.Tooltips.OccupiesPetSlots")).WithFormatArgs(2));
+
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		{
+			player.AddBuff(Item.buffType, 3);
+			player.AddBuff(BuffType<SlimePrincessMinionBuff>(), 3);
+			return false;
+		}
 	}
 
 	public class SlimePrinceNinjaMinion : CombatPetGroundedMeleeMinion
@@ -77,7 +97,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 			}
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			float goreVel = 0.25f;
 			var source = Projectile.GetSource_Death();
@@ -91,7 +111,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets.MasterModeBossPets
 				Main.gore[goreIdx].velocity *= goreVel;
 				Main.gore[goreIdx].velocity += offset;
 			}
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 		}
 
 		public override void OnSpawn()

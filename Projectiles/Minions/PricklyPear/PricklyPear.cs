@@ -73,7 +73,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.PricklyPear
 			return true;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			// only spawn 1ish cactus per volley
 			// this can spawn cacti upon hitting walls/ceilings/enemies , but that's ok

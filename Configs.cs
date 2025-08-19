@@ -213,10 +213,7 @@ namespace AmuletOfManyMinions
 			if (Main.netMode == NetmodeID.SinglePlayer) return true;
 			else if (!IsPlayerLocalServerOwner(whoAmI))
 			{
-				// Line was throwing an error CS0029
-				//message = AoMMSystem.AcceptClientChangesText.ToString();
-				// New line should work as intended
-				message = NetworkText.FromLiteral(AoMMSystem.AcceptClientChangesText.Value);
+				message = AoMMSystem.AcceptClientChangesText.ToNetworkText();
 				return false;
 			}
 			return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);

@@ -1,0 +1,10 @@
+v{ModVersion} has been published to {tMLBuildPurpose} tML v{tMLVersion}.
+New Features
+========
+* Add Combat Pet AI for vanilla 1.4.4 pets 
+
+Bugfixes
+========
+* Fix bug where Spirit Revolver wouldn't fire
+* Fix bug where tall combat pets wouldn't jump
+* Fix bug in cross-mod API where pets' tile collide style wasn't accounted for

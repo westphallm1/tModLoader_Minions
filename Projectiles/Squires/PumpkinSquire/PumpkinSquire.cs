@@ -102,7 +102,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PumpkinSquire
 			return bounces == 0;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			// don't explode
 			SoundEngine.PlaySound(SoundID.NPCDeath1 with { PitchVariance = 0.5f }, Projectile.position);

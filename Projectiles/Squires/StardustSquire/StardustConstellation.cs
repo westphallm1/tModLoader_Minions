@@ -59,7 +59,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			}
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			Vector2 targetPos = new Vector2(Projectile.ai[0], Projectile.ai[1]);
 			if(Projectile.owner == Main.myPlayer)
@@ -131,7 +131,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.StardustSquire
 			blurDrawer.Update(Projectile.Center);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for (int i = 0; i < 10; i++)
 			{
