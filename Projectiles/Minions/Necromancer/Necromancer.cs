@@ -11,6 +11,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static AmuletOfManyMinions.CrossModClient.SummonersShine.CrossModSetup;
+using AmuletOfManyMinions.Core.Minions.AI;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 {
@@ -87,6 +88,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			Projectile.timeLeft = TimeToLive;
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 60;
+			// But do set a behavior to avoid a null pointer exception
+			MinionBehavior = new SimpleMinionBehavior(this);
 		}
 
 		public override bool PreDraw(ref Color lightColor)
