@@ -571,7 +571,7 @@ Mods: {
 
 			NecromancerMinionItem: {
 				DisplayName: Necro Doll
-				Tooltip: Summons a neromancer to fight for you!
+				Tooltip: Summons a necromancer to fight for you!
 			}
 
 			NullHatchetMinionItem: {
@@ -2225,3 +2225,4 @@ Mods: {
 		}
 	}
 }
+
