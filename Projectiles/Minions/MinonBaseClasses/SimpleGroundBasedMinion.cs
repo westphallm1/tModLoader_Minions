@@ -106,7 +106,9 @@ namespace AmuletOfManyMinions.Projectiles.Minions.MinonBaseClasses
 
 		public void DefaultGroundedMovement(Vector2 vector)
 		{
-			if (vector.Y < -3 * Projectile.height && Math.Abs(vector.X) < Minion.StartFlyingHeight)
+			float projTopOffset = vector.Y + Projectile.height / 2;
+			// Jump if there's at least a 1.5 block offset between the projectile's top and its destination
+			if (projTopOffset <= -24 && Math.Abs(vector.X) < Minion.StartFlyingHeight)
 			{
 				GHelper.DoJump(vector);
 			}

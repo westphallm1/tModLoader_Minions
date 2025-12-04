@@ -107,7 +107,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.SoulboundArsenal
 			Main.dust[dustId].velocity *= 0.8f;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 			for (float i = 0; i < 2 * Math.PI; i += (float)Math.PI / 12)

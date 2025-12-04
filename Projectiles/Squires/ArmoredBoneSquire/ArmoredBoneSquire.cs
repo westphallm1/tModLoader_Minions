@@ -224,9 +224,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.ArmoredBoneSquire
 			SpawnDust(10);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 			SpawnDust(10);
 		}
 

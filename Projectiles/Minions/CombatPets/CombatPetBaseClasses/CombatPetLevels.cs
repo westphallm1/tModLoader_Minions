@@ -219,7 +219,6 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			PetModdedStats = newModdedStats;
 			if (didUpdate && !fromSync)
 			{
-				// TODO MP packet
 				new CombatPetLevelModdedPacket(Player, PetEmblemItem, PetModdedStats).Send();
 			}
 		}
@@ -516,6 +515,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				Player.AddBuff(buffId, 2);
 			}
 			BuffsToAddOnRespawn.Clear();
+		}
+
+		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+		{
+			base.SyncPlayer(toWho, fromWho, newPlayer);
+			new CombatPetLevelPacket(Player, (byte)PetLevel, (short)PetDamage).Send(toWho, fromWho);
 		}
 	}
 

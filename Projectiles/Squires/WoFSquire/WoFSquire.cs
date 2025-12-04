@@ -416,7 +416,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			if (Main.netMode != NetmodeID.Server)
 			{
@@ -632,7 +632,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.WoFSquire
 			}
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			if (mockHealth == 0)
 			{

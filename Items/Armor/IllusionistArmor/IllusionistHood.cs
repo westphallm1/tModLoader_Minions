@@ -174,7 +174,7 @@ namespace AmuletOfManyMinions.Items.Armor.IllusionistArmor
 			Projectile.velocity = Vector2.Zero;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			int dustType = isCorrupt ? 89 : 87;
 			for (int i = 0; i < 3; i++)

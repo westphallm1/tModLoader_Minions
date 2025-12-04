@@ -125,7 +125,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.VanillaClones.Pirate
 			info.Knockback = 0;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			SpawnSmallExplosionOnProjDeath(Projectile);
 		}

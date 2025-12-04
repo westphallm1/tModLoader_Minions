@@ -75,7 +75,7 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			return true;
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			if (Projectile.owner == Main.myPlayer)
 			{
@@ -193,9 +193,9 @@ namespace AmuletOfManyMinions.Projectiles.Squires.PottedPal
 			base.Animate(minFrame, 2);
 		}
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 			SpawnDust();
 		}
 		private void SpawnDust()
