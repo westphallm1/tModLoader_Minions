@@ -76,10 +76,18 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			Main.projFrames[Projectile.type] = 1;
 			ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;
+			
+			// Removing properties that classify the projectile as a minion
+			Main.projPet[Projectile.type] = false;
+			ProjectileID.Sets.MinionSacrificable[Projectile.type] = false;
+			ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = false;
 		}
 		public override void SetDefaults()
 		{
-			// this is a bit sneaky, doesn't set any of the SimpleMinion defaults
+			// adding in SimpleMinion Defaults to deal with new SimpleMinion code that checks for Behavior -- Old --> // this is a bit sneaky, doesn't set any of the SimpleMinion defaults
+			base.SetDefaults();
+			
+			// Same behavior, but now as an override
 			Projectile.width = 30;
 			Projectile.height = 30;
 			Projectile.friendly = true;
@@ -88,6 +96,13 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			Projectile.timeLeft = TimeToLive;
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 60;
+			
+			// Make sure this helper doesn’t consume a minion slot
+			Projectile.minion = false;
+			Projectile.minionSlots = 0f;
+
+			// It’s a shot-like helper, so probably doesn’t need to be netImportant
+			Projectile.netImportant = false;
 			// But do set a behavior to avoid a null pointer exception
 			MinionBehavior = new SimpleMinionBehavior(this);
 		}
@@ -265,7 +280,8 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 			IdleMovement(VectorToIdle);
 			framesSinceLastHit++;
 			int projectileVelocity = 6 + EmpowerCount / 2;
-			if (framesSinceLastHit++ > rateOfFire)
+			// if (framesSinceLastHit++ > rateOfFire) // Old line - changed to fix double frame increments
+			if (framesSinceLastHit > rateOfFire) // New line
 			{
 				// try to predict the position at the time of impact a bit
 				VectorToTargetPosition.SafeNormalize();
@@ -286,7 +302,12 @@ namespace AmuletOfManyMinions.Projectiles.Minions.Necromancer
 						Main.myPlayer);
 				}
 			}
-			else if (Main.myPlayer == Player.whoAmI && framesSinceLastHit == 30 && Main.projectile[projId].active)
+			// else if (Main.myPlayer == Player.whoAmI && framesSinceLastHit == 30 && Main.projectile[projId].active) // Old line - changed to fix double frame increments
+			else if (Main.myPlayer == Player.whoAmI  // New line
+				&& framesSinceLastHit == 30
+				&& projId >= 0 && projId < Main.maxProjectiles
+				&& Main.projectile[projId].active
+				&& Main.projectile[projId].type == ProjectileType<BoneSphereProjectile>()) // added for projective sanity check
 			{
 				VectorToTargetPosition.SafeNormalize();
 				VectorToTargetPosition *= projectileVelocity;

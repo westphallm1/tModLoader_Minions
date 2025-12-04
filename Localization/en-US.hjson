@@ -571,7 +571,7 @@ Mods: {
 
 			NecromancerMinionItem: {
 				DisplayName: Necro Doll
-				Tooltip: Summons a neromancer to fight for you!
+				Tooltip: Summons a necromancer to fight for you!
 			}
 
 			NullHatchetMinionItem: {
@@ -1741,6 +1741,7 @@ Mods: {
 			Spectre: Spectre
 			Stardust: Stardust
 			Celestial: Celestial
+			Fallback: "This Custom Pet Level is missing a a localization key"
 		}
 
 		CombatPetQuiz: {
@@ -2238,3 +2239,4 @@ Mods: {
 		}
 	}
 }
+

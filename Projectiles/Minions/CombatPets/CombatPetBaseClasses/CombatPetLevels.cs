@@ -1,6 +1,7 @@
 using AmuletOfManyMinions.Core.Minions.CrossModAI;
 using AmuletOfManyMinions.Core.Netcode.Packets;
 using AmuletOfManyMinions.CrossModClient.SummonersShine;
+using AmuletOfManyMinions.CrossModSystem;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
 using AmuletOfManyMinions.Projectiles.Minions.VanillaClones;
 using Microsoft.Xna.Framework;
@@ -15,10 +16,11 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 {
-	internal enum CombatPetTier: int
+	public enum CombatPetTier : int
 	{
 		Base = 0,
 		Golden = 1,
@@ -31,25 +33,26 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		Celestial = 8
 	}
 
-	internal interface ICombatPetLevelInfo
+	public interface ICombatPetLevelInfo
 	{
-		public int Level { get; }
-		public int BaseDamage { get; } // The base damage done by combat pets at this level of progression
-		public int BaseSearchRange { get; } // The base distance combat pets will seek from the player 
-		public float BaseSpeed { get; } // How the AI actually uses speed varies quite a bit from type to type ...
-		public int MaxPets { get; } // Maximum # of unique combat pets available
-		public LocalizedText Description { get; }  // Used in combat pet item tooltips referring to level up points
+		int Level { get; }
+		int BaseDamage { get; } // The base damage done by combat pets at this level of progression
+		int BaseSearchRange { get; } // The base distance combat pets will seek from the player
+		float BaseSpeed { get; } // How the AI actually uses speed varies quite a bit from type to type ...
+		int MaxPets { get; } // Maximum # of unique combat pets available
+		LocalizedText Description { get; }  // Used in combat pet item tooltips referring to level up points
 	}
+
 	internal struct CombatPetLevelInfo : ICombatPetLevelInfo
 	{
-		public int Level { get; private set;  }
+		public int Level { get; private set; }
 		public int BaseDamage { get; private set; } // The base damage done by combat pets at this level of progression
-		public int BaseSearchRange { get; private set; } // The base distance combat pets will seek from the player 
+		public int BaseSearchRange { get; private set; } // The base distance combat pets will seek from the player
 		public float BaseSpeed { get; private set; } // How the AI actually uses speed varies quite a bit from type to type ...
 		public int MaxPets { get; private set; } // Maximum # of unique combat pets available
 		public LocalizedText Description { get; private set; }  // Used in combat pet item tooltips referring to level up points
 
-		public CombatPetLevelInfo(int level, int damage, int searchRange, int baseSpeed, int maxPets, string key)
+		public CombatPetLevelInfo(int level, int damage, int searchRange, float baseSpeed, int maxPets, string key)
 		{
 			Level = level;
 			BaseDamage = damage;
@@ -83,16 +86,64 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			return this;
 		}
 	}
-	class CombatPetLevelTable : ModSystem
-	{
-		internal static ICombatPetLevelInfo[] PetLevelTable;
 
-		public override void Load()
+	public class CombatPetLevelTable : ModSystem
+	{
+		public static ICombatPetLevelInfo[] PetLevelTable;
+		private static readonly List<ICombatPetLevelInfo> CustomPetLevels = new();
+
+		public static void RegisterCustomCombatPetLevel(int level, int damage, int range, float speed, int maxPets, string descriptionKey)
+		{
+			string fullKey = ModContent.GetInstance<AmuletOfManyMinions>().GetLocalizationKey($"CombatPetLevels.{descriptionKey}");
+			LocalizedText description = Language.GetOrRegister(fullKey);
+
+			// ✅ Check if the localization fallback triggered (the key is missing from the actual .hjson files)
+			if (description.Value.Contains(fullKey))
+			{
+				ModContent.GetInstance<AmuletOfManyMinions>().Logger.Warn(
+					$"[AoMM] WARNING: Missing localization key '{fullKey}'. Falling back to 'CombatPetLevels.Fallback'.");
+
+				// Replace with a known-safe fallback localization entry
+				fullKey = ModContent.GetInstance<AmuletOfManyMinions>().GetLocalizationKey("CombatPetLevels.Fallback");
+
+				// Optional: register the fallback text dynamically if it doesn't exist
+				var fallbackText = Language.GetTextValue(fullKey);
+				if (fallbackText.Contains(fullKey))
+				{
+					Language.GetOrRegister(fullKey).SetDefault($"Unknown custom pet level (Tier {level})");
+				}
+			}
+			
+			CustomPetLevels.Add(new CombatPetLevelInfo(level, damage, range, speed, maxPets, fullKey));
+		}
+		// Original Load method commented out and replaced by RebuildPetLevelTable
+		/*public override void Load()
 		{
 			string commonKey = Mod.GetLocalizationKey("CombatPetLevels.");
-			PetLevelTable = new ICombatPetLevelInfo[]{
+			var baseLevels = new List<ICombatPetLevelInfo>
+			{
 				new CombatPetLevelInfo(0, 7, 550, 8, 1, $"{commonKey}Base"), // Base level (no associated emblem)
-
+				new CombatPetLevelInfo(1, 11, 600, 8, 1, $"{commonKey}Golden"), // ore tier
+				new CombatPetLevelInfo(2, 15, 700, 9, 1, $"{commonKey}Demonite"), // EoC - tier
+				new CombatPetLevelInfo(3, 18, 750, 10, 2, $"{commonKey}Skeletal"), // Dungeon Tier
+				new CombatPetLevelInfo(4, 30, 900, 12, 2, $"{commonKey}Soulful"), // Post WoF
+				new CombatPetLevelInfo(5, 36, 950, 14, 3, $"{commonKey}Hallowed"), // Post Mech
+				new CombatPetLevelInfo(6, 42, 1000, 15, 3, $"{commonKey}Spectre"), // Post Plantera
+				new CombatPetLevelInfo(7, 52, 1050, 16, 4, $"{commonKey}Stardust"), // Post Pillars
+				new CombatPetLevelInfo(8, 80, 1100, 18, 6, $"{commonKey}Celestial") // Post Moon Lord
+			};*/
+		public override void Load()
+		{
+			RebuildPetLevelTable(); // here to make sure the mod works even if no mods call the rebuild below
+		}		
+		public static void RebuildPetLevelTable()  // called when loading from inside this mod, and can also be called from the ModCallHandler if custom levels are added
+		{
+			var modInstance = ModContent.GetInstance<AmuletOfManyMinions>();
+			string commonKey = modInstance.GetLocalizationKey("CombatPetLevels.");
+			
+			var baseLevels = new List<ICombatPetLevelInfo>
+			{
+				new CombatPetLevelInfo(0, 7, 550, 8, 1, $"{commonKey}Base"), // Base level (no associated emblem)
 				new CombatPetLevelInfo(1, 11, 600, 8, 1, $"{commonKey}Golden"), // ore tier
 				new CombatPetLevelInfo(2, 15, 700, 9, 1, $"{commonKey}Demonite"), // EoC - tier
 				new CombatPetLevelInfo(3, 18, 750, 10, 2, $"{commonKey}Skeletal"), // Dungeon Tier
@@ -102,14 +153,20 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 				new CombatPetLevelInfo(7, 52, 1050, 16, 4, $"{commonKey}Stardust"), // Post Pillars
 				new CombatPetLevelInfo(8, 80, 1100, 18, 6, $"{commonKey}Celestial") // Post Moon Lord
 			};
+
+			baseLevels.AddRange(CustomPetLevels);
+			PetLevelTable = baseLevels.OrderBy(p => p.Level).ToArray();
+			
+			ModContent.GetInstance<AmuletOfManyMinions>().Logger.Info($"[CombatPetLevelTable] Rebuilt table with {PetLevelTable.Length} levels.");
 		}
 
 		public override void Unload()
 		{
 			PetLevelTable = null;
+			CustomPetLevels.Clear();
 		}
 	}
-
+	
 	class LeveledCombatPetModPlayer : ModPlayer
 	{
 		internal int PetLevel { get; set; }
@@ -219,16 +276,37 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 
 		public bool GetEmblemSuperiority(CombatPetEmblem replacer, CombatPetEmblem old)
 		{
+			// Rem out to update for code that can handle dynamic emblem checks without throwing errors.
+			// int PetLevelDiff = replacer.PetLevel - old.PetLevel;
+			// if (PetLevelDiff > 0)
+			//	return true;
+			// if (PetLevelDiff < 0)
+			//	return false;
+			// int DamageDiff = replacer.Item.damage - old.Item.damage;
+			// if (DamageDiff > 0)
+			//	return true;
+			// if (DamageDiff < 0)
+			//	return false;
+			//return CrossModSetup.GetCrossModEmblemSuperiority(replacer.Item, old.Item);
+			
+			//New code here, should function the same with no exceptions
+			if (replacer == null)
+				return false; // Nothing to compare
+			if (old == null)
+				return true; // Anything is better than nothing
+
 			int PetLevelDiff = replacer.PetLevel - old.PetLevel;
 			if (PetLevelDiff > 0)
 				return true;
 			if (PetLevelDiff < 0)
 				return false;
+
 			int DamageDiff = replacer.Item.damage - old.Item.damage;
 			if (DamageDiff > 0)
 				return true;
 			if (DamageDiff < 0)
 				return false;
+
 			return CrossModSetup.GetCrossModEmblemSuperiority(replacer.Item, old.Item);
 		}
 
@@ -236,6 +314,7 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 		// to set the player's combat pet's damage
 		private void CheckForCombatPetEmblem()
 		{
+					
 			// don't run every frame
 			if(Main.GameUpdateCount % 10 != 0)
 			{
@@ -248,30 +327,107 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			for (int i = 0; i < Player.inventory.Length; i++)
 			{
 				Item item = Player.inventory[i];
-				if(!item.IsAir && item.ModItem != null && item.ModItem is CombatPetEmblem petEmblem)
+				if(!item.IsAir && item.ModItem != null)
 				{
-					// choose max tier rather than max damage
-					if(maxItem == null || GetEmblemSuperiority(item.ModItem as CombatPetEmblem, maxItem.ModItem as CombatPetEmblem))
+					if (item.ModItem is CombatPetEmblem petEmblem)
 					{
-						maxLevel = petEmblem.PetLevel;
-						maxDamage = item.damage;
-						maxItem = item;
-						maxEmblemItem = item.type;
+						
+						// choose max tier rather than max damage
+						if(maxItem == null || GetEmblemSuperiority(item.ModItem as CombatPetEmblem, maxItem.ModItem as CombatPetEmblem))
+						{
+							maxLevel = petEmblem.PetLevel;
+							maxDamage = item.damage;
+							maxItem = item;
+							maxEmblemItem = item.type;
+						}
+					}
+					/* else if(CombatPetEmblemReverseLookup.LevelToTypeLookup.ContainsValue(item.type))
+					{
+						
+						int level = CombatPetEmblemReverseLookup.LevelToTypeLookup.First(kv => kv.Value == item.type).Key;
+						if(maxItem == null || 
+							level > maxLevel ||
+							(level == maxLevel && item.damage > maxDamage))
+						{
+							maxLevel = level;
+							maxDamage = item.damage;
+							maxItem = item;
+							maxEmblemItem = item.type;
+						}
+					}*/
+					else  // Replacement code to handle multiple new emblems per level and custom level
+					{
+						foreach (var kv in CombatPetEmblemReverseLookup.LevelToTypeLookup)
+						{
+							if (kv.Value.Contains(item.type))
+							{
+								int level = kv.Key;
+								if (maxItem == null || 
+									level > maxLevel ||
+									(level == maxLevel && item.damage > maxDamage))
+								{
+									maxLevel = level;
+									maxDamage = item.damage;
+									maxItem = item;
+									maxEmblemItem = item.type;
+								}
+								break;
+							}
+						}
 					}
 				}
 			}
+			
 			for(int i = 0; i < Player.bank.item.Length; i++)
 			{
 				Item item = Player.bank.item[i];
-				if(!item.IsAir && item.ModItem != null && item.ModItem is CombatPetEmblem petEmblem)
-				{
-					// choose max tier rather than max damage
-					if (maxItem == null || GetEmblemSuperiority(item.ModItem as CombatPetEmblem, maxItem.ModItem as CombatPetEmblem))
+				if(!item.IsAir && item.ModItem != null)
+				{	
+					if(item.ModItem is CombatPetEmblem petEmblem)
 					{
-						maxLevel = petEmblem.PetLevel;
-						maxDamage = item.damage;
-						maxItem = item;
-						maxEmblemItem = item.type;
+						
+						// choose max tier rather than max damage
+						if (maxItem == null || GetEmblemSuperiority(item.ModItem as CombatPetEmblem, maxItem.ModItem as CombatPetEmblem))
+						{
+							maxLevel = petEmblem.PetLevel;
+							maxDamage = item.damage;
+							maxItem = item;
+							maxEmblemItem = item.type;
+						}
+					}
+					/* else if(CombatPetEmblemReverseLookup.LevelToTypeLookup.ContainsValue(item.type))
+					{
+						
+						int level = CombatPetEmblemReverseLookup.LevelToTypeLookup.First(kv => kv.Value == item.type).Key;
+						if(maxItem == null || 
+							level > maxLevel ||
+							(level == maxLevel && item.damage > maxDamage))
+						{
+							maxLevel = level;
+							maxDamage = item.damage;
+							maxItem = item;
+							maxEmblemItem = item.type;
+						}
+					}*/
+					else  // Replacement code to handle multiple new emblems per level and custom level
+					{
+						foreach (var kv in CombatPetEmblemReverseLookup.LevelToTypeLookup)
+						{
+							if (kv.Value.Contains(item.type))
+							{
+								int level = kv.Key;
+								if (maxItem == null || 
+									level > maxLevel ||
+									(level == maxLevel && item.damage > maxDamage))
+								{
+									maxLevel = level;
+									maxDamage = item.damage;
+									maxItem = item;
+									maxEmblemItem = item.type;
+								}
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -467,14 +623,28 @@ namespace AmuletOfManyMinions.Projectiles.Minions.CombatPets
 			if(attackPatternUpdateTier == 0)
 			{
 				return;
-			} else if (attackPatternUpdateTier > player.PetLevel)
+			/*} else if (attackPatternUpdateTier > player.PetLevel)
 			{
 				tooltips.Add(new TooltipLine(mod, nameof(NotLeveledUpText),
 					NotLeveledUpText.Format(Lang.GetItemNameValue(CombatPetEmblemReverseLookup.LevelToTypeLookup[attackPatternUpdateTier])))
 				{
 					OverrideColor = Color.Gray
+				});*/
+			}	
+			else if (attackPatternUpdateTier > player.PetLevel)  // Replacement code to handle multiple new emblems per level and custom level
+			{
+				CombatPetEmblemReverseLookup.LevelToTypeLookup.TryGetValue(attackPatternUpdateTier, out var types);
+				string emblemNames = (types != null && types.Count > 0)
+					? string.Join(", ", types.Select(Lang.GetItemNameValue))
+					: $"Emblem (Level {attackPatternUpdateTier})";
+
+				tooltips.Add(new TooltipLine(mod, nameof(NotLeveledUpText),
+					NotLeveledUpText.Format(emblemNames))
+				{
+					OverrideColor = Color.Gray
 				});
-			} else
+			}	
+			else
 			{
 				tooltips.Add(new TooltipLine(mod, nameof(LeveledUpText), LeveledUpText.ToString())
 				{

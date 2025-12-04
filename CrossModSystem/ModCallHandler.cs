@@ -2,13 +2,17 @@
 using AmuletOfManyMinions.Core.Minions.CrossModAI.ManagedAI;
 using AmuletOfManyMinions.Core.Minions.Tactics;
 using AmuletOfManyMinions.Projectiles.Minions.CombatPets;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetEmblems;
+using AmuletOfManyMinions.Projectiles.Minions.CombatPets.CombatPetBaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace AmuletOfManyMinions.CrossModSystem
 {
@@ -134,6 +138,58 @@ namespace AmuletOfManyMinions.CrossModSystem
 					return RegisterSlimePet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(null), a.Arg(true), a.Arg<int>());
 				case "RegisterWormPet":
 					return RegisterWormPet(a.Arg<ModProjectile>(), a.Arg<ModBuff>(), a.Arg<int?>(), a.Arg(true), a.Arg(64), a.Arg<int>());
+
+				// Register new Combat Pet Emblem
+				// First Argument is ItemType (int)
+				// Second argument is petLevel (int)
+				case "RegisterCombatPetEmblem": // should allow multiple emblems to be registered to AOMM base tiers and custom tiers.
+				{
+					int itemType = a.Arg<int>();
+					int level = a.Arg<int>();
+
+					if (!CombatPetEmblemReverseLookup.LevelToTypeLookup.TryGetValue(level, out var emblemList))
+					{
+						emblemList = new List<int>();
+						CombatPetEmblemReverseLookup.LevelToTypeLookup[level] = emblemList;
+					}
+					if (!emblemList.Contains(itemType))
+					{
+						emblemList.Add(itemType);
+					}
+					
+					// Safe item name retrieval
+					string itemName = Lang.GetItemNameValue(itemType) ?? $"ItemType({itemType})";
+					ModContent.GetInstance<AmuletOfManyMinions>().Logger.Info($"[ModCallHandler] Registered emblem {Lang.GetItemNameValue(itemType)} for level {level}.");
+
+					return true;
+				}
+				
+				case "RegisterCombatPetLevel":
+				{
+					var unpack = new ArgsUnpacker(args, 2); // import the message and version string
+					int level     = unpack.Arg<int>(); // level # (cannot be 0-8) (int)
+					int damage    = unpack.Arg<int>(); // damage (int)
+					int range     = unpack.Arg<int>(); // search range (int)
+					float speed   = unpack.Arg<float>(); // speed (float)
+					int maxPets   = unpack.Arg<int>(); // max unique minions (int)
+					string key    = unpack.Arg<string>(); // name of the new level (ie. Thorium) (String)
+					
+					if (!key.StartsWith("Mods."))
+					{
+						throw new ArgumentException($"[AoMM] Invalid localization key: '{key}'. Must be a fully qualified key like 'Mods.MyMod.CombatPetLevels.Xyz'");
+					}
+					
+					if (level >= 0 && level <= 8) // If Level 0-8 is used above, registration fails with an error
+						throw new ArgumentException($"Level {level} is reserved by AoMM; use a value > 8 for custom tiers.");
+					
+					if (CombatPetLevelTable.PetLevelTable != null && CombatPetLevelTable.PetLevelTable.Any(p => p.Level == level)) // If 2 or mods try to register the same new level, registration fails with an error
+							throw new ArgumentException($"[AoMM] Combat pet level {level} is already registered.");
+
+					CombatPetLevelTable.RegisterCustomCombatPetLevel(level, damage, range, speed, maxPets, key);
+					CombatPetLevelTable.RebuildPetLevelTable(); // This calls the CombatPetLevels PetLevelTable to be rebuilt with the new custom levels added
+					ModContent.GetInstance<AmuletOfManyMinions>().Logger.Info($"[ModCallHandler] Rebuilt pet level table after registering custom level {level}.");
+					return null;
+				}
 
 				// One-off utility functions
 				case "GetPetLevel":
@@ -531,7 +587,33 @@ namespace AmuletOfManyMinions.CrossModSystem
 			CrossModCombatPetMinionItem.CrossModCombatPetLevelUpTiers[buff.Type] = levelUpTier;
 			return default;
 		}
-
+		
+		/// <summary>
+		/// Register a custom Combat Pet Emblem item and associate it with a combat pet level.
+		/// This allows AoMM to recognize and assign the correct pet stats from a ModItem.
+		/// </summary>
+		/// <param name="itemType">The ItemID (Type) of the ModItem emblem</param>
+		/// <param name="petLevel">The corresponding combat pet level (0–8)</param>
+		/// <returns>null</returns>
+		internal static object RegisterCombatPetEmblem(int itemType, int petLevel)
+		{
+			if (itemType <= 0 || petLevel < 0 || petLevel > 8)
+			{
+				ModContent.GetInstance<AmuletOfManyMinions>().Logger.Warn(
+					$"RegisterCombatPetEmblem received invalid data. ItemType: {itemType}, PetLevel: {petLevel}");
+				return default;
+			}
+			if (!CombatPetEmblemReverseLookup.LevelToTypeLookup.TryGetValue(petLevel, out var emblemList))
+					{
+						emblemList = new List<int>();
+						CombatPetEmblemReverseLookup.LevelToTypeLookup[petLevel] = emblemList;
+					}
+					if (!emblemList.Contains(itemType))
+					{
+						emblemList.Add(itemType);
+					}
+			return default;
+		}
 
 		/// <summary>
 		/// Get the combat pet level of a player directly. Most stats on managed combat pets
